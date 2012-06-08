@@ -1,0 +1,70 @@
+﻿Datum: 1.6.2012   Testversion Transistortester (AVR) Version 0.97k
+
+
+Für alle, die selber experimentieren wollen,hier eine kurze Anleitung,
+wie man die 1Mhz und 8MHz Version selbst erzeugen kann.
+Bei meiner Software handelt es sich um eine "Testversion".
+Selbstverständlich kann ich keine Gewährleistung geben.
+
+Die Werte AVR @ 8Mhz Clock sind mit der gleichen Software
+(Sourcecode ist selbstanpassend!) erzeugt.
+Allerdings müssen dazu mit einer Linux Entwicklungsumgebung
+die folgenden 4 Schritte erfolgen.
+
+
+1.) Editieren der Makefile (~./Sourcecode/default/Makefile) 
+    Den Eintrag OP_MHZ=1 auf OP_MHZ=8 ändern, sowie den Programmer (PROGRAMMER=),
+    die Schnittstelle des Programmers (PORT=) und den AVR-Typ (PARTNO=) einstellen,
+    falls man avrdude für das Programmieren benutzen möchte
+
+2.) make aufrufen!
+    Im Verzeichnis ~./Sourcecode/default wird "make" aufgerufen.
+    Ein vorheriger "make clean" Aufruf ist nicht erforderlich.
+
+3.) Mit dem Aufruf "make upload" die Programmierdaten über das ISP-Interface in den AVR brennen.
+
+4.) Bei Bedarf mit dem Aufruf "make fuses" den AVR für den Betrieb konfigurieren.
+
+Für eine Quarz-Oszillator-Betrieb ist es erforderlich einen 8MHz Quarz an Pin 9 und Pin 10
+des AVRs anzuschliessen und anstelle des Aufrufes "make fuses" den Aufruf "make fuses-crystal"
+aufzurufen.
+Bei der ATmega168 Linie ist auch der Quarz-betriebene 1MHz Betrieb möglich, es wird dann
+ein Vorteiler für die Clock programmiert.
+Wenn man Strom sparen möchte, kann man auch mit dem "make fuses-crystal-lp" Aufruf
+den Low Power Crystal Oscillator Mode benutzen. Mit dem Standard fuses-crystal Aufruf
+wird der Full Swing Oscillator Mode programmiert.
+Bei der ATmega8 Linie müsste für einen 1MHz Quarz-Betrieb auch ein 1MHz Quarz
+angeschlossen werden, wegen der besseren Auflösung der Kondensatormessung ist aber
+sowieso der 8MHz Betrieb zu bevorzugen.
+Beim Setzen der Clockfrequenz bitte äußerst sorgfältig arbeiten, man kann sie 
+sehr leicht so ändern, daß keine (ISP-)Programmierung mehr möglich ist!!!
+
+
+Ausser dem Atmega8 habe ich eine ATmega168 Version (PARTNO=m168) getestet.
+Die Version mit allen Funktionen läuft nur noch auf einem ATmega168, für den
+ATmega8 ist eine Version mit allen Mess-Möglichkeiten nur möglich, wenn man auf
+die Selbsttest-Funktion verzichtet. Der Selbsttest ist nur noch möglich, wenn man
+mindestens auf die Option AUTOSCALE_ADC und die neue POWER_OFF=5 verzichtet.
+Für eine ATmega88 Version mit Selbsttest-Funktion muss zusätzlich auch auf die
+UART-Funktion (WITH_UART) verzichtet werden.
+
+In dem Unterverzeichnis mega8_auto sind die Programmfiles für einen ATmega8 in der
+8MHz Version ohne die Selbsttestfunktion abgelegt.
+Im Unterverzeichnis mega8_selftest sind die Programmfiles für einen ATmega8 mit der
+Selbsttestfunktion (ohne AUTOSCALE_ADC) abgelegt, ebenfalls in der 8MHz Version.
+Die jeweilige Makefile ist in den Unterverzeichnissen auch vorhanden und kann jetzt
+unmittelbar benutzt werden, da die Unterverzeichnisse parallel zum default Unterverzeichnis
+liegen.
+
+Meine Tests habe ich mit dem Quarz-Oszillator (bestückter Quarz) durchgeführt.
+Ein Betrieb mit 8Mhz RC-Generator sollte aber ebenfalls möglich sein.
+Wegen der besseren Auflösung bei der Kapazitätsmessung bevorzuge ich die 8MHz Variante.
+So sind auch die Programmfiles für den ATmega168 für 8MHz Takt erzeugt (Verzeichnis default)!
+
+
+
+Ich bin an Rückmeldungen von mutigen Testern durchaus interessiert, entweder im
+Forum oder auch direkt per Email (kh_kuebbeler@web.de).
+
+Grüße
+Karl-Heinz Kübbeler

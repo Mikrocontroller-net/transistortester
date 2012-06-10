@@ -48,6 +48,8 @@ CFLAGS += -DR_MESS
 
 # the C_MESS option enables Capacity measuring 
 CFLAGS += -DC_MESS
+# this level defines the empty voltage level for capacitors in mV
+CFLAGS += -DCAP_EMPTY_LEVEL=3
 
 # the AUTOSCALE_ADC option enables the autoscale ADC (VCC and Bandgap Ref)
 CFLAGS += -DAUTOSCALE_ADC

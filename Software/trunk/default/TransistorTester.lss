@@ -27,11 +27,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  11 .debug_frame  000001b0  00000000  00000000  0000773c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    000005a9  00000000  00000000  000078ec  2**0
+ 12 .debug_str    000005be  00000000  00000000  000078ec  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    00000c18  00000000  00000000  00007e95  2**0
+ 13 .debug_loc    00000c18  00000000  00000000  00007eaa  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_pubtypes 0000005f  00000000  00000000  00008aad  2**0
+ 14 .debug_pubtypes 0000005f  00000000  00000000  00008ac2  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -2581,7 +2581,7 @@ void EntladePins() {
      R_DDR = (1<<(PC2*2)) | (1<<(PC1*2)) | (1<<(PC0*2));	// Pins across R_L resistors to GND
      dc6:	e5 e1       	ldi	r30, 0x15	; 21
      dc8:	be 2e       	mov	r11, r30
-        if ((adcmv[0] < 5) && (adcmv[1] < 5) && (adcmv[2] < 5)) {
+        if ((adcmv[0] < (CAP_EMPTY_LEVEL+2)) && (adcmv[1] < (CAP_EMPTY_LEVEL+2)) && (adcmv[2] < (CAP_EMPTY_LEVEL+2))) {
            break;
         }
      }
@@ -2613,7 +2613,7 @@ void EntladePins() {
      adcmv[2] = ReadADC(PC2);	// which voltage has Pin 3?
      de6:	82 e0       	ldi	r24, 0x02	; 2
      de8:	0e 94 8a 11 	call	0x2314	; 0x2314 <ReadADC>
-     if ((PartFound == PART_CELL) || (adcmv[0] < 3) & (adcmv[1] < 3) & (adcmv[2] < 3)) {
+     if ((PartFound == PART_CELL) || (adcmv[0] < CAP_EMPTY_LEVEL) & (adcmv[1] < CAP_EMPTY_LEVEL) & (adcmv[2] < CAP_EMPTY_LEVEL)) {
      dec:	20 91 07 01 	lds	r18, 0x0107
      df0:	28 30       	cpi	r18, 0x08	; 8
      df2:	c1 f0       	breq	.+48     	; 0xe24 <EntladePins+0x7a>
@@ -2729,7 +2729,7 @@ void EntladePins() {
            ADC_DDR |= (1<<PC2);	// below 1.3V, switch directly with ADC-Port to GND
      e88:	3a 9a       	sbi	0x07, 2	; 7
         }
-        if ((adcmv[0] < 5) && (adcmv[1] < 5) && (adcmv[2] < 5)) {
+        if ((adcmv[0] < (CAP_EMPTY_LEVEL+2)) && (adcmv[1] < (CAP_EMPTY_LEVEL+2)) && (adcmv[2] < (CAP_EMPTY_LEVEL+2))) {
      e8a:	35 e0       	ldi	r19, 0x05	; 5
      e8c:	e3 16       	cp	r14, r19
      e8e:	f1 04       	cpc	r15, r1
@@ -2751,7 +2751,7 @@ void EntladePins() {
      ea2:	c4 3f       	cpi	r28, 0xF4	; 244
      ea4:	d8 07       	cpc	r29, r24
      ea6:	a9 f6       	brne	.-86     	; 0xe52 <EntladePins+0xa8>
-        if ((adcmv[0] < 5) && (adcmv[1] < 5) && (adcmv[2] < 5)) {
+        if ((adcmv[0] < (CAP_EMPTY_LEVEL+2)) && (adcmv[1] < (CAP_EMPTY_LEVEL+2)) && (adcmv[2] < (CAP_EMPTY_LEVEL+2))) {
            break;
         }
      }

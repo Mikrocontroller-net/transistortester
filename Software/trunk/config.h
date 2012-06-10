@@ -190,3 +190,6 @@ Is SWUART_INVERT defined, the UART works is inverse mode
   #define TXD_VAL TXD_MSK
 #endif
 
+#ifndef CAP_EMPTY_LEVEL
+ #define CAP_EMPTY_LEVEL 3
+#endif

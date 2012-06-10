@@ -697,7 +697,7 @@ void EntladePins() {
      adcmv[0] = W5msReadADC(PC0);	// which voltage has Pin 1?
      adcmv[1] = ReadADC(PC1);	// which voltage has Pin 2?
      adcmv[2] = ReadADC(PC2);	// which voltage has Pin 3?
-     if ((PartFound == PART_CELL) || (adcmv[0] < 3) & (adcmv[1] < 3) & (adcmv[2] < 3)) {
+     if ((PartFound == PART_CELL) || (adcmv[0] < CAP_EMPTY_LEVEL) & (adcmv[1] < CAP_EMPTY_LEVEL) & (adcmv[2] < CAP_EMPTY_LEVEL)) {
         ADC_DDR = TXD_MSK;		// switch all ADC-Pins to input
         R_DDR = 0;			// switch all R_L Ports (and R_H) to input
         return;
@@ -732,7 +732,7 @@ void EntladePins() {
         if (adcmv[2] < 1300) {
            ADC_DDR |= (1<<PC2);	// below 1.3V, switch directly with ADC-Port to GND
         }
-        if ((adcmv[0] < 5) && (adcmv[1] < 5) && (adcmv[2] < 5)) {
+        if ((adcmv[0] < (CAP_EMPTY_LEVEL+2)) && (adcmv[1] < (CAP_EMPTY_LEVEL+2)) && (adcmv[2] < (CAP_EMPTY_LEVEL+2))) {
            break;
         }
      }

@@ -9,13 +9,13 @@ extern uint8_t mindiv;
 
 // ReadADC.c is replaces by functional identical ReadADC.S
 //                          ==============================
-// ANZ_MES = 44 for best accuracy, Sum of 44 single ADC values 
-// ANZ_MES = 22 for middle accuracy, double of the sum of 22 single ADC values 
-// ANZ_MES = 11 for fastest result , four times the sum of 11 single ADC values 
+// ANZ_MESS = 44 for best accuracy, Sum of 44 single ADC values 
+// ANZ_MESS = 22 for middle accuracy, double of the sum of 22 single ADC values 
+// ANZ_MESS = 11 for fastest result , four times the sum of 11 single ADC values 
 // Per division by 9 we get the resolution of mV .
 
-#ifndef ANZ_MES
-#define ANZ_MES 44
+#ifndef ANZ_MESS
+#define ANZ_MESS 44
 #endif
 
 unsigned int ReadADC(uint8_t mux) {
@@ -29,7 +29,7 @@ unsigned int ReadADC(uint8_t mux) {
      goto lowADC;
   }
 #endif
-  adcx = (ANZ_MES/11); 		// round up the result
+  adcx = (ANZ_MESS/11); 		// round up the result
   ADCSRA |= (1<<ADSC);		//start conversion
   while (ADCSRA&(1<<ADSC));	//wait for ADC finished
 #ifdef NO_AREF_CAP
@@ -38,7 +38,7 @@ unsigned int ReadADC(uint8_t mux) {
   wait300us();
 #endif
 
-  for (jj = 0; jj < ANZ_MES; jj++) {
+  for (jj = 0; jj < ANZ_MESS; jj++) {
      //repeat ANZ_MESS measurements for oversampling 
      ADCSRA |= (1<<ADSC);		//start conversion
      while (ADCSRA & (1<<ADSC));	//wait for ADC finished
@@ -51,11 +51,11 @@ unsigned int ReadADC(uint8_t mux) {
      }
 #endif
   }
-#if ANZ_MES == 22
+#if ANZ_MESS == 22
   adcx *= 2;		//multiply sum by 2
 #endif
   
-#if ANZ_MES == 11
+#if ANZ_MESS == 11
   adcx *= 4;		//multiply sum by 4
 #endif
   return adcx/9;	// return (sum / 9), gives a resolution in mV

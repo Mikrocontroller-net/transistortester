@@ -10,6 +10,9 @@
 #define MEM_read_byte(a)  pgm_read_byte(a)
 #endif
 
+// RH_OFFSET : systematic offset of resistor measurement with RH (470k) 
+// resolution is 0.1 Ohm, 7000 defines a offset of 700 Ohm
+#define RH_OFFSET 7000 
 
 // automatic selection of option and parameters for different AVR s
 //----------------========----------
@@ -111,12 +114,15 @@
   #define COMMON_COLLECTOR
 
   #define C_NULL (((46 * F_CPU) / 10000000)+4)
-  #define PIN_RM 190
-  #define PIN_RP 220
+  #define PIN_RM 196
+  #define PIN_RP 240
 #endif
 
-#ifndef REF_KORR
- #define REF_KORR 0
+#ifndef REF_R_KORR
+ #define REF_R_KORR 0
+#endif
+#ifndef REF_C_KORR
+ #define REF_C_KORR 0
 #endif
 
 #ifdef POWER_OFF
@@ -140,6 +146,7 @@
 // clock divider is 4, when CPU_Clock==1MHz and ADC_Clock==250kHz
 // clock divider is 128, when CPU_Clock==16MHz and ADC_Clock==125kHz
 #define F_ADC 125000
+//#define F_ADC 250000
 #if F_CPU/F_ADC == 4
  #define AUTO_CLOCK_DIV (1<<ADPS1) 
 #endif
@@ -190,6 +197,3 @@ Is SWUART_INVERT defined, the UART works is inverse mode
   #define TXD_VAL TXD_MSK
 #endif
 
-#ifndef CAP_EMPTY_LEVEL
- #define CAP_EMPTY_LEVEL 3
-#endif

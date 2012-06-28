@@ -103,11 +103,12 @@ start:
 #endif
   ref_mv = ReadADC(0x0e);      // read Reference-voltage 
   ref_mv = W20msReadADC(0x0e);  // read Reference-voltage
+  ref_mv += REF_R_KORR;		// correction for the resistor measurement 
 #ifdef AUTOSCALE_ADC
   scale_intref_adc();	       // scale ADC to internal Reference
 #endif
 
-  ref_mv += REF_KORR;		// correction for the capacity measurement 
+  ref_mv += (REF_C_KORR - REF_R_KORR);	// correction for the capacity measurement 
 
 #ifdef BAT_CHECK
   // Battery check is selected
@@ -622,7 +623,8 @@ void RvalOut(uint8_t ii) {
 #include "CheckPins.c"
 
 #ifdef __AVR_ATmega8__
- #define WishVolt 2560
+ // 2.54V reference voltage + korrection (fix for ATmega8)
+ #define WishVolt (2560 + REF_R_KORR)
 #else
  #define WishVolt ref_mv
 #endif
@@ -632,14 +634,14 @@ unsigned int mindiff,ergeb;
 uint8_t multip,divid;
 unsigned int diff;
 
-   mindiff = WishVolt;
+   mindiff = WishVolt;		// WishVolt == ref_mv  or 2560 for ATmega8
    for (multip=2;multip<64;multip++) {
       // find factors for ADC-resolution in mV 
       //  ADC * multip / divid 
       for (divid=2;divid<multip;divid++) {
          ergeb = (unsigned int)(1023 * multip) / divid;
          diff = abs((int)(WishVolt - ergeb));
-#if ANZ_MES == 44
+#if ANZ_MESS == 44
          if (!(diff > mindiff)) 
             // find result where is most added, biggest minmul,mindiv
 #else
@@ -940,7 +942,7 @@ void AutoCheck(void) {
         lcd_data(' ');
         if (tt == 1) {   // output of reference voltage and factors for capacity measurement
            ref_mv = ReadADC(0x0e);      // read reference voltage 
-           ref_mv = W5msReadADC(0x0e) + REF_KORR;  // read reference voltage 
+           ref_mv = W5msReadADC(0x0e) + REF_C_KORR;  // read reference voltage 
            lcd_fix_string(URefT);	//"URef="
            lcd_string(utoa(ref_mv, outval, 10));
            lcd_fix_string(mVT);		//"mV "

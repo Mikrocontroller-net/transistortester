@@ -3,8 +3,8 @@
 #include <stdlib.h>
 //#include "autoinout.h"
 
-#ifndef ANZ_MES
-#define ANZ_MES 44
+#ifndef ANZ_MESS
+#define ANZ_MESS 44
 #endif
 
 .GLOBAL ReadADC
@@ -42,7 +42,7 @@ ReadADC:
   rjmp  lowADC			; 1.1V is selected, go to special routine
 #endif
 ; normal 5V reference
-;  adcx = (ANZ_MES/11); 	// round up the result (+4)
+;  adcx = (ANZ_MESS/11); 	// round up the result (+4)
 ;  ADCSRA |= (1<<ADSC);		//start Conversion
 #if ADCSRA < 32
   sbi	ADCSRA,ADSC
@@ -70,11 +70,11 @@ w3f6:
   rcall	wait300us
 #endif
 
-;  adcx = (ANZ_MES/11); 	// round up the result (+4)
-  ldi	r24, (ANZ_MES/11)
+;  adcx = (ANZ_MESS/11); 	// round up the result (+4)
+  ldi	r24, (ANZ_MESS/11)
   ldi	r25, 0
 
-;  for (jj = 0; jj < ANZ_MES; jj++) {
+;  for (jj = 0; jj < ANZ_MESS; jj++) {
      //repeat ANZ_MESS measurements for oversampling
   ldi	r20, 0
 
@@ -118,19 +118,19 @@ w416:
   brcs	lowADC 
 #endif
 
-;  for (jj = 0; jj < ANZ_MES; jj++) {
+;  for (jj = 0; jj < ANZ_MESS; jj++) {
 r436:
   subi	r20, 0xFF	; 255
-  cpi	r20, ANZ_MES
+  cpi	r20, ANZ_MESS
   brne	forlop1 
 
-#if ANZ_MES == 22
+#if ANZ_MESS == 22
 ;  adcx *= 2;		// multiply sum by 2
   add	r24,r24
   adc	r25,r25		;*2
 #endif
   
-#if ANZ_MES == 11
+#if ANZ_MESS == 11
 ;  adcx *= 4;		// multiply sum by 4
   add	r24,r24
   adc	r25,r25		;*2

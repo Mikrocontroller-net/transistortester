@@ -599,10 +599,9 @@ widmes:
 //    if((adc.hp2 + (adc.hp2 / 61)) < adc.hp1)
   if (adc.hp2 < 4972) { 
      // voltage breaks down with low test current and it is not nearly shorted  => resistor
-     if (adc.lp1 < 120) { // take measurement with R_H 
-#if DebugOut == 3
+//     if (adc.lp1 < 120) { // take measurement with R_H 
+     if (adc.lp1 < 169) { // take measurement with R_H 
         ii = 'H';
-#endif
         if (adc.lp2 < 38) {
            // measurement > 60MOhm to big resistance
            goto testend;
@@ -629,10 +628,9 @@ widmes:
            lrx1 = (lirx1 + lirx2) / 2;		//average of both R_H measurements
         }
         lrx1 *= 100;
+        lrx1 += RH_OFFSET;			// add constant for correction of systematic error
      } else {
-#if DebugOut == 3
         ii = 'L';
-#endif
         // two measurements with R_L resistors (680) are made:
         // lirx1 (measurement at HighPin)
         if (adc.tp1 > adc.hp1) {
@@ -644,7 +642,7 @@ widmes:
         }
         // lirx2 (Measurement at LowPin)
         lirx2 =(unsigned long)(R_L_VAL+PIN_RM) * (unsigned long)(adc.tp2 -adc.lp1) / adc.lp1;
-//        lrx1 =(unsigned long)R_L_VAL * (unsigned long)adc.hp1 / (adc.hp3 - adc.hp1);
+//     lrx1 =(unsigned long)R_L_VAL * (unsigned long)adc.hp1 / (adc.hp3 - adc.hp1);
 #ifdef AUTOSCALE_ADC
         if (adc.hp1 < U_INT_LIMIT) {
            lrx1 = (lirx1*FAKT_LOW + lirx2) / (FAKT_LOW+1);	//weighted average of both R_L measurements
@@ -666,12 +664,11 @@ widmes:
   lcd_data(' ');
   if (ii == 'H') {
      lcd_data('X');
-     lcd_string(ultoa(lirx1, outval, 10));
-     lcd_data('0');
+     (void) value_out(lirx1, 3);
      lcd_data(' ');
      lcd_data('Y');
-     lcd_string(ultoa(lirx2, outval, 10));
-     lcd_data('0');
+     (void) value_out(lirx2, 3);
+     lcd_data(' ');
   } else {
      lcd_data('x');
      (void) value_out(lirx1, 2);

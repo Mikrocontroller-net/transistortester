@@ -81,7 +81,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      wdt_reset();
      // read voltage without current, is already charged enough?
 #ifdef AUTOSCALE_ADC
-     adcv[2] = ReadADC(HighPin) - adcv[0] + (REF_KORR/3);
+     adcv[2] = ReadADC(HighPin) - adcv[0] + (REF_C_KORR/3);
 #else
      adcv[2] = ReadADC(HighPin) - adcv[0]; 
 #endif

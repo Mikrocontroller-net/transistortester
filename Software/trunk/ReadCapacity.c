@@ -251,8 +251,8 @@ messe_mit_rh:
       cval = 0;			//unsigned long may not reach negativ value
   }
   cpre = 0;			// cval unit is pF 
-  if (ovcnt16 > 100) {
-     // cval > 6553600
+  if (ovcnt16 > 65) {
+     // cval > 4259840
      cval /= 1000;		// switch from pF to nF unit
      cpre = 1;			// set unit, prevent overflow
   }
@@ -273,9 +273,9 @@ messe_mit_rh:
 #endif
   R_DDR = HiPinR_L; 		//switch R_L for High-Pin to GND
 #if F_CPU < 2000001
-   if(cval < 70)
+   if(cval < 50)
 #else 
-   if(cval < 35)
+   if(cval < 25)
 #endif 
      {
      // cval can only be so little in pF unit, cpre must not be testet!

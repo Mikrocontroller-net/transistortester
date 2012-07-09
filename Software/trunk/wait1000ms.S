@@ -226,4 +226,31 @@ wait1us:
  nop
 #endif
 
+#if F_CPU == 16000000
+; 16MHz Version			x = 2
+.global wait5us		; wait 5µs
+.global wait4us		; wait 4µs
+.global wait3us		; wait 3µs
+.global wait2us		; wait 2µs
+.global wait1us		; wait 1µs
+ rcall wait5us		;5us
+; run directly to wait5us ;10us
+
+wait5us:
+ rcall wait1us		;1us
+wait4us:
+ rcall wait1us		;2us
+
+wait3us:
+ rcall wait1us		;3us
+wait2us:
+ rcall wait1us
+; run directly to wait1us
+
+wait1us:
+ rcall wait500ns
+wait500ns:
+ nop
+#endif
+
  ret

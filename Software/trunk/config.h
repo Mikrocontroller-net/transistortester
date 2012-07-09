@@ -80,7 +80,7 @@
 // COMMON_COLLECTOR activates measurement of current amplification factor also in common collector circuit  (Emitter follower)
   #define COMMON_COLLECTOR
 
-  #define C_NULL (((55 * F_CPU) / 10000000)+4)
+  #define C_NULL (((45 * F_CPU) / 10000000)+3)
   #define PIN_RM 196
   #define PIN_RP 225
 
@@ -113,7 +113,7 @@
 // COMMON_COLLECTOR activates measurement of current amplification factor also in common collector circuit  (Emitter follower)
   #define COMMON_COLLECTOR
 
-  #define C_NULL (((46 * F_CPU) / 10000000)+4)
+  #define C_NULL (((37 * F_CPU) / 10000000)+3)
   #define PIN_RM 196
   #define PIN_RP 240
 #endif

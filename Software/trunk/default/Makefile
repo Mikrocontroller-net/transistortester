@@ -38,7 +38,7 @@ CFLAGS += -DWITH_SELFTEST
 
 # the WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring
 CFLAGS += -DWITH_AUTO_REF
-CFLAGS += -DREF_C_KORR=15
+CFLAGS += -DREF_C_KORR=16
 
 # the WITH_UART option enables the software UART
 #CFLAGS += -DWITH_UART
@@ -104,6 +104,11 @@ CFLAGS += -DBAT_OUT=150
 # because this increase the danger for deep discharge!!
 CFLAGS += -DBAT_POOR=64
 
+# Output of flux voltage of diodes can be done in mV units or in Volt with two digits decimal place.
+# The Volt output can save space at the LCD, but needs more program space.
+# Set the option UF_OUT_MV to get the mV units.
+#CFLAGS += -DUF_OUT_MV
+
 
 # select your programmer type and port if you will use avrdude
 PROGRAMMER=avrisp2
@@ -112,34 +117,24 @@ PORT=usb
 
 ifeq ($(PARTNO),m8)
 MCU = atmega8
-ifeq ($(OP_MHZ),8)
-# BODLEV 4V, BODEN enabled, SUT 65ms, CLK 8MHz
-FUSES_INT = -U lfuse:w:0x24:m -U hfuse:w:0xd9:m
-# Operation with 8MHz crystal 
-FUSES_CRY = -U lfuse:w:0x3f:m -U hfuse:w:0xd9:m
-FUSES_CRY_L = -U lfuse:w:0x3f:m -U hfuse:w:0xd9:m
-else
+ifeq ($(OP_MHZ),1)
 # BODLEV 4V, BODEN enabled, SUT 65ms, CLK 1MHz
 FUSES_INT = -U lfuse:w:0x21:m -U hfuse:w:0xd9:m
 # operation with 1MHz crystal!!!
-FUSES_CRY = -U lfuse:w:0x3d:m -U hfuse:w:0xd9:m
+FUSES_CRY = -U lfuse:w:0x3d:m -U hfuse:w:0xc9:m
 FUSES_CRY_L = -U lfuse:w:0x3d:m -U hfuse:w:0xd9:m
+else
+# BODLEV 4V, BODEN enabled, SUT 65ms, CLK 8MHz
+FUSES_INT = -U lfuse:w:0x24:m -U hfuse:w:0xd9:m
+# Operation with 8MHz crystal 
+FUSES_CRY = -U lfuse:w:0x3f:m -U hfuse:w:0xc9:m
+FUSES_CRY_L = -U lfuse:w:0x3f:m -U hfuse:w:0xd9:m
 endif
 endif
 
 ifeq ($(PARTNO),m48)
 MCU = atmega48
-ifeq ($(OP_MHZ),8)
-# RC operation ,CLK 8MHz
-FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-# Operation with 8MHz crystal and /1 divider , full swing crystal
-FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-# Operation with 8MHz crystal and /1 divider , low power
-FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-else
+ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xdc:m
 # -U efuse:w:0xff:m
@@ -148,23 +143,23 @@ FUSES_CRY = -U lfuse:w:0x77:m -U hfuse:w:0xdc:m
 # -U efuse:w:0xff:m
 # Operation with 8MHz crystal and /8 divider , low power
 FUSES_CRY_L = -U lfuse:w:0x7f:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xff:m
+else
+# RC operation ,CLK 8MHz
+FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xff:m
+# Operation with 8MHz crystal and /1 divider , full swing crystal
+FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xff:m
+# Operation with 8MHz crystal and /1 divider , low power
+FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xdc:m
 # -U efuse:w:0xff:m
 endif
 endif
 
 ifeq ($(PARTNO),m48p)
 MCU = atmega48
-ifeq ($(OP_MHZ),8)
-# RC operation ,CLK 8MHz
-FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-# Operation with 8MHz crystal and /1 divider , full swing crystal
-FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-# Operation with 8MHz crystal and /1 divider , low power
-FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-else
+ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xdc:m
 # -U efuse:w:0xff:m
@@ -173,23 +168,23 @@ FUSES_CRY = -U lfuse:w:0x77:m -U hfuse:w:0xdc:m
 # -U efuse:w:0xff:m
 # Operation with 8MHz crystal and /8 divider , low power
 FUSES_CRY_L = -U lfuse:w:0x7f:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xff:m
+else
+# RC operation ,CLK 8MHz
+FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xff:m
+# Operation with 8MHz crystal and /1 divider , full swing crystal
+FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xff:m
+# Operation with 8MHz crystal and /1 divider , low power
+FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xdc:m
 # -U efuse:w:0xff:m
 endif
 endif
 
 ifeq ($(PARTNO),m88)
 MCU = atmega88
-ifeq ($(OP_MHZ),8)
-# RC operation ,CLK 8MHz
-FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xf9:m
-# Operation with 8MHz crystal and /1 divider , full swing crystal
-FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xf9:m
-# Operation with 8MHz crystal and /1 divider , low power
-FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xf9:m
-else
+ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xdc:m
 # -U efuse:w:0xf9:m
@@ -198,23 +193,23 @@ FUSES_CRY = -U lfuse:w:0x77:m -U hfuse:w:0xdc:m
 # -U efuse:w:0xf9:m
 # Operation with 8MHz crystal and /8 divider , low power
 FUSES_CRY_L = -U lfuse:w:0x7f:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xf9:m
+else
+# RC operation ,CLK 8MHz
+FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xf9:m
+# Operation with 8MHz crystal and /1 divider , full swing crystal
+FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xf9:m
+# Operation with 8MHz crystal and /1 divider , low power
+FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xdc:m
 # -U efuse:w:0xf9:m
 endif
 endif
 
 ifeq ($(PARTNO),m88p)
 MCU = atmega88
-ifeq ($(OP_MHZ),8)
-# RC operation ,CLK 8MHz
-FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xf9:m
-# Operation with 8MHz crystal and /1 divider , full swing crystal
-FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xf9:m
-# Operation with 8MHz crystal and /1 divider , low power
-FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xf9:m
-else
+ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xdc:m
 # -U efuse:w:0xf9:m
@@ -223,23 +218,23 @@ FUSES_CRY = -U lfuse:w:0x77:m -U hfuse:w:0xdc:m
 # -U efuse:w:0xf9:m
 # Operation with 8MHz crystal and /8 divider , low power
 FUSES_CRY_L = -U lfuse:w:0x7f:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xf9:m
+else
+# RC operation ,CLK 8MHz
+FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xf9:m
+# Operation with 8MHz crystal and /1 divider , full swing crystal
+FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xf9:m
+# Operation with 8MHz crystal and /1 divider , low power
+FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xdc:m
 # -U efuse:w:0xf9:m
 endif
 endif
 
 ifeq ($(PARTNO),m168)
 MCU = atmega168
-ifeq ($(OP_MHZ),8)
-# RC operation ,CLK 8MHz
-FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xf9:m
-# Operation with 8MHz crystal and /1 divider , full swing crystal
-FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xf9:m
-# Operation with 8MHz crystal and /1 divider , low power
-FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xf9:m
-else
+ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xdc:m
 # -U efuse:w:0xf9:m
@@ -248,23 +243,23 @@ FUSES_CRY = -U lfuse:w:0x77:m -U hfuse:w:0xdc:m
 # -U efuse:w:0xf9:m
 # Operation with 8MHz crystal and /8 divider , low power
 FUSES_CRY_L = -U lfuse:w:0x7f:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xf9:m
+else
+# RC operation ,CLK 8MHz
+FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xf9:m
+# Operation with 8MHz crystal and /1 divider , full swing crystal
+FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xf9:m
+# Operation with 8MHz crystal and /1 divider , low power
+FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xdc:m
 # -U efuse:w:0xf9:m
 endif
 endif
 
 ifeq ($(PARTNO),m168p)
 MCU = atmega168
-ifeq ($(OP_MHZ),8)
-# RC operation ,CLK 8MHz
-FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xf9:m
-# Operation with 8MHz crystal and /1 divider , full swing crystal
-FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xf9:m
-# Operation with 8MHz crystal and /1 divider , low power
-FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xf9:m
-else
+ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xdc:m
 # -U efuse:w:0xf9:m
@@ -274,22 +269,22 @@ FUSES_CRY = -U lfuse:w:0x77:m -U hfuse:w:0xdc:m
 # Operation with 8MHz crystal and /8 divider , low power
 FUSES_CRY_L = -U lfuse:w:0x7f:m -U hfuse:w:0xdc:m
 # -U efuse:w:0xf9:m
+else
+# RC operation ,CLK 8MHz
+FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xf9:m
+# Operation with 8MHz crystal and /1 divider , full swing crystal
+FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xf9:m
+# Operation with 8MHz crystal and /1 divider , low power
+FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xdc:m
+# -U efuse:w:0xf9:m
 endif
 endif
 
 ifeq ($(PARTNO),m328)
 MCU = atmega328
-ifeq ($(OP_MHZ),8)
-# RC operation ,CLK 8MHz
-FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
-# Operation with 8MHz crystal and /1 divider , full swing crystal
-FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
-# Operation with 8MHz crystal and /1 divider , low power
-FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
-else
+ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xd9:m
 # -U efuse:w:0xfc:m
@@ -298,23 +293,23 @@ FUSES_CRY = -U lfuse:w:0x77:m -U hfuse:w:0xd9:m
 # -U efuse:w:0xfc:m
 # Operation with 8MHz crystal and /8 divider , low power
 FUSES_CRY_L = -U lfuse:w:0x7f:m -U hfuse:w:0xd9:m
+# -U efuse:w:0xfc:m
+else
+# RC operation ,CLK 8MHz
+FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xd9:m
+# -U efuse:w:0xfc:m
+# Operation with 8MHz crystal and /1 divider , full swing crystal
+FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xd9:m
+# -U efuse:w:0xfc:m
+# Operation with 8MHz crystal and /1 divider , low power
+FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xd9:m
 # -U efuse:w:0xfc:m
 endif
 endif
 
 ifeq ($(PARTNO),m328p)
 MCU = atmega328
-ifeq ($(OP_MHZ),8)
-# RC operation ,CLK 8MHz
-FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
-# Operation with 8MHz crystal and /1 divider , full swing crystal
-FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
-# Operation with 8MHz crystal and /1 divider , low power
-FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
-else
+ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xd9:m
 # -U efuse:w:0xfc:m
@@ -324,16 +319,21 @@ FUSES_CRY = -U lfuse:w:0x77:m -U hfuse:w:0xd9:m
 # Operation with 8MHz crystal and /8 divider , low power
 FUSES_CRY_L = -U lfuse:w:0x7f:m -U hfuse:w:0xd9:m
 # -U efuse:w:0xfc:m
+else
+# RC operation ,CLK 8MHz
+FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xd9:m
+# -U efuse:w:0xfc:m
+# Operation with 8MHz crystal and /1 divider , full swing crystal
+FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xd9:m
+# -U efuse:w:0xfc:m
+# Operation with 8MHz crystal and /1 divider , low power
+FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xd9:m
+# -U efuse:w:0xfc:m
 endif
 endif
 
-ifeq ($(OP_MHZ),8)
-# CLK 8MHz
-CFLAGS += -DF_CPU=8000000UL
-else
-# CLK 1MHz
-CFLAGS += -DF_CPU=1000000UL
-endif
+CFLAGS += -DF_CPU=$(OP_MHZ)000000UL
+
 ## Options common to compile, link and assembly rules
 COMMON = -mmcu=$(MCU)
 

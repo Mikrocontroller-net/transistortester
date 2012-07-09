@@ -590,8 +590,21 @@ void UfAusgabe(uint8_t bcdnum) {
 }
 void mVAusgabe(uint8_t nn) {
    if (nn < 3) {
+#ifdef UF_OUT_MV
+      // Output in mV units
       lcd_string(utoa(diodes[nn].Voltage, outval, 10));
       lcd_data('m');
+#else
+      // Output with format x.xxV or .xxV
+      // round up last digit, first digit will never appear (10000)
+      utoa((diodes[nn].Voltage + 10005),outval,10);
+      if (outval[1] != '0') {
+         lcd_data(outval[1]);
+      }
+      lcd_data('.');
+      lcd_data(outval[2]);
+      lcd_data(outval[3]);
+#endif
       lcd_data('V');
       lcd_data(' ');
    }

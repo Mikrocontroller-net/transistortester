@@ -962,10 +962,6 @@ void AutoCheck(void) {
            Line2();			//Cursor to column 1, row 2
            lcd_fix_string(RHfakt);	//"RHf="
            lcd_string(utoa(RHmultip, outval, 10));
-#ifdef C_MESS
-           lcd_fix_string(RLfakt);	//" RLf="
-           lcd_string(utoa(getRLmultip(ref_mv), outval, 10));
-#endif
         }
         if (tt == 2) { // how equal are the RL resistors? 
            R_PORT = 1<<(TP1*2);		//RL1 to VCC

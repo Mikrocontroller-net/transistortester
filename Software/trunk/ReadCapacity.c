@@ -80,11 +80,11 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      wait500us();			//wait a little time
      wdt_reset();
      // read voltage without current, is already charged enough?
-#ifdef AUTOSCALE_ADC
-     adcv[2] = ReadADC(HighPin) - adcv[0] + (REF_C_KORR/3);
-#else
-     adcv[2] = ReadADC(HighPin) - adcv[0]; 
-#endif
+//#ifdef AUTOSCALE_ADC
+     adcv[2] = ReadADC(HighPin) - adcv[0] + (REF_C_KORR/2);
+//#else
+//     adcv[2] = ReadADC(HighPin) - adcv[0]; 
+//#endif
      if ((ovcnt16 == 126) && (adcv[2] < 75)) {
         // 300mV can not be reached well-timed 
         break;		// don't try to load any more
@@ -244,12 +244,7 @@ messe_mit_rh:
      goto keinC;	// no normal end
   }
   cval = CombineII2Long(ovcnt16, tmpint);
-// a clock frequency dependent offset (C_NULL) must be subtract 
-  if (cval > C_NULL) {
-      cval -= C_NULL;
-  } else {
-      cval = 0;			//unsigned long may not reach negativ value
-  }
+
   cpre = 0;			// cval unit is pF 
   if (ovcnt16 > 65) {
      // cval > 4259840
@@ -258,6 +253,35 @@ messe_mit_rh:
   }
   cval *= RHmultip;		// 708
   cval /= (F_CPU / 10000);	// divide by 100 (@ 1MHz clock), 800 (@ 8MHz clock)
+#if 0
+  Line4();
+//  lcd_clear_line();
+//  Line4();
+  lcd_ziff1(LowPin);
+  lcd_data('c');
+  lcd_ziff1(HighPin);
+  lcd_data(' ');
+  lcd_string(ultoa(cval,outval,10));
+  lcd_data(' ');
+  wait3s();
+#endif
+  if (cpre == 0) {
+#if COMP_SLEW1 > COMP_SLEW2
+     if (cval < COMP_SLEW1) {
+        // add slew rate dependent offset
+        cval += (COMP_SLEW1 / (cval+COMP_SLEW2 ));
+     }
+#endif
+     if (HighPin == TP2) cval += 2;	// measurements with TP2 have 2pF less capacity
+//     if ((HighPin == TP3) && (LowPin == TP2)) cval -= 1; // this combination has 1pF to much
+//     if ((HighPin == TP1) && (LowPin == TP3)) cval += 1; // this combinations has 1pF to less
+     if (cval > C_NULL) {
+         cval -= C_NULL;		//subtract constant offset (pF)
+     } else {
+         cval = 0;			//unsigned long may not reach negativ value
+     }
+  }
+
 #if DebugOut == 10
   R_DDR = 0;			// switch all resistor ports to input
   Line4();

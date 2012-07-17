@@ -960,6 +960,7 @@ void AutoCheck(void) {
            lcd_string(utoa(ref_mv, outval, 10));
            lcd_fix_string(mVT);		//"mV "
            Line2();			//Cursor to column 1, row 2
+           RefVoltage();		//compute RHmultip = f(reference voltage)
            lcd_fix_string(RHfakt);	//"RHf="
            lcd_string(utoa(RHmultip, outval, 10));
         }

@@ -14,6 +14,8 @@
 // resolution is 0.1 Ohm, 7000 defines a offset of 700 Ohm
 #define RH_OFFSET 7000 
 
+// CABLE_CAP defines the capacity (pF) of 12cm cable with clip at the terminal pins
+#define CABLE_CAP 3
 // automatic selection of option and parameters for different AVR s
 //----------------========----------
 #if defined(__AVR_ATmega48__)
@@ -48,7 +50,7 @@
   #undef BAT_CHECK
   #endif
 
-  #define C_NULL (((52 * F_CPU) / 10000000)+4)
+  #define C_NULL 50 
   #define PIN_RM 190
   #define PIN_RP 220
 
@@ -64,9 +66,14 @@
 // COMMON_COLLECTOR activates measurement of current amplification factor also in common collector circuit  (Emitter follower)
   #define COMMON_COLLECTOR
 
-  #define C_NULL (((52 * F_CPU) / 10000000)+4)
   #define PIN_RM 190
   #define PIN_RP 225
+// CC0 defines the capacity of empty terminal pins 1 & 3 without cable
+  #define CC0 36
+// Slew rate correction  val += COMP_SLEW1 / (val + COMP_SLEW2)
+  #define COMP_SLEW1 4000
+  #define COMP_SLEW2 220
+  #define C_NULL CC0+CABLE_CAP+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2))
 
 //------------------=========----------
 #elif defined(__AVR_ATmega168__)
@@ -80,9 +87,14 @@
 // COMMON_COLLECTOR activates measurement of current amplification factor also in common collector circuit  (Emitter follower)
   #define COMMON_COLLECTOR
 
-  #define C_NULL (((45 * F_CPU) / 10000000)+3)
   #define PIN_RM 196
   #define PIN_RP 225
+// CC0 defines the capacity of empty terminal pins 1 & 3 without cable
+  #define CC0 36
+// Slew rate correction  val += COMP_SLEW1 / (val + COMP_SLEW2)
+  #define COMP_SLEW1 4000
+  #define COMP_SLEW2 220
+  #define C_NULL CC0+CABLE_CAP+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2))
 
 //------------------=========----------
 #elif defined(__AVR_ATmega328__)
@@ -96,9 +108,14 @@
 // COMMON_COLLECTOR activates measurement of current amplification factor also in common collector circuit  (Emitter follower)
   #define COMMON_COLLECTOR
 
-  #define C_NULL (((52 * F_CPU) / 10000000)+4)
   #define PIN_RM 200
   #define PIN_RP 220
+// CC0 defines the capacity of empty terminal pins 1 & 3 without cable
+  #define CC0 36
+// Slew rate correction  val += COMP_SLEW1 / (val + COMP_SLEW2)
+  #define COMP_SLEW1 4000
+  #define COMP_SLEW2 220
+  #define C_NULL CC0+CABLE_CAP+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2))
 
 //------------------=========----------
 #else
@@ -113,9 +130,14 @@
 // COMMON_COLLECTOR activates measurement of current amplification factor also in common collector circuit  (Emitter follower)
   #define COMMON_COLLECTOR
 
-  #define C_NULL (((37 * F_CPU) / 10000000)+3)
   #define PIN_RM 196
   #define PIN_RP 240
+// CC0 defines the capacity of empty terminal pins 1 & 3 without cable
+  #define CC0 27
+// Slew rate correction  val += COMP_SLEW1 / (val + COMP_SLEW2)
+  #define COMP_SLEW1 0
+  #define COMP_SLEW2 33
+  #define C_NULL CC0+CABLE_CAP+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2))
 #endif
 
 #ifndef REF_R_KORR

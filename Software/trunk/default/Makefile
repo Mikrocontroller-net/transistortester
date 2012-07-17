@@ -38,7 +38,7 @@ CFLAGS += -DWITH_SELFTEST
 
 # the WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring
 CFLAGS += -DWITH_AUTO_REF
-CFLAGS += -DREF_C_KORR=16
+CFLAGS += -DREF_C_KORR=8
 
 # the WITH_UART option enables the software UART
 #CFLAGS += -DWITH_UART

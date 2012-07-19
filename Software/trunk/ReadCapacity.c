@@ -80,11 +80,8 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      wait500us();			//wait a little time
      wdt_reset();
      // read voltage without current, is already charged enough?
-//#ifdef AUTOSCALE_ADC
-     adcv[2] = ReadADC(HighPin) - adcv[0] + (REF_C_KORR/2);
-//#else
-//     adcv[2] = ReadADC(HighPin) - adcv[0]; 
-//#endif
+//     adcv[2] = ReadADC(HighPin) - adcv[0] + C_H_KORR;
+     adcv[2] = ReadADC(HighPin) - adcv[0];
      if ((ovcnt16 == 126) && (adcv[2] < 75)) {
         // 300mV can not be reached well-timed 
         break;		// don't try to load any more
@@ -148,7 +145,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   }
   // Capacity is more than about 50µF
   ChargePin10ms(HiPinR_H,0);		//switch HighPin with R_H 10ms auf GND, then currentless
-  adcv[3] = ReadADC(HighPin) - adcv[0]; // read volatge again, is discharged only a little bit ?
+  adcv[3] = ReadADC(HighPin) - adcv[0]; // read voltage again, is discharged only a little bit ?
 #if DebugOut == 10
   lcd_data('U');
   lcd_data('3');
@@ -165,10 +162,12 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 #endif
      goto keinC; //implausible, not yet the half voltage
   }
-   cval = ovcnt16*10 + 10;
+   cval = ovcnt16 + 1;
 
    cpre = 1;		// switch units to nF 
    cval *= getRLmultip(adcv[2]);	// get factor to convert time to capacity from table
+   cval *= (400 - (C_H_KORR));
+   cval /= 40;
 #if DebugOut == 10
    Line3();
    lcd_clear_line();
@@ -179,6 +178,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
    lcd_data(' ');
    lcd_string(ultoa(cval,outval,10));
    lcd_data('n');
+   lcd_string(utoa(ovcnt16,outval,10));
    wait3s();
 #endif
    goto checkDiodes;

@@ -166,7 +166,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 
    cpre = 1;		// switch units to nF 
    cval *= getRLmultip(adcv[2]);	// get factor to convert time to capacity from table
-   cval *= (400 - (C_H_KORR));
+   cval *= (400 - ((C_H_KORR*2)/5));
    cval /= 40;
 #if DebugOut == 10
    Line3();

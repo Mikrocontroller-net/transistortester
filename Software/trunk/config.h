@@ -90,6 +90,8 @@
   #define PIN_RM 196
   #define PIN_RP 225
 // CC0 defines the capacity of empty terminal pins 1 & 3 without cable
+// CC0 35 for ATmega168A
+// CC0 36 for ATmega168
   #define CC0 36
 // Slew rate correction  val += COMP_SLEW1 / (val + COMP_SLEW2)
   #define COMP_SLEW1 4000

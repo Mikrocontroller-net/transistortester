@@ -3211,7 +3211,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     10de:	9e 01       	movw	r18, r28
     10e0:	40 e0       	ldi	r20, 0x00	; 0
     10e2:	50 e0       	ldi	r21, 0x00	; 0
-   cval *= (400 - (C_H_KORR));
+   cval *= (400 - ((C_H_KORR*2)/5));
     10e4:	0e 94 37 12 	call	0x246e	; 0x246e <__mulsi3>
    cval /= 40;
     10e8:	28 e2       	ldi	r18, 0x28	; 40

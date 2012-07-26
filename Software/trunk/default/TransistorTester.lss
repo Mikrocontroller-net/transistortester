@@ -3212,7 +3212,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     10de:	ec 01       	movw	r28, r24
     10e0:	c6 01       	movw	r24, r12
     10e2:	b5 01       	movw	r22, r10
-    10e4:	26 e8       	ldi	r18, 0x86	; 134
+    10e4:	28 e8       	ldi	r18, 0x88	; 136
     10e6:	31 e0       	ldi	r19, 0x01	; 1
     10e8:	40 e0       	ldi	r20, 0x00	; 0
     10ea:	50 e0       	ldi	r21, 0x00	; 0
@@ -4287,7 +4287,7 @@ void AutoCheck(void) {
            ref_mv = W5msReadADC(0x0e) + REF_C_KORR;  // read reference voltage 
     1734:	8e e0       	ldi	r24, 0x0E	; 14
     1736:	0e 94 e5 11 	call	0x23ca	; 0x23ca <W5msReadADC>
-    173a:	08 96       	adiw	r24, 0x08	; 8
+    173a:	0e 96       	adiw	r24, 0x0e	; 14
     173c:	90 93 32 01 	sts	0x0132, r25
     1740:	80 93 31 01 	sts	0x0131, r24
            lcd_fix_string(URefT);	//"URef="
@@ -4926,7 +4926,7 @@ start:
   ref_mv += (REF_C_KORR - REF_R_KORR);	// correction for the capacity measurement 
     1abc:	80 91 31 01 	lds	r24, 0x0131
     1ac0:	90 91 32 01 	lds	r25, 0x0132
-    1ac4:	08 96       	adiw	r24, 0x08	; 8
+    1ac4:	0e 96       	adiw	r24, 0x0e	; 14
     1ac6:	90 93 32 01 	sts	0x0132, r25
     1aca:	80 93 31 01 	sts	0x0131, r24
 

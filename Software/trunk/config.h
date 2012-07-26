@@ -20,6 +20,7 @@
 //----------------========----------
 #if defined(__AVR_ATmega48__)
 //----------------========----------
+  #define ACALL rcall
   #define MCU_STATUS_REG MCUCR
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1
@@ -57,6 +58,7 @@
 //------------------========----------
 #elif defined(__AVR_ATmega88__)
 //------------------========----------
+  #define ACALL rcall
   #define MCU_STATUS_REG MCUCR
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1
@@ -78,6 +80,7 @@
 //------------------=========----------
 #elif defined(__AVR_ATmega168__)
 //------------------=========----------
+  #define ACALL call
   #define MCU_STATUS_REG MCUCR
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1
@@ -101,6 +104,7 @@
 //------------------=========----------
 #elif defined(__AVR_ATmega328__)
 //------------------=========----------
+  #define ACALL call
   #define MCU_STATUS_REG MCUCR
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1
@@ -123,6 +127,7 @@
 #else
 //                   ATmega8
 //------------------=========----------
+  #define ACALL rcall
   #define MCU_STATUS_REG MCUCSR
   #define ADC_COMP_CONTROL SFIOR
   #define TI1_INT_FLAGS TIFR

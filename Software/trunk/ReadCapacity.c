@@ -91,37 +91,8 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      }
   }
   // wait 5ms and read voltage again, does the capacitor keep the voltage?
-  adcv[1] = W5msReadADC(HighPin) - adcv[0];
-  wdt_reset();
-
-
-#if DebugOut == 10
-  Line3();
-  lcd_clear_line();
-  Line3();
-  lcd_ziff1(LowPin);
-  lcd_data('C');
-  lcd_ziff1(HighPin);
-  lcd_data(' ');
-  lcd_data('U');
-  lcd_data('0');
-  lcd_data(':');
-  lcd_string(utoa(adcv[0],outval,10));
-  lcd_data(' ');
-  lcd_data('U');
-  lcd_data('2');
-  lcd_data(':');
-  lcd_string(utoa(adcv[2],outval,10));
-  Line4();
-  lcd_data('U');
-  lcd_data('1');
-  lcd_data(':');
-  lcd_string(utoa(adcv[1],outval,10));
-  lcd_data('*');
-  lcd_string(utoa(ovcnt16,outval,10)); 
-  lcd_data(' ');
-  wait3s();
-#endif
+//  adcv[1] = W5msReadADC(HighPin) - adcv[0];
+//  wdt_reset();
   cpre = 0;			//default unit is pF
   if (adcv[2] < 301) {
 #if DebugOut == 10
@@ -131,19 +102,13 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 #endif
      goto keinC;		// was never charged enough, >100mF or shorted
   }
-  if (adcv[1] < 151) {
-#if DebugOut == 10
-     lcd_data('L');
-     lcd_data(' ');
-     wait1s();
-#endif
-     goto keinC;		// capacitor does not keep the voltage about 5ms
-  }
   //voltage is rised properly and keeps the voltage enough
   if ((ovcnt16 == 0 ) && (adcv[2] > 1300)) {
      goto messe_mit_rh;		// Voltage of more than 1300mV is reached in one pulse, to fast loaded
   }
   // Capacity is more than about 50µF
+  cpre = 1;		// switch units to nF 
+#if 0
   ChargePin10ms(HiPinR_H,0);		//switch HighPin with R_H 10ms auf GND, then currentless
   adcv[3] = ReadADC(HighPin) - adcv[0]; // read voltage again, is discharged only a little bit ?
 #if DebugOut == 10
@@ -162,11 +127,35 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 #endif
      goto keinC; //implausible, not yet the half voltage
   }
-   cval = ovcnt16 + 1;
-
-   cpre = 1;		// switch units to nF 
-   cval *= getRLmultip(adcv[2]);	// get factor to convert time to capacity from table
-   cval *= (400 - ((C_H_KORR*2)/5));
+  cval = ovcnt16 + 1;
+  cval *= getRLmultip(adcv[2]);		// get factor to convert time to capacity from table
+#else
+  // wait the same time which is required for loading
+  for (tmpint=0;tmpint<=ovcnt16;tmpint++) {
+     wait10ms();
+     adcv[3] = ReadADC(HighPin) - adcv[0]; // read voltage again, is discharged only a little bit ?
+     wdt_reset();
+  }
+  if (adcv[2] > adcv[3]) {
+     // build difference to load voltage
+     adcv[3] = adcv[2] - adcv[3];
+  } else {
+     adcv[3] = 0;
+  }
+  if (adcv[3] > 100) {
+     // more than 100mV is lost during load time
+#if DebugOut == 10
+     lcd_data('L');
+     lcd_data(' ');
+     wait1s();
+#endif
+     goto keinC;		// capacitor does not keep the voltage about 5ms
+  }
+  cval = ovcnt16 + 1;
+  // compute factor with load voltage + lost voltage during the voltage load time
+  cval *= getRLmultip(adcv[2]+adcv[3]);	// get factor to convert time to capacity from table
+#endif
+   cval *= (400 - ((C_H_KORR)*2)/5);	// correct with C_H_KORR with 0.1% resolution, but prevent overflow
    cval /= 40;
 #if DebugOut == 10
    Line3();
@@ -318,8 +307,8 @@ checkDiodes:
       lcd_data(' ');
       wait1s();
 #endif
-      //höchstwahrscheinlich eine (oder mehrere) Diode(n) in Sperrrichtung,
-      //die sonst fälschlicherweise als Kondensator erkannt wird
+      // nearly shure, that there is one or more diodes in reverse direction,
+      // which would be wrongly detected as capacitor 
    } else {
 
    PartFound = PART_CAPACITOR;	//capacitor is found

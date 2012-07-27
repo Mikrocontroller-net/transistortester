@@ -154,17 +154,19 @@
  #define REF_C_KORR 0
 #endif
 
+#define LONG_WAIT_TIME 10000
+#define SHORT_WAIT_TIME 3000
 #ifdef POWER_OFF
 // if POWER OFF function is selected, wait 10s
 // if POWER_OFF with parameter > 2, wait only 3s before repeating
  #if (POWER_OFF+0) > 2
-  #define OFF_WAIT_TIME 3000
+  #define OFF_WAIT_TIME SHORT_WAIT_TIME
  #else
-  #define OFF_WAIT_TIME 10000
+  #define OFF_WAIT_TIME LONG_WAIT_TIME
  #endif
 #else
 // if POWER OFF function is not selected, wait 3s before repeat measurement
- #define OFF_WAIT_TIME  3000
+ #define OFF_WAIT_TIME  SHORT_WAIT_TIME
 #endif
 
 //**********************************************************

@@ -79,8 +79,22 @@ int main(void) {
   MCUCR = (1<<PUD);		// disable Pull-Up Resistors mega168 family
  #endif
 #endif
+
+  // tester display time selection
+  display_time = OFF_WAIT_TIME;		// LONG_WAIT_TIME for single mode, else SHORT_WAIT_TIME
+  empty_count = 0;                      // flag for extreme debouncing
+  if (!(ON_PIN_REG & (1<<RST_PIN)))     // if power button is pressed ...
+    empty_count = 1;                    // ... set debounce flag
+  wait300ms();                          // wait to catch a long key press
+  if (!(ON_PIN_REG & (1<<RST_PIN)))     // check if power button is pressed
+  {
+    if (empty_count == 1)               // if button is still pressed
+      display_time = LONG_WAIT_TIME;	// ... set long time display anyway
+  }
+
   empty_count = 0;
   mess_count = 0;
+
 
 //*****************************************************************
 //Entry: if start key is pressed before shut down
@@ -535,11 +549,12 @@ gakAusgabe:
  end:
   empty_count = 0;		// reset counter, if part is found
   mess_count++;			// count measurements
+
  end2:
   while(!(ON_PIN_REG & (1<<RST_PIN)));	//wait ,until button is released
   wait200ms();
 // wait 10 seconds or 3 seconds (if repeat function)
-  for(gthvoltage = 0;gthvoltage<OFF_WAIT_TIME;gthvoltage++) {
+  for(gthvoltage = 0;gthvoltage<display_time;gthvoltage++) {
      if(!(ON_PIN_REG & (1<<RST_PIN))) {
         // If the key is pressed again... 
         // goto start of measurement 

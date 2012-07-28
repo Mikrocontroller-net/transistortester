@@ -80,6 +80,7 @@ int main(void) {
  #endif
 #endif
 
+#if POWER_OFF+0 > 1
   // tester display time selection
   display_time = OFF_WAIT_TIME;		// LONG_WAIT_TIME for single mode, else SHORT_WAIT_TIME
   empty_count = 0;                      // flag for extreme debouncing
@@ -91,6 +92,9 @@ int main(void) {
     if (empty_count == 1)               // if button is still pressed
       display_time = LONG_WAIT_TIME;	// ... set long time display anyway
   }
+#else
+  #define display_time OFF_WAIT_TIME
+#endif
 
   empty_count = 0;
   mess_count = 0;
@@ -574,12 +578,13 @@ gakAusgabe:
      goto start;			// repeat measurement POWER_OFF times
   }
  #endif
+  // only one Measurement requested, shut off
   wdt_disable();			//Watchdog off
   ON_PORT &= ~(1<<ON_PIN);		//switch off power
   //never ending loop 
   while(1) {
      if(!(ON_PIN_REG & (1<<RST_PIN))) {
-        // The statement is only reached if no auto off is installed
+        // The statement is only reached if no auto off equipment is installed
         goto start;
      }
   }

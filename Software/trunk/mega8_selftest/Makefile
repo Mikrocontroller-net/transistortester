@@ -87,7 +87,7 @@ CFLAGS += -DANZ_MESS=44
 # The tester will also shut down with found part,
 # but measurements are allowed double of the specified number.
 #  You can specify up to 255 empty measurements (CFLAGS += -DPOWER_OFF=255).
-CFLAGS += -DPOWER_OFF=5
+CFLAGS += -DPOWER_OFF
 # option BAT_CHECK enables the Battery Voltage Check, otherwise output SW Version
 # is only needed for battery powered tester version
 CFLAGS += -DBAT_CHECK
@@ -108,7 +108,7 @@ CFLAGS += -DBAT_POOR=64
 # Output of flux voltage of diodes can be done in mV units or in Volt with two digits decimal place.
 # The Volt output can save space at the LCD, but needs more program space.
 # Set the option UF_OUT_MV to get the mV units.
-CFLAGS += -DUF_OUT_MV
+#CFLAGS += -DUF_OUT_MV
 
 
 # select your programmer type and port if you will use avrdude

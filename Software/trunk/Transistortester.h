@@ -421,4 +421,6 @@ uint8_t PartFound;	 	// the found part
 char outval[12];		// String for ASCII-outpu
 uint8_t empty_count;		// counter for max count of empty measurements
 uint8_t mess_count;		// counter for max count of nonempty measurements
+#if POWER_OFF+0 > 1
 unsigned int display_time;	// display time of measurement in ms units
+#endif

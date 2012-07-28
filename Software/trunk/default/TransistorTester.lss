@@ -4866,6 +4866,7 @@ int main(void) {
  #endif
 #endif
 
+#if POWER_OFF+0 > 1
   // tester display time selection
   display_time = OFF_WAIT_TIME;		// LONG_WAIT_TIME for single mode, else SHORT_WAIT_TIME
     1a6e:	88 eb       	ldi	r24, 0xB8	; 184
@@ -4896,6 +4897,9 @@ int main(void) {
     1a9c:	90 93 05 01 	sts	0x0105, r25
     1aa0:	80 93 04 01 	sts	0x0104, r24
   }
+#else
+  #define display_time OFF_WAIT_TIME
+#endif
 
   empty_count = 0;
     1aa4:	10 92 36 01 	sts	0x0136, r1
@@ -6220,6 +6224,7 @@ gakAusgabe:
      goto start;			// repeat measurement POWER_OFF times
   }
  #endif
+  // only one Measurement requested, shut off
   wdt_disable();			//Watchdog off
     2396:	88 e1       	ldi	r24, 0x18	; 24
     2398:	0f b6       	in	r0, 0x3f	; 63

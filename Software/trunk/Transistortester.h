@@ -205,7 +205,7 @@ const unsigned char Dioden[] MEM_TEXT = {'*',LCD_CHAR_DIODE1, ' ', ' ',0};
 const unsigned char Resis[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
 #endif
 const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
-const unsigned char VERSION[] MEM_TEXT = "Version 0.98k";
+const unsigned char VERSION[] MEM_TEXT = "Version 0.99k";
 
 #ifdef WITH_SELFTEST
 const unsigned char mVT[] MEM_TEXT = "mV ";

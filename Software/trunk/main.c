@@ -453,9 +453,9 @@ start:
  #ifdef R_MESS	//resistor measurement is wanted
   else if(PartFound == PART_RESISTOR) {
     if (NumOfR == 1) { // single resistor
-       lcd_ziff1(resis[ii].rb);  	//Pin-number 1
+       lcd_ziff1(resis[0].rb);  	//Pin-number 1
        lcd_fix_string(Resis);
-       lcd_ziff1(resis[ii].ra);		//Pin-number 2
+       lcd_ziff1(resis[0].ra);		//Pin-number 2
     } else { // R-Max suchen
        ii = 0;
        if (resis[1].rx > resis[0].rx)
@@ -965,7 +965,7 @@ void AutoCheck(void) {
   lcd_fix_string(SELFTEST);		// "Selftest mode.."
   wait1s();
  
-  for(tt=1;tt<10;tt++) {		// loop for all Tests
+  for(tt=1;tt<11;tt++) {		// loop for all Tests
      for(ww=0;ww<8;ww++) {		// repeat the test 8 times
         Line2();			//Cursor to column 1, row 2
         lcd_clear_line();		// clear total line
@@ -973,7 +973,7 @@ void AutoCheck(void) {
         lcd_clear_line();		// clear total line
         Line1();			//Cursor to column 1, row 1
         lcd_data('T');			//output the Testmode "T"
-        lcd_data('0'+tt);		//followed by the test number
+        lcd_string(utoa(tt, outval, 10));	//output Test number
         lcd_data(' ');
         if (tt == 1) {   // output of reference voltage and factors for capacity measurement
            ref_mv = ReadADC(0x0e);      // read reference voltage 
@@ -982,7 +982,9 @@ void AutoCheck(void) {
            lcd_string(utoa(ref_mv, outval, 10));
            lcd_fix_string(mVT);		//"mV "
            Line2();			//Cursor to column 1, row 2
+#ifdef WITH_AUTO_REF
            RefVoltage();		//compute RHmultip = f(reference voltage)
+#endif
            lcd_fix_string(RHfakt);	//"RHf="
            lcd_string(utoa(RHmultip, outval, 10));
         }
@@ -1071,7 +1073,19 @@ void AutoCheck(void) {
 
            lcd_fix_string(RIHI);	// "RiHi="
         }
-        if (tt == 9) { 			//frequency generator 50Hz
+        if (tt == 9) {			//measure Zero offset for Capacity measurement
+#ifdef C_MESS
+           ReadCapacity(TP3, TP1);
+           adcmv[0] = (unsigned int) cval_uncorrected;
+           ReadCapacity(TP3, TP2);
+           adcmv[1] = (unsigned int) cval_uncorrected;
+           ReadCapacity(TP2, TP1);
+           adcmv[2] = (unsigned int) cval_uncorrected;
+#else
+           continue;
+#endif
+        }
+        if (tt == 10) {			//frequency generator 50Hz
            ADC_PORT = TXD_VAL;
            ADC_DDR = 1<<TP1 | TXD_MSK;	// Pin 1 to GND
            R_DDR = (1<<(TP3*2)) | (1<<(TP2*2));

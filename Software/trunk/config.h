@@ -39,7 +39,6 @@
   #ifdef C_MESS
   #warning "ATmega48 does NOT support Capacity measuring!"
   #undef C_MESS
-  #undef WITH_AUTO_REF
   #endif
 // WITH_UART activates the output of data with software UART 
   #ifdef WITH_UART
@@ -71,7 +70,7 @@
   #define PIN_RM 190
   #define PIN_RP 225
 // CC0 defines the capacity of empty terminal pins 1 & 3 without cable
-  #define CC0 36
+  #define CC0 35
 // Slew rate correction  val += COMP_SLEW1 / (val + COMP_SLEW2)
   #define COMP_SLEW1 4000
   #define COMP_SLEW2 220
@@ -89,13 +88,32 @@
   #define LONG_HFE
 // COMMON_COLLECTOR activates measurement of current amplification factor also in common collector circuit  (Emitter follower)
   #define COMMON_COLLECTOR
+  #define MEGA168A 17
+  #define MEGA168PA 18
 
+  // EXACT_TYPE can be MEGA168, MEGA168A or MEGA168PA
+  #define EXACT_TYPE MEGA168
+ #if EXACT_TYPE == MEGA168A
+  #warning "ATmega168A is selected!"
+// Pin resistor values of ATmega168A
   #define PIN_RM 196
   #define PIN_RP 225
 // CC0 defines the capacity of empty terminal pins 1 & 3 without cable
-// CC0 35 for ATmega168A
-// CC0 36 for ATmega168
+  #define CC0 35
+ #elif EXACT_TYPE == MEGA168PA
+  #warning "ATmega168PA is selected!"
+// Pin resistor values of ATmega168PA
+  #define PIN_RM 202
+  #define PIN_RP 214
+// CC0 defines the capacity of empty terminal pins 1 & 3 without cable
+  #define CC0 35
+ #else
+// Pin resistor values of ATmega168
+  #define PIN_RM 196
+  #define PIN_RP 225
+// CC0 defines the capacity of empty terminal pins 1 & 3 without cable
   #define CC0 36
+ #endif
 // Slew rate correction  val += COMP_SLEW1 / (val + COMP_SLEW2)
   #define COMP_SLEW1 4000
   #define COMP_SLEW2 220
@@ -152,6 +170,10 @@
 #endif
 #ifndef REF_C_KORR
  #define REF_C_KORR 0
+#endif
+#ifndef C_MESS
+  // undef WITH_AUTO_REF if no capacity measurement
+  #undef WITH_AUTO_REF
 #endif
 
 #define LONG_WAIT_TIME 10000

@@ -414,6 +414,7 @@ uint8_t minmul=1,mindiv=1;
 
 uint8_t ii;			// multipurpose counter
 unsigned long cval;		// capacitor value 
+unsigned long cval_uncorrected;	// capacity value without corrections
 uint8_t cpre;			//Prefix for capacitor value  0=p, 1=n, 2=µ, 3=m
 uint8_t ca, cb;			//pins of capacitor
 

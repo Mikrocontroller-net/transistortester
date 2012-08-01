@@ -20,6 +20,7 @@
 // If any of the tries to measure the load time is successful,
 // the following variables are set:
 // cval = value of the capacitor 
+// cval_uncorrected = value of the capacitor uncorrected
 // cpre = units of cval (0==pF, 1=nF, 2=µF)
 // ca   = Pin number (0-2) of the LowPin
 // cb   = Pin number (0-2) of the HighPin
@@ -127,8 +128,8 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 #endif
      goto keinC; //implausible, not yet the half voltage
   }
-  cval = ovcnt16 + 1;
-  cval *= getRLmultip(adcv[2]);		// get factor to convert time to capacity from table
+  cval_uncorrected = ovcnt16 + 1;
+  cval_uncorrected *= getRLmultip(adcv[2]);		// get factor to convert time to capacity from table
 #else
   // wait the same time which is required for loading
   for (tmpint=0;tmpint<=ovcnt16;tmpint++) {
@@ -151,10 +152,11 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 #endif
      goto keinC;		// capacitor does not keep the voltage about 5ms
   }
-  cval = ovcnt16 + 1;
+  cval_uncorrected = ovcnt16 + 1;
   // compute factor with load voltage + lost voltage during the voltage load time
-  cval *= getRLmultip(adcv[2]+adcv[3]);	// get factor to convert time to capacity from table
+  cval_uncorrected *= getRLmultip(adcv[2]+adcv[3]);	// get factor to convert time to capacity from table
 #endif
+   cval = cval_uncorrected;		// set result to uncorrected
    cval *= (400 - ((C_H_KORR)*2)/5);	// correct with C_H_KORR with 0.1% resolution, but prevent overflow
    cval /= 40;
 #if DebugOut == 10
@@ -232,28 +234,17 @@ messe_mit_rh:
   if (ovcnt16 >= (F_CPU/10000)) {
      goto keinC;	// no normal end
   }
-  cval = CombineII2Long(ovcnt16, tmpint);
+  cval_uncorrected = CombineII2Long(ovcnt16, tmpint);
 
   cpre = 0;			// cval unit is pF 
   if (ovcnt16 > 65) {
-     // cval > 4259840
-     cval /= 1000;		// switch from pF to nF unit
+     // cval_uncorrected > 4259840
+     cval_uncorrected /= 1000;		// switch from pF to nF unit
      cpre = 1;			// set unit, prevent overflow
   }
-  cval *= RHmultip;		// 708
-  cval /= (F_CPU / 10000);	// divide by 100 (@ 1MHz clock), 800 (@ 8MHz clock)
-#if 0
-  Line4();
-//  lcd_clear_line();
-//  Line4();
-  lcd_ziff1(LowPin);
-  lcd_data('c');
-  lcd_ziff1(HighPin);
-  lcd_data(' ');
-  lcd_string(ultoa(cval,outval,10));
-  lcd_data(' ');
-  wait3s();
-#endif
+  cval_uncorrected *= RHmultip;		// 708
+  cval_uncorrected /= (F_CPU / 10000);	// divide by 100 (@ 1MHz clock), 800 (@ 8MHz clock)
+  cval = cval_uncorrected;		// set the corrected cval
   if (cpre == 0) {
 #if COMP_SLEW1 > COMP_SLEW2
      if (cval < COMP_SLEW1) {

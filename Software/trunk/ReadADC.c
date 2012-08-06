@@ -64,7 +64,7 @@ unsigned int ReadADC(uint8_t mux) {
 #ifdef AUTOSCALE_ADC
 lowADC:
 #if 0
-  Line4();
+  lcd_line4();
   lcd_string(utoa(adcx, outval, 10));
   lcd_data('~');
 #endif

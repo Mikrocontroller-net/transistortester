@@ -48,6 +48,17 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     TristatePin remains switched to input , no action required 
   */
   wdt_reset();
+#ifdef AUTO_CAL
+  uint16_t resis680pl;
+  uint16_t resis680mi;
+  resis680pl = eeprom_read_word(&R680pl);
+  resis680mi = eeprom_read_word(&R680mi);
+  #define RR680PL resis680pl
+  #define RR680MI resis680mi
+#else
+  #define RR680PL (R_L_VAL + PIN_RP)
+  #define RR680MI (R_L_VAL + PIN_RM)
+#endif
   LoPinRL = MEM_read_byte(&PinRLtab[LowPin]);		// intruction for LowPin R_L
   LoPinRH = LoPinRL + LoPinRL;				// intruction for LowPin R_H
   TriPinRL = MEM_read_byte(&PinRLtab[TristatePin]);	// intruction for TristatePin R_L
@@ -76,16 +87,16 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   }
 
 #if DebugOut == 5
-  Line2();
+  lcd_line2();
   lcd_clear_line();
-  Line2();
+  lcd_line2();
 #endif
 
   if(adc.lp_otr > 92) {  //there is some current without TristatePin current 
 #if DebugOut == 5
-     lcd_ziff1(LowPin);
+     lcd_testpin(LowPin);
      lcd_data('F');
-     lcd_ziff1(HighPin);
+     lcd_testpin(HighPin);
      lcd_data(' ');
      wait1s();
 #endif
@@ -158,9 +169,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      adc.hp1 = U_VCC - W5msReadADC(HighPin);
      adc.tp1 = ReadADC(TristatePin);	// voltage at base resistor 
 #if DebugOut == 5
-       Line3();
+       lcd_line3();
        lcd_clear_line();
-       Line3();
+       lcd_line3();
        lcd_data('H');
        lcd_string(utoa(adc.hp1,outval,10));
        lcd_data(' ');
@@ -170,12 +181,12 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 #endif
 #ifdef LONG_HFE
      c_hfe = ((unsigned long)adc.hp1 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
-              (unsigned int)(R_L_VAL+PIN_RP))) / (unsigned int)adc.tp1;	
+              (unsigned int)RR680PL)) / (unsigned int)adc.tp1;	
      if (c_hfe > 65535) {
         c_hfe = 65535;
      }
 #else
-     c_hfe = ((adc.hp1 / ((R_L_VAL+PIN_RP+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
+     c_hfe = ((adc.hp1 / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
 #endif
   } else {
      c_hfe = (unsigned long)((adc.hp1 - adc.tp1) / adc.tp1);
@@ -192,9 +203,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   if(adc.lp_otr < 977) {
      //if the component has no connection between  HighPin and LowPin
 #if DebugOut == 5
-     lcd_ziff1(LowPin);
+     lcd_testpin(LowPin);
      lcd_data('P');
-     lcd_ziff1(HighPin);
+     lcd_testpin(HighPin);
      lcd_data(' ');
      wait1s();
 #endif
@@ -226,9 +237,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 
  #ifdef LONG_HFE
         trans.hfe[PartReady] = ((unsigned int)adc.lp1 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
-                 (unsigned int)(R_L_VAL+PIN_RM))) / (unsigned int)adc.tp2;	
+                 (unsigned int)RR680MI)) / (unsigned int)adc.tp2;	
  #else
-        trans.hfe[PartReady] = ((adc.lp1 / ((R_L_VAL+PIN_RM+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
+        trans.hfe[PartReady] = ((adc.lp1 / ((RR680MI+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
  #endif
 #ifdef COMMON_COLLECTOR
         //current amplification factor for common  Collektor (Emitter follower)
@@ -287,12 +298,12 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        adc.tp1 = U_VCC - ReadADC(TristatePin);	// voltage at Base resistor
 #ifdef LONG_HFE
        c_hfe = ((unsigned long)adc.lp1 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
-              (unsigned int)(R_L_VAL+PIN_RM))) / (unsigned int)adc.tp1;	
+              (unsigned int)RR680MI)) / (unsigned int)adc.tp1;	
        if (c_hfe > 65535) {
           c_hfe = 65535;
        }
 #else
-       c_hfe = ((adc.lp1 / ((R_L_VAL+PIN_RM+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
+       c_hfe = ((adc.lp1 / ((RR680MI+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
 #endif
     } else {
        c_hfe = (adc.lp1 - adc.tp1) / adc.tp1;
@@ -307,9 +318,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     if(adc.hp1 < 1600) {
        //component has current => npn-Transistor or somthing else
 #if DebugOut == 5
-       lcd_ziff1(LowPin);
+       lcd_testpin(LowPin);
        lcd_data('N');
-       lcd_ziff1(HighPin);
+       lcd_testpin(HighPin);
        lcd_data(' ');
        wait1s();
 #endif
@@ -374,9 +385,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
       adc.tp2 = U_VCC - ReadADC(TristatePin);	//measure the voltage at the base resistor 
 
 #if DebugOut == 5
-       Line3();
+       lcd_line3();
        lcd_clear_line();
-       Line3();
+       lcd_line3();
        lcd_data('H');
        lcd_data('P');
        lcd_string(utoa(adc.hp2,outval,10));
@@ -384,9 +395,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        lcd_data('T');
        lcd_data('P');
        lcd_string(utoa(adc.tp2,outval,10));
-       Line4();
+       lcd_line4();
        lcd_clear_line();
-       Line4();
+       lcd_line4();
        lcd_data('L');
        lcd_data('P');
        lcd_string(utoa(adc.lp1,outval,10));
@@ -413,9 +424,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 
 #ifdef LONG_HFE
       trans.hfe[PartReady] = ((unsigned int)adc.hp2 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
-              (unsigned int)(R_L_VAL+PIN_RP))) / (unsigned int)adc.tp2;	
+              (unsigned int)RR680PL)) / (unsigned int)adc.tp2;	
 #else
-      trans.hfe[PartReady] = ((adc.hp2 / ((R_L_VAL+PIN_RP+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
+      trans.hfe[PartReady] = ((adc.hp2 / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
 #endif
 #ifdef COMMON_COLLECTOR
        //compare current amplification factor for common Collector (Emitter follower)
@@ -435,9 +446,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
             PartFound = PART_FET;	//N-Kanal-MOSFET is found (Basis/Gate will Not be pulled down)
             PartMode = PART_MODE_N_E_MOS;
 #if DebugOut == 5
-            Line3();
+            lcd_line3();
             lcd_clear_line();
-            Line3();
+            lcd_line3();
             lcd_data('N');
             lcd_data('F');
             wait1s();
@@ -507,12 +518,12 @@ savenresult:
       adc.hp3 = adc.hp2;
   }
 #if DebugOut == 4
-  Line3();
+  lcd_line3();
   lcd_clear_line();
-  Line3();
-  lcd_ziff1(HighPin);
+  lcd_line3();
+  lcd_testpin(HighPin);
   lcd_data('D');
-  lcd_ziff1(LowPin);
+  lcd_testpin(LowPin);
   lcd_data(' ');
   lcd_data('L');
   lcd_string(utoa(adc.hp1,outval,10));
@@ -560,12 +571,12 @@ widmes:
   if (adc.hp2 > 20) {
      // if resistor, voltage should be down
  #if DebugOut == 3
-     Line3();
+     lcd_line3();
      lcd_clear_line();
-     Line3();
-     lcd_ziff1(LowPin);
+     lcd_line3();
+     lcd_testpin(LowPin);
      lcd_data('U');
-     lcd_ziff1(HighPin);
+     lcd_testpin(HighPin);
      lcd_data('A');
      lcd_string(utoa(adc.hp1, outval, 10));
      lcd_data('B');
@@ -636,12 +647,12 @@ widmes:
         if (adc.tp1 > adc.hp1) {
            adc.hp1 = adc.tp1;		//diff negativ is illegal
         }
-        lirx1 =(unsigned long)(R_L_VAL+PIN_RP) * (unsigned long)(adc.hp1 - adc.tp1) / (U_VCC - adc.hp1);
+        lirx1 =(unsigned long)RR680PL * (unsigned long)(adc.hp1 - adc.tp1) / (U_VCC - adc.hp1);
         if (adc.tp2 < adc.lp1) {
            adc.lp1 = adc.tp2;		//diff negativ is illegal
         }
         // lirx2 (Measurement at LowPin)
-        lirx2 =(unsigned long)(R_L_VAL+PIN_RM) * (unsigned long)(adc.tp2 -adc.lp1) / adc.lp1;
+        lirx2 =(unsigned long)RR680MI * (unsigned long)(adc.tp2 -adc.lp1) / adc.lp1;
 //     lrx1 =(unsigned long)R_L_VAL * (unsigned long)adc.hp1 / (adc.hp3 - adc.hp1);
 #ifdef AUTOSCALE_ADC
         if (adc.hp1 < U_INT_LIMIT) {
@@ -655,12 +666,12 @@ widmes:
         }
      }
 #if DebugOut == 3
-  Line3();
+  lcd_line3();
   lcd_clear_line();
-  Line3();
-  lcd_ziff1(LowPin);
+  lcd_line3();
+  lcd_testpin(LowPin);
   lcd_data(ii);
-  lcd_ziff1(HighPin);
+  lcd_testpin(HighPin);
   lcd_data(' ');
   if (ii == 'H') {
      lcd_data('X');
@@ -677,15 +688,15 @@ widmes:
      (void) value_out(lirx2, 2);
   }
   lcd_data(' ');
-  Line4();
+  lcd_line4();
   lcd_clear_line();
-  Line4();
+  lcd_line4();
   (void) value_out(lrx1, 2);
   lcd_data(' ');
-  Line2();
+  lcd_line2();
 #endif
      if((PartFound == PART_DIODE) || (PartFound == PART_NONE) || (PartFound == PART_RESISTOR)) {
-        for (ii=0; ii<NumOfR; ii++) {
+        for (ii=0; ii<ResistorsFound; ii++) {
            // search measurements with inverse polarity 
            thisR = &resis[ii];
            if (thisR->rt != TristatePin) {
@@ -710,14 +721,14 @@ widmes:
            goto testend;
         } // end for
         // no same resistor with the same Tristate-Pin found, new one
-        thisR = &resis[NumOfR];		// pointer to a free resistor structure
+        thisR = &resis[ResistorsFound];		// pointer to a free resistor structure
         thisR->rx = lrx1;		// save resistor value
         thisR->ra = LowPin;		// save Pin numbers
         thisR->rb = HighPin;
         thisR->rt = TristatePin;	// Tristate is saved for easier search of inverse measurement
-        NumOfR++;			// 1 more resistor found
+        ResistorsFound++;			// 1 more resistor found
 #if DebugOut == 3
-        lcd_data(NumOfR+'0');
+        lcd_data(ResistorsFound+'0');
         lcd_data('R');
 #endif
      }

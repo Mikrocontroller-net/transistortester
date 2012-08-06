@@ -6,7 +6,7 @@
 
 
 //LCD
-void lcd_ziff1(unsigned char temp);
+void lcd_testpin(unsigned char temp);
 void lcd_data(unsigned char temp1);
 void lcd_command(unsigned char temp1);
 void lcd_send(unsigned char data);
@@ -31,10 +31,10 @@ void uart_newline(void);
 #define CMD_SetDDRAMAddress      0x80    // zum Cursor setzen
 
 //Makros for LCD
-#define Line1() lcd_command((uint8_t)(CMD_SetDDRAMAddress))		//move to the beginning of the 1. row
-#define Line2() lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x40))	//move to the beginning of the 2. row
-#define Line3() lcd_command(((uint8_t)CMD_SetDDRAMAddress + 0x14))	//move to the beginning of the 3. row
-#define Line4() lcd_command(((uint8_t)CMD_SetDDRAMAddress + 0x54))	//move to the beginning of the 4. row
+#define lcd_line1() lcd_command((uint8_t)(CMD_SetDDRAMAddress))		//move to the beginning of the 1. row
+#define lcd_line2() lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x40))	//move to the beginning of the 2. row
+#define lcd_line3() lcd_command(((uint8_t)CMD_SetDDRAMAddress + 0x14))	//move to the beginning of the 3. row
+#define lcd_line4() lcd_command(((uint8_t)CMD_SetDDRAMAddress + 0x54))	//move to the beginning of the 4. row
 #define lcd_aus() lcd_command(0x08)
 #define lcd_ein() lcd_command(0x0c)
 #define lcd_shift_right() lcd_command(0x1c)

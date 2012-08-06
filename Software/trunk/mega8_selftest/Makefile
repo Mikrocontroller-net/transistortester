@@ -36,6 +36,10 @@ UI_LANGUAGE = LANG_ENGLISH
 
 # the WITH_SELFTEST option enables selftest function 
 CFLAGS += -DWITH_SELFTEST
+# AUTO_CAL will enable the autocalibration of zero offset of capacity measurement in selftest section
+#CFLAGS += -DAUTO_CAL
+# FREQUENCY_50HZ enables a 50 Hz frequency generator for up to one minute at the end of selftests
+#CFLAGS += -DFREQUENCY_50HZ
 
 # the WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring
 CFLAGS += -DWITH_AUTO_REF

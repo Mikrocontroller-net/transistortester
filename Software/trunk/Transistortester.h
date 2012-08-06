@@ -202,7 +202,7 @@ const unsigned char AnKat[] MEM_TEXT = {'-', LCD_CHAR_DIODE1, '-',0};
 const unsigned char KatAn[] MEM_TEXT = {'-', LCD_CHAR_DIODE2, '-',0};
 const unsigned char Dioden[] MEM_TEXT = {'*',LCD_CHAR_DIODE1, ' ', ' ',0};
 #ifdef R_MESS
-const unsigned char Resis[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
+const unsigned char Resistor_str[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
 #endif
 const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
 const unsigned char VERSION[] MEM_TEXT = "Version 0.99k";
@@ -217,7 +217,11 @@ const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
 const unsigned char RH1L[] MEM_TEXT = "RH-";
 const unsigned char RH1H[] MEM_TEXT = "RH+";
 const unsigned char RILO[] MEM_TEXT = "Ri_Lo= (mV)";
+ #ifdef AUTO_CAL
+const unsigned char RIHI[] MEM_TEXT = "Ri_Hi=";
+ #else
 const unsigned char RIHI[] MEM_TEXT = "Ri_Hi= (mV)";
+ #endif
 const unsigned char RLRL[] MEM_TEXT = "+RL- 12 13 23";
 const unsigned char RHRH[] MEM_TEXT = "+RH- 12 13 23";
 const unsigned char RELPROBE[] MEM_TEXT = "isolate probe";
@@ -287,6 +291,10 @@ const unsigned char PinADCtab[] MEM_TEXT = { (1<<TP1),
   const unsigned char CyrillicMuIcon[] MEM_TEXT = {0,17,17,17,19,29,16,16};	//µ
 #endif
 
+#ifdef AUTO_CAL
+  const uint16_t R680pl EEMEM = R_L_VAL+PIN_RP;	// total resistor to VCC
+  const uint16_t R680mi EEMEM = R_L_VAL+PIN_RM;	// total resistor to GND
+#endif
 //End of EEPROM-Strings
 
 //Watchdog
@@ -395,12 +403,15 @@ struct resis_t{
 } resis[3];
  unsigned int rxv, rtst;
  unsigned int rvmax;
- uint8_t NumOfR;		//Number of found resistors
+ uint8_t ResistorsFound;	//Number of found resistors
 #endif
 
 
 #ifdef C_MESS 
   const unsigned char C_Prefix_tab[] PROGMEM = { 'p','n',LCD_CHAR_U,'m'}; // pF,nF,µF,mF
+ #ifdef AUTO_CAL
+  const uint16_t cap_null EEMEM = C_NULL;	// Zero offset of capacity measurement 
+ #endif
   #define MULTIP
 #endif
 #ifdef MULTIP

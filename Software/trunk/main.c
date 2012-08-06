@@ -42,7 +42,7 @@ int main(void) {
      // check if  Watchdog-Event 
      // this happens, if the Watchdog is not reset for 2s
      // can happen, if any loop in the Program doen't finish.
-     Line1();
+     lcd_line1();
      lcd_fix_string(TestTimedOut);	//Output Timeout
      wait3s();				//wait for 3 s
      ON_PORT = 0;			//shut off!
@@ -110,7 +110,7 @@ start:
   lcd_clear();
   ADC_DDR = TXD_MSK;		//activate Software-UART 
 #ifdef R_MESS
-  NumOfR = 0;
+  ResistorsFound = 0;
 #endif
 #ifdef C_MESS
   ca = 0;
@@ -132,7 +132,7 @@ start:
   // Battery check is selected
   ReadADC(5);	//Dummy-Readout
   trans.hfe[0] = W5msReadADC(5); 	//with 5V reference
-  Line1();	//1. row 
+  lcd_line1();	//1. row 
   lcd_fix_string(Bat);		//output: "Bat. "
  #ifdef BAT_OUT
   // display Battery voltage
@@ -162,7 +162,7 @@ start:
  #endif
   // check the battery voltage
   if (trans.hfe[0] <  WARN_LEVEL) {
-     //Vcc < 7,3V; Warnung anzeigen
+     //Vcc < 7,3V; show Warning 
      if(trans.hfe[0] < POOR_LEVEL) {	
         //Vcc <6,3V; no proper operation is possible
         lcd_fix_string(BatEmpty);	//Battery empty!
@@ -186,7 +186,7 @@ start:
 #ifdef WITH_AUTO_REF
   RefVoltage();			//compute RHmultip = f(reference voltage)
 #endif
-  Line2();			//LCD position row2, column 1
+  lcd_line2();			//LCD position row2, column 1
   lcd_fix_string(TestRunning);		//String: testing...
 //#ifndef __AVR_ATmega8__
 #if 0
@@ -198,14 +198,14 @@ start:
   lcd_data('C');
 #endif
 #ifndef DebugOut
-  Line2();			//LCD position row 2, column 1
+  lcd_line2();			//LCD position row 2, column 1
 #endif
 #ifdef C_MESS
   #define AUSGABE_FUNKTION
   EntladePins();		// discharge all capacitors!
   if(PartFound == PART_CELL) {
     lcd_clear();
-    Line1();
+    lcd_line1();
     lcd_data('C');
     lcd_data('e');
     lcd_data('l');
@@ -238,13 +238,13 @@ start:
 #endif
   //All checks are done, output result to display
   lcd_clear();
-  Line1();
+  lcd_line1();
   if(PartFound == PART_DIODE) {
      if(NumOfDiodes == 1) {		//single Diode
         lcd_fix_string(Diode);		//"Diode: "
-        lcd_ziff1(diodes[0].Anode);
+        lcd_testpin(diodes[0].Anode);
         lcd_fix_string(AnKat);		//"->|-"
-        lcd_ziff1(diodes[0].Cathode);
+        lcd_testpin(diodes[0].Cathode);
         UfAusgabe(0x70);
 #ifdef C_MESS
         lcd_fix_string(GateCap);		//"C="
@@ -256,29 +256,29 @@ start:
         lcd_data('2');
         lcd_fix_string(Dioden);		//"diodes "
         if(diodes[0].Anode == diodes[1].Anode) { //Common Anode
-           lcd_ziff1(diodes[0].Cathode);
+           lcd_testpin(diodes[0].Cathode);
            lcd_fix_string(KatAn);	//"-|<-"
-           lcd_ziff1(diodes[0].Anode);
+           lcd_testpin(diodes[0].Anode);
            lcd_fix_string(AnKat);	//"->|-"
-           lcd_ziff1(diodes[1].Cathode);
+           lcd_testpin(diodes[1].Cathode);
            UfAusgabe(0x01);
            goto end;
         } else if(diodes[0].Cathode == diodes[1].Cathode) { //Common Cathode
-           lcd_ziff1(diodes[0].Anode);
+           lcd_testpin(diodes[0].Anode);
            lcd_fix_string(AnKat);	//"->|-"
-	   lcd_ziff1(diodes[0].Cathode);
+	   lcd_testpin(diodes[0].Cathode);
            lcd_fix_string(KatAn);	//"-|<-"
-           lcd_ziff1(diodes[1].Anode);
+           lcd_testpin(diodes[1].Anode);
            UfAusgabe(0x01);
            goto end;
           }
         else if ((diodes[0].Cathode == diodes[1].Anode) && (diodes[1].Cathode == diodes[0].Anode)) {
            //Antiparallel
-           lcd_ziff1(diodes[0].Anode);
+           lcd_testpin(diodes[0].Anode);
            lcd_fix_string(AnKat);	//"->|-"
-           lcd_ziff1(diodes[0].Cathode);
+           lcd_testpin(diodes[0].Cathode);
            lcd_fix_string(AnKat);	//"->|-"
-           lcd_ziff1(diodes[1].Cathode);
+           lcd_testpin(diodes[1].Cathode);
            UfAusgabe(0x01);
            goto end;
         }
@@ -321,34 +321,34 @@ start:
            trans.c = 1;
           }
 #if DebugOut == 4
-	Line3();
-        lcd_ziff1(diodes[0].Anode);
+	lcd_line3();
+        lcd_testpin(diodes[0].Anode);
         lcd_data(':');
-        lcd_ziff1(diodes[0].Cathode);
+        lcd_testpin(diodes[0].Cathode);
         lcd_data(' ');
         lcd_string(utoa(diodes[0].Voltage, outval, 10));
         lcd_data(' ');
-        lcd_ziff1(diodes[1].Anode);
+        lcd_testpin(diodes[1].Anode);
         lcd_data(':');
-        lcd_ziff1(diodes[1].Cathode);
+        lcd_testpin(diodes[1].Cathode);
         lcd_data(' ');
         lcd_string(utoa(diodes[1].Voltage, outval, 10));
-	Line4();
-        lcd_ziff1(diodes[2].Anode);
+	lcd_line4();
+        lcd_testpin(diodes[2].Anode);
         lcd_data(':');
-        lcd_ziff1(diodes[2].Cathode);
+        lcd_testpin(diodes[2].Cathode);
         lcd_data(' ');
         lcd_string(utoa(diodes[2].Voltage, outval, 10));
-        Line1();
+        lcd_line1();
 #endif
         if((trans.b<3) && (trans.c<3)) {
            lcd_data('3');
            lcd_fix_string(Dioden);	//"Diodes "
-           lcd_ziff1(diodes[trans.b].Anode);
+           lcd_testpin(diodes[trans.b].Anode);
            lcd_fix_string(AnKat);	//"->|-"
-           lcd_ziff1(diodes[trans.b].Cathode);
+           lcd_testpin(diodes[trans.b].Cathode);
            lcd_fix_string(AnKat);	//"->|-"
-           lcd_ziff1(diodes[trans.c].Cathode);
+           lcd_testpin(diodes[trans.c].Cathode);
            UfAusgabe( (trans.b<<4)|trans.c);
            goto end;
         }
@@ -380,10 +380,10 @@ start:
        }
     }
     lcd_fix_string(ebcstr);		//" EBC="
-    lcd_ziff1(trans.e);
-    lcd_ziff1(trans.b);
-    lcd_ziff1(trans.c);
-    Line2(); //2. row 
+    lcd_testpin(trans.e);
+    lcd_testpin(trans.b);
+    lcd_testpin(trans.c);
+    lcd_line2(); //2. row 
     lcd_fix_string(hfestr);		//"B="  (hFE)
     lcd_string(utoa(trans.hfe[1], outval, 10));
     lcd_data(' ');
@@ -424,11 +424,11 @@ start:
        lcd_show_format_cap();
     }
  #endif
-    Line2(); //2. row 
+    lcd_line2(); //2. row 
     lcd_fix_string(gds);		//"GDS="
-    lcd_ziff1(trans.b);
-    lcd_ziff1(trans.c);
-    lcd_ziff1(trans.e);
+    lcd_testpin(trans.b);
+    lcd_testpin(trans.c);
+    lcd_testpin(trans.e);
     if((NumOfDiodes > 0) && (PartMode < 3)) {
        //MOSFET with protection diode; only with enhancement-FETs
        lcd_data(LCD_CHAR_DIODE1);	//show Diode symbol >|
@@ -452,15 +452,15 @@ start:
   }
  #ifdef R_MESS	//resistor measurement is wanted
   else if(PartFound == PART_RESISTOR) {
-    if (NumOfR == 1) { // single resistor
-       lcd_ziff1(resis[0].rb);  	//Pin-number 1
-       lcd_fix_string(Resis);
-       lcd_ziff1(resis[0].ra);		//Pin-number 2
+    if (ResistorsFound == 1) { // single resistor
+       lcd_testpin(resis[0].rb);  	//Pin-number 1
+       lcd_fix_string(Resistor_str);
+       lcd_testpin(resis[0].ra);		//Pin-number 2
     } else { // R-Max suchen
        ii = 0;
        if (resis[1].rx > resis[0].rx)
           ii = 1;
-       if (NumOfR == 2) {
+       if (ResistorsFound == 2) {
           ii = 2;
        } else {
           if (resis[2].rx > resis[ii].rx) {
@@ -470,28 +470,28 @@ start:
 
        if (ii == 0) {
           lcd_data('1');
-          lcd_fix_string(Resis);	// -[=]-
+          lcd_fix_string(Resistor_str);	// -[=]-
           lcd_data('3');
-          lcd_fix_string(Resis);	// -[=]-
+          lcd_fix_string(Resistor_str);	// -[=]-
           lcd_data('2');
        }
        if (ii == 1) {
           lcd_data('1');
-          lcd_fix_string(Resis);	// -[=]-
+          lcd_fix_string(Resistor_str);	// -[=]-
           lcd_data('2');
-          lcd_fix_string(Resis);	// -[=]-
+          lcd_fix_string(Resistor_str);	// -[=]-
           lcd_data('3');
        }
        if (ii == 2) {
           lcd_data('2');
-          lcd_fix_string(Resis);	// -[=]-
+          lcd_fix_string(Resistor_str);	// -[=]-
           lcd_data('1');
-          lcd_fix_string(Resis);	// -[=]-
+          lcd_fix_string(Resistor_str);	// -[=]-
           lcd_data('3');
        }
     }
-    Line2(); //2. row 
-    if (NumOfR == 1) {
+    lcd_line2(); //2. row 
+    if (ResistorsFound == 1) {
        RvalOut(0);
     } else {
        // output resistor values in right order
@@ -517,23 +517,23 @@ start:
 //capacity measurement is wanted
   else if(PartFound == PART_CAPACITOR) {
 //     lcd_fix_string(Capacitor);
-     lcd_ziff1(ca);			//Pin number 1
+     lcd_testpin(ca);			//Pin number 1
      lcd_fix_string(CapZeich);		// capacitor sign
-     lcd_ziff1(cb);			//Pin number 2
-     Line2(); 				//2. row 
+     lcd_testpin(cb);			//Pin number 2
+     lcd_line2(); 				//2. row 
      lcd_show_format_cap();
      goto end;
   }
 #endif
   if(NumOfDiodes == 0) { //no diodes are found
      lcd_fix_string(TestFailed1); 	//"Kein,unbek. oder"
-     Line2(); //2. row 
+     lcd_line2(); //2. row 
      lcd_fix_string(TestFailed2); 	//"defektes "
      lcd_fix_string(Bauteil);		//"Bauteil"
   } else {
      lcd_fix_string(Bauteil);		//"Bauteil"
      lcd_fix_string(Unknown); 		//" unbek."
-     Line2(); //2. row 
+     lcd_line2(); //2. row 
      lcd_fix_string(OrBroken); 		//"oder defekt "
      lcd_data(NumOfDiodes + '0');
      lcd_fix_string(AnKat);		//"->|-"
@@ -544,11 +544,11 @@ start:
 
 
 gakAusgabe:
-  Line2(); //2. row 
+  lcd_line2(); //2. row 
   lcd_fix_string(GAK);		//"GAK="
-  lcd_ziff1(trans.b);
-  lcd_ziff1(trans.c);
-  lcd_ziff1(trans.e);
+  lcd_testpin(trans.b);
+  lcd_testpin(trans.c);
+  lcd_testpin(trans.e);
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - 
  end:
   empty_count = 0;		// reset counter, if part is found
@@ -603,7 +603,7 @@ gakAusgabe:
 // if number >= 3  no output is done
 void UfAusgabe(uint8_t bcdnum) {
 
-   Line2(); 				//2. row
+   lcd_line2(); 				//2. row
    lcd_fix_string(Uf);			//"Uf="
    mVAusgabe(bcdnum >> 4);
    mVAusgabe(bcdnum & 0x0f);
@@ -774,7 +774,7 @@ void EntladePins() {
      if (clr_cnt == MAX_ENTLADE_ZEIT) {
         PartFound = PART_CELL;	// mark as Battery
         // there is charge on capacitor, warn later!
-//        Line3();
+//        lcd_line3();
 //        lcd_data('E');
 //        lcd_string(utoa(adcmv[0], outval, 10));
 //        lcd_data(' ');
@@ -927,206 +927,5 @@ uint8_t value_out(unsigned long vval,uint8_t pp) {
 #endif
 
 #ifdef WITH_SELFTEST
-void AutoCheck(void) {
-  uint8_t tt;		// number of running test
-  uint8_t ww;		// counter for repeating the tests
-  unsigned int  adcmv[3];
-  ADC_PORT = TXD_VAL;
-  ADC_DDR = TXD_MSK;
-  R_PORT = (1<<(TP1*2));		//Pin 1 over RL to +
-  R_DDR = (1<<(TP1*2)) | (1<<(TP2*2));	//Pin 2 over RL to -
-  adcmv[0] = W5msReadADC(PC0);		// voltage at Pin 1
-  adcmv[1] = ReadADC(PC1);		// voltage at Pin 2
-  adcmv[2] = ReadADC(PC2);		// voltage at Pin 3
-  if (abs((int)(adcmv[1] - adcmv[0])) > 20) {
-     return;				//difference to big, no selftest
-  }
-  if (abs((int)(adcmv[2] - adcmv[0])) > 20) {
-     return;				//difference to big, no selftest
-  }
-  if (abs((int)(adcmv[0] - (U_VCC/2))) > 30) {
-     return;				//difference to big, no selftest
-  }
-  R_DDR = (1<<(TP1*2)) | (1<<(TP3*2));	//Pin 3 over RL to - (Pin 1 over RL to +)
-  adcmv[0] = W5msReadADC(PC0);		// voltage at Pin 1
-  adcmv[1] = ReadADC(PC1);		// voltage at Pin 2
-  adcmv[2] = ReadADC(PC2);		// voltage at Pin 3
-  if (abs((int)(adcmv[1] - adcmv[0])) > 20) {
-     return;				//difference to big, no selftest
-  }
-  if (abs((int)(adcmv[2] - adcmv[0])) > 20) {
-     return;				//difference to big, no selftest
-  }
-  if (abs((int)(adcmv[0] - (U_VCC/2))) > 30) {
-     return;				//difference to big, no selftest
-  }
-  lcd_clear();
-  Line1();
-  lcd_fix_string(SELFTEST);		// "Selftest mode.."
-  wait1s();
- 
-  for(tt=1;tt<11;tt++) {		// loop for all Tests
-     for(ww=0;ww<8;ww++) {		// repeat the test 8 times
-        Line2();			//Cursor to column 1, row 2
-        lcd_clear_line();		// clear total line
-        Line1();			//Cursor to column 1, row 1
-        lcd_clear_line();		// clear total line
-        Line1();			//Cursor to column 1, row 1
-        lcd_data('T');			//output the Testmode "T"
-        lcd_string(utoa(tt, outval, 10));	//output Test number
-        lcd_data(' ');
-        if (tt == 1) {   // output of reference voltage and factors for capacity measurement
-           ref_mv = ReadADC(0x0e);      // read reference voltage 
-           ref_mv = W5msReadADC(0x0e) + REF_C_KORR;  // read reference voltage 
-           lcd_fix_string(URefT);	//"URef="
-           lcd_string(utoa(ref_mv, outval, 10));
-           lcd_fix_string(mVT);		//"mV "
-           Line2();			//Cursor to column 1, row 2
-#ifdef WITH_AUTO_REF
-           RefVoltage();		//compute RHmultip = f(reference voltage)
-#endif
-           lcd_fix_string(RHfakt);	//"RHf="
-           lcd_string(utoa(RHmultip, outval, 10));
-        }
-        if (tt == 2) { // how equal are the RL resistors? 
-           R_PORT = 1<<(TP1*2);		//RL1 to VCC
-           R_DDR = (1<<(TP1*2)) | (1<<(TP2*2));	//RL2 to -
-           adcmv[0] = W20msReadADC(TP1);
-           R_DDR = (1<<(TP1*2)) | (1<<(TP3*2));	//RL3 to -
-           adcmv[1] = W20msReadADC(TP1);
-           R_PORT = 1<<(TP2*2);		//RL2 to VCC
-           R_DDR = (1<<(TP2*2)) | (1<<(TP3*2));	//RL3 to -
-           adcmv[2] = W20msReadADC(TP2);
-           lcd_fix_string(RLRL);	// "RLRL"
-        }
-        if (tt == 3) { // how equal are the RH resistors
-           R_PORT = 2<<(TP1*2);		//RH1 to VCC
-           R_DDR = (2<<(TP1*2)) | (2<<(TP2*2));	//RH2 to -
-           adcmv[0] = W20msReadADC(TP1);
-           R_DDR = (2<<(TP1*2)) | (2<<(TP3*2));	//RH3 to -
-           adcmv[1] = W20msReadADC(TP1);
-           R_PORT = 2<<(TP2*2);		//RL2 to VCC
-           R_DDR = (2<<(TP2*2)) | (2<<(TP3*2));	//RH3 to -
-           adcmv[2] = W20msReadADC(TP2);
-           lcd_fix_string(RHRH);	// "RHRH"
-        }
-        if (tt == 4) { // Text release probes
-           lcd_fix_string(RELPROBE);	// "Release Probes"
-        }
-        if (tt == 5) { // can we switch the ADC pins to GND across R_H resistor?
-           R_PORT = 0;
-           R_DDR = 2<<(TP1*2);		//Pin 1 over R_H to GND
-           adcmv[0] = W20msReadADC(TP1);
-
-           R_DDR = 2<<(TP2*2);		//Pin 2 over R_H to GND
-           adcmv[1] = W20msReadADC(TP2);
-
-           R_DDR = 2<<(TP3*2);		//Pin 3 over R_H to GND
-           adcmv[2] = W20msReadADC(TP3);
-           lcd_fix_string(RH1L);	// "RH_Lo="
-        }
-        if (tt == 6) { // can we switch the ADC pins to VCC across the R_H resistor?
-           R_DDR = 2<<(TP1*2);		//Pin 1 over R_H to VCC
-           R_PORT = 2<<(TP1*2);
-           adcmv[0] = W20msReadADC(TP1);
-           R_DDR = 2<<(TP2*2);		//Pin 2 over R_H to VCC
-           R_PORT = 2<<(TP2*2);
-           adcmv[1] = W20msReadADC(TP2);
-           R_DDR = 2<<(TP3*2);		//Pin 3 over R_H to VCC
-           R_PORT = 2<<(TP3*2);
-           adcmv[2] = W20msReadADC(TP3);
-           lcd_fix_string(RH1H);	// "RH_Hi="
-        }
-        if (tt == 7) { // measurement of internal resistance of the ADC port outputs switched to GND
-           ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
-           R_PORT = 1<<(TP1*2);		//R_L-PORT 1 to VCC
-           R_DDR = 1<<(TP1*2);		//Pin 1 to output and over R_L to VCC
-           adcmv[0] = W5msReadADC(TP1);
-
-           ADC_DDR = 1<<TP2 | TXD_MSK;	//ADC-Pin 2 to output 0V
-           R_PORT =  1<<(TP2*2);	//R_L-PORT 2 to VCC
-           R_DDR = 1<<(TP2*2);		//Pin 2 to output and over R_L to VCC
-           adcmv[1] = W5msReadADC(TP2);
-
-           ADC_DDR = 1<<TP3 | TXD_MSK;	//ADC-Pin 3 to output 0V
-           R_PORT =  1<<(TP3*2);	//R_L-PORT 3 to VCC
-           R_DDR = 1<<(TP3*2);		//Pin 3 to output and over R_L to VCC
-           adcmv[2] = W5msReadADC(TP3);
-           lcd_fix_string(RILO);	// "RiLo="
-        }
-        if (tt == 8) { // measurement of internal resistance of the ADC port output switched to VCC
-           R_PORT = 0;			// R-Ports to GND
-           ADC_PORT = 1<<TP1 | TXD_VAL;	//ADC-Port 1 to VCC
-           ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
-           R_DDR = 1<<(TP1*2);		//Pin 1 to output and over R_L to GND
-           adcmv[0] = U_VCC - W5msReadADC(TP1);
-      
-           ADC_PORT = 1<<TP2 | TXD_VAL;	//ADC-Port 2 to VCC
-           ADC_DDR = 1<<TP2 | TXD_MSK;	//ADC-Pin  2 to output 0V
-           R_DDR = 1<<(TP2*2);		//Pin 2 to output and over R_L to GND
-           adcmv[1] = U_VCC - W5msReadADC(TP2);
-
-           ADC_PORT = 1<<TP3 | TXD_VAL;	//ADC-Port 3 to VCC
-           ADC_DDR = 1<<TP3 | TXD_MSK;	//ADC-Pin  3 to output 0V
-           R_DDR = 1<<(TP3*2);		//Pin 3 to output and over R_L to GND
-           adcmv[2] = U_VCC - W5msReadADC(TP3);
-
-           lcd_fix_string(RIHI);	// "RiHi="
-        }
-        if (tt == 9) {			//measure Zero offset for Capacity measurement
-#ifdef C_MESS
-           ReadCapacity(TP3, TP1);
-           adcmv[0] = (unsigned int) cval_uncorrected;
-           ReadCapacity(TP3, TP2);
-           adcmv[1] = (unsigned int) cval_uncorrected;
-           ReadCapacity(TP2, TP1);
-           adcmv[2] = (unsigned int) cval_uncorrected;
-#else
-           continue;
-#endif
-        }
-        if (tt == 10) {			//frequency generator 50Hz
-           ADC_PORT = TXD_VAL;
-           ADC_DDR = 1<<TP1 | TXD_MSK;	// Pin 1 to GND
-           R_DDR = (1<<(TP3*2)) | (1<<(TP2*2));
-           for (ii=0;ii<250;ii++) {
-              R_PORT = (1<<(TP2*2));	// Pin 2 over R_L to VCC, Pin 3 over R_L to GND
-              wait10ms();
-              R_PORT = (1<<(TP3*2));	// Pin 3 over R_L to VCC, Pin 2 over R_L to GND
-              wait10ms();
-              wdt_reset();
-           }
-        }
-        if (tt > 1) {			// output 3 voltages 
-           Line2();			//Cursor to column 1, row 2
-           lcd_string(utoa(adcmv[0], outval, 10));	//output voltage 1
-           lcd_data(' ');
-           lcd_string(utoa(adcmv[1], outval, 10));	//output voltage 2
-           lcd_data(' ');
-           lcd_string(utoa(adcmv[2], outval, 10));	//output voltage 3
-        }
-        ADC_DDR =  TXD_MSK;		// all-Pins to Input
-        ADC_PORT = TXD_VAL;		// all ADC-Ports to GND
-        R_DDR = 0;			// all R-Ports to Input
-        R_PORT = 0;
-        if(!(ON_PIN_REG & (1<<RST_PIN))) {
-	   // if key is pressed, don't repeat
-           break;
-        }
-        wait500ms();
-        if(!(ON_PIN_REG & (1<<RST_PIN))) {
-	   // if key is pressed, don't repeat
-           break;
-        }
-        wait500ms();
-     } //end for ww
-     wait1s();
-  } //end for tt
-  lcd_clear();
-  Line1();
-  lcd_fix_string(ATE);		//"Auto Test End"
-  Line2();
-  lcd_fix_string(VERSION);	//"Version ..."
-  wait2s();			//wait 2 seconds
- } 
+ #include "AutoCheck.c"
 #endif

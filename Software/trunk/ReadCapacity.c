@@ -44,12 +44,12 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 
   if(PartFound == PART_CAPACITOR) {
 #if DebugOut == 10
-     Line3();
+     lcd_line3();
      lcd_clear_line();
-     Line3();
-     lcd_ziff1(LowPin);
+     lcd_line3();
+     lcd_testpin(LowPin);
      lcd_data('C');
-     lcd_ziff1(HighPin);
+     lcd_testpin(HighPin);
      lcd_data(' ');
      lcd_data('d');
      lcd_data('o');
@@ -160,12 +160,12 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
    cval *= (400 - ((C_H_KORR)*2)/5);	// correct with C_H_KORR with 0.1% resolution, but prevent overflow
    cval /= 40;
 #if DebugOut == 10
-   Line3();
+   lcd_line3();
    lcd_clear_line();
-   Line3();
-   lcd_ziff1(LowPin);
+   lcd_line3();
+   lcd_testpin(LowPin);
    lcd_data('C');
-   lcd_ziff1(HighPin);
+   lcd_testpin(HighPin);
    lcd_data(' ');
    lcd_string(ultoa(cval,outval,10));
    lcd_data('n');
@@ -255,21 +255,31 @@ messe_mit_rh:
      if (HighPin == TP2) cval += 2;	// measurements with TP2 have 2pF less capacity
 //     if ((HighPin == TP3) && (LowPin == TP2)) cval -= 1; // this combination has 1pF to much
 //     if ((HighPin == TP1) && (LowPin == TP3)) cval += 1; // this combinations has 1pF to less
+#ifdef AUTO_CAL
+     // auto calibration mode, cap_null can be updated in selftest section
+     tmpint = eeprom_read_word(&cap_null);	// read zero offset
+     if (cval > tmpint) {
+         cval -= tmpint;		//subtract zero offset (pF)
+     } else {
+         cval = 0;			//unsigned long may not reach negativ value
+     }
+#else
      if (cval > C_NULL) {
          cval -= C_NULL;		//subtract constant offset (pF)
      } else {
          cval = 0;			//unsigned long may not reach negativ value
      }
+#endif
   }
 
 #if DebugOut == 10
   R_DDR = 0;			// switch all resistor ports to input
-  Line4();
+  lcd_line4();
   lcd_clear_line();
-  Line4();
-  lcd_ziff1(LowPin);
+  lcd_line4();
+  lcd_testpin(LowPin);
   lcd_data('c');
-  lcd_ziff1(HighPin);
+  lcd_testpin(HighPin);
   lcd_data(' ');
   lcd_string(ultoa(cval,outval,10));
   lcd_data('p');

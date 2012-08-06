@@ -15,7 +15,7 @@
 
 // sends numeric character (Pin Number) to the LCD 
 // from binary 0 we send ASCII 1 ....
-void lcd_ziff1(unsigned char temp) {
+void lcd_testpin(unsigned char temp) {
    lcd_data(temp + '1');
 }
 // sends data byte to the LCD 
@@ -31,6 +31,14 @@ void lcd_data(unsigned char temp1) {
     case LCD_CHAR_DIODE2:
     	uart_putc('|');
     	uart_putc('<');
+    	break;
+    case LCD_CHAR_CAP:
+    	uart_putc('|');
+    	uart_putc('|');
+    	break;
+    case LCD_CHAR_RESIS1:
+    case LCD_CHAR_RESIS2:
+    	uart_putc('R');
     	break;
     case 225:	//ä
     	uart_putc('ä');

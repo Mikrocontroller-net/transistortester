@@ -83,14 +83,13 @@ int main(void) {
 #if POWER_OFF+0 > 1
   // tester display time selection
   display_time = OFF_WAIT_TIME;		// LONG_WAIT_TIME for single mode, else SHORT_WAIT_TIME
-  empty_count = 0;                      // flag for extreme debouncing
-  if (!(ON_PIN_REG & (1<<RST_PIN)))     // if power button is pressed ...
-    empty_count = 1;                    // ... set debounce flag
-  wait300ms();                          // wait to catch a long key press
-  if (!(ON_PIN_REG & (1<<RST_PIN)))     // check if power button is pressed
-  {
-    if (empty_count == 1)               // if button is still pressed
-      display_time = LONG_WAIT_TIME;	// ... set long time display anyway
+  if (!(ON_PIN_REG & (1<<RST_PIN))) {
+     // if power button is pressed ...
+     wait300ms();			// wait to catch a long key press
+     if (!(ON_PIN_REG & (1<<RST_PIN))) {
+        // check if power button is still pressed
+        display_time = LONG_WAIT_TIME;	// ... set long time display anyway
+     }
   }
 #else
   #define display_time OFF_WAIT_TIME

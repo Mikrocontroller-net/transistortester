@@ -109,23 +109,23 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   }
   // Capacity is more than about 50µF
   cpre = 1;		// switch units to nF 
-#if 0
+#ifdef NO_CAP_HOLD_TIME
   ChargePin10ms(HiPinR_H,0);		//switch HighPin with R_H 10ms auf GND, then currentless
   adcv[3] = ReadADC(HighPin) - adcv[0]; // read voltage again, is discharged only a little bit ?
-#if DebugOut == 10
+ #if DebugOut == 10
   lcd_data('U');
   lcd_data('3');
   lcd_data(':');
   lcd_string(utoa(adcv[3],outval,10));
   lcd_data(' ');
   wait2s();
-#endif
+ #endif
   if ((adcv[3] + adcv[3]) < adcv[2]) {
-#if DebugOut == 10
+ #if DebugOut == 10
      lcd_data('H');
      lcd_data(' ');
      wait1s();
-#endif
+ #endif
      goto keinC; //implausible, not yet the half voltage
   }
   cval_uncorrected = ovcnt16 + 1;
@@ -145,11 +145,11 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   }
   if (adcv[3] > 100) {
      // more than 100mV is lost during load time
-#if DebugOut == 10
+ #if DebugOut == 10
      lcd_data('L');
      lcd_data(' ');
      wait1s();
-#endif
+ #endif
      goto keinC;		// capacitor does not keep the voltage about 5ms
   }
   cval_uncorrected = ovcnt16 + 1;

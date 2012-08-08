@@ -91,29 +91,11 @@
   #define MEGA168A 17
   #define MEGA168PA 18
 
-  // EXACT_TYPE can be MEGA168, MEGA168A or MEGA168PA
-  #define EXACT_TYPE MEGA168
- #if EXACT_TYPE == MEGA168A
-  #warning "ATmega168A is selected!"
-// Pin resistor values of ATmega168A
-  #define PIN_RM 196
-  #define PIN_RP 225
-// CC0 defines the capacity of empty terminal pins 1 & 3 without cable
-  #define CC0 35
- #elif EXACT_TYPE == MEGA168PA
-  #warning "ATmega168PA is selected!"
-// Pin resistor values of ATmega168PA
-  #define PIN_RM 202
-  #define PIN_RP 214
-// CC0 defines the capacity of empty terminal pins 1 & 3 without cable
-  #define CC0 35
- #else
 // Pin resistor values of ATmega168
   #define PIN_RM 196
   #define PIN_RP 225
 // CC0 defines the capacity of empty terminal pins 1 & 3 without cable
   #define CC0 36
- #endif
 // Slew rate correction  val += COMP_SLEW1 / (val + COMP_SLEW2)
   #define COMP_SLEW1 4000
   #define COMP_SLEW2 220

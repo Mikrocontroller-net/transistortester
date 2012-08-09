@@ -165,7 +165,7 @@ endif
 endif
 
 ifeq ($(PARTNO),m48p)
-MCU = atmega48
+MCU = atmega48p
 ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xdc:m
@@ -215,7 +215,7 @@ endif
 endif
 
 ifeq ($(PARTNO),m88p)
-MCU = atmega88
+MCU = atmega88p
 ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xdc:m
@@ -265,7 +265,7 @@ endif
 endif
 
 ifeq ($(PARTNO),m168p)
-MCU = atmega168
+MCU = atmega168p
 ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xdc:m
@@ -315,7 +315,7 @@ endif
 endif
 
 ifeq ($(PARTNO),m328p)
-MCU = atmega328
+MCU = atmega328p
 ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xd9:m

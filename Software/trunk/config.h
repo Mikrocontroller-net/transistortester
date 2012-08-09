@@ -16,9 +16,29 @@
 
 // CABLE_CAP defines the capacity (pF) of 12cm cable with clip at the terminal pins
 #define CABLE_CAP 3
+// select the right Processor Typ
+#if defined(__AVR_ATmega48__)
+ #define PROCESSOR_TYP 48
+#elif defined(__AVR_ATmega48p__)
+ #define PROCESSOR_TYP 48
+#elif defined(__AVR_ATmega88__)
+ #define PROCESSOR_TYP 88
+#elif defined(__AVR_ATmega88p__)
+ #define PROCESSOR_TYP 88
+#elif defined(__AVR_ATmega168__)
+ #define PROCESSOR_TYP 168
+#elif defined(__AVR_ATmega168p__)
+ #define PROCESSOR_TYP 168
+#elif defined(__AVR_ATmega328__)
+ #define PROCESSOR_TYP 328
+#elif defined(__AVR_ATmega328p__)
+ #define PROCESSOR_TYP 328
+#else
+ #define PROCESSOR_TYP 8
+#endif
 // automatic selection of option and parameters for different AVR s
 //----------------========----------
-#if defined(__AVR_ATmega48__)
+#if PROCESSOR_TYP == 48
 //----------------========----------
   #define ACALL rcall
   #define MCU_STATUS_REG MCUCR
@@ -55,7 +75,7 @@
   #define PIN_RP 220
 
 //------------------========----------
-#elif defined(__AVR_ATmega88__)
+#elif PROCESSOR_TYP == 88
 //------------------========----------
   #define ACALL rcall
   #define MCU_STATUS_REG MCUCR
@@ -77,7 +97,7 @@
   #define C_NULL CC0+CABLE_CAP+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2))
 
 //------------------=========----------
-#elif defined(__AVR_ATmega168__)
+#elif PROCESSOR_TYP == 168
 //------------------=========----------
   #define ACALL call
   #define MCU_STATUS_REG MCUCR
@@ -102,7 +122,7 @@
   #define C_NULL CC0+CABLE_CAP+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2))
 
 //------------------=========----------
-#elif defined(__AVR_ATmega328__)
+#elif PROCESSOR_TYP == 328
 //------------------=========----------
   #define ACALL call
   #define MCU_STATUS_REG MCUCR

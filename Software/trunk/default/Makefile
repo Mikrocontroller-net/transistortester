@@ -23,7 +23,7 @@ CFLAGS = -Wall
 # atmega88 : m88 or m88p
 # atmega168: m168 or m168p
 # atmega328: m328 or m328p
-PARTNO = m168
+PARTNO = m168p
 
 #select your language
 # available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE

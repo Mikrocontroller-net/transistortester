@@ -19,19 +19,19 @@
 // select the right Processor Typ
 #if defined(__AVR_ATmega48__)
  #define PROCESSOR_TYP 48
-#elif defined(__AVR_ATmega48p__)
+#elif defined(__AVR_ATmega48P__)
  #define PROCESSOR_TYP 48
 #elif defined(__AVR_ATmega88__)
  #define PROCESSOR_TYP 88
-#elif defined(__AVR_ATmega88p__)
+#elif defined(__AVR_ATmega88P__)
  #define PROCESSOR_TYP 88
 #elif defined(__AVR_ATmega168__)
  #define PROCESSOR_TYP 168
-#elif defined(__AVR_ATmega168p__)
+#elif defined(__AVR_ATmega168P__)
  #define PROCESSOR_TYP 168
 #elif defined(__AVR_ATmega328__)
  #define PROCESSOR_TYP 328
-#elif defined(__AVR_ATmega328p__)
+#elif defined(__AVR_ATmega328P__)
  #define PROCESSOR_TYP 328
 #else
  #define PROCESSOR_TYP 8

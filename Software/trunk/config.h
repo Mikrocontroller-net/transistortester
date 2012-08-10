@@ -13,6 +13,8 @@
 // RH_OFFSET : systematic offset of resistor measurement with RH (470k) 
 // resolution is 0.1 Ohm, 7000 defines a offset of 700 Ohm
 #define RH_OFFSET 7000 
+// TP2_CAP_OFFSET is a additionally offset for TP2 capacity measurements in pF units
+#define TP2_CAP_OFFSET 2
 
 // CABLE_CAP defines the capacity (pF) of 12cm cable with clip at the terminal pins
 #define CABLE_CAP 3

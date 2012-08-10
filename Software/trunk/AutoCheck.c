@@ -2,6 +2,8 @@ void AutoCheck(void) {
   uint8_t tt;		// number of running test
   uint8_t ww;		// counter for repeating the tests
   unsigned int  adcmv[3];
+// define the maximum count of repetitions MAX_REP
+#define MAX_REP 8
 
 #ifdef AUTO_CAL
   uint16_t sum_c0;	// sum of empty probe C measurement
@@ -50,7 +52,7 @@ void AutoCheck(void) {
      sum_c0 = 0;			//reset sum of capacity measurements
      c0_count = 0;			//counter for capacity measurement
 #endif
-     for(ww=0;ww<8;ww++) {		// repeat the test 8 times
+     for(ww=0;ww<MAX_REP;ww++) {	// repeat the test MAX_REP times
         lcd_line2();			//Cursor to column 1, row 2
         lcd_clear_line();		// clear total line
         lcd_line1();			//Cursor to column 1, row 1
@@ -138,10 +140,11 @@ void AutoCheck(void) {
            adcmv[2] = W5msReadADC(TP3);
            lcd_fix_string(RILO);	// "RiLo="
 #ifdef AUTO_CAL
-           sum_c0 += adcmv[0] + adcmv[1] + adcmv[2];
+           sum_c0 += adcmv[0] + adcmv[1] + adcmv[2]; //add all three values
            c0_count += 3;
-           if (c0_count == 24) {
-              sum_c0 /= 8;
+           if (c0_count == (MAX_REP*3)) {
+              //last repetition of measurement
+              sum_c0 /= MAX_REP;
               sum_rm = sum_c0;          // sum of 3 Pin voltages switched to GND
            }
 #endif
@@ -167,16 +170,18 @@ void AutoCheck(void) {
 #ifdef AUTO_CAL
            sum_c0 += adcmv[0] + adcmv[1] + adcmv[2];
            c0_count += 3;
-           if (c0_count == 24) {
-              sum_c0 /= 8;		// sum of 3 Pin voltages switched to VCC
-              u680 = ((U_VCC * 3) - sum_rm - sum_c0);
+           if (c0_count == (MAX_REP*3)) {
+              //last repetition of measurement
+              sum_c0 /= MAX_REP;		// sum of 3 Pin voltages switched to VCC
+              u680 = ((U_VCC * 3) - sum_rm - sum_c0);	//three times the voltage at the 680 Ohm
               pin_rm = (unsigned long)((unsigned long)sum_rm * (unsigned long)R_L_VAL) / (unsigned long)u680;
               adcmv[2] = pin_rm;	// for last output in row 2
               pin_rp = (unsigned long)((unsigned long)sum_c0 * (unsigned long)R_L_VAL) / (unsigned long)u680;
               if ((pin_rp < 280) && (pin_rm < 250)) {
-                 lcd_string(utoa(pin_rp, outval, 10));
-                 (void) eeprom_write_word(&R680pl, pin_rp+R_L_VAL);
-                 (void) eeprom_write_word(&R680mi, pin_rm+R_L_VAL);
+                 // rp is below 28 Ohm and rm is below 25 Ohm
+                 lcd_string(utoa(pin_rp, outval, 10));	//write value to LCD
+                 (void) eeprom_write_word((uint16_t *)(&R680pl), pin_rp+R_L_VAL);  //hold VCC resistance value in EEprom
+                 (void) eeprom_write_word((uint16_t *)(&R680mi), pin_rm+R_L_VAL);  //hold GND resistance value in EEprom
               }
            }
 #endif
@@ -184,22 +189,25 @@ void AutoCheck(void) {
         if (tt == 9) {			//measure Zero offset for Capacity measurement
 #ifdef C_MESS
            ReadCapacity(TP3, TP1);
-           adcmv[0] = (unsigned int) cval_uncorrected;
+           adcmv[0] = (unsigned int) cval_uncorrected;	//save capacity value of empty Pin 1:3
            ReadCapacity(TP3, TP2);
-           adcmv[1] = (unsigned int) cval_uncorrected;
+           adcmv[1] = (unsigned int) cval_uncorrected;	//save capacity value of empty Pin 2:3
            ReadCapacity(TP2, TP1);
-           adcmv[2] = (unsigned int) cval_uncorrected;
+           adcmv[2] = (unsigned int) cval_uncorrected;	//save capacity value of empty Pin 1:2
+
 #ifdef AUTO_CAL
-           sum_c0 += adcmv[0] + adcmv[1] + adcmv[2] + 3;
+           //build the sum of all three measurements and add a little, because one combination has about 2 pF too less
+           sum_c0 += adcmv[0] + adcmv[1] + adcmv[2] + (TP2_CAP_OFFSET+1);
            c0_count += 3;
-           if ((c0_count == 24) && (sum_c0 < (60*24))){
-              sum_c0 /= 24;
+           if ((c0_count == (MAX_REP*3)) && (sum_c0 < (60*(MAX_REP*3)))){
+              // last repetition of measurement and capacity is below 60 pF
+              sum_c0 /= (MAX_REP*3);		//divide through (MAX_REP*3)
               lcd_data('E');
               lcd_data('E');
               lcd_data('=');
-              lcd_string(utoa(sum_c0, outval, 10));
+              lcd_string(utoa(sum_c0, outval, 10));	//zero offset for capacity measurement to LCD
               sum_c0 += (COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)); //add slew rate dependend offset
-              (void) eeprom_write_word(&cap_null, sum_c0);
+              (void) eeprom_write_word((uint16_t *)(&cap_null), sum_c0);	// hold zero offset + slew rate dependend offset
            }
 #endif
 #else
@@ -232,7 +240,7 @@ void AutoCheck(void) {
      wait1s();
   } //end for tt
   lcd_clear();
-  lcd_line1();
+//  lcd_line1();
   lcd_fix_string(ATE);		//"Selftest End"
   lcd_line2();
   lcd_fix_string(VERSION);	//"Version ..."
@@ -240,7 +248,7 @@ void AutoCheck(void) {
   lcd_line1();
   lcd_fix_string(ATE);		//"Selftest End"
   lcd_data(' ');
-  lcd_data('5');
+  lcd_data('5');		// add text "50Hz"
   lcd_data('0');
   lcd_data('H');
   lcd_data('z');

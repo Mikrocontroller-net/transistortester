@@ -325,7 +325,7 @@ void EntladePins();			// discharge capacitors
 void RefVoltage();			// compensate the reference voltage for comparator 
 void AutoCheck();			// check if self-test should be done 
 unsigned int getRLmultip(unsigned int cvolt);  // get C-Multiplikator for voltage cvolt
-void scale_intref_adc();		// get skale factors for ReadADC with internal reference
+void scale_intref_adc();		// get scale factors for ReadADC with internal reference
 uint8_t value_out(unsigned long vval,uint8_t pp);    // output 4 digits with (pp-1) digits after point
 unsigned int compute_hfe(unsigned int lpx, unsigned int tpy);
 

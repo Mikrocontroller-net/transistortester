@@ -252,7 +252,7 @@ messe_mit_rh:
         cval += (COMP_SLEW1 / (cval+COMP_SLEW2 ));
      }
 #endif
-     if (HighPin == TP2) cval += 2;	// measurements with TP2 have 2pF less capacity
+     if (HighPin == TP2) cval += TP2_CAP_OFFSET;	// measurements with TP2 have 2pF less capacity
 //     if ((HighPin == TP3) && (LowPin == TP2)) cval -= 1; // this combination has 1pF to much
 //     if ((HighPin == TP1) && (LowPin == TP3)) cval += 1; // this combinations has 1pF to less
 #ifdef AUTO_CAL

@@ -36,11 +36,16 @@
 #else
  #define PROCESSOR_TYP 8
 #endif
+// automatic selection of right call type
+#if FLASHEND > 0X1FFF
+ #define ACALL call
+#else
+ #define ACALL rcall
+#endif
 // automatic selection of option and parameters for different AVR s
 //----------------========----------
 #if PROCESSOR_TYP == 48
 //----------------========----------
-  #define ACALL rcall
   #define MCU_STATUS_REG MCUCR
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1
@@ -77,7 +82,6 @@
 //------------------========----------
 #elif PROCESSOR_TYP == 88
 //------------------========----------
-  #define ACALL rcall
   #define MCU_STATUS_REG MCUCR
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1
@@ -99,7 +103,6 @@
 //------------------=========----------
 #elif PROCESSOR_TYP == 168
 //------------------=========----------
-  #define ACALL call
   #define MCU_STATUS_REG MCUCR
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1
@@ -124,7 +127,6 @@
 //------------------=========----------
 #elif PROCESSOR_TYP == 328
 //------------------=========----------
-  #define ACALL call
   #define MCU_STATUS_REG MCUCR
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1
@@ -147,7 +149,6 @@
 #else
 //                   ATmega8
 //------------------=========----------
-  #define ACALL rcall
   #define MCU_STATUS_REG MCUCSR
   #define ADC_COMP_CONTROL SFIOR
   #define TI1_INT_FLAGS TIFR

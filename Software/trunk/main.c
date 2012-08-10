@@ -437,8 +437,8 @@ start:
     if(PartMode < 3) {	//enhancement-MOSFET
        lcd_fix_string(vt);
        //Gate-threshold voltage
-       lcd_string(utoa(gthvoltage, outval, 10));
-       lcd_data('m');
+       diodes[0].Voltage = gthvoltage;
+       mVAusgabe(0);			//Output gthvoltage
     }
     goto end;
     // end (PartFound == PART_FET)

@@ -81,7 +81,6 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      wait500us();			//wait a little time
      wdt_reset();
      // read voltage without current, is already charged enough?
-//     adcv[2] = ReadADC(HighPin) - adcv[0] + C_H_KORR;
      adcv[2] = ReadADC(HighPin) - adcv[0];
      if ((ovcnt16 == 126) && (adcv[2] < 75)) {
         // 300mV can not be reached well-timed 
@@ -157,6 +156,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   cval_uncorrected *= getRLmultip(adcv[2]+adcv[3]);	// get factor to convert time to capacity from table
 #endif
    cval = cval_uncorrected;		// set result to uncorrected
+   // cval for this type is at least 40000nF, so the last digit will be never shown
    cval *= (400 - ((C_H_KORR)*2)/5);	// correct with C_H_KORR with 0.1% resolution, but prevent overflow
    cval /= 40;
 #if DebugOut == 10

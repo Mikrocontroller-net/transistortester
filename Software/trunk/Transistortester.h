@@ -411,6 +411,7 @@ struct resis_t{
   const unsigned char C_Prefix_tab[] PROGMEM = { 'p','n',LCD_CHAR_U,'m'}; // pF,nF,µF,mF
  #ifdef AUTO_CAL
   const uint16_t cap_null EEMEM = C_NULL;	// Zero offset of capacity measurement 
+  const int16_t ref_offset EEMEM = REF_C_KORR;	// default correction of internal reference voltage for capacity measurement
  #endif
   #define MULTIP
 #endif
@@ -426,6 +427,7 @@ uint8_t minmul=1,mindiv=1;
 uint8_t ii;			// multipurpose counter
 unsigned long cval;		// capacitor value 
 unsigned long cval_uncorrected;	// capacity value without corrections
+int16_t load_diff;		// difference voltage of loaded capacitor and internal reference
 uint8_t cpre;			//Prefix for capacitor value  0=p, 1=n, 2=µ, 3=m
 uint8_t ca, cb;			//pins of capacitor
 

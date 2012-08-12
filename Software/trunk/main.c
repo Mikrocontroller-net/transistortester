@@ -118,14 +118,13 @@ start:
 #ifdef WITH_UART
   uart_newline();		// start of new measurement
 #endif
-  ref_mv = ReadADC(0x0e);      // read Reference-voltage 
-  ref_mv = W20msReadADC(0x0e);  // read Reference-voltage
-  ref_mv += REF_R_KORR;		// correction for the resistor measurement 
+  (void) ReadADC(0x0e);		// read Reference-voltage 
+  ref_mv = W20msReadADC(0x0e);	// read Reference-voltage
 #ifdef AUTOSCALE_ADC
-  scale_intref_adc();	       // scale ADC to internal Reference
+  scale_intref_adc();		// scale ADC to internal Reference
 #endif
 
-  ref_mv += (REF_C_KORR - REF_R_KORR);	// correction for the capacity measurement 
+//  ref_mv += REF_C_KORR;		// correction for the capacity measurement 
 
 #ifdef BAT_CHECK
   // Battery check is selected
@@ -204,7 +203,7 @@ start:
   EntladePins();		// discharge all capacitors!
   if(PartFound == PART_CELL) {
     lcd_clear();
-    lcd_line1();
+//    lcd_line1();
     lcd_data('C');
     lcd_data('e');
     lcd_data('l');
@@ -237,7 +236,7 @@ start:
 #endif
   //All checks are done, output result to display
   lcd_clear();
-  lcd_line1();
+//  lcd_line1();
   if(PartFound == PART_DIODE) {
      if(NumOfDiodes == 1) {		//single Diode
         lcd_fix_string(Diode);		//"Diode: "
@@ -658,7 +657,7 @@ void RvalOut(uint8_t ii) {
  // 2.54V reference voltage + korrection (fix for ATmega8)
  #define WishVolt (2560 + REF_R_KORR)
 #else
- #define WishVolt ref_mv
+ #define WishVolt (ref_mv + REF_R_KORR)
 #endif
 #ifdef AUTOSCALE_ADC
 void scale_intref_adc(void) {
@@ -850,7 +849,7 @@ void RefVoltage(void) {
   uint8_t tabind;
   uint8_t tabres;
 
-  referenz = ref_mv;
+  referenz = ref_mv + (int8_t)eeprom_read_word((uint16_t *)(&ref_offset));
   if (referenz >= Ref_Tab_Beginn) {
      referenz -= Ref_Tab_Beginn;
   } else  {

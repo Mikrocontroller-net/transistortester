@@ -23,7 +23,7 @@ CFLAGS = -Wall
 # atmega88 : m88 or m88p
 # atmega168: m168 or m168p
 # atmega328: m328 or m328p
-PARTNO = m168
+PARTNO = m168p
 
 #select your language
 # available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE
@@ -36,6 +36,8 @@ UI_LANGUAGE = LANG_ENGLISH
 # the WITH_SELFTEST option enables selftest function 
 CFLAGS += -DWITH_SELFTEST
 # AUTO_CAL will enable the autocalibration of zero offset of capacity measurement in selftest section
+# Additionally the port output resistance and correction for low capacity measurement can be done
+# with ATmega168
 CFLAGS += -DAUTO_CAL
 # FREQUENCY_50HZ enables a 50 Hz frequency generator for up to one minute at the end of selftests
 CFLAGS += -DFREQUENCY_50HZ
@@ -44,7 +46,7 @@ CFLAGS += -DFREQUENCY_50HZ
 # the WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring
 CFLAGS += -DWITH_AUTO_REF
 # REF_C_KORR has mV units, greater values gives lower capacity results
-CFLAGS += -DREF_C_KORR=18
+CFLAGS += -DREF_C_KORR=12
 CFLAGS += -DC_H_KORR=0
 
 # the WITH_UART option enables the software UART
@@ -441,6 +443,9 @@ fuses-crystal-lp:
 upload:
 	make
 	avrdude -c $(PROGRAMMER) -B 5.0 -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTester.hex:a \
+	-U eeprom:w:./TransistorTester.eep:a
+eeprom:
+	avrdude -c $(PROGRAMMER) -B 5.0 -p $(PARTNO) -P $(PORT) \
 	-U eeprom:w:./TransistorTester.eep:a
 verify:
 	avrdude -D -c $(PROGRAMMER) -B 5.0 -p $(PARTNO) -P $(PORT) -U flash:v:./TransistorTester.hex:a \

@@ -47,7 +47,7 @@ void AutoCheck(void) {
   lcd_fix_string(SELFTEST);		// "Selftest mode.."
   wait1s();
  
-  for(tt=1;tt<10;tt++) {		// loop for all Tests
+  for(tt=1;tt<11;tt++) {		// loop for all Tests
 #ifdef AUTO_CAL
      sum_c0 = 0;			//reset sum of capacity measurements
      c0_count = 0;			//counter for capacity measurement
@@ -62,8 +62,8 @@ void AutoCheck(void) {
         lcd_string(utoa(tt, outval, 10));	//output Test number
         lcd_data(' ');
         if (tt == 1) {   // output of reference voltage and factors for capacity measurement
-           ref_mv = ReadADC(0x0e);      // read reference voltage 
-           ref_mv = W5msReadADC(0x0e) + REF_C_KORR;  // read reference voltage 
+           (void) ReadADC(0x0e);      // read reference voltage 
+           ref_mv = W5msReadADC(0x0e);  // read reference voltage 
            lcd_fix_string(URefT);	//"URef="
            lcd_string(utoa(ref_mv, outval, 10));
            lcd_fix_string(mVT);		//"mV "
@@ -195,7 +195,7 @@ void AutoCheck(void) {
            ReadCapacity(TP2, TP1);
            adcmv[2] = (unsigned int) cval_uncorrected;	//save capacity value of empty Pin 1:2
 
-#ifdef AUTO_CAL
+ #ifdef AUTO_CAL
            //build the sum of all three measurements and add a little, because one combination has about 2 pF too less
            sum_c0 += adcmv[0] + adcmv[1] + adcmv[2] + (TP2_CAP_OFFSET+1);
            c0_count += 3;
@@ -209,9 +209,34 @@ void AutoCheck(void) {
               sum_c0 += (COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)); //add slew rate dependend offset
               (void) eeprom_write_word((uint16_t *)(&cap_null), sum_c0);	// hold zero offset + slew rate dependend offset
            }
-#endif
+ #endif
 #else
-           continue;
+           break;
+#endif
+        }
+        if (tt == 10) {			//measure  offset Voltage of analog Comparator for Capacity measurement
+#ifdef C_MESS
+           adcmv[0] = 0;
+           adcmv[1] = 0;
+           adcmv[2] = ww;
+           ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
+           if (cpre > 1) continue;	// is too big
+           if (((cpre == 0) && (cval > 95000)) || ((cpre == 1) && (cval < 30000))) {
+              // value of capacitor is correct
+              (void) eeprom_write_word((uint16_t *)(&ref_offset), load_diff);	// hold zero offset + slew rate dependend offset
+              lcd_line2();			//Cursor to column 1, row 2
+              lcd_data('E');
+              lcd_data('E');
+              lcd_data(' ');
+              lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
+              wait2s();
+              break;
+           } else {
+              wait2s();
+              continue;
+           }
+#else
+           break;
 #endif
         }
         if (tt > 1) {			// output 3 voltages 
@@ -269,5 +294,6 @@ void AutoCheck(void) {
      }
   }
  #endif
-  wait2s();			//wait 2 seconds
+ PartFound = PART_NONE;
+ wait1s();			//wait 1 seconds
  } 

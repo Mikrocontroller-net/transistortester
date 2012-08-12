@@ -360,7 +360,7 @@ void lcd_fix_string(const unsigned char *data) {
    while(1) {
       cc = MEM_read_byte(data);
      1a4:	ce 01       	movw	r24, r28
-     1a6:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168p>
+     1a6:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168>
       if((cc==0) || (cc==128)) {
      1aa:	88 23       	and	r24, r24
      1ac:	31 f0       	breq	.+12     	; 0x1ba <lcd_fix_string+0x1c>
@@ -395,7 +395,7 @@ void lcd_fix_customchar(const unsigned char *chardata) {
      1ce:	c8 01       	movw	r24, r16
      1d0:	8c 0f       	add	r24, r28
      1d2:	9d 1f       	adc	r25, r29
-     1d4:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168p>
+     1d4:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168>
      1d8:	0e 94 82 00 	call	0x104	; 0x104 <lcd_data>
      1dc:	21 96       	adiw	r28, 0x01	; 1
    }
@@ -731,13 +731,13 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   resis680pl = eeprom_read_word(&R680pl);
      370:	8b ed       	ldi	r24, 0xDB	; 219
      372:	91 e0       	ldi	r25, 0x01	; 1
-     374:	0e 94 9a 14 	call	0x2934	; 0x2934 <__eerd_word_m168p>
+     374:	0e 94 9a 14 	call	0x2934	; 0x2934 <__eerd_word_m168>
      378:	9b 87       	std	Y+11, r25	; 0x0b
      37a:	8a 87       	std	Y+10, r24	; 0x0a
   resis680mi = eeprom_read_word(&R680mi);
      37c:	8d ed       	ldi	r24, 0xDD	; 221
      37e:	91 e0       	ldi	r25, 0x01	; 1
-     380:	0e 94 9a 14 	call	0x2934	; 0x2934 <__eerd_word_m168p>
+     380:	0e 94 9a 14 	call	0x2934	; 0x2934 <__eerd_word_m168>
      384:	9d 87       	std	Y+13, r25	; 0x0d
      386:	8c 87       	std	Y+12, r24	; 0x0c
   #define RR680MI resis680mi
@@ -751,7 +751,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      38c:	c5 01       	movw	r24, r10
      38e:	8b 52       	subi	r24, 0x2B	; 43
      390:	9e 4f       	sbci	r25, 0xFE	; 254
-     392:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168p>
+     392:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168>
      396:	8a 83       	std	Y+2, r24	; 0x02
   LoPinRH = LoPinRL + LoPinRL;				// intruction for LowPin R_H
   TriPinRL = MEM_read_byte(&PinRLtab[TristatePin]);	// intruction for TristatePin R_L
@@ -760,7 +760,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      39c:	90 e0       	ldi	r25, 0x00	; 0
      39e:	8b 52       	subi	r24, 0x2B	; 43
      3a0:	9e 4f       	sbci	r25, 0xFE	; 254
-     3a2:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168p>
+     3a2:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168>
      3a6:	d8 2e       	mov	r13, r24
   TriPinRH = TriPinRL + TriPinRL;			// intruction for TristatePin R_H
      3a8:	e8 2e       	mov	r14, r24
@@ -771,7 +771,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      3b0:	c4 01       	movw	r24, r8
      3b2:	8b 52       	subi	r24, 0x2B	; 43
      3b4:	9e 4f       	sbci	r25, 0xFE	; 254
-     3b6:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168p>
+     3b6:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168>
      3ba:	c8 2e       	mov	r12, r24
   HiPinRH = HiPinRL + HiPinRL;				// intruction for HighPin R_H
      3bc:	38 2f       	mov	r19, r24
@@ -782,13 +782,13 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      3c2:	c4 01       	movw	r24, r8
      3c4:	88 52       	subi	r24, 0x28	; 40
      3c6:	9e 4f       	sbci	r25, 0xFE	; 254
-     3c8:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168p>
+     3c8:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168>
      3cc:	8b 83       	std	Y+3, r24	; 0x03
   LoADCp = MEM_read_byte(&PinADCtab[LowPin]);		// intruction for ADC Low-Pin
      3ce:	c5 01       	movw	r24, r10
      3d0:	88 52       	subi	r24, 0x28	; 40
      3d2:	9e 4f       	sbci	r25, 0xFE	; 254
-     3d4:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168p>
+     3d4:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168>
      3d8:	8c 83       	std	Y+4, r24	; 0x04
   HiADCp |= TXD_VAL;
   LoADCm = LoADCp | TXD_MSK;
@@ -2961,7 +2961,7 @@ unsigned int getRLmultip(unsigned int cvolt) {
      fc4:	99 1f       	adc	r25, r25
      fc6:	80 50       	subi	r24, 0x00	; 0
      fc8:	90 40       	sbci	r25, 0x00	; 0
-     fca:	0e 94 9a 14 	call	0x2934	; 0x2934 <__eerd_word_m168p>
+     fca:	0e 94 9a 14 	call	0x2934	; 0x2934 <__eerd_word_m168>
      fce:	8c 01       	movw	r16, r24
   y2 = MEM_read_word(&RLtab[tabind+1]);
      fd0:	ce 01       	movw	r24, r28
@@ -2969,7 +2969,7 @@ unsigned int getRLmultip(unsigned int cvolt) {
      fd4:	99 1f       	adc	r25, r25
      fd6:	8e 5f       	subi	r24, 0xFE	; 254
      fd8:	9f 4f       	sbci	r25, 0xFF	; 255
-     fda:	0e 94 9a 14 	call	0x2934	; 0x2934 <__eerd_word_m168p>
+     fda:	0e 94 9a 14 	call	0x2934	; 0x2934 <__eerd_word_m168>
      fde:	9c 01       	movw	r18, r24
   } else {
      uvolt = 0;		// limit to begin of table
@@ -3040,7 +3040,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     1030:	90 e0       	ldi	r25, 0x00	; 0
     1032:	88 52       	subi	r24, 0x28	; 40
     1034:	9e 4f       	sbci	r25, 0xFE	; 254
-    1036:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168p>
+    1036:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168>
     103a:	c8 2e       	mov	r12, r24
   HiPinR_L = MEM_read_byte(&PinRLtab[HighPin]);	//R_L mask for HighPin R_L load
     103c:	21 2f       	mov	r18, r17
@@ -3048,7 +3048,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     1040:	c9 01       	movw	r24, r18
     1042:	8b 52       	subi	r24, 0x2B	; 43
     1044:	9e 4f       	sbci	r25, 0xFE	; 254
-    1046:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168p>
+    1046:	0e 94 92 14 	call	0x2924	; 0x2924 <__eerd_byte_m168>
     104a:	08 2f       	mov	r16, r24
   HiPinR_H = HiPinR_L + HiPinR_L;	//double for HighPin R_H load
 
@@ -3596,7 +3596,7 @@ messe_mit_rh:
      tmpint = eeprom_read_word(&cap_null);	// read zero offset
     138c:	8f ed       	ldi	r24, 0xDF	; 223
     138e:	91 e0       	ldi	r25, 0x01	; 1
-    1390:	0e 94 9a 14 	call	0x2934	; 0x2934 <__eerd_word_m168p>
+    1390:	0e 94 9a 14 	call	0x2934	; 0x2934 <__eerd_word_m168>
      if (cval > tmpint) {
     1394:	20 91 63 01 	lds	r18, 0x0163
     1398:	30 91 64 01 	lds	r19, 0x0164
@@ -3718,7 +3718,7 @@ void RefVoltage(void) {
   referenz = ref_mv + (int8_t)eeprom_read_word((uint16_t *)(&ref_offset));
     1444:	81 ee       	ldi	r24, 0xE1	; 225
     1446:	91 e0       	ldi	r25, 0x01	; 1
-    1448:	0e 94 9a 14 	call	0x2934	; 0x2934 <__eerd_word_m168p>
+    1448:	0e 94 9a 14 	call	0x2934	; 0x2934 <__eerd_word_m168>
     144c:	99 27       	eor	r25, r25
     144e:	87 fd       	sbrc	r24, 7
     1450:	90 95       	com	r25
@@ -3762,7 +3762,7 @@ void RefVoltage(void) {
     1488:	99 1f       	adc	r25, r25
     148a:	86 5a       	subi	r24, 0xA6	; 166
     148c:	9f 4f       	sbci	r25, 0xFF	; 255
-    148e:	0e 94 9a 14 	call	0x2934	; 0x2934 <__eerd_word_m168p>
+    148e:	0e 94 9a 14 	call	0x2934	; 0x2934 <__eerd_word_m168>
     1492:	8c 01       	movw	r16, r24
   y2 = MEM_read_word(&RHtab[tabind+1]);
     1494:	ce 01       	movw	r24, r28
@@ -3770,7 +3770,7 @@ void RefVoltage(void) {
     1498:	99 1f       	adc	r25, r25
     149a:	84 5a       	subi	r24, 0xA4	; 164
     149c:	9f 4f       	sbci	r25, 0xFF	; 255
-    149e:	0e 94 9a 14 	call	0x2934	; 0x2934 <__eerd_word_m168p>
+    149e:	0e 94 9a 14 	call	0x2934	; 0x2934 <__eerd_word_m168>
     14a2:	9c 01       	movw	r18, r24
   } else  {
      referenz = 0;		// limit to begin of table
@@ -4804,14 +4804,14 @@ void AutoCheck(void) {
     1ac8:	75 4e       	sbci	r23, 0xE5	; 229
     1aca:	8b ed       	ldi	r24, 0xDB	; 219
     1acc:	91 e0       	ldi	r25, 0x01	; 1
-    1ace:	0e 94 a0 14 	call	0x2940	; 0x2940 <__eewr_word_m168p>
+    1ace:	0e 94 a0 14 	call	0x2940	; 0x2940 <__eewr_word_m168>
                  (void) eeprom_write_word((uint16_t *)(&R680mi), pin_rm+R_L_VAL);  //hold GND resistance value in EEprom
     1ad2:	b3 01       	movw	r22, r6
     1ad4:	60 57       	subi	r22, 0x70	; 112
     1ad6:	75 4e       	sbci	r23, 0xE5	; 229
     1ad8:	8d ed       	ldi	r24, 0xDD	; 221
     1ada:	91 e0       	ldi	r25, 0x01	; 1
-    1adc:	0e 94 a0 14 	call	0x2940	; 0x2940 <__eewr_word_m168p>
+    1adc:	0e 94 a0 14 	call	0x2940	; 0x2940 <__eewr_word_m168>
     1ae0:	3f c1       	rjmp	.+638    	; 0x1d60 <AutoCheck+0x6b4>
               }
            }
@@ -4900,7 +4900,7 @@ void AutoCheck(void) {
     1b74:	8f ed       	ldi	r24, 0xDF	; 223
     1b76:	91 e0       	ldi	r25, 0x01	; 1
     1b78:	b8 01       	movw	r22, r16
-    1b7a:	0e 94 a0 14 	call	0x2940	; 0x2940 <__eewr_word_m168p>
+    1b7a:	0e 94 a0 14 	call	0x2940	; 0x2940 <__eewr_word_m168>
     1b7e:	56 c0       	rjmp	.+172    	; 0x1c2c <AutoCheck+0x580>
  #endif
 #else
@@ -4955,7 +4955,7 @@ void AutoCheck(void) {
     1bd4:	70 91 4a 01 	lds	r23, 0x014A
     1bd8:	81 ee       	ldi	r24, 0xE1	; 225
     1bda:	91 e0       	ldi	r25, 0x01	; 1
-    1bdc:	0e 94 a0 14 	call	0x2940	; 0x2940 <__eewr_word_m168p>
+    1bdc:	0e 94 a0 14 	call	0x2940	; 0x2940 <__eewr_word_m168>
               lcd_line2();			//Cursor to column 1, row 2
     1be0:	80 ec       	ldi	r24, 0xC0	; 192
     1be2:	0e 94 7e 00 	call	0xfc	; 0xfc <lcd_command>
@@ -7126,9 +7126,9 @@ gakAusgabe:
     291e:	c9 01       	movw	r24, r18
     2920:	0c 94 a5 14 	jmp	0x294a	; 0x294a <strrev>
 
-00002924 <__eerd_byte_m168p>:
+00002924 <__eerd_byte_m168>:
     2924:	f9 99       	sbic	0x1f, 1	; 31
-    2926:	fe cf       	rjmp	.-4      	; 0x2924 <__eerd_byte_m168p>
+    2926:	fe cf       	rjmp	.-4      	; 0x2924 <__eerd_byte_m168>
     2928:	92 bd       	out	0x22, r25	; 34
     292a:	81 bd       	out	0x21, r24	; 33
     292c:	f8 9a       	sbi	0x1f, 0	; 31
@@ -7136,17 +7136,17 @@ gakAusgabe:
     2930:	80 b5       	in	r24, 0x20	; 32
     2932:	08 95       	ret
 
-00002934 <__eerd_word_m168p>:
+00002934 <__eerd_word_m168>:
     2934:	a8 e1       	ldi	r26, 0x18	; 24
     2936:	b0 e0       	ldi	r27, 0x00	; 0
     2938:	42 e0       	ldi	r20, 0x02	; 2
     293a:	50 e0       	ldi	r21, 0x00	; 0
-    293c:	0c 94 b7 14 	jmp	0x296e	; 0x296e <__eerd_blraw_m168p>
+    293c:	0c 94 b7 14 	jmp	0x296e	; 0x296e <__eerd_blraw_m168>
 
-00002940 <__eewr_word_m168p>:
-    2940:	0e 94 c5 14 	call	0x298a	; 0x298a <__eewr_byte_m168p>
+00002940 <__eewr_word_m168>:
+    2940:	0e 94 c5 14 	call	0x298a	; 0x298a <__eewr_byte_m168>
     2944:	27 2f       	mov	r18, r23
-    2946:	0c 94 c6 14 	jmp	0x298c	; 0x298c <__eewr_r18_m168p>
+    2946:	0c 94 c6 14 	jmp	0x298c	; 0x298c <__eewr_r18_m168>
 
 0000294a <strrev>:
     294a:	dc 01       	movw	r26, r24
@@ -7166,15 +7166,15 @@ gakAusgabe:
     2966:	c8 f3       	brcs	.-14     	; 0x295a <strrev+0x10>
     2968:	08 95       	ret
 
-0000296a <__eerd_block_m168p>:
+0000296a <__eerd_block_m168>:
     296a:	dc 01       	movw	r26, r24
     296c:	cb 01       	movw	r24, r22
 
-0000296e <__eerd_blraw_m168p>:
+0000296e <__eerd_blraw_m168>:
     296e:	fc 01       	movw	r30, r24
     2970:	f9 99       	sbic	0x1f, 1	; 31
-    2972:	fe cf       	rjmp	.-4      	; 0x2970 <__eerd_blraw_m168p+0x2>
-    2974:	06 c0       	rjmp	.+12     	; 0x2982 <__eerd_blraw_m168p+0x14>
+    2972:	fe cf       	rjmp	.-4      	; 0x2970 <__eerd_blraw_m168+0x2>
+    2974:	06 c0       	rjmp	.+12     	; 0x2982 <__eerd_blraw_m168+0x14>
     2976:	f2 bd       	out	0x22, r31	; 34
     2978:	e1 bd       	out	0x21, r30	; 33
     297a:	f8 9a       	sbi	0x1f, 0	; 31
@@ -7183,15 +7183,15 @@ gakAusgabe:
     2980:	0d 92       	st	X+, r0
     2982:	41 50       	subi	r20, 0x01	; 1
     2984:	50 40       	sbci	r21, 0x00	; 0
-    2986:	b8 f7       	brcc	.-18     	; 0x2976 <__eerd_blraw_m168p+0x8>
+    2986:	b8 f7       	brcc	.-18     	; 0x2976 <__eerd_blraw_m168+0x8>
     2988:	08 95       	ret
 
-0000298a <__eewr_byte_m168p>:
+0000298a <__eewr_byte_m168>:
     298a:	26 2f       	mov	r18, r22
 
-0000298c <__eewr_r18_m168p>:
+0000298c <__eewr_r18_m168>:
     298c:	f9 99       	sbic	0x1f, 1	; 31
-    298e:	fe cf       	rjmp	.-4      	; 0x298c <__eewr_r18_m168p>
+    298e:	fe cf       	rjmp	.-4      	; 0x298c <__eewr_r18_m168>
     2990:	1f ba       	out	0x1f, r1	; 31
     2992:	92 bd       	out	0x22, r25	; 34
     2994:	81 bd       	out	0x21, r24	; 33

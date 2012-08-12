@@ -42,8 +42,6 @@ tmpval              0x1               main.o
 mess_count          0x1               main.o
 outval              0xc               main.o
 resis               0x15              main.o
-rvmax               0x2               main.o
-rxv                 0x2               main.o
 ref_mv              0x2               main.o
 tmpval2             0x1               main.o
 empty_count         0x1               main.o
@@ -53,7 +51,6 @@ trans               0x7               main.o
 ResistorsFound      0x1               main.o
 cval_uncorrected    0x4               main.o
 gthvoltage          0x2               main.o
-rtst                0x2               main.o
 ca                  0x1               main.o
 load_diff           0x2               main.o
 diodes              0x18              main.o
@@ -444,7 +441,7 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
                 0x0000000000800104                _edata = .
                 0x0000000000800104                PROVIDE (__data_end, .)
 
-.bss            0x0000000000800104       0x63
+.bss            0x0000000000800104       0x5d
                 0x0000000000800104                PROVIDE (__bss_start, .)
  *(.bss)
  .bss           0x0000000000800104        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm168.o
@@ -470,7 +467,7 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
  .bss           0x0000000000800104        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_byte_atmega168.o)
  *(.bss*)
  *(COMMON)
- COMMON         0x0000000000800104       0x63 main.o
+ COMMON         0x0000000000800104       0x5d main.o
                 0x0000000000800104                display_time
                 0x0000000000800106                PartReady
                 0x0000000000800107                NumOfDiodes
@@ -481,32 +478,29 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
                 0x000000000080010c                mess_count
                 0x000000000080010d                outval
                 0x0000000000800119                resis
-                0x000000000080012e                rvmax
-                0x0000000000800130                rxv
-                0x0000000000800132                ref_mv
-                0x0000000000800134                tmpval2
-                0x0000000000800135                empty_count
-                0x0000000000800136                ii
-                0x0000000000800137                cpre
-                0x0000000000800138                trans
-                0x000000000080013f                ResistorsFound
-                0x0000000000800140                cval_uncorrected
-                0x0000000000800144                gthvoltage
-                0x0000000000800146                rtst
-                0x0000000000800148                ca
-                0x0000000000800149                load_diff
-                0x000000000080014b                diodes
-                0x0000000000800163                cval
-                0x0000000000800167                PROVIDE (__bss_end, .)
+                0x000000000080012e                ref_mv
+                0x0000000000800130                tmpval2
+                0x0000000000800131                empty_count
+                0x0000000000800132                ii
+                0x0000000000800133                cpre
+                0x0000000000800134                trans
+                0x000000000080013b                ResistorsFound
+                0x000000000080013c                cval_uncorrected
+                0x0000000000800140                gthvoltage
+                0x0000000000800142                ca
+                0x0000000000800143                load_diff
+                0x0000000000800145                diodes
+                0x000000000080015d                cval
+                0x0000000000800161                PROVIDE (__bss_end, .)
                 0x00000000000029aa                __data_load_start = LOADADDR (.data)
                 0x00000000000029ae                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x0000000000800167        0x0
-                0x0000000000800167                PROVIDE (__noinit_start, .)
+.noinit         0x0000000000800161        0x0
+                0x0000000000800161                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x0000000000800167                PROVIDE (__noinit_end, .)
-                0x0000000000800167                _end = .
-                0x0000000000800167                PROVIDE (__heap_start, .)
+                0x0000000000800161                PROVIDE (__noinit_end, .)
+                0x0000000000800161                _end = .
+                0x0000000000800161                PROVIDE (__heap_start, .)
 
 .eeprom         0x0000000000810000      0x1e3
  *(.eeprom*)
@@ -641,17 +635,17 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
                 0x0000000000000020       0x20 main.o
 
 .debug_pubnames
-                0x0000000000000000      0x5a0
+                0x0000000000000000      0x585
  *(.debug_pubnames)
  .debug_pubnames
                 0x0000000000000000       0xaf lcd-routines.o
  .debug_pubnames
-                0x00000000000000af      0x4f1 main.o
+                0x00000000000000af      0x4d6 main.o
 
-.debug_info     0x0000000000000000     0x186e
+.debug_info     0x0000000000000000     0x1835
  *(.debug_info)
  .debug_info    0x0000000000000000      0x20e lcd-routines.o
- .debug_info    0x000000000000020e     0x1660 main.o
+ .debug_info    0x000000000000020e     0x1627 main.o
  *(.gnu.linkonce.wi.*)
 
 .debug_abbrev   0x0000000000000000      0x34d
@@ -669,12 +663,12 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
  .debug_frame   0x0000000000000000       0xb0 lcd-routines.o
  .debug_frame   0x00000000000000b0      0x100 main.o
 
-.debug_str      0x0000000000000000      0x659
+.debug_str      0x0000000000000000      0x64e
  *(.debug_str)
  .debug_str     0x0000000000000000      0x131 lcd-routines.o
                                         0x16f (size before relaxing)
- .debug_str     0x0000000000000131      0x528 main.o
-                                        0x620 (size before relaxing)
+ .debug_str     0x0000000000000131      0x51d main.o
+                                        0x615 (size before relaxing)
 
 .debug_loc      0x0000000000000000      0xffc
  *(.debug_loc)

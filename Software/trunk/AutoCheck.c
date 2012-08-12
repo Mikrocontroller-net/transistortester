@@ -46,8 +46,13 @@ void AutoCheck(void) {
   lcd_line1();
   lcd_fix_string(SELFTEST);		// "Selftest mode.."
   wait1s();
+#ifdef AUTO_CAL
+ #define TEST_COUNT 11
+#else
+ #define TEST_COUNT 10
+#endif
  
-  for(tt=1;tt<11;tt++) {		// loop for all Tests
+  for(tt=1;tt<TEST_COUNT;tt++) {		// loop for all Tests
 #ifdef AUTO_CAL
      sum_c0 = 0;			//reset sum of capacity measurements
      c0_count = 0;			//counter for capacity measurement
@@ -186,8 +191,8 @@ void AutoCheck(void) {
            }
 #endif
         }
-        if (tt == 9) {			//measure Zero offset for Capacity measurement
 #ifdef C_MESS
+        if (tt == 9) {			//measure Zero offset for Capacity measurement
            ReadCapacity(TP3, TP1);
            adcmv[0] = (unsigned int) cval_uncorrected;	//save capacity value of empty Pin 1:3
            ReadCapacity(TP3, TP2);
@@ -210,12 +215,9 @@ void AutoCheck(void) {
               (void) eeprom_write_word((uint16_t *)(&cap_null), sum_c0);	// hold zero offset + slew rate dependend offset
            }
  #endif
-#else
-           break;
-#endif
         }
+ #ifdef AUTO_CAL
         if (tt == 10) {			//measure  offset Voltage of analog Comparator for Capacity measurement
-#ifdef C_MESS
            adcmv[0] = 0;
            adcmv[1] = 0;
            adcmv[2] = ww;
@@ -235,10 +237,9 @@ void AutoCheck(void) {
               wait2s();
               continue;
            }
-#else
-           break;
-#endif
         }
+ #endif
+#endif
         if (tt > 1) {			// output 3 voltages 
            lcd_line2();			//Cursor to column 1, row 2
            lcd_string(utoa(adcmv[0], outval, 10));	//output voltage 1

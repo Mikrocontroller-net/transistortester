@@ -401,8 +401,6 @@ struct resis_t{
    uint8_t ra,rb;		// Pins of RX
    uint8_t rt;			// Tristate-Pin (inactive)
 } resis[3];
- unsigned int rxv, rtst;
- unsigned int rvmax;
  uint8_t ResistorsFound;	//Number of found resistors
 #endif
 

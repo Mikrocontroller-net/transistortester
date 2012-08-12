@@ -849,7 +849,11 @@ void RefVoltage(void) {
   uint8_t tabind;
   uint8_t tabres;
 
+  #ifdef AUTO_CAL
   referenz = ref_mv + (int8_t)eeprom_read_word((uint16_t *)(&ref_offset));
+  #else
+  referenz = ref_mv + REF_C_KORR;
+  #endif
   if (referenz >= Ref_Tab_Beginn) {
      referenz -= Ref_Tab_Beginn;
   } else  {

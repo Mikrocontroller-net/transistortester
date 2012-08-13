@@ -216,11 +216,14 @@ const unsigned char ATE[] MEM_TEXT = "Selftest End";
 const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
 const unsigned char RH1L[] MEM_TEXT = "RH-";
 const unsigned char RH1H[] MEM_TEXT = "RH+";
-const unsigned char RILO[] MEM_TEXT = "Ri_Lo= (mV)";
  #ifdef AUTO_CAL
 const unsigned char RIHI[] MEM_TEXT = "Ri_Hi=";
+const unsigned char RILO[] MEM_TEXT = "Ri_Lo=";
+const unsigned char MinCap[] MEM_TEXT = " >100nF";
+const unsigned char REF_Cstr[] MEM_TEXT = "REF_C=";
  #else
 const unsigned char RIHI[] MEM_TEXT = "Ri_Hi= (mV)";
+const unsigned char RILO[] MEM_TEXT = "Ri_Lo= (mV)";
  #endif
 const unsigned char RLRL[] MEM_TEXT = "+RL- 12 13 23";
 const unsigned char RHRH[] MEM_TEXT = "+RH- 12 13 23";
@@ -408,8 +411,11 @@ struct resis_t{
 #ifdef C_MESS 
   const unsigned char C_Prefix_tab[] PROGMEM = { 'p','n',LCD_CHAR_U,'m'}; // pF,nF,µF,mF
  #ifdef AUTO_CAL
-  const uint16_t cap_null EEMEM = C_NULL;	// Zero offset of capacity measurement 
+//  const uint16_t cap_null EEMEM = C_NULL;	// Zero offset of capacity measurement 
   const int16_t ref_offset EEMEM = REF_C_KORR;	// default correction of internal reference voltage for capacity measurement
+  // LoPin:HiPin                        2:1    3:1    1:2                    :     3:2                   1:3    2:3
+  const uint8_t c_zero_tab[] EEMEM = { C_NULL,C_NULL,C_NULL+TP2_CAP_OFFSET,C_NULL,C_NULL+TP2_CAP_OFFSET,C_NULL,C_NULL }; //table of zero offsets
+  uint8_t pin_combination;		// coded Pin-combination  2:1,3:1,1:2,x:x,3:2,1:3,2:3
  #endif
   #define MULTIP
 #endif

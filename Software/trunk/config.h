@@ -144,7 +144,7 @@
   #define CC0 36
 // Slew rate correction  val += COMP_SLEW1 / (val + COMP_SLEW2)
   #define COMP_SLEW1 4000
-  #define COMP_SLEW2 220
+  #define COMP_SLEW2 180
   #define C_NULL CC0+CABLE_CAP+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2))
 
 //------------------=========----------

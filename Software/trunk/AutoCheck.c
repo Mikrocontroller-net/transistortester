@@ -1,13 +1,14 @@
 void AutoCheck(void) {
   uint8_t tt;		// number of running test
   uint8_t ww;		// counter for repeating the tests
-  unsigned int  adcmv[3];
+  unsigned int  adcmv[7];
 // define the maximum count of repetitions MAX_REP
 #define MAX_REP 8
 
 #ifdef AUTO_CAL
   uint16_t sum_c0;	// sum of empty probe C measurement
   uint8_t c0_count;	// counter for accumulated Cap measurements
+  uint8_t err=1;		//error flag
   uint16_t sum_rm=0;	// sum of 3 Pin voltages with 680 Ohm load
   uint16_t u680;	// 3 * (Voltage at 680 Ohm)
   uint16_t pin_rp;
@@ -47,7 +48,7 @@ void AutoCheck(void) {
   lcd_fix_string(SELFTEST);		// "Selftest mode.."
   wait1s();
 #ifdef AUTO_CAL
- #define TEST_COUNT 11
+ #define TEST_COUNT 12
 #else
  #define TEST_COUNT 10
 #endif
@@ -66,6 +67,7 @@ void AutoCheck(void) {
         lcd_data('T');			//output the Testmode "T"
         lcd_string(utoa(tt, outval, 10));	//output Test number
         lcd_data(' ');
+                                        //############################################
         if (tt == 1) {   // output of reference voltage and factors for capacity measurement
            (void) ReadADC(0x0e);      // read reference voltage 
            ref_mv = W5msReadADC(0x0e);  // read reference voltage 
@@ -79,6 +81,7 @@ void AutoCheck(void) {
            lcd_fix_string(RHfakt);	//"RHf="
            lcd_string(utoa(RHmultip, outval, 10));
         }
+                                        //############################################
         if (tt == 2) { // how equal are the RL resistors? 
            R_PORT = 1<<(TP1*2);		//RL1 to VCC
            R_DDR = (1<<(TP1*2)) | (1<<(TP2*2));	//RL2 to -
@@ -90,6 +93,7 @@ void AutoCheck(void) {
            adcmv[2] = W20msReadADC(TP2);
            lcd_fix_string(RLRL);	// "RLRL"
         }
+                                        //############################################
         if (tt == 3) { // how equal are the RH resistors
            R_PORT = 2<<(TP1*2);		//RH1 to VCC
            R_DDR = (2<<(TP1*2)) | (2<<(TP2*2));	//RH2 to -
@@ -101,9 +105,11 @@ void AutoCheck(void) {
            adcmv[2] = W20msReadADC(TP2);
            lcd_fix_string(RHRH);	// "RHRH"
         }
+                                        //############################################
         if (tt == 4) { // Text release probes
            lcd_fix_string(RELPROBE);	// "Release Probes"
         }
+                                        //############################################
         if (tt == 5) { // can we switch the ADC pins to GND across R_H resistor?
            R_PORT = 0;
            R_DDR = 2<<(TP1*2);		//Pin 1 over R_H to GND
@@ -116,6 +122,7 @@ void AutoCheck(void) {
            adcmv[2] = W20msReadADC(TP3);
            lcd_fix_string(RH1L);	// "RH_Lo="
         }
+                                        //############################################
         if (tt == 6) { // can we switch the ADC pins to VCC across the R_H resistor?
            R_DDR = 2<<(TP1*2);		//Pin 1 over R_H to VCC
            R_PORT = 2<<(TP1*2);
@@ -128,6 +135,7 @@ void AutoCheck(void) {
            adcmv[2] = W20msReadADC(TP3);
            lcd_fix_string(RH1H);	// "RH_Hi="
         }
+                                        //############################################
         if (tt == 7) { // measurement of internal resistance of the ADC port outputs switched to GND
            ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
            R_PORT = 1<<(TP1*2);		//R_L-PORT 1 to VCC
@@ -145,15 +153,18 @@ void AutoCheck(void) {
            adcmv[2] = W5msReadADC(TP3);
            lcd_fix_string(RILO);	// "RiLo="
 #ifdef AUTO_CAL
+           err = 1;			// set to not finished
            sum_c0 += adcmv[0] + adcmv[1] + adcmv[2]; //add all three values
            c0_count += 3;
            if (c0_count == (MAX_REP*3)) {
               //last repetition of measurement
               sum_c0 /= MAX_REP;
               sum_rm = sum_c0;          // sum of 3 Pin voltages switched to GND
+              err = 0;			// clear not finished flag
            }
 #endif
         }
+                                        //############################################
         if (tt == 8) { // measurement of internal resistance of the ADC port output switched to VCC
            R_PORT = 0;			// R-Ports to GND
            ADC_PORT = 1<<TP1 | TXD_VAL;	//ADC-Port 1 to VCC
@@ -175,7 +186,7 @@ void AutoCheck(void) {
 #ifdef AUTO_CAL
            sum_c0 += adcmv[0] + adcmv[1] + adcmv[2];
            c0_count += 3;
-           if (c0_count == (MAX_REP*3)) {
+           if ((err == 0) && (c0_count == (MAX_REP*3))) {
               //last repetition of measurement
               sum_c0 /= MAX_REP;		// sum of 3 Pin voltages switched to VCC
               u680 = ((U_VCC * 3) - sum_rm - sum_c0);	//three times the voltage at the 680 Ohm
@@ -192,55 +203,88 @@ void AutoCheck(void) {
 #endif
         }
 #ifdef C_MESS
+                                        //############################################
         if (tt == 9) {			//measure Zero offset for Capacity measurement
+ #ifdef AUTO_CAL
+           if (ww == 0) { //first step of loop
+              // clear all sum
+              for (c0_count=0;c0_count<7;c0_count++) adcmv[c0_count] = 0;
+           }
+           PartFound = PART_NONE;
+           ReadCapacity(TP3, TP1);
+           if (cval_uncorrected > 70) break;
+           adcmv[5] += (unsigned char) cval_uncorrected;	//save capacity value of empty Pin 1:3
+           ReadCapacity(TP3, TP2);
+           if (cval_uncorrected > 70) break;
+           adcmv[6] += (unsigned char) cval_uncorrected;	//save capacity value of empty Pin 2:3
+           ReadCapacity(TP2, TP1);
+           if (cval_uncorrected > 70) break;
+           adcmv[2] += (unsigned char) cval_uncorrected;	//save capacity value of empty Pin 1:2
+           ReadCapacity(TP1, TP3);
+           if (cval_uncorrected > 70) break;
+           adcmv[1] += (unsigned char) cval_uncorrected;	//save capacity value of empty Pin 3:1
+           ReadCapacity(TP2, TP3);
+           if (cval_uncorrected > 70) break;
+           adcmv[4] += (unsigned char) cval_uncorrected;	//save capacity value of empty Pin 3:2
+           ReadCapacity(TP1, TP2);
+           if (cval_uncorrected > 70) break;
+           adcmv[0] += (unsigned char) cval_uncorrected;	//save capacity value of empty Pin 2:1
+           if (ww == (MAX_REP - 1)) {
+              for (c0_count=0;c0_count<7;c0_count++) {
+                 adcmv[c0_count] /= MAX_REP;
+                 // write all zero offsets to the EEprom 
+                 (void) eeprom_write_byte((uint8_t *)(&c_zero_tab[c0_count]),adcmv[c0_count]+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)));
+              }
+              lcd_data('E');
+              lcd_data('E');
+              lcd_data('0');
+           }
+           adcmv[0] = adcmv[5];		// for output
+           adcmv[1] = adcmv[6];		// for output
+ #else
+           // No AUTO_CAL mode, show only values
            ReadCapacity(TP3, TP1);
            adcmv[0] = (unsigned int) cval_uncorrected;	//save capacity value of empty Pin 1:3
            ReadCapacity(TP3, TP2);
            adcmv[1] = (unsigned int) cval_uncorrected;	//save capacity value of empty Pin 2:3
            ReadCapacity(TP2, TP1);
            adcmv[2] = (unsigned int) cval_uncorrected;	//save capacity value of empty Pin 1:2
-
- #ifdef AUTO_CAL
-           //build the sum of all three measurements and add a little, because one combination has about 2 pF too less
-           sum_c0 += adcmv[0] + adcmv[1] + adcmv[2] + (TP2_CAP_OFFSET+1);
-           c0_count += 3;
-           if ((c0_count == (MAX_REP*3)) && (sum_c0 < (60*(MAX_REP*3)))){
-              // last repetition of measurement and capacity is below 60 pF
-              sum_c0 /= (MAX_REP*3);		//divide through (MAX_REP*3)
-              lcd_data('E');
-              lcd_data('E');
-              lcd_data('=');
-              lcd_string(utoa(sum_c0, outval, 10));	//zero offset for capacity measurement to LCD
-              sum_c0 += (COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)); //add slew rate dependend offset
-              (void) eeprom_write_word((uint16_t *)(&cap_null), sum_c0);	// hold zero offset + slew rate dependend offset
-           }
  #endif
         }
  #ifdef AUTO_CAL
-        if (tt == 10) {			//measure  offset Voltage of analog Comparator for Capacity measurement
-           adcmv[0] = 0;
-           adcmv[1] = 0;
-           adcmv[2] = ww;
+                                        //############################################
+        if (tt == 10) {			// Message C > 100nF
+           lcd_data('1');
+           lcd_fix_string(CapZeich);	// "-||-"
+           lcd_data('3');
+           lcd_fix_string(MinCap);	// " >100nF"
+           PartFound = PART_NONE;
            ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
-           if (cpre > 1) continue;	// is too big
+           if (((cpre == 0) && (cval > 95000)) || ((cpre == 1) && (cval < 30000))) {
+              // the right capacitor is detected, finish with next step
+              ww = MAX_REP;
+           } else {
+              ww = 1;			// wait until capacitor is found
+           }
+           // next step will repeat measurement
+        }
+                                        //############################################
+        if (tt == 11) {			//measure  offset Voltage of analog Comparator for Capacity measurement
+           PartFound = PART_NONE;
+           ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
            if (((cpre == 0) && (cval > 95000)) || ((cpre == 1) && (cval < 30000))) {
               // value of capacitor is correct
               (void) eeprom_write_word((uint16_t *)(&ref_offset), load_diff);	// hold zero offset + slew rate dependend offset
               lcd_line2();			//Cursor to column 1, row 2
-              lcd_data('E');
-              lcd_data('E');
-              lcd_data(' ');
+              lcd_fix_string(REF_Cstr);	// "REF_C="
               lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
-              wait2s();
+              wait4s();
               break;
-           } else {
-              wait2s();
-              continue;
            }
         }
  #endif
 #endif
-        if (tt > 1) {			// output 3 voltages 
+        if ((tt > 1) && (tt <10)) {	// output 3 voltages 
            lcd_line2();			//Cursor to column 1, row 2
            lcd_string(utoa(adcmv[0], outval, 10));	//output voltage 1
            lcd_data(' ');
@@ -298,3 +342,4 @@ void AutoCheck(void) {
  PartFound = PART_NONE;
  wait1s();			//wait 1 seconds
  } 
+ 

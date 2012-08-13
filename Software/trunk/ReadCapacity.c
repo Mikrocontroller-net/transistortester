@@ -38,6 +38,10 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   uint8_t LoADC;
   uint8_t ii;
 
+#ifdef AUTO_CAL
+  pin_combination = (HighPin * 3) + LowPin - 1;	// coded Pin combination for capacity zero offset
+#endif
+
   LoADC = MEM_read_byte(&PinADCtab[LowPin]) | TXD_MSK;
   HiPinR_L = MEM_read_byte(&PinRLtab[HighPin]);	//R_L mask for HighPin R_L load
   HiPinR_H = HiPinR_L + HiPinR_L;	//double for HighPin R_H load
@@ -257,18 +261,18 @@ messe_mit_rh:
         cval += (COMP_SLEW1 / (cval+COMP_SLEW2 ));
      }
 #endif
-     if (HighPin == TP2) cval += TP2_CAP_OFFSET;	// measurements with TP2 have 2pF less capacity
-//     if ((HighPin == TP3) && (LowPin == TP2)) cval -= 1; // this combination has 1pF to much
-//     if ((HighPin == TP1) && (LowPin == TP3)) cval += 1; // this combinations has 1pF to less
 #ifdef AUTO_CAL
      // auto calibration mode, cap_null can be updated in selftest section
-     tmpint = eeprom_read_word(&cap_null);	// read zero offset
+     tmpint = eeprom_read_byte(&c_zero_tab[pin_combination]);	// read zero offset
      if (cval > tmpint) {
          cval -= tmpint;		//subtract zero offset (pF)
      } else {
          cval = 0;			//unsigned long may not reach negativ value
      }
 #else
+     if (HighPin == TP2) cval += TP2_CAP_OFFSET;	// measurements with TP2 have 2pF less capacity
+//     if ((HighPin == TP3) && (LowPin == TP2)) cval -= 1; // this combination has 1pF to much
+//     if ((HighPin == TP1) && (LowPin == TP3)) cval += 1; // this combinations has 1pF to less
      if (cval > C_NULL) {
          cval -= C_NULL;		//subtract constant offset (pF)
      } else {
@@ -316,10 +320,9 @@ checkDiodes:
       // nearly shure, that there is one or more diodes in reverse direction,
       // which would be wrongly detected as capacitor 
    } else {
-
-   PartFound = PART_CAPACITOR;	//capacitor is found
-   ca = LowPin;			// save LowPin
-   cb = HighPin;		// save HighPin
+      PartFound = PART_CAPACITOR;	//capacitor is found
+      ca = LowPin;			// save LowPin
+      cb = HighPin;		// save HighPin
    }
 
 keinC:

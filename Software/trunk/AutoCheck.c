@@ -69,8 +69,8 @@ void AutoCheck(void) {
         lcd_data(' ');
                                         //############################################
         if (tt == 1) {   // output of reference voltage and factors for capacity measurement
-           (void) ReadADC(0x0e);      // read reference voltage 
-           ref_mv = W5msReadADC(0x0e);  // read reference voltage 
+           (void) ReadADC(0x0e);	// read reference voltage 
+           ref_mv = W5msReadADC(0x0e);	// read reference voltage 
            lcd_fix_string(URefT);	//"URef="
            lcd_string(utoa(ref_mv, outval, 10));
            lcd_fix_string(mVT);		//"mV "
@@ -159,7 +159,7 @@ void AutoCheck(void) {
            if (c0_count == (MAX_REP*3)) {
               //last repetition of measurement
               sum_c0 /= MAX_REP;
-              sum_rm = sum_c0;          // sum of 3 Pin voltages switched to GND
+              sum_rm = sum_c0;		// sum of 3 Pin voltages switched to GND
               err = 0;			// clear not finished flag
            }
 #endif
@@ -275,7 +275,7 @@ void AutoCheck(void) {
            if (((cpre == 0) && (cval > 95000)) || ((cpre == 1) && (cval < 30000))) {
               // value of capacitor is correct
               (void) eeprom_write_word((uint16_t *)(&ref_offset), load_diff);	// hold zero offset + slew rate dependend offset
-              lcd_line2();			//Cursor to column 1, row 2
+              lcd_line2();		//Cursor to column 1, row 2
               lcd_fix_string(REF_Cstr);	// "REF_C="
               lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
               wait4s();

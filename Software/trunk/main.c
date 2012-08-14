@@ -124,8 +124,6 @@ start:
   scale_intref_adc();		// scale ADC to internal Reference
 #endif
 
-//  ref_mv += REF_C_KORR;		// correction for the capacity measurement 
-
 #ifdef BAT_CHECK
   // Battery check is selected
   ReadADC(5);	//Dummy-Readout

@@ -62,7 +62,7 @@ CFLAGS += -DCAP_EMPTY_LEVEL=3
 
 # the AUTOSCALE_ADC option enables the autoscale ADC (VCC and Bandgap Ref)
 CFLAGS += -DAUTOSCALE_ADC
-#CFLAGS += -DREF_R_KORR=0
+CFLAGS += -DREF_R_KORR=0
 # NO_AREF_CAP tells your Software, that you have no Capacitor installed at pin AREF (21)
 # this enables a shorter wait-time for AUTOSCALE_ADC function
 CFLAGS += -DNO_AREF_CAP

@@ -236,8 +236,8 @@ messe_mit_rh:
   }
 //############################################################
   ADCSRA = (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; //enable ADC
-  R_DDR = 0;            // switch R_H resistor port for input
-  R_PORT = 0;                   // switch R_H resistor port pull up for HighPin off
+  R_DDR = 0;			// switch R_H resistor port for input
+  R_PORT = 0;			// switch R_H resistor port pull up for HighPin off
   load_diff = ReadADC(HighPin) + REF_C_KORR - ref_mv;	// build difference of capacitor voltage to Reference Voltage
 //############################################################
   if (ovcnt16 >= (F_CPU/10000)) {

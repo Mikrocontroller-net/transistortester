@@ -324,6 +324,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin);	//capacity measurement
 void UfAusgabe(uint8_t bcdchar);	// Output of the threshold voltage(s) Uf
 void mVAusgabe(uint8_t nn);		// Output of the theshold voltage for Diode nn 
 void RvalOut(uint8_t ii);		// Output of the resistore value(s)
+void ShowResistor(void);		// show one or two Resistors
 void EntladePins();			// discharge capacitors
 void RefVoltage();			// compensate the reference voltage for comparator 
 void AutoCheck();			// check if self-test should be done 

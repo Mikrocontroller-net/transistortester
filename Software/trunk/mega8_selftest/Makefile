@@ -37,6 +37,8 @@ UI_LANGUAGE = LANG_ENGLISH
 # the WITH_SELFTEST option enables selftest function 
 CFLAGS += -DWITH_SELFTEST
 # AUTO_CAL will enable the autocalibration of zero offset of capacity measurement in selftest section
+# Additionally the port output resistance and correction for low capacity measurement can be done
+# with ATmega168
 #CFLAGS += -DAUTO_CAL
 # FREQUENCY_50HZ enables a 50 Hz frequency generator for up to one minute at the end of selftests
 #CFLAGS += -DFREQUENCY_50HZ
@@ -441,6 +443,12 @@ upload:
 	make
 	avrdude -c $(PROGRAMMER) -B 5.0 -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTester.hex:a \
 	-U eeprom:w:./TransistorTester.eep:a
+eeprom:
+	avrdude -c $(PROGRAMMER) -B 5.0 -p $(PARTNO) -P $(PORT) \
+	-U eeprom:w:./TransistorTester.eep:a
+verify:
+	avrdude -D -c $(PROGRAMMER) -B 5.0 -p $(PARTNO) -P $(PORT) -U flash:v:./TransistorTester.hex:a \
+	-U eeprom:v:./TransistorTester.eep:a -v
 upload_orig:
 	avrdude -c $(PROGRAMMER) -B 5.0 -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTestorig.hex:a \
 	-U eeprom:w:./TransistorTestorig.eep:a

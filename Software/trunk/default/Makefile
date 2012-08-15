@@ -421,6 +421,7 @@ size: ${TARGET}
 clean:
 	-rm -rf $(OBJECTS) TransistorTester.elf dep/* TransistorTester.hex TransistorTester.eep TransistorTester.lss TransistorTester.map
 steril:
+	make
 	-rm -rf $(OBJECTS) TransistorTester.elf dep/* TransistorTester.lss TransistorTester.map
 
 

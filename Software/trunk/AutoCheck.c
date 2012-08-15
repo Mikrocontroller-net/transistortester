@@ -8,7 +8,7 @@ void AutoCheck(void) {
 #ifdef AUTO_CAL
   uint16_t sum_c0;	// sum of empty probe C measurement
   uint8_t c0_count;	// counter for accumulated Cap measurements
-  uint8_t err=1;		//error flag
+  uint8_t err_flag=1;	//error flag
   uint16_t sum_rm=0;	// sum of 3 Pin voltages with 680 Ohm load
   uint16_t u680;	// 3 * (Voltage at 680 Ohm)
   uint16_t pin_rp;
@@ -153,14 +153,14 @@ void AutoCheck(void) {
            adcmv[2] = W5msReadADC(TP3);
            lcd_fix_string(RILO);	// "RiLo="
 #ifdef AUTO_CAL
-           err = 1;			// set to not finished
+           err_flag = 1;		// set to not finished
            sum_c0 += adcmv[0] + adcmv[1] + adcmv[2]; //add all three values
            c0_count += 3;
            if (c0_count == (MAX_REP*3)) {
               //last repetition of measurement
               sum_c0 /= MAX_REP;
               sum_rm = sum_c0;		// sum of 3 Pin voltages switched to GND
-              err = 0;			// clear not finished flag
+              err_flag = 0;		// clear not finished flag
            }
 #endif
         }
@@ -186,7 +186,7 @@ void AutoCheck(void) {
 #ifdef AUTO_CAL
            sum_c0 += adcmv[0] + adcmv[1] + adcmv[2];
            c0_count += 3;
-           if ((err == 0) && (c0_count == (MAX_REP*3))) {
+           if ((err_flag == 0) && (c0_count == (MAX_REP*3))) {
               //last repetition of measurement
               sum_c0 /= MAX_REP;		// sum of 3 Pin voltages switched to VCC
               u680 = ((U_VCC * 3) - sum_rm - sum_c0);	//three times the voltage at the 680 Ohm
@@ -259,18 +259,21 @@ void AutoCheck(void) {
            lcd_data('3');
            lcd_fix_string(MinCap);	// " >100nF"
            PartFound = PART_NONE;
+           err_flag = 1;		// C is not found
            ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
            if (((cpre == 0) && (cval > 95000)) || ((cpre == 1) && (cval < 30000))) {
               // the right capacitor is detected, finish with next step
               ww = MAX_REP;
+              err_flag = 0;		// Capacitor is found
            } else {
-              ww = 1;			// wait until capacitor is found
+              wait2s();			// wait additional time
            }
            // next step will repeat measurement
         }
                                         //############################################
         if (tt == 11) {			//measure  offset Voltage of analog Comparator for Capacity measurement
            PartFound = PART_NONE;
+           if (err_flag != 0) break;
            ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
            if (((cpre == 0) && (cval > 95000)) || ((cpre == 1) && (cval < 30000))) {
               // value of capacitor is correct

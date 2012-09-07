@@ -327,7 +327,7 @@ checkDiodes:
 
 keinC:
   // discharge capacitor again
-  EntladePins();		// discharge capacitors
+//  EntladePins();		// discharge capacitors
   //ready
   // switch all ports to input
   ADC_DDR =  TXD_MSK;		// switch all ADC ports to input

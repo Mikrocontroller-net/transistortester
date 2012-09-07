@@ -118,11 +118,13 @@ start:
 #ifdef WITH_UART
   uart_newline();		// start of new measurement
 #endif
+  Config.RefFlag = 0;
+  Config.Samples = 190;		// set number of samples near to max
+  Config.U_AVCC = U_VCC;	// set VCC Voltage
   (void) ReadADC(0x0e);		// read Reference-voltage 
   ref_mv = W20msReadADC(0x0e);	// read Reference-voltage
-#ifdef AUTOSCALE_ADC
-  scale_intref_adc();		// scale ADC to internal Reference
-#endif
+  Config.U_Bandgap = WishVolt;	// set internal reference voltage for ADC
+  Config.Samples = ANZ_MESS;	// set to configured number of samples
 
 #ifdef BAT_CHECK
   // Battery check is selected
@@ -351,16 +353,16 @@ start:
      }
      // end (PartFound == PART_DIODE)
   } else if (PartFound == PART_TRANSISTOR) {
-    if(PartReady == 0) {
-       //if never a second test is done, (Transistor with protection diode)
-       trans.hfe[1] = trans.hfe[0];
-    }
-    if((trans.hfe[0]>trans.hfe[1])) {
-       //if the amplification factor was higher at first testr: swap C and E !
-       trans.hfe[1] = trans.hfe[0];
-       tmp = trans.c;
-       trans.c = trans.e;
-       trans.e = tmp;
+    if(PartReady != 0) {
+       if((trans.hfe[0]>trans.hfe[1])) {
+          //if the amplification factor was higher at first testr: swap C and E !
+          tmp = trans.c;
+          trans.c = trans.e;
+          trans.e = tmp;
+       } else {
+          trans.hfe[0] = trans.hfe[1];
+          trans.uBE[0] = trans.uBE[1];
+       }
     }
 
     if(PartMode == PART_MODE_NPN) {
@@ -381,62 +383,67 @@ start:
     lcd_testpin(trans.c);
     lcd_line2(); //2. row 
     lcd_fix_string(hfestr);		//"B="  (hFE)
-    lcd_string(utoa(trans.hfe[1], outval, 10));
+    lcd_string(utoa(trans.hfe[0], outval, 10));
     lcd_data(' ');
 
-    for(trans.c=0;trans.c<NumOfDiodes;trans.c++) {
-       if(((diodes[trans.c].Cathode == trans.e) && (diodes[trans.c].Anode == trans.b) && (PartMode == PART_MODE_NPN)) ||
-          ((diodes[trans.c].Anode == trans.e) && (diodes[trans.c].Cathode == trans.b) && (PartMode == PART_MODE_PNP))) {
-          lcd_fix_string(Uf);		//"Uf="
-          mVAusgabe(trans.c);		// output: xxxxmV
-          goto end;
-       }
-    }
+    lcd_fix_string(Uf);		//"Uf="
+    diodes[2].Voltage = trans.uBE[0];
+    mVAusgabe(2);		// output: xxxxmV
     goto end;
     // end (PartFound == PART_TRANSISTOR)
   } else if (PartFound == PART_FET) {	//JFET or MOSFET
     if(PartMode&1) {
        //N-Kanal
-       lcd_data('N');
+       lcd_data('P');			//P-channel
     } else {
-       lcd_data('P');			//P-Kanal
+       lcd_data('N');			//N-channel
     }
     lcd_data('-');
-    if((PartMode==PART_MODE_N_D_MOS) || (PartMode==PART_MODE_P_D_MOS)) {
+
+    tmp = PartMode/2;
+    if (tmp == (PART_MODE_N_D_MOS/2)) {
        lcd_data('D');			// N-D
-       lcd_fix_string(mosfet);		//"-MOS "
+    }
+    if (tmp == (PART_MODE_N_E_MOS/2)) {
+       lcd_data('E');			// N-E
+    }
+    if (tmp == (PART_MODE_N_JFET/2)) {
+       lcd_fix_string(jfet);		//"JFET"
     } else {
-       if((PartMode==PART_MODE_N_JFET) || (PartMode==PART_MODE_P_JFET)) {
-          lcd_fix_string(jfet);		//"-JFET"
-       } else {
-          lcd_data('E');		// -E
-          lcd_fix_string(mosfet);	//"-MOS "
-       }
+       lcd_fix_string(mosfet);		//"-MOS "
     }
- #ifdef C_MESS	//Gate capacity
-    if(PartMode < 3) {  //enhancement-MOSFET
-       lcd_fix_string(GateCap);		//"C="
-       ReadCapacity(trans.b,trans.e);	//measure capacity
-       lcd_show_format_cap();
-    }
- #endif
-    lcd_line2(); //2. row 
     lcd_fix_string(gds);		//"GDS="
     lcd_testpin(trans.b);
     lcd_testpin(trans.c);
     lcd_testpin(trans.e);
-    if((NumOfDiodes > 0) && (PartMode < 3)) {
+    if((NumOfDiodes > 0) && (PartMode < PART_MODE_N_D_MOS)) {
        //MOSFET with protection diode; only with enhancement-FETs
-       lcd_data(LCD_CHAR_DIODE1);	//show Diode symbol >|
+       if (PartMode&1) {
+          lcd_data(LCD_CHAR_DIODE1);	//show Diode symbol >|
+       } else {
+          lcd_data(LCD_CHAR_DIODE2);	//show Diode symbol |<
+       }
+    }
+    lcd_line2();			//2. Row
+    if(PartMode < PART_MODE_N_D_MOS) {	//enhancement-MOSFET
+ #ifdef C_MESS	//Gate capacity
+       lcd_fix_string(GateCap);		//"C="
+       ReadCapacity(trans.b,trans.e);	//measure capacity
+       lcd_show_format_cap();
+ #endif
+       lcd_fix_string(vt);		// "Vt="
     } else {
-       lcd_data(' ');	// ' '
+       lcd_data('I');
+       lcd_data('=');
+       utoa(trans.uBE[1]+100,outval,10);
+       lcd_data(outval[1]);
+       lcd_data('.');
+       lcd_data(outval[2]);
+       lcd_fix_string(Vgs_str);		// "mA Vgs="
     }
-    if(PartMode < 3) {	//enhancement-MOSFET
-       lcd_fix_string(vt);
-       //Gate-threshold voltage
-       diodes[0].Voltage = gthvoltage;
-       mVAusgabe(0);			//Output gthvoltage
-    }
+    //Gate-threshold voltage
+    diodes[0].Voltage = gthvoltage;
+    mVAusgabe(0);			//Output gthvoltage
     goto end;
     // end (PartFound == PART_FET)
   } else if (PartFound == PART_THYRISTOR) {
@@ -648,48 +655,7 @@ void RvalOut(uint8_t ii) {
 #endif
 
 //******************************************************************
-//#include "ReadADC.c"
 #include "CheckPins.c"
-
-#ifdef __AVR_ATmega8__
- // 2.54V reference voltage + korrection (fix for ATmega8)
- #define WishVolt (2560 + REF_R_KORR)
-#else
- #define WishVolt (ref_mv + REF_R_KORR)
-#endif
-#ifdef AUTOSCALE_ADC
-void scale_intref_adc(void) {
-unsigned int mindiff,ergeb;
-uint8_t multip,divid;
-unsigned int diff;
-
-   mindiff = WishVolt;		// WishVolt == ref_mv  or 2560 for ATmega8
-   for (multip=2;multip<64;multip++) {
-      // find factors for ADC-resolution in mV 
-      //  ADC * multip / divid 
-      for (divid=2;divid<multip;divid++) {
-         ergeb = (unsigned int)(1023 * multip) / divid;
-         diff = abs((int)(WishVolt - ergeb));
-#if ANZ_MESS == 44
-         if (!(diff > mindiff)) 
-            // find result where is most added, biggest minmul,mindiv
-#else
-         if (diff < mindiff) 
-            // find fastest possible solution, lowest minmul,mindiv
-#endif
-                            {
-            mindiff = diff;
-            minmul = multip;
-            mindiv = divid;
-         }
-//       if (ergeb < (WishVolt - mindiff)) break;
-      } // end for divid
-   } // end for multip
-   // with minmul and mindiv function ReadADC will change resolution of result in mV too,
-   // if it switches to internal (1.1V) Reference.
-
-}
-#endif
 
 void ChargePin10ms(uint8_t PinToCharge, uint8_t ChargeDirection) {
    //Load the specified pin to the specified direction with 680 Ohm for 10ms.
@@ -848,7 +814,7 @@ void RefVoltage(void) {
   uint8_t tabres;
 
   #ifdef AUTO_CAL
-  referenz = ref_mv + (int8_t)eeprom_read_word((uint16_t *)(&ref_offset));
+  referenz = ref_mv + (int16_t)eeprom_read_word((uint16_t *)(&ref_offset));
   #else
   referenz = ref_mv + REF_C_KORR;
   #endif

@@ -81,7 +81,7 @@ const uint16_t RHtab[] MEM_TEXT = { 954, 903, 856, 814, 775, 740, 707, 676, 648}
 
 // with integer factors the ADC-value will be changed to mV resolution in ReadADC !
 // all if statements are corrected to the mV resolution.
-#define U_VCC 5001		// maximum of the ReadADC routine 
+//#define U_VCC 5001		// maximum of the ReadADC routine 
 
 
 /*########################################################################################
@@ -104,6 +104,12 @@ End of configuration
   const unsigned char Unknown[] MEM_TEXT = " unbek."; //€€";
   const unsigned char TestFailed1[] MEM_TEXT = "Kein,unbek. oder";
   const unsigned char OrBroken[] MEM_TEXT = "oder defekt "; //€";
+ #ifdef WITH_SELFTEST
+  const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+  const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
+  const unsigned char ATE[] MEM2_TEXT = "Selftest End";
+  const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
+ #endif
 #endif
 
 #if defined(LANG_ENGLISH)		//english
@@ -119,6 +125,12 @@ End of configuration
   const unsigned char Unknown[] MEM_TEXT = " unknown"; //€";
   const unsigned char TestFailed1[] MEM_TEXT = "No, unknown, or"; //€";
   const unsigned char OrBroken[] MEM_TEXT = "or damaged "; //€€";
+ #ifdef WITH_SELFTEST
+  const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+  const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
+  const unsigned char ATE[] MEM2_TEXT = "Selftest End";
+  const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
+ #endif
 #endif
 
 #if defined(LANG_POLISH)		//polnisch
@@ -134,6 +146,12 @@ End of configuration
   const unsigned char Unknown[] MEM_TEXT = " nieznany";
   const unsigned char TestFailed1[] MEM_TEXT = "brak elementu"; //€€€";
   const unsigned char OrBroken[] MEM_TEXT = "lub uszkodz. ";
+ #ifdef WITH_SELFTEST
+  const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+  const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
+  const unsigned char ATE[] MEM2_TEXT = "Selftest End";
+  const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
+ #endif
 #endif
 
 #if defined(LANG_CZECH)		//Tschechisch
@@ -149,6 +167,12 @@ End of configuration
   const unsigned char Unknown[] MEM_TEXT = " neznama"; //€";
   const unsigned char TestFailed1[] MEM_TEXT = "Zadna, neznama"; //€€";
   const unsigned char OrBroken[] MEM_TEXT = "nebo vadna "; //€€";
+ #ifdef WITH_SELFTEST
+  const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+  const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
+  const unsigned char ATE[] MEM2_TEXT = "Selftest End";
+  const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
+ #endif
 #endif
 
 #if defined(LANG_SLOVAK)		//slowakisch
@@ -164,6 +188,12 @@ End of configuration
   const unsigned char Unknown[] MEM_TEXT = " neznama"; //€";
   const unsigned char TestFailed1[] MEM_TEXT = "Ziadna, neznama"; //€";
   const unsigned char OrBroken[] MEM_TEXT = "alebo vadna "; //€";
+ #ifdef WITH_SELFTEST
+  const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+  const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
+  const unsigned char ATE[] MEM2_TEXT = "Selftest End";
+  const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
+ #endif
 #endif
 
 #if defined(LANG_SLOVENE)                    //slovenian
@@ -179,22 +209,50 @@ End of configuration
   const unsigned char Unknown[] MEM_TEXT = " neznan"; 
   const unsigned char TestFailed1[] MEM_TEXT = "Ni, neznan, ali"; 
   const unsigned char OrBroken[] MEM_TEXT = "ali zanic "; 
+ #ifdef WITH_SELFTEST
+  const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+  const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
+  const unsigned char ATE[] MEM2_TEXT = "Selftest End";
+  const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
+ #endif
 #endif
 
+#if defined(LANG_RUSSIAN)                    //Russian
+  const unsigned char TestRunning[] MEM_TEXT = {'T','e','c',Cyr_t,Cyr_i,'p','o',Cyr_v,'a',Cyr_n,Cyr_i,'e','.','.','.',0}; 
+  const unsigned char BatWeak[] MEM_TEXT = {'c',Cyr_l,'a',Cyr_b,Cyr_y,Cyr_j,0}; 
+  const unsigned char BatEmpty[] MEM_TEXT = {Cyr_p,Cyr_U,'c',Cyr_t,'o',Cyr_j,'!',0};
+  const unsigned char TestFailed2[] MEM_TEXT = {Cyr_p,'o',Cyr_v,'p','e',Cyr_zsch,Cyr_d,'e',Cyr_n,' ',0};
+  const unsigned char Bauteil[] MEM_TEXT = {Cyr_tsch,'a','c',Cyr_t,Cyr_hh,0}; 
+  const unsigned char Diode[] MEM_TEXT = {Cyr_D,Cyr_i,'o',Cyr_d,':',0};
+  const unsigned char GAK[] MEM_TEXT = "GAC=";
+  const unsigned char Triac[] MEM_TEXT = {'C',Cyr_i,Cyr_m,Cyr_i,'c',Cyr_t,'o','p',0};
+  const unsigned char Thyristor[] MEM_TEXT = {Cyr_t,Cyr_i,'p',Cyr_i,'c',Cyr_t,'o','p',0};
+  const unsigned char Unknown[] MEM_TEXT = {' ',Cyr_n,'e',Cyr_i,Cyr_z,Cyr_v,'e','c',Cyr_t,Cyr_n,Cyr_y,Cyr_j,0}; 
+  const unsigned char TestFailed1[] MEM_TEXT = {'o',Cyr_t,'c',Cyr_U,Cyr_t,'c',Cyr_t,Cyr_v,Cyr_U,'e',Cyr_t,0};
+  const unsigned char OrBroken[] MEM_TEXT = {Cyr_i,Cyr_l,Cyr_i,' ',Cyr_p,'o',Cyr_v,'p','e',Cyr_zsch,Cyr_d,'e',Cyr_n,0};
+
+ #ifdef WITH_SELFTEST
+  const unsigned char TestTimedOut[] MEM_TEXT = {Cyr_v,'p','e',Cyr_m,Cyr_ja,' ',Cyr_t,'e','c',Cyr_t,Cyr_i,'p','o',Cyr_v,'a',Cyr_n,Cyr_i,Cyr_ja,Cyr_v,Cyr_y,Cyr_sch,Cyr_l,'o','!',0};
+  const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
+  const unsigned char ATE[] MEM2_TEXT = {Cyr_k,'o',Cyr_n,'e',Cyr_c,' ','c','a',Cyr_m,'o',Cyr_t,'e','c',Cyr_t,Cyr_i,'p','o',Cyr_v,'a',Cyr_n,Cyr_i,Cyr_ja,0};
+  const unsigned char RELPROBE[] MEM2_TEXT = {'o',Cyr_t,Cyr_k,Cyr_l,Cyr_ju,Cyr_tsch,Cyr_i,Cyr_t,'b',' ',Cyr_z,'o',Cyr_n,Cyr_d,0};
+ #endif
+#endif
 
 // Strings, which are not dependent of any language
 const unsigned char Bat[] MEM_TEXT = "Bat. ";
 const unsigned char OK[] MEM_TEXT = "OK";
-const unsigned char mosfet[] MEM_TEXT = "-MOS ";
+const unsigned char mosfet[] MEM_TEXT = "-MOS";
 const unsigned char jfet[] MEM_TEXT = "JFET";
 const unsigned char GateCap[] MEM_TEXT = "C=";
 const unsigned char hfestr[] MEM_TEXT ="B=";
 const unsigned char NPN[] MEM_TEXT = "NPN ";
 const unsigned char PNP[] MEM_TEXT = "PNP ";
 const unsigned char ebcstr[] MEM_TEXT = " EBC=";
-const unsigned char gds[] MEM_TEXT = "GDS=";
+const unsigned char gds[] MEM_TEXT = " GDS=";
 const unsigned char Uf[] MEM_TEXT = "Uf=";
-const unsigned char vt[] MEM_TEXT = "Vt=";
+const unsigned char vt[] MEM_TEXT = " Vt=";
+const unsigned char Vgs_str[] MEM_TEXT = "mA@Vgs=";
 #ifdef C_MESS
 const unsigned char CapZeich[] MEM_TEXT = {'-',LCD_CHAR_CAP,'-',0};
 #endif
@@ -204,30 +262,26 @@ const unsigned char Dioden[] MEM_TEXT = {'*',LCD_CHAR_DIODE1, ' ', ' ',0};
 #ifdef R_MESS
 const unsigned char Resistor_str[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
 #endif
-const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
 const unsigned char VERSION[] MEM_TEXT = "Version 0.99k";
 
 #ifdef WITH_SELFTEST
-const unsigned char mVT[] MEM_TEXT = "mV ";
-const unsigned char URefT[] MEM_TEXT = "Ref=";
-const unsigned char RHfakt[] MEM_TEXT = "RHf=";
-const unsigned char RLfakt[] MEM_TEXT = " RLf=";
-const unsigned char ATE[] MEM_TEXT = "Selftest End";
-const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
-const unsigned char RH1L[] MEM_TEXT = "RH-";
-const unsigned char RH1H[] MEM_TEXT = "RH+";
+const unsigned char mVT[] MEM2_TEXT = "mV ";
+const unsigned char URefT[] MEM2_TEXT = "Ref=";
+const unsigned char RHfakt[] MEM2_TEXT = "RHf=";
+//const unsigned char RLfakt[] MEM2_TEXT = " RLf=";
+const unsigned char RH1L[] MEM2_TEXT = "RH-";
+const unsigned char RH1H[] MEM2_TEXT = "RH+";
  #ifdef AUTO_CAL
-const unsigned char RIHI[] MEM_TEXT = "Ri_Hi=";
-const unsigned char RILO[] MEM_TEXT = "Ri_Lo=";
-const unsigned char MinCap[] MEM_TEXT = " >100nF";
-const unsigned char REF_Cstr[] MEM_TEXT = "REF_C=";
+const unsigned char RIHI[] MEM2_TEXT = "Ri_Hi=";
+const unsigned char RILO[] MEM2_TEXT = "Ri_Lo=";
+const unsigned char MinCap[] MEM2_TEXT = " >100nF";
+const unsigned char REF_Cstr[] MEM2_TEXT = "REF_C=";
  #else
-const unsigned char RIHI[] MEM_TEXT = "Ri_Hi= (mV)";
-const unsigned char RILO[] MEM_TEXT = "Ri_Lo= (mV)";
+const unsigned char RIHI[] MEM2_TEXT = "Ri_Hi= (mV)";
+const unsigned char RILO[] MEM2_TEXT = "Ri_Lo= (mV)";
  #endif
-const unsigned char RLRL[] MEM_TEXT = "+RL- 12 13 23";
-const unsigned char RHRH[] MEM_TEXT = "+RH- 12 13 23";
-const unsigned char RELPROBE[] MEM_TEXT = "isolate probe";
+const unsigned char RLRL[] MEM2_TEXT = "+RL- 12 13 23";
+const unsigned char RHRH[] MEM2_TEXT = "+RH- 12 13 23";
  #define MULTIP
  #define LCD_CLEAR
 #endif
@@ -297,6 +351,7 @@ const unsigned char PinADCtab[] MEM_TEXT = { (1<<TP1),
 #ifdef AUTO_CAL
   const uint16_t R680pl EEMEM = R_L_VAL+PIN_RP;	// total resistor to VCC
   const uint16_t R680mi EEMEM = R_L_VAL+PIN_RM;	// total resistor to GND
+  const int8_t RefDiff EEMEM = REF_R_KORR;	// correction of internal Reference Voltage
 #endif
 //End of EEPROM-Strings
 
@@ -317,8 +372,9 @@ struct Diode {
 void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin);
 void ChargePin10ms(uint8_t PinToCharge, uint8_t ChargeDirection);
 unsigned int ReadADC(uint8_t mux);		// read Routine for ADC
-unsigned int W5msReadADC(uint8_t mux);		// wait 5ms and read than the ADC
-unsigned int W20msReadADC(uint8_t mux);		// wait 5ms and read then ADC
+unsigned int W5msReadADC(uint8_t mux);		// wait 5ms and read than ADC
+unsigned int W10msReadADC(uint8_t mux);		// wait 10ms and read than ADC
+unsigned int W20msReadADC(uint8_t mux);		// wait 20ms and read then ADC
 void lcd_show_format_cap(void);
 void ReadCapacity(uint8_t HighPin, uint8_t LowPin);	//capacity measurement
 void UfAusgabe(uint8_t bcdchar);	// Output of the threshold voltage(s) Uf
@@ -372,12 +428,12 @@ unsigned int compute_hfe(unsigned int lpx, unsigned int tpy);
 //End (parts)
 //special definition for different parts 
 //FETs
-#define PART_MODE_N_E_MOS 1
-#define PART_MODE_P_E_MOS 2
-#define PART_MODE_N_D_MOS 3
-#define PART_MODE_P_D_MOS 4
-#define PART_MODE_N_JFET 5
-#define PART_MODE_P_JFET 6
+#define PART_MODE_N_E_MOS 2
+#define PART_MODE_P_E_MOS 3
+#define PART_MODE_N_D_MOS 4
+#define PART_MODE_P_D_MOS 5
+#define PART_MODE_N_JFET 6
+#define PART_MODE_P_JFET 7
 
 //Bipolar
 #define PART_MODE_NPN 1
@@ -389,7 +445,7 @@ uint8_t NumOfDiodes;
 
 struct {
   unsigned int hfe[2];		//current amplification factor 
-  //unsigned int uBE[2];	//B-E-voltage of the Transistor
+  unsigned int uBE[2];		//B-E-voltage of the Transistor
   uint8_t b,c,e;		//pins of the Transistor
 }trans;
 unsigned int gthvoltage;	//Gate-threshold voltage 
@@ -397,7 +453,7 @@ unsigned int gthvoltage;	//Gate-threshold voltage
 uint8_t PartReady;		//part detection is finished 
 uint8_t PartMode;
 uint8_t tmpval, tmpval2;
-unsigned int ref_mv;		//Reference-voltage  in mV units
+unsigned int ref_mv;            //Reference-voltage  in mV units
 
 #ifdef R_MESS
 struct resis_t{
@@ -425,9 +481,9 @@ struct resis_t{
   unsigned int RHmultip=DEFAULT_RH_FAKT;
 #endif
 
-#ifdef AUTOSCALE_ADC
-uint8_t minmul=1,mindiv=1;
-#endif
+//#ifdef AUTOSCALE_ADC
+//uint8_t minmul=1,mindiv=1;
+//#endif
 
 uint8_t ii;			// multipurpose counter
 unsigned long cval;		// capacitor value 
@@ -440,6 +496,14 @@ uint8_t PartFound;	 	// the found part
 char outval[12];		// String for ASCII-outpu
 uint8_t empty_count;		// counter for max count of empty measurements
 uint8_t mess_count;		// counter for max count of nonempty measurements
+
+struct Config_t {
+  uint8_t Samples;		// number of ADC samples to take
+  uint8_t RefFlag;		// save Reference type VCC of IntRef
+  uint16_t U_Bandgap;		// Reference Voltage in mV
+  uint16_t U_AVCC;		// Voltage of AVCC
+} Config;
+
 #if POWER_OFF+0 > 1
 unsigned int display_time;	// display time of measurement in ms units
 #endif

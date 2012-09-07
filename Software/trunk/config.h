@@ -1,18 +1,33 @@
 
+// U_VCC defines the VCC Voltage of the ATmega in mV units
+#define U_VCC 4980
+
+// U_SCALE can be set to 4 for better resolution of ReadADC function for resistor measurement
+#define U_SCALE 4
+
 // the following definitions specify where to load external data from: EEprom or flash
 #ifdef USE_EEPROM
-#define MEM_TEXT EEMEM
-#define MEM_read_word(a)  eeprom_read_word(a)
-#define MEM_read_byte(a)  eeprom_read_byte(a)
+ #define MEM_TEXT EEMEM
+ #if E2END > 0X1FF
+  #define MEM2_TEXT EEMEM
+  #define lcd_fix2_string(a)  lcd_fix_string(a)
+ #else
+  #define MEM2_TEXT PROGMEM
+  #define lcd_fix2_string(a)  lcd_pgm_string(a)
+ #endif
+ #define MEM_read_word(a)  eeprom_read_word(a)
+ #define MEM_read_byte(a)  eeprom_read_byte(a)
 #else
-#define MEM_TEXT PROGMEM
-#define MEM_read_word(a)  pgm_read_word(a)
-#define MEM_read_byte(a)  pgm_read_byte(a)
+ #define MEM_TEXT PROGMEM
+ #define MEM2_TEXT PROGMEM
+ #define MEM_read_word(a)  pgm_read_word(a)
+ #define MEM_read_byte(a)  pgm_read_byte(a)
 #endif
 
 // RH_OFFSET : systematic offset of resistor measurement with RH (470k) 
 // resolution is 0.1 Ohm, 7000 defines a offset of 700 Ohm
-#define RH_OFFSET 7000 
+#define RH_OFFSET 0 
+
 // TP2_CAP_OFFSET is a additionally offset for TP2 capacity measurements in pF units
 #define TP2_CAP_OFFSET 2
 
@@ -117,8 +132,10 @@
   #define MEGA168PA 18
 
 // Pin resistor values of ATmega168
-  #define PIN_RM 196
-  #define PIN_RP 225
+//  #define PIN_RM 196
+//  #define PIN_RP 225
+  #define PIN_RM 190
+  #define PIN_RP 220
 // CC0 defines the capacity of empty terminal pins 1 & 3 without cable
   #define CC0 36
 // Slew rate correction  val += COMP_SLEW1 / (val + COMP_SLEW2)
@@ -254,4 +271,26 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 #else
   #define TXD_VAL TXD_MSK
 #endif
+#ifndef WITH_SELFTEST
+ #ifdef AUTO_CAL
+  #undef AUTO_CAL
+  #warning "AUTO_CAL without WITH_SELFTEST deselected!"
+ #endif
+#endif
+
+#ifdef __AVR_ATmega8__
+ // 2.54V reference voltage + korrection (fix for ATmega8)
+ #ifdef AUTO_CAL
+  #define WishVolt (2560 + (int8_t)eeprom_read_byte((uint8_t *)&RefDiff))
+ #else
+  #define WishVolt (2560 + REF_R_KORR)
+ #endif
+#else
+ #ifdef AUTO_CAL
+  #define WishVolt (ref_mv + (int8_t)eeprom_read_byte((uint8_t *)&RefDiff))
+ #else
+  #define WishVolt (ref_mv + REF_R_KORR)
+ #endif
+#endif
+
 

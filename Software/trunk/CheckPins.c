@@ -41,6 +41,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   unsigned long lrx1;
   unsigned long lirx1;
   unsigned long lirx2;
+  int ukorr;
 #endif
   /*
     switch HighPin directls to VCC 
@@ -103,6 +104,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      //Test if N-JFET or if self-conducting N-MOSFET
      R_DDR = LoPinRL | TriPinRH;	//switch R_H for Tristate-Pin (probably Gate) to GND
      adc.lp1 = W20msReadADC(LowPin);	//measure voltage at the assumed Source 
+     adc.tp1 = ReadADC(TristatePin);	// measure Gate voltage
      R_PORT = TriPinRH;			//switch R_H for Tristate-Pin (probably Gate) to VCC
      adc.lp2 = W20msReadADC(LowPin);	//measure voltage at the assumed Source again
      //If it is a self-conducting MOSFET or JFET, then must be: adc.lp2 > adc.lp1 
@@ -120,6 +122,11 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
            PartFound = PART_FET;	//N-Kanal-JFET
            PartMode = PART_MODE_N_JFET;
         }
+//      if ((PartReady == 0) || (adc.lp1 > trans.uBE[0])) 
+//      there is no way to find out the right Source / Drain
+        trans.uBE[0] = adc.lp1;
+        gthvoltage = adc.lp1 - adc.tp1;	//voltage GS (Source - Gate)
+        trans.uBE[1] = (unsigned int)(((unsigned long)adc.lp1 * 100) / RR680MI);
         trans.b = TristatePin;		//save Pin numbers found for this FET
         trans.c = HighPin;
         trans.e = LowPin;
@@ -133,6 +140,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      R_DDR = TriPinRH | HiPinRL;	//High-Pin to output
      R_PORT = TriPinRH | HiPinRL;	//High-Pin across R_L to Vcc
      adc.hp1 = W20msReadADC(HighPin);	//measure voltage at assumed Source 
+     adc.tp1 = ReadADC(TristatePin);	// measure Gate voltage
      R_PORT = HiPinRL;			//switch R_H for Tristate-Pin (assumed Gate) to GND
      adc.hp2 = W20msReadADC(HighPin);	//read voltage at assumed Source again
      //if it is a self-conducting P_MOSFET or P-JFET , then must be:  adc.hp1 > adc.hp2 
@@ -148,6 +156,8 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
            PartFound = PART_FET;	//P-Kanal-JFET
            PartMode = PART_MODE_P_JFET;
         }
+        gthvoltage = adc.tp1 - adc.hp1;		//voltage GS (Gate - Source)
+        trans.uBE[1] = (unsigned int)(((unsigned long)(U_VCC - adc.hp1) * 100) / RR680PL);
         trans.b = TristatePin;		//save Pin numbers found for this FET
         trans.c = LowPin;
         trans.e = HighPin;
@@ -156,9 +166,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 
 
 #ifdef COMMON_COLLECTOR
-  // Test circuit with common collector (Emitter follower)
+  // Test circuit with common collector (Emitter follower) PNP
   ADC_PORT = TXD_VAL;
-  ADC_DDR = LoADCm;			// Collektor direct to GND
+  ADC_DDR = LoADCm;			// Collector direct to GND
   R_PORT = HiPinRL;			// switch R_L port for HighPin (Emitter) to VCC
   R_DDR = TriPinRL | HiPinRL;		// Base resistor  R_L to GND
   adc.hp1 = U_VCC - W5msReadADC(HighPin);	// voltage at the Emitter resistor
@@ -179,21 +189,21 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        lcd_string(utoa(adc.tp1,outval,10));
        lcd_data(' ');
 #endif
-#ifdef LONG_HFE
+ #ifdef LONG_HFE
      c_hfe = ((unsigned long)adc.hp1 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
               (unsigned int)RR680PL)) / (unsigned int)adc.tp1;	
      if (c_hfe > 65535) {
         c_hfe = 65535;
      }
-#else
+ #else
      c_hfe = ((adc.hp1 / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
-#endif
+ #endif
   } else {
      c_hfe = (unsigned long)((adc.hp1 - adc.tp1) / adc.tp1);
   }
 #endif
 
-  //set Pins again for circuit with common Emitter
+  //set Pins again for circuit with common Emitter PNP
   R_DDR = LoPinRL;		//switch R_L port for Low-Pin to output (GND)
   R_PORT = 0;			//switch all resistor ports to GND
   ADC_DDR = HiADCm;		//switch High-Pin to output
@@ -209,23 +219,24 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      lcd_data(' ');
      wait1s();
 #endif
-     //Test to pnp
-     R_DDR = LoPinRL | TriPinRL;	//switch R_L port for Tristate-Pin to output (GND), for Test of pnp
+     //Test to PNP
+     R_DDR = LoPinRL | TriPinRL;	//switch R_L port for Tristate-Pin to output (GND), for Test of PNP
      adc.lp1 = W5msReadADC(LowPin);	//measure voltage at LowPin
      if(adc.lp1 > 3422) {
         //component has current => PNP-Transistor or equivalent
         //compute current amplification factor in both directions
         R_DDR = LoPinRL | TriPinRH;	//switch R_H port for Tristate-Pin (Base) to output (GND)
 
-        adc.lp1 = W5msReadADC(LowPin);	//measure voltage at LowPin (assumed Collektor)
+        adc.lp1 = W5msReadADC(LowPin);	//measure voltage at LowPin (assumed Collector)
         adc.tp2 = ReadADC(TristatePin);	//measure voltage at TristatePin (Base) 
         //check, if Test is done before 
         if((PartFound == PART_TRANSISTOR) || (PartFound == PART_FET)) {
            PartReady = 1;
         }
+        trans.uBE[PartReady] = ReadADC(HighPin) - adc.tp2;	// Base Emitter Voltage
 
         //compute current amplification factor for circuit with common Emitter
-        //hFE = B = Collektor current / Base current
+        //hFE = B = Collector current / Base current
         if(adc.tp2 < 53) {
 #if DebugOut == 5
            lcd_data('<');
@@ -242,10 +253,11 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         trans.hfe[PartReady] = ((adc.lp1 / ((RR680MI+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
  #endif
 #ifdef COMMON_COLLECTOR
-        //current amplification factor for common  Collektor (Emitter follower)
+        //current amplification factor for common  Collector (Emitter follower)
         // c_hFE = (Emitter current - Base current) / Base current
         if (c_hfe > trans.hfe[PartReady]) {
            trans.hfe[PartReady] = (unsigned int)c_hfe;
+           trans.uBE[PartReady] = U_VCC - adc.hp1 - adc.tp1;	// Base Emitter Voltage common collector
         }
 #endif
 
@@ -283,7 +295,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
            trans.c = LowPin;
            trans.e = HighPin;
         }  // end if PartFound != PART_THYRISTOR
-    } // end component has current => pnp
+    } // end component has current => PNP
 
 #ifdef COMMON_COLLECTOR
     // Low-Pin=RL- HighPin=VCC
@@ -296,27 +308,40 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        R_PORT = TriPinRH;		// Tripin=RH+
        adc.lp1 = W5msReadADC(LowPin);
        adc.tp1 = U_VCC - ReadADC(TristatePin);	// voltage at Base resistor
-#ifdef LONG_HFE
+ #ifdef LONG_HFE
        c_hfe = ((unsigned long)adc.lp1 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
               (unsigned int)RR680MI)) / (unsigned int)adc.tp1;	
        if (c_hfe > 65535) {
           c_hfe = 65535;
        }
-#else
+ #else
        c_hfe = ((adc.lp1 / ((RR680MI+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
-#endif
+ #endif
     } else {
        c_hfe = (adc.lp1 - adc.tp1) / adc.tp1;
     }
+#if DebugOut == 5
+       lcd_line4();
+       lcd_clear_line();
+       lcd_line4();
+       lcd_data('L');
+       lcd_data('P');
+       lcd_string(utoa(adc.lp1,outval,10));
+       lcd_data(' ');
+       lcd_data('T');
+       lcd_data('P');
+       lcd_string(utoa(adc.tp1,outval,10));
+       wait1s();
 #endif
-    //Tristate (can be Base) to VCC, Test if npn
+#endif
+    //Tristate (can be Base) to VCC, Test if NPN
     ADC_DDR = LoADCm;		//Low-Pin to output 0V
     ADC_PORT = TXD_VAL;			//switch Low-Pin to GND
     R_DDR = TriPinRL | HiPinRL;		//RL port for High-Pin and Tristate-Pin to output
     R_PORT = TriPinRL | HiPinRL;	//RL port for High-Pin and Tristate-Pin to Vcc
-    adc.hp1 = W5msReadADC(HighPin);	//measure voltage at High-Pin 
+    adc.hp1 = W5msReadADC(HighPin);	//measure voltage at High-Pin  (Collector)
     if(adc.hp1 < 1600) {
-       //component has current => npn-Transistor or somthing else
+       //component has current => NPN-Transistor or somthing else
 #if DebugOut == 5
        lcd_testpin(LowPin);
        lcd_data('N');
@@ -376,7 +401,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
          PartReady = 1;
          goto savenresult;
         }
-      //Test auf Transistor or MOSFET
+      //Test if NPN Transistor or MOSFET
       // ADC_DDR = LoADCm;	//Low-Pin to output 0V
       R_DDR = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to output
       R_PORT = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to VCC
@@ -395,21 +420,11 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        lcd_data('T');
        lcd_data('P');
        lcd_string(utoa(adc.tp2,outval,10));
-       lcd_line4();
-       lcd_clear_line();
-       lcd_line4();
-       lcd_data('L');
-       lcd_data('P');
-       lcd_string(utoa(adc.lp1,outval,10));
-       lcd_data(' ');
-       lcd_data('T');
-       lcd_data('P');
-       lcd_string(utoa(adc.tp1,outval,10));
-       wait1s();
 #endif
       if((PartFound == PART_TRANSISTOR) || (PartFound == PART_FET)) {
          PartReady = 1;	//check, if test is already done once
       }
+      trans.uBE[PartReady] = U_VCC - adc.tp2 - ReadADC(LowPin);
 
       //compute current amplification factor for common Emitter
       //hFE = B = Collector current / Base current
@@ -433,6 +448,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        // hFE = (Emitterstrom - Basisstrom) / Basisstrom
        if (c_hfe >  trans.hfe[PartReady]) {
           trans.hfe[PartReady] = (unsigned int)c_hfe;
+          trans.uBE[PartReady] = U_VCC - adc.lp1 - adc.tp1;
        }
 #endif
 
@@ -556,6 +572,12 @@ widmes:
 #ifdef R_MESS
   // resistor measurement
   wdt_reset();
+// U_SCALE can be set to 4 for better resolution of ReadADC result
+ #if U_SCALE != 1
+  Config.U_AVCC = U_VCC*U_SCALE;
+  Config.U_Bandgap *= U_SCALE;
+  Config.Samples = 190;
+ #endif
   ADC_PORT = TXD_VAL;
   ADC_DDR = LoADCm;		//switch Low-Pin to output (GND)
   R_DDR = HiPinRL;		//switch R_L port for High-Pin to output (VCC)
@@ -568,7 +590,7 @@ widmes:
   R_PORT = 0;
   R_DDR = HiPinRH;		//switch R_H port for High-Pin to output (GND)
   adc.hp2 = W5msReadADC(HighPin);	// read voltage, should be down
-  if (adc.hp2 > 20) {
+  if (adc.hp2 > (20*U_SCALE)) {
      // if resistor, voltage should be down
  #if DebugOut == 3
      lcd_line3();
@@ -600,7 +622,7 @@ widmes:
   R_DDR = LoPinRH;			//switch R_H for Low-Pin to GND
   adc.lp2 = W5msReadADC(LowPin);
 		
-  if((adc.hp1 < 4400) && (adc.hp2 > 97)) {
+  if((adc.hp1 < (4400*U_SCALE)) && (adc.hp2 > (97*U_SCALE))) {
      //voltage break down isn't insufficient 
  #if DebugOut == 3
      lcd_data('F');
@@ -608,21 +630,25 @@ widmes:
      goto testend; 
   }
 //    if((adc.hp2 + (adc.hp2 / 61)) < adc.hp1)
-  if (adc.hp2 < 4972) { 
+  if (adc.hp2 < (4972*U_SCALE)) { 
      // voltage breaks down with low test current and it is not nearly shorted  => resistor
 //     if (adc.lp1 < 120) { // take measurement with R_H 
-     if (adc.lp1 < 169) { // take measurement with R_H 
+     if (adc.lp1 < (169*U_SCALE)) { // take measurement with R_H 
         ii = 'H';
-        if (adc.lp2 < 38) {
+        if (adc.lp2 < (38*U_SCALE)) {
            // measurement > 60MOhm to big resistance
            goto testend;
         }
         // two measurements with R_H resistors (470k) are made:
         // lirx1 (measurement at HighPin)
-        lirx1 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)adc.hp2 / (U_VCC - adc.hp2);
+//        ukorr = (int)((U_VCC * U_SCALE) - adc.hp2) / ((U_VCC*U_SCALE)/(7*U_SCALE)) + (2*U_SCALE);
+//        adc.hp2 += ukorr;
+        lirx1 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)adc.hp2 / ((U_VCC*U_SCALE) - adc.hp2);
         // lirx2 (measurement at LowPin)
-        lirx2 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)(U_VCC - adc.lp2) / adc.lp2;
-#define U_INT_LIMIT 990		// 1V switch limit in ReadADC for atmega family
+//        ukorr = (int)((U_VCC * U_SCALE)/2 - adc.lp2) / ((U_VCC*U_SCALE)/(12*U_SCALE));
+//        adc.lp2 += ukorr;
+        lirx2 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)((U_VCC*U_SCALE) - adc.lp2) / adc.lp2;
+#define U_INT_LIMIT (990*U_SCALE)		// 1V switch limit in ReadADC for atmega family
 #ifdef __AVR_ATmega8__
 #define FAKT_LOW 2		//resolution is about twice as good
 #else
@@ -644,16 +670,31 @@ widmes:
         ii = 'L';
         // two measurements with R_L resistors (680) are made:
         // lirx1 (measurement at HighPin)
+#if 1
         if (adc.tp1 > adc.hp1) {
            adc.hp1 = adc.tp1;		//diff negativ is illegal
         }
-        lirx1 =(unsigned long)RR680PL * (unsigned long)(adc.hp1 - adc.tp1) / (U_VCC - adc.hp1);
+        lirx1 =(unsigned long)RR680PL * (unsigned long)(adc.hp1 - adc.tp1) / ((U_VCC*U_SCALE) - adc.hp1);
         if (adc.tp2 < adc.lp1) {
            adc.lp1 = adc.tp2;		//diff negativ is illegal
         }
         // lirx2 (Measurement at LowPin)
         lirx2 =(unsigned long)RR680MI * (unsigned long)(adc.tp2 -adc.lp1) / adc.lp1;
 //     lrx1 =(unsigned long)R_L_VAL * (unsigned long)adc.hp1 / (adc.hp3 - adc.hp1);
+#else
+        ukorr = (int)((4 * U_SCALE) - adc.hp1 / (U_VCC/12));
+        if (ukorr > 0) adc.hp1 -= ukorr;
+        lirx1 =(unsigned long)RR680PL * (unsigned long)adc.hp1 / ((U_VCC*U_SCALE) - adc.hp1);
+        if (lirx1 > (RR680MI - R_L_VAL))  lirx1 -= (RR680MI - R_L_VAL);
+        else     lirx1 = 0;
+        ukorr = (int)((4 * U_SCALE) - adc.lp1 / (U_VCC/6));
+        if (ukorr < 0) ukorr = -ukorr;
+        adc.lp1 += ukorr;
+        lirx2 =(unsigned long)RR680MI * (unsigned long)((U_VCC*U_SCALE) - adc.lp1) / adc.lp1;
+        if (lirx2 > (RR680PL - R_L_VAL))  lirx2 -= (RR680PL - R_L_VAL);
+        else     lirx2 = 0;
+#endif
+
 #ifdef AUTOSCALE_ADC
         if (adc.hp1 < U_INT_LIMIT) {
            lrx1 = (lirx1*FAKT_LOW + lirx2) / (FAKT_LOW+1);	//weighted average of both R_L measurements
@@ -735,6 +776,11 @@ widmes:
   }
 #endif
   testend:
+#if U_SCALE != 1
+  Config.U_AVCC = U_VCC;
+  Config.U_Bandgap /= U_SCALE;
+  Config.Samples = ANZ_MESS;
+#endif
 #ifdef DebugOut
 #if DebugOut < 10
   wait2s();

@@ -3,241 +3,200 @@
 #include <stdlib.h>
 //#include "autoinout.h"
 
-#ifndef ANZ_MESS
-#define ANZ_MESS 44
-#endif
-
 .GLOBAL ReadADC
 .GLOBAL W20msReadADC
+.GLOBAL W10msReadADC
 .GLOBAL W5msReadADC
-// assembler version of ReadADC.c
-// ACALL is defined in config.h as rcall for ATmega8 and as call for ATmega168
+;// assembler version of ReadADC.c
+;// ACALL is defined in config.h as rcall for ATmega8 and as call for ATmega168
 
-;unsigned int W20msReadADC(uint8_t mux) {
+
+;unsigned int igned int W20msReadADC(uint8_t Probe) {
 W20msReadADC:
-  ACALL	wait10ms
+  ACALL wait10ms
+W10msReadADC:
   ACALL wait5ms
-// runs to W5msReadADC
+;// runs to W5msReadADC
 
-;unsigned int W5msReadADC(uint8_t mux) {
+;unsigned int W5msReadADC(uint8_t Probe) {
 W5msReadADC:
-  ACALL	wait5ms;
-// runs directly to ReadADC, this will replace "ACALL ReadADC + ret"
+  ACALL wait5ms;
+;// runs directly to ReadADC, this will replace "ACALL ReadADC + ret"
 
-;unsigned int ReadADC(uint8_t mux) {
+;unsigned int ReadADC(uint8_t Probe) {
 ReadADC:
-  //returns result of ADC port mux scaled to mV resolution (unsigned int)
-;  unsigned int adcx;
-;  uint8_t jj;
-
-;  ADMUX = mux | (1<<REFS0);
-  mov   r22,r24
-  ori	r24, 1<<REFS0		; make shure, that REFS0 is allways set
+;  //returns result of ADC port Probe scaled to mV resolution (unsigned int)
+;  unsigned long Value;
+	push	r17
+; unsigned int U; /* return value (mV) */
+; uint8_t Samples; /* loop counter */
+; unsigned long Value; /* ADC value */
+; Probe |= (1 << REFS0); /* use internal reference anyway */
+	mov	r17, r24;	Probe
+	ori	r17, (1 << REFS0)
+get_sample:
+; ADMUX = Probe; /* set input channel and U reference */
 #if ADMUX < 32
-  out   ADMUX, r24
+        out	ADMUX, r17
 #else
-  sts	ADMUX, r24
+	sts	ADMUX, r17
 #endif
 #ifdef AUTOSCALE_ADC
-  sbrc	r24,REFS1		; skip if not 1.1V reference
-  rjmp  lowADC			; 1.1V is selected, go to special routine
-#endif
-; normal 5V reference
-;  adcx = (ANZ_MESS/11); 	// round up the result (+4)
-;  ADCSRA |= (1<<ADSC);		//start Conversion
-#if ADCSRA < 32
-  sbi	ADCSRA,ADSC
-#else
-  lds	r18, ADCSRA
-  ori	r18, (1<<ADSC)
-  sts	ADCSRA, r18
-#endif
-
-//  while (ADCSRA&(1<<ADSC));		// wait for ADC finish
-w3f6:
-#if ADCSRA < 32
-  sbi	ADCSRA,ADSC
-#else
-  lds	r18, ADCSRA
-  sbrc	r18, ADSC
-#endif
-  rjmp	w3f6 
-
+ /* if voltage reference changed run a dummy conversion */
+; Samples = Probe & (1 << REFS1); /* get REFS1 bit flag */
+	mov	r30, r17
+       	andi	r30, (1 << REFS1)
+; if (Samples != Config.RefFlag) {
+	lds	r24, Config+1
+       	cp	r30, r24
+       	breq	r2aa2 
 #ifdef NO_AREF_CAP
-; wait50us();		// AVR126 recommend a 70µs wait-time for band gap ADC
-  ACALL wait50us
+;    wait100us(); /* time for voltage stabilization */
+	ACALL	wait100us
 #else
-;  wait300us();
-  ACALL	wait300us
+	ACALL	wait300us
 #endif
-
-;  adcx = (ANZ_MESS/11); 	// round up the result (+4)
-  ldi	r24, (ANZ_MESS/11)
-  ldi	r25, 0
-
-;  for (jj = 0; jj < ANZ_MESS; jj++) {
-     //repeat ANZ_MESS measurements for oversampling
-  ldi	r20, 0
-
-forlop1:
-;     ADCSRA |= (1<<ADSC);	//start conversion
+;    ADCSRA |= (1 << ADSC); /* start conversion */
 #if ADCSRA < 32
-  sbi	ADCSRA,ADSC
+	sbi	ADCSRA,ADSC
 #else
-  lds	r18, ADCSRA
-  ori	r18, (1<<ADSC)
-  sts	ADCSRA, r18
+	lds	r24, ADCSRA
+       	ori	r24, (1 << ADSC)
+	sts	ADCSRA, r24
+#endif
+;    while (ADCSRA & (1 << ADSC)); /* wait until conversion is done */
+wadc1:
+	lds	r24, ADCSRA
+       	sbrc	r24, ADSC
+       	rjmp	wadc1 
+;    Config.RefFlag = Samples; /* update flag */
+	sts	Config+1, r30
+
 #endif
 
-;     while (ADCSRA & (1<<ADSC));	//wait for ADC finished
-w416:
+;unsigned int ReadADC (uint8_t Probe) {
+r2aa2:
+	ldi	r18, 0x00	; 0
+	ldi	r19, 0x00	; 0
+	movw	r20, r18
+	ldi	r30, 0x00	; Samples = 0
+	rjmp	r2ae8 
+ /* * sample ADC readings */
+; Value = 0UL; /* reset sampling variable */
+; Samples = 0; /* number of samples to take */
+; while (Samples < Config.Samples) /* take samples */ {
+;    ADCSRA |= (1 << ADSC); /* start conversion */
+Loop:
 #if ADCSRA < 32
-  sbic	ADCSRA,ADSC
+        sbi	ADCSRA,ADSC
 #else
-  lds	r18, ADCSRA
-  sbrc	r18, ADSC
+	lds	r24, ADCSRA
+       	ori	r24, (1 << ADSC)
+	sts	ADCSRA, r24
 #endif
-  rjmp	w416 
-
-;     adcx += ADCW;		//  add measurements 
-#if ADCH < 32
-  in	r18,ADCL
-  in	r19,ADCH
-#else
-  lds	r18, ADCL
-  lds	r19, ADCH
-#endif
-  add	r24, r18
-  adc	r25, r19
+;    while (ADCSRA & (1 << ADSC)); /* wait until conversion is done */
+wadc2:
+	lds	r24, ADCSRA
+       	sbrc	r24, ADSC
+	rjmp	wadc2 
+;    Value += ADCW; /* add ADC reading */
+	lds	r22, ADCL
+	lds	r23, ADCH
+	add	r18, r22
+	adc	r19, r23
+	adc	r20, r1
+	adc	r21, r1
 #ifdef AUTOSCALE_ADC
-;     if ((jj == 4) && (adcx < 1024)){
-  cpi	r20, 0x04	; 4
-  brne	r436 
-  ldi	r21, 0x04	; 4 * 256
-  cpi	r24, 0
-  cpc	r25, r21
-  brcs	lowADC 
+;    /* auto-switch voltage reference for low readings */
+;    if ((Samples == 4) && (Config.U_Bandgap > 255) && ((uint16_t)Value < 1024) && !(Probe & (1 << REFS1))) {
+	cpi	r30, 0x04	; Samples == 4
+	brne	r2ae6 
+	lds	r24, Config+3
+        cpi	r24,0
+        breq	r2ae6
+       	ldi	r24, (1024 >> 8)	; Value < 1024
+	cpi	r18, (1024 & 0xff)	; 0
+	cpc	r19, r24
+	brcc	r2ae6 
+	sbrc	r17, REFS1
+	rjmp	r2ae6 
+;      Probe |= (1 << REFS1); /* select internal bandgap reference */
+	ori	r17, (1 << REFS1)
+;       goto get_sample; /* re-run sampling */
+	rjmp	get_sample 
+;    }
 #endif
-
-;  for (jj = 0; jj < ANZ_MESS; jj++) {
-r436:
-  subi	r20, 0xFF	; 255
-  cpi	r20, ANZ_MESS
-  brne	forlop1 
-
-#if ANZ_MESS == 22
-;  adcx *= 2;		// multiply sum by 2
-  add	r24,r24
-  adc	r25,r25		;*2
-#endif
-  
-#if ANZ_MESS == 11
-;  adcx *= 4;		// multiply sum by 4
-  add	r24,r24
-  adc	r25,r25		;*2
-  add	r24,r24
-  adc	r25,r25		;*2
-#endif
-
-;  return adcx/9;
-  ldi	r22, 0x09	; 9
-  ldi	r23, 0
-
+;    Samples++; /* one more done */
+r2ae6:
+	subi	r30, 0xFF	; Samples++
+;    Config.RefFlag = Samples; /* update flag */
+; }
+; /* * sample ADC readings */
+; Value = 0UL; /* reset sampling variable */
+; Samples = 0; /* number of samples to take */
+; while (Samples < Config.Samples) /* take samples */ {
+r2ae8:
+	lds	r24, Config+0
+	cp	r30, r24
+	brcs	Loop 
+;    }
+;    Samples++; /* one more done */
+; }
 #ifdef AUTOSCALE_ADC
-  rjmp	diviret 
-  
-lowADC:
-;  adcx = 0;
-;  ADMUX = mux | (1<<REFS1) | (1<<REFS0); // Internal 1.1V Referenz
-  ori	r22, (1<<REFS1)|(1<<REFS0)
-#if ADMUX < 32
-  out	ADMUX, r22
-#else
-  sts	ADMUX, r22
+; /* * convert ADC reading to voltage * - single sample: U = ADC reading * U_ref / 1024 */
+; /* get voltage of reference used */
+; if (Probe & (1 << REFS1)) U = Config.U_Bandgap; /* bandgap reference */
+	sbrs	r17, REFS1
+	rjmp	r2afe 
+	lds	r22, Config+2;   Config.U_Bandgap
+	lds	r23, Config+3
+       	rjmp	r2b02 
 #endif
-
-;  ADCSRA |= (1<<ADSC);		//start conversion
-#if ADCSRA < 32
-  sbi	ADCSRA,ADSC
-#else
-  lds	r24, ADCSRA
-  ori	r24, (1<<ADSC)
-  sts	ADCSRA, r24
-#endif
-
-;  while (ADCSRA&(1<<ADSC));	//wait for ADC finished
-w454:
-#if ADCSRA < 32
-  sbic	ADCSRA, ADSC
-#else
-  lds	r24, ADCSRA
-  sbrc	r24, ADSC
-#endif
-  rjmp	w454 
-
-#ifdef NO_AREF_CAP
-;  wait300us();			//wait 300µs for no or 1nF AREF capacitor
-  ACALL wait300us
-#else
-;  wait5ms();			//wait 6ms for up to 100nF AREF capacitor
-;  wait1ms();
-  ACALL	wait5ms
-  ACALL	wait1ms
-#endif
-
-;  adcx = 0;
-  ldi	r24, 0x00	; 0
-  ldi	r25, 0x00	; 0
-
-;  for (jj=0; jj<minmul; jj++) {
-  ldi	r20, 0x00	; 0
-  rjmp	r48c
-
-;     ADCSRA |= (1<<ADSC);	//start conversion
-forlop2:
-#if ADCSRA < 32
-  sbi	ADCSRA, ADSC
-#else
-  lds	r18, ADCSRA
-  ori	r18, (1<<ADSC)
-  sts	ADCSRA, r18
-#endif
-
-;     while (ADCSRA&(1<<ADSC));		//wait for ADC finished
-w476:
-#if ADCSRA < 32
-  sbic	ADCSRA, ADSC
-#else
-  lds	r18, ADCSRA
-  sbrc	r18, ADSC
-#endif
-  rjmp	w476 
-
-;     adcx += ADCW;			//add Measurement results
-#if ADCSRA < 32
-  in	r18, ADCL
-  in	r19, ADCH
-#else
-  lds	r18, ADCL
-  lds	r19, ADCH
-#endif
-  add	r24, r18
-  adc	r25, r19
-
-;  for (jj=0; jj<minmul; jj++) {
-  subi	r20, 0xFF	; 255
-r48c:
-  lds	r18, minmul
-  cp	r20, r18
-  brcs	forlop2 
-
-;  return (adcx/mindiv);		//divide by mindiv gives a resolution of mV
-  lds	r22, mindiv
-  ldi	r23, 0
-#endif
-diviret:
-  ACALL	__udivmodhi4
-  movw	r24, r22
-  clr	r0
-  ret
+; else U = U_VCC; /* Vcc reference */
+r2afe:
+	lds	r22, Config+4;	Config.U_AVCC
+       	lds	r23, Config+5
+; /* convert to voltage; */
+; Value *= U; /* ADC readings * U_ref */
+r2b02:
+	ldi	r24, 0x00	; 0
+	ldi	r25, 0x00	; 0
+	ACALL	__mulsi3
+; Value /= 1023; /* / 1024 for 10bit ADC */
+	ldi	r18, (1023 & 0xff)
+	ldi	r19, (1023 >> 8)
+; Round up
+        ldi	r20, (1023 >> 9)
+	add	r22, r18
+        adc	r23, r20
+        adc     r24, r1
+        adc	r25, r1
+;
+	ldi	r20, 0x00	; 0
+	ldi	r21, 0x00	; 0
+	ACALL	__udivmodsi4;			R22-25 / R18-21
+	movw	r22, r18
+	movw	r24, r20
+; /* de-sample to get average voltage */
+; Value /= Config.Samples;
+	lds	r18,Config+0
+; Round up
+	mov	r19,r18
+        asr	r19
+        add	r22,r19
+        adc     r23, r1
+        adc     r24, r1
+        adc	r25, r1
+;
+	ldi	r19, 0x00	; 0
+	ldi	r20, 0x00	; 0
+	ldi	r21, 0x00	; 0
+	ACALL	__udivmodsi4;			R22-25 / R18-21
+; U = (unsigned int)Value;
+; return U;
+;//   return ((unsigned int)(Value / (1023 * (unsigned long)Config.Samples)));
+;}
+	movw	r24, r18
+	pop	r17
+    	ret
 

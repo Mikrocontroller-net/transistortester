@@ -26,11 +26,13 @@ CFLAGS = -Wall
 PARTNO = m168
 
 #select your language
-# available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE
+# available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
+#                          LANG_RUSSIAN
 UI_LANGUAGE = LANG_ENGLISH
 
 # the LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset
 # this lcd-display don't have a character for Ohm and for µ (micro)
+# Russian language requires a LCD controller with russian characterset and option LCD_CYRILLIC!
 #CFLAGS += -DLCD_CYRILLIC
 
 # the WITH_SELFTEST option enables selftest function 
@@ -62,7 +64,7 @@ CFLAGS += -DCAP_EMPTY_LEVEL=3
 
 # the AUTOSCALE_ADC option enables the autoscale ADC (VCC and Bandgap Ref)
 CFLAGS += -DAUTOSCALE_ADC
-CFLAGS += -DREF_R_KORR=0
+CFLAGS += -DREF_R_KORR=3
 # NO_AREF_CAP tells your Software, that you have no Capacitor installed at pin AREF (21)
 # this enables a shorter wait-time for AUTOSCALE_ADC function
 CFLAGS += -DNO_AREF_CAP
@@ -81,8 +83,9 @@ CFLAGS += -DUSE_EEPROM
 CFLAGS += -DPULLUP_DISABLE
 
 # the ANZ_MESS option specifies, how often an ADC value is read and accumulated
-# possible values for 5V Operation are 44, 22 and 11
-CFLAGS += -DANZ_MESS=44
+# possible values of ANZ_MESS are 5 to 200
+CFLAGS += -DANZ_MESS=25
+
 
 # The POWER_OFF option enables the power off function, otherwise loop measurements infinitely
 # until power is disconnected with a ON/OFF switch (CFLAGS += -DPOWER_OFF).
@@ -126,6 +129,7 @@ PORT=usb
 
 ifeq ($(PARTNO),m8)
 MCU = atmega8
+HEX_FLASH_FLAGS = --change-section-lma .eeprom=0x2000
 ifeq ($(OP_MHZ),1)
 # BODLEV 4V, BODEN enabled, SUT 65ms, CLK 1MHz
 FUSES_INT = -U lfuse:w:0x21:m -U hfuse:w:0xd9:m
@@ -143,6 +147,7 @@ endif
 
 ifeq ($(PARTNO),m48)
 MCU = atmega48
+HEX_FLASH_FLAGS = --change-section-lma .eeprom=0x1000
 ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xdc:m
@@ -168,6 +173,7 @@ endif
 
 ifeq ($(PARTNO),m48p)
 MCU = atmega48p
+HEX_FLASH_FLAGS = --change-section-lma .eeprom=0x1000
 ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xdc:m
@@ -193,6 +199,7 @@ endif
 
 ifeq ($(PARTNO),m88)
 MCU = atmega88
+HEX_FLASH_FLAGS = --change-section-lma .eeprom=0x2000
 ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xdc:m
@@ -218,6 +225,7 @@ endif
 
 ifeq ($(PARTNO),m88p)
 MCU = atmega88p
+HEX_FLASH_FLAGS = --change-section-lma .eeprom=0x2000
 ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xdc:m
@@ -243,6 +251,7 @@ endif
 
 ifeq ($(PARTNO),m168)
 MCU = atmega168
+HEX_FLASH_FLAGS = --change-section-lma .eeprom=0x4000
 ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xdc:m
@@ -268,6 +277,7 @@ endif
 
 ifeq ($(PARTNO),m168p)
 MCU = atmega168p
+HEX_FLASH_FLAGS = --change-section-lma .eeprom=0x4000
 ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
 FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xdc:m
@@ -293,51 +303,41 @@ endif
 
 ifeq ($(PARTNO),m328)
 MCU = atmega328
+HEX_FLASH_FLAGS = --change-section-lma .eeprom=0x8000
 ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
-FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
+FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xd9:m -U efuse:w:0xfc:m
 # Operation with 8MHz crystal and /8 divider , full swing crystal
-FUSES_CRY = -U lfuse:w:0x77:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
+FUSES_CRY = -U lfuse:w:0x77:m -U hfuse:w:0xd9:m -U efuse:w:0xfc:m
 # Operation with 8MHz crystal and /8 divider , low power
-FUSES_CRY_L = -U lfuse:w:0x7f:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
+FUSES_CRY_L = -U lfuse:w:0x7f:m -U hfuse:w:0xd9:m -U efuse:w:0xfc:m
 else
 # RC operation ,CLK 8MHz
-FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
+FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xd9:m -U efuse:w:0xfc:m
 # Operation with 8MHz crystal and /1 divider , full swing crystal
-FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
+FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xd9:m -U efuse:w:0xfc:m
 # Operation with 8MHz crystal and /1 divider , low power
-FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
+FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xd9:m -U efuse:w:0xfc:m
 endif
 endif
 
 ifeq ($(PARTNO),m328p)
 MCU = atmega328p
+HEX_FLASH_FLAGS = --change-section-lma .eeprom=0x8000
 ifeq ($(OP_MHZ),1)
 # RC operation ,CLK 1MHz
-FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
+FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xd9:m -U efuse:w:0xfc:m
 # Operation with 8MHz crystal and /8 divider , full swing crystal
-FUSES_CRY = -U lfuse:w:0x77:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
+FUSES_CRY = -U lfuse:w:0x77:m -U hfuse:w:0xd9:m -U efuse:w:0xfc:m
 # Operation with 8MHz crystal and /8 divider , low power
-FUSES_CRY_L = -U lfuse:w:0x7f:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
+FUSES_CRY_L = -U lfuse:w:0x7f:m -U hfuse:w:0xd9:m -U efuse:w:0xfc:m
 else
 # RC operation ,CLK 8MHz
-FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
+FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xd9:m -U efuse:w:0xfc:m
 # Operation with 8MHz crystal and /1 divider , full swing crystal
-FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
+FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xd9:m -U efuse:w:0xfc:m
 # Operation with 8MHz crystal and /1 divider , low power
-FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xd9:m
-# -U efuse:w:0xfc:m
+FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xd9:m -U efuse:w:0xfc:m
 endif
 endif
 
@@ -363,6 +363,7 @@ LDFLAGS +=  -Wl,-Map=TransistorTester.map
 
 ## Intel Hex file production flags
 HEX_FLASH_FLAGS = -R .eeprom -R .fuse -R .lock -R .signature
+#HEX_FLASH_FLAGS += -R .fuse -R .lock -R .signature
 
 HEX_EEPROM_FLAGS = -j .eeprom
 HEX_EEPROM_FLAGS += --set-section-flags=.eeprom="alloc,load"

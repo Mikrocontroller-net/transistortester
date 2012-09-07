@@ -1,5 +1,11 @@
+Der CAP_EMPTY_LEVEL wurde in der Makefile von 3 auf 4 angehoben.
+Wegen der einstellbaren VCC Spannung die Ausgabe der Selbsttest-Funktion auf Differenzen umgestellt.
+Für die Widerstandmessung kann die Auflösung der ReadADC-Funktion um Faktor 4 angehoben werden.
+Neue ReadADC Funktion mit einstellbarer VCC Spannung und frei wählbarer ANZ_MESS.
+Erweiterung der Autokalibration für AUTOSCALE_ADC (Widerstandsmessung, REF_R_KORR).
+Beim avrdude Aufruf für das fuse Setzen beim ATmega328 in der Makefile wird auch efuse gesetzt.
 0.99 / 15.08.2012
-Autokalibration fuer Kondensatormessung < 40µF.
+Autokalibration fuer Kondensatormessung < 40µF (REF_C_KORR).
 Ausgabeformat fuer FET Schwellspannung in V.
 Makefile und config.h für die PicoPower Prozessorvariante -P angepaßt.
 Abgleich der Pin-Ausgangswiderstände bei Selbsttest ergaenzt.

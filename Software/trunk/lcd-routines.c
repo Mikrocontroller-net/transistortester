@@ -157,6 +157,21 @@ void lcd_string(char *data) {
     }
 }
 
+#ifdef WITH_SELFTEST
+//Load string from PGM  and send to LCD 
+void lcd_pgm_string(const unsigned char *data) {
+   unsigned char cc;
+   while(1) {
+      cc = pgm_read_byte(data);
+      if((cc==0) || (cc==128)) {
+         return;
+      }
+      lcd_data(cc);
+      data++;
+   }
+}
+#endif
+
 //Load string from PGM or EEprom and send to LCD 
 void lcd_fix_string(const unsigned char *data) {
    unsigned char cc;

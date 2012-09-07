@@ -1,7 +1,8 @@
 void AutoCheck(void) {
   uint8_t tt;		// number of running test
   uint8_t ww;		// counter for repeating the tests
-  unsigned int  adcmv[7];
+  int8_t udiff;		// difference between ADC Voltage with VCC or Bandgap reference
+  int  adcmv[7];
 // define the maximum count of repetitions MAX_REP
 #define MAX_REP 8
 
@@ -45,7 +46,7 @@ void AutoCheck(void) {
   }
   lcd_clear();
   lcd_line1();
-  lcd_fix_string(SELFTEST);		// "Selftest mode.."
+  lcd_fix2_string(SELFTEST);		// "Selftest mode.."
   wait1s();
 #ifdef AUTO_CAL
  #define TEST_COUNT 12
@@ -69,16 +70,17 @@ void AutoCheck(void) {
         lcd_data(' ');
                                         //############################################
         if (tt == 1) {   // output of reference voltage and factors for capacity measurement
+           Config.Samples = 190;	// set number of ADC reads near to maximum
            (void) ReadADC(0x0e);	// read reference voltage 
            ref_mv = W5msReadADC(0x0e);	// read reference voltage 
-           lcd_fix_string(URefT);	//"URef="
+           lcd_fix2_string(URefT);	//"URef="
            lcd_string(utoa(ref_mv, outval, 10));
-           lcd_fix_string(mVT);		//"mV "
+           lcd_fix2_string(mVT);		//"mV "
            lcd_line2();			//Cursor to column 1, row 2
 #ifdef WITH_AUTO_REF
            RefVoltage();		//compute RHmultip = f(reference voltage)
 #endif
-           lcd_fix_string(RHfakt);	//"RHf="
+           lcd_fix2_string(RHfakt);	//"RHf="
            lcd_string(utoa(RHmultip, outval, 10));
         }
                                         //############################################
@@ -86,28 +88,34 @@ void AutoCheck(void) {
            R_PORT = 1<<(TP1*2);		//RL1 to VCC
            R_DDR = (1<<(TP1*2)) | (1<<(TP2*2));	//RL2 to -
            adcmv[0] = W20msReadADC(TP1);
+           adcmv[0] -= ((long)U_VCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_L_VAL + PIN_RP));
            R_DDR = (1<<(TP1*2)) | (1<<(TP3*2));	//RL3 to -
            adcmv[1] = W20msReadADC(TP1);
+           adcmv[1] -= ((long)U_VCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_L_VAL + PIN_RP));
            R_PORT = 1<<(TP2*2);		//RL2 to VCC
            R_DDR = (1<<(TP2*2)) | (1<<(TP3*2));	//RL3 to -
            adcmv[2] = W20msReadADC(TP2);
-           lcd_fix_string(RLRL);	// "RLRL"
+           adcmv[2] -= ((long)U_VCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_L_VAL + PIN_RP));
+           lcd_fix2_string(RLRL);	// "RLRL"
         }
                                         //############################################
         if (tt == 3) { // how equal are the RH resistors
            R_PORT = 2<<(TP1*2);		//RH1 to VCC
            R_DDR = (2<<(TP1*2)) | (2<<(TP2*2));	//RH2 to -
            adcmv[0] = W20msReadADC(TP1);
+           adcmv[0] -= (U_VCC/2);
            R_DDR = (2<<(TP1*2)) | (2<<(TP3*2));	//RH3 to -
            adcmv[1] = W20msReadADC(TP1);
+           adcmv[1] -= (U_VCC/2);
            R_PORT = 2<<(TP2*2);		//RL2 to VCC
            R_DDR = (2<<(TP2*2)) | (2<<(TP3*2));	//RH3 to -
            adcmv[2] = W20msReadADC(TP2);
-           lcd_fix_string(RHRH);	// "RHRH"
+           adcmv[2] -= (U_VCC/2);
+           lcd_fix2_string(RHRH);	// "RHRH"
         }
                                         //############################################
         if (tt == 4) { // Text release probes
-           lcd_fix_string(RELPROBE);	// "Release Probes"
+           lcd_fix2_string(RELPROBE);	// "Release Probes"
         }
                                         //############################################
         if (tt == 5) { // can we switch the ADC pins to GND across R_H resistor?
@@ -120,20 +128,20 @@ void AutoCheck(void) {
 
            R_DDR = 2<<(TP3*2);		//Pin 3 over R_H to GND
            adcmv[2] = W20msReadADC(TP3);
-           lcd_fix_string(RH1L);	// "RH_Lo="
+           lcd_fix2_string(RH1L);	// "RH_Lo="
         }
                                         //############################################
         if (tt == 6) { // can we switch the ADC pins to VCC across the R_H resistor?
            R_DDR = 2<<(TP1*2);		//Pin 1 over R_H to VCC
            R_PORT = 2<<(TP1*2);
-           adcmv[0] = W20msReadADC(TP1);
+           adcmv[0] = W20msReadADC(TP1) - U_VCC;
            R_DDR = 2<<(TP2*2);		//Pin 2 over R_H to VCC
            R_PORT = 2<<(TP2*2);
-           adcmv[1] = W20msReadADC(TP2);
+           adcmv[1] = W20msReadADC(TP2) - U_VCC;
            R_DDR = 2<<(TP3*2);		//Pin 3 over R_H to VCC
            R_PORT = 2<<(TP3*2);
-           adcmv[2] = W20msReadADC(TP3);
-           lcd_fix_string(RH1H);	// "RH_Hi="
+           adcmv[2] = W20msReadADC(TP3) - U_VCC;
+           lcd_fix2_string(RH1H);	// "RH_Hi="
         }
                                         //############################################
         if (tt == 7) { // measurement of internal resistance of the ADC port outputs switched to GND
@@ -151,7 +159,7 @@ void AutoCheck(void) {
            R_PORT =  1<<(TP3*2);	//R_L-PORT 3 to VCC
            R_DDR = 1<<(TP3*2);		//Pin 3 to output and over R_L to VCC
            adcmv[2] = W5msReadADC(TP3);
-           lcd_fix_string(RILO);	// "RiLo="
+           lcd_fix2_string(RILO);	// "RiLo="
 #ifdef AUTO_CAL
            err_flag = 1;		// set to not finished
            sum_c0 += adcmv[0] + adcmv[1] + adcmv[2]; //add all three values
@@ -182,7 +190,7 @@ void AutoCheck(void) {
            R_DDR = 1<<(TP3*2);		//Pin 3 to output and over R_L to GND
            adcmv[2] = U_VCC - W5msReadADC(TP3);
 
-           lcd_fix_string(RIHI);	// "RiHi="
+           lcd_fix2_string(RIHI);	// "RiHi="
 #ifdef AUTO_CAL
            sum_c0 += adcmv[0] + adcmv[1] + adcmv[2];
            c0_count += 3;
@@ -257,7 +265,7 @@ void AutoCheck(void) {
            lcd_data('1');
            lcd_fix_string(CapZeich);	// "-||-"
            lcd_data('3');
-           lcd_fix_string(MinCap);	// " >100nF"
+           lcd_fix2_string(MinCap);	// " >100nF"
            PartFound = PART_NONE;
            err_flag = 1;		// C is not found
            ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
@@ -279,8 +287,40 @@ void AutoCheck(void) {
               // value of capacitor is correct
               (void) eeprom_write_word((uint16_t *)(&ref_offset), load_diff);	// hold zero offset + slew rate dependend offset
               lcd_line2();		//Cursor to column 1, row 2
-              lcd_fix_string(REF_Cstr);	// "REF_C="
+              lcd_fix2_string(REF_Cstr);	// "REF_C="
               lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
+  #ifdef AUTOSCALE_ADC
+              ADC_PORT =  TXD_VAL;	//ADC-Port 1 to GND
+              ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
+              R_DDR = 2<<(TP3*2);		//Pin 3 over R_H to GND
+              do {
+                adcmv[0] = ReadADC(TP3);
+              } while (adcmv[0] > 980);
+              R_DDR = 0;		//all Pins to input 
+              Config.U_Bandgap = 0;	// do not use internal Ref
+              adcmv[0] = ReadADC(TP3);  // get cap voltage with VCC reference
+              Config.U_Bandgap = WishVolt;
+              adcmv[1] = ReadADC(TP3);	// get cap voltage with internal reference
+              Config.U_Bandgap = 0;	// do not use internal Ref
+              adcmv[2] = ReadADC(TP3);  // get cap voltage with VCC reference
+              Config.U_Bandgap = WishVolt;
+              udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1] - adcmv[1])) * WishVolt / (2*adcmv[1]))+REF_R_KORR;
+              if (udiff != 0) {
+                 udiff += (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
+                 (void) eeprom_write_byte((uint8_t *)(&RefDiff), (uint8_t)udiff);	// hold offset for true reference Voltage
+                 lcd_data(' ');
+                 lcd_data('_');
+                 lcd_data('R');
+                 lcd_data('=');
+                 lcd_string(itoa(udiff, outval, 10));	//output voltage 1
+                lcd_line3();
+                lcd_string(itoa(adcmv[0], outval, 10));	//output voltage 1
+                lcd_data(' ');
+                lcd_string(itoa(adcmv[1], outval, 10));	//output voltage 2
+                lcd_data(' ');
+                lcd_string(itoa(adcmv[2], outval, 10));	//output voltage 3
+              }
+  #endif
               wait4s();
               break;
            }
@@ -289,11 +329,11 @@ void AutoCheck(void) {
 #endif
         if ((tt > 1) && (tt <10)) {	// output 3 voltages 
            lcd_line2();			//Cursor to column 1, row 2
-           lcd_string(utoa(adcmv[0], outval, 10));	//output voltage 1
+           lcd_string(itoa(adcmv[0], outval, 10));	//output voltage 1
            lcd_data(' ');
-           lcd_string(utoa(adcmv[1], outval, 10));	//output voltage 2
+           lcd_string(itoa(adcmv[1], outval, 10));	//output voltage 2
            lcd_data(' ');
-           lcd_string(utoa(adcmv[2], outval, 10));	//output voltage 3
+           lcd_string(itoa(adcmv[2], outval, 10));	//output voltage 3
         }
         ADC_DDR =  TXD_MSK;		// all-Pins to Input
         ADC_PORT = TXD_VAL;		// all ADC-Ports to GND
@@ -312,14 +352,15 @@ void AutoCheck(void) {
      } //end for ww
      wait1s();
   } //end for tt
+  Config.Samples = ANZ_MESS;	// set to configured number of samples
   lcd_clear();
 //  lcd_line1();
-  lcd_fix_string(ATE);		//"Selftest End"
+  lcd_fix2_string(ATE);		//"Selftest End"
   lcd_line2();
   lcd_fix_string(VERSION);	//"Version ..."
  #ifdef FREQUENCY_50HZ
   lcd_line1();
-  lcd_fix_string(ATE);		//"Selftest End"
+  lcd_fix2_string(ATE);		//"Selftest End"
   lcd_data(' ');
   lcd_data('5');		// add text "50Hz"
   lcd_data('0');

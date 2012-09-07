@@ -4,108 +4,73 @@
 #include "wait1000ms.h"
 #include "lcd-routines.h"
 
-extern uint8_t minmul;
-extern uint8_t mindiv;
+extern struct Config_t{
+  uint8_t Samples;              // number of ADC samples to take
+  uint8_t RefFlag;              // save Reference type VCC of IntRef
+  uint16_t U_Bandgap;           // Reference Voltage in mV
+  uint16_t U_AVCC;		// Voltage of AVCC
+} Config;
 
-// ReadADC.c is replaces by functional identical ReadADC.S
-//                          ==============================
-// ANZ_MESS = 44 for best accuracy, Sum of 44 single ADC values 
-// ANZ_MESS = 22 for middle accuracy, double of the sum of 22 single ADC values 
-// ANZ_MESS = 11 for fastest result , four times the sum of 11 single ADC values 
-// Per division by 9 we get the resolution of mV .
 
-#ifndef ANZ_MESS
-#define ANZ_MESS 44
-#endif
-
-unsigned int ReadADC(uint8_t mux) {
-  //read value of specified ADC channel and give back result with mV resolution 
-  unsigned int adcx;
-  uint8_t jj;
-
-  ADMUX = mux | (1<<REFS0);
+unsigned int ReadADC (uint8_t Probe) {
+ unsigned int U; /* return value (mV) */
+ uint8_t Samples; /* loop counter */
+ unsigned long Value; /* ADC value */
+ Probe |= (1 << REFS0); /* use internal reference anyway */
+sample:
+ ADMUX = Probe; /* set input channel and U reference */
 #ifdef AUTOSCALE_ADC
-  if ((mux&(1<<REFS1)) != 0) {
-     goto lowADC;
-  }
-#endif
-  adcx = (ANZ_MESS/11); 		// round up the result
-  ADCSRA |= (1<<ADSC);		//start conversion
-  while (ADCSRA&(1<<ADSC));	//wait for ADC finished
+ /* if voltage reference changed run a dummy conversion */
+ Samples = Probe & (1 << REFS1); /* get REFS1 bit flag */
+ if (Samples != Config.RefFlag) {
 #ifdef NO_AREF_CAP
-  wait50us();			// report AVR126 recommends a 70µs wait time for ADC Reading of band gap
+    wait100us(); /* time for voltage stabilization */
 #else
-  wait300us();
+    wait300us(); /* time for voltage stabilization */
 #endif
-
-  for (jj = 0; jj < ANZ_MESS; jj++) {
-     //repeat ANZ_MESS measurements for oversampling 
-     ADCSRA |= (1<<ADSC);		//start conversion
-     while (ADCSRA & (1<<ADSC));	//wait for ADC finished
-     adcx += ADCW;		// add  measurements
-#define U_GRENZ 1024		//about 1V
+    ADCSRA |= (1 << ADSC); /* start conversion */
+    while (ADCSRA & (1 << ADSC)); /* wait until conversion is done */
+    Config.RefFlag = Samples; /* update flag */
+ }
+#endif
+ /* * sample ADC readings */
+ Value = 0UL; /* reset sampling variable */
+ Samples = 0; /* number of samples to take */
+ while (Samples < Config.Samples) /* take samples */ {
+    ADCSRA |= (1 << ADSC); /* start conversion */
+    while (ADCSRA & (1 << ADSC)); /* wait until conversion is done */
+    Value += ADCW; /* add ADC reading */
 #ifdef AUTOSCALE_ADC
-     if ((jj == 4) && (adcx < U_GRENZ)){
-       //switch ADC reference to internal ref instead of 5V
-       goto lowADC;
-     }
+    /* auto-switch voltage reference for low readings */
+    if ((Samples == 4) && (Config.U_Bandgap > 255) && ((uint16_t)Value < 1024) && !(Probe & (1 << REFS1))) {
+       Probe |= (1 << REFS1); /* select internal bandgap reference */
+       goto sample; /* re-run sampling */
+    }
 #endif
-  }
-#if ANZ_MESS == 22
-  adcx *= 2;		//multiply sum by 2
-#endif
-  
-#if ANZ_MESS == 11
-  adcx *= 4;		//multiply sum by 4
-#endif
-  return adcx/9;	// return (sum / 9), gives a resolution in mV
-
-//########################################################
+    Samples++; /* one more done */
+ }
 #ifdef AUTOSCALE_ADC
-lowADC:
-#if 0
-  lcd_line4();
-  lcd_string(utoa(adcx, outval, 10));
-  lcd_data('~');
-#endif
-  
-  ADMUX = mux | (1<<REFS1) | (1<<REFS0); // Internal 1.1V reference
-  adcx = 0;
-  ADCSRA |= (1<<ADSC);		//start conversion
-  while (ADCSRA&(1<<ADSC));	//wait for ADC finished
-#ifdef NO_AREF_CAP
-  wait300us();			// without or 1nF capacitor at the AREF pin
+ /* * convert ADC reading to voltage * - single sample: U = ADC reading * U_ref / 1024 */
+ /* get voltage of reference used */
+ if (Probe & (1 << REFS1)) U = Config.U_Bandgap; /* bandgap reference */
+ else U = Config.U_AVCC; /* Vcc reference */
 #else
-  wait5ms();			// up to 100nF capacitor at the AREF pin
-  wait1ms();
+ U = Config.U_AVCC; /* Vcc reference */
 #endif
-  for (jj=0; jj<minmul; jj++) {
-     // add minmul measurements
-     ADCSRA |= (1<<ADSC);		//start conversion
-     while (ADCSRA&(1<<ADSC));		//wait for ADC finished
-     adcx += ADCW;			//add measurement results 
-  }
-#if 0
-  lcd_string(utoa(adcx, outval, 10));
-  lcd_data('/');
-  lcd_string(utoa(mindiv, outval, 10));
-  lcd_data(' ');
-  wait1s();
-#endif
-  return (adcx/mindiv);			//divide by mindiv gives a resolution in  mV
-#endif
+ /* convert to voltage; */
+ Value *= U; /* ADC readings * U_ref */
+ Value /= 1023; /* / 1024 for 10bit ADC */
+ /* de-sample to get average voltage */
+ Value /= Config.Samples;
+ U = (unsigned int)Value;
+ return U;
+//   return ((unsigned int)(Value / (1023 * (unsigned long)Config.Samples)));
 }
-
-unsigned int W20msReadADC(uint8_t mux) {
-   // wait 20ms before reading of ADC
-   wait20ms();
-   return (ReadADC(mux));
-  }
-  
-
-unsigned int W5msReadADC(uint8_t mux) {
-   // wait 5ms before reading of ADC
-   wait5ms();
-   return (ReadADC(mux));
-  }
-
+unsigned int W5msReadADC (uint8_t Probe) {
+  wait5ms();
+  return (ReadADC(Probe));
+}
+unsigned int W20msReadADC (uint8_t Probe) {
+  wait20ms();
+  return (ReadADC(Probe));
+}

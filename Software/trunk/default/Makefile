@@ -23,7 +23,7 @@ CFLAGS = -Wall
 # atmega88 : m88 or m88p
 # atmega168: m168 or m168p
 # atmega328: m328 or m328p
-PARTNO = m168
+PARTNO = m328p
 
 #select your language
 # available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
@@ -115,11 +115,6 @@ CFLAGS += -DBAT_OUT=150
 # Setting the poor level to low values is not recommended for rechargeable 9V Batteries,
 # because this increase the danger for deep discharge!!
 CFLAGS += -DBAT_POOR=64
-
-# Output of flux voltage of diodes can be done in mV units or in Volt with two digits decimal place.
-# The Volt output can save space at the LCD, but needs more program space.
-# Set the option UF_OUT_MV to get the mV units.
-#CFLAGS += -DUF_OUT_MV
 
 
 # select your programmer type and port if you will use avrdude

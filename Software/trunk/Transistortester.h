@@ -281,6 +281,7 @@ const unsigned char RILO[] MEM2_TEXT = "Ri_Lo= (mV)";
  #endif
 const unsigned char RLRL[] MEM2_TEXT = "+RL- 12 13 23";
 const unsigned char RHRH[] MEM2_TEXT = "+RH- 12 13 23";
+const unsigned char T50HZ[] MEM2_TEXT = " 50Hz";
  #define MULTIP
  #define LCD_CLEAR
 #endif
@@ -385,7 +386,8 @@ void RefVoltage();			// compensate the reference voltage for comparator
 void AutoCheck();			// check if self-test should be done 
 unsigned int getRLmultip(unsigned int cvolt);  // get C-Multiplikator for voltage cvolt
 void scale_intref_adc();		// get scale factors for ReadADC with internal reference
-uint8_t value_out(unsigned long vval,uint8_t pp);    // output 4 digits with (pp-1) digits after point
+//uint8_t value_out(unsigned long vval,uint8_t pp);    // output 4 digits with (pp-1) digits after point
+void DisplayValue(unsigned long vval,int8_t Expo,unsigned char Unit, unsigned char Digits); //output Digits characters with exponent and unit
 unsigned int compute_hfe(unsigned int lpx, unsigned int tpy);
 
 #define R_DDR DDRB
@@ -463,9 +465,9 @@ struct resis_t{
  uint8_t ResistorsFound;	//Number of found resistors
 #endif
 
+ const uint8_t PrefixTab[] EEMEM = { 'p','n',LCD_CHAR_U,'m',0,'k','M'}; // p,n,u,m,-,k,M
 
 #ifdef C_MESS 
-  const unsigned char C_Prefix_tab[] PROGMEM = { 'p','n',LCD_CHAR_U,'m'}; // pF,nF,µF,mF
  #ifdef AUTO_CAL
 //  const uint16_t cap_null EEMEM = C_NULL;	// Zero offset of capacity measurement 
   const int16_t ref_offset EEMEM = REF_C_KORR;	// default correction of internal reference voltage for capacity measurement
@@ -488,7 +490,7 @@ uint8_t ii;			// multipurpose counter
 unsigned long cval;		// capacitor value 
 unsigned long cval_uncorrected;	// capacity value without corrections
 int16_t load_diff;		// difference voltage of loaded capacitor and internal reference
-uint8_t cpre;			//Prefix for capacitor value  0=p, 1=n, 2=µ, 3=m
+int8_t cpre;			//Prefix for capacitor value  -12=p, -9=n, -6=µ, -3=m
 uint8_t ca, cb;			//pins of capacitor
 
 uint8_t PartFound;	 	// the found part 

@@ -21,7 +21,7 @@
 // the following variables are set:
 // cval = value of the capacitor 
 // cval_uncorrected = value of the capacitor uncorrected
-// cpre = units of cval (0==pF, 1=nF, 2=µF)
+// cpre = units of cval (-12==pF, -9=nF, -6=µF)
 // ca   = Pin number (0-2) of the LowPin
 // cb   = Pin number (0-2) of the HighPin
 
@@ -97,7 +97,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   // wait 5ms and read voltage again, does the capacitor keep the voltage?
 //  adcv[1] = W5msReadADC(HighPin) - adcv[0];
 //  wdt_reset();
-  cpre = 0;			//default unit is pF
+  cpre = -12;			//default unit is pF
   if (adcv[2] < 301) {
 #if DebugOut == 10
      lcd_data('K');
@@ -111,7 +111,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      goto messe_mit_rh;		// Voltage of more than 1300mV is reached in one pulse, to fast loaded
   }
   // Capacity is more than about 50µF
-  cpre = 1;		// switch units to nF 
+  cpre = -9;		// switch units to nF 
 #ifdef NO_CAP_HOLD_TIME
   ChargePin10ms(HiPinR_H,0);		//switch HighPin with R_H 10ms auf GND, then currentless
   adcv[3] = ReadADC(HighPin) - adcv[0]; // read voltage again, is discharged only a little bit ?
@@ -245,16 +245,15 @@ messe_mit_rh:
   }
   cval_uncorrected = CombineII2Long(ovcnt16, tmpint);
 
-  cpre = 0;			// cval unit is pF 
+  cpre = -12;			// cval unit is pF 
   if (ovcnt16 > 65) {
-     // cval_uncorrected > 4259840
-     cval_uncorrected /= 1000;		// switch from pF to nF unit
-     cpre = 1;			// set unit, prevent overflow
+     cval_uncorrected /= 100;	// switch to next unit
+     cpre += 2;			// set unit, prevent overflow
   }
   cval_uncorrected *= RHmultip;		// 708
   cval_uncorrected /= (F_CPU / 10000);	// divide by 100 (@ 1MHz clock), 800 (@ 8MHz clock)
   cval = cval_uncorrected;		// set the corrected cval
-  if (cpre == 0) {
+  if (cpre == -12) {
 #if COMP_SLEW1 > COMP_SLEW2
      if (cval < COMP_SLEW1) {
         // add slew rate dependent offset

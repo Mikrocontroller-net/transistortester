@@ -204,7 +204,8 @@ void AutoCheck(void) {
               pin_rp = (unsigned long)((unsigned long)sum_c0 * (unsigned long)R_L_VAL) / (unsigned long)u680;
               if ((pin_rp < 280) && (pin_rm < 250)) {
                  // rp is below 28 Ohm and rm is below 25 Ohm
-                 lcd_string(utoa(pin_rp, outval, 10));	//write value to LCD
+//                 lcd_string(utoa(pin_rp, outval, 10));	//write value to LCD
+                 DisplayValue(pin_rp,-1,LCD_CHAR_OMEGA,3);
                  (void) eeprom_write_word((uint16_t *)(&R680pl), pin_rp+R_L_VAL);  //hold VCC resistance value in EEprom
                  (void) eeprom_write_word((uint16_t *)(&R680mi), pin_rm+R_L_VAL);  //hold GND resistance value in EEprom
               }
@@ -351,17 +352,12 @@ void AutoCheck(void) {
   Config.Samples = ANZ_MESS;	// set to configured number of ADC samples
   lcd_clear();
 //  lcd_line1();
-  lcd_fix2_string(ATE);		//"Selftest End"
   lcd_line2();
   lcd_fix_string(VERSION);	//"Version ..."
- #ifdef FREQUENCY_50HZ
   lcd_line1();
   lcd_fix2_string(ATE);		//"Selftest End"
-  lcd_data(' ');
-  lcd_data('5');		// add text "50Hz"
-  lcd_data('0');
-  lcd_data('H');
-  lcd_data('z');
+ #ifdef FREQUENCY_50HZ
+  lcd_fix2_string(T50HZ);	//" 50Hz"
   ADC_PORT = TXD_VAL;
   ADC_DDR = 1<<TP1 | TXD_MSK;	// Pin 1 to GND
   R_DDR = (1<<(TP3*2)) | (1<<(TP2*2));

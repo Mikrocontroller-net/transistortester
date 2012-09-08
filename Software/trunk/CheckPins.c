@@ -718,23 +718,28 @@ widmes:
   lcd_data(' ');
   if (ii == 'H') {
      lcd_data('X');
-     (void) value_out(lirx1, 3);
+//     (void) value_out(lirx1, 3);
+     DisplayValue(lirx1,1,LCD_CHAR_OMEGA,4)
      lcd_data(' ');
      lcd_data('Y');
-     (void) value_out(lirx2, 3);
+//     (void) value_out(lirx2, 3);
+     DisplayValue(lirx2,1,LCD_CHAR_OMEGA,4)
      lcd_data(' ');
   } else {
      lcd_data('x');
-     (void) value_out(lirx1, 2);
+//     (void) value_out(lirx1, 2);
+     DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,4)
      lcd_data(' ');
      lcd_data('y');
-     (void) value_out(lirx2, 2);
+//     (void) value_out(lirx2, 2);
+     DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4)
   }
   lcd_data(' ');
   lcd_line4();
   lcd_clear_line();
   lcd_line4();
-  (void) value_out(lrx1, 2);
+//  (void) value_out(lrx1, 2);
+  DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4)
   lcd_data(' ');
   lcd_line2();
 #endif
@@ -753,9 +758,11 @@ widmes:
               lcd_data('R');
               lcd_data('!');
               lcd_data('=');
-              (void) value_out(thisR->rx, 2);
+//              (void) value_out(thisR->rx, 2);
+              DisplayValue(thisR->rx,-1,LCD_CHAR_OMEGA,3)
               lcd_data(' ');
-              (void) value_out(lirx1, 2);
+//              (void) value_out(lirx1, 2);
+              DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,3)
               lcd_data(' ');
  #endif
               goto testend; // <10% mismatch

@@ -574,10 +574,12 @@ widmes:
   wdt_reset();
 // U_SCALE can be set to 4 for better resolution of ReadADC result
  #if U_SCALE != 1
-  Config.U_AVCC = U_VCC*U_SCALE;
+  Config.U_AVCC = U_VCC*U_SCALE;	// scale to higher resolution, mV scale is not required
   Config.U_Bandgap *= U_SCALE;
-  Config.Samples = 190;
  #endif
+#if R_ANZ_MESS != ANZ_MESS
+  Config.Samples = R_ANZ_MESS;	// switch to special number of repetitions
+#endif
   ADC_PORT = TXD_VAL;
   ADC_DDR = LoADCm;		//switch Low-Pin to output (GND)
   R_DDR = HiPinRL;		//switch R_L port for High-Pin to output (VCC)
@@ -777,9 +779,11 @@ widmes:
 #endif
   testend:
 #if U_SCALE != 1
-  Config.U_AVCC = U_VCC;
+  Config.U_AVCC = U_VCC;		// scale back to mV resolution
   Config.U_Bandgap /= U_SCALE;
-  Config.Samples = ANZ_MESS;
+#endif
+#if R_ANZ_MESS != ANZ_MESS
+  Config.Samples = ANZ_MESS;		// switch back to standard number of repetition
 #endif
 #ifdef DebugOut
 #if DebugOut < 10

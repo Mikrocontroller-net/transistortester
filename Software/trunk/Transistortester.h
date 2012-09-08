@@ -104,8 +104,8 @@ End of configuration
   const unsigned char Unknown[] MEM_TEXT = " unbek."; //€€";
   const unsigned char TestFailed1[] MEM_TEXT = "Kein,unbek. oder";
   const unsigned char OrBroken[] MEM_TEXT = "oder defekt "; //€";
- #ifdef WITH_SELFTEST
   const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+ #ifdef WITH_SELFTEST
   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
   const unsigned char ATE[] MEM2_TEXT = "Selftest End";
   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
@@ -125,8 +125,8 @@ End of configuration
   const unsigned char Unknown[] MEM_TEXT = " unknown"; //€";
   const unsigned char TestFailed1[] MEM_TEXT = "No, unknown, or"; //€";
   const unsigned char OrBroken[] MEM_TEXT = "or damaged "; //€€";
- #ifdef WITH_SELFTEST
   const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+ #ifdef WITH_SELFTEST
   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
   const unsigned char ATE[] MEM2_TEXT = "Selftest End";
   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
@@ -146,8 +146,8 @@ End of configuration
   const unsigned char Unknown[] MEM_TEXT = " nieznany";
   const unsigned char TestFailed1[] MEM_TEXT = "brak elementu"; //€€€";
   const unsigned char OrBroken[] MEM_TEXT = "lub uszkodz. ";
- #ifdef WITH_SELFTEST
   const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+ #ifdef WITH_SELFTEST
   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
   const unsigned char ATE[] MEM2_TEXT = "Selftest End";
   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
@@ -167,8 +167,8 @@ End of configuration
   const unsigned char Unknown[] MEM_TEXT = " neznama"; //€";
   const unsigned char TestFailed1[] MEM_TEXT = "Zadna, neznama"; //€€";
   const unsigned char OrBroken[] MEM_TEXT = "nebo vadna "; //€€";
- #ifdef WITH_SELFTEST
   const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+ #ifdef WITH_SELFTEST
   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
   const unsigned char ATE[] MEM2_TEXT = "Selftest End";
   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
@@ -188,8 +188,8 @@ End of configuration
   const unsigned char Unknown[] MEM_TEXT = " neznama"; //€";
   const unsigned char TestFailed1[] MEM_TEXT = "Ziadna, neznama"; //€";
   const unsigned char OrBroken[] MEM_TEXT = "alebo vadna "; //€";
- #ifdef WITH_SELFTEST
   const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+ #ifdef WITH_SELFTEST
   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
   const unsigned char ATE[] MEM2_TEXT = "Selftest End";
   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
@@ -209,8 +209,8 @@ End of configuration
   const unsigned char Unknown[] MEM_TEXT = " neznan"; 
   const unsigned char TestFailed1[] MEM_TEXT = "Ni, neznan, ali"; 
   const unsigned char OrBroken[] MEM_TEXT = "ali zanic "; 
- #ifdef WITH_SELFTEST
   const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+ #ifdef WITH_SELFTEST
   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
   const unsigned char ATE[] MEM2_TEXT = "Selftest End";
   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
@@ -230,9 +230,8 @@ End of configuration
   const unsigned char Unknown[] MEM_TEXT = {' ',Cyr_n,'e',Cyr_i,Cyr_z,Cyr_v,'e','c',Cyr_t,Cyr_n,Cyr_y,Cyr_j,0}; 
   const unsigned char TestFailed1[] MEM_TEXT = {'o',Cyr_t,'c',Cyr_U,Cyr_t,'c',Cyr_t,Cyr_v,Cyr_U,'e',Cyr_t,0};
   const unsigned char OrBroken[] MEM_TEXT = {Cyr_i,Cyr_l,Cyr_i,' ',Cyr_p,'o',Cyr_v,'p','e',Cyr_zsch,Cyr_d,'e',Cyr_n,0};
-
- #ifdef WITH_SELFTEST
   const unsigned char TestTimedOut[] MEM_TEXT = {Cyr_v,'p','e',Cyr_m,Cyr_ja,' ',Cyr_t,'e','c',Cyr_t,Cyr_i,'p','o',Cyr_v,'a',Cyr_n,Cyr_i,Cyr_ja,Cyr_v,Cyr_y,Cyr_sch,Cyr_l,'o','!',0};
+ #ifdef WITH_SELFTEST
   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
   const unsigned char ATE[] MEM2_TEXT = {Cyr_k,'o',Cyr_n,'e',Cyr_c,' ','c','a',Cyr_m,'o',Cyr_t,'e','c',Cyr_t,Cyr_i,'p','o',Cyr_v,'a',Cyr_n,Cyr_i,Cyr_ja,0};
   const unsigned char RELPROBE[] MEM2_TEXT = {'o',Cyr_t,Cyr_k,Cyr_l,Cyr_ju,Cyr_tsch,Cyr_i,Cyr_t,'b',' ',Cyr_z,'o',Cyr_n,Cyr_d,0};

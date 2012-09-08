@@ -119,12 +119,12 @@ start:
   uart_newline();		// start of new measurement
 #endif
   Config.RefFlag = 0;
-  Config.Samples = 190;		// set number of samples near to max
+  Config.Samples = 190;		// set number of ADC samples near to max
   Config.U_AVCC = U_VCC;	// set VCC Voltage
   (void) ReadADC(0x0e);		// read Reference-voltage 
   ref_mv = W20msReadADC(0x0e);	// read Reference-voltage
-  Config.U_Bandgap = WishVolt;	// set internal reference voltage for ADC
-  Config.Samples = ANZ_MESS;	// set to configured number of samples
+  Config.U_Bandgap = ADC_internal_reference;	// set internal reference voltage for ADC
+  Config.Samples = ANZ_MESS;	// set to configured number of ADC samples
 
 #ifdef BAT_CHECK
   // Battery check is selected

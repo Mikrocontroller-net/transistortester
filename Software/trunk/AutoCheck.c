@@ -299,26 +299,22 @@ void AutoCheck(void) {
               R_DDR = 0;		//all Pins to input 
               Config.U_Bandgap = 0;	// do not use internal Ref
               adcmv[0] = ReadADC(TP3);  // get cap voltage with VCC reference
-              Config.U_Bandgap = WishVolt;
+              Config.U_Bandgap = ADC_internal_reference;
               adcmv[1] = ReadADC(TP3);	// get cap voltage with internal reference
               Config.U_Bandgap = 0;	// do not use internal Ref
               adcmv[2] = ReadADC(TP3);  // get cap voltage with VCC reference
-              Config.U_Bandgap = WishVolt;
-              udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1] - adcmv[1])) * WishVolt / (2*adcmv[1]))+REF_R_KORR;
+              Config.U_Bandgap = ADC_internal_reference;
+              udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1] - adcmv[1])) * ADC_internal_reference / (2*adcmv[1]))+REF_R_KORR;
+              lcd_data(' ');
+              lcd_data('_');
+              lcd_data('R');
+              lcd_data('=');
               if (udiff != 0) {
                  udiff += (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
                  (void) eeprom_write_byte((uint8_t *)(&RefDiff), (uint8_t)udiff);	// hold offset for true reference Voltage
-                 lcd_data(' ');
-                 lcd_data('_');
-                 lcd_data('R');
-                 lcd_data('=');
                  lcd_string(itoa(udiff, outval, 10));	//output voltage 1
-                lcd_line3();
-                lcd_string(itoa(adcmv[0], outval, 10));	//output voltage 1
-                lcd_data(' ');
-                lcd_string(itoa(adcmv[1], outval, 10));	//output voltage 2
-                lcd_data(' ');
-                lcd_string(itoa(adcmv[2], outval, 10));	//output voltage 3
+              } else {
+                 lcd_data('=');		// mark as identical
               }
   #endif
               wait4s();
@@ -352,7 +348,7 @@ void AutoCheck(void) {
      } //end for ww
      wait1s();
   } //end for tt
-  Config.Samples = ANZ_MESS;	// set to configured number of samples
+  Config.Samples = ANZ_MESS;	// set to configured number of ADC samples
   lcd_clear();
 //  lcd_line1();
   lcd_fix2_string(ATE);		//"Selftest End"

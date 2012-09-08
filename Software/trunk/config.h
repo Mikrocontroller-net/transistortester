@@ -5,6 +5,24 @@
 // U_SCALE can be set to 4 for better resolution of ReadADC function for resistor measurement
 #define U_SCALE 4
 
+// R_ANZ_MESS can ce set to a higher number of measurements (up to 200) for resistor measurement
+#define R_ANZ_MESS 190
+
+#if R_ANZ_MESS < ANZ_MESS
+ #undef R_ANZ_MESS
+ #define R_ANZ_MESS ANZ_MESS
+#endif
+#if U_SCALE < 0
+ // limit U_SCALE
+ #undef U_SCALE
+ #define U_SCALE 1
+#endif
+#if U_SCALE > 4
+ // limit U_SCALE
+ #undef U_SCALE
+ #define U_SCALE 4
+#endif
+
 // the following definitions specify where to load external data from: EEprom or flash
 #ifdef USE_EEPROM
  #define MEM_TEXT EEMEM
@@ -26,7 +44,7 @@
 
 // RH_OFFSET : systematic offset of resistor measurement with RH (470k) 
 // resolution is 0.1 Ohm, 7000 defines a offset of 700 Ohm
-#define RH_OFFSET 0 
+#define RH_OFFSET 3500 
 
 // TP2_CAP_OFFSET is a additionally offset for TP2 capacity measurements in pF units
 #define TP2_CAP_OFFSET 2
@@ -281,15 +299,15 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 #ifdef __AVR_ATmega8__
  // 2.54V reference voltage + korrection (fix for ATmega8)
  #ifdef AUTO_CAL
-  #define WishVolt (2560 + (int8_t)eeprom_read_byte((uint8_t *)&RefDiff))
+  #define ADC_internal_reference (2560 + (int8_t)eeprom_read_byte((uint8_t *)&RefDiff))
  #else
-  #define WishVolt (2560 + REF_R_KORR)
+  #define ADC_internal_reference (2560 + REF_R_KORR)
  #endif
 #else
  #ifdef AUTO_CAL
-  #define WishVolt (ref_mv + (int8_t)eeprom_read_byte((uint8_t *)&RefDiff))
+  #define ADC_internal_reference (ref_mv + (int8_t)eeprom_read_byte((uint8_t *)&RefDiff))
  #else
-  #define WishVolt (ref_mv + REF_R_KORR)
+  #define ADC_internal_reference (ref_mv + REF_R_KORR)
  #endif
 #endif
 

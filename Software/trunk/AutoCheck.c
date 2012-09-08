@@ -10,6 +10,7 @@ void AutoCheck(void) {
   uint16_t sum_c0;	// sum of empty probe C measurement
   uint8_t c0_count;	// counter for accumulated Cap measurements
   uint8_t err_flag=1;	//error flag
+  int8_t udiff2;
   uint16_t sum_rm=0;	// sum of 3 Pin voltages with 680 Ohm load
   uint16_t u680;	// 3 * (Voltage at 680 Ohm)
   uint16_t pin_rp;
@@ -243,8 +244,7 @@ void AutoCheck(void) {
                  // write all zero offsets to the EEprom 
                  (void) eeprom_write_byte((uint8_t *)(&c_zero_tab[c0_count]),adcmv[c0_count]+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)));
               }
-              lcd_data('E');
-              lcd_data('E');
+              lcd_data('C');
               lcd_data('0');
            }
            adcmv[0] = adcmv[5];		// for output
@@ -309,13 +309,13 @@ void AutoCheck(void) {
               lcd_data('_');
               lcd_data('R');
               lcd_data('=');
+              udiff2 = udiff + (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
               if (udiff != 0) {
-                 udiff += (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
-                 (void) eeprom_write_byte((uint8_t *)(&RefDiff), (uint8_t)udiff);	// hold offset for true reference Voltage
-                 lcd_string(itoa(udiff, outval, 10));	//output voltage 1
+                 (void) eeprom_write_byte((uint8_t *)(&RefDiff), (uint8_t)udiff2);	// hold offset for true reference Voltage
               } else {
                  lcd_data('=');		// mark as identical
               }
+              lcd_string(itoa(udiff2, outval, 10));	//output correction voltage
   #endif
               wait4s();
               break;

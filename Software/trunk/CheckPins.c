@@ -41,7 +41,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   unsigned long lrx1;
   unsigned long lirx1;
   unsigned long lirx2;
-  int ukorr;
+//  int ukorr;
 #endif
   /*
     switch HighPin directls to VCC 

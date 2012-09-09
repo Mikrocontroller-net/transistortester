@@ -613,20 +613,8 @@ void mVAusgabe(uint8_t nn) {
   #define AUSGABE_FUNKTION
 void RvalOut(uint8_t ii) {	
    // output of resistor value
-   unsigned long rrx;
-   uint8_t prefix;
 
-   rrx = resis[ii].rx;
-//   prefix = value_out(rrx,2);
-
-//   if (prefix == 1) {
-//      lcd_data('k');
-//   }
-//   if (prefix == 2) {
-//      lcd_data('M');
-//   }
-//   lcd_data(LCD_CHAR_OMEGA);	//Omega is sign for Ohm 
-   DisplayValue(rrx,-1,LCD_CHAR_OMEGA,4);
+   DisplayValue(resis[ii].rx,-1,LCD_CHAR_OMEGA,4);
    lcd_data(' ');
  }
 #endif
@@ -868,7 +856,7 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
       Index++;				/* adjust index for exponent offset, take next prefix */
       Offset = 3 - Offset;		/* reverse value (1 or 2) */
     }
-  Prefix = eeprom_read_byte((uint8_t *)(&PrefixTab[Index]));   /* look up prefix in table */
+  Prefix = MEM_read_byte((uint8_t *)(&PrefixTab[Index]));   /* look up prefix in table */
   /*
    *  display value
    */

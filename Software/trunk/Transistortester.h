@@ -465,7 +465,7 @@ struct resis_t{
  uint8_t ResistorsFound;	//Number of found resistors
 #endif
 
- const uint8_t PrefixTab[] EEMEM = { 'p','n',LCD_CHAR_U,'m',0,'k','M'}; // p,n,u,m,-,k,M
+ const uint8_t PrefixTab[] MEM_TEXT = { 'p','n',LCD_CHAR_U,'m',0,'k','M'}; // p,n,u,m,-,k,M
 
 #ifdef C_MESS 
  #ifdef AUTO_CAL

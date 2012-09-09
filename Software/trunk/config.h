@@ -40,6 +40,7 @@
  #define MEM2_TEXT PROGMEM
  #define MEM_read_word(a)  pgm_read_word(a)
  #define MEM_read_byte(a)  pgm_read_byte(a)
+ #define lcd_fix2_string(a)  lcd_pgm_string(a)
 #endif
 
 // RH_OFFSET : systematic offset of resistor measurement with RH (470k) 

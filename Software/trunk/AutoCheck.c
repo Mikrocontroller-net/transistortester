@@ -270,7 +270,7 @@ void AutoCheck(void) {
            PartFound = PART_NONE;
            err_flag = 1;		// C is not found
            ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
-           if (((cpre == 0) && (cval > 95000)) || ((cpre == 1) && (cval < 30000))) {
+           if (((cpre == -12) && (cval > 95000)) || ((cpre == -10) && (cval < 300000))) {
               // the right capacitor is detected, finish with next step
               ww = MAX_REP;
               err_flag = 0;		// Capacitor is found
@@ -284,7 +284,7 @@ void AutoCheck(void) {
            PartFound = PART_NONE;
            if (err_flag != 0) break;
            ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
-           if (((cpre == 0) && (cval > 95000)) || ((cpre == 1) && (cval < 30000))) {
+           if (((cpre == -12) && (cval > 95000)) || ((cpre == -10) && (cval < 300000))) {
               // value of capacitor is correct
               (void) eeprom_write_word((uint16_t *)(&ref_offset), load_diff);	// hold zero offset + slew rate dependend offset
               lcd_line2();		//Cursor to column 1, row 2

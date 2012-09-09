@@ -192,9 +192,6 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
  #ifdef LONG_HFE
      c_hfe = ((unsigned long)adc.hp1 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
               (unsigned int)RR680PL)) / (unsigned int)adc.tp1;	
-     if (c_hfe > 65535) {
-        c_hfe = 65535;
-     }
  #else
      c_hfe = ((adc.hp1 / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
  #endif
@@ -256,7 +253,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         //current amplification factor for common  Collector (Emitter follower)
         // c_hFE = (Emitter current - Base current) / Base current
         if (c_hfe > trans.hfe[PartReady]) {
-           trans.hfe[PartReady] = (unsigned int)c_hfe;
+           trans.hfe[PartReady] = c_hfe;
            trans.uBE[PartReady] = U_VCC - adc.hp1 - adc.tp1;	// Base Emitter Voltage common collector
         }
 #endif
@@ -311,9 +308,6 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
  #ifdef LONG_HFE
        c_hfe = ((unsigned long)adc.lp1 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
               (unsigned int)RR680MI)) / (unsigned int)adc.tp1;	
-       if (c_hfe > 65535) {
-          c_hfe = 65535;
-       }
  #else
        c_hfe = ((adc.lp1 / ((RR680MI+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
  #endif
@@ -447,7 +441,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        //compare current amplification factor for common Collector (Emitter follower)
        // hFE = (Emitterstrom - Basisstrom) / Basisstrom
        if (c_hfe >  trans.hfe[PartReady]) {
-          trans.hfe[PartReady] = (unsigned int)c_hfe;
+          trans.hfe[PartReady] = c_hfe;
           trans.uBE[PartReady] = U_VCC - adc.lp1 - adc.tp1;
        }
 #endif

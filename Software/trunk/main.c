@@ -129,14 +129,14 @@ start:
 #ifdef BAT_CHECK
   // Battery check is selected
   ReadADC(5);	//Dummy-Readout
-  trans.hfe[0] = W5msReadADC(5); 	//with 5V reference
+  trans.uBE[0] = W5msReadADC(5); 	//with 5V reference
   lcd_line1();	//1. row 
   lcd_fix_string(Bat);		//output: "Bat. "
  #ifdef BAT_OUT
   // display Battery voltage
   // The divisor to get the voltage in 0.01V units is ((10*33)/133) witch is about 2.4812
   // A good result can be get with multiply by 4 and divide by 10 (about 0.75%).
-  cval = (trans.hfe[0]*4)/10+((BAT_OUT+5)/10); // usually output only 2 digits
+  cval = (trans.uBE[0]*4)/10+((BAT_OUT+5)/10); // usually output only 2 digits
   DisplayValue(cval,-2,'V',2);		// Display 2 Digits of this 10mV units
   lcd_data(' ');
  #endif
@@ -149,9 +149,9 @@ start:
  #define POOR_LEVEL (((unsigned long)6300*(unsigned long)33)/133)
  #endif
   // check the battery voltage
-  if (trans.hfe[0] <  WARN_LEVEL) {
+  if (trans.uBE[0] <  WARN_LEVEL) {
      //Vcc < 7,3V; show Warning 
-     if(trans.hfe[0] < POOR_LEVEL) {	
+     if(trans.uBE[0] < POOR_LEVEL) {	
         //Vcc <6,3V; no proper operation is possible
         lcd_fix_string(BatEmpty);	//Battery empty!
         wait2s();
@@ -179,9 +179,9 @@ start:
 //#ifndef __AVR_ATmega8__
 #if 0
   // does not read temperature, looks like internal reference
-  trans.hfe[0] = ReadADC((1<<REFS1)|(1<<REFS0)|8); 	//read temperature sensor
+  trans.uBE[0] = ReadADC((1<<REFS1)|(1<<REFS0)|8); 	//read temperature sensor
   lcd_data(' ');
-  lcd_string(itoa((int)(trans.hfe[0] - 289), outval, 10));	//output temperature
+  lcd_string(itoa((int)(trans.uBE[0] - 289), outval, 10));	//output temperature
   lcd_data(LCD_CHAR_DEGREE);
   lcd_data('C');
 #endif
@@ -373,12 +373,11 @@ start:
     lcd_testpin(trans.c);
     lcd_line2(); //2. row 
     lcd_fix_string(hfestr);		//"B="  (hFE)
-    lcd_string(utoa(trans.hfe[0], outval, 10));
+    DisplayValue(trans.hfe[0],0,0,3);
     lcd_data(' ');
 
     lcd_fix_string(Uf);		//"Uf="
-    diodes[2].Voltage = trans.uBE[0];
-    mVAusgabe(2);		// output: xxxxmV
+    DisplayValue(trans.uBE[0],-3,'V',3);
     goto end;
     // end (PartFound == PART_TRANSISTOR)
   } else if (PartFound == PART_FET) {	//JFET or MOSFET
@@ -425,15 +424,11 @@ start:
     } else {
        lcd_data('I');
        lcd_data('=');
-       utoa(trans.uBE[1]+100,outval,10);
-       lcd_data(outval[1]);
-       lcd_data('.');
-       lcd_data(outval[2]);
-       lcd_fix_string(Vgs_str);		// "mA Vgs="
+       DisplayValue(trans.uBE[1],-4,'A',2);
+       lcd_fix_string(Vgs_str);		// " Vgs="
     }
     //Gate-threshold voltage
-    diodes[0].Voltage = gthvoltage;
-    mVAusgabe(0);			//Output gthvoltage
+    DisplayValue(gthvoltage,-3,'V',2);
     goto end;
     // end (PartFound == PART_FET)
   } else if (PartFound == PART_THYRISTOR) {

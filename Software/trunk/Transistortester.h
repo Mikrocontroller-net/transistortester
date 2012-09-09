@@ -251,7 +251,7 @@ const unsigned char ebcstr[] MEM_TEXT = " EBC=";
 const unsigned char gds[] MEM_TEXT = " GDS=";
 const unsigned char Uf[] MEM_TEXT = "Uf=";
 const unsigned char vt[] MEM_TEXT = " Vt=";
-const unsigned char Vgs_str[] MEM_TEXT = "mA@Vgs=";
+const unsigned char Vgs_str[] MEM_TEXT = "@Vgs=";
 #ifdef C_MESS
 const unsigned char CapZeich[] MEM_TEXT = {'-',LCD_CHAR_CAP,'-',0};
 #endif
@@ -445,7 +445,7 @@ struct Diode diodes[6];
 uint8_t NumOfDiodes;
 
 struct {
-  unsigned int hfe[2];		//current amplification factor 
+  unsigned long hfe[2];		//current amplification factor 
   unsigned int uBE[2];		//B-E-voltage of the Transistor
   uint8_t b,c,e;		//pins of the Transistor
 }trans;

@@ -85,7 +85,8 @@
   #define MCU_STATUS_REG MCUCR
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1
-  #define DEFAULT_RH_FAKT  856      // mega48 1101 mV
+  #define DEFAULT_BAND_GAP 1070
+  #define DEFAULT_RH_FAKT  884      // mega328 1070 mV
 // WITH_SELFTEST enables the selftest fuction 
   #ifdef WITH_SELFTEST
   #warning "ATmega48 does NOT support SELFTEST!"
@@ -121,7 +122,8 @@
   #define MCU_STATUS_REG MCUCR
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1
-  #define DEFAULT_RH_FAKT  855      // mega88 1102 mV
+  #define DEFAULT_BAND_GAP 1070
+  #define DEFAULT_RH_FAKT  884      // mega328 1070 mV
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
 // COMMON_COLLECTOR activates measurement of current amplification factor also in common collector circuit  (Emitter follower)
@@ -142,7 +144,8 @@
   #define MCU_STATUS_REG MCUCR
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1
-  #define DEFAULT_RH_FAKT  855      // mega168 1102 mV
+  #define DEFAULT_BAND_GAP 1070
+  #define DEFAULT_RH_FAKT  884      // mega328 1070 mV
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
 // COMMON_COLLECTOR activates measurement of current amplification factor also in common collector circuit  (Emitter follower)
@@ -168,7 +171,8 @@
   #define MCU_STATUS_REG MCUCR
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1
-  #define DEFAULT_RH_FAKT  855      // mega328 1102 mV
+  #define DEFAULT_BAND_GAP 1070
+  #define DEFAULT_RH_FAKT  884      // mega328 1070 mV
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
 // COMMON_COLLECTOR activates measurement of current amplification factor also in common collector circuit  (Emitter follower)
@@ -190,6 +194,7 @@
   #define MCU_STATUS_REG MCUCSR
   #define ADC_COMP_CONTROL SFIOR
   #define TI1_INT_FLAGS TIFR
+  #define DEFAULT_BAND_GAP 1298		//mega8 1298 mV
   #define DEFAULT_RH_FAKT  708      // mega8 1298 mV
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
@@ -290,12 +295,6 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 #else
   #define TXD_VAL TXD_MSK
 #endif
-#ifndef WITH_SELFTEST
- #ifdef AUTO_CAL
-  #undef AUTO_CAL
-  #warning "AUTO_CAL without WITH_SELFTEST deselected!"
- #endif
-#endif
 
 #ifdef __AVR_ATmega8__
  // 2.54V reference voltage + korrection (fix for ATmega8)
@@ -312,4 +311,24 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  #endif
 #endif
 
+#undef AUTO_RH
+#ifdef C_MESS
+ #ifdef WITH_AUTO_REF
+  #define AUTO_RH
+ #else
+  #ifdef AUTO_CAL
+   #define AUTO_RH
+  #endif
+ #endif
+#endif
+
+#undef CHECK_CALL
+#ifdef WITH_SELFTEST
+ // AutoCheck Function is needed
+ #define CHECK_CALL
+#endif
+#ifdef AUTO_CAL
+ // AutoCheck Function is needed
+ #define CHECK_CALL
+#endif
 

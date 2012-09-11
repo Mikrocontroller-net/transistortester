@@ -98,7 +98,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      lcd_testpin(LowPin);
      lcd_data('F');
      lcd_testpin(HighPin);
-     lcd_data(' ');
+     lcd_space();
      wait1s();
 #endif
      //Test if N-JFET or if self-conducting N-MOSFET
@@ -126,7 +126,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 //      there is no way to find out the right Source / Drain
         trans.uBE[0] = adc.lp1;
         gthvoltage = adc.lp1 - adc.tp1;	//voltage GS (Source - Gate)
-        trans.uBE[1] = (unsigned int)(((unsigned long)adc.lp1 * 100) / RR680MI);
+        trans.uBE[1] = (unsigned int)(((unsigned long)adc.lp1 * 1000) / RR680MI); // Id 0.01mA
         trans.b = TristatePin;		//save Pin numbers found for this FET
         trans.c = HighPin;
         trans.e = LowPin;
@@ -157,7 +157,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
            PartMode = PART_MODE_P_JFET;
         }
         gthvoltage = adc.tp1 - adc.hp1;		//voltage GS (Gate - Source)
-        trans.uBE[1] = (unsigned int)(((unsigned long)(U_VCC - adc.hp1) * 100) / RR680PL);
+        trans.uBE[1] = (unsigned int)(((unsigned long)(U_VCC - adc.hp1) * 1000) / RR680PL); // Id 0.01mA
         trans.b = TristatePin;		//save Pin numbers found for this FET
         trans.c = LowPin;
         trans.e = HighPin;
@@ -184,10 +184,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        lcd_line3();
        lcd_data('H');
        lcd_string(utoa(adc.hp1,outval,10));
-       lcd_data(' ');
+       lcd_space();
        lcd_data('T');
        lcd_string(utoa(adc.tp1,outval,10));
-       lcd_data(' ');
+       lcd_space();
 #endif
  #ifdef LONG_HFE
      c_hfe = ((unsigned long)adc.hp1 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
@@ -213,7 +213,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      lcd_testpin(LowPin);
      lcd_data('P');
      lcd_testpin(HighPin);
-     lcd_data(' ');
+     lcd_space();
      wait1s();
 #endif
      //Test to PNP
@@ -321,7 +321,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        lcd_data('L');
        lcd_data('P');
        lcd_string(utoa(adc.lp1,outval,10));
-       lcd_data(' ');
+       lcd_space();
        lcd_data('T');
        lcd_data('P');
        lcd_string(utoa(adc.tp1,outval,10));
@@ -340,7 +340,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        lcd_testpin(LowPin);
        lcd_data('N');
        lcd_testpin(HighPin);
-       lcd_data(' ');
+       lcd_space();
        wait1s();
 #endif
        if(PartReady==1) {
@@ -410,7 +410,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        lcd_data('H');
        lcd_data('P');
        lcd_string(utoa(adc.hp2,outval,10));
-       lcd_data(' ');
+       lcd_space();
        lcd_data('T');
        lcd_data('P');
        lcd_string(utoa(adc.tp2,outval,10));
@@ -534,13 +534,13 @@ savenresult:
   lcd_testpin(HighPin);
   lcd_data('D');
   lcd_testpin(LowPin);
-  lcd_data(' ');
+  lcd_space();
   lcd_data('L');
   lcd_string(utoa(adc.hp1,outval,10));
-  lcd_data(' ');
+  lcd_space();
   lcd_data('H');
   lcd_string(utoa(adc.hp3,outval,10));
-  lcd_data(' ');
+  lcd_space();
   wait1s();
 #endif
 
@@ -599,7 +599,7 @@ widmes:
      lcd_string(utoa(adc.hp1, outval, 10));
      lcd_data('B');
      lcd_string(utoa(adc.hp2, outval, 10));
-     lcd_data(' ');
+     lcd_space();
  #endif
      goto testend;
   }
@@ -709,32 +709,32 @@ widmes:
   lcd_testpin(LowPin);
   lcd_data(ii);
   lcd_testpin(HighPin);
-  lcd_data(' ');
+  lcd_space();
   if (ii == 'H') {
      lcd_data('X');
 //     (void) value_out(lirx1, 3);
      DisplayValue(lirx1,1,LCD_CHAR_OMEGA,4)
-     lcd_data(' ');
+     lcd_space();
      lcd_data('Y');
 //     (void) value_out(lirx2, 3);
      DisplayValue(lirx2,1,LCD_CHAR_OMEGA,4)
-     lcd_data(' ');
+     lcd_space();
   } else {
      lcd_data('x');
 //     (void) value_out(lirx1, 2);
      DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,4)
-     lcd_data(' ');
+     lcd_space();
      lcd_data('y');
 //     (void) value_out(lirx2, 2);
      DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4)
   }
-  lcd_data(' ');
+  lcd_space();
   lcd_line4();
   lcd_clear_line();
   lcd_line4();
 //  (void) value_out(lrx1, 2);
   DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4)
-  lcd_data(' ');
+  lcd_space();
   lcd_line2();
 #endif
      if((PartFound == PART_DIODE) || (PartFound == PART_NONE) || (PartFound == PART_RESISTOR)) {
@@ -754,10 +754,10 @@ widmes:
               lcd_data('=');
 //              (void) value_out(thisR->rx, 2);
               DisplayValue(thisR->rx,-1,LCD_CHAR_OMEGA,3)
-              lcd_data(' ');
+              lcd_space();
 //              (void) value_out(lirx1, 2);
               DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,3)
-              lcd_data(' ');
+              lcd_space();
  #endif
               goto testend; // <10% mismatch
            }

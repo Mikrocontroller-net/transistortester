@@ -37,7 +37,7 @@ UI_LANGUAGE = LANG_ENGLISH
 #CFLAGS += -DLCD_CYRILLIC
 
 # the WITH_SELFTEST option enables selftest function 
-CFLAGS += -DWITH_SELFTEST
+#CFLAGS += -DWITH_SELFTEST
 # AUTO_CAL will enable the autocalibration of zero offset of capacity measurement in selftest section
 # Additionally the port output resistance and correction for low capacity measurement can be done
 # with ATmega168
@@ -51,7 +51,7 @@ CFLAGS += -DREF_C_KORR=4
 CFLAGS += -DC_H_KORR=5
 
 # the WITH_UART option enables the software UART
-#CFLAGS += -DWITH_UART
+CFLAGS += -DWITH_UART
 
 # the R_MESS option enables Resistor measuring 
 CFLAGS += -DR_MESS
@@ -112,11 +112,6 @@ CFLAGS += -DBAT_OUT=150
 # Setting the poor level to low values is not recommended for rechargeable 9V Batteries,
 # because this increase the danger for deep discharge!!
 CFLAGS += -DBAT_POOR=64
-
-# Output of flux voltage of diodes can be done in mV units or in Volt with two digits decimal place.
-# The Volt output can save space at the LCD, but needs more program space.
-# Set the option UF_OUT_MV to get the mV units.
-#CFLAGS += -DUF_OUT_MV
 
 
 # select your programmer type and port if you will use avrdude

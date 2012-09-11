@@ -71,7 +71,7 @@
 const uint16_t RLtab[] MEM_TEXT = {22447,20665,19138,17815,16657,15635,14727,13914,13182,12520,11918,11369,10865,10401, 9973, 9577, 9209, 8866, 8546, 8247, 7966, 7702, 7454, 7220, 6999, 6789, 6591, 6403, 6224, 6054, 5892, 5738, 5590, 5449, 5314, 5185, 5061, 4942, 4828, 4718, 4613, 4511, 4413, 4319, 4228};
 
 
-#ifdef WITH_AUTO_REF
+#ifdef AUTO_RH
 
 //resistor   470000 Ohm      1000 1050 1100 1150 1200 1250 1300 1350 1400  mV
 const uint16_t RHtab[] MEM_TEXT = { 954, 903, 856, 814, 775, 740, 707, 676, 648};
@@ -107,8 +107,10 @@ End of configuration
   const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
  #ifdef WITH_SELFTEST
   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-  const unsigned char ATE[] MEM2_TEXT = "Selftest End";
   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
+ #endif
+ #ifdef AUTO_CAL
+  const unsigned char ATE[] MEM_TEXT = "Selftest End";
  #endif
 #endif
 
@@ -128,8 +130,10 @@ End of configuration
   const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
  #ifdef WITH_SELFTEST
   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-  const unsigned char ATE[] MEM2_TEXT = "Selftest End";
   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
+ #endif
+ #ifdef AUTO_CAL
+  const unsigned char ATE[] MEM_TEXT = "Selftest End";
  #endif
 #endif
 
@@ -149,8 +153,10 @@ End of configuration
   const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
  #ifdef WITH_SELFTEST
   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-  const unsigned char ATE[] MEM2_TEXT = "Selftest End";
   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
+ #endif
+ #ifdef AUTO_CAL
+  const unsigned char ATE[] MEM_TEXT = "Selftest End";
  #endif
 #endif
 
@@ -170,8 +176,10 @@ End of configuration
   const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
  #ifdef WITH_SELFTEST
   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-  const unsigned char ATE[] MEM2_TEXT = "Selftest End";
   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
+ #endif
+ #ifdef AUTO_CAL
+  const unsigned char ATE[] MEM_TEXT = "Selftest End";
  #endif
 #endif
 
@@ -191,8 +199,10 @@ End of configuration
   const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
  #ifdef WITH_SELFTEST
   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-  const unsigned char ATE[] MEM2_TEXT = "Selftest End";
   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
+ #endif
+ #ifdef AUTO_CAL
+  const unsigned char ATE[] MEM_TEXT = "Selftest End";
  #endif
 #endif
 
@@ -212,8 +222,10 @@ End of configuration
   const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
  #ifdef WITH_SELFTEST
   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-  const unsigned char ATE[] MEM2_TEXT = "Selftest End";
   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
+ #endif
+ #ifdef AUTO_CAL
+  const unsigned char ATE[] MEM_TEXT = "Selftest End";
  #endif
 #endif
 
@@ -233,8 +245,10 @@ End of configuration
   const unsigned char TestTimedOut[] MEM_TEXT = {Cyr_v,'p','e',Cyr_m,Cyr_ja,' ',Cyr_t,'e','c',Cyr_t,Cyr_i,'p','o',Cyr_v,'a',Cyr_n,Cyr_i,Cyr_ja,Cyr_v,Cyr_y,Cyr_sch,Cyr_l,'o','!',0};
  #ifdef WITH_SELFTEST
   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-  const unsigned char ATE[] MEM2_TEXT = {Cyr_k,'o',Cyr_n,'e',Cyr_c,' ','c','a',Cyr_m,'o',Cyr_t,'e','c',Cyr_t,Cyr_i,'p','o',Cyr_v,'a',Cyr_n,Cyr_i,Cyr_ja,0};
   const unsigned char RELPROBE[] MEM2_TEXT = {'o',Cyr_t,Cyr_k,Cyr_l,Cyr_ju,Cyr_tsch,Cyr_i,Cyr_t,'b',' ',Cyr_z,'o',Cyr_n,Cyr_d,0};
+ #endif
+ #ifdef AUTO_CAL
+  const unsigned char ATE[] MEM_TEXT = {Cyr_k,'o',Cyr_n,'e',Cyr_c,' ','c','a',Cyr_m,'o',Cyr_t,'e','c',Cyr_t,Cyr_i,'p','o',Cyr_v,'a',Cyr_n,Cyr_i,Cyr_ja,0};
  #endif
 #endif
 
@@ -254,6 +268,7 @@ const unsigned char vt[] MEM_TEXT = " Vt=";
 const unsigned char Vgs_str[] MEM_TEXT = "@Vgs=";
 #ifdef C_MESS
 const unsigned char CapZeich[] MEM_TEXT = {'-',LCD_CHAR_CAP,'-',0};
+const unsigned char Cell_str[] MEM_TEXT = "Cell!";
 #endif
 const unsigned char AnKat[] MEM_TEXT = {'-', LCD_CHAR_DIODE1, '-',0};
 const unsigned char KatAn[] MEM_TEXT = {'-', LCD_CHAR_DIODE2, '-',0};
@@ -263,27 +278,27 @@ const unsigned char Resistor_str[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RE
 #endif
 const unsigned char VERSION[] MEM_TEXT = "Version 0.99k";
 
+
 #ifdef WITH_SELFTEST
-const unsigned char mVT[] MEM2_TEXT = "mV ";
 const unsigned char URefT[] MEM2_TEXT = "Ref=";
 const unsigned char RHfakt[] MEM2_TEXT = "RHf=";
-//const unsigned char RLfakt[] MEM2_TEXT = " RLf=";
 const unsigned char RH1L[] MEM2_TEXT = "RH-";
 const unsigned char RH1H[] MEM2_TEXT = "RH+";
- #ifdef AUTO_CAL
-const unsigned char RIHI[] MEM2_TEXT = "Ri_Hi=";
-const unsigned char RILO[] MEM2_TEXT = "Ri_Lo=";
-const unsigned char MinCap[] MEM2_TEXT = " >100nF";
-const unsigned char REF_Cstr[] MEM2_TEXT = "REF_C=";
- #else
-const unsigned char RIHI[] MEM2_TEXT = "Ri_Hi= (mV)";
-const unsigned char RILO[] MEM2_TEXT = "Ri_Lo= (mV)";
- #endif
 const unsigned char RLRL[] MEM2_TEXT = "+RL- 12 13 23";
 const unsigned char RHRH[] MEM2_TEXT = "+RH- 12 13 23";
-const unsigned char T50HZ[] MEM2_TEXT = " 50Hz";
  #define MULTIP
  #define LCD_CLEAR
+#endif
+ 
+#ifdef CHECK_CALL
+const unsigned char RIHI[] MEM_TEXT = "Ri_Hi=";
+const unsigned char RILO[] MEM_TEXT = "Ri_Lo=";
+const unsigned char T50HZ[] MEM_TEXT = " 50Hz";
+#endif
+#ifdef AUTO_CAL
+const unsigned char MinCap[] MEM_TEXT = " >100nF";
+const unsigned char REF_Cstr[] MEM_TEXT = "REF_C=";
+const unsigned char REF_Rstr[] MEM_TEXT = "REF_R=";
 #endif
 #ifdef DebugOut
  #define LCD_CLEAR

@@ -23,7 +23,7 @@ CFLAGS = -Wall
 # atmega88 : m88 or m88p
 # atmega168: m168 or m168p
 # atmega328: m328 or m328p
-PARTNO = m328p
+PARTNO = m168
 
 #select your language
 # available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
@@ -46,13 +46,13 @@ CFLAGS += -DFREQUENCY_50HZ
 
 
 # the WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring
-CFLAGS += -DWITH_AUTO_REF
+#CFLAGS += -DWITH_AUTO_REF
 # REF_C_KORR has mV units, greater values gives lower capacity results
 CFLAGS += -DREF_C_KORR=12
 CFLAGS += -DC_H_KORR=0
 
 # the WITH_UART option enables the software UART
-#CFLAGS += -DWITH_UART
+CFLAGS += -DWITH_UART
 
 # the R_MESS option enables Resistor measuring 
 CFLAGS += -DR_MESS
@@ -60,7 +60,7 @@ CFLAGS += -DR_MESS
 # the C_MESS option enables Capacity measuring 
 CFLAGS += -DC_MESS
 # this level defines the empty voltage level for capacitors in mV
-CFLAGS += -DCAP_EMPTY_LEVEL=3
+CFLAGS += -DCAP_EMPTY_LEVEL=4
 
 # the AUTOSCALE_ADC option enables the autoscale ADC (VCC and Bandgap Ref)
 CFLAGS += -DAUTOSCALE_ADC

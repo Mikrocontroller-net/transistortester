@@ -119,10 +119,14 @@ start:
   uart_newline();		// start of new measurement
 #endif
   Config.RefFlag = 0;
-  Config.Samples = 190;		// set number of ADC samples near to max
   Config.U_AVCC = U_VCC;	// set VCC Voltage
+#ifdef WITH_AUTO_REF
+  Config.Samples = 190;		// set number of ADC samples near to max
   (void) ReadADC(0x0e);		// read Reference-voltage 
   ref_mv = W20msReadADC(0x0e);	// read Reference-voltage
+#else
+  ref_mv = DEFAULT_BAND_GAP;	// set to default Reference Voltage
+#endif
   Config.U_Bandgap = ADC_internal_reference;	// set internal reference voltage for ADC
   Config.Samples = ANZ_MESS;	// set to configured number of ADC samples
 
@@ -138,7 +142,7 @@ start:
   // A good result can be get with multiply by 4 and divide by 10 (about 0.75%).
   cval = (trans.uBE[0]*4)/10+((BAT_OUT+5)/10); // usually output only 2 digits
   DisplayValue(cval,-2,'V',2);		// Display 2 Digits of this 10mV units
-  lcd_data(' ');
+  lcd_space();
  #endif
  #if (BAT_POOR > 52) && (BAT_POOR < 190)
  #define WARN_LEVEL (((unsigned long)(BAT_POOR*100+1000)*(unsigned long)33)/133)
@@ -171,16 +175,17 @@ start:
 
 //  wait1s();			// add mor time for reading batterie voltage
   // begin tests
-#ifdef WITH_AUTO_REF
+#ifdef AUTO_RH
   RefVoltage();			//compute RHmultip = f(reference voltage)
 #endif
+
   lcd_line2();			//LCD position row2, column 1
   lcd_fix_string(TestRunning);		//String: testing...
 //#ifndef __AVR_ATmega8__
 #if 0
   // does not read temperature, looks like internal reference
   trans.uBE[0] = ReadADC((1<<REFS1)|(1<<REFS0)|8); 	//read temperature sensor
-  lcd_data(' ');
+  lcd_space();
   lcd_string(itoa((int)(trans.uBE[0] - 289), outval, 10));	//output temperature
   lcd_data(LCD_CHAR_DEGREE);
   lcd_data('C');
@@ -194,15 +199,12 @@ start:
   if(PartFound == PART_CELL) {
     lcd_clear();
 //    lcd_line1();
-    lcd_data('C');
-    lcd_data('e');
-    lcd_data('l');
-    lcd_data('l');
-    lcd_data('!');
+    lcd_fix_string(Cell_str);	// display "Cell!"
     goto end2;
   }
 #endif
-#ifdef WITH_SELFTEST
+
+#ifdef CHECK_CALL
   AutoCheck();			//check, if selftest should be done
 #endif
      
@@ -313,19 +315,19 @@ start:
         lcd_testpin(diodes[0].Anode);
         lcd_data(':');
         lcd_testpin(diodes[0].Cathode);
-        lcd_data(' ');
+        lcd_space();
         lcd_string(utoa(diodes[0].Voltage, outval, 10));
-        lcd_data(' ');
+        lcd_space();
         lcd_testpin(diodes[1].Anode);
         lcd_data(':');
         lcd_testpin(diodes[1].Cathode);
-        lcd_data(' ');
+        lcd_space();
         lcd_string(utoa(diodes[1].Voltage, outval, 10));
 	lcd_line4();
         lcd_testpin(diodes[2].Anode);
         lcd_data(':');
         lcd_testpin(diodes[2].Cathode);
-        lcd_data(' ');
+        lcd_space();
         lcd_string(utoa(diodes[2].Voltage, outval, 10));
         lcd_line1();
 #endif
@@ -374,7 +376,7 @@ start:
     lcd_line2(); //2. row 
     lcd_fix_string(hfestr);		//"B="  (hFE)
     DisplayValue(trans.hfe[0],0,0,3);
-    lcd_data(' ');
+    lcd_space();
 
     lcd_fix_string(Uf);		//"Uf="
     DisplayValue(trans.uBE[0],-3,'V',3);
@@ -424,7 +426,7 @@ start:
     } else {
        lcd_data('I');
        lcd_data('=');
-       DisplayValue(trans.uBE[1],-4,'A',2);
+       DisplayValue(trans.uBE[1],-5,'A',2);
        lcd_fix_string(Vgs_str);		// " Vgs="
     }
     //Gate-threshold voltage
@@ -600,7 +602,7 @@ void mVAusgabe(uint8_t nn) {
    if (nn < 3) {
       // Output in mV units
       DisplayValue(diodes[nn].Voltage,-3,'V',3);
-      lcd_data(' ');
+      lcd_space();
    }
 }
 
@@ -610,7 +612,7 @@ void RvalOut(uint8_t ii) {
    // output of resistor value
 
    DisplayValue(resis[ii].rx,-1,LCD_CHAR_OMEGA,4);
-   lcd_data(' ');
+   lcd_space();
  }
 #endif
 
@@ -699,9 +701,9 @@ void EntladePins() {
 //        lcd_line3();
 //        lcd_data('E');
 //        lcd_string(utoa(adcmv[0], outval, 10));
-//        lcd_data(' ');
+//        lcd_space();
 //        lcd_string(utoa(adcmv[1], outval, 10));
-//        lcd_data(' ');
+//        lcd_space();
 //        lcd_string(utoa(adcmv[2], outval, 10));
      }
      for(adcmv[0]=0;adcmv[0]<clr_cnt;adcmv[0]++) {
@@ -747,8 +749,9 @@ unsigned int getRLmultip(unsigned int cvolt) {
   return ( ((y1 - y2) * tabres + (RL_Tab_Abstand/2)) / RL_Tab_Abstand + y2); // interpolate table
 }
 
+#endif
 
- #ifdef WITH_AUTO_REF
+#ifdef AUTO_RH
 void RefVoltage(void) {
 // RefVoltage interpolates table RHtab corresponding to voltage ref_mv .
 // RHtab contain the factors to get capacity from load time with 470k for
@@ -787,7 +790,6 @@ void RefVoltage(void) {
   // RHmultip is the interpolated factor to compute capacity from load time with 470k
   RHmultip = ((y1 - y2) * tabres + (Ref_Tab_Abstand/2)) / Ref_Tab_Abstand + y2;
  }
- #endif
 #endif
 
 #ifdef LCD_CLEAR
@@ -795,12 +797,11 @@ void lcd_clear_line(void) {
  // writes 20 spaces to LCD-Display, Cursor must be positioned to first column
  unsigned char ll;
  for (ll=0;ll<20;ll++) {
-    lcd_data(' ');
+    lcd_space();
  }
 }
 #endif
 
-#ifdef AUSGABE_FUNKTION
 /* ************************************************************************
  *   display of values and units
  * ************************************************************************ */
@@ -892,8 +893,7 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
   if (Unit) lcd_data(Unit);
 }
 
-#endif
 
-#ifdef WITH_SELFTEST
+#ifdef CHECK_CALL
  #include "AutoCheck.c"
 #endif

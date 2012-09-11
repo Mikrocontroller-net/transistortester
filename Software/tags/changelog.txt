@@ -1,3 +1,10 @@
+Bei Selbsttest 10-11 wird nur der Korrekturwert für den Komparatoroffset ausgegeben und
+wenn die AUTOSCALE_ADC Funktion gewählt wurde, der Korrekturwert für die interne Referenz.
+Bei Selbsttest 9 werden die gefundenen Nullwerte der Kapazitätsmessung ausgegeben.
+Die Selbsttest-Funktion 7 und 8 werden nur noch die Port-Innenwiderstände in Ohm ausgegeben.
+Die Selbsttestfunktionen 7-11 werden separat mit der AUTO_CAL Funktion angewählt und die
+gefundenen Werte im EEprom festgehalten.
+Die Wiederholanzahl für Selbsttest Nr. 1-6 wurde auf 4 reduziert.
 Die Beschränkung für hFE < 65536 entfällt.
 Die Option UF_OUT_MV entfällt.
 Die Funktion value_out wurde durch die Funktion DisplayValue ersetzt, Dank an Markus Reschke!

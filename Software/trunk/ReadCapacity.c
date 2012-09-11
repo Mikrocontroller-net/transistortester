@@ -54,11 +54,11 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      lcd_testpin(LowPin);
      lcd_data('C');
      lcd_testpin(HighPin);
-     lcd_data(' ');
+     lcd_space();
      lcd_data('d');
      lcd_data('o');
      lcd_data('p');
-     lcd_data(' ');
+     lcd_space();
      lcd_string(ultoa(cval,outval,10));
      wait2s();
 #endif
@@ -101,7 +101,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   if (adcv[2] < 301) {
 #if DebugOut == 10
      lcd_data('K');
-     lcd_data(' ');
+     lcd_space();
      wait1s();
 #endif
      goto keinC;		// was never charged enough, >100mF or shorted
@@ -120,13 +120,13 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   lcd_data('3');
   lcd_data(':');
   lcd_string(utoa(adcv[3],outval,10));
-  lcd_data(' ');
+  lcd_space();
   wait2s();
  #endif
   if ((adcv[3] + adcv[3]) < adcv[2]) {
  #if DebugOut == 10
      lcd_data('H');
-     lcd_data(' ');
+     lcd_space();
      wait1s();
  #endif
      goto keinC; //implausible, not yet the half voltage
@@ -150,7 +150,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      // more than 100mV is lost during load time
  #if DebugOut == 10
      lcd_data('L');
-     lcd_data(' ');
+     lcd_space();
      wait1s();
  #endif
      goto keinC;		// capacitor does not keep the voltage about 5ms
@@ -170,7 +170,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
    lcd_testpin(LowPin);
    lcd_data('C');
    lcd_testpin(HighPin);
-   lcd_data(' ');
+   lcd_space();
    lcd_string(ultoa(cval,outval,10));
    lcd_data('n');
    lcd_string(utoa(ovcnt16,outval,10));
@@ -270,8 +270,6 @@ messe_mit_rh:
      }
 #else
      if (HighPin == TP2) cval += TP2_CAP_OFFSET;	// measurements with TP2 have 2pF less capacity
-//     if ((HighPin == TP3) && (LowPin == TP2)) cval -= 1; // this combination has 1pF to much
-//     if ((HighPin == TP1) && (LowPin == TP3)) cval += 1; // this combinations has 1pF to less
      if (cval > C_NULL) {
          cval -= C_NULL;		//subtract constant offset (pF)
      } else {
@@ -288,7 +286,7 @@ messe_mit_rh:
   lcd_testpin(LowPin);
   lcd_data('c');
   lcd_testpin(HighPin);
-  lcd_data(' ');
+  lcd_space();
   lcd_string(ultoa(cval,outval,10));
   lcd_data('p');
   wait3s();
@@ -303,7 +301,7 @@ messe_mit_rh:
      // cval can only be so little in pF unit, cpre must not be testet!
 #if DebugOut == 10
      lcd_data('<');
-     lcd_data(' ');
+     lcd_space();
      wait1s();
 #endif
       goto keinC;	//capacity to low, < 70pF @1MHz (35pF @8MHz)
@@ -313,7 +311,7 @@ checkDiodes:
    if((NumOfDiodes > 0)  && (PartFound != PART_FET)) {
 #if DebugOut == 10
       lcd_data('D');
-      lcd_data(' ');
+      lcd_space();
       wait1s();
 #endif
       // nearly shure, that there is one or more diodes in reverse direction,

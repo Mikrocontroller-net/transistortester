@@ -18,6 +18,12 @@
 void lcd_testpin(unsigned char temp) {
    lcd_data(temp + '1');
 }
+
+// send space character to LCD
+void lcd_space(void) {
+   lcd_data(' ');
+}
+
 // sends data byte to the LCD 
 void lcd_data(unsigned char temp1) {
  LCD_PORT |= (1<<LCD_RS);        // set RS to 1 
@@ -157,7 +163,7 @@ void lcd_string(char *data) {
     }
 }
 
-#ifdef WITH_SELFTEST
+#ifdef AUTO_CAL
 //Load string from PGM  and send to LCD 
 void lcd_pgm_string(const unsigned char *data) {
    unsigned char cc;

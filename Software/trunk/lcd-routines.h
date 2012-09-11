@@ -8,6 +8,7 @@
 //LCD
 void lcd_testpin(unsigned char temp);
 void lcd_data(unsigned char temp1);
+void lcd_space(void);
 void lcd_command(unsigned char temp1);
 void lcd_send(unsigned char data);
 void lcd_string(char *data);

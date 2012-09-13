@@ -760,7 +760,9 @@ widmes:
         // no same resistor with the same Tristate-Pin found, new one
         thisR = &resis[ResistorsFound];		// pointer to a free resistor structure
         thisR->rx = lrx1;		// save resistor value
+#if FLASHEND > 0x1fff
         thisR->lx = 0;			// no inductance
+#endif
         thisR->ra = LowPin;		// save Pin numbers
         thisR->rb = HighPin;
         thisR->rt = TristatePin;	// Tristate is saved for easier search of inverse measurement

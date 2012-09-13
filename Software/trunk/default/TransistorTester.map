@@ -11,7 +11,7 @@ Archive member included because of file (symbol)
 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_divmodsi4.o)
                               main.o (__divmodsi4)
 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_exit.o)
-                              /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm168.o (exit)
+                              /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm328p.o (exit)
 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_copy_data.o)
                               main.o (__do_copy_data)
 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_clear_bss.o)
@@ -20,18 +20,18 @@ Archive member included because of file (symbol)
                               main.o (itoa)
 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(utoa.o)
                               main.o (utoa)
-/usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_byte_atmega168.o)
-                              lcd-routines.o (__eerd_byte_m168)
-/usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_word_atmega168.o)
-                              main.o (__eerd_word_m168)
-/usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_byte_atmega168.o)
-                              main.o (__eewr_byte_m168)
-/usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_word_atmega168.o)
-                              main.o (__eewr_word_m168)
+/usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_byte_atmega328p.o)
+                              lcd-routines.o (__eerd_byte_m328p)
+/usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_word_atmega328p.o)
+                              main.o (__eerd_word_m328p)
+/usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_byte_atmega328p.o)
+                              main.o (__eewr_byte_m328p)
+/usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_word_atmega328p.o)
+                              main.o (__eewr_word_m328p)
 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(strrev.o)
                               /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(itoa.o) (strrev)
-/usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_block_atmega168.o)
-                              /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_word_atmega168.o) (__eerd_blraw_m168)
+/usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_block_atmega328p.o)
+                              /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_word_atmega328p.o) (__eerd_blraw_m328p)
 
 Allocating common symbols
 Common symbol       size              file
@@ -79,7 +79,7 @@ signature        0x0000000000840000 0x0000000000000400 rw !x
 Linker script and memory map
 
 Address of section .data set to 0x800100
-LOAD /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm168.o
+LOAD /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm328p.o
 LOAD lcd-routines.o
 LOAD main.o
 LOAD swuart.o
@@ -180,58 +180,48 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x0000000000000000     0x33a6
+.text           0x0000000000000000     0x32d8
  *(.vectors)
- .vectors       0x0000000000000000       0x68 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm168.o
+ .vectors       0x0000000000000000       0x68 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm328p.o
                 0x0000000000000000                __vectors
                 0x0000000000000000                __vector_default
  *(.vectors)
  *(.progmem.gcc*)
  *(.progmem*)
- .progmem.data  0x0000000000000068       0xa8 main.o
-                0x0000000000000068                LogTab
-                0x00000000000000c4                SELFTEST
-                0x00000000000000d4                RELPROBE
-                0x00000000000000e2                URefT
-                0x00000000000000e7                RHfakt
-                0x00000000000000ec                RH1L
-                0x00000000000000f0                RH1H
-                0x00000000000000f4                RLRL
-                0x0000000000000102                RHRH
-                0x0000000000000110                . = ALIGN (0x2)
-                0x0000000000000110                __trampolines_start = .
+                0x0000000000000068                . = ALIGN (0x2)
+                0x0000000000000068                __trampolines_start = .
  *(.trampolines)
- .trampolines   0x0000000000000110        0x0 linker stubs
+ .trampolines   0x0000000000000068        0x0 linker stubs
  *(.trampolines*)
-                0x0000000000000110                __trampolines_end = .
+                0x0000000000000068                __trampolines_end = .
  *(.jumptables)
  *(.jumptables*)
  *(.lowtext)
  *(.lowtext*)
-                0x0000000000000110                __ctors_start = .
+                0x0000000000000068                __ctors_start = .
  *(.ctors)
-                0x0000000000000110                __ctors_end = .
-                0x0000000000000110                __dtors_start = .
+                0x0000000000000068                __ctors_end = .
+                0x0000000000000068                __dtors_start = .
  *(.dtors)
-                0x0000000000000110                __dtors_end = .
+                0x0000000000000068                __dtors_end = .
  SORT(*)(.ctors)
  SORT(*)(.dtors)
  *(.init0)
- .init0         0x0000000000000110        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm168.o
-                0x0000000000000110                __init
+ .init0         0x0000000000000068        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm328p.o
+                0x0000000000000068                __init
  *(.init0)
  *(.init1)
  *(.init1)
  *(.init2)
- .init2         0x0000000000000110        0xc /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm168.o
+ .init2         0x0000000000000068        0xc /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm328p.o
  *(.init2)
  *(.init3)
  *(.init3)
  *(.init4)
- .init4         0x000000000000011c       0x16 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_copy_data.o)
-                0x000000000000011c                __do_copy_data
- .init4         0x0000000000000132       0x10 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_clear_bss.o)
-                0x0000000000000132                __do_clear_bss
+ .init4         0x0000000000000074       0x16 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_copy_data.o)
+                0x0000000000000074                __do_copy_data
+ .init4         0x000000000000008a       0x10 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_clear_bss.o)
+                0x000000000000008a                __do_clear_bss
  *(.init4)
  *(.init5)
  *(.init5)
@@ -242,175 +232,175 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
  *(.init8)
  *(.init8)
  *(.init9)
- .init9         0x0000000000000142        0x8 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm168.o
+ .init9         0x000000000000009a        0x8 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm328p.o
  *(.init9)
  *(.text)
- .text          0x000000000000014a        0x4 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm168.o
-                0x000000000000014a                __vector_22
-                0x000000000000014a                __vector_1
-                0x000000000000014a                __vector_24
-                0x000000000000014a                __vector_12
-                0x000000000000014a                __bad_interrupt
-                0x000000000000014a                __vector_6
-                0x000000000000014a                __vector_3
-                0x000000000000014a                __vector_23
-                0x000000000000014a                __vector_25
-                0x000000000000014a                __vector_11
-                0x000000000000014a                __vector_13
-                0x000000000000014a                __vector_17
-                0x000000000000014a                __vector_19
-                0x000000000000014a                __vector_7
-                0x000000000000014a                __vector_5
-                0x000000000000014a                __vector_4
-                0x000000000000014a                __vector_9
-                0x000000000000014a                __vector_2
-                0x000000000000014a                __vector_21
-                0x000000000000014a                __vector_15
-                0x000000000000014a                __vector_8
-                0x000000000000014a                __vector_14
-                0x000000000000014a                __vector_10
-                0x000000000000014a                __vector_16
-                0x000000000000014a                __vector_18
-                0x000000000000014a                __vector_20
- .text          0x000000000000014e      0x1e4 lcd-routines.o
-                0x000000000000014e                lcd_enable
-                0x0000000000000158                lcd_send
-                0x00000000000001a0                lcd_data
-                0x00000000000001fc                lcd_space
-                0x0000000000000204                lcd_testpin
-                0x000000000000020c                uart_newline
-                0x000000000000021a                lcd_command
-                0x0000000000000234                lcd_clear
-                0x0000000000000244                lcd_init
-                0x000000000000029a                lcd_string
-                0x00000000000002c2                lcd_pgm_string
-                0x00000000000002e2                lcd_fix_string
-                0x0000000000000304                lcd_fix_customchar
- .text          0x0000000000000332     0x2d14 main.o
-                0x0000000000000332                ChargePin10ms
-                0x0000000000000374                CheckPins
-                0x0000000000001064                EntladePins
-                0x000000000000119a                getRLmultip
-                0x000000000000121e                Scale_C_with_vcc
-                0x00000000000012be                ReadCapacity
-                0x0000000000001712                RefVoltage
-                0x00000000000017b2                lcd_clear_line
-                0x00000000000017c2                DisplayValue
-                0x000000000000192e                ReadInductance
-                0x0000000000001c40                RvalOut
-                0x0000000000001c74                mVAusgabe
-                0x0000000000001ca4                UfAusgabe
-                0x0000000000001ccc                AutoCheck
-                0x00000000000025fc                main
- .text          0x0000000000003046       0x40 swuart.o
-                0x0000000000003046                uart_putc
- .text          0x0000000000003086       0x4a wait1000ms.o
-                0x0000000000003086                wait5s
-                0x0000000000003088                wait4s
-                0x000000000000308a                wait3s
-                0x000000000000308c                wait2s
-                0x000000000000308e                wait1000ms
-                0x000000000000308e                wait1s
-                0x0000000000003090                wait500ms
-                0x0000000000003092                wait400ms
-                0x0000000000003094                wait300ms
-                0x0000000000003096                wait200ms
-                0x0000000000003098                wait100ms
-                0x000000000000309c                wait50ms
-                0x000000000000309e                wait40ms
-                0x00000000000030a0                wait30ms
-                0x00000000000030a2                wait20ms
-                0x00000000000030a4                wait10ms
-                0x00000000000030a6                wait5ms
-                0x00000000000030a8                wait4ms
-                0x00000000000030aa                wait3ms
-                0x00000000000030ac                wait2ms
-                0x00000000000030ae                wait1ms
-                0x00000000000030b0                wait500us
-                0x00000000000030b2                wait400us
-                0x00000000000030b4                wait300us
-                0x00000000000030b6                wait200us
-                0x00000000000030b8                wait100us
-                0x00000000000030ba                wait50us
-                0x00000000000030bc                wait40us
-                0x00000000000030be                wait30us
-                0x00000000000030c0                wait20us
-                0x00000000000030c2                wait10us
-                0x00000000000030c4                wait5us
-                0x00000000000030c6                wait4us
-                0x00000000000030c8                wait3us
-                0x00000000000030ca                wait2us
-                0x00000000000030cc                wait1us
- .text          0x00000000000030d0        0x4 CombineToLong.o
-                0x00000000000030d0                CombineBI2Long
-                0x00000000000030d2                CombineII2Long
- .text          0x00000000000030d4       0xe6 ReadADC.o
-                0x00000000000030d4                W20msReadADC
-                0x00000000000030d8                W10msReadADC
-                0x00000000000030dc                W5msReadADC
-                0x00000000000030e0                ReadADC
- .text          0x00000000000031ba        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_mulsi3.o)
- .text          0x00000000000031ba        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_udivmodqi4.o)
- .text          0x00000000000031ba        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_udivmodhi4.o)
- .text          0x00000000000031ba        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_udivmodsi4.o)
- .text          0x00000000000031ba        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_divmodsi4.o)
- .text          0x00000000000031ba        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_exit.o)
- .text          0x00000000000031ba        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_copy_data.o)
- .text          0x00000000000031ba        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_clear_bss.o)
- .text          0x00000000000031ba        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(itoa.o)
- .text          0x00000000000031ba        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(utoa.o)
- .text          0x00000000000031ba        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_byte_atmega168.o)
- .text          0x00000000000031ba        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_word_atmega168.o)
- .text          0x00000000000031ba        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_byte_atmega168.o)
- .text          0x00000000000031ba        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_word_atmega168.o)
- .text          0x00000000000031ba        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(strrev.o)
- .text          0x00000000000031ba        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_block_atmega168.o)
-                0x00000000000031ba                . = ALIGN (0x2)
+ .text          0x00000000000000a2        0x4 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm328p.o
+                0x00000000000000a2                __vector_22
+                0x00000000000000a2                __vector_1
+                0x00000000000000a2                __vector_24
+                0x00000000000000a2                __vector_12
+                0x00000000000000a2                __bad_interrupt
+                0x00000000000000a2                __vector_6
+                0x00000000000000a2                __vector_3
+                0x00000000000000a2                __vector_23
+                0x00000000000000a2                __vector_25
+                0x00000000000000a2                __vector_11
+                0x00000000000000a2                __vector_13
+                0x00000000000000a2                __vector_17
+                0x00000000000000a2                __vector_19
+                0x00000000000000a2                __vector_7
+                0x00000000000000a2                __vector_5
+                0x00000000000000a2                __vector_4
+                0x00000000000000a2                __vector_9
+                0x00000000000000a2                __vector_2
+                0x00000000000000a2                __vector_21
+                0x00000000000000a2                __vector_15
+                0x00000000000000a2                __vector_8
+                0x00000000000000a2                __vector_14
+                0x00000000000000a2                __vector_10
+                0x00000000000000a2                __vector_16
+                0x00000000000000a2                __vector_18
+                0x00000000000000a2                __vector_20
+ .text          0x00000000000000a6      0x1e4 lcd-routines.o
+                0x00000000000000a6                lcd_enable
+                0x00000000000000b0                lcd_send
+                0x00000000000000f8                lcd_data
+                0x0000000000000154                lcd_space
+                0x000000000000015c                lcd_testpin
+                0x0000000000000164                uart_newline
+                0x0000000000000172                lcd_command
+                0x000000000000018c                lcd_clear
+                0x000000000000019c                lcd_init
+                0x00000000000001f2                lcd_string
+                0x000000000000021a                lcd_pgm_string
+                0x000000000000023a                lcd_fix_string
+                0x000000000000025c                lcd_fix_customchar
+ .text          0x000000000000028a     0x2cee main.o
+                0x000000000000028a                ChargePin10ms
+                0x00000000000002cc                CheckPins
+                0x0000000000000fbc                EntladePins
+                0x00000000000010f2                ReadInductance
+                0x00000000000013f2                getRLmultip
+                0x0000000000001476                Scale_C_with_vcc
+                0x0000000000001516                ReadCapacity
+                0x000000000000196a                RefVoltage
+                0x0000000000001a0a                lcd_clear_line
+                0x0000000000001a1a                DisplayValue
+                0x0000000000001b86                RvalOut
+                0x0000000000001bba                mVAusgabe
+                0x0000000000001bea                UfAusgabe
+                0x0000000000001c12                AutoCheck
+                0x0000000000002542                main
+ .text          0x0000000000002f78       0x40 swuart.o
+                0x0000000000002f78                uart_putc
+ .text          0x0000000000002fb8       0x4a wait1000ms.o
+                0x0000000000002fb8                wait5s
+                0x0000000000002fba                wait4s
+                0x0000000000002fbc                wait3s
+                0x0000000000002fbe                wait2s
+                0x0000000000002fc0                wait1000ms
+                0x0000000000002fc0                wait1s
+                0x0000000000002fc2                wait500ms
+                0x0000000000002fc4                wait400ms
+                0x0000000000002fc6                wait300ms
+                0x0000000000002fc8                wait200ms
+                0x0000000000002fca                wait100ms
+                0x0000000000002fce                wait50ms
+                0x0000000000002fd0                wait40ms
+                0x0000000000002fd2                wait30ms
+                0x0000000000002fd4                wait20ms
+                0x0000000000002fd6                wait10ms
+                0x0000000000002fd8                wait5ms
+                0x0000000000002fda                wait4ms
+                0x0000000000002fdc                wait3ms
+                0x0000000000002fde                wait2ms
+                0x0000000000002fe0                wait1ms
+                0x0000000000002fe2                wait500us
+                0x0000000000002fe4                wait400us
+                0x0000000000002fe6                wait300us
+                0x0000000000002fe8                wait200us
+                0x0000000000002fea                wait100us
+                0x0000000000002fec                wait50us
+                0x0000000000002fee                wait40us
+                0x0000000000002ff0                wait30us
+                0x0000000000002ff2                wait20us
+                0x0000000000002ff4                wait10us
+                0x0000000000002ff6                wait5us
+                0x0000000000002ff8                wait4us
+                0x0000000000002ffa                wait3us
+                0x0000000000002ffc                wait2us
+                0x0000000000002ffe                wait1us
+ .text          0x0000000000003002        0x4 CombineToLong.o
+                0x0000000000003002                CombineBI2Long
+                0x0000000000003004                CombineII2Long
+ .text          0x0000000000003006       0xe6 ReadADC.o
+                0x0000000000003006                W20msReadADC
+                0x000000000000300a                W10msReadADC
+                0x000000000000300e                W5msReadADC
+                0x0000000000003012                ReadADC
+ .text          0x00000000000030ec        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_mulsi3.o)
+ .text          0x00000000000030ec        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_udivmodqi4.o)
+ .text          0x00000000000030ec        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_udivmodhi4.o)
+ .text          0x00000000000030ec        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_udivmodsi4.o)
+ .text          0x00000000000030ec        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_divmodsi4.o)
+ .text          0x00000000000030ec        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_exit.o)
+ .text          0x00000000000030ec        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_copy_data.o)
+ .text          0x00000000000030ec        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_clear_bss.o)
+ .text          0x00000000000030ec        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(itoa.o)
+ .text          0x00000000000030ec        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(utoa.o)
+ .text          0x00000000000030ec        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_byte_atmega328p.o)
+ .text          0x00000000000030ec        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_word_atmega328p.o)
+ .text          0x00000000000030ec        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_byte_atmega328p.o)
+ .text          0x00000000000030ec        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_word_atmega328p.o)
+ .text          0x00000000000030ec        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(strrev.o)
+ .text          0x00000000000030ec        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_block_atmega328p.o)
+                0x00000000000030ec                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x00000000000031ba       0x3e /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_mulsi3.o)
-                0x00000000000031ba                __mulsi3
- .text.libgcc   0x00000000000031f8       0x18 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_udivmodqi4.o)
-                0x00000000000031f8                __udivmodqi4
- .text.libgcc   0x0000000000003210       0x28 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_udivmodhi4.o)
-                0x0000000000003210                __udivmodhi4
- .text.libgcc   0x0000000000003238       0x44 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_udivmodsi4.o)
-                0x0000000000003238                __udivmodsi4
- .text.libgcc   0x000000000000327c       0x36 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_divmodsi4.o)
-                0x000000000000327c                __divmodsi4
- .text.libgcc   0x00000000000032b2        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_exit.o)
- .text.libgcc   0x00000000000032b2        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_copy_data.o)
- .text.libgcc   0x00000000000032b2        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_clear_bss.o)
+ .text.libgcc   0x00000000000030ec       0x3e /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_mulsi3.o)
+                0x00000000000030ec                __mulsi3
+ .text.libgcc   0x000000000000312a       0x18 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_udivmodqi4.o)
+                0x000000000000312a                __udivmodqi4
+ .text.libgcc   0x0000000000003142       0x28 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_udivmodhi4.o)
+                0x0000000000003142                __udivmodhi4
+ .text.libgcc   0x000000000000316a       0x44 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_udivmodsi4.o)
+                0x000000000000316a                __udivmodsi4
+ .text.libgcc   0x00000000000031ae       0x36 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_divmodsi4.o)
+                0x00000000000031ae                __divmodsi4
+ .text.libgcc   0x00000000000031e4        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_exit.o)
+ .text.libgcc   0x00000000000031e4        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_copy_data.o)
+ .text.libgcc   0x00000000000031e4        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_clear_bss.o)
  .text.avr-libc
-                0x00000000000032b2       0x42 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(itoa.o)
-                0x00000000000032b2                itoa
+                0x00000000000031e4       0x42 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(itoa.o)
+                0x00000000000031e4                itoa
  .text.avr-libc
-                0x00000000000032f4       0x2c /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(utoa.o)
-                0x00000000000032f4                utoa
+                0x0000000000003226       0x2c /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(utoa.o)
+                0x0000000000003226                utoa
  .text.avr-libc
-                0x0000000000003320       0x10 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_byte_atmega168.o)
-                0x0000000000003320                __eerd_byte_m168
+                0x0000000000003252       0x10 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_byte_atmega328p.o)
+                0x0000000000003252                __eerd_byte_m328p
  .text.avr-libc
-                0x0000000000003330        0xc /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_word_atmega168.o)
-                0x0000000000003330                __eerd_word_m168
+                0x0000000000003262        0xc /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_word_atmega328p.o)
+                0x0000000000003262                __eerd_word_m328p
  .text.avr-libc
-                0x000000000000333c       0x1c /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_byte_atmega168.o)
-                0x000000000000333c                __eewr_byte_m168
-                0x000000000000333e                __eewr_r18_m168
+                0x000000000000326e       0x1c /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_byte_atmega328p.o)
+                0x000000000000326e                __eewr_byte_m328p
+                0x0000000000003270                __eewr_r18_m328p
  .text.avr-libc
-                0x0000000000003358        0xa /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_word_atmega168.o)
-                0x0000000000003358                __eewr_word_m168
+                0x000000000000328a        0xa /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_word_atmega328p.o)
+                0x000000000000328a                __eewr_word_m328p
  .text.avr-libc
-                0x0000000000003362       0x20 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(strrev.o)
-                0x0000000000003362                strrev
+                0x0000000000003294       0x20 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(strrev.o)
+                0x0000000000003294                strrev
  .text.avr-libc
-                0x0000000000003382       0x20 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_block_atmega168.o)
-                0x0000000000003382                __eerd_block_m168
-                0x0000000000003386                __eerd_blraw_m168
-                0x00000000000033a2                . = ALIGN (0x2)
+                0x00000000000032b4       0x20 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_block_atmega328p.o)
+                0x00000000000032b4                __eerd_block_m328p
+                0x00000000000032b8                __eerd_blraw_m328p
+                0x00000000000032d4                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000000000033a2        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_exit.o)
-                0x00000000000033a2                exit
-                0x00000000000033a2                _exit
+ .fini9         0x00000000000032d4        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_exit.o)
+                0x00000000000032d4                exit
+                0x00000000000032d4                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -429,14 +419,14 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000000000033a2        0x4 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_exit.o)
+ .fini0         0x00000000000032d4        0x4 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_exit.o)
  *(.fini0)
-                0x00000000000033a6                _etext = .
+                0x00000000000032d8                _etext = .
 
-.data           0x0000000000800100        0x2 load address 0x00000000000033a6
+.data           0x0000000000800100        0x2 load address 0x00000000000032d8
                 0x0000000000800100                PROVIDE (__data_start, .)
  *(.data)
- .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm168.o
+ .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm328p.o
  .data          0x0000000000800100        0x0 lcd-routines.o
  .data          0x0000000000800100        0x2 main.o
                 0x0000000000800100                RHmultip
@@ -454,12 +444,12 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
  .data          0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_clear_bss.o)
  .data          0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(itoa.o)
  .data          0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(utoa.o)
- .data          0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_byte_atmega168.o)
- .data          0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_word_atmega168.o)
- .data          0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_byte_atmega168.o)
- .data          0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_word_atmega168.o)
+ .data          0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_byte_atmega328p.o)
+ .data          0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_word_atmega328p.o)
+ .data          0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_byte_atmega328p.o)
+ .data          0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_word_atmega328p.o)
  .data          0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(strrev.o)
- .data          0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_block_atmega168.o)
+ .data          0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_block_atmega328p.o)
  *(.data*)
  *(.rodata)
  *(.rodata*)
@@ -471,7 +461,7 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
 .bss            0x0000000000800102       0x7d
                 0x0000000000800102                PROVIDE (__bss_start, .)
  *(.bss)
- .bss           0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm168.o
+ .bss           0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm328p.o
  .bss           0x0000000000800102        0x0 lcd-routines.o
  .bss           0x0000000000800102        0x0 main.o
  .bss           0x0000000000800102        0x0 swuart.o
@@ -488,12 +478,12 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
  .bss           0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_clear_bss.o)
  .bss           0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(itoa.o)
  .bss           0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(utoa.o)
- .bss           0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_byte_atmega168.o)
- .bss           0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_word_atmega168.o)
- .bss           0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_byte_atmega168.o)
- .bss           0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_word_atmega168.o)
+ .bss           0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_byte_atmega328p.o)
+ .bss           0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_word_atmega328p.o)
+ .bss           0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_byte_atmega328p.o)
+ .bss           0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_word_atmega328p.o)
  .bss           0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(strrev.o)
- .bss           0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_block_atmega168.o)
+ .bss           0x0000000000800102        0x0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_block_atmega328p.o)
  *(.bss*)
  *(COMMON)
  COMMON         0x0000000000800102       0x7d main.o
@@ -526,8 +516,8 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
                 0x0000000000800163                diodes
                 0x000000000080017b                cval
                 0x000000000080017f                PROVIDE (__bss_end, .)
-                0x00000000000033a6                __data_load_start = LOADADDR (.data)
-                0x00000000000033a8                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00000000000032d8                __data_load_start = LOADADDR (.data)
+                0x00000000000032da                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x000000000080017f        0x0
                 0x000000000080017f                PROVIDE (__noinit_start, .)
@@ -536,65 +526,74 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
                 0x000000000080017f                _end = .
                 0x000000000080017f                PROVIDE (__heap_start, .)
 
-.eeprom         0x0000000000810000      0x1be
+.eeprom         0x0000000000810000      0x266
  *(.eeprom*)
- .eeprom        0x0000000000810000      0x1be main.o
+ .eeprom        0x0000000000810000      0x266 main.o
                 0x0000000000810000                RLtab
-                0x000000000081005a                RHtab
-                0x000000000081006c                TestRunning
-                0x0000000000810077                BatWeak
-                0x000000000081007c                BatEmpty
-                0x0000000000810083                TestFailed2
-                0x000000000081008c                Bauteil
-                0x0000000000810091                Diode
-                0x0000000000810099                GAK
-                0x000000000081009e                Triac
-                0x00000000008100a4                Thyristor
-                0x00000000008100ae                Unknown
-                0x00000000008100b7                TestFailed1
-                0x00000000008100c7                OrBroken
-                0x00000000008100d3                TestTimedOut
-                0x00000000008100dc                ATE
-                0x00000000008100e9                Bat
-                0x00000000008100ef                OK
-                0x00000000008100f2                mosfet
-                0x00000000008100f7                jfet
-                0x00000000008100fc                GateCap
-                0x00000000008100ff                hfestr
-                0x0000000000810102                NPN
-                0x0000000000810107                PNP
-                0x000000000081010c                ebcstr
-                0x0000000000810112                gds
-                0x0000000000810118                Uf
-                0x000000000081011c                vt
-                0x0000000000810121                Vgs_str
-                0x0000000000810127                CapZeich
-                0x000000000081012b                Cell_str
-                0x0000000000810131                AnKat
-                0x0000000000810135                KatAn
-                0x0000000000810139                Dioden
-                0x000000000081013e                Resistor_str
-                0x0000000000810143                VERSION
-                0x0000000000810151                RIHI
-                0x0000000000810158                RILO
-                0x000000000081015f                T50HZ
-                0x0000000000810165                MinCap
-                0x000000000081016d                REF_Cstr
-                0x0000000000810174                REF_Rstr
-                0x000000000081017b                DiodeIcon1
-                0x0000000000810183                DiodeIcon2
-                0x000000000081018b                CapIcon
-                0x0000000000810193                ResIcon1
-                0x000000000081019b                ResIcon2
-                0x00000000008101a3                PinRLtab
-                0x00000000008101a6                PinADCtab
-                0x00000000008101a9                R680pl
-                0x00000000008101ab                R680mi
-                0x00000000008101ad                RefDiff
-                0x00000000008101ae                PrefixTab
-                0x00000000008101b5                ref_offset
-                0x00000000008101b7                c_zero_tab
-                0x00000000008101be                __eeprom_end = .
+                0x000000000081005a                LogTab
+                0x00000000008100b6                RHtab
+                0x00000000008100c8                TestRunning
+                0x00000000008100d3                BatWeak
+                0x00000000008100d8                BatEmpty
+                0x00000000008100df                TestFailed2
+                0x00000000008100e8                Bauteil
+                0x00000000008100ed                Diode
+                0x00000000008100f5                GAK
+                0x00000000008100fa                Triac
+                0x0000000000810100                Thyristor
+                0x000000000081010a                Unknown
+                0x0000000000810113                TestFailed1
+                0x0000000000810123                OrBroken
+                0x000000000081012f                TestTimedOut
+                0x0000000000810138                SELFTEST
+                0x0000000000810148                RELPROBE
+                0x0000000000810156                ATE
+                0x0000000000810163                Bat
+                0x0000000000810169                OK
+                0x000000000081016c                mosfet
+                0x0000000000810171                jfet
+                0x0000000000810176                GateCap
+                0x0000000000810179                hfestr
+                0x000000000081017c                NPN
+                0x0000000000810181                PNP
+                0x0000000000810186                ebcstr
+                0x000000000081018c                gds
+                0x0000000000810192                Uf
+                0x0000000000810196                vt
+                0x000000000081019b                Vgs_str
+                0x00000000008101a1                CapZeich
+                0x00000000008101a5                Cell_str
+                0x00000000008101ab                AnKat
+                0x00000000008101af                KatAn
+                0x00000000008101b3                Dioden
+                0x00000000008101b8                Resistor_str
+                0x00000000008101bd                VERSION
+                0x00000000008101cb                URefT
+                0x00000000008101d0                RHfakt
+                0x00000000008101d5                RH1L
+                0x00000000008101d9                RH1H
+                0x00000000008101dd                RLRL
+                0x00000000008101eb                RHRH
+                0x00000000008101f9                RIHI
+                0x0000000000810200                RILO
+                0x0000000000810207                T50HZ
+                0x000000000081020d                MinCap
+                0x0000000000810215                REF_Cstr
+                0x000000000081021c                REF_Rstr
+                0x0000000000810223                DiodeIcon1
+                0x000000000081022b                DiodeIcon2
+                0x0000000000810233                CapIcon
+                0x000000000081023b                ResIcon1
+                0x0000000000810243                ResIcon2
+                0x000000000081024b                PinRLtab
+                0x000000000081024e                PinADCtab
+                0x0000000000810251                R680pl
+                0x0000000000810253                R680mi
+                0x0000000000810255                RefDiff
+                0x0000000000810256                PrefixTab
+                0x000000000081025d                ref_offset
+                0x000000000081025f                c_zero_tab
+                0x0000000000810266                __eeprom_end = .
 
 .fuse
  *(.fuse)
@@ -610,27 +609,27 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
 
 .stab           0x0000000000000000      0xdbc
  *(.stab)
- .stab          0x0000000000000000      0x6cc /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm168.o
+ .stab          0x0000000000000000      0x6cc /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm328p.o
  .stab          0x00000000000006cc      0x1b0 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(itoa.o)
                                         0x1bc (size before relaxing)
  .stab          0x000000000000087c      0x12c /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(utoa.o)
                                         0x138 (size before relaxing)
- .stab          0x00000000000009a8       0x90 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_byte_atmega168.o)
+ .stab          0x00000000000009a8       0x90 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_byte_atmega328p.o)
                                          0x9c (size before relaxing)
- .stab          0x0000000000000a38       0x6c /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_word_atmega168.o)
+ .stab          0x0000000000000a38       0x6c /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_word_atmega328p.o)
                                          0x78 (size before relaxing)
- .stab          0x0000000000000aa4       0xe4 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_byte_atmega168.o)
+ .stab          0x0000000000000aa4       0xe4 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_byte_atmega328p.o)
                                          0xf0 (size before relaxing)
- .stab          0x0000000000000b88       0x54 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_word_atmega168.o)
+ .stab          0x0000000000000b88       0x54 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_word_atmega328p.o)
                                          0x60 (size before relaxing)
  .stab          0x0000000000000bdc       0xd8 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(strrev.o)
                                          0xe4 (size before relaxing)
- .stab          0x0000000000000cb4      0x108 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_block_atmega168.o)
+ .stab          0x0000000000000cb4      0x108 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_block_atmega328p.o)
                                         0x114 (size before relaxing)
 
 .stabstr        0x0000000000000000      0x1d2
  *(.stabstr)
- .stabstr       0x0000000000000000      0x1d2 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm168.o
+ .stabstr       0x0000000000000000      0x1d2 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm328p.o
 
 .stab.excl
  *(.stab.excl)
@@ -674,38 +673,38 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
  .debug_pubnames
                 0x00000000000000e1      0x55b main.o
 
-.debug_info     0x0000000000000000     0x1bd3
+.debug_info     0x0000000000000000     0x1ba8
  *(.debug_info)
  .debug_info    0x0000000000000000      0x2a2 lcd-routines.o
- .debug_info    0x00000000000002a2     0x1931 main.o
+ .debug_info    0x00000000000002a2     0x1906 main.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x0000000000000000      0x382
+.debug_abbrev   0x0000000000000000      0x379
  *(.debug_abbrev)
  .debug_abbrev  0x0000000000000000       0xbe lcd-routines.o
- .debug_abbrev  0x00000000000000be      0x2c4 main.o
+ .debug_abbrev  0x00000000000000be      0x2bb main.o
 
-.debug_line     0x0000000000000000     0x2b51
+.debug_line     0x0000000000000000     0x2b1f
  *(.debug_line)
  .debug_line    0x0000000000000000      0x39f lcd-routines.o
- .debug_line    0x000000000000039f     0x27b2 main.o
+ .debug_line    0x000000000000039f     0x2780 main.o
 
 .debug_frame    0x0000000000000000      0x1e0
  *(.debug_frame)
  .debug_frame   0x0000000000000000       0xe0 lcd-routines.o
  .debug_frame   0x00000000000000e0      0x100 main.o
 
-.debug_str      0x0000000000000000      0x754
+.debug_str      0x0000000000000000      0x74b
  *(.debug_str)
  .debug_str     0x0000000000000000      0x172 lcd-routines.o
                                         0x1b0 (size before relaxing)
- .debug_str     0x0000000000000172      0x5e2 main.o
-                                        0x6fb (size before relaxing)
+ .debug_str     0x0000000000000172      0x5d9 main.o
+                                        0x6e0 (size before relaxing)
 
-.debug_loc      0x0000000000000000      0xfd3
+.debug_loc      0x0000000000000000     0x1001
  *(.debug_loc)
  .debug_loc     0x0000000000000000      0x1f4 lcd-routines.o
- .debug_loc     0x00000000000001f4      0xddf main.o
+ .debug_loc     0x00000000000001f4      0xe0d main.o
 
 .debug_macinfo
  *(.debug_macinfo)

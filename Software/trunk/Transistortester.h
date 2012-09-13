@@ -72,7 +72,10 @@
 
 // Widerstand 680 Ohm                300   325   350   375   400   425   450   475   500   525   550   575   600   625   650   675   700   725   750   775   800   825   850   875   900   925   950   975  1000  1025  1050  1075  1100  1125  1150  1175  1200  1225  1250  1275  1300  1325  1350  1375  1400  mV
 const uint16_t RLtab[] MEM_TEXT = {22447,20665,19138,17815,16657,15635,14727,13914,13182,12520,11918,11369,10865,10401, 9973, 9577, 9209, 8866, 8546, 8247, 7966, 7702, 7454, 7220, 6999, 6789, 6591, 6403, 6224, 6054, 5892, 5738, 5590, 5449, 5314, 5185, 5061, 4942, 4828, 4718, 4613, 4511, 4413, 4319, 4228};
+
+#if FLASHEND > 0x1fff
 const uint8_t LogTab[] MEM2_TEXT = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 24, 25, 26, 27, 29, 30, 31, 33, 34, 36, 37, 39, 40, 42, 43, 45, 46, 48, 49, 51, 53, 54, 56, 58, 60, 62, 63, 65, 67, 69, 71, 73, 76, 78, 80, 82, 84, 87, 89, 92, 94, 97, 99, 102, 105, 108, 111, 114, 117, 120, 124, 127, 131, 135, 139, 143, 147, 151, 156, 161, 166, 171, 177, 183, 190, 197, 204, 212, 221, 230, 241 };
+#endif
 
 
 
@@ -395,7 +398,7 @@ unsigned int W10msReadADC(uint8_t mux);		// wait 10ms and read than ADC
 unsigned int W20msReadADC(uint8_t mux);		// wait 20ms and read then ADC
 void lcd_show_format_cap(void);
 void ReadCapacity(uint8_t HighPin, uint8_t LowPin);	//capacity measurement
-void ReadInductance(uint8_t HighPin, uint8_t LowPin);	//inductance measurement
+void ReadInductance(void);		//inductance measurement
 void UfAusgabe(uint8_t bcdchar);	// Output of the threshold voltage(s) Uf
 void mVAusgabe(uint8_t nn);		// Output of the theshold voltage for Diode nn 
 void RvalOut(uint8_t ii);		// Output of the resistore value(s)
@@ -479,7 +482,9 @@ unsigned int ref_mv;            //Reference-voltage  in mV units
 #ifdef R_MESS
 struct resis_t{
    unsigned long rx;		// value of resistor RX  
+#if FLASHEND > 0x1fff
    unsigned long lx;		// inductance uH
+#endif
    uint8_t ra,rb;		// Pins of RX
    uint8_t rt;			// Tristate-Pin (inactive)
 } resis[3];

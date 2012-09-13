@@ -254,9 +254,9 @@ start:
      ReadCapacity(TP3, TP2);
      ReadCapacity(TP2, TP1);
 
-     ReadInductance(TP1, TP2);
-     ReadInductance(TP1, TP3);
-     ReadInductance(TP2, TP3);
+#if FLASHEND > 0x1fff
+     ReadInductance();			// measure inductance
+#endif
   }
 #endif
   //All checks are done, output result to display
@@ -516,10 +516,12 @@ start:
     lcd_line2(); //2. row 
     if (ResistorsFound == 1) {
        RvalOut(0);
+#if FLASHEND > 0x1fff
        if (resis[0].lx != 0) {
 	  // resistor have also Inductance
           DisplayValue(resis[0].lx,-4,'H',3);	// output inductance
        }
+#endif
     } else {
        // output resistor values in right order
        if (ii == 0) {
@@ -748,7 +750,9 @@ void EntladePins() {
 
 #ifdef C_MESS	//measurement of capacity is wanted
 #include "ReadCapacity.c"
+#if FLASHEND > 0x1fff
 #include "ReadInductance.c"
+#endif
 
 unsigned int getRLmultip(unsigned int cvolt) {
 

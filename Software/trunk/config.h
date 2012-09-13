@@ -1,6 +1,8 @@
 
 // U_VCC defines the VCC Voltage of the ATmega in mV units
-#define U_VCC 4980
+// with integer factors the ADC-value will be changed to mV resolution in ReadADC !
+
+#define U_VCC 5000
 
 // U_SCALE can be set to 4 for better resolution of ReadADC function for resistor measurement
 #define U_SCALE 4
@@ -28,9 +30,13 @@
  #define MEM_TEXT EEMEM
  #if E2END > 0X1FF
   #define MEM2_TEXT EEMEM
+  #define MEM2_read_byte(a)  eeprom_read_byte(a)
+  #define MEM2_read_word(a)  eeprom_read_word(a)
   #define lcd_fix2_string(a)  lcd_fix_string(a)
  #else
   #define MEM2_TEXT PROGMEM
+  #define MEM2_read_byte(a)  pgm_read_byte(a)
+  #define MEM2_read_word(a)  pgm_read_word(a)
   #define lcd_fix2_string(a)  lcd_pgm_string(a)
  #endif
  #define MEM_read_word(a)  eeprom_read_word(a)
@@ -327,8 +333,15 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  // AutoCheck Function is needed
  #define CHECK_CALL
 #endif
+
 #ifdef AUTO_CAL
- // AutoCheck Function is needed
- #define CHECK_CALL
+  // AutoCheck Function is needed
+  #define CHECK_CALL
+  #define RR680PL resis680pl
+  #define RR680MI resis680mi
+#else
+  #define RR680PL (R_L_VAL + PIN_RP)
+  #define RR680MI (R_L_VAL + PIN_RM)
 #endif
+
 

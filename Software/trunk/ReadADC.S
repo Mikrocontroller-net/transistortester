@@ -46,8 +46,8 @@ get_sample:
 ; Samples = Probe & (1 << REFS1); /* get REFS1 bit flag */
 	mov	r30, r17
        	andi	r30, (1 << REFS1)
-; if (Samples != Config.RefFlag) {
-	lds	r24, Config+1
+; if (Samples != ADCconfig.RefFlag) {
+	lds	r24, ADCconfig+1
        	cp	r30, r24
        	breq	r2aa2 
 #ifdef NO_AREF_CAP
@@ -69,8 +69,8 @@ wadc1:
 	lds	r24, ADCSRA
        	sbrc	r24, ADSC
        	rjmp	wadc1 
-;    Config.RefFlag = Samples; /* update flag */
-	sts	Config+1, r30
+;    ADCconfig.RefFlag = Samples; /* update flag */
+	sts	ADCconfig+1, r30
 
 #endif
 
@@ -84,7 +84,7 @@ r2aa2:
  /* * sample ADC readings */
 ; Value = 0UL; /* reset sampling variable */
 ; Samples = 0; /* number of samples to take */
-; while (Samples < Config.Samples) /* take samples */ {
+; while (Samples < ADCconfig.Samples) /* take samples */ {
 ;    ADCSRA |= (1 << ADSC); /* start conversion */
 Loop:
 #if ADCSRA < 32
@@ -108,10 +108,10 @@ wadc2:
 	adc	r21, r1
 #ifdef AUTOSCALE_ADC
 ;    /* auto-switch voltage reference for low readings */
-;    if ((Samples == 4) && (Config.U_Bandgap > 255) && ((uint16_t)Value < 1024) && !(Probe & (1 << REFS1))) {
+;    if ((Samples == 4) && (ADCconfig.U_Bandgap > 255) && ((uint16_t)Value < 1024) && !(Probe & (1 << REFS1))) {
 	cpi	r30, 0x04	; Samples == 4
 	brne	r2ae6 
-	lds	r24, Config+3
+	lds	r24, ADCconfig+3
         cpi	r24,0
         breq	r2ae6
        	ldi	r24, (1024 >> 8)	; Value < 1024
@@ -129,14 +129,14 @@ wadc2:
 ;    Samples++; /* one more done */
 r2ae6:
 	subi	r30, 0xFF	; Samples++
-;    Config.RefFlag = Samples; /* update flag */
+;    ADCconfig.RefFlag = Samples; /* update flag */
 ; }
 ; /* * sample ADC readings */
 ; Value = 0UL; /* reset sampling variable */
 ; Samples = 0; /* number of samples to take */
-; while (Samples < Config.Samples) /* take samples */ {
+; while (Samples < ADCconfig.Samples) /* take samples */ {
 r2ae8:
-	lds	r24, Config+0
+	lds	r24, ADCconfig+0
 	cp	r30, r24
 	brcs	Loop 
 ;    }
@@ -145,17 +145,17 @@ r2ae8:
 #ifdef AUTOSCALE_ADC
 ; /* * convert ADC reading to voltage * - single sample: U = ADC reading * U_ref / 1024 */
 ; /* get voltage of reference used */
-; if (Probe & (1 << REFS1)) U = Config.U_Bandgap; /* bandgap reference */
+; if (Probe & (1 << REFS1)) U = ADCconfig.U_Bandgap; /* bandgap reference */
 	sbrs	r17, REFS1
 	rjmp	r2afe 
-	lds	r22, Config+2;   Config.U_Bandgap
-	lds	r23, Config+3
+	lds	r22, ADCconfig+2;   ADCconfig.U_Bandgap
+	lds	r23, ADCconfig+3
        	rjmp	r2b02 
 #endif
 ; else U = U_VCC; /* Vcc reference */
 r2afe:
-	lds	r22, Config+4;	Config.U_AVCC
-       	lds	r23, Config+5
+	lds	r22, ADCconfig+4;	ADCconfig.U_AVCC
+       	lds	r23, ADCconfig+5
 ; /* convert to voltage; */
 ; Value *= U; /* ADC readings * U_ref */
 r2b02:
@@ -178,8 +178,8 @@ r2b02:
 	movw	r22, r18
 	movw	r24, r20
 ; /* de-sample to get average voltage */
-; Value /= Config.Samples;
-	lds	r18,Config+0
+; Value /= ADCconfig.Samples;
+	lds	r18,ADCconfig+0
 ; Round up
 	mov	r19,r18
         asr	r19
@@ -194,7 +194,7 @@ r2b02:
 	ACALL	__udivmodsi4;			R22-25 / R18-21
 ; U = (unsigned int)Value;
 ; return U;
-;//   return ((unsigned int)(Value / (1023 * (unsigned long)Config.Samples)));
+;//   return ((unsigned int)(Value / (1023 * (unsigned long)ADCconfig.Samples)));
 ;}
 	movw	r24, r18
 	pop	r17

@@ -28,7 +28,7 @@ void AutoCheck(void) {
   if (abs((int)(adcmv[2] - adcmv[0])) > 20) {
      return;				//difference to big, no selftest
   }
-  if (abs((int)(adcmv[0] - (U_VCC/2))) > 30) {
+  if (abs((int)((adcmv[0]*2) - ADCconfig.U_AVCC)) > 60) {
      return;				//difference to big, no selftest
   }
   R_DDR = (1<<(TP1*2)) | (1<<(TP3*2));	//Pin 3 over RL to - (Pin 1 over RL to +)
@@ -41,7 +41,7 @@ void AutoCheck(void) {
   if (abs((int)(adcmv[2] - adcmv[0])) > 20) {
      return;				//difference to big, no selftest
   }
-  if (abs((int)(adcmv[0] - (U_VCC/2))) > 30) {
+  if (abs((int)((adcmv[0]*2) - ADCconfig.U_AVCC)) > 60) {
      return;				//difference to big, no selftest
   }
 #ifdef WITH_SELFTEST
@@ -63,7 +63,7 @@ void AutoCheck(void) {
         lcd_space();
                                         //############################################
         if (tt == 1) {   // output of reference voltage and factors for capacity measurement
-           Config.Samples = 190;	// set number of ADC reads near to maximum
+           ADCconfig.Samples = 190;	// set number of ADC reads near to maximum
  #ifdef WITH_AUTO_REF
            (void) ReadADC(0x0e);	// read reference voltage 
            ref_mv = W5msReadADC(0x0e);	// read reference voltage 
@@ -80,14 +80,14 @@ void AutoCheck(void) {
            R_PORT = 1<<(TP1*2);		//RL1 to VCC
            R_DDR = (1<<(TP1*2)) | (1<<(TP2*2));	//RL2 to -
            adcmv[0] = W20msReadADC(TP1);
-           adcmv[0] -= ((long)U_VCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_L_VAL + PIN_RP));
+           adcmv[0] -= ((long)ADCconfig.U_AVCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_L_VAL + PIN_RP));
            R_DDR = (1<<(TP1*2)) | (1<<(TP3*2));	//RL3 to -
            adcmv[1] = W20msReadADC(TP1);
-           adcmv[1] -= ((long)U_VCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_L_VAL + PIN_RP));
+           adcmv[1] -= ((long)ADCconfig.U_AVCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_L_VAL + PIN_RP));
            R_PORT = 1<<(TP2*2);		//RL2 to VCC
            R_DDR = (1<<(TP2*2)) | (1<<(TP3*2));	//RL3 to -
            adcmv[2] = W20msReadADC(TP2);
-           adcmv[2] -= ((long)U_VCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_L_VAL + PIN_RP));
+           adcmv[2] -= ((long)ADCconfig.U_AVCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_L_VAL + PIN_RP));
            lcd_fix2_string(RLRL);	// "RLRL"
         }
                                         //############################################
@@ -95,14 +95,15 @@ void AutoCheck(void) {
            R_PORT = 2<<(TP1*2);		//RH1 to VCC
            R_DDR = (2<<(TP1*2)) | (2<<(TP2*2));	//RH2 to -
            adcmv[0] = W20msReadADC(TP1);
-           adcmv[0] -= (U_VCC/2);
+           adcmv[3] = ADCconfig.U_AVCC / 2;
+           adcmv[0] -= adcmv[3];
            R_DDR = (2<<(TP1*2)) | (2<<(TP3*2));	//RH3 to -
            adcmv[1] = W20msReadADC(TP1);
-           adcmv[1] -= (U_VCC/2);
+           adcmv[1] -= adcmv[3];
            R_PORT = 2<<(TP2*2);		//RL2 to VCC
            R_DDR = (2<<(TP2*2)) | (2<<(TP3*2));	//RH3 to -
            adcmv[2] = W20msReadADC(TP2);
-           adcmv[2] -= (U_VCC/2);
+           adcmv[2] -= adcmv[3];
            lcd_fix2_string(RHRH);	// "RHRH"
         }
                                         //############################################
@@ -126,13 +127,13 @@ void AutoCheck(void) {
         if (tt == 6) { // can we switch the ADC pins to VCC across the R_H resistor?
            R_DDR = 2<<(TP1*2);		//Pin 1 over R_H to VCC
            R_PORT = 2<<(TP1*2);
-           adcmv[0] = W20msReadADC(TP1) - U_VCC;
+           adcmv[0] = W20msReadADC(TP1) - ADCconfig.U_AVCC;
            R_DDR = 2<<(TP2*2);		//Pin 2 over R_H to VCC
            R_PORT = 2<<(TP2*2);
-           adcmv[1] = W20msReadADC(TP2) - U_VCC;
+           adcmv[1] = W20msReadADC(TP2) - ADCconfig.U_AVCC;
            R_DDR = 2<<(TP3*2);		//Pin 3 over R_H to VCC
            R_PORT = 2<<(TP3*2);
-           adcmv[2] = W20msReadADC(TP3) - U_VCC;
+           adcmv[2] = W20msReadADC(TP3) - ADCconfig.U_AVCC;
            lcd_fix2_string(RH1H);	// "RH_Hi="
         }
                                         //############################################
@@ -185,20 +186,20 @@ void AutoCheck(void) {
   ADC_PORT = 1<<TP1 | TXD_VAL;	//ADC-Port 1 to VCC
   ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
   R_DDR = 1<<(TP1*2);		//Pin 1 to output and over R_L to GND
-  adcmv[0] = U_VCC - W5msReadADC(TP1);
+  adcmv[0] = ADCconfig.U_AVCC - W5msReadADC(TP1);
       
   ADC_PORT = 1<<TP2 | TXD_VAL;	//ADC-Port 2 to VCC
   ADC_DDR = 1<<TP2 | TXD_MSK;	//ADC-Pin  2 to output 0V
   R_DDR = 1<<(TP2*2);		//Pin 2 to output and over R_L to GND
-  adcmv[1] = U_VCC - W5msReadADC(TP2);
+  adcmv[1] = ADCconfig.U_AVCC - W5msReadADC(TP2);
 
   ADC_PORT = 1<<TP3 | TXD_VAL;	//ADC-Port 3 to VCC
   ADC_DDR = 1<<TP3 | TXD_MSK;	//ADC-Pin  3 to output 0V
   R_DDR = 1<<(TP3*2);		//Pin 3 to output and over R_L to GND
-  adcmv[2] = U_VCC - W5msReadADC(TP3);
+  adcmv[2] = ADCconfig.U_AVCC - W5msReadADC(TP3);
 
   sum_c0 = (adcmv[0] + adcmv[1] + adcmv[2]);
-  u680 = ((U_VCC * 3) - sum_rm - sum_c0);	//three times the voltage at the 680 Ohm
+  u680 = ((ADCconfig.U_AVCC * 3) - sum_rm - sum_c0);	//three times the voltage at the 680 Ohm
   pin_rm = (unsigned long)((unsigned long)sum_rm * (unsigned long)R_L_VAL) / (unsigned long)u680;
   adcmv[2] = pin_rm;	// for last output in row 2
   pin_rp = (unsigned long)((unsigned long)sum_c0 * (unsigned long)R_L_VAL) / (unsigned long)u680;
@@ -285,13 +286,13 @@ no_c0save:
            adcmv[0] = ReadADC(TP3);
         } while (adcmv[0] > 980);
         R_DDR = 0;		//all Pins to input 
-        Config.U_Bandgap = 0;	// do not use internal Ref
+        ADCconfig.U_Bandgap = 0;	// do not use internal Ref
         adcmv[0] = ReadADC(TP3);  // get cap voltage with VCC reference
-        Config.U_Bandgap = ADC_internal_reference;
+        ADCconfig.U_Bandgap = ADC_internal_reference;
         adcmv[1] = ReadADC(TP3);	// get cap voltage with internal reference
-        Config.U_Bandgap = 0;	// do not use internal Ref
+        ADCconfig.U_Bandgap = 0;	// do not use internal Ref
         adcmv[2] = ReadADC(TP3);  // get cap voltage with VCC reference
-        Config.U_Bandgap = ADC_internal_reference;
+        ADCconfig.U_Bandgap = ADC_internal_reference;
         udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1] - adcmv[1])) * ADC_internal_reference / (2*adcmv[1]))+REF_R_KORR;
         lcd_line2();
         lcd_fix_string(REF_Rstr);	// "REF_R="
@@ -308,7 +309,7 @@ no_c0save:
  #endif
 #endif
 
-  Config.Samples = ANZ_MESS;	// set to configured number of ADC samples
+  ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples
   lcd_clear();
 //  lcd_line1();
   lcd_line2();

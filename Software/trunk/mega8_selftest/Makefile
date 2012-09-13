@@ -51,7 +51,7 @@ CFLAGS += -DREF_C_KORR=4
 CFLAGS += -DC_H_KORR=5
 
 # the WITH_UART option enables the software UART
-CFLAGS += -DWITH_UART
+#CFLAGS += -DWITH_UART
 
 # the R_MESS option enables Resistor measuring 
 CFLAGS += -DR_MESS

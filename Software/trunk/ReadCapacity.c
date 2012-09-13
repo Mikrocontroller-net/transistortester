@@ -160,9 +160,10 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   cval_uncorrected *= getRLmultip(adcv[2]+adcv[3]);	// get factor to convert time to capacity from table
 #endif
    cval = cval_uncorrected;		// set result to uncorrected
+   Scale_C_with_vcc();
    // cval for this type is at least 40000nF, so the last digit will be never shown
-   cval *= (400 - ((C_H_KORR)*2)/5);	// correct with C_H_KORR with 0.1% resolution, but prevent overflow
-   cval /= 40;
+   cval *= (1000 - C_H_KORR);	// correct with C_H_KORR with 0.1% resolution, but prevent overflow
+   cval /= 100;
 #if DebugOut == 10
    lcd_line3();
    lcd_clear_line();
@@ -171,8 +172,8 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
    lcd_data('C');
    lcd_testpin(HighPin);
    lcd_space();
-   lcd_string(ultoa(cval,outval,10));
-   lcd_data('n');
+   DisplaValue(cval,cpre,'F',4);
+   lcd_space();
    lcd_string(utoa(ovcnt16,outval,10));
    wait3s();
 #endif
@@ -253,6 +254,7 @@ messe_mit_rh:
   cval_uncorrected *= RHmultip;		// 708
   cval_uncorrected /= (F_CPU / 10000);	// divide by 100 (@ 1MHz clock), 800 (@ 8MHz clock)
   cval = cval_uncorrected;		// set the corrected cval
+  Scale_C_with_vcc();
   if (cpre == -12) {
 #if COMP_SLEW1 > COMP_SLEW2
      if (cval < COMP_SLEW1) {
@@ -287,8 +289,7 @@ messe_mit_rh:
   lcd_data('c');
   lcd_testpin(HighPin);
   lcd_space();
-  lcd_string(ultoa(cval,outval,10));
-  lcd_data('p');
+  DisplayValue(cval,cpre,'F',4);
   wait3s();
 #endif
   R_DDR = HiPinR_L; 		//switch R_L for High-Pin to GND

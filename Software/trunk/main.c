@@ -106,8 +106,14 @@ start:
   NumOfDiodes = 0;
   PartReady = 0;
   PartMode = 0;
+  WithReference = 0;		// no precision reference voltage
   lcd_clear();
   ADC_DDR = TXD_MSK;		//activate Software-UART 
+#ifdef AUTO_CAL
+  resis680pl = eeprom_read_word(&R680pl);
+  resis680mi = eeprom_read_word(&R680mi);
+#endif
+
 #ifdef R_MESS
   ResistorsFound = 0;
 #endif
@@ -118,23 +124,31 @@ start:
 #ifdef WITH_UART
   uart_newline();		// start of new measurement
 #endif
-  Config.RefFlag = 0;
-  Config.U_AVCC = U_VCC;	// set VCC Voltage
+  ADCconfig.RefFlag = 0;
+  ADCconfig.U_AVCC = U_VCC;	// set initial VCC Voltage
+  ADCconfig.Samples = 190;		// set number of ADC samples near to max
+  ChargePin10ms((1<<TPREF),0);	// shorten 2.5V reference voltage
+  trans.uBE[1] = W5msReadADC(TPREF); // read voltage of precision reference
+  if ((trans.uBE[1] > 2250) && (trans.uBE[1] < 2750)) {
+     // precision voltage reference connected, update U_AVCC
+     WithReference = 1;
+     ADCconfig.U_AVCC = (unsigned long)((unsigned long)ADCconfig.U_AVCC * 2495) / trans.uBE[1];
+  }
+  lcd_line1();	//1. row 
+  
 #ifdef WITH_AUTO_REF
-  Config.Samples = 190;		// set number of ADC samples near to max
   (void) ReadADC(0x0e);		// read Reference-voltage 
   ref_mv = W20msReadADC(0x0e);	// read Reference-voltage
 #else
   ref_mv = DEFAULT_BAND_GAP;	// set to default Reference Voltage
 #endif
-  Config.U_Bandgap = ADC_internal_reference;	// set internal reference voltage for ADC
-  Config.Samples = ANZ_MESS;	// set to configured number of ADC samples
+  ADCconfig.U_Bandgap = ADC_internal_reference;	// set internal reference voltage for ADC
+  ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples
 
 #ifdef BAT_CHECK
   // Battery check is selected
-  ReadADC(5);	//Dummy-Readout
-  trans.uBE[0] = W5msReadADC(5); 	//with 5V reference
-  lcd_line1();	//1. row 
+  ReadADC(TPBAT);	//Dummy-Readout
+  trans.uBE[0] = W5msReadADC(TPBAT); 	//with 5V reference
   lcd_fix_string(Bat);		//output: "Bat. "
  #ifdef BAT_OUT
   // display Battery voltage
@@ -180,6 +194,10 @@ start:
 #endif
 
   lcd_line2();			//LCD position row2, column 1
+  if (WithReference) {
+     DisplayValue(ADCconfig.U_AVCC,-3,'V',3);	// Display 3 Digits of this mV units
+     lcd_space();
+  }
   lcd_fix_string(TestRunning);		//String: testing...
 //#ifndef __AVR_ATmega8__
 #if 0
@@ -209,12 +227,23 @@ start:
 #endif
      
   // check all 6 combinations for the 3 pins 
+#if 0
   CheckPins(TP1, TP2, TP3);
   CheckPins(TP1, TP3, TP2);
   CheckPins(TP2, TP1, TP3);
   CheckPins(TP2, TP3, TP1);
   CheckPins(TP3, TP2, TP1);
   CheckPins(TP3, TP1, TP2);
+#else
+  CheckPins(TP1, TP2, TP3);
+  CheckPins(TP2, TP1, TP3);
+
+  CheckPins(TP1, TP3, TP2);
+  CheckPins(TP3, TP1, TP2);
+
+  CheckPins(TP2, TP3, TP1);
+  CheckPins(TP3, TP2, TP1);
+#endif
   
 #ifdef C_MESS
   //separate check if is is a capacitor
@@ -224,6 +253,10 @@ start:
      ReadCapacity(TP3, TP1);
      ReadCapacity(TP3, TP2);
      ReadCapacity(TP2, TP1);
+
+     ReadInductance(TP1, TP2);
+     ReadInductance(TP1, TP3);
+     ReadInductance(TP2, TP3);
   }
 #endif
   //All checks are done, output result to display
@@ -483,6 +516,10 @@ start:
     lcd_line2(); //2. row 
     if (ResistorsFound == 1) {
        RvalOut(0);
+       if (resis[0].lx != 0) {
+	  // resistor have also Inductance
+          DisplayValue(resis[0].lx,-4,'H',3);	// output inductance
+       }
     } else {
        // output resistor values in right order
        if (ii == 0) {
@@ -698,13 +735,6 @@ void EntladePins() {
      if (clr_cnt == MAX_ENTLADE_ZEIT) {
         PartFound = PART_CELL;	// mark as Battery
         // there is charge on capacitor, warn later!
-//        lcd_line3();
-//        lcd_data('E');
-//        lcd_string(utoa(adcmv[0], outval, 10));
-//        lcd_space();
-//        lcd_string(utoa(adcmv[1], outval, 10));
-//        lcd_space();
-//        lcd_string(utoa(adcmv[2], outval, 10));
      }
      for(adcmv[0]=0;adcmv[0]<clr_cnt;adcmv[0]++) {
         // for safety, discharge 5% of discharge  time
@@ -718,6 +748,7 @@ void EntladePins() {
 
 #ifdef C_MESS	//measurement of capacity is wanted
 #include "ReadCapacity.c"
+#include "ReadInductance.c"
 
 unsigned int getRLmultip(unsigned int cvolt) {
 
@@ -747,6 +778,15 @@ unsigned int getRLmultip(unsigned int cvolt) {
   y1 = MEM_read_word(&RLtab[tabind]);
   y2 = MEM_read_word(&RLtab[tabind+1]);
   return ( ((y1 - y2) * tabres + (RL_Tab_Abstand/2)) / RL_Tab_Abstand + y2); // interpolate table
+}
+
+void Scale_C_with_vcc(void) {
+   while (cval > 1000000) {
+      cval /= 10;
+      cpre ++;          // prevent overflow
+   }
+   cval *= ADCconfig.U_AVCC;	// scale with measured voltage
+   cval /= U_VCC;               // Factors are computed for U_VCC
 }
 
 #endif

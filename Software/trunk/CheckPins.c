@@ -49,17 +49,17 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     TristatePin remains switched to input , no action required 
   */
   wdt_reset();
-#ifdef AUTO_CAL
-  uint16_t resis680pl;
-  uint16_t resis680mi;
-  resis680pl = eeprom_read_word(&R680pl);
-  resis680mi = eeprom_read_word(&R680mi);
-  #define RR680PL resis680pl
-  #define RR680MI resis680mi
-#else
-  #define RR680PL (R_L_VAL + PIN_RP)
-  #define RR680MI (R_L_VAL + PIN_RM)
-#endif
+//#ifdef AUTO_CAL
+//  uint16_t resis680pl;
+//  uint16_t resis680mi;
+//  resis680pl = eeprom_read_word(&R680pl);
+//  resis680mi = eeprom_read_word(&R680mi);
+//  #define RR680PL resis680pl
+//  #define RR680MI resis680mi
+//#else
+//  #define RR680PL (R_L_VAL + PIN_RP)
+//  #define RR680MI (R_L_VAL + PIN_RM)
+//#endif
   LoPinRL = MEM_read_byte(&PinRLtab[LowPin]);		// intruction for LowPin R_L
   LoPinRH = LoPinRL + LoPinRL;				// intruction for LowPin R_H
   TriPinRL = MEM_read_byte(&PinRLtab[TristatePin]);	// intruction for TristatePin R_L
@@ -157,7 +157,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
            PartMode = PART_MODE_P_JFET;
         }
         gthvoltage = adc.tp1 - adc.hp1;		//voltage GS (Gate - Source)
-        trans.uBE[1] = (unsigned int)(((unsigned long)(U_VCC - adc.hp1) * 1000) / RR680PL); // Id 0.01mA
+        trans.uBE[1] = (unsigned int)(((unsigned long)(ADCconfig.U_AVCC - adc.hp1) * 1000) / RR680PL); // Id 0.01mA
         trans.b = TristatePin;		//save Pin numbers found for this FET
         trans.c = LowPin;
         trans.e = HighPin;
@@ -171,12 +171,12 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   ADC_DDR = LoADCm;			// Collector direct to GND
   R_PORT = HiPinRL;			// switch R_L port for HighPin (Emitter) to VCC
   R_DDR = TriPinRL | HiPinRL;		// Base resistor  R_L to GND
-  adc.hp1 = U_VCC - W5msReadADC(HighPin);	// voltage at the Emitter resistor
+  adc.hp1 = ADCconfig.U_AVCC - W5msReadADC(HighPin);	// voltage at the Emitter resistor
   adc.tp1 = ReadADC(TristatePin);	// voltage at the base resistor
 
   if (adc.tp1 < 10) {
      R_DDR =  TriPinRH | HiPinRL;	// Tripin=RH-
-     adc.hp1 = U_VCC - W5msReadADC(HighPin);
+     adc.hp1 = ADCconfig.U_AVCC - W5msReadADC(HighPin);
      adc.tp1 = ReadADC(TristatePin);	// voltage at base resistor 
 #if DebugOut == 5
        lcd_line3();
@@ -254,7 +254,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         // c_hFE = (Emitter current - Base current) / Base current
         if (c_hfe > trans.hfe[PartReady]) {
            trans.hfe[PartReady] = c_hfe;
-           trans.uBE[PartReady] = U_VCC - adc.hp1 - adc.tp1;	// Base Emitter Voltage common collector
+           trans.uBE[PartReady] = ADCconfig.U_AVCC - adc.hp1 - adc.tp1;	// Base Emitter Voltage common collector
         }
 #endif
 
@@ -299,12 +299,12 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     R_DDR = LoPinRL | TriPinRL;
     R_PORT = TriPinRL;			// TriPin=RL+  NPN with common Collector
     adc.lp1 = W5msReadADC(LowPin);	// voltage at Emitter resistor
-    adc.tp1 = U_VCC - ReadADC(TristatePin);	// voltage at Base resistor
+    adc.tp1 = ADCconfig.U_AVCC - ReadADC(TristatePin);	// voltage at Base resistor
     if (adc.tp1 < 10) {
        R_DDR = LoPinRL | TriPinRH;
        R_PORT = TriPinRH;		// Tripin=RH+
        adc.lp1 = W5msReadADC(LowPin);
-       adc.tp1 = U_VCC - ReadADC(TristatePin);	// voltage at Base resistor
+       adc.tp1 = ADCconfig.U_AVCC - ReadADC(TristatePin);	// voltage at Base resistor
  #ifdef LONG_HFE
        c_hfe = ((unsigned long)adc.lp1 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
               (unsigned int)RR680MI)) / (unsigned int)adc.tp1;	
@@ -400,8 +400,8 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
       R_DDR = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to output
       R_PORT = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to VCC
       wait50ms();
-      adc.hp2 = U_VCC - ReadADC(HighPin);	//measure the voltage at the collector resistor 
-      adc.tp2 = U_VCC - ReadADC(TristatePin);	//measure the voltage at the base resistor 
+      adc.hp2 = ADCconfig.U_AVCC - ReadADC(HighPin);	//measure the voltage at the collector resistor 
+      adc.tp2 = ADCconfig.U_AVCC - ReadADC(TristatePin);	//measure the voltage at the base resistor 
 
 #if DebugOut == 5
        lcd_line3();
@@ -418,7 +418,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
       if((PartFound == PART_TRANSISTOR) || (PartFound == PART_FET)) {
          PartReady = 1;	//check, if test is already done once
       }
-      trans.uBE[PartReady] = U_VCC - adc.tp2 - ReadADC(LowPin);
+      trans.uBE[PartReady] = ADCconfig.U_AVCC - adc.tp2 - ReadADC(LowPin);
 
       //compute current amplification factor for common Emitter
       //hFE = B = Collector current / Base current
@@ -442,7 +442,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        // hFE = (Emitterstrom - Basisstrom) / Basisstrom
        if (c_hfe >  trans.hfe[PartReady]) {
           trans.hfe[PartReady] = c_hfe;
-          trans.uBE[PartReady] = U_VCC - adc.lp1 - adc.tp1;
+          trans.uBE[PartReady] = ADCconfig.U_AVCC - adc.lp1 - adc.tp1;
        }
 #endif
 
@@ -568,11 +568,11 @@ widmes:
   wdt_reset();
 // U_SCALE can be set to 4 for better resolution of ReadADC result
  #if U_SCALE != 1
-  Config.U_AVCC = U_VCC*U_SCALE;	// scale to higher resolution, mV scale is not required
-  Config.U_Bandgap *= U_SCALE;
+  ADCconfig.U_AVCC *= U_SCALE;	// scale to higher resolution, mV scale is not required
+  ADCconfig.U_Bandgap *= U_SCALE;
  #endif
 #if R_ANZ_MESS != ANZ_MESS
-  Config.Samples = R_ANZ_MESS;	// switch to special number of repetitions
+  ADCconfig.Samples = R_ANZ_MESS;	// switch to special number of repetitions
 #endif
   ADC_PORT = TXD_VAL;
   ADC_DDR = LoADCm;		//switch Low-Pin to output (GND)
@@ -637,13 +637,13 @@ widmes:
         }
         // two measurements with R_H resistors (470k) are made:
         // lirx1 (measurement at HighPin)
-//        ukorr = (int)((U_VCC * U_SCALE) - adc.hp2) / ((U_VCC*U_SCALE)/(7*U_SCALE)) + (2*U_SCALE);
+//        ukorr = (int)(ADCconfig.U_AVCC - adc.hp2) / (ADCconfig.U_AVCC/(7*U_SCALE)) + (2*U_SCALE);
 //        adc.hp2 += ukorr;
-        lirx1 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)adc.hp2 / ((U_VCC*U_SCALE) - adc.hp2);
+        lirx1 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)adc.hp2 / ((ADCconfig.U_AVCC*U_SCALE) - adc.hp2);
         // lirx2 (measurement at LowPin)
-//        ukorr = (int)((U_VCC * U_SCALE)/2 - adc.lp2) / ((U_VCC*U_SCALE)/(12*U_SCALE));
+//        ukorr = (int)(ADCconfig.U_AVCC/2 - adc.lp2) / (ADCconfig.U_AVCC/(12*U_SCALE));
 //        adc.lp2 += ukorr;
-        lirx2 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)((U_VCC*U_SCALE) - adc.lp2) / adc.lp2;
+        lirx2 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)(ADCconfig.U_AVCC - adc.lp2) / adc.lp2;
 #define U_INT_LIMIT (990*U_SCALE)		// 1V switch limit in ReadADC for atmega family
 #ifdef __AVR_ATmega8__
 #define FAKT_LOW 2		//resolution is about twice as good
@@ -670,7 +670,7 @@ widmes:
         if (adc.tp1 > adc.hp1) {
            adc.hp1 = adc.tp1;		//diff negativ is illegal
         }
-        lirx1 =(unsigned long)RR680PL * (unsigned long)(adc.hp1 - adc.tp1) / ((U_VCC*U_SCALE) - adc.hp1);
+        lirx1 =(unsigned long)RR680PL * (unsigned long)(adc.hp1 - adc.tp1) / (ADCconfig.U_AVCC - adc.hp1);
         if (adc.tp2 < adc.lp1) {
            adc.lp1 = adc.tp2;		//diff negativ is illegal
         }
@@ -678,15 +678,15 @@ widmes:
         lirx2 =(unsigned long)RR680MI * (unsigned long)(adc.tp2 -adc.lp1) / adc.lp1;
 //     lrx1 =(unsigned long)R_L_VAL * (unsigned long)adc.hp1 / (adc.hp3 - adc.hp1);
 #else
-        ukorr = (int)((4 * U_SCALE) - adc.hp1 / (U_VCC/12));
+        ukorr = (int)((4 * U_SCALE) - adc.hp1 / (ADCconfig.U_AVCC/(12*U_SCALE)));
         if (ukorr > 0) adc.hp1 -= ukorr;
-        lirx1 =(unsigned long)RR680PL * (unsigned long)adc.hp1 / ((U_VCC*U_SCALE) - adc.hp1);
+        lirx1 =(unsigned long)RR680PL * (unsigned long)adc.hp1 / (ADCconfig.U_AVCC - adc.hp1);
         if (lirx1 > (RR680MI - R_L_VAL))  lirx1 -= (RR680MI - R_L_VAL);
         else     lirx1 = 0;
-        ukorr = (int)((4 * U_SCALE) - adc.lp1 / (U_VCC/6));
+        ukorr = (int)((4 * U_SCALE) - adc.lp1 / (ADCconfig.U_AVCC/(6*U_SCALE)));
         if (ukorr < 0) ukorr = -ukorr;
         adc.lp1 += ukorr;
-        lirx2 =(unsigned long)RR680MI * (unsigned long)((U_VCC*U_SCALE) - adc.lp1) / adc.lp1;
+        lirx2 =(unsigned long)RR680MI * (unsigned long)(ADCconfig.U_AVCC - adc.lp1) / adc.lp1;
         if (lirx2 > (RR680PL - R_L_VAL))  lirx2 -= (RR680PL - R_L_VAL);
         else     lirx2 = 0;
 #endif
@@ -712,27 +712,22 @@ widmes:
   lcd_space();
   if (ii == 'H') {
      lcd_data('X');
-//     (void) value_out(lirx1, 3);
      DisplayValue(lirx1,1,LCD_CHAR_OMEGA,4)
      lcd_space();
      lcd_data('Y');
-//     (void) value_out(lirx2, 3);
      DisplayValue(lirx2,1,LCD_CHAR_OMEGA,4)
      lcd_space();
   } else {
      lcd_data('x');
-//     (void) value_out(lirx1, 2);
      DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,4)
      lcd_space();
      lcd_data('y');
-//     (void) value_out(lirx2, 2);
      DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4)
   }
   lcd_space();
   lcd_line4();
   lcd_clear_line();
   lcd_line4();
-//  (void) value_out(lrx1, 2);
   DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4)
   lcd_space();
   lcd_line2();
@@ -752,10 +747,8 @@ widmes:
               lcd_data('R');
               lcd_data('!');
               lcd_data('=');
-//              (void) value_out(thisR->rx, 2);
               DisplayValue(thisR->rx,-1,LCD_CHAR_OMEGA,3)
               lcd_space();
-//              (void) value_out(lirx1, 2);
               DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,3)
               lcd_space();
  #endif
@@ -767,6 +760,7 @@ widmes:
         // no same resistor with the same Tristate-Pin found, new one
         thisR = &resis[ResistorsFound];		// pointer to a free resistor structure
         thisR->rx = lrx1;		// save resistor value
+        thisR->lx = 0;			// no inductance
         thisR->ra = LowPin;		// save Pin numbers
         thisR->rb = HighPin;
         thisR->rt = TristatePin;	// Tristate is saved for easier search of inverse measurement
@@ -780,11 +774,11 @@ widmes:
 #endif
   testend:
 #if U_SCALE != 1
-  Config.U_AVCC = U_VCC;		// scale back to mV resolution
-  Config.U_Bandgap /= U_SCALE;
+  ADCconfig.U_AVCC /= U_SCALE;		// scale back to mV resolution
+  ADCconfig.U_Bandgap /= U_SCALE;
 #endif
 #if R_ANZ_MESS != ANZ_MESS
-  Config.Samples = ANZ_MESS;		// switch back to standard number of repetition
+  ADCconfig.Samples = ANZ_MESS;		// switch back to standard number of repetition
 #endif
 #ifdef DebugOut
 #if DebugOut < 10

@@ -20,6 +20,7 @@
   This Port must have an ADC-Input  (ATmega8:  PORTC).
   The lower pins of this Port must be used for measurements.
   Please don't change the definitions of TP1, TP2 and TP3!
+  The TPREF pin can be connected with a 2.5V precision voltage reference
 */
 
 #define ADC_PORT PORTC
@@ -28,6 +29,8 @@
 #define TP1 PC0
 #define TP2 PC1
 #define TP3 PC2
+#define TPREF PC4
+#define TPBAT PC5
 
 
 /*
@@ -69,6 +72,8 @@
 
 // Widerstand 680 Ohm                300   325   350   375   400   425   450   475   500   525   550   575   600   625   650   675   700   725   750   775   800   825   850   875   900   925   950   975  1000  1025  1050  1075  1100  1125  1150  1175  1200  1225  1250  1275  1300  1325  1350  1375  1400  mV
 const uint16_t RLtab[] MEM_TEXT = {22447,20665,19138,17815,16657,15635,14727,13914,13182,12520,11918,11369,10865,10401, 9973, 9577, 9209, 8866, 8546, 8247, 7966, 7702, 7454, 7220, 6999, 6789, 6591, 6403, 6224, 6054, 5892, 5738, 5590, 5449, 5314, 5185, 5061, 4942, 4828, 4718, 4613, 4511, 4413, 4319, 4228};
+const uint8_t LogTab[] MEM2_TEXT = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 24, 25, 26, 27, 29, 30, 31, 33, 34, 36, 37, 39, 40, 42, 43, 45, 46, 48, 49, 51, 53, 54, 56, 58, 60, 62, 63, 65, 67, 69, 71, 73, 76, 78, 80, 82, 84, 87, 89, 92, 94, 97, 99, 102, 105, 108, 111, 114, 117, 120, 124, 127, 131, 135, 139, 143, 147, 151, 156, 161, 166, 171, 177, 183, 190, 197, 204, 212, 221, 230, 241 };
+
 
 
 #ifdef AUTO_RH
@@ -81,8 +86,6 @@ const uint16_t RHtab[] MEM_TEXT = { 954, 903, 856, 814, 775, 740, 707, 676, 648}
 
 // with integer factors the ADC-value will be changed to mV resolution in ReadADC !
 // all if statements are corrected to the mV resolution.
-//#define U_VCC 5001		// maximum of the ReadADC routine 
-
 
 /*########################################################################################
 End of configuration 
@@ -392,6 +395,7 @@ unsigned int W10msReadADC(uint8_t mux);		// wait 10ms and read than ADC
 unsigned int W20msReadADC(uint8_t mux);		// wait 20ms and read then ADC
 void lcd_show_format_cap(void);
 void ReadCapacity(uint8_t HighPin, uint8_t LowPin);	//capacity measurement
+void ReadInductance(uint8_t HighPin, uint8_t LowPin);	//inductance measurement
 void UfAusgabe(uint8_t bcdchar);	// Output of the threshold voltage(s) Uf
 void mVAusgabe(uint8_t nn);		// Output of the theshold voltage for Diode nn 
 void RvalOut(uint8_t ii);		// Output of the resistore value(s)
@@ -400,6 +404,7 @@ void EntladePins();			// discharge capacitors
 void RefVoltage();			// compensate the reference voltage for comparator 
 void AutoCheck();			// check if self-test should be done 
 unsigned int getRLmultip(unsigned int cvolt);  // get C-Multiplikator for voltage cvolt
+void Scale_C_with_vcc();		// scale capacity value for different VCC Voltages
 void scale_intref_adc();		// get scale factors for ReadADC with internal reference
 //uint8_t value_out(unsigned long vval,uint8_t pp);    // output 4 digits with (pp-1) digits after point
 void DisplayValue(unsigned long vval,int8_t Expo,unsigned char Unit, unsigned char Digits); //output Digits characters with exponent and unit
@@ -474,6 +479,7 @@ unsigned int ref_mv;            //Reference-voltage  in mV units
 #ifdef R_MESS
 struct resis_t{
    unsigned long rx;		// value of resistor RX  
+   unsigned long lx;		// inductance uH
    uint8_t ra,rb;		// Pins of RX
    uint8_t rt;			// Tristate-Pin (inactive)
 } resis[3];
@@ -508,17 +514,24 @@ int16_t load_diff;		// difference voltage of loaded capacitor and internal refer
 int8_t cpre;			//Prefix for capacitor value  -12=p, -9=n, -6=µ, -3=m
 uint8_t ca, cb;			//pins of capacitor
 
+uint8_t WithReference;		// Marker for found precision voltage reference = 1
 uint8_t PartFound;	 	// the found part 
 char outval[12];		// String for ASCII-outpu
 uint8_t empty_count;		// counter for max count of empty measurements
 uint8_t mess_count;		// counter for max count of nonempty measurements
 
-struct Config_t {
+struct ADCconfig_t {
   uint8_t Samples;		// number of ADC samples to take
   uint8_t RefFlag;		// save Reference type VCC of IntRef
   uint16_t U_Bandgap;		// Reference Voltage in mV
   uint16_t U_AVCC;		// Voltage of AVCC
-} Config;
+} ADCconfig;
+
+#ifdef AUTO_CAL
+  uint16_t resis680pl;
+  uint16_t resis680mi;
+#endif
+
 
 #if POWER_OFF+0 > 1
 unsigned int display_time;	// display time of measurement in ms units

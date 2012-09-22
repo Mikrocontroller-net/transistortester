@@ -172,7 +172,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
    lcd_data('C');
    lcd_testpin(HighPin);
    lcd_space();
-   DisplaValue(cval,cpre,'F',4);
+   DisplayValue(cval,cpre,'F',4);
    lcd_space();
    lcd_string(utoa(ovcnt16,outval,10));
    wait3s();
@@ -194,7 +194,7 @@ messe_mit_rh:
   ACSR =  (1<<ACBG) | (1<<ACI)  | (1<<ACIC);	// enable, 1.3V, no Interrupt, Connect to Timer1 
   ADMUX = (1<<REFS0) | HighPin;			// switch Mux to High-Pin
   ADCSRA = (1<<ADIF) | AUTO_CLOCK_DIV; //disable ADC
-  wait200us();
+  wait200us();			//wait for bandgap to start up
 
   ovcnt16 = 0;
 // setup Counter1

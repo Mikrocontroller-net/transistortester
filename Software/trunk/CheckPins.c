@@ -31,6 +31,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   uint8_t LoADCm;		// mask to switch the ADC DDR port Low-Pin
   uint8_t PinMSK;
   uint8_t ii;			// Hilfsvariable
+  int udiff;
 
 #ifdef COMMON_COLLECTOR
   unsigned long c_hfe;		// amplification factor for common Collector (Emitter follower)
@@ -574,12 +575,27 @@ widmes:
 #if R_ANZ_MESS != ANZ_MESS
   ADCconfig.Samples = R_ANZ_MESS;	// switch to special number of repetitions
 #endif
+  #define MAX_REPEAT (700 / (5 + R_ANZ_MESS/8))
   ADC_PORT = TXD_VAL;
   ADC_DDR = LoADCm;		//switch Low-Pin to output (GND)
   R_DDR = HiPinRL;		//switch R_L port for High-Pin to output (VCC)
   R_PORT = HiPinRL;	
+#if FLASHEND > 0x1fff
+  adc.hp2 = 0;
+  for (ii=1;ii<MAX_REPEAT;ii++) {
+     // wait until voltage is stable
+     adc.tp1 = W5msReadADC(LowPin);	// low-voltage at Rx with load
+     adc.hp1 = ReadADC(HighPin);		// voltage at resistor Rx with R_L
+     udiff = adc.hp1 - adc.hp2;
+     if (udiff < 0) udiff = -udiff;
+     if (udiff < 3) break;
+     adc.hp2 = adc.hp1;
+     wdt_reset();
+  }
+  if (ii == MAX_REPEAT) goto testend;
+#else
   adc.tp1 = W5msReadADC(LowPin);	// low-voltage at Rx with load
-  adc.hp1 = ReadADC(HighPin);		// voltage at resistor Rx with R_L
+#endif
   if (adc.tp1 > adc.hp1) {
      adc.tp1 = adc.hp1;
   }
@@ -610,8 +626,22 @@ widmes:
   ADC_PORT = HiADCp;		//switch High-Pin to VCC
   R_PORT = 0;
   R_DDR = LoPinRL;			//switch R_L for Low-Pin to GND
+#if FLASHEND > 0x1fff
+  adc.lp2 = 0;
+  for (ii=1;ii<MAX_REPEAT;ii++) {
+     // wait until voltage is stable
+     adc.tp2 = W5msReadADC(HighPin);	//high voltage with load
+     adc.lp1 = ReadADC(LowPin);		//voltage at the other end of Rx
+     udiff = adc.lp1 - adc.lp2;
+     if (udiff < 0) udiff = -udiff;
+     if (udiff < 3) break;
+     adc.lp2 = adc.lp1;
+     wdt_reset();
+  }
+  if (ii == MAX_REPEAT) goto testend;
+#else
   adc.tp2 = W5msReadADC(HighPin);	//high voltage with load
-  adc.lp1 = ReadADC(LowPin);		//voltage at the other end of Rx
+#endif
   if (adc.tp2 < adc.lp1) {
      adc.tp2 = adc.lp1;
   }

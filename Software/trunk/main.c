@@ -519,7 +519,7 @@ start:
 #if FLASHEND > 0x1fff
        if (resis[0].lx != 0) {
 	  // resistor have also Inductance
-          DisplayValue(resis[0].lx,-4,'H',3);	// output inductance
+          DisplayValue(resis[0].lx,-5,'H',3);	// output inductance
        }
 #endif
     } else {
@@ -785,7 +785,7 @@ unsigned int getRLmultip(unsigned int cvolt) {
 }
 
 void Scale_C_with_vcc(void) {
-   while (cval > 1000000) {
+   while (cval > 100000) {
       cval /= 10;
       cpre ++;          // prevent overflow
    }

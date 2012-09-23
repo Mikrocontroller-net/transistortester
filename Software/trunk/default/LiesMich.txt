@@ -1,4 +1,4 @@
-﻿Datum: 1.6.2012   Testversion Transistortester (AVR) Version 0.97k
+﻿Datum: 23.9.2012   Testversion Transistortester (AVR) Version 1.00k
 
 
 Für alle, die selber experimentieren wollen,hier eine kurze Anleitung,
@@ -40,27 +40,22 @@ Beim Setzen der Clockfrequenz bitte äußerst sorgfältig arbeiten, man kann sie
 sehr leicht so ändern, daß keine (ISP-)Programmierung mehr möglich ist!!!
 
 
-Ausser dem Atmega8 habe ich eine ATmega168 Version (PARTNO=m168) getestet.
-Die Version mit allen Funktionen läuft nur noch auf einem ATmega168, für den
-ATmega8 ist eine Version mit allen Mess-Möglichkeiten nur möglich, wenn man auf
-die Selbsttest-Funktion verzichtet. Der Selbsttest ist nur noch möglich, wenn man
-mindestens auf die Option AUTOSCALE_ADC und die neue POWER_OFF=5 verzichtet.
-Für eine ATmega88 Version mit Selbsttest-Funktion muss zusätzlich auch auf die
-UART-Funktion (WITH_UART) verzichtet werden.
+Ausser dem ATmega8 habe ich eine ATmega168 Version (PARTNO=m168) getestet.
+Die Version mit allen Funktionen läuft nur noch auf einem ATmega168 oder ATmega328.
+Ein Wechsel vom ATmega8 auf einen ATmega168 oder ATmega328 ist ohne
+Hardwareänderung möglich.
 
 In dem Unterverzeichnis mega8_auto sind die Programmfiles für einen ATmega8 in der
 8MHz Version ohne die Selbsttestfunktion abgelegt.
-Im Unterverzeichnis mega8_selftest sind die Programmfiles für einen ATmega8 mit der
+Im Unterverzeichnis mega8_selftest sind jetzt die Programmfiles für einen ATmega8 ohne die
 Selbsttestfunktion (ohne AUTOSCALE_ADC) abgelegt, ebenfalls in der 8MHz Version.
-Die jeweilige Makefile ist in den Unterverzeichnissen auch vorhanden und kann jetzt
-unmittelbar benutzt werden, da die Unterverzeichnisse parallel zum default Unterverzeichnis
-liegen.
+Die jeweilige Makefile ist in den Unterverzeichnissen auch vorhanden und kann 
+unmittelbar benutzt werden. 
 
 Meine Tests habe ich mit dem Quarz-Oszillator (bestückter Quarz) durchgeführt.
 Ein Betrieb mit 8Mhz RC-Generator sollte aber ebenfalls möglich sein.
 Wegen der besseren Auflösung bei der Kapazitätsmessung bevorzuge ich die 8MHz Variante.
 So sind auch die Programmfiles für den ATmega168 für 8MHz Takt erzeugt (Verzeichnis default)!
-
 
 
 Ich bin an Rückmeldungen von mutigen Testern durchaus interessiert, entweder im

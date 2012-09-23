@@ -267,7 +267,11 @@ no_c0save:
      PartFound = PART_NONE;
      //measure  offset Voltage of analog Comparator for Capacity measurement
      ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
-     if (((cpre == -12) && (cval > 95000)) || ((cpre == -10) && (cval < 300000))) {
+     while (cpre < -9) {
+        cpre++;
+        cval /= 10;
+     }
+     if ((cpre == -9) && (cval > 95)) {
         cap_found++;
      } else {
         cap_found = 0;		// wait for stable connection
@@ -303,6 +307,8 @@ no_c0save:
         wait4s();
         break;
      }
+     lcd_line2();
+     DisplayValue(cval,cpre,'F',4);
      wait200ms();			// wait additional time
   }
 

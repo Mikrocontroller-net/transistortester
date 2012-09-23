@@ -1,4 +1,4 @@
-﻿Datum: 1.6.2012   Test version Transistortester (AVR) Version 0.97k
+﻿Datum: 23.9.2012   Test version Transistortester (AVR) Version 1.00k
 
 
 For all adventurous people here is my short intruction, how to get
@@ -29,7 +29,7 @@ get a operable ATmega microcontroller.
 
 For crystal operation you need a proper installed 8MHz crystal at pin 9 and pin 10 of the
 ATmega.
-For ATmega88, ATmega168 and ATmega328 is a clock operation of 1MHz possible, even if
+For ATmega168 and ATmega328 is a clock operation of 1MHz possible, even if
 a 8MHz crystal installed. For this case a clock divide by 8 is programmed with the
 fuses.
 A new make fuses-crystal-lp call is also possible with the ATmega168 line of controllers
@@ -37,23 +37,19 @@ to save power with the Low Power Crystal Oscillator mode. The fuses-crystal call
 enables the Full Swing Crystal Oscillator mode.
 The ATmega8 must have a 1MHz crystal installed, if you wish a 1MHz crystal operation.
 For better resolution of capacity measurement the 8Mhz clock is recommended.
-If you don't use the Makefile for setting the fuses, be carful, you can set the
+If you don't use the Makefile for setting the fuses, be careful, you can set the
 fuses, that no further ISP programming of your ATmega is possible!!!
 
 I have tested a ATmega168 vesion (PARTNO=m168) and a ATmega8 version (PARTNO=m8).
 You can use all options at same time only with ATmega168 version.
-You can use all measurement options with ATmega8 only, if you dont configure
-the selftest function.
-The selftest function can only be configured with ATmega8, if you don't
-select option AUTOSCALE_ADC and the new POWER_OFF=5 option.
-If you select the ATmega88 with the selftest function, you must omit the
-option WITH_UART too.
+The selftest and automatic calibration is only possible with mega168 of mega328!
+You can change from ATmega8 to ATmega168 or ATmega328 without hardware changes.
 
 In the directory Sourcecode/mega8_auto are compiled programming data for the
 ATmega8 without the selftest function but with AUTOSCALE_ADC.
 
 In the directory Sourcecode/mega8_selftest are compiled programming date for
-the ATmega8 with selftest function but without the AUTOSCALE_ADC option.
+the ATmega8 without selftest function and without the AUTOSCALE_ADC option.
 Both versions are compiled for 8MHz operation, as you can see in the Makefile options.
 
 All my tests are done with 8Mhz crystal operation. You can select also the

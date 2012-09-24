@@ -595,6 +595,7 @@ widmes:
   if (ii == MAX_REPEAT) goto testend;
 #else
   adc.tp1 = W5msReadADC(LowPin);	// low-voltage at Rx with load
+  adc.hp1 = ReadADC(HighPin);		// voltage at resistor Rx with R_L
 #endif
   if (adc.tp1 > adc.hp1) {
      adc.tp1 = adc.hp1;
@@ -641,6 +642,7 @@ widmes:
   if (ii == MAX_REPEAT) goto testend;
 #else
   adc.tp2 = W5msReadADC(HighPin);	//high voltage with load
+  adc.lp1 = ReadADC(LowPin);		//voltage at the other end of Rx
 #endif
   if (adc.tp2 < adc.lp1) {
      adc.tp2 = adc.lp1;

@@ -671,7 +671,7 @@ widmes:
         // lirx1 (measurement at HighPin)
 //        ukorr = (int)(ADCconfig.U_AVCC - adc.hp2) / (ADCconfig.U_AVCC/(7*U_SCALE)) + (2*U_SCALE);
 //        adc.hp2 += ukorr;
-        lirx1 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)adc.hp2 / ((ADCconfig.U_AVCC*U_SCALE) - adc.hp2);
+        lirx1 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)adc.hp2 / (ADCconfig.U_AVCC - adc.hp2);
         // lirx2 (measurement at LowPin)
 //        ukorr = (int)(ADCconfig.U_AVCC/2 - adc.lp2) / (ADCconfig.U_AVCC/(12*U_SCALE));
 //        adc.lp2 += ukorr;

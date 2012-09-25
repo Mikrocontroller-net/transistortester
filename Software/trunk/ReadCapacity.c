@@ -177,6 +177,62 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
    lcd_string(utoa(ovcnt16,outval,10));
    wait3s();
 #endif
+#if 0
+   adcv[0] = 0;                // 
+   adcv[1] = 0;                // 
+   adcv[2] = 0;                // 
+   for(ii=0;ii<32;ii++) {
+      if ((ii & 0x07) == 0) EntladePins();	// discharge capacitor
+      ADC_PORT = TXD_VAL;			// switch ADC-Port to GND
+      ADC_DDR = LoADC;			// switch Low-Pin to output (GND)
+      R_PORT = HiPinR_L;			// switch R-Port to VCC
+      R_DDR = HiPinR_L;			// switch R_L port for HighPin to output (VCC)
+      ADMUX = HighPin | (1<<REFS1) | (1<<REFS0);      // switch to HighPin, Internal Ref. 
+      ADCSRA |= (1<<ADSC);        // Start Conversion
+      while (ADCSRA&(1<<ADSC));   // wait
+      adcv[0] += ADCW; // Add Voltage
+      ADMUX = LowPin | (1<<REFS1) | (1<<REFS0);      // switch to LowPin, Internal Ref. 
+      ADCSRA |= (1<<ADSC);        // Start Conversion
+      while (ADCSRA&(1<<ADSC));   // wait
+      R_DDR = 0;		// switch current off
+      adcv[1] += ADCW; // Add Voltage
+      wait20us();
+      ADMUX = HighPin | (1<<REFS1) | (1<<REFS0);      // switch to HighPin, Internal Ref. 
+      ADCSRA |= (1<<ADSC);        // Start Conversion
+      while (ADCSRA&(1<<ADSC));   // wait
+      adcv[2] += ADCW; // Add Voltage
+      R_DDR = HiPinR_L;			// switch R_L port for HighPin to output (VCC)
+      ADMUX = LowPin | (1<<REFS1) | (1<<REFS0);      // switch to LowPin, Internal Ref. 
+      ADCSRA |= (1<<ADSC);        // Start Conversion
+      while (ADCSRA&(1<<ADSC));   // wait
+      adcv[1] += ADCW; // Add Voltage
+      ADMUX = HighPin | (1<<REFS1) | (1<<REFS0);      // switch to HighPin, Internal Ref. 
+      ADCSRA |= (1<<ADSC);        // Start Conversion
+      while (ADCSRA&(1<<ADSC));   // wait
+      R_DDR = 0;		// switch current off
+      adcv[0] += ADCW; // Add Voltage
+   }
+   if (adcv[1] < adcv[0]) {
+      adcv[0] -= adcv[1];	// mean voltage at C with current
+   } else {
+      adcv[0] = 0;
+   }
+   adcv[2] *= 2;
+   if (adcv[0] > adcv[2]) {
+      tmpint = adcv[0] - adcv[2];	// difference
+   } else {
+      tmpint = 0;
+   }
+   ovcnt16 = (unsigned long)tmpint * 10 * (unsigned long)(RR680MI - R_L_VAL) / adcv[1];
+   lcd_line3();
+   DisplayValue(adcv[0],-4,' ',4);	// Mittelwert
+   DisplayValue(adcv[2],-4,' ',4);
+   lcd_line4();
+   DisplayValue(tmpint,-4,' ',4);
+   DisplayValue(ovcnt16,-2,LCD_CHAR_OMEGA,4);
+   wait3s();
+
+#endif
    goto checkDiodes;
 
 //==================================================================================

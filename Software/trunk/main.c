@@ -127,7 +127,10 @@ start:
   ADCconfig.RefFlag = 0;
   ADCconfig.U_AVCC = U_VCC;	// set initial VCC Voltage
   ADCconfig.Samples = 190;		// set number of ADC samples near to max
-  ChargePin10ms((1<<TPREF),0);	// shorten 2.5V reference voltage
+  ADC_PORT = TXD_VAL;
+  ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND
+  wait1ms();
+  ADC_DDR =  TXD_MSK; 	// switch pin with reference back to input
   trans.uBE[1] = W5msReadADC(TPREF); // read voltage of precision reference
   if ((trans.uBE[1] > 2250) && (trans.uBE[1] < 2750)) {
      // precision voltage reference connected, update U_AVCC

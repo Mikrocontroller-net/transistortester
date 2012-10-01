@@ -31,7 +31,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   uint8_t LoADCm;		// mask to switch the ADC DDR port Low-Pin
   uint8_t PinMSK;
   uint8_t ii;			// Hilfsvariable
+#if FLASHEND > 0x1fff
   int udiff;
+#endif
 
 #ifdef COMMON_COLLECTOR
   unsigned long c_hfe;		// amplification factor for common Collector (Emitter follower)
@@ -42,7 +44,6 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   unsigned long lrx1;
   unsigned long lirx1;
   unsigned long lirx2;
-//  int ukorr;
 #endif
   /*
     switch HighPin directls to VCC 
@@ -669,12 +670,8 @@ widmes:
         }
         // two measurements with R_H resistors (470k) are made:
         // lirx1 (measurement at HighPin)
-//        ukorr = (int)(ADCconfig.U_AVCC - adc.hp2) / (ADCconfig.U_AVCC/(7*U_SCALE)) + (2*U_SCALE);
-//        adc.hp2 += ukorr;
         lirx1 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)adc.hp2 / (ADCconfig.U_AVCC - adc.hp2);
         // lirx2 (measurement at LowPin)
-//        ukorr = (int)(ADCconfig.U_AVCC/2 - adc.lp2) / (ADCconfig.U_AVCC/(12*U_SCALE));
-//        adc.lp2 += ukorr;
         lirx2 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)(ADCconfig.U_AVCC - adc.lp2) / adc.lp2;
 #define U_INT_LIMIT (990*U_SCALE)		// 1V switch limit in ReadADC for atmega family
 #ifdef __AVR_ATmega8__
@@ -698,7 +695,6 @@ widmes:
         ii = 'L';
         // two measurements with R_L resistors (680) are made:
         // lirx1 (measurement at HighPin)
-#if 1
         if (adc.tp1 > adc.hp1) {
            adc.hp1 = adc.tp1;		//diff negativ is illegal
         }
@@ -709,19 +705,6 @@ widmes:
         // lirx2 (Measurement at LowPin)
         lirx2 =(unsigned long)RR680MI * (unsigned long)(adc.tp2 -adc.lp1) / adc.lp1;
 //     lrx1 =(unsigned long)R_L_VAL * (unsigned long)adc.hp1 / (adc.hp3 - adc.hp1);
-#else
-        ukorr = (int)((4 * U_SCALE) - adc.hp1 / (ADCconfig.U_AVCC/(12*U_SCALE)));
-        if (ukorr > 0) adc.hp1 -= ukorr;
-        lirx1 =(unsigned long)RR680PL * (unsigned long)adc.hp1 / (ADCconfig.U_AVCC - adc.hp1);
-        if (lirx1 > (RR680MI - R_L_VAL))  lirx1 -= (RR680MI - R_L_VAL);
-        else     lirx1 = 0;
-        ukorr = (int)((4 * U_SCALE) - adc.lp1 / (ADCconfig.U_AVCC/(6*U_SCALE)));
-        if (ukorr < 0) ukorr = -ukorr;
-        adc.lp1 += ukorr;
-        lirx2 =(unsigned long)RR680MI * (unsigned long)(ADCconfig.U_AVCC - adc.lp1) / adc.lp1;
-        if (lirx2 > (RR680PL - R_L_VAL))  lirx2 -= (RR680PL - R_L_VAL);
-        else     lirx2 = 0;
-#endif
 
 #ifdef AUTOSCALE_ADC
         if (adc.hp1 < U_INT_LIMIT) {

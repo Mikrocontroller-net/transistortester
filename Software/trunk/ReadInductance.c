@@ -129,14 +129,14 @@ void ReadInductance(void) {
             total_r =  ReadADC(HighPin);
             if ((umax < 2) && (total_r < 2)) break;	// low current detected
         }
-        cval = CombineII2Long(ovcnt16, tmpint);
-        if (cval > 6) cval -= 6;
-        else          cval = 0;
+        cap.cval = CombineII2Long(ovcnt16, tmpint);
+        if (cap.cval > 6) cap.cval -= 6;
+        else          cap.cval = 0;
         if ((count&0x01) == 1) {
            // second pass with delayed counter start
-           cval += (3 * (F_CPU/1000000))+10;
+           cap.cval += (3 * (F_CPU/1000000))+10;
         }
-        if (ovcnt16 >= (F_CPU/100000)) cval = 0; // no transition found
+        if (ovcnt16 >= (F_CPU/100000)) cap.cval = 0; // no transition found
         total_r = (mess_r + resis[0].rx + RR680PL - R_L_VAL);
         // compute the maximum Voltage umax with the Resistor of the coil
         umax = ((unsigned long)mess_r * (unsigned long)ADCconfig.U_AVCC) / total_r;
@@ -148,7 +148,7 @@ void ReadInductance(void) {
         #endif
         per_ref = (uint8_t)MEM2_read_byte(&LogTab[per_ref]);	// -log(1 - per_ref/100)
         // lx in 0.01mH units,  L = Tau * R
-        inductance[count] = (cval * total_r ) / ((unsigned int)per_ref * (F_CPU/1000000));
+        inductance[count] = (cap.cval * total_r ) / ((unsigned int)per_ref * (F_CPU/1000000));
         if (((count&0x01) == 0) && (inductance[count] > (F_CPU/1000000))) {
            // transition is found, measurement with delayed counter start is not necessary
            inductance[count+1] = inductance[count];	// set delayed measurement to same value

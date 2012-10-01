@@ -80,6 +80,8 @@ int main(void) {
  #endif
 #endif
 
+//  DIDR0 = 0x3f;			//disable all Input register of ADC
+
 #if POWER_OFF+0 > 1
   // tester display time selection
   display_time = OFF_WAIT_TIME;		// LONG_WAIT_TIME for single mode, else SHORT_WAIT_TIME
@@ -118,8 +120,8 @@ start:
   ResistorsFound = 0;
 #endif
 #ifdef C_MESS
-  ca = 0;
-  cb = 0;
+  cap.ca = 0;
+  cap.cb = 0;
 #endif
 #ifdef WITH_UART
   uart_newline();		// start of new measurement
@@ -157,8 +159,8 @@ start:
   // display Battery voltage
   // The divisor to get the voltage in 0.01V units is ((10*33)/133) witch is about 2.4812
   // A good result can be get with multiply by 4 and divide by 10 (about 0.75%).
-  cval = (trans.uBE[0]*4)/10+((BAT_OUT+5)/10); // usually output only 2 digits
-  DisplayValue(cval,-2,'V',2);		// Display 2 Digits of this 10mV units
+  cap.cval = (trans.uBE[0]*4)/10+((BAT_OUT+5)/10); // usually output only 2 digits
+  DisplayValue(cap.cval,-2,'V',2);		// Display 2 Digits of this 10mV units
   lcd_space();
  #endif
  #if (BAT_POOR > 52) && (BAT_POOR < 190)
@@ -275,7 +277,7 @@ start:
 #ifdef C_MESS
         lcd_fix_string(GateCap);		//"C="
         ReadCapacity(diodes[0].Cathode,diodes[0].Anode);	// Capacity opposite flow direction
-        DisplayValue(cval,cpre,'F',3);
+        DisplayValue(cap.cval,cpre,'F',3);
 #endif
         goto end;
      } else if(NumOfDiodes == 2) { // double diode
@@ -456,7 +458,7 @@ start:
  #ifdef C_MESS	//Gate capacity
        lcd_fix_string(GateCap);		//"C="
        ReadCapacity(trans.b,trans.e);	//measure capacity
-       DisplayValue(cval,cpre,'F',3);
+       DisplayValue(cap.cval,cpre,'F',3);
  #endif
        lcd_fix_string(vt);		// "Vt="
     } else {
@@ -549,11 +551,17 @@ start:
 //capacity measurement is wanted
   else if(PartFound == PART_CAPACITOR) {
 //     lcd_fix_string(Capacitor);
-     lcd_testpin(ca);			//Pin number 1
+     lcd_testpin(cap.ca);		//Pin number 1
      lcd_fix_string(CapZeich);		// capacitor sign
-     lcd_testpin(cb);			//Pin number 2
-     lcd_line2(); 				//2. row 
-     DisplayValue(cval,cpre,'F',4);
+     lcd_testpin(cap.cb);		//Pin number 2
+     lcd_line2(); 			//2. row 
+     DisplayValue(cap.cval,cpre,'F',4);
+#if FLASHEND > 0x1fff
+     if (cap.esr > 0) {
+        lcd_fix_string(esr_txt);	// " ESR="
+        DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
+     }
+#endif
      goto end;
   }
 #endif
@@ -788,12 +796,12 @@ unsigned int getRLmultip(unsigned int cvolt) {
 }
 
 void Scale_C_with_vcc(void) {
-   while (cval > 100000) {
-      cval /= 10;
+   while (cap.cval > 100000) {
+      cap.cval /= 10;
       cpre ++;          // prevent overflow
    }
-   cval *= ADCconfig.U_AVCC;	// scale with measured voltage
-   cval /= U_VCC;               // Factors are computed for U_VCC
+   cap.cval *= ADCconfig.U_AVCC;	// scale with measured voltage
+   cap.cval /= U_VCC;               // Factors are computed for U_VCC
 }
 
 #endif

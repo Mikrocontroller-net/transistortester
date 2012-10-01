@@ -275,6 +275,9 @@ const unsigned char Vgs_str[] MEM_TEXT = "@Vgs=";
 #ifdef C_MESS
 const unsigned char CapZeich[] MEM_TEXT = {'-',LCD_CHAR_CAP,'-',0};
 const unsigned char Cell_str[] MEM_TEXT = "Cell!";
+ #if FLASHEND > 0x1fff
+const unsigned char esr_txt[] MEM_TEXT = " ESR=";
+ #endif
 #endif
 const unsigned char AnKat[] MEM_TEXT = {'-', LCD_CHAR_DIODE1, '-',0};
 const unsigned char KatAn[] MEM_TEXT = {'-', LCD_CHAR_DIODE2, '-',0};
@@ -508,16 +511,17 @@ struct resis_t{
   unsigned int RHmultip=DEFAULT_RH_FAKT;
 #endif
 
-//#ifdef AUTOSCALE_ADC
-//uint8_t minmul=1,mindiv=1;
-//#endif
-
 uint8_t ii;			// multipurpose counter
+struct cap_t {
 unsigned long cval;		// capacitor value 
 unsigned long cval_uncorrected;	// capacity value without corrections
+#if FLASHEND > 0x1fff
+unsigned int esr;		// serial resistance of C in 0.01 Ohm
+#endif
+uint8_t ca, cb;			//pins of capacitor
+} cap;
 int16_t load_diff;		// difference voltage of loaded capacitor and internal reference
 int8_t cpre;			//Prefix for capacitor value  -12=p, -9=n, -6=µ, -3=m
-uint8_t ca, cb;			//pins of capacitor
 
 uint8_t WithReference;		// Marker for found precision voltage reference = 1
 uint8_t PartFound;	 	// the found part 

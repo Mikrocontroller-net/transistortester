@@ -21,9 +21,15 @@
 // the following variables are set:
 // cap.cval = value of the capacitor 
 // cap.cval_uncorrected = value of the capacitor uncorrected
+// cap.esr = serial resistance of capacitor,  0.01 Ohm units
 // cpre = units of cap.cval (-12==pF, -9=nF, -6=µF)
 // ca   = Pin number (0-2) of the LowPin
 // cb   = Pin number (0-2) of the HighPin
+
+#include <avr/io.h>
+#include <stdlib.h>
+#include "config.h"
+#include "Transistortester.h"
 
 unsigned long CombineII2Long( unsigned int ovcnt16, unsigned int tmpcnt); //tricky function to build unsigned long from two unsigned int values
 
@@ -33,13 +39,9 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   // check if capacitor and measure the capacity value
   unsigned int tmpint;
   unsigned int adcv[4];
-#if FLASHEND > 0x1fff
-  unsigned long sumvolt[4];
-#endif
   unsigned int ovcnt16;
   uint8_t HiPinR_L, HiPinR_H;
   uint8_t LoADC;
-  uint8_t HiADC, LoPinR_L;
   uint8_t ii;
 
 #ifdef AUTO_CAL
@@ -47,8 +49,6 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 #endif
 
   LoADC = MEM_read_byte(&PinADCtab[LowPin]) | TXD_MSK;
-  HiADC = MEM_read_byte(&PinADCtab[HighPin]) | TXD_MSK;
-  LoPinR_L = MEM_read_byte(&PinRLtab[LowPin]);	//R_L mask for LowPin R_L load
   HiPinR_L = MEM_read_byte(&PinRLtab[HighPin]);	//R_L mask for HighPin R_L load
   HiPinR_H = HiPinR_L + HiPinR_L;	//double for HighPin R_H load
 
@@ -187,114 +187,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
    wait3s();
 #endif
 #if FLASHEND > 0x1fff
-   sumvolt[0] = 1;		// set sum of LowPin voltage to 1 to prevent divide by zero
-   sumvolt[1] = 0;		// clear sum of HighPin voltage with current
-   sumvolt[2] = 0;		// clear sum of HighPin voltage without current
-   sumvolt[3] = 0;		// clear sum of slew-rate
-   EntladePins();	// discharge capacitor
-   ADC_PORT = TXD_VAL;		// switch ADC-Port to GND
-   while (ADCSRA&(1<<ADSC));	// wait dummy read , sync with ADC-clock
-   // ADC Sample and Hold (SH) is done 1.5 ADC clock number after starting 
-   for(ii=0;ii<128;ii++) {
-      ADC_DDR = LoADC;				// switch Low-Pin to output (GND)
-      while (1) {
-         R_PORT = HiPinR_L;			// switch R-Port to VCC
-         R_DDR = HiPinR_L;			// switch R_L port for HighPin to output (VCC)
-          ADMUX = LowPin | (1<<REFS1) | (1<<REFS0);      // switch ADC to LowPin, Internal Ref. 
-          ADCSRA |= (1<<ADSC);			// Start Conversion
-          while (ADCSRA&(1<<ADSC));		// wait dummy read after switch
-         ADCSRA |= (1<<ADSC);			// Start Conversion
-         while (ADCSRA&(1<<ADSC));		// wait
-         adcv[0] = ADCW;			// Voltage LowPin with current
-          ADMUX = HighPin | (1<<REFS1) | (1<<REFS0);      // switch ADC to HighPin, Internal Ref. 
-          ADCSRA |= (1<<ADSC);			// Start Conversion
-          while (ADCSRA&(1<<ADSC));		// wait dummy read after switch
-         ADCSRA |= (1<<ADSC);			// Start Conversion
-         wait10us();				// 2.5 ADC clocks = 20 us
-         wait5us();			
-         wait3us();				// with 17 us delay the voltage goes down before SH
-//         wdt_reset();				// with wdt_reset the timing can be adjusted,
-						// when time is too short, voltage is down before SH of ADC
-						// when time is too long, capacitor will be overloaded.
-						// That will cause too high voltage without current.
-         R_DDR = 0;				// switch current off,  SH is 1.5 ADC clock behind start
-         while (ADCSRA&(1<<ADSC));		// wait
-         adcv[1] = ADCW;			// Voltage HighPin with current
-         R_PORT = 0;
-          ADCSRA |= (1<<ADSC);			// Start Conversion
-          while (ADCSRA&(1<<ADSC));		// wait dummy read
-         ADCSRA |= (1<<ADSC);			// Start Conversion
-         while (ADCSRA&(1<<ADSC));		// wait
-         adcv[2] = ADCW;			// Voltage HighPin without current
-         if (adcv[2] > 2) break;
-         wdt_reset();
-      }
-      sumvolt[0] += adcv[0];			// add sum of both LowPin voltages with current
-      sumvolt[1] += adcv[1];			// add  HighPin voltages with current
-      sumvolt[2] += adcv[2]; 			// capacitor voltage without current
-       ADCSRA |= (1<<ADSC);			// Start Conversion
-       while (ADCSRA&(1<<ADSC));		// wait dummy read
-      ADC_DDR = HiADC;				// switch High Pin to GND
-      while (1) {
-         R_PORT = LoPinR_L;
-         R_DDR = LoPinR_L;			// switch LowPin with 680 Ohm to VCC
-          ADMUX = HighPin | (1<<REFS1) | (1<<REFS0);      // switch ADC to HighPin, Internal Ref. 
-          ADCSRA |= (1<<ADSC);			// Start Conversion
-          while (ADCSRA&(1<<ADSC));		// wait dummy read after switch
-         ADCSRA |= (1<<ADSC);			// Start Conversion
-         while (ADCSRA&(1<<ADSC));		// wait
-         adcv[0] = ADCW;			// Voltage HighPin with current
-          ADMUX = LowPin | (1<<REFS1) | (1<<REFS0);      // switch ADC to LowPin, Internal Ref. 
-          ADCSRA |= (1<<ADSC);			// Start Conversion
-          while (ADCSRA&(1<<ADSC));		// wait dummy read after switch
-         ADCSRA |= (1<<ADSC);			// Start Conversion
-         wait10us();				// 2.5 ADC clocks = 20 us
-         wait5us();			
-         wait3us();				// with 17 us delay the voltage goes down before SH
-//         wdt_reset();				// with wdt_reset the timing can be adjusted,
-						// when time is too short, voltage is down before SH of ADC
-						// when time is too long, capacitor will be overloaded.
-						// That will cause too high voltage without current.
-         R_DDR = 0;				// switch current off, SH is 1.5 ADC clock ticks behind start
-         while (ADCSRA&(1<<ADSC));		// wait
-         adcv[1] = ADCW;			//  Voltage LowPin with current
-         R_PORT = 0;
-          ADMUX = LowPin | (1<<REFS1) | (1<<REFS0);      // switch ADC to LowPin, Internal Ref. 
-          ADCSRA |= (1<<ADSC);		// Start Conversion
-          while (ADCSRA&(1<<ADSC));		// wait dummy read
-         ADCSRA |= (1<<ADSC);			// Start Conversion
-         while (ADCSRA&(1<<ADSC));		// wait
-         adcv[2] = ADCW;			// Voltage LowPin without current
-         if (adcv[2] > 2) break;
-         wdt_reset();
-      }
-      R_DDR = 0;				// switch current off
-      sumvolt[0] += adcv[0];			// add  LowPin voltages with current
-      sumvolt[1] += adcv[1];			// add  HighPin voltages with current
-      sumvolt[2] += adcv[2];			// add  HighPin voltages without current
-   } // end for
-//   lcd_line3();
-//   DisplayValue(sumvolt[0],0,' ',4);
-//   DisplayValue(sumvolt[1],0,' ',4);
-   if (sumvolt[1] > sumvolt[0]) {
-      sumvolt[1] -= sumvolt[0];
-   } else {
-      sumvolt[1] = 0;
-   }
-//   lcd_line4();
-//   DisplayValue(sumvolt[1],0,' ',4);	// Difference Voltage
-//   DisplayValue(sumvolt[2],0,' ',4);
-//   wait3s();
-   sumvolt[2] = (sumvolt[2] * 94) / 100;	// scale down the voltage without current with 94%
-   if (sumvolt[1] > sumvolt[2]) {
-      // mean voltage at the capacitor is higher with current
-      // sumvolt[0] is the sum of voltages at LowPin, caused by output resistance of Port
-      // (RR680MI - R_L_VAL) is the port output resistance in 0.1 Ohm units.
-      // we scale up the difference voltage with 10 to get 0.01 Ohm units of ESR
-      cap.esr = ((sumvolt[1] - sumvolt[2]) * 10 * (unsigned long)(RR680MI - R_L_VAL)) / sumvolt[0];
-   }
-
-
+   GetESR(HighPin,LowPin);
 #endif
    goto checkDiodes;
 
@@ -427,6 +320,11 @@ messe_mit_rh:
       goto keinC;	//capacity to low, < 70pF @1MHz (35pF @8MHz)
    }
    // end low capacity 
+#if FLASHEND > 0x1fff
+   if (ovcnt16 > (6 * ((unsigned long)F_CPU/1000000))) {	// above 3 uF
+      GetESR(HighPin,LowPin);
+   }
+#endif
 checkDiodes:
    if((NumOfDiodes > 0)  && (PartFound != PART_FET)) {
 #if DebugOut == 10
@@ -453,3 +351,43 @@ keinC:
   R_PORT = 0; 			// switch all resistor outputs to GND, no pull up
   return;
  } // end ReadCapacity()
+
+unsigned int getRLmultip(unsigned int cvolt) {
+
+// interpolate table RLtab corresponding to voltage cvolt
+// Widerstand 680 Ohm          300   325   350   375   400   425   450   475   500   525   550   575   600   625   650   675   700   725   750   775   800   825   850   875   900   925   950   975  1000  1025  1050  1075  1100  1125  1150  1175  1200  1225  1250  1275  1300  1325  1350  1375  1400  mV
+//uint16_t RLtab[] MEM_TEXT = {22447,20665,19138,17815,16657,15635,14727,13914,13182,12520,11918,11369,10865,10401, 9973, 9577, 9209, 8866, 8546, 8247, 7966, 7702, 7454, 7220, 6999, 6789, 6591, 6403, 6224, 6054, 5892, 5738, 5590, 5449, 5314, 5185, 5061, 4942, 4828, 4718, 4613, 4511, 4413, 4319, 4228};
+
+#define RL_Tab_Abstand 25       // displacement of table 25mV
+#define RL_Tab_Beginn 300       // begin of table ist 300mV
+#define RL_Tab_Length 1100      // length of table is 1400-300
+
+  unsigned int uvolt;
+  unsigned int y1, y2;
+  uint8_t tabind;
+  uint8_t tabres;
+  if (cvolt >= RL_Tab_Beginn) {
+     uvolt = cvolt - RL_Tab_Beginn;
+  } else {
+     uvolt = 0;			// limit to begin of table
+  }
+  tabind = uvolt / RL_Tab_Abstand;
+  tabres = uvolt % RL_Tab_Abstand;
+  tabres = RL_Tab_Abstand - tabres;
+  if (tabind > (RL_Tab_Length/RL_Tab_Abstand)) {
+     tabind = (RL_Tab_Length/RL_Tab_Abstand);	// limit to end of table
+  }
+  y1 = MEM_read_word(&RLtab[tabind]);
+  y2 = MEM_read_word(&RLtab[tabind+1]);
+  return ( ((y1 - y2) * tabres + (RL_Tab_Abstand/2)) / RL_Tab_Abstand + y2); // interpolate table
+}
+
+void Scale_C_with_vcc(void) {
+   while (cap.cval > 100000) {
+      cap.cval /= 10;
+      cpre ++;			// prevent overflow
+   }
+   cap.cval *= ADCconfig.U_AVCC;	// scale with measured voltage
+   cap.cval /= U_VCC;			// Factors are computed for U_VCC
+}
+

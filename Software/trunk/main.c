@@ -15,6 +15,8 @@
 //#define DebugOut 4		// if set, output of voltages of Diode measurement in row 3+4
 //#define DebugOut 5		// if set, output of Transistor checks in row 2+3
 //#define DebugOut 10		// if set, output of capacity measurements (ReadCapacity) in row 3+4 
+
+#define MAIN_C
 #include "Transistortester.h"
 
 //begin of transistortester program
@@ -217,11 +219,9 @@ start:
   lcd_line2();			//LCD position row 2, column 1
 #endif
 #ifdef C_MESS
-  #define AUSGABE_FUNKTION
   EntladePins();		// discharge all capacitors!
   if(PartFound == PART_CELL) {
     lcd_clear();
-//    lcd_line1();
     lcd_fix_string(Cell_str);	// display "Cell!"
     goto end2;
   }
@@ -559,7 +559,7 @@ start:
 #if FLASHEND > 0x1fff
      if (cap.esr > 0) {
         lcd_fix_string(esr_txt);	// " ESR="
-        DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
+        DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,3);
      }
 #endif
      goto end;
@@ -657,7 +657,6 @@ void mVAusgabe(uint8_t nn) {
 }
 
 #ifdef R_MESS
-  #define AUSGABE_FUNKTION
 void RvalOut(uint8_t ii) {	
    // output of resistor value
 
@@ -757,54 +756,6 @@ void EntladePins() {
  }
 
 
-
-
-#ifdef C_MESS	//measurement of capacity is wanted
-#include "ReadCapacity.c"
-#if FLASHEND > 0x1fff
-#include "ReadInductance.c"
-#endif
-
-unsigned int getRLmultip(unsigned int cvolt) {
-
-// interpolate table RLtab corresponding to voltage cvolt
-// Widerstand 680 Ohm          300   325   350   375   400   425   450   475   500   525   550   575   600   625   650   675   700   725   750   775   800   825   850   875   900   925   950   975  1000  1025  1050  1075  1100  1125  1150  1175  1200  1225  1250  1275  1300  1325  1350  1375  1400  mV
-//uint16_t RLtab[] MEM_TEXT = {22447,20665,19138,17815,16657,15635,14727,13914,13182,12520,11918,11369,10865,10401, 9973, 9577, 9209, 8866, 8546, 8247, 7966, 7702, 7454, 7220, 6999, 6789, 6591, 6403, 6224, 6054, 5892, 5738, 5590, 5449, 5314, 5185, 5061, 4942, 4828, 4718, 4613, 4511, 4413, 4319, 4228};
-
-#define RL_Tab_Abstand 25	// displacement of table 25mV
-#define RL_Tab_Beginn 300	// begin of table ist 300mV
-#define RL_Tab_Length 1100	// length of table is 1400-300
-
-  unsigned int uvolt;
-  unsigned int y1, y2;
-  uint8_t tabind;
-  uint8_t tabres;
-  if (cvolt >= RL_Tab_Beginn) {
-     uvolt = cvolt - RL_Tab_Beginn;
-  } else {
-     uvolt = 0;		// limit to begin of table
-  }
-  tabind = uvolt / RL_Tab_Abstand;
-  tabres = uvolt % RL_Tab_Abstand;
-  tabres = RL_Tab_Abstand - tabres;
-  if (tabind > (RL_Tab_Length/RL_Tab_Abstand)) {
-     tabind = (RL_Tab_Length/RL_Tab_Abstand);	// limit to end of table
-  }
-  y1 = MEM_read_word(&RLtab[tabind]);
-  y2 = MEM_read_word(&RLtab[tabind+1]);
-  return ( ((y1 - y2) * tabres + (RL_Tab_Abstand/2)) / RL_Tab_Abstand + y2); // interpolate table
-}
-
-void Scale_C_with_vcc(void) {
-   while (cap.cval > 100000) {
-      cap.cval /= 10;
-      cpre ++;          // prevent overflow
-   }
-   cap.cval *= ADCconfig.U_AVCC;	// scale with measured voltage
-   cap.cval /= U_VCC;               // Factors are computed for U_VCC
-}
-
-#endif
 
 #ifdef AUTO_RH
 void RefVoltage(void) {

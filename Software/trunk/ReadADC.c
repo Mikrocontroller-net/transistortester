@@ -3,13 +3,16 @@
 #include <stdlib.h>
 #include "wait1000ms.h"
 #include "lcd-routines.h"
+#include "Transistortester.h"
 
+/*
 extern struct ADCconfig_t{
   uint8_t Samples;              // number of ADC samples to take
   uint8_t RefFlag;              // save Reference type VCC of IntRef
   uint16_t U_Bandgap;           // Reference Voltage in mV
   uint16_t U_AVCC;		// Voltage of AVCC
 } ADCconfig;
+*/
 
 
 unsigned int ReadADC (uint8_t Probe) {
@@ -68,6 +71,10 @@ sample:
 }
 unsigned int W5msReadADC (uint8_t Probe) {
   wait5ms();
+  return (ReadADC(Probe));
+}
+unsigned int W10msReadADC (uint8_t Probe) {
+  wait10ms();
   return (ReadADC(Probe));
 }
 unsigned int W20msReadADC (uint8_t Probe) {

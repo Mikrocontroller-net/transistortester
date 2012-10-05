@@ -271,7 +271,7 @@ no_c0save:
         cpre++;
         cap.cval /= 10;
      }
-     if ((cpre == -9) && (cap.cval > 95)) {
+     if ((cpre == -9) && (cap.cval > 95) && (cap.cval < 3000)) {
         cap_found++;
      } else {
         cap_found = 0;		// wait for stable connection

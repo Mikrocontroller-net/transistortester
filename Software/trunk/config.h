@@ -1,14 +1,83 @@
 
+/*########################################################################################
+        Configuration
+*/
+
+/* Port , that is directly connected to the probes.
+  This Port must have an ADC-Input  (ATmega8:  PORTC).
+  The lower pins of this Port must be used for measurements.
+  Please don't change the definitions of TP1, TP2 and TP3!
+  The TPREF pin can be connected with a 2.5V precision voltage reference
+*/
+
+#define ADC_PORT PORTC
+#define ADC_DDR DDRC
+#define ADC_PIN PINC
+#define TP1 PC0
+#define TP2 PC1
+#define TP3 PC2
+#define TPREF PC4
+#define TPBAT PC5
+
+
+/*
+  exact values of used resistors (Ohm).
+  The standard value for R_L is 680 Ohm, for R_H 470kOhm.
+  
+  To calibrate your tester the resistor-values can be adjusted:
+*/
+  #define R_L_VAL 6800          // standard value 680 Ohm, multiplied by 10 for 0.1 Ohm resolution
+//  #define R_L_VAL 6690          // this will be define a 669 Ohm
+  #define R_H_VAL 47000         // standard value 470000 Ohm, multiplied by 10, divided by 100 
+//  #define R_H_VAL 47900               // this will be define a 479000 Ohm, divided by 100 
+
+#define R_DDR DDRB
+#define R_PORT PORTB
+
+/* Port for the Test resistors
+  The Resistors must be connected to the lower 6 Pins of the Port in following sequence:
+  RLx = 680R-resistor for Test-Pin x
+  RHx = 470k-resistor for Test-Pin x
+
+  RL1 an Pin 0
+  RH1 an Pin 1
+  RL2 an Pin 2
+  RH2 an Pin 3
+  RL3 an Pin 4
+  RH3 an Pin 5
+*/
+
+#define ON_DDR DDRD
+#define ON_PORT PORTD
+#define ON_PIN_REG PIND
+#define ON_PIN PD6      //Pin, must be switched to high to swtch power on
+#define RST_PIN PD7     //Pin, is swiched to low, if push button is pressed
+
+
 // U_VCC defines the VCC Voltage of the ATmega in mV units
-// with integer factors the ADC-value will be changed to mV resolution in ReadADC !
 
 #define U_VCC 5000
+// with integer factors the ADC-value will be changed to mV resolution in ReadADC !
+// all if statements are corrected to the mV resolution.
+
+
 
 // U_SCALE can be set to 4 for better resolution of ReadADC function for resistor measurement
 #define U_SCALE 4
 
 // R_ANZ_MESS can ce set to a higher number of measurements (up to 200) for resistor measurement
 #define R_ANZ_MESS 190
+
+//Watchdog
+#define WDT_enabled
+/* If you remove the "#define WDT_enabled" , the Watchdog will not be activated.
+  This is only for Test or debugging usefull.
+ For normal operation please activate the Watchdog !
+*/
+
+/*########################################################################################
+End of configuration 
+*/
 
 #if R_ANZ_MESS < ANZ_MESS
  #undef R_ANZ_MESS
@@ -270,6 +339,16 @@
 #if F_CPU/F_ADC == 128
  #define AUTO_CLOCK_DIV (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0)
 #endif
+
+#ifndef PIN_RP
+  #define PIN_RP  220           //estimated internal resistance PORT to VCC
+                                //will only be used, if not set before in config.h
+#endif
+#ifndef PIN_RM
+  #define PIN_RM  190           //estimated internal resistance PORT to GND
+                                //will only be used, if not set before in config.h
+#endif
+
 //**********************************************************
 
 // defines for the WITH_UART option

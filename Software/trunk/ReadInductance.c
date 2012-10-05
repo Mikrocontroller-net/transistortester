@@ -3,12 +3,17 @@
 // The current with a coil will with (1 - e**(-t*R/L)), where R is
 // the sum of Pin_RM , R_L_VAL , Resistance of coil and Pin_RP.
 // L in the inductance of the coil.
+#include <avr/io.h>
+#include <stdlib.h>
+#include "config.h"
+#include "Transistortester.h"
 
 unsigned long CombineII2Long( unsigned int ovcnt16, unsigned int tmpcnt); //tricky function to build unsigned long from two unsigned int values
 
 
 //=================================================================
 void ReadInductance(void) {
+#if FLASHEND > 0x1fff
   // check if inductor and measure the inductance value
   unsigned int tmpint;
   unsigned int ovcnt16;	// overrun counter for 16 bit counter
@@ -170,5 +175,6 @@ void ReadInductance(void) {
   // switch all ports to input
   ADC_DDR =  TXD_MSK;		// switch all ADC ports to input
   R_DDR = 0;			// switch all resistor ports to input
+#endif
   return;
  } // end ReadInductance()

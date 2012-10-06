@@ -559,7 +559,7 @@ start:
 #if FLASHEND > 0x1fff
      if (cap.esr > 0) {
         lcd_fix_string(esr_txt);	// " ESR="
-        DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,3);
+        DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
      }
 #endif
      goto end;

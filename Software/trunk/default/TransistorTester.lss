@@ -5733,7 +5733,7 @@ start:
     21b0:	90 91 5e 01 	lds	r25, 0x015E
     21b4:	40 91 48 01 	lds	r20, 0x0148
     21b8:	26 e4       	ldi	r18, 0x46	; 70
-    21ba:	fb c2       	rjmp	.+1526   	; 0x27b2 <main+0x980>
+    21ba:	a7 c2       	rjmp	.+1358   	; 0x270a <main+0x8d8>
 #endif
         goto end;
      } else if(NumOfDiodes == 2) { // double diode
@@ -6101,7 +6101,7 @@ start:
   } else if (PartFound == PART_FET) {	//JFET or MOSFET
     2468:	83 30       	cpi	r24, 0x03	; 3
     246a:	09 f0       	breq	.+2      	; 0x246e <main+0x63c>
-    246c:	82 c0       	rjmp	.+260    	; 0x2572 <main+0x740>
+    246c:	81 c0       	rjmp	.+258    	; 0x2570 <main+0x73e>
     if(PartMode&1) {
     246e:	80 91 08 01 	lds	r24, 0x0108
     2472:	80 ff       	sbrs	r24, 0
@@ -6242,225 +6242,225 @@ start:
     2568:	90 e0       	ldi	r25, 0x00	; 0
     256a:	4d ef       	ldi	r20, 0xFD	; 253
     256c:	26 e5       	ldi	r18, 0x56	; 86
-    256e:	02 e0       	ldi	r16, 0x02	; 2
-    2570:	78 cf       	rjmp	.-272    	; 0x2462 <main+0x630>
+    256e:	21 c1       	rjmp	.+578    	; 0x27b2 <main+0x980>
     goto end;
     // end (PartFound == PART_FET)
   } else if (PartFound == PART_THYRISTOR) {
-    2572:	85 30       	cpi	r24, 0x05	; 5
-    2574:	19 f4       	brne	.+6      	; 0x257c <main+0x74a>
+    2570:	85 30       	cpi	r24, 0x05	; 5
+    2572:	19 f4       	brne	.+6      	; 0x257a <main+0x748>
     lcd_fix_string(Thyristor);		//"Thyristor"
-    2576:	84 ea       	ldi	r24, 0xA4	; 164
-    2578:	90 e0       	ldi	r25, 0x00	; 0
-    257a:	04 c0       	rjmp	.+8      	; 0x2584 <main+0x752>
+    2574:	84 ea       	ldi	r24, 0xA4	; 164
+    2576:	90 e0       	ldi	r25, 0x00	; 0
+    2578:	04 c0       	rjmp	.+8      	; 0x2582 <main+0x750>
     goto gakAusgabe;
   } else if (PartFound == PART_TRIAC) {
-    257c:	84 30       	cpi	r24, 0x04	; 4
-    257e:	c1 f4       	brne	.+48     	; 0x25b0 <main+0x77e>
+    257a:	84 30       	cpi	r24, 0x04	; 4
+    257c:	c1 f4       	brne	.+48     	; 0x25ae <main+0x77c>
     lcd_fix_string(Triac);		//"Triac"
-    2580:	8e e9       	ldi	r24, 0x9E	; 158
-    2582:	90 e0       	ldi	r25, 0x00	; 0
-    2584:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
+    257e:	8e e9       	ldi	r24, 0x9E	; 158
+    2580:	90 e0       	ldi	r25, 0x00	; 0
+    2582:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
   mess_count = 0;
   goto end2;
 
 
 gakAusgabe:
   lcd_line2(); //2. row 
-    2588:	80 ec       	ldi	r24, 0xC0	; 192
-    258a:	0e 94 0d 01 	call	0x21a	; 0x21a <lcd_command>
+    2586:	80 ec       	ldi	r24, 0xC0	; 192
+    2588:	0e 94 0d 01 	call	0x21a	; 0x21a <lcd_command>
   lcd_fix_string(GAK);		//"GAK="
-    258e:	89 e9       	ldi	r24, 0x99	; 153
-    2590:	90 e0       	ldi	r25, 0x00	; 0
-    2592:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
+    258c:	89 e9       	ldi	r24, 0x99	; 153
+    258e:	90 e0       	ldi	r25, 0x00	; 0
+    2590:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
   lcd_testpin(trans.b);
-    2596:	80 91 55 01 	lds	r24, 0x0155
-    259a:	0e 94 02 01 	call	0x204	; 0x204 <lcd_testpin>
+    2594:	80 91 55 01 	lds	r24, 0x0155
+    2598:	0e 94 02 01 	call	0x204	; 0x204 <lcd_testpin>
   lcd_testpin(trans.c);
-    259e:	80 91 56 01 	lds	r24, 0x0156
-    25a2:	0e 94 02 01 	call	0x204	; 0x204 <lcd_testpin>
+    259c:	80 91 56 01 	lds	r24, 0x0156
+    25a0:	0e 94 02 01 	call	0x204	; 0x204 <lcd_testpin>
   lcd_testpin(trans.e);
-    25a6:	80 91 57 01 	lds	r24, 0x0157
-    25aa:	0e 94 02 01 	call	0x204	; 0x204 <lcd_testpin>
-    25ae:	35 c1       	rjmp	.+618    	; 0x281a <main+0x9e8>
+    25a4:	80 91 57 01 	lds	r24, 0x0157
+    25a8:	0e 94 02 01 	call	0x204	; 0x204 <lcd_testpin>
+    25ac:	36 c1       	rjmp	.+620    	; 0x281a <main+0x9e8>
   } else if (PartFound == PART_TRIAC) {
     lcd_fix_string(Triac);		//"Triac"
     goto gakAusgabe;
   }
  #ifdef R_MESS	//resistor measurement is wanted
   else if(PartFound == PART_RESISTOR) {
-    25b0:	86 30       	cpi	r24, 0x06	; 6
-    25b2:	09 f0       	breq	.+2      	; 0x25b6 <main+0x784>
-    25b4:	cc c0       	rjmp	.+408    	; 0x274e <main+0x91c>
+    25ae:	86 30       	cpi	r24, 0x06	; 6
+    25b0:	09 f0       	breq	.+2      	; 0x25b4 <main+0x782>
+    25b2:	cd c0       	rjmp	.+410    	; 0x274e <main+0x91c>
     if (ResistorsFound == 1) { // single resistor
-    25b6:	60 91 58 01 	lds	r22, 0x0158
-    25ba:	61 30       	cpi	r22, 0x01	; 1
-    25bc:	69 f4       	brne	.+26     	; 0x25d8 <main+0x7a6>
+    25b4:	60 91 58 01 	lds	r22, 0x0158
+    25b8:	61 30       	cpi	r22, 0x01	; 1
+    25ba:	69 f4       	brne	.+26     	; 0x25d6 <main+0x7a4>
        lcd_testpin(resis[0].rb);  	//Pin-number 1
-    25be:	80 91 23 01 	lds	r24, 0x0123
-    25c2:	0e 94 02 01 	call	0x204	; 0x204 <lcd_testpin>
+    25bc:	80 91 23 01 	lds	r24, 0x0123
+    25c0:	0e 94 02 01 	call	0x204	; 0x204 <lcd_testpin>
        lcd_fix_string(Resistor_str);
-    25c6:	84 e4       	ldi	r24, 0x44	; 68
-    25c8:	91 e0       	ldi	r25, 0x01	; 1
-    25ca:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
+    25c4:	84 e4       	ldi	r24, 0x44	; 68
+    25c6:	91 e0       	ldi	r25, 0x01	; 1
+    25c8:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
        lcd_testpin(resis[0].ra);		//Pin-number 2
-    25ce:	80 91 22 01 	lds	r24, 0x0122
-    25d2:	0e 94 02 01 	call	0x204	; 0x204 <lcd_testpin>
-    25d6:	80 c0       	rjmp	.+256    	; 0x26d8 <main+0x8a6>
+    25cc:	80 91 22 01 	lds	r24, 0x0122
+    25d0:	0e 94 02 01 	call	0x204	; 0x204 <lcd_testpin>
+    25d4:	80 c0       	rjmp	.+256    	; 0x26d6 <main+0x8a4>
     } else { // R-Max suchen
        ii = 0;
-    25d8:	10 92 46 01 	sts	0x0146, r1
+    25d6:	10 92 46 01 	sts	0x0146, r1
        if (resis[1].rx > resis[0].rx)
-    25dc:	20 91 25 01 	lds	r18, 0x0125
-    25e0:	30 91 26 01 	lds	r19, 0x0126
-    25e4:	40 91 27 01 	lds	r20, 0x0127
-    25e8:	50 91 28 01 	lds	r21, 0x0128
-    25ec:	80 91 1a 01 	lds	r24, 0x011A
-    25f0:	90 91 1b 01 	lds	r25, 0x011B
-    25f4:	a0 91 1c 01 	lds	r26, 0x011C
-    25f8:	b0 91 1d 01 	lds	r27, 0x011D
-    25fc:	82 17       	cp	r24, r18
-    25fe:	93 07       	cpc	r25, r19
-    2600:	a4 07       	cpc	r26, r20
-    2602:	b5 07       	cpc	r27, r21
-    2604:	18 f4       	brcc	.+6      	; 0x260c <main+0x7da>
+    25da:	20 91 25 01 	lds	r18, 0x0125
+    25de:	30 91 26 01 	lds	r19, 0x0126
+    25e2:	40 91 27 01 	lds	r20, 0x0127
+    25e6:	50 91 28 01 	lds	r21, 0x0128
+    25ea:	80 91 1a 01 	lds	r24, 0x011A
+    25ee:	90 91 1b 01 	lds	r25, 0x011B
+    25f2:	a0 91 1c 01 	lds	r26, 0x011C
+    25f6:	b0 91 1d 01 	lds	r27, 0x011D
+    25fa:	82 17       	cp	r24, r18
+    25fc:	93 07       	cpc	r25, r19
+    25fe:	a4 07       	cpc	r26, r20
+    2600:	b5 07       	cpc	r27, r21
+    2602:	18 f4       	brcc	.+6      	; 0x260a <main+0x7d8>
           ii = 1;
-    2606:	81 e0       	ldi	r24, 0x01	; 1
-    2608:	80 93 46 01 	sts	0x0146, r24
+    2604:	81 e0       	ldi	r24, 0x01	; 1
+    2606:	80 93 46 01 	sts	0x0146, r24
        if (ResistorsFound == 2) {
-    260c:	62 30       	cpi	r22, 0x02	; 2
-    260e:	19 f4       	brne	.+6      	; 0x2616 <main+0x7e4>
+    260a:	62 30       	cpi	r22, 0x02	; 2
+    260c:	19 f4       	brne	.+6      	; 0x2614 <main+0x7e2>
           ii = 2;
-    2610:	60 93 46 01 	sts	0x0146, r22
-    2614:	22 c0       	rjmp	.+68     	; 0x265a <main+0x828>
+    260e:	60 93 46 01 	sts	0x0146, r22
+    2612:	22 c0       	rjmp	.+68     	; 0x2658 <main+0x826>
        } else {
           if (resis[2].rx > resis[ii].rx) {
-    2616:	20 91 46 01 	lds	r18, 0x0146
-    261a:	30 e0       	ldi	r19, 0x00	; 0
-    261c:	8b e0       	ldi	r24, 0x0B	; 11
-    261e:	90 e0       	ldi	r25, 0x00	; 0
-    2620:	28 9f       	mul	r18, r24
-    2622:	f0 01       	movw	r30, r0
-    2624:	29 9f       	mul	r18, r25
-    2626:	f0 0d       	add	r31, r0
-    2628:	38 9f       	mul	r19, r24
-    262a:	f0 0d       	add	r31, r0
-    262c:	11 24       	eor	r1, r1
-    262e:	e6 5e       	subi	r30, 0xE6	; 230
-    2630:	fe 4f       	sbci	r31, 0xFE	; 254
-    2632:	20 91 30 01 	lds	r18, 0x0130
-    2636:	30 91 31 01 	lds	r19, 0x0131
-    263a:	40 91 32 01 	lds	r20, 0x0132
-    263e:	50 91 33 01 	lds	r21, 0x0133
-    2642:	80 81       	ld	r24, Z
-    2644:	91 81       	ldd	r25, Z+1	; 0x01
-    2646:	a2 81       	ldd	r26, Z+2	; 0x02
-    2648:	b3 81       	ldd	r27, Z+3	; 0x03
-    264a:	82 17       	cp	r24, r18
-    264c:	93 07       	cpc	r25, r19
-    264e:	a4 07       	cpc	r26, r20
-    2650:	b5 07       	cpc	r27, r21
-    2652:	18 f4       	brcc	.+6      	; 0x265a <main+0x828>
+    2614:	20 91 46 01 	lds	r18, 0x0146
+    2618:	30 e0       	ldi	r19, 0x00	; 0
+    261a:	8b e0       	ldi	r24, 0x0B	; 11
+    261c:	90 e0       	ldi	r25, 0x00	; 0
+    261e:	28 9f       	mul	r18, r24
+    2620:	f0 01       	movw	r30, r0
+    2622:	29 9f       	mul	r18, r25
+    2624:	f0 0d       	add	r31, r0
+    2626:	38 9f       	mul	r19, r24
+    2628:	f0 0d       	add	r31, r0
+    262a:	11 24       	eor	r1, r1
+    262c:	e6 5e       	subi	r30, 0xE6	; 230
+    262e:	fe 4f       	sbci	r31, 0xFE	; 254
+    2630:	20 91 30 01 	lds	r18, 0x0130
+    2634:	30 91 31 01 	lds	r19, 0x0131
+    2638:	40 91 32 01 	lds	r20, 0x0132
+    263c:	50 91 33 01 	lds	r21, 0x0133
+    2640:	80 81       	ld	r24, Z
+    2642:	91 81       	ldd	r25, Z+1	; 0x01
+    2644:	a2 81       	ldd	r26, Z+2	; 0x02
+    2646:	b3 81       	ldd	r27, Z+3	; 0x03
+    2648:	82 17       	cp	r24, r18
+    264a:	93 07       	cpc	r25, r19
+    264c:	a4 07       	cpc	r26, r20
+    264e:	b5 07       	cpc	r27, r21
+    2650:	18 f4       	brcc	.+6      	; 0x2658 <main+0x826>
              ii = 2;
-    2654:	82 e0       	ldi	r24, 0x02	; 2
-    2656:	80 93 46 01 	sts	0x0146, r24
+    2652:	82 e0       	ldi	r24, 0x02	; 2
+    2654:	80 93 46 01 	sts	0x0146, r24
           }
        }
 
        if (ii == 0) {
-    265a:	80 91 46 01 	lds	r24, 0x0146
-    265e:	88 23       	and	r24, r24
-    2660:	89 f4       	brne	.+34     	; 0x2684 <main+0x852>
+    2658:	80 91 46 01 	lds	r24, 0x0146
+    265c:	88 23       	and	r24, r24
+    265e:	89 f4       	brne	.+34     	; 0x2682 <main+0x850>
           lcd_data('1');
-    2662:	81 e3       	ldi	r24, 0x31	; 49
-    2664:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
+    2660:	81 e3       	ldi	r24, 0x31	; 49
+    2662:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
           lcd_fix_string(Resistor_str);	// -[=]-
-    2668:	84 e4       	ldi	r24, 0x44	; 68
-    266a:	91 e0       	ldi	r25, 0x01	; 1
-    266c:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
+    2666:	84 e4       	ldi	r24, 0x44	; 68
+    2668:	91 e0       	ldi	r25, 0x01	; 1
+    266a:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
           lcd_data('3');
-    2670:	83 e3       	ldi	r24, 0x33	; 51
-    2672:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
+    266e:	83 e3       	ldi	r24, 0x33	; 51
+    2670:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
           lcd_fix_string(Resistor_str);	// -[=]-
-    2676:	84 e4       	ldi	r24, 0x44	; 68
-    2678:	91 e0       	ldi	r25, 0x01	; 1
-    267a:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
+    2674:	84 e4       	ldi	r24, 0x44	; 68
+    2676:	91 e0       	ldi	r25, 0x01	; 1
+    2678:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
           lcd_data('2');
-    267e:	82 e3       	ldi	r24, 0x32	; 50
-    2680:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
+    267c:	82 e3       	ldi	r24, 0x32	; 50
+    267e:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
        }
        if (ii == 1) {
-    2684:	80 91 46 01 	lds	r24, 0x0146
-    2688:	81 30       	cpi	r24, 0x01	; 1
-    268a:	89 f4       	brne	.+34     	; 0x26ae <main+0x87c>
+    2682:	80 91 46 01 	lds	r24, 0x0146
+    2686:	81 30       	cpi	r24, 0x01	; 1
+    2688:	89 f4       	brne	.+34     	; 0x26ac <main+0x87a>
           lcd_data('1');
-    268c:	81 e3       	ldi	r24, 0x31	; 49
-    268e:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
+    268a:	81 e3       	ldi	r24, 0x31	; 49
+    268c:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
           lcd_fix_string(Resistor_str);	// -[=]-
-    2692:	84 e4       	ldi	r24, 0x44	; 68
-    2694:	91 e0       	ldi	r25, 0x01	; 1
-    2696:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
+    2690:	84 e4       	ldi	r24, 0x44	; 68
+    2692:	91 e0       	ldi	r25, 0x01	; 1
+    2694:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
           lcd_data('2');
-    269a:	82 e3       	ldi	r24, 0x32	; 50
-    269c:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
+    2698:	82 e3       	ldi	r24, 0x32	; 50
+    269a:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
           lcd_fix_string(Resistor_str);	// -[=]-
-    26a0:	84 e4       	ldi	r24, 0x44	; 68
-    26a2:	91 e0       	ldi	r25, 0x01	; 1
-    26a4:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
+    269e:	84 e4       	ldi	r24, 0x44	; 68
+    26a0:	91 e0       	ldi	r25, 0x01	; 1
+    26a2:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
           lcd_data('3');
-    26a8:	83 e3       	ldi	r24, 0x33	; 51
-    26aa:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
+    26a6:	83 e3       	ldi	r24, 0x33	; 51
+    26a8:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
        }
        if (ii == 2) {
-    26ae:	80 91 46 01 	lds	r24, 0x0146
-    26b2:	82 30       	cpi	r24, 0x02	; 2
-    26b4:	89 f4       	brne	.+34     	; 0x26d8 <main+0x8a6>
+    26ac:	80 91 46 01 	lds	r24, 0x0146
+    26b0:	82 30       	cpi	r24, 0x02	; 2
+    26b2:	89 f4       	brne	.+34     	; 0x26d6 <main+0x8a4>
           lcd_data('2');
-    26b6:	82 e3       	ldi	r24, 0x32	; 50
-    26b8:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
+    26b4:	82 e3       	ldi	r24, 0x32	; 50
+    26b6:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
           lcd_fix_string(Resistor_str);	// -[=]-
-    26bc:	84 e4       	ldi	r24, 0x44	; 68
-    26be:	91 e0       	ldi	r25, 0x01	; 1
-    26c0:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
+    26ba:	84 e4       	ldi	r24, 0x44	; 68
+    26bc:	91 e0       	ldi	r25, 0x01	; 1
+    26be:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
           lcd_data('1');
-    26c4:	81 e3       	ldi	r24, 0x31	; 49
-    26c6:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
+    26c2:	81 e3       	ldi	r24, 0x31	; 49
+    26c4:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
           lcd_fix_string(Resistor_str);	// -[=]-
-    26ca:	84 e4       	ldi	r24, 0x44	; 68
-    26cc:	91 e0       	ldi	r25, 0x01	; 1
-    26ce:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
+    26c8:	84 e4       	ldi	r24, 0x44	; 68
+    26ca:	91 e0       	ldi	r25, 0x01	; 1
+    26cc:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
           lcd_data('3');
-    26d2:	83 e3       	ldi	r24, 0x33	; 51
-    26d4:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
+    26d0:	83 e3       	ldi	r24, 0x33	; 51
+    26d2:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
        }
     }
     lcd_line2(); //2. row 
-    26d8:	80 ec       	ldi	r24, 0xC0	; 192
-    26da:	0e 94 0d 01 	call	0x21a	; 0x21a <lcd_command>
+    26d6:	80 ec       	ldi	r24, 0xC0	; 192
+    26d8:	0e 94 0d 01 	call	0x21a	; 0x21a <lcd_command>
     if (ResistorsFound == 1) {
-    26de:	80 91 58 01 	lds	r24, 0x0158
-    26e2:	81 30       	cpi	r24, 0x01	; 1
-    26e4:	a1 f4       	brne	.+40     	; 0x270e <main+0x8dc>
+    26dc:	80 91 58 01 	lds	r24, 0x0158
+    26e0:	81 30       	cpi	r24, 0x01	; 1
+    26e2:	a9 f4       	brne	.+42     	; 0x270e <main+0x8dc>
        RvalOut(0);
-    26e6:	80 e0       	ldi	r24, 0x00	; 0
-    26e8:	0e 94 1d 0a 	call	0x143a	; 0x143a <RvalOut>
+    26e4:	80 e0       	ldi	r24, 0x00	; 0
+    26e6:	0e 94 1d 0a 	call	0x143a	; 0x143a <RvalOut>
 #if FLASHEND > 0x1fff
        if (resis[0].lx != 0) {
-    26ec:	60 91 1e 01 	lds	r22, 0x011E
-    26f0:	70 91 1f 01 	lds	r23, 0x011F
-    26f4:	80 91 20 01 	lds	r24, 0x0120
-    26f8:	90 91 21 01 	lds	r25, 0x0121
-    26fc:	61 15       	cp	r22, r1
-    26fe:	71 05       	cpc	r23, r1
-    2700:	81 05       	cpc	r24, r1
-    2702:	91 05       	cpc	r25, r1
-    2704:	09 f4       	brne	.+2      	; 0x2708 <main+0x8d6>
-    2706:	89 c0       	rjmp	.+274    	; 0x281a <main+0x9e8>
+    26ea:	60 91 1e 01 	lds	r22, 0x011E
+    26ee:	70 91 1f 01 	lds	r23, 0x011F
+    26f2:	80 91 20 01 	lds	r24, 0x0120
+    26f6:	90 91 21 01 	lds	r25, 0x0121
+    26fa:	61 15       	cp	r22, r1
+    26fc:	71 05       	cpc	r23, r1
+    26fe:	81 05       	cpc	r24, r1
+    2700:	91 05       	cpc	r25, r1
+    2702:	09 f4       	brne	.+2      	; 0x2706 <main+0x8d4>
+    2704:	8a c0       	rjmp	.+276    	; 0x281a <main+0x9e8>
 	  // resistor have also Inductance
           DisplayValue(resis[0].lx,-5,'H',3);	// output inductance
-    2708:	4b ef       	ldi	r20, 0xFB	; 251
-    270a:	28 e4       	ldi	r18, 0x48	; 72
-    270c:	52 c0       	rjmp	.+164    	; 0x27b2 <main+0x980>
+    2706:	4b ef       	ldi	r20, 0xFB	; 251
+    2708:	28 e4       	ldi	r18, 0x48	; 72
+    270a:	03 e0       	ldi	r16, 0x03	; 3
+    270c:	aa ce       	rjmp	.-684    	; 0x2462 <main+0x630>
        }
 #endif
     } else {
@@ -6541,14 +6541,14 @@ gakAusgabe:
     279a:	81 e3       	ldi	r24, 0x31	; 49
     279c:	91 e0       	ldi	r25, 0x01	; 1
     279e:	0e 94 71 01 	call	0x2e2	; 0x2e2 <lcd_fix_string>
-        DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,3);
+        DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
     27a2:	60 91 63 01 	lds	r22, 0x0163
     27a6:	70 91 64 01 	lds	r23, 0x0164
     27aa:	80 e0       	ldi	r24, 0x00	; 0
     27ac:	90 e0       	ldi	r25, 0x00	; 0
     27ae:	4e ef       	ldi	r20, 0xFE	; 254
     27b0:	24 ef       	ldi	r18, 0xF4	; 244
-    27b2:	03 e0       	ldi	r16, 0x03	; 3
+    27b2:	02 e0       	ldi	r16, 0x02	; 2
     27b4:	56 ce       	rjmp	.-852    	; 0x2462 <main+0x630>
      }
 #endif

@@ -263,15 +263,15 @@ no_c0save:
      lcd_data('1');
      lcd_fix_string(CapZeich);	// "-||-"
      lcd_data('3');
-     lcd_fix_string(MinCap);	// " >100nF!"
+     lcd_fix_string(MinCap_str); // " >100nF!"
      PartFound = PART_NONE;
      //measure  offset Voltage of analog Comparator for Capacity measurement
      ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
-     while (cpre < -9) {
-        cpre++;
+     while (cap.cpre < -9) {
+        cap.cpre++;
         cap.cval /= 10;
      }
-     if ((cpre == -9) && (cap.cval > 95) && (cap.cval < 3000)) {
+     if ((cap.cpre == -9) && (cap.cval > 95) && (cap.cval < 22000)) {
         cap_found++;
      } else {
         cap_found = 0;		// wait for stable connection
@@ -280,7 +280,7 @@ no_c0save:
         // value of capacitor is correct
         (void) eeprom_write_word((uint16_t *)(&ref_offset), load_diff);	// hold zero offset + slew rate dependend offset
         lcd_clear();
-        lcd_fix_string(REF_Cstr);	// "REF_C="
+        lcd_fix_string(REF_C_str);	// "REF_C="
         lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
   #ifdef AUTOSCALE_ADC
         ADC_PORT =  TXD_VAL;	//ADC-Port 1 to GND
@@ -299,7 +299,7 @@ no_c0save:
         ADCconfig.U_Bandgap = ADC_internal_reference;
         udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1] - adcmv[1])) * ADC_internal_reference / (2*adcmv[1]))+REF_R_KORR;
         lcd_line2();
-        lcd_fix_string(REF_Rstr);	// "REF_R="
+        lcd_fix_string(REF_R_str);	// "REF_R="
         udiff2 = udiff + (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
         (void) eeprom_write_byte((uint8_t *)(&RefDiff), (uint8_t)udiff2);	// hold offset for true reference Voltage
         lcd_string(itoa(udiff2, outval, 10));	//output correction voltage
@@ -308,7 +308,7 @@ no_c0save:
         break;
      }
      lcd_line2();
-     DisplayValue(cap.cval,cpre,'F',4);
+     DisplayValue(cap.cval,cap.cpre,'F',4);
      wait200ms();			// wait additional time
   }
 
@@ -319,7 +319,7 @@ no_c0save:
   lcd_clear();
 //  lcd_line1();
   lcd_line2();
-  lcd_fix_string(VERSION);	//"Version ..."
+  lcd_fix_string(VERSION_str);	//"Version ..."
   lcd_line1();
   lcd_fix_string(ATE);		//"Selftest End"
 #ifdef FREQUENCY_50HZ

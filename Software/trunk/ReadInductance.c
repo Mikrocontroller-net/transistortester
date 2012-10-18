@@ -135,8 +135,21 @@ void ReadInductance(void) {
             if ((umax < 2) && (total_r < 2)) break;	// low current detected
         }
         cap.cval = CombineII2Long(ovcnt16, tmpint);
-        if (cap.cval > 6) cap.cval -= 6;
-        else          cap.cval = 0;
+  #define CNT_ZERO_42 6
+  #define CNT_ZERO_720 8
+#if F_CPU == 16000000UL
+  #undef CNT_ZERO_42
+  #undef CNT_ZERO_720
+  #define CNT_ZERO_42 4
+  #define CNT_ZERO_720 10
+#endif
+        if (mess_r < R_L_VAL) {
+           if (cap.cval > CNT_ZERO_42) cap.cval -= CNT_ZERO_42;
+           else          cap.cval = 0;
+        } else {
+           if (cap.cval > CNT_ZERO_720) cap.cval -= CNT_ZERO_720;
+           else          cap.cval = 0;
+        }
         if ((count&0x01) == 1) {
            // second pass with delayed counter start
            cap.cval += (3 * (F_CPU/1000000))+10;

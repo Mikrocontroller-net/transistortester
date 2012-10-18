@@ -225,25 +225,28 @@ End of configuration
 #endif
 
 // Strings, which are not dependent of any language
- const unsigned char Bat[] MEM_TEXT = "Bat. ";
- const unsigned char OK[] MEM_TEXT = "OK";
- const unsigned char mosfet[] MEM_TEXT = "-MOS";
- const unsigned char jfet[] MEM_TEXT = "JFET";
- const unsigned char GateCap[] MEM_TEXT = "C=";
- const unsigned char hfestr[] MEM_TEXT ="B=";
- const unsigned char NPN[] MEM_TEXT = "NPN ";
- const unsigned char PNP[] MEM_TEXT = "PNP ";
- const unsigned char ebcstr[] MEM_TEXT = " EBC=";
- const unsigned char gds[] MEM_TEXT = " GDS=";
- const unsigned char Uf[] MEM_TEXT = "Uf=";
- const unsigned char vt[] MEM_TEXT = " Vt=";
+ const unsigned char Bat_str[] MEM_TEXT = "Bat. ";
+ const unsigned char OK_str[] MEM_TEXT = "OK";
+ const unsigned char mosfet_str[] MEM_TEXT = "-MOS";
+ const unsigned char jfet_str[] MEM_TEXT = "JFET";
+ const unsigned char GateCap_str[] MEM_TEXT = "C=";
+ const unsigned char hfe_str[] MEM_TEXT ="B=";
+ const unsigned char NPN_str[] MEM_TEXT = "NPN ";
+ const unsigned char PNP_str[] MEM_TEXT = "PNP ";
+ const unsigned char EBC_str[] MEM_TEXT = " EBC=";
+ const unsigned char GDS_str[] MEM_TEXT = " GDS=";
+ const unsigned char Uf_str[] MEM_TEXT = "Uf=";
+ const unsigned char vt_str[] MEM_TEXT = " Vt=";
  const unsigned char Vgs_str[] MEM_TEXT = "@Vgs=";
 #ifdef C_MESS
  const unsigned char CapZeich[] MEM_TEXT = {'-',LCD_CHAR_CAP,'-',0};
  const unsigned char Cell_str[] MEM_TEXT = "Cell!";
  #if FLASHEND > 0x1fff
- const unsigned char esr_txt[] MEM_TEXT = " ESR=";
+ const unsigned char ESR_str[] MEM_TEXT = " ESR=";
  #endif
+#endif
+#if FLASHEND > 0x1fff
+ const unsigned char Lis_str[] MEM_TEXT = "L=";
 #endif
  const unsigned char AnKat[] MEM_TEXT = {'-', LCD_CHAR_DIODE1, '-',0};
  const unsigned char KatAn[] MEM_TEXT = {'-', LCD_CHAR_DIODE2, '-',0};
@@ -251,7 +254,7 @@ End of configuration
 #ifdef R_MESS
  const unsigned char Resistor_str[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
 #endif
- const unsigned char VERSION[] MEM_TEXT = "Version 1.00k";
+ const unsigned char VERSION_str[] MEM_TEXT = "Version 1.01k";
 
 
 #ifdef WITH_SELFTEST
@@ -270,9 +273,9 @@ End of configuration
  const unsigned char T50HZ[] MEM_TEXT = " 50Hz";
 #endif
 #ifdef AUTO_CAL
- const unsigned char MinCap[] MEM_TEXT = " >100nF";
- const unsigned char REF_Cstr[] MEM_TEXT = "REF_C=";
- const unsigned char REF_Rstr[] MEM_TEXT = "REF_R=";
+ const unsigned char MinCap_str[] MEM_TEXT = " >100nF";
+ const unsigned char REF_C_str[] MEM_TEXT = "REF_C=";
+ const unsigned char REF_R_str[] MEM_TEXT = "REF_R=";
 #endif
 #ifdef DebugOut
  #define LCD_CLEAR
@@ -349,6 +352,7 @@ End of configuration
    const int16_t ref_offset EEMEM = REF_C_KORR;	// default correction of internal reference voltage for capacity measurement
   // LoPin:HiPin                        2:1    3:1    1:2                    :     3:2                   1:3    2:3
    const uint8_t c_zero_tab[] EEMEM = { C_NULL,C_NULL,C_NULL+TP2_CAP_OFFSET,C_NULL,C_NULL+TP2_CAP_OFFSET,C_NULL,C_NULL }; //table of zero offsets
+   const uint8_t EE_ESR_ZERO EEMEM = ESR_ZERO;	// zero offset of ESR measurement
  #endif
 #endif
 //End of EEPROM-Strings
@@ -365,11 +369,13 @@ End of configuration
   extern int8_t RefDiff;
   extern uint16_t ref_offset;
   extern uint8_t c_zero_tab[];
+  extern uint8_t EE_ESR_ZERO EEMEM;	// zero offset of ESR measurement
  #endif
   extern  uint16_t RLtab[];
 
  #if FLASHEND > 0x1fff
   extern uint8_t LogTab[];
+  extern const unsigned char ESR_str[];
  #endif
 
 
@@ -394,7 +400,7 @@ unsigned int W20msReadADC(uint8_t mux);		// wait 20ms and read then ADC
 void lcd_show_format_cap(void);
 void ReadCapacity(uint8_t HighPin, uint8_t LowPin);	//capacity measurement
 void ReadInductance(void);		//inductance measurement
-void GetESR(uint8_t HighPin, uint8_t LowPin);	//get ESR of capacitor
+void GetESR();				//get ESR of capacitor
 void UfAusgabe(uint8_t bcdchar);	// Output of the threshold voltage(s) Uf
 void mVAusgabe(uint8_t nn);		// Output of the theshold voltage for Diode nn 
 void RvalOut(uint8_t ii);		// Output of the resistore value(s)
@@ -478,10 +484,10 @@ COMMON struct cap_t {
 #if FLASHEND > 0x1fff
   unsigned int esr;		// serial resistance of C in 0.01 Ohm
 #endif
-  uint8_t ca, cb;			//pins of capacitor
+  uint8_t ca, cb;		//pins of capacitor
+  int8_t cpre;			//Prefix for capacitor value  -12=p, -9=n, -6=µ, -3=m
 } cap;
 COMMON int16_t load_diff;		// difference voltage of loaded capacitor and internal reference
-COMMON int8_t cpre;			//Prefix for capacitor value  -12=p, -9=n, -6=µ, -3=m
 
 COMMON uint8_t WithReference;		// Marker for found precision voltage reference = 1
 COMMON uint8_t PartFound;	 	// the found part 

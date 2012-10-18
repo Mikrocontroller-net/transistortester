@@ -156,7 +156,7 @@ start:
   // Battery check is selected
   ReadADC(TPBAT);	//Dummy-Readout
   trans.uBE[0] = W5msReadADC(TPBAT); 	//with 5V reference
-  lcd_fix_string(Bat);		//output: "Bat. "
+  lcd_fix_string(Bat_str);		//output: "Bat. "
  #ifdef BAT_OUT
   // display Battery voltage
   // The divisor to get the voltage in 0.01V units is ((10*33)/133) witch is about 2.4812
@@ -185,10 +185,10 @@ start:
      }
      lcd_fix_string(BatWeak);		//Battery weak
   } else { // Battery-voltage OK
-     lcd_fix_string(OK); 		// "OK"
+     lcd_fix_string(OK_str); 		// "OK"
   }
 #else
-  lcd_fix_string(VERSION);		// if no Battery check, Version .. in row 1
+  lcd_fix_string(VERSION_str);		// if no Battery check, Version .. in row 1
 #endif
 #ifdef WDT_enabled
   wdt_enable(WDTO_2S);		//Watchdog on
@@ -275,9 +275,9 @@ start:
         lcd_testpin(diodes[0].Cathode);
         UfAusgabe(0x70);
 #ifdef C_MESS
-        lcd_fix_string(GateCap);		//"C="
+        lcd_fix_string(GateCap_str);	//"C="
         ReadCapacity(diodes[0].Cathode,diodes[0].Anode);	// Capacity opposite flow direction
-        DisplayValue(cap.cval,cpre,'F',3);
+        DisplayValue(cap.cval,cap.cpre,'F',3);
 #endif
         goto end;
      } else if(NumOfDiodes == 2) { // double diode
@@ -396,9 +396,9 @@ start:
     }
 
     if(PartMode == PART_MODE_NPN) {
-       lcd_fix_string(NPN);		//"NPN "
+       lcd_fix_string(NPN_str);		//"NPN "
     } else {
-       lcd_fix_string(PNP);		//"PNP "
+       lcd_fix_string(PNP_str);		//"PNP "
     }
     if(NumOfDiodes > 2) {	//Transistor with protection diode
        if(PartMode == PART_MODE_NPN) {
@@ -407,16 +407,16 @@ start:
           lcd_fix_string(KatAn);	//"-|<-"
        }
     }
-    lcd_fix_string(ebcstr);		//" EBC="
+    lcd_fix_string(EBC_str);		//" EBC="
     lcd_testpin(trans.e);
     lcd_testpin(trans.b);
     lcd_testpin(trans.c);
     lcd_line2(); //2. row 
-    lcd_fix_string(hfestr);		//"B="  (hFE)
+    lcd_fix_string(hfe_str);		//"B="  (hFE)
     DisplayValue(trans.hfe[0],0,0,3);
     lcd_space();
 
-    lcd_fix_string(Uf);		//"Uf="
+    lcd_fix_string(Uf_str);		//"Uf="
     DisplayValue(trans.uBE[0],-3,'V',3);
     goto end;
     // end (PartFound == PART_TRANSISTOR)
@@ -437,11 +437,11 @@ start:
        lcd_data('E');			// N-E
     }
     if (tmp == (PART_MODE_N_JFET/2)) {
-       lcd_fix_string(jfet);		//"JFET"
+       lcd_fix_string(jfet_str);	//"JFET"
     } else {
-       lcd_fix_string(mosfet);		//"-MOS "
+       lcd_fix_string(mosfet_str);	//"-MOS "
     }
-    lcd_fix_string(gds);		//"GDS="
+    lcd_fix_string(GDS_str);		//"GDS="
     lcd_testpin(trans.b);
     lcd_testpin(trans.c);
     lcd_testpin(trans.e);
@@ -456,11 +456,11 @@ start:
     lcd_line2();			//2. Row
     if(PartMode < PART_MODE_N_D_MOS) {	//enhancement-MOSFET
  #ifdef C_MESS	//Gate capacity
-       lcd_fix_string(GateCap);		//"C="
+       lcd_fix_string(GateCap_str);		//"C="
        ReadCapacity(trans.b,trans.e);	//measure capacity
-       DisplayValue(cap.cval,cpre,'F',3);
+       DisplayValue(cap.cval,cap.cpre,'F',3);
  #endif
-       lcd_fix_string(vt);		// "Vt="
+       lcd_fix_string(vt_str);		// "Vt="
     } else {
        lcd_data('I');
        lcd_data('=');
@@ -524,6 +524,7 @@ start:
 #if FLASHEND > 0x1fff
        if (resis[0].lx != 0) {
 	  // resistor have also Inductance
+          lcd_fix_string(Lis_str);	// "L="
           DisplayValue(resis[0].lx,-5,'H',3);	// output inductance
        }
 #endif
@@ -555,12 +556,9 @@ start:
      lcd_fix_string(CapZeich);		// capacitor sign
      lcd_testpin(cap.cb);		//Pin number 2
      lcd_line2(); 			//2. row 
-     DisplayValue(cap.cval,cpre,'F',4);
+     DisplayValue(cap.cval,cap.cpre,'F',4);
 #if FLASHEND > 0x1fff
-     if (cap.esr > 0) {
-        lcd_fix_string(esr_txt);	// " ESR="
-        DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
-     }
+     GetESR();				// get ESR of capacitor
 #endif
      goto end;
   }
@@ -644,7 +642,7 @@ gakAusgabe:
 void UfAusgabe(uint8_t bcdnum) {
 
    lcd_line2(); 				//2. row
-   lcd_fix_string(Uf);			//"Uf="
+   lcd_fix_string(Uf_str);			//"Uf="
    mVAusgabe(bcdnum >> 4);
    mVAusgabe(bcdnum & 0x0f);
 }

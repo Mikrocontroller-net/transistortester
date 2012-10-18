@@ -42,7 +42,7 @@ CFLAGS += -DWITH_SELFTEST
 # with ATmega168
 CFLAGS += -DAUTO_CAL
 # FREQUENCY_50HZ enables a 50 Hz frequency generator for up to one minute at the end of selftests
-CFLAGS += -DFREQUENCY_50HZ
+#CFLAGS += -DFREQUENCY_50HZ
 
 
 # the WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring
@@ -65,6 +65,10 @@ CFLAGS += -DCAP_EMPTY_LEVEL=4
 # the AUTOSCALE_ADC option enables the autoscale ADC (VCC and Bandgap Ref)
 CFLAGS += -DAUTOSCALE_ADC
 CFLAGS += -DREF_R_KORR=3
+
+# the ESR_ZERO value define the zero value of ESR measurement (units = 0.01 Ohm)
+CFLAGS += -DESR_ZERO=29
+
 # NO_AREF_CAP tells your Software, that you have no Capacitor installed at pin AREF (21)
 # this enables a shorter wait-time for AUTOSCALE_ADC function
 CFLAGS += -DNO_AREF_CAP

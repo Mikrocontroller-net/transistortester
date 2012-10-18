@@ -22,7 +22,7 @@
 // cap.cval = value of the capacitor 
 // cap.cval_uncorrected = value of the capacitor uncorrected
 // cap.esr = serial resistance of capacitor,  0.01 Ohm units
-// cpre = units of cap.cval (-12==pF, -9=nF, -6=µF)
+// cap.cpre = units of cap.cval (-12==pF, -9=nF, -6=µF)
 // ca   = Pin number (0-2) of the LowPin
 // cb   = Pin number (0-2) of the HighPin
 
@@ -94,7 +94,12 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      wait500us();			//wait a little time
      wdt_reset();
      // read voltage without current, is already charged enough?
-     adcv[2] = ReadADC(HighPin) - adcv[0];
+     adcv[2] = ReadADC(HighPin);
+     if (adcv[2] > adcv[0]) {
+        adcv[2] -= adcv[0];		//difference to beginning voltage
+     } else {
+        adcv[2] = 0;			// voltage is lower or same as beginning voltage
+     }
      if ((ovcnt16 == 126) && (adcv[2] < 75)) {
         // 300mV can not be reached well-timed 
         break;		// don't try to load any more
@@ -106,7 +111,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   // wait 5ms and read voltage again, does the capacitor keep the voltage?
 //  adcv[1] = W5msReadADC(HighPin) - adcv[0];
 //  wdt_reset();
-  cpre = -12;			//default unit is pF
+  cap.cpre = -12;			//default unit is pF
   if (adcv[2] < 301) {
 #if DebugOut == 10
      lcd_data('K');
@@ -120,10 +125,15 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      goto messe_mit_rh;		// Voltage of more than 1300mV is reached in one pulse, to fast loaded
   }
   // Capacity is more than about 50µF
-  cpre = -9;		// switch units to nF 
+  cap.cpre = -9;		// switch units to nF 
 #ifdef NO_CAP_HOLD_TIME
   ChargePin10ms(HiPinR_H,0);		//switch HighPin with R_H 10ms auf GND, then currentless
   adcv[3] = ReadADC(HighPin) - adcv[0]; // read voltage again, is discharged only a little bit ?
+  if (adcv[3] > adcv[0]) {
+     adcv[3] -= adcv[0];		// difference to beginning voltage
+  } else {
+     adcv[3] = 0;			// voltage is lower to beginning voltage
+  }
  #if DebugOut == 10
   lcd_data('U');
   lcd_data('3');
@@ -146,14 +156,19 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   // wait the same time which is required for loading
   for (tmpint=0;tmpint<=ovcnt16;tmpint++) {
      wait10ms();
-     adcv[3] = ReadADC(HighPin) - adcv[0]; // read voltage again, is discharged only a little bit ?
+     adcv[3] = ReadADC(HighPin);	// read voltage again, is discharged only a little bit ?
      wdt_reset();
+  }
+  if (adcv[3] > adcv[0]) {
+     adcv[3] -= adcv[0];		// difference to beginning voltage
+  } else {
+     adcv[3] = 0;			// voltage is lower or same as beginning voltage
   }
   if (adcv[2] > adcv[3]) {
      // build difference to load voltage
-     adcv[3] = adcv[2] - adcv[3];
+     adcv[3] = adcv[2] - adcv[3];	// lost voltage during load time wait
   } else {
-     adcv[3] = 0;
+     adcv[3] = 0;			// no lost voltage
   }
   if (adcv[3] > 100) {
      // more than 100mV is lost during load time
@@ -162,13 +177,13 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      lcd_space();
      wait1s();
  #endif
-     goto keinC;		// capacitor does not keep the voltage about 5ms
+     goto keinC;			// capacitor does not keep the voltage about 5ms
   }
   cap.cval_uncorrected = ovcnt16 + 1;
   // compute factor with load voltage + lost voltage during the voltage load time
   cap.cval_uncorrected *= getRLmultip(adcv[2]+adcv[3]);	// get factor to convert time to capacity from table
 #endif
-   cap.cval = cap.cval_uncorrected;		// set result to uncorrected
+   cap.cval = cap.cval_uncorrected;	// set result to uncorrected
    Scale_C_with_vcc();
    // cap.cval for this type is at least 40000nF, so the last digit will be never shown
    cap.cval *= (1000 - C_H_KORR);	// correct with C_H_KORR with 0.1% resolution, but prevent overflow
@@ -181,13 +196,10 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
    lcd_data('C');
    lcd_testpin(HighPin);
    lcd_space();
-   DisplayValue(cap.cval,cpre,'F',4);
+   DisplayValue(cap.cval,cap.cpre,'F',4);
    lcd_space();
    lcd_string(utoa(ovcnt16,outval,10));
    wait3s();
-#endif
-#if FLASHEND > 0x1fff
-   GetESR(HighPin,LowPin);
 #endif
    goto checkDiodes;
 
@@ -225,21 +237,21 @@ messe_mit_rh:
 //******************************
   while(1) {
      // Wait, until  Input Capture is set
-     ii = TI1_INT_FLAGS;		//read Timer flags
+     ii = TI1_INT_FLAGS;	//read Timer flags
      if (ii & (1<<ICF1))  {
         break;
      }
-     if((ii & (1<<TOV1))) {		// counter overflow, 65.536 ms @ 1MHz, 8.192ms @ 8MHz
+     if((ii & (1<<TOV1))) {	// counter overflow, 65.536 ms @ 1MHz, 8.192ms @ 8MHz
         TI1_INT_FLAGS = (1<<TOV1);	// Reset OV Flag
         wdt_reset();
         ovcnt16++;
         if(ovcnt16 == (F_CPU/5000)) {
-           break; 	//Timeout for Charging, above 12 s
+           break; 		//Timeout for Charging, above 12 s
         }
      }
   }
   TCCR1B = (0<<ICNC1) | (0<<ICES1) | (0<<CS10);  // stop counter
-  TI1_INT_FLAGS = (1<<ICF1);			// Reset Input Capture
+  TI1_INT_FLAGS = (1<<ICF1);		// Reset Input Capture
   tmpint = ICR1;		// get previous Input Capture Counter flag
 // check actual counter, if an additional overflow must be added
   if((TCNT1 > tmpint) && (ii & (1<<TOV1))) {
@@ -258,16 +270,16 @@ messe_mit_rh:
   }
   cap.cval_uncorrected = CombineII2Long(ovcnt16, tmpint);
 
-  cpre = -12;			// cap.cval unit is pF 
+  cap.cpre = -12;			// cap.cval unit is pF 
   if (ovcnt16 > 65) {
      cap.cval_uncorrected /= 100;	// switch to next unit
-     cpre += 2;			// set unit, prevent overflow
+     cap.cpre += 2;			// set unit, prevent overflow
   }
   cap.cval_uncorrected *= RHmultip;		// 708
   cap.cval_uncorrected /= (F_CPU / 10000);	// divide by 100 (@ 1MHz clock), 800 (@ 8MHz clock)
   cap.cval = cap.cval_uncorrected;		// set the corrected cap.cval
   Scale_C_with_vcc();
-  if (cpre == -12) {
+  if (cap.cpre == -12) {
 #if COMP_SLEW1 > COMP_SLEW2
      if (cap.cval < COMP_SLEW1) {
         // add slew rate dependent offset
@@ -301,7 +313,7 @@ messe_mit_rh:
   lcd_data('c');
   lcd_testpin(HighPin);
   lcd_space();
-  DisplayValue(cap.cval,cpre,'F',4);
+  DisplayValue(cap.cval,cap.cpre,'F',4);
   wait3s();
 #endif
   R_DDR = HiPinR_L; 		//switch R_L for High-Pin to GND
@@ -311,7 +323,7 @@ messe_mit_rh:
    if(cap.cval < 25)
 #endif 
      {
-     // cap.cval can only be so little in pF unit, cpre must not be testet!
+     // cap.cval can only be so little in pF unit, cap.cpre must not be testet!
 #if DebugOut == 10
      lcd_data('<');
      lcd_space();
@@ -321,9 +333,9 @@ messe_mit_rh:
    }
    // end low capacity 
 #if FLASHEND > 0x1fff
-   if (ovcnt16 > (6 * ((unsigned long)F_CPU/1000000))) {	// above 3 uF
-      GetESR(HighPin,LowPin);
-   }
+//   if (ovcnt16 > (6 * ((unsigned long)F_CPU/1000000))) {	// above 3 uF
+//      GetESR(HighPin,LowPin);
+//   }
 #endif
 checkDiodes:
    if((NumOfDiodes > 0)  && (PartFound != PART_FET)) {
@@ -385,7 +397,7 @@ unsigned int getRLmultip(unsigned int cvolt) {
 void Scale_C_with_vcc(void) {
    while (cap.cval > 100000) {
       cap.cval /= 10;
-      cpre ++;			// prevent overflow
+      cap.cpre ++;			// prevent overflow
    }
    cap.cval *= ADCconfig.U_AVCC;	// scale with measured voltage
    cap.cval /= U_VCC;			// Factors are computed for U_VCC

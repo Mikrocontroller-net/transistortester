@@ -16,7 +16,9 @@
 #define TP1 PC0
 #define TP2 PC1
 #define TP3 PC2
+// Port pin for 2.5V precision reference used for VCC check (optional)
 #define TPREF PC4
+// Port pin for Battery voltage measuring
 #define TPBAT PC5
 
 
@@ -50,22 +52,26 @@
 #define ON_DDR DDRD
 #define ON_PORT PORTD
 #define ON_PIN_REG PIND
-#define ON_PIN PD6      //Pin, must be switched to high to swtch power on
+#define ON_PIN PD6      //Pin, must be switched to high to switch power on
 #define RST_PIN PD7     //Pin, is swiched to low, if push button is pressed
 
 
 // U_VCC defines the VCC Voltage of the ATmega in mV units
 
 #define U_VCC 5000
-// with integer factors the ADC-value will be changed to mV resolution in ReadADC !
-// all if statements are corrected to the mV resolution.
+// integer factors are used to change the ADC-value to mV resolution in ReadADC !
 
+// With the option NO_CAP_HOLD_TIME you specify, that capacitor loaded with 680 Ohm resistor will not
+// be tested to hold the voltage same time as load time.
+// Otherwise (without this option) the voltage drop during load time is compensated to avoid displaying
+// too much capacity for capacitors with internal parallel resistance.
+// #define NO_CAP_HOLD_TIME
 
 
 // U_SCALE can be set to 4 for better resolution of ReadADC function for resistor measurement
 #define U_SCALE 4
 
-// R_ANZ_MESS can ce set to a higher number of measurements (up to 200) for resistor measurement
+// R_ANZ_MESS can be set to a higher number of measurements (up to 200) for resistor measurement
 #define R_ANZ_MESS 190
 
 //Watchdog
@@ -423,4 +429,8 @@ Is SWUART_INVERT defined, the UART works is inverse mode
   #define RR680MI (R_L_VAL + PIN_RM)
 #endif
 
+#ifndef ESR_ZERO
+ //define a default zero value for ESR measurement (0.01 Ohm units)
+ #define ESR_ZERO 23
+#endif
 

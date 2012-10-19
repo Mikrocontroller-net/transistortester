@@ -282,6 +282,7 @@ no_c0save:
         lcd_clear();
         lcd_fix_string(REF_C_str);	// "REF_C="
         lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
+        eeprom_write_byte((uint8_t *)(&EE_ESR_ZERO), (uint8_t)ESR_ZERO); // set to initial zero offset
   #ifdef AUTOSCALE_ADC
         ADC_PORT =  TXD_VAL;	//ADC-Port 1 to GND
         ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V

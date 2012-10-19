@@ -35,7 +35,7 @@ void ReadInductance(void) {
      return;	//We have found no resistor  
   }
   for (found=0;found<ResistorsFound;found++) {
-     if (resis[found].rx > 28000) continue;
+     if (resis[found].rx > 21000) continue;
      // we can check for Inductance, if resistance is below 2800 Ohm
      for (count=0;count<4;count++) {
         // Try four times (different direction and with delayed counter start)

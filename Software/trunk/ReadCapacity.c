@@ -155,7 +155,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 #else
   // wait the same time which is required for loading
   for (tmpint=0;tmpint<=ovcnt16;tmpint++) {
-     wait10ms();
+     wait5ms();
      adcv[3] = ReadADC(HighPin);	// read voltage again, is discharged only a little bit ?
      wdt_reset();
   }

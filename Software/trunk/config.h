@@ -121,6 +121,8 @@ End of configuration
  #define MEM2_TEXT PROGMEM
  #define MEM_read_word(a)  pgm_read_word(a)
  #define MEM_read_byte(a)  pgm_read_byte(a)
+ #define MEM2_read_byte(a)  pgm_read_byte(a)
+ #define MEM2_read_word(a)  pgm_read_word(a)
  #define lcd_fix2_string(a)  lcd_pgm_string(a)
 #endif
 
@@ -303,8 +305,9 @@ End of configuration
   #undef WITH_AUTO_REF
 #endif
 
-#define LONG_WAIT_TIME 10000
-#define SHORT_WAIT_TIME 3000
+#define LONG_WAIT_TIME 14000
+#define SHORT_WAIT_TIME 5000
+
 #ifdef POWER_OFF
 // if POWER OFF function is selected, wait 10s
 // if POWER_OFF with parameter > 2, wait only 3s before repeating

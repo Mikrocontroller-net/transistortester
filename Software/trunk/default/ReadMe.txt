@@ -1,4 +1,4 @@
-﻿Datum: 23.9.2012   Test version Transistortester (AVR) Version 1.00k
+﻿Date: 19.10.2012   Test version Transistortester (AVR) Version 1.01k
 
 
 For all adventurous people here is my short intruction, how to get
@@ -8,17 +8,20 @@ I can give you no warranty for proper operation.
 
 Software for 8 MHz or 1MHz operation is allways the same.
 The source will adapt to your Makefile option.
+The 8 Mhz operation is recommended, because last tests are
+always done in this mode.
+
 With Linux operating system with the GNU toolchain and
 program avrdude installed you need only 4 steps to
 get a operable ATmega microcontroller.
 
 
-1.) Edit your Makefile (~./Sourcecode/default/Makefile) 
+1.) Edit your Makefile (~./trunk/default/Makefile) 
     Select OP_MHZ=1 or OP_MHZ=8 operation and AVR-type (PARTNO=).
     Set the programmer type (PROGRAMMER=) and your programmer port (PORT=)
     if you wish to use avrdude to load data to the ATmega.
 
-2.) Change to directory ~./Sourcecode/default and call "make" !
+2.) Change to directory ~./trunk/default and call "make" !
     You need no "make clean" call.
 
 3.) Connect your programmer to the ATmega and call "make upload" to load the
@@ -31,12 +34,12 @@ For crystal operation you need a proper installed 8MHz crystal at pin 9 and pin 
 ATmega.
 For ATmega168 and ATmega328 is a clock operation of 1MHz possible, even if
 a 8MHz crystal installed. For this case a clock divide by 8 is programmed with the
-fuses.
+fuses. 
 A new make fuses-crystal-lp call is also possible with the ATmega168 line of controllers
 to save power with the Low Power Crystal Oscillator mode. The fuses-crystal call
 enables the Full Swing Crystal Oscillator mode.
 The ATmega8 must have a 1MHz crystal installed, if you wish a 1MHz crystal operation.
-For better resolution of capacity measurement the 8Mhz clock is recommended.
+For better resolution of capacity and inductivity measurement the 8Mhz clock is recommended.
 If you don't use the Makefile for setting the fuses, be careful, you can set the
 fuses, that no further ISP programming of your ATmega is possible!!!
 
@@ -44,11 +47,13 @@ I have tested a ATmega168 vesion (PARTNO=m168) and a ATmega8 version (PARTNO=m8)
 You can use all options at same time only with ATmega168 version.
 The selftest and automatic calibration is only possible with mega168 of mega328!
 You can change from ATmega8 to ATmega168 or ATmega328 without hardware changes.
+I strongly recommend to change from ATmega8 to ATmega168 or
+better ATmega328 microcontroller.
 
-In the directory Sourcecode/mega8_auto are compiled programming data for the
+In the directory trunk/mega8_auto are compiled programming data for the
 ATmega8 without the selftest function but with AUTOSCALE_ADC.
 
-In the directory Sourcecode/mega8_selftest are compiled programming date for
+In the directory trunk/mega8_selftest are compiled programming date for
 the ATmega8 without selftest function and without the AUTOSCALE_ADC option.
 Both versions are compiled for 8MHz operation, as you can see in the Makefile options.
 
@@ -59,6 +64,22 @@ You must change the fuses for 8MHz operation or alternatively compile the softwa
 Usually the fuses are preset to 1Mhz operation.
 See the 4 steps above!
 
+You should run the selftest with autocalibration of your tester to get better measurement results for
+capacity measurement and resistor measurement, especially with the AUTOSCALE_ADC option set.
+For autocalibration you need a high quality external capacitor with at least 100 nF. 
+This capacitor must be connected to pin 1 and pin 3 of the tester after measuring the
+zero offset of capacity measurement (C0).
+The zero offset of the ESR (Equivalent Series Resistor) of a capacitor would be adjusted, if
+you connect a capacitor with a high capacity value and a very low ESR. The tester assumes, that
+negative ESR is not possible, and will reduce the zero offset so that result will be zero.
+Because this measurement is nor very stable, you should repeat this calibration some times.
+This correction behavior is shown with the output of "ESR=0?".
+The new zero offset take effect for the next measurements until the next selftest will reset
+the zero offset to the initial value.
+Therfore you must repeat this calibration step after every selftest!
+Measurement of ESR is very critical, since the resolution of resistance measurement is 0.01 Ohm.
+Unstable connection, the printed board, the ATmega exemplar or cable resistance have influences
+to the ESR measurement result!
 
 
 Please tell me, if you have problems with my software.

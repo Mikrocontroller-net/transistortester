@@ -1,4 +1,4 @@
-﻿Datum: 23.9.2012   Testversion Transistortester (AVR) Version 1.00k
+﻿Datum: 19.10.2012   Test Version Transistortester (AVR) Version 1.01k
 
 
 Für alle, die selber experimentieren wollen,hier eine kurze Anleitung,
@@ -6,11 +6,14 @@ wie man die 1Mhz und 8MHz Version selbst erzeugen kann.
 Bei meiner Software handelt es sich um eine "Testversion".
 Selbstverständlich kann ich keine Gewährleistung geben.
 
-Die Werte AVR @ 8Mhz Clock sind mit der gleichen Software
+Die Software für 8 Mhz Takt und 1 MHz Takt werden mit der gleichen Software
 (Sourcecode ist selbstanpassend!) erzeugt.
-Allerdings müssen dazu mit einer Linux Entwicklungsumgebung
-die folgenden 4 Schritte erfolgen.
+Der 8 MHz Betrieb wird empfohlen, weil alle letzten Tests mit
+dieser Taktrate durchgeführt wurden.
 
+Mit einem Linuy Betriebssystem mit installierten GNU Tools und
+installiertem Programm avrdude braucht man nur 4 Schritte
+um einen fertigen ATmega microcontroller zu erhalten.
 
 1.) Editieren der Makefile (~./Sourcecode/default/Makefile) 
     Den Eintrag OP_MHZ=1 auf OP_MHZ=8 ändern, sowie den Programmer (PROGRAMMER=),
@@ -18,35 +21,39 @@ die folgenden 4 Schritte erfolgen.
     falls man avrdude für das Programmieren benutzen möchte
 
 2.) make aufrufen!
-    Im Verzeichnis ~./Sourcecode/default wird "make" aufgerufen.
+    Im Verzeichnis ~./trunk/default wird "make" aufgerufen.
     Ein vorheriger "make clean" Aufruf ist nicht erforderlich.
 
-3.) Mit dem Aufruf "make upload" die Programmierdaten über das ISP-Interface in den AVR brennen.
+3.) Das Programmiergerät anschließen und mit dem Aufruf "make upload" die Programmierdaten
+    über das ISP-Interface in den AVR brennen.
 
 4.) Bei Bedarf mit dem Aufruf "make fuses" den AVR für den Betrieb konfigurieren.
+    Der ISR-Stecker wieder entfernen.
 
 Für eine Quarz-Oszillator-Betrieb ist es erforderlich einen 8MHz Quarz an Pin 9 und Pin 10
 des AVRs anzuschliessen und anstelle des Aufrufes "make fuses" den Aufruf "make fuses-crystal"
 aufzurufen.
 Bei der ATmega168 Linie ist auch der Quarz-betriebene 1MHz Betrieb möglich, es wird dann
 ein Vorteiler für die Clock programmiert.
+
 Wenn man Strom sparen möchte, kann man auch mit dem "make fuses-crystal-lp" Aufruf
 den Low Power Crystal Oscillator Mode benutzen. Mit dem Standard fuses-crystal Aufruf
 wird der Full Swing Oscillator Mode programmiert.
 Bei der ATmega8 Linie müsste für einen 1MHz Quarz-Betrieb auch ein 1MHz Quarz
-angeschlossen werden, wegen der besseren Auflösung der Kondensatormessung ist aber
-sowieso der 8MHz Betrieb zu bevorzugen.
-Beim Setzen der Clockfrequenz bitte äußerst sorgfältig arbeiten, man kann sie 
+angeschlossen werden, wegen der besseren Auflösung der Kondensatormessung und
+Induktivitätsmessung ist aber sowieso der 8MHz Betrieb zu bevorzugen.
+Beim Setzen der Clockfrequenz (fuses) bitte äußerst sorgfältig arbeiten, man kann sie 
 sehr leicht so ändern, daß keine (ISP-)Programmierung mehr möglich ist!!!
-
 
 Ausser dem ATmega8 habe ich eine ATmega168 Version (PARTNO=m168) getestet.
 Die Version mit allen Funktionen läuft nur noch auf einem ATmega168 oder ATmega328.
 Ein Wechsel vom ATmega8 auf einen ATmega168 oder ATmega328 ist ohne
 Hardwareänderung möglich.
+Ich rate dringend zu einem Wechsel vom ATmega8 zu einem ATmega168 oder besser
+einem ATmega328 Prozessor.
 
-In dem Unterverzeichnis mega8_auto sind die Programmfiles für einen ATmega8 in der
-8MHz Version ohne die Selbsttestfunktion abgelegt.
+In dem Unterverzeichnis trunk/mega8_auto sind die Programmfiles für einen ATmega8 in der
+8MHz Version ohne die Selbsttestfunktion aber mit der AUTOSCALE_ADC Funktion abgelegt.
 Im Unterverzeichnis mega8_selftest sind jetzt die Programmfiles für einen ATmega8 ohne die
 Selbsttestfunktion (ohne AUTOSCALE_ADC) abgelegt, ebenfalls in der 8MHz Version.
 Die jeweilige Makefile ist in den Unterverzeichnissen auch vorhanden und kann 
@@ -55,11 +62,33 @@ unmittelbar benutzt werden.
 Meine Tests habe ich mit dem Quarz-Oszillator (bestückter Quarz) durchgeführt.
 Ein Betrieb mit 8Mhz RC-Generator sollte aber ebenfalls möglich sein.
 Wegen der besseren Auflösung bei der Kapazitätsmessung bevorzuge ich die 8MHz Variante.
-So sind auch die Programmfiles für den ATmega168 für 8MHz Takt erzeugt (Verzeichnis default)!
+So sind auch die Programmfiles für den ATmega168 für 8MHz Takt erzeugt (Verzeichnis trunk/default)!
+Normalerweise sind die Fuses auf 1 Mhz Betrieb voreingestellt.
+
+Sie sollten einen Selbsttest mit der Selbstkalibration des Testers durchführen, um bessere
+Meßresultate der Kapazitätsmessung und der Widerstandsmessung zu erreichen,
+besonders mit der AUTOSCALE_ADC Option.
+Für die Selbstkalibration benötigen Sie einen externen Kondensator hoher Güte mit
+wenigstens 100 nF (20 uF maximal).
+Dieser Kondensator muß nach der Messung des Null-Offsets der Kondensatormessung (C0) an
+Pin 1 und Pin 3 des Testers angeschlossen werden.
+
+Der Nulloffset der ESR (Äquivalenter Serieller Widerstand) eines Kondensators wird abgeglichen,
+wenn Sie einen Kondensator mit hoher Kapazität und sehr niedrigem ESR anschließen.
+Der Tester nimmt an, daß ein negativer ESR nicht möglich ist und wird den Nulloffset
+so reduzieren, daß das Ergebnis Null ergibt. Da die Anzeige etwas schwankt, sollte
+dieser Abgleich mehrfach durchgeführt werden.
+Das Korrektur-Verhalten wird angezeigt durch die Ausgabe des Textes "ESR=0?".
+Der neue Nulloffset bleibt für die nächsten Messungen wirksam, bis der nächste Selbsttest
+den Nulloffset auf den Anfangswert zurücksetzt.
+Aus diesem Grund muß diese Kalibration nach jedem Selbsttest wiederholt werden!
+Die Messung des ESR-Wertes ist sehr schwierig, da die Widerstandauflösung 0.01 Ohm beträgt.
+Die Steckverbindungen, die Platine, das ATmega Exemplar und die Kabelwiderstände haben
+Einfluß auf das Meßergebnis!
 
 
 Ich bin an Rückmeldungen von mutigen Testern durchaus interessiert, entweder im
 Forum oder auch direkt per Email (kh_kuebbeler@web.de).
 
-Grüße
+Viele Grüße uns viel Glück
 Karl-Heinz Kübbeler

@@ -50,6 +50,7 @@ CFLAGS += -DAUTO_CAL
 # REF_C_KORR has mV units, greater values gives lower capacity results
 CFLAGS += -DREF_C_KORR=12
 CFLAGS += -DC_H_KORR=0
+CFLAGS += -DREF_L_KORR=50
 
 # the WITH_UART option enables the software UART
 CFLAGS += -DWITH_UART

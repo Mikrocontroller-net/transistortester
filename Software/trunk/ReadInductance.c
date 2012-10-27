@@ -54,7 +54,7 @@ void ReadInductance(void) {
         // Measurement of Inductance values
         R_PORT = 0;		// switch R port to GND
         ADC_PORT =   TXD_VAL;		// switch ADC-Port to GND
-        if ((resis[found].rx < 80) && ((count & 0x01) == 0)) {
+        if ((resis[found].rx < 240) && ((count & 0x01) == 0)) {
            // we can use PinR_L for measurement
            mess_r = RR680MI - R_L_VAL;
            ADC_DDR = HiADC | (1<<LowPin) | TXD_MSK;	// switch HiADC and Low Pin to GND, 
@@ -136,34 +136,40 @@ void ReadInductance(void) {
         }
         cap.cval = CombineII2Long(ovcnt16, tmpint);
   #define CNT_ZERO_42 6
-  #define CNT_ZERO_720 8
+  #define CNT_ZERO_720 7
 #if F_CPU == 16000000UL
   #undef CNT_ZERO_42
   #undef CNT_ZERO_720
   #define CNT_ZERO_42 4
   #define CNT_ZERO_720 10
 #endif
+        // Voltage of comparator in % of umax
+        #ifdef AUTO_CAL
+        tmpint = (ref_mv + (int16_t)eeprom_read_word((uint16_t *)(&ref_offset))) ;
+        #else
+        tmpint = (ref_mv + REF_C_KORR);
+        #endif
         if (mess_r < R_L_VAL) {
+           // measurement without 680 Ohm
            if (cap.cval > CNT_ZERO_42) cap.cval -= CNT_ZERO_42;
            else          cap.cval = 0;
         } else {
+           // measurement with 680 Ohm resistor
+           // if 680 Ohm resistor is used, use REF_L_KORR for correction
+           tmpint += REF_L_KORR;
            if (cap.cval > CNT_ZERO_720) cap.cval -= CNT_ZERO_720;
            else          cap.cval = 0;
+           if (cap.cval > 12) cap.cval -= 1;
         }
         if ((count&0x01) == 1) {
            // second pass with delayed counter start
            cap.cval += (3 * (F_CPU/1000000))+10;
         }
         if (ovcnt16 >= (F_CPU/100000)) cap.cval = 0; // no transition found
-        total_r = (mess_r + resis[0].rx + RR680PL - R_L_VAL);
+        total_r = (mess_r + resis[found].rx + RR680PL - R_L_VAL);
         // compute the maximum Voltage umax with the Resistor of the coil
         umax = ((unsigned long)mess_r * (unsigned long)ADCconfig.U_AVCC) / total_r;
-        // Voltage of comparator in % of umax
-        #ifdef AUTO_CAL
-        per_ref = ((unsigned long)(ref_mv + (int16_t)eeprom_read_word((uint16_t *)(&ref_offset))) * 100) / umax;
-        #else
-        per_ref = ((unsigned long)(ref_mv + REF_C_KORR) * 100) / umax;
-        #endif
+        per_ref = ((unsigned long)tmpint * 100) / umax;
         per_ref = (uint8_t)MEM2_read_byte(&LogTab[per_ref]);	// -log(1 - per_ref/100)
         // lx in 0.01mH units,  L = Tau * R
         inductance[count] = (cap.cval * total_r ) / ((unsigned int)per_ref * (F_CPU/1000000));

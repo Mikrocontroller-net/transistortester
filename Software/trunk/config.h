@@ -2,6 +2,11 @@
 /*########################################################################################
         Configuration
 */
+//#define DebugOut 3		// if set, output of voltages of resistor measurements in row 2,3,4
+//#define DebugOut 4		// if set, output of voltages of Diode measurement in row 3+4
+//#define DebugOut 5		// if set, output of Transistor checks in row 2+3
+//#define DebugOut 10		// if set, output of capacity measurements (ReadCapacity) in row 3+4 
+
 
 /* Port , that is directly connected to the probes.
   This Port must have an ADC-Input  (ATmega8:  PORTC).

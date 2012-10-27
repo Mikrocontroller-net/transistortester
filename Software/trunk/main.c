@@ -11,10 +11,6 @@
 #include <avr/pgmspace.h>
 #include <avr/wdt.h>
 #include <math.h>
-//#define DebugOut 3		// if set, output of voltages of resistor measurements in row 2,3,4
-//#define DebugOut 4		// if set, output of voltages of Diode measurement in row 3+4
-//#define DebugOut 5		// if set, output of Transistor checks in row 2+3
-//#define DebugOut 10		// if set, output of capacity measurements (ReadCapacity) in row 3+4 
 
 #define MAIN_C
 #include "Transistortester.h"
@@ -240,6 +236,7 @@ start:
   CheckPins(TP3, TP2, TP1);
   CheckPins(TP3, TP1, TP2);
 #else
+//         High  Low  Tri
   CheckPins(TP1, TP2, TP3);
   CheckPins(TP2, TP1, TP3);
 

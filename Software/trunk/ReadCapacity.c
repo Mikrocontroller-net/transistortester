@@ -52,29 +52,39 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   HiPinR_L = MEM_read_byte(&PinRLtab[HighPin]);	//R_L mask for HighPin R_L load
   HiPinR_H = HiPinR_L + HiPinR_L;	//double for HighPin R_H load
 
+#if DebugOut == 10
+  lcd_line3();
+  lcd_clear_line();
+  lcd_line3();
+  lcd_testpin(LowPin);
+  lcd_data('C');
+  lcd_testpin(HighPin);
+  lcd_space();
+#endif
   if(PartFound == PART_CAPACITOR) {
 #if DebugOut == 10
-     lcd_line3();
-     lcd_clear_line();
-     lcd_line3();
-     lcd_testpin(LowPin);
-     lcd_data('C');
-     lcd_testpin(HighPin);
-     lcd_space();
      lcd_data('d');
      lcd_data('o');
      lcd_data('p');
      lcd_space();
-     lcd_string(ultoa(cap.cval,outval,10));
+     DisplayValue(cap.cval,cap.cpre,'F',3);
      wait2s();
 #endif
      return;	//We have found a capacitor already
   }
   if(PartFound == PART_RESISTOR) {
+#if DebugOut == 10
+     lcd_data('R');
+     wait2s();
+#endif
      return;	//We have found a resistor already 
   }
   for (ii=0;ii<NumOfDiodes;ii++) {
      if ((diodes[ii].Cathode == LowPin) && (diodes[ii].Anode == HighPin) && (diodes[ii].Voltage < 1500)) {
+#if DebugOut == 10
+        lcd_data('D');
+        wait2s();
+#endif
         return;
      }
   }
@@ -82,6 +92,8 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 #if FLASHEND > 0x1fff
   cap.esr = 0;				// set ESR of capacitor to zero
 #endif
+  cap.cval = 0;				// set capacity value to zero
+  cap.cpre = -12;			//default unit is pF
   EntladePins();			// discharge capacitor
   ADC_PORT = TXD_VAL;			// switch ADC-Port to GND
   R_PORT = 0;				// switch R-Port to GND
@@ -111,7 +123,6 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   // wait 5ms and read voltage again, does the capacitor keep the voltage?
 //  adcv[1] = W5msReadADC(HighPin) - adcv[0];
 //  wdt_reset();
-  cap.cpre = -12;			//default unit is pF
   if (adcv[2] < 301) {
 #if DebugOut == 10
      lcd_data('K');
@@ -120,6 +131,10 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 #endif
      goto keinC;		// was never charged enough, >100mF or shorted
   }
+#if DebugOut == 10
+  DisplayValue(ovcnt16,0,' ',4);
+  DisplayValue(adcv[2],-3,'V',4);
+#endif
   //voltage is rised properly and keeps the voltage enough
   if ((ovcnt16 == 0 ) && (adcv[2] > 1300)) {
      goto messe_mit_rh;		// Voltage of more than 1300mV is reached in one pulse, to fast loaded

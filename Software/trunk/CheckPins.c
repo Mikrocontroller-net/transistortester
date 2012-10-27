@@ -566,6 +566,7 @@ savenresult:
 
 widmes:
 #ifdef R_MESS
+  if (NumOfDiodes > 0) goto clean_ports;
   // resistor measurement
   wdt_reset();
 // U_SCALE can be set to 4 for better resolution of ReadADC result
@@ -802,6 +803,7 @@ widmes:
   wait2s();
 #endif
 #endif
+ clean_ports:
   ADC_DDR = TXD_MSK;		// all ADC-Pins Input
   ADC_PORT = TXD_VAL;		// all ADC outputs to Ground, keine Pull up
   R_DDR = 0;			// all resistor-outputs to Input

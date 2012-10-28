@@ -60,6 +60,25 @@
 #define ON_PIN PD6      //Pin, must be switched to high to switch power on
 #define RST_PIN PD7     //Pin, is swiched to low, if push button is pressed
 
+/*
+       Port(s) / Pins for LCD
+*/
+#define HW_LCD_EN_PORT         PORTD
+#define HW_LCD_EN_PIN          5
+
+#define HW_LCD_RS_PORT         PORTD
+#define HW_LCD_RS_PIN          4
+
+#define HW_LCD_B4_PORT         PORTD
+#define HW_LCD_B4_PIN          0
+#define HW_LCD_B5_PORT         PORTD
+#define HW_LCD_B5_PIN          1
+#define HW_LCD_B6_PORT         PORTD
+#define HW_LCD_B6_PIN          2
+#define HW_LCD_B7_PORT         PORTD
+#define HW_LCD_B7_PIN          3
+
+
 
 // U_VCC defines the VCC Voltage of the ATmega in mV units
 
@@ -118,6 +137,7 @@ End of configuration
   #define MEM2_read_byte(a)  pgm_read_byte(a)
   #define MEM2_read_word(a)  pgm_read_word(a)
   #define lcd_fix2_string(a)  lcd_pgm_string(a)
+  #define use_lcd_pgm
  #endif
  #define MEM_read_word(a)  eeprom_read_word(a)
  #define MEM_read_byte(a)  eeprom_read_byte(a)
@@ -129,6 +149,7 @@ End of configuration
  #define MEM2_read_byte(a)  pgm_read_byte(a)
  #define MEM2_read_word(a)  pgm_read_word(a)
  #define lcd_fix2_string(a)  lcd_pgm_string(a)
+ #define use_lcd_pgm
 #endif
 
 // RH_OFFSET : systematic offset of resistor measurement with RH (470k) 

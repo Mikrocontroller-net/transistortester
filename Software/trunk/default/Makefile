@@ -46,7 +46,7 @@ CFLAGS += -DAUTO_CAL
 
 
 # the WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring
-#CFLAGS += -DWITH_AUTO_REF
+CFLAGS += -DWITH_AUTO_REF
 # REF_C_KORR has mV units, greater values gives lower capacity results
 CFLAGS += -DREF_C_KORR=12
 CFLAGS += -DC_H_KORR=0
@@ -144,7 +144,6 @@ FUSES_CRY = -U lfuse:w:0x3f:m -U hfuse:w:0xc9:m
 FUSES_CRY_L = -U lfuse:w:0x3f:m -U hfuse:w:0xd9:m
 endif
 endif
-
 ifeq ($(PARTNO),m48)
 MCU = atmega48
 HEX_FLASH_FLAGS = --change-section-lma .eeprom=0x1000
@@ -372,7 +371,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Objects that must be built in order to link
-OBJECTS = lcd-routines.o main.o swuart.o wait1000ms.o CombineToLong.o ReadCapacity.o ReadInductance.o ReadADC.o GetESR.o
+OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o swuart.o wait1000ms.o CombineToLong.o ReadCapacity.o ReadInductance.o ReadADC.o GetESR.o
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -383,6 +382,9 @@ all: $(TARGET) TransistorTester.hex TransistorTester.eep TransistorTester.lss si
 
 ## Compile
 lcd-routines.o: ../lcd-routines.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+lcd_hw_4_bit.o: ../lcd_hw_4_bit.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ReadCapacity.o: ../ReadCapacity.c Makefile

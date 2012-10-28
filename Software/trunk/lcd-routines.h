@@ -4,15 +4,20 @@
 // http://www.mikrocontroller.net/articles/AVR-GCC-Tutorial
 //
 
+extern void _lcd_hw_init();
+extern void _lcd_hw_write(uint8_t flags, uint8_t data);
+
+#define lcd_write_cmd(cmd)                             _lcd_hw_write(0b00000000, cmd); wait50us();
+#define lcd_write_data(data)                   _lcd_hw_write(0b00000001, data); wait50us();
+#define lcd_write_init(data_length)            _lcd_hw_write(0b10000000, CMD_SetIFOptions | (data_length << 4))
+
 
 //LCD
 void lcd_testpin(unsigned char temp);
 void lcd_data(unsigned char temp1);
 void lcd_space(void);
 void lcd_command(unsigned char temp1);
-void lcd_send(unsigned char data);
 void lcd_string(char *data);
-void lcd_enable(void);
 void lcd_init(void);
 void lcd_clear(void);
 void lcd_fix_string(const unsigned char *data);
@@ -65,13 +70,6 @@ void uart_newline(void);
 // LCD commands
  
 #define CLEAR_DISPLAY 0x01
- 
-// specifies which pins are used for the LCD, adapt to your hardware
- 
-#define LCD_PORT      PORTD
-#define LCD_DDR       DDRD
-#define LCD_RS        PD4
-#define LCD_EN1       PD5
 
 #define Cyr_B 0xa0
 #define Cyr_b 0xb2

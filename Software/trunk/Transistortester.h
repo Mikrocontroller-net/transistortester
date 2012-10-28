@@ -80,8 +80,6 @@ End of configuration
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
    const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
- #endif
- #ifdef AUTO_CAL
    const unsigned char ATE[] MEM_TEXT = "Selftest End";
  #endif
 #endif
@@ -103,8 +101,6 @@ End of configuration
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
    const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
- #endif
- #ifdef AUTO_CAL
    const unsigned char ATE[] MEM_TEXT = "Selftest End";
  #endif
 #endif
@@ -126,8 +122,6 @@ End of configuration
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
    const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
- #endif
- #ifdef AUTO_CAL
    const unsigned char ATE[] MEM_TEXT = "Selftest End";
  #endif
 #endif
@@ -149,8 +143,6 @@ End of configuration
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
    const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
- #endif
- #ifdef AUTO_CAL
    const unsigned char ATE[] MEM_TEXT = "Selftest End";
  #endif
 #endif
@@ -172,8 +164,6 @@ End of configuration
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
    const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
- #endif
- #ifdef AUTO_CAL
    const unsigned char ATE[] MEM_TEXT = "Selftest End";
  #endif
 #endif
@@ -195,8 +185,6 @@ End of configuration
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
    const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
- #endif
- #ifdef AUTO_CAL
    const unsigned char ATE[] MEM_TEXT = "Selftest End";
  #endif
 #endif
@@ -218,8 +206,6 @@ End of configuration
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
    const unsigned char RELPROBE[] MEM2_TEXT = {'o',Cyr_t,Cyr_k,Cyr_l,Cyr_ju,Cyr_tsch,Cyr_i,Cyr_t,'b',' ',Cyr_z,'o',Cyr_n,Cyr_d,0};
- #endif
- #ifdef AUTO_CAL
    const unsigned char ATE[] MEM_TEXT = {Cyr_k,'o',Cyr_n,'e',Cyr_c,' ','c','a',Cyr_m,'o',Cyr_t,'e','c',Cyr_t,Cyr_i,'p','o',Cyr_v,'a',Cyr_n,Cyr_i,Cyr_ja,0};
  #endif
 #endif
@@ -352,8 +338,8 @@ End of configuration
    const int16_t ref_offset EEMEM = REF_C_KORR;	// default correction of internal reference voltage for capacity measurement
   // LoPin:HiPin                        2:1    3:1    1:2                    :     3:2                   1:3    2:3
    const uint8_t c_zero_tab[] EEMEM = { C_NULL,C_NULL,C_NULL+TP2_CAP_OFFSET,C_NULL,C_NULL+TP2_CAP_OFFSET,C_NULL,C_NULL }; //table of zero offsets
-   const uint8_t EE_ESR_ZERO EEMEM = ESR_ZERO;	// zero offset of ESR measurement
  #endif
+  const uint8_t EE_ESR_ZERO EEMEM = ESR_ZERO;	// zero offset of ESR measurement
 #endif
 //End of EEPROM-Strings
  #ifdef MULTIP
@@ -363,14 +349,19 @@ End of configuration
 #else
  // no MAIN_C
  #define COMMON extern
+ #ifdef WITH_SELFTEST
+   extern unsigned char SELFTEST[] MEM2_TEXT;
+   extern unsigned char RELPROBE[] MEM2_TEXT;
+   extern unsigned char ATE[] MEM_TEXT;
+ #endif
  #ifdef AUTO_CAL
   extern uint16_t R680pl;
   extern uint16_t R680mi;
   extern int8_t RefDiff;
   extern uint16_t ref_offset;
   extern uint8_t c_zero_tab[];
-  extern uint8_t EE_ESR_ZERO EEMEM;	// zero offset of ESR measurement
  #endif
+  extern uint8_t EE_ESR_ZERO EEMEM;	// zero offset of ESR measurement
   extern  uint16_t RLtab[];
 
  #if FLASHEND > 0x1fff

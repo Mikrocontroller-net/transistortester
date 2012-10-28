@@ -365,7 +365,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Objects that must be built in order to link
-OBJECTS = lcd-routines.o main.o swuart.o wait1000ms.o CombineToLong.o ReadCapacity.o ReadInductance.o ReadADC.o GetESR.o
+OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o swuart.o wait1000ms.o CombineToLong.o ReadCapacity.o ReadInductance.o ReadADC.o GetESR.o
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -376,6 +376,9 @@ all: $(TARGET) TransistorTester.hex TransistorTester.eep TransistorTester.lss si
 
 ## Compile
 lcd-routines.o: ../lcd-routines.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+lcd_hw_4_bit.o: ../lcd_hw_4_bit.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ReadCapacity.o: ../ReadCapacity.c Makefile

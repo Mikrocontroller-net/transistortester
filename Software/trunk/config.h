@@ -58,25 +58,52 @@
 #define ON_PORT PORTD
 #define ON_PIN_REG PIND
 #define ON_PIN PD6      //Pin, must be switched to high to switch power on
-#define RST_PIN PD7     //Pin, is swiched to low, if push button is pressed
+
+#ifdef STRIP_GRID_BOARD
+// Strip Grid board version
+#define RST_PIN PD0     //Pin, is switched to low, if push button is pressed
+#else
+// normal layout version
+#define RST_PIN PD7     //Pin, is switched to low, if push button is pressed
+#endif
+
 
 /*
        Port(s) / Pins for LCD
 */
-#define HW_LCD_EN_PORT         PORTD
-#define HW_LCD_EN_PIN          5
+#ifdef STRIP_GRID_BOARD
+ // special Layout for strip grid board
+ #define HW_LCD_EN_PORT         PORTD
+ #define HW_LCD_EN_PIN          5
 
-#define HW_LCD_RS_PORT         PORTD
-#define HW_LCD_RS_PIN          4
+ #define HW_LCD_RS_PORT         PORTD
+ #define HW_LCD_RS_PIN          7
 
-#define HW_LCD_B4_PORT         PORTD
-#define HW_LCD_B4_PIN          0
-#define HW_LCD_B5_PORT         PORTD
-#define HW_LCD_B5_PIN          1
-#define HW_LCD_B6_PORT         PORTD
-#define HW_LCD_B6_PIN          2
-#define HW_LCD_B7_PORT         PORTD
-#define HW_LCD_B7_PIN          3
+ #define HW_LCD_B4_PORT         PORTD
+ #define HW_LCD_B4_PIN          4
+ #define HW_LCD_B5_PORT         PORTD
+ #define HW_LCD_B5_PIN          3
+ #define HW_LCD_B6_PORT         PORTD
+ #define HW_LCD_B6_PIN          2
+ #define HW_LCD_B7_PORT         PORTD
+ #define HW_LCD_B7_PIN          1
+#else
+ // normal Layout
+ #define HW_LCD_EN_PORT         PORTD
+ #define HW_LCD_EN_PIN          5
+
+ #define HW_LCD_RS_PORT         PORTD
+ #define HW_LCD_RS_PIN          4
+
+ #define HW_LCD_B4_PORT         PORTD
+ #define HW_LCD_B4_PIN          0
+ #define HW_LCD_B5_PORT         PORTD
+ #define HW_LCD_B5_PIN          1
+ #define HW_LCD_B6_PORT         PORTD
+ #define HW_LCD_B6_PIN          2
+ #define HW_LCD_B7_PORT         PORTD
+ #define HW_LCD_B7_PIN          3
+#endif
 
 
 

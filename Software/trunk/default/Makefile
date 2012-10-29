@@ -35,6 +35,9 @@ UI_LANGUAGE = LANG_ENGLISH
 # Russian language requires a LCD controller with russian characterset and option LCD_CYRILLIC!
 #CFLAGS += -DLCD_CYRILLIC
 
+# Option STRIP_GRID_BOARD selects different board-layout, do not set for standard board!
+#CFLAGS += -DSTRIP_GRID_BOARD
+
 # the WITH_SELFTEST option enables selftest function 
 CFLAGS += -DWITH_SELFTEST
 # AUTO_CAL will enable the autocalibration of zero offset of capacity measurement in selftest section

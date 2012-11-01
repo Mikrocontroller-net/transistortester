@@ -76,7 +76,7 @@ void lcd_command(unsigned char temp1) {
 }
  
 // Initialise: 
-// Mustt be called first .
+// Must be called first .
  
 void lcd_init(void) {
    _lcd_hw_init();
@@ -92,7 +92,7 @@ void lcd_init(void) {
    wait1ms();
 
    lcd_write_init(0);
-   wait5ms();
+   wait10ms();
 
    // 4Bit / 2 rows / 5x7
    lcd_command(CMD_SetIFOptions | 0x08);
@@ -109,7 +109,7 @@ void lcd_init(void) {
  
 void lcd_clear(void) {
    lcd_command(CLEAR_DISPLAY);
-   wait5ms();
+   wait10ms();
 #ifdef WITH_UART
    uart_newline();
 #endif

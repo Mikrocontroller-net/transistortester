@@ -19,7 +19,7 @@
 int main(void) {
   //switch on
   ON_DDR = (1<<ON_PIN);
-  ON_PORT = (1<<ON_PIN) | (1<<RST_PIN);	//power on and Pullup for the Reset-Pin
+  ON_PORT = (1<<ON_PIN); 	// switch power on 
   uint8_t tmp;
   //ADC-Init
   ADCSRA = (1<<ADEN) | AUTO_CLOCK_DIV;	//prescaler=8 or 64 (if 8Mhz clock)
@@ -263,7 +263,7 @@ start:
 #endif
   //All checks are done, output result to display
   lcd_clear();
-//  lcd_line1();
+  lcd_line1();
   if(PartFound == PART_DIODE) {
      if(NumOfDiodes == 1) {		//single Diode
         lcd_fix_string(Diode);		//"Diode: "

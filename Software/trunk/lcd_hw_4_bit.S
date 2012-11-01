@@ -94,6 +94,7 @@ _lcd_hw_write:
                        set_b7_high
 
                set_en_low
+               ACALL    wait1us
 
                ; skip sending low nibble for init commands
                sbrc    preg_1, 7
@@ -117,6 +118,7 @@ _lcd_hw_write:
                        set_b7_high
 
                set_en_low
+               ACALL    wait1us
 
 _lcd_hw_write_exit:
                ret

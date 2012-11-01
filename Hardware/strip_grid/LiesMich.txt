@@ -1,0 +1,55 @@
+Die Datei ttester_strip_grid.diy ist ein Streifenleiter-Karten Entwurf für
+den Transistortester. Die Datei TTester_strip.pdf zeigt das Ergebnis im PDF-Format.
+
+Der Entwurf wurde mit der Software diy-layout-creator (DIYLC) gemacht.
+Da das Programm DIYLC in Java programmiert ist, sollte es Betriebssystem unabhängig
+genutzt werden können.
+Siehe dazu für nähere Information: http://code.google.com/p/diy-layout-creator
+
+Es wurde sowohl die Abschalt-Automatik als auch der Quarz und die Präzisions-
+Spannungsreferenz integriert.
+Aber die Pinbelegung des ATmega wurde für dieses Layout angepaßt!
+Die erforderlichen Programm-Anpassungen für den ATmega werden mit der
+Makefile Option STRIP_GRID_BOARD gemacht.
+Das Programm mit der Standard Pinbelegung kann auf diesem Board nicht laufen !!
+Genauso wenig läuft ein für die Streifenleiter-Karte angepaßtes Programm auf
+einer Standard-Karte!
+
+Eine Standard 100mm x 100mm Streifenleiter-Karte kann auf das erforderliche Maß
+verkleinert werden.
+Es ist ratsam, zuerst die Befestigungslöcher zu bohren und danach die Drahtbrücken
+zu verlöten. Die Leiterbahnunterbrechungen sollten an den angegebenen Stellen auf
+keinen Fall vergessen werden. Beim ISP-Stecker und bei REF1 liegen die Unterbrechungen
+zwischen den Rasterpunkten!
+
+Auf der Platine ist der Spannungsregler IC2 (78L05) eingezeichnet, ein Low Drop Regler
+wie der MCP1702-5002 kann in der neben der Platine gezeichneten Weise eingebaut werden.
+Die Anschlußbelegung ist nicht kompatibel!
+Der Widerstand R1 (680 Ohm) ist unter dem ATmega-Sockel montiert und sollte deswegen
+als einer der ersten Bauteile verlötet werden. Um einen Kurzschluß auszuschließen,
+sollte der Anschlußdraht mit einem Isolierschlauch überzogen werden.
+
+Die GND Leitung ist an den ATmega von beiden Seiten herangeführt und ist zusätzlich
+unter dem Sockel gebrückt.
+Der Widerstand R10 ist als einziger Widerstand stehend montiert.
+Wenn das Potentiometer VR1 vom LCD-Display verdeckt wird, kann man das Potentiometer
+auch auf der Lötseite verbauen. Anderenfalls muß man die VEE Spannung ohne das eingesteckte
+Display einstellen.
+
+Nach der Montage aller Bauteile, aber ohne das eingesteckte Display und den ATmega
+sollte man die Verbindungen mit einem Ohmmeter oder Durchgangsprüfer testen.
+Die GND Verbindungen sollten nur an den vorgesehenen Pinnen (ATmega, ISP und LCD) 
+vorhanden sein. Ebenso sollten die VCC Verbindungen nur an den vorgesehenen Pinnen
+vorhanden sein.
+Nach diesem Test kann man die Spannungsquelle anschließen und die VCC Spannung bei
+gedrücktem Taster überprüfen. Wenn hier die erwarteten 5V vorhanden sind, kann
+man den ATmega und das LCD einstecken.
+
+Wenn der ATmega noch nicht programmiert ist, muß als nächste Aktion die Programmierung
+des ATmega über die ISP-Schnittstelle erfolgen.
+
+Für die eventuelle Fehlersuche sollte man die Hinweise in der PDF-Dokumentation beachten.
+
+Viel Erfolg beim Nachbau!
+
+Karl-Heinz

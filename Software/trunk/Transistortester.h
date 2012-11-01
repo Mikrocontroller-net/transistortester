@@ -240,7 +240,7 @@ End of configuration
 #ifdef R_MESS
  const unsigned char Resistor_str[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
 #endif
- const unsigned char VERSION_str[] MEM_TEXT = "Version 1.01k";
+ const unsigned char VERSION_str[] MEM_TEXT = "Version 1.02k";
 
 
 #ifdef WITH_SELFTEST

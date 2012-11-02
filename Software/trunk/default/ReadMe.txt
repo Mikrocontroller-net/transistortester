@@ -1,4 +1,4 @@
-﻿Date: 19.10.2012   Test version Transistortester (AVR) Version 1.01k
+﻿Date: 02.11.2012   Test version Transistortester (AVR) Version 1.02k
 
 
 For all adventurous people here is my short intruction, how to get
@@ -50,12 +50,13 @@ You can change from ATmega8 to ATmega168 or ATmega328 without hardware changes.
 I strongly recommend to change from ATmega8 to ATmega168 or
 better ATmega328 microcontroller.
 
-In the directory trunk/mega8_auto are compiled programming data for the
-ATmega8 without the selftest function but with AUTOSCALE_ADC.
-
-In the directory trunk/mega8_selftest are compiled programming date for
+In the directory trunk/mega8 are compiled programming date for
 the ATmega8 without selftest function and without the AUTOSCALE_ADC option.
-Both versions are compiled for 8MHz operation, as you can see in the Makefile options.
+This versions is compiled for 8MHz operation, as you can see in the Makefile options.
+
+The directory trunk/mega168_strip_grid contains compiled data for ATmega168 for
+the strip grid printed board. You can not use the standard version with this
+modified layout!
 
 All my tests are done with 8Mhz crystal operation. You can select also the
 8MHz RC clock operation if you don't have the crystal installed.

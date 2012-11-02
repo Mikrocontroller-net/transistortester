@@ -108,6 +108,7 @@ start:
   PartMode = 0;
   WithReference = 0;		// no precision reference voltage
   lcd_clear();
+  lcd_line1();
   ADC_DDR = TXD_MSK;		//activate Software-UART 
 #ifdef AUTO_CAL
   resis680pl = eeprom_read_word(&R680pl);
@@ -218,6 +219,7 @@ start:
   EntladePins();		// discharge all capacitors!
   if(PartFound == PART_CELL) {
     lcd_clear();
+    lcd_line1();
     lcd_fix_string(Cell_str);	// display "Cell!"
     goto end2;
   }

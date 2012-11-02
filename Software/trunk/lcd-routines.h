@@ -34,8 +34,8 @@ void uart_newline(void);
 #define CMD_SetEntryMode         0x04
 #define CMD_SetDisplayAndCursor  0x08
 #define CMD_SetIFOptions         0x20
-#define CMD_SetCGRAMAddress      0x40    // für Custom-Zeichen
-#define CMD_SetDDRAMAddress      0x80    // zum Cursor setzen
+#define CMD_SetCGRAMAddress      0x40    // for Custom character
+#define CMD_SetDDRAMAddress      0x80    // set Cursor 
 
 //Makros for LCD
 #define lcd_line1() lcd_command((uint8_t)(CMD_SetDDRAMAddress))		//move to the beginning of the 1. row
@@ -55,8 +55,8 @@ void uart_newline(void);
 #define LCD_CHAR_DIODE1  1	//Diode-Icon; will be generated as custom character
 #define LCD_CHAR_DIODE2  2	//Diode-Icon;  will be generated as custom character
 #define LCD_CHAR_CAP 3		//Capacitor-Icon;  will be generated as custom character
-#define LCD_CHAR_RESIS1 6       // Resistor left part will be generated as custom character
-#define LCD_CHAR_RESIS2 7       // Resistor right part will be generated as custom character
+#define LCD_CHAR_RESIS1 7       // Resistor left part will be generated as custom character
+#define LCD_CHAR_RESIS2 6       // Resistor right part will be generated as custom character
 
 #ifdef LCD_CYRILLIC
 	#define LCD_CHAR_OMEGA  4	//Omega-character 

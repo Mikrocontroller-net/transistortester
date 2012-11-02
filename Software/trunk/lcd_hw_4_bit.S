@@ -71,14 +71,14 @@ _lcd_hw_init:
        .func _lcd_hw_write
 _lcd_hw_write:
                
+               set_en_high
+
                ; Set RS (0=Cmd, 1=Char)
                set_rs_low
                sbrc    preg_1, 0
                        set_rs_high
 
                ; Send high nibble
-               set_en_high
-               
                set_b4_low
                set_b5_low
                set_b6_low
@@ -93,7 +93,8 @@ _lcd_hw_write:
                sbrc    preg_2, 7
                        set_b7_high
 
-               set_en_low
+               nop			; wait for data setup time
+               set_en_low		; force data read from LCD controller
                ACALL    wait1us
 
                ; skip sending low nibble for init commands
@@ -117,7 +118,8 @@ _lcd_hw_write:
                sbrc    preg_2, 3
                        set_b7_high
 
-               set_en_low
+               nop			; wait for data setup time
+               set_en_low		; force data read from LCD controller
                ACALL    wait1us
 
 _lcd_hw_write_exit:

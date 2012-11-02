@@ -73,7 +73,7 @@ zero offset of capacity measurement (C0).
 The zero offset of the ESR (Equivalent Series Resistor) of a capacitor would be adjusted, if
 you connect a capacitor with a high capacity value and a very low ESR. The tester assumes, that
 negative ESR is not possible, and will reduce the zero offset so that result will be zero.
-Because this measurement is nor very stable, you should repeat this calibration some times.
+Because this measurement is not very stable, you should repeat this calibration some times.
 This correction behavior is shown with the output of "ESR=0?".
 The new zero offset take effect for the next measurements until the next selftest will reset
 the zero offset to the initial value.

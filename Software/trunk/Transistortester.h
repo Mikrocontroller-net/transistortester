@@ -227,6 +227,7 @@ End of configuration
 #ifdef C_MESS
  const unsigned char CapZeich[] MEM_TEXT = {'-',LCD_CHAR_CAP,'-',0};
  const unsigned char Cell_str[] MEM_TEXT = "Cell!";
+ const unsigned char VCC_str[] MEM_TEXT = "VCC=";
  #if FLASHEND > 0x1fff
  const unsigned char ESR_str[] MEM_TEXT = " ESR=";
  #endif
@@ -256,7 +257,7 @@ End of configuration
 #ifdef CHECK_CALL
  const unsigned char RIHI[] MEM_TEXT = "Ri_Hi=";
  const unsigned char RILO[] MEM_TEXT = "Ri_Lo=";
- const unsigned char T50HZ[] MEM_TEXT = " 50Hz";
+ const unsigned char T50HZ[] MEM2_TEXT = " 50Hz";
 #endif
 #ifdef AUTO_CAL
  const unsigned char MinCap_str[] MEM_TEXT = " >100nF";

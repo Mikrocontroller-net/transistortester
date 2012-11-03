@@ -79,9 +79,8 @@ void lcd_command(unsigned char temp1) {
 // Must be called first .
  
 void lcd_init(void) {
-   _lcd_hw_init();
    wait30ms();
-   // to initialise, send 3 times
+   // to initialise, send 3 times to be shure to be in 8 Bit mode
    lcd_write_init(1);
    wait5ms();
    
@@ -91,7 +90,7 @@ void lcd_init(void) {
    lcd_write_init(1);
    wait1ms();
 
-   lcd_write_init(0);
+   lcd_write_init(0);		// switch to 4 Bit mode
    wait10ms();
 
    // 4Bit / 2 rows / 5x7
@@ -113,6 +112,7 @@ void lcd_clear(void) {
 #ifdef WITH_UART
    uart_newline();
 #endif
+   lcd_line1();			// set cursor to Line1 Column 1, (only for OLED-Display)
 }
 
 

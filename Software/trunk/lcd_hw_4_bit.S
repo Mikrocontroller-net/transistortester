@@ -36,28 +36,6 @@
 #define set_b7_high            sbi             _SFR_IO_ADDR(HW_LCD_B7_PORT), HW_LCD_B7_PIN
 #define set_b7_output          sbi             (_SFR_IO_ADDR(HW_LCD_B7_PORT) - 1), HW_LCD_B7_PIN
 
-;----------------------------------------------------------------------
-;
-; "_lcd_hw_init"
-;
-;----------------------------------------------------------------------
-       .global _lcd_hw_init
-       .func _lcd_hw_init
-_lcd_hw_init:
-
-               set_b4_output
-               set_b5_output
-               set_b6_output
-               set_b7_output
-
-               set_rs_output
-               set_en_output
-
-               set_rs_low
-               set_en_low
-                                                
-               ret
-       .endfunc
 
 ;----------------------------------------------------------------------
 ;
@@ -72,9 +50,11 @@ _lcd_hw_init:
 _lcd_hw_write:
                
                set_en_high
+               set_en_output;		//init hardware
 
                ; Set RS (0=Cmd, 1=Char)
                set_rs_low
+               set_rs_output;		//init hardware
                sbrc    preg_1, 0
                        set_rs_high
 
@@ -86,12 +66,16 @@ _lcd_hw_write:
 
                sbrc    preg_2, 4
                        set_b4_high
+               set_b4_output;		//init hardware
                sbrc    preg_2, 5
                        set_b5_high
+               set_b5_output;		//init hardware
                sbrc    preg_2, 6
                        set_b6_high
+               set_b6_output;		//init hardware
                sbrc    preg_2, 7
                        set_b7_high
+               set_b7_output;		//init hardware
 
                nop			; wait for data setup time
                set_en_low		; force data read from LCD controller

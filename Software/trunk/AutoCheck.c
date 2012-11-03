@@ -46,7 +46,6 @@ void AutoCheck(void) {
   }
 #ifdef WITH_SELFTEST
   lcd_clear();
-  lcd_line1();
   lcd_fix2_string(SELFTEST);		// "Selftest mode.."
   wait1s();
  #define TEST_COUNT 7
@@ -204,7 +203,6 @@ void AutoCheck(void) {
   adcmv[2] = pin_rm;	// for last output in row 2
   pin_rp = (unsigned long)((unsigned long)sum_c0 * (unsigned long)R_L_VAL) / (unsigned long)u680;
   lcd_clear();
-  lcd_line1();
   lcd_fix_string(RIHI);	// "RiHi="
   DisplayValue(pin_rp,-1,LCD_CHAR_OMEGA,3);
   lcd_line2();
@@ -236,7 +234,6 @@ void AutoCheck(void) {
   ReadCapacity(TP1, TP2);
   adcmv[0] = (unsigned int) cap.cval_uncorrected;	//save capacity value of empty Pin 2:1
   lcd_clear();
-  lcd_line1();
   lcd_data('C');
   lcd_data('0');
   lcd_space();
@@ -262,7 +259,6 @@ no_c0save:
  cap_found = 0;
  for (ww=0;ww<64;ww++) {
      lcd_clear();
-     lcd_line1();
      lcd_data('1');
      lcd_fix_string(CapZeich);	// "-||-"
      lcd_data('3');
@@ -283,7 +279,6 @@ no_c0save:
         // value of capacitor is correct
         (void) eeprom_write_word((uint16_t *)(&ref_offset), load_diff);	// hold zero offset + slew rate dependend offset
         lcd_clear();
-        lcd_line1();
         lcd_fix_string(REF_C_str);	// "REF_C="
         lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
         eeprom_write_byte((uint8_t *)(&EE_ESR_ZERO), (uint8_t)ESR_ZERO); // set to initial zero offset
@@ -327,7 +322,7 @@ no_c0save:
   lcd_line1();
   lcd_fix_string(ATE);		//"Selftest End"
 #ifdef FREQUENCY_50HZ
-  lcd_fix_string(T50HZ);	//" 50Hz"
+  lcd_fix2_string(T50HZ);	//" 50Hz"
   ADC_PORT = TXD_VAL;
   ADC_DDR = 1<<TP1 | TXD_MSK;	// Pin 1 to GND
   R_DDR = (1<<(TP3*2)) | (1<<(TP2*2));

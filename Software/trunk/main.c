@@ -108,7 +108,6 @@ start:
   PartMode = 0;
   WithReference = 0;		// no precision reference voltage
   lcd_clear();
-  lcd_line1();
   ADC_DDR = TXD_MSK;		//activate Software-UART 
 #ifdef AUTO_CAL
   resis680pl = eeprom_read_word(&R680pl);
@@ -191,27 +190,27 @@ start:
   wdt_enable(WDTO_2S);		//Watchdog on
 #endif
 
-//  wait1s();			// add mor time for reading batterie voltage
+//  wait1s();			// add more time for reading batterie voltage
   // begin tests
 #ifdef AUTO_RH
   RefVoltage();			//compute RHmultip = f(reference voltage)
 #endif
+  if (WithReference) {
+     lcd_line2();
+     lcd_fix_string(VCC_str);		// VCC=
+     DisplayValue(ADCconfig.U_AVCC,-3,'V',3);	// Display 3 Digits of this mV units
+#if FLASHEND > 0x3fff
+     lcd_space();
+     trans.uBE[0] = ReadADC((1<<REFS1)|(1<<REFS0)|8); 	//read temperature sensor
+     lcd_string(itoa(trans.uBE[0] - 345, outval, 10));    //output correction voltage
+     lcd_data(LCD_CHAR_DEGREE); // output degree
+     lcd_data('C');
+#endif
+     wait1s();
+  }
 
   lcd_line2();			//LCD position row2, column 1
-  if (WithReference) {
-     DisplayValue(ADCconfig.U_AVCC,-3,'V',3);	// Display 3 Digits of this mV units
-     lcd_space();
-  }
   lcd_fix_string(TestRunning);		//String: testing...
-//#ifndef __AVR_ATmega8__
-#if 0
-  // does not read temperature, looks like internal reference
-  trans.uBE[0] = ReadADC((1<<REFS1)|(1<<REFS0)|8); 	//read temperature sensor
-  lcd_space();
-  lcd_string(itoa((int)(trans.uBE[0] - 289), outval, 10));	//output temperature
-  lcd_data(LCD_CHAR_DEGREE);
-  lcd_data('C');
-#endif
 #ifndef DebugOut
   lcd_line2();			//LCD position row 2, column 1
 #endif
@@ -219,7 +218,6 @@ start:
   EntladePins();		// discharge all capacitors!
   if(PartFound == PART_CELL) {
     lcd_clear();
-    lcd_line1();
     lcd_fix_string(Cell_str);	// display "Cell!"
     goto end2;
   }
@@ -230,14 +228,6 @@ start:
 #endif
      
   // check all 6 combinations for the 3 pins 
-#if 0
-  CheckPins(TP1, TP2, TP3);
-  CheckPins(TP1, TP3, TP2);
-  CheckPins(TP2, TP1, TP3);
-  CheckPins(TP2, TP3, TP1);
-  CheckPins(TP3, TP2, TP1);
-  CheckPins(TP3, TP1, TP2);
-#else
 //         High  Low  Tri
   CheckPins(TP1, TP2, TP3);
   CheckPins(TP2, TP1, TP3);
@@ -247,7 +237,6 @@ start:
 
   CheckPins(TP2, TP3, TP1);
   CheckPins(TP3, TP2, TP1);
-#endif
   
 #ifdef C_MESS
   //separate check if is is a capacitor
@@ -265,7 +254,6 @@ start:
 #endif
   //All checks are done, output result to display
   lcd_clear();
-  lcd_line1();
   if(PartFound == PART_DIODE) {
      if(NumOfDiodes == 1) {		//single Diode
         lcd_fix_string(Diode);		//"Diode: "

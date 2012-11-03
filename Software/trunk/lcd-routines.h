@@ -4,10 +4,9 @@
 // http://www.mikrocontroller.net/articles/AVR-GCC-Tutorial
 //
 
-extern void _lcd_hw_init();
 extern void _lcd_hw_write(uint8_t flags, uint8_t data);
 
-#define lcd_write_cmd(cmd)                             _lcd_hw_write(0b00000000, cmd); wait50us();
+#define lcd_write_cmd(cmd)                     _lcd_hw_write(0b00000000, cmd); wait50us();
 #define lcd_write_data(data)                   _lcd_hw_write(0b00000001, data); wait50us();
 #define lcd_write_init(data_length)            _lcd_hw_write(0b10000000, CMD_SetIFOptions | (data_length << 4))
 
@@ -55,6 +54,7 @@ void uart_newline(void);
 #define LCD_CHAR_DIODE1  1	//Diode-Icon; will be generated as custom character
 #define LCD_CHAR_DIODE2  2	//Diode-Icon;  will be generated as custom character
 #define LCD_CHAR_CAP 3		//Capacitor-Icon;  will be generated as custom character
+	// numbers of RESIS1 and RESIS2 are swapped for OLED display, which shows a corrupt RESIS1 character otherwise ???
 #define LCD_CHAR_RESIS1 7       // Resistor left part will be generated as custom character
 #define LCD_CHAR_RESIS2 6       // Resistor right part will be generated as custom character
 

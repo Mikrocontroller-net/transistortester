@@ -50,16 +50,12 @@ int main(void) {
   lcd_fix_customchar(DiodeIcon1);	//load Character  >|
   LCDLoadCustomChar(LCD_CHAR_DIODE2);	//Custom-Character 
   lcd_fix_customchar(DiodeIcon2);	//load Character  |<
-#ifdef C_MESS
   LCDLoadCustomChar(LCD_CHAR_CAP);	//Custom-Character  Capacitor symbol
   lcd_fix_customchar(CapIcon);		//load Character  ||
-#endif
-#ifdef R_MESS
   LCDLoadCustomChar(LCD_CHAR_RESIS1);	//Custom-Character Resistor symbol
   lcd_fix_customchar(ResIcon1);		//load Character  [
   LCDLoadCustomChar(LCD_CHAR_RESIS2);	//Custom-Character 
   lcd_fix_customchar(ResIcon2);		//load Character  ]
-#endif
   
 #ifdef LCD_CYRILLIC
   //if kyrillish LCD-Characterset, load  Omega- and µ-Character
@@ -114,13 +110,9 @@ start:
   resis680mi = eeprom_read_word(&R680mi);
 #endif
 
-#ifdef R_MESS
   ResistorsFound = 0;
-#endif
-#ifdef C_MESS
   cap.ca = 0;
   cap.cb = 0;
-#endif
 #ifdef WITH_UART
   uart_newline();		// start of new measurement
 #endif
@@ -214,14 +206,12 @@ start:
 #ifndef DebugOut
   lcd_line2();			//LCD position row 2, column 1
 #endif
-#ifdef C_MESS
   EntladePins();		// discharge all capacitors!
   if(PartFound == PART_CELL) {
     lcd_clear();
     lcd_fix_string(Cell_str);	// display "Cell!"
     goto end2;
   }
-#endif
 
 #ifdef CHECK_CALL
   AutoCheck();			//check, if selftest should be done
@@ -238,7 +228,6 @@ start:
   CheckPins(TP2, TP3, TP1);
   CheckPins(TP3, TP2, TP1);
   
-#ifdef C_MESS
   //separate check if is is a capacitor
   if(((PartFound == PART_NONE) || (PartFound == PART_RESISTOR) || (PartFound == PART_DIODE)) ) {
      EntladePins();		// discharge capacities
@@ -251,7 +240,6 @@ start:
      ReadInductance();			// measure inductance
 #endif
   }
-#endif
   //All checks are done, output result to display
   lcd_clear();
   if(PartFound == PART_DIODE) {
@@ -261,11 +249,9 @@ start:
         lcd_fix_string(AnKat);		//"->|-"
         lcd_testpin(diodes[0].Cathode);
         UfAusgabe(0x70);
-#ifdef C_MESS
         lcd_fix_string(GateCap_str);	//"C="
         ReadCapacity(diodes[0].Cathode,diodes[0].Anode);	// Capacity opposite flow direction
         DisplayValue(cap.cval,cap.cpre,'F',3);
-#endif
         goto end;
      } else if(NumOfDiodes == 2) { // double diode
         lcd_data('2');
@@ -442,11 +428,10 @@ start:
     }
     lcd_line2();			//2. Row
     if(PartMode < PART_MODE_N_D_MOS) {	//enhancement-MOSFET
- #ifdef C_MESS	//Gate capacity
+	//Gate capacity
        lcd_fix_string(GateCap_str);		//"C="
        ReadCapacity(trans.b,trans.e);	//measure capacity
        DisplayValue(cap.cval,cap.cpre,'F',3);
- #endif
        lcd_fix_string(vt_str);		// "Vt="
     } else {
        lcd_data('I');
@@ -465,7 +450,6 @@ start:
     lcd_fix_string(Triac);		//"Triac"
     goto gakAusgabe;
   }
- #ifdef R_MESS	//resistor measurement is wanted
   else if(PartFound == PART_RESISTOR) {
     if (ResistorsFound == 1) { // single resistor
        lcd_testpin(resis[0].rb);  	//Pin-number 1
@@ -533,9 +517,7 @@ start:
     goto end;
 
   } // end (PartFound == PART_RESISTOR)
-#endif
 
-#ifdef C_MESS
 //capacity measurement is wanted
   else if(PartFound == PART_CAPACITOR) {
 //     lcd_fix_string(Capacitor);
@@ -549,7 +531,6 @@ start:
 #endif
      goto end;
   }
-#endif
   if(NumOfDiodes == 0) { //no diodes are found
      lcd_fix_string(TestFailed1); 	//"Kein,unbek. oder"
      lcd_line2(); //2. row 
@@ -641,14 +622,12 @@ void mVAusgabe(uint8_t nn) {
    }
 }
 
-#ifdef R_MESS
 void RvalOut(uint8_t ii) {	
    // output of resistor value
 
    DisplayValue(resis[ii].rx,-1,LCD_CHAR_OMEGA,4);
    lcd_space();
  }
-#endif
 
 //******************************************************************
 #include "CheckPins.c"

@@ -150,6 +150,9 @@ End of configuration
  #undef U_SCALE
  #define U_SCALE 4
 #endif
+#ifndef REF_L_KORR
+ #define REF_L_KORR 50
+#endif
 
 // the following definitions specify where to load external data from: EEprom or flash
 #ifdef USE_EEPROM
@@ -215,45 +218,8 @@ End of configuration
  #define ACALL rcall
 #endif
 // automatic selection of option and parameters for different AVR s
-//----------------========----------
-#if PROCESSOR_TYP == 48
-//----------------========----------
-  #define MCU_STATUS_REG MCUCR
-  #define ADC_COMP_CONTROL ADCSRB
-  #define TI1_INT_FLAGS TIFR1
-  #define DEFAULT_BAND_GAP 1070
-  #define DEFAULT_RH_FAKT  884      // mega328 1070 mV
-// WITH_SELFTEST enables the selftest fuction 
-  #ifdef WITH_SELFTEST
-  #warning "ATmega48 does NOT support SELFTEST!"
-  #undef WITH_SELFTEST
-  #endif
-// R_MESS activates the resistor measurement 
-  #ifdef R_MESS
-  #warning "ATmega48 does NOT support Resistor measuring!"
-  #undef R_MESS
-  #endif
-// C_MESS activates the capacitor measurement 
-  #ifdef C_MESS
-  #warning "ATmega48 does NOT support Capacity measuring!"
-  #undef C_MESS
-  #endif
-// WITH_UART activates the output of data with software UART 
-  #ifdef WITH_UART
-  #warning "no UART support with ATmega48!"
-  #undef WITH_UART
-  #endif
-  #ifdef BAT_CHECK
-  #warning "no BAT_CHECK support with ATmega48!"
-  #undef BAT_CHECK
-  #endif
-
-  #define C_NULL 50 
-  #define PIN_RM 190
-  #define PIN_RP 220
-
 //------------------========----------
-#elif PROCESSOR_TYP == 88
+#if PROCESSOR_TYP == 88
 //------------------========----------
   #define MCU_STATUS_REG MCUCR
   #define ADC_COMP_CONTROL ADCSRB
@@ -352,10 +318,6 @@ End of configuration
 #endif
 #ifndef REF_C_KORR
  #define REF_C_KORR 0
-#endif
-#ifndef C_MESS
-  // undef WITH_AUTO_REF if no capacity measurement
-  #undef WITH_AUTO_REF
 #endif
 
 #define LONG_WAIT_TIME 14000
@@ -459,13 +421,11 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 #endif
 
 #undef AUTO_RH
-#ifdef C_MESS
- #ifdef WITH_AUTO_REF
+#ifdef WITH_AUTO_REF
+ #define AUTO_RH
+#else
+ #ifdef AUTO_CAL
   #define AUTO_RH
- #else
-  #ifdef AUTO_CAL
-   #define AUTO_RH
-  #endif
  #endif
 #endif
 

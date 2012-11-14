@@ -19,11 +19,9 @@ CFLAGS = -Wall
 
 #select your Part-No. for avrdude :
 # atmega8  : m8
-# atmega48 : m48 or m48p
-# atmega88 : m88 or m88p
 # atmega168: m168 or m168p
 # atmega328: m328 or m328p
-PARTNO = m168p
+PARTNO = m168
 
 #select your language
 # available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
@@ -45,7 +43,7 @@ CFLAGS += -DWITH_SELFTEST
 # with ATmega168
 CFLAGS += -DAUTO_CAL
 # FREQUENCY_50HZ enables a 50 Hz frequency generator for up to one minute at the end of selftests
-CFLAGS += -DFREQUENCY_50HZ
+#CFLAGS += -DFREQUENCY_50HZ
 
 
 # the WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring
@@ -58,11 +56,6 @@ CFLAGS += -DREF_L_KORR=50
 # the WITH_UART option enables the software UART
 CFLAGS += -DWITH_UART
 
-# the R_MESS option enables Resistor measuring 
-CFLAGS += -DR_MESS
-
-# the C_MESS option enables Capacity measuring 
-CFLAGS += -DC_MESS
 # this level defines the empty voltage level for capacitors in mV
 CFLAGS += -DCAP_EMPTY_LEVEL=4
 

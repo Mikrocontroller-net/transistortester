@@ -12,12 +12,6 @@
 #include <avr/interrupt.h>
 #include <math.h>
 
-#ifdef C_MESS 
-  #define MULTIP
-#endif
-#ifdef WITH_SELFTEST
- #define MULTIP
-#endif
 
 #if defined (MAIN_C)
  #define COMMON
@@ -224,23 +218,17 @@ End of configuration
  const unsigned char Uf_str[] MEM_TEXT = "Uf=";
  const unsigned char vt_str[] MEM_TEXT = " Vt=";
  const unsigned char Vgs_str[] MEM_TEXT = "@Vgs=";
-#ifdef C_MESS
  const unsigned char CapZeich[] MEM_TEXT = {'-',LCD_CHAR_CAP,'-',0};
  const unsigned char Cell_str[] MEM_TEXT = "Cell!";
  const unsigned char VCC_str[] MEM_TEXT = "VCC=";
- #if FLASHEND > 0x1fff
- const unsigned char ESR_str[] MEM_TEXT = " ESR=";
- #endif
-#endif
 #if FLASHEND > 0x1fff
+ const unsigned char ESR_str[] MEM_TEXT = " ESR=";
  const unsigned char Lis_str[] MEM_TEXT = "L=";
 #endif
  const unsigned char AnKat[] MEM_TEXT = {'-', LCD_CHAR_DIODE1, '-',0};
  const unsigned char KatAn[] MEM_TEXT = {'-', LCD_CHAR_DIODE2, '-',0};
  const unsigned char Dioden[] MEM_TEXT = {'*',LCD_CHAR_DIODE1, ' ', ' ',0};
-#ifdef R_MESS
  const unsigned char Resistor_str[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
-#endif
  const unsigned char VERSION_str[] MEM_TEXT = "Version 1.02k";
 
 
@@ -285,7 +273,6 @@ End of configuration
 				     0x13,
 				     0x11,
 				     0x00};	// Diode-Icon Anode right
-#ifdef C_MESS
  const unsigned char CapIcon[] MEM_TEXT = { 0x1b,
 				     0x1b,
 				     0x1b,
@@ -294,8 +281,6 @@ End of configuration
 				     0x1b,
 				     0x1b,
 				     0x00};	// Capacitor Icon
-#endif
-#ifdef R_MESS
  const unsigned char ResIcon1[] MEM_TEXT = { 0x00,
 				     0x0f,
 				     0x08,
@@ -312,7 +297,6 @@ End of configuration
 				     0x1e,
 				     0x00,
 				     0x00};	// Resistor Icon2
-#endif
 
  const unsigned char PinRLtab[] MEM_TEXT = { (1<<(TP1*2)),
 				     (1<<(TP2*2)),
@@ -333,20 +317,16 @@ End of configuration
    const int8_t RefDiff EEMEM = REF_R_KORR;	// correction of internal Reference Voltage
 #endif
   const uint8_t PrefixTab[] MEM_TEXT = { 'p','n',LCD_CHAR_U,'m',0,'k','M'}; // p,n,u,m,-,k,M
-#ifdef C_MESS 
- #ifdef AUTO_CAL
+#ifdef AUTO_CAL
 //  const uint16_t cap_null EEMEM = C_NULL;	// Zero offset of capacity measurement 
    const int16_t ref_offset EEMEM = REF_C_KORR;	// default correction of internal reference voltage for capacity measurement
   // LoPin:HiPin                        2:1    3:1    1:2                    :     3:2                   1:3    2:3
    const uint8_t c_zero_tab[] EEMEM = { C_NULL,C_NULL,C_NULL+TP2_CAP_OFFSET,C_NULL,C_NULL+TP2_CAP_OFFSET,C_NULL,C_NULL }; //table of zero offsets
- #endif
-  const uint8_t EE_ESR_ZERO EEMEM = ESR_ZERO;	// zero offset of ESR measurement
 #endif
+  const uint8_t EE_ESR_ZERO EEMEM = ESR_ZERO;	// zero offset of ESR measurement
 //End of EEPROM-Strings
- #ifdef MULTIP
 // Multiplier for capacity measurement with R_H (470KOhm)
   unsigned int RHmultip=DEFAULT_RH_FAKT;
- #endif
 #else
  // no MAIN_C
  #define COMMON extern
@@ -377,9 +357,7 @@ End of configuration
  #endif
   extern unsigned char PinRLtab[];
   extern unsigned char PinADCtab[];
- #ifdef MULTIP
   extern unsigned int RHmultip;
- #endif
 #endif
 
 
@@ -455,7 +433,6 @@ COMMON uint8_t PartMode;
 COMMON uint8_t tmpval, tmpval2;
 COMMON unsigned int ref_mv;            //Reference-voltage  in mV units
 
-#ifdef R_MESS
 COMMON struct resis_t{
    unsigned long rx;		// value of resistor RX  
 #if FLASHEND > 0x1fff
@@ -465,7 +442,6 @@ COMMON struct resis_t{
    uint8_t rt;			// Tristate-Pin (inactive)
 } resis[3];
 COMMON  uint8_t ResistorsFound;	//Number of found resistors
-#endif
 
 
 

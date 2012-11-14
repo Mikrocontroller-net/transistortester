@@ -19,19 +19,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   7 .debug_pubnames 0000069c  00000000  00000000  00004e72  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_info   00002461  00000000  00000000  0000550e  2**0
+  8 .debug_info   00002456  00000000  00000000  0000550e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_abbrev 00000696  00000000  00000000  0000796f  2**0
+  9 .debug_abbrev 00000696  00000000  00000000  00007964  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   0000321f  00000000  00000000  00008005  2**0
+ 10 .debug_line   0000321f  00000000  00000000  00007ffa  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  00000200  00000000  00000000  0000b224  2**2
+ 11 .debug_frame  00000200  00000000  00000000  0000b21c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000811  00000000  00000000  0000b424  2**0
+ 12 .debug_str    00000811  00000000  00000000  0000b41c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    00001178  00000000  00000000  0000bc35  2**0
+ 13 .debug_loc    00001178  00000000  00000000  0000bc2d  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_pubtypes 000001af  00000000  00000000  0000cdad  2**0
+ 14 .debug_pubtypes 000001af  00000000  00000000  0000cda5  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -555,7 +555,7 @@ void lcd_fix_customchar(const unsigned char *chardata) {
      348:	08 95       	ret
 
 0000034a <ChargePin10ms>:
-#endif
+ }
 
 //******************************************************************
 #include "CheckPins.c"
@@ -2086,11 +2086,11 @@ savenresult:
      NumOfDiodes++;
      c8c:	8f 5f       	subi	r24, 0xFF	; 255
      c8e:	80 93 07 01 	sts	0x0107, r24
+#if DebugOut == 4
   lcd_data(NumOfDiodes+'0');
 #endif
 
 widmes:
-#ifdef R_MESS
   if (NumOfDiodes > 0) goto clean_ports;
      c92:	80 91 07 01 	lds	r24, 0x0107
      c96:	88 23       	and	r24, r24
@@ -2100,7 +2100,7 @@ widmes:
   wdt_reset();
      c9c:	a8 95       	wdr
 // U_SCALE can be set to 4 for better resolution of ReadADC result
- #if U_SCALE != 1
+#if U_SCALE != 1
   ADCconfig.U_AVCC *= U_SCALE;	// scale to higher resolution, mV scale is not required
      c9e:	80 91 3f 01 	lds	r24, 0x013F
      ca2:	90 91 40 01 	lds	r25, 0x0140
@@ -2119,7 +2119,7 @@ widmes:
      cc4:	99 1f       	adc	r25, r25
      cc6:	90 93 3e 01 	sts	0x013E, r25
      cca:	80 93 3d 01 	sts	0x013D, r24
- #endif
+#endif
 #if R_ANZ_MESS != ANZ_MESS
   ADCconfig.Samples = R_ANZ_MESS;	// switch to special number of repetitions
      cce:	8e eb       	ldi	r24, 0xBE	; 190
@@ -2219,7 +2219,7 @@ widmes:
      d3c:	a6 c1       	rjmp	.+844    	; 0x108a <__stack+0xb8b>
      lcd_string(utoa(adc.hp2, outval, 10));
      lcd_space();
- #endif
+#endif
      goto testend;
   }
   R_PORT = HiPinRH;		//switch R_H for High-Pin to VCC
@@ -2346,7 +2346,7 @@ widmes:
      dc8:	60 c1       	rjmp	.+704    	; 0x108a <__stack+0xb8b>
      dca:	06 c0       	rjmp	.+12     	; 0xdd8 <__stack+0x8d9>
      lcd_data('F');
- #endif
+#endif
      goto testend; 
   }
 //    if((adc.hp2 + (adc.hp2 / 61)) < adc.hp1)
@@ -2728,7 +2728,7 @@ widmes:
     1044:	11 f5       	brne	.+68     	; 0x108a <__stack+0xb8b>
               DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,3)
               lcd_space();
- #endif
+#endif
               goto testend; // <10% mismatch
            }
            PartFound = PART_RESISTOR;
@@ -2785,9 +2785,9 @@ widmes:
         ResistorsFound++;			// 1 more resistor found
     1084:	5f 5f       	subi	r21, 0xFF	; 255
     1086:	50 93 57 01 	sts	0x0157, r21
+#endif
      }
   }
-#endif
   testend:
 #if U_SCALE != 1
   ADCconfig.U_AVCC /= U_SCALE;		// scale back to mV resolution
@@ -3548,11 +3548,11 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
     144c:	08 95       	ret
 
 0000144e <RvalOut>:
+      DisplayValue(diodes[nn].Voltage,-3,'V',3);
       lcd_space();
    }
 }
 
-#ifdef R_MESS
 void RvalOut(uint8_t ii) {	
     144e:	0f 93       	push	r16
    // output of resistor value
@@ -4532,7 +4532,6 @@ void AutoCheck(void) {
   }
 #endif
 
-#ifdef C_MESS
   //measure Zero offset for Capacity measurement
   adcmv[3] = 0;
     1a74:	18 86       	std	Y+8, r1	; 0x08
@@ -4643,7 +4642,7 @@ void AutoCheck(void) {
   lcd_string(itoa(adcmv[6], outval, 10));	//output cap0 2:3
   lcd_space();
   DisplayValue(adcmv[2],-12,'F',3);		//output cap0 1:2
- #ifdef AUTO_CAL
+#ifdef AUTO_CAL
   for (ww=0;ww<7;ww++) {
       if (adcmv[ww] > 70) goto no_c0save;
     1b54:	21 91       	ld	r18, Z+
@@ -4655,7 +4654,7 @@ void AutoCheck(void) {
   lcd_string(itoa(adcmv[6], outval, 10));	//output cap0 2:3
   lcd_space();
   DisplayValue(adcmv[2],-12,'F',3);		//output cap0 1:2
- #ifdef AUTO_CAL
+#ifdef AUTO_CAL
   for (ww=0;ww<7;ww++) {
     1b5e:	e8 17       	cp	r30, r24
     1b60:	f9 07       	cpc	r31, r25
@@ -4680,7 +4679,7 @@ void AutoCheck(void) {
     1b7e:	e1 1c       	adc	r14, r1
     1b80:	f1 1c       	adc	r15, r1
   DisplayValue(adcmv[2],-12,'F',3);		//output cap0 1:2
- #ifdef AUTO_CAL
+#ifdef AUTO_CAL
   for (ww=0;ww<7;ww++) {
       if (adcmv[ww] > 70) goto no_c0save;
   }
@@ -4693,11 +4692,11 @@ void AutoCheck(void) {
       (void) eeprom_write_byte((uint8_t *)(&c_zero_tab[ww]),adcmv[ww]+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)));
   }
 no_c0save:
- #endif
+#endif
  wait2s();		//wait 2 seconds
     1b8a:	0e 94 66 14 	call	0x28cc	; 0x28cc <wait2s>
  
- #ifdef AUTO_CAL
+#ifdef AUTO_CAL
  // Message C > 100nF
  cap_found = 0;
     1b8e:	10 e0       	ldi	r17, 0x00	; 0
@@ -4725,7 +4724,7 @@ no_c0save:
     1ba0:	a1 e0       	ldi	r26, 0x01	; 1
     1ba2:	fa 2e       	mov	r15, r26
  
- #ifdef AUTO_CAL
+#ifdef AUTO_CAL
  // Message C > 100nF
  cap_found = 0;
  for (ww=0;ww<64;ww++) {
@@ -4839,7 +4838,7 @@ no_c0save:
     1c6a:	91 e0       	ldi	r25, 0x01	; 1
     1c6c:	6d e1       	ldi	r22, 0x1D	; 29
     1c6e:	0e 94 ad 1d 	call	0x3b5a	; 0x3b5a <__eewr_byte_m168>
-  #ifdef AUTOSCALE_ADC
+ #ifdef AUTOSCALE_ADC
         ADC_PORT =  TXD_VAL;	//ADC-Port 1 to GND
     1c72:	88 e0       	ldi	r24, 0x08	; 8
     1c74:	88 b9       	out	0x08, r24	; 8
@@ -4977,7 +4976,7 @@ no_c0save:
     1d76:	50 e0       	ldi	r21, 0x00	; 0
     1d78:	0e 94 68 1d 	call	0x3ad0	; 0x3ad0 <itoa>
     1d7c:	0e 94 2b 01 	call	0x256	; 0x256 <lcd_string>
-  #endif
+ #endif
         wait4s();
     1d80:	0e 94 64 14 	call	0x28c8	; 0x28c8 <wait4s>
         break;
@@ -4990,7 +4989,7 @@ no_c0save:
      if ((cap.cpre == -9) && (cap.cval > 95) && (cap.cval < 22000)) {
     1d86:	10 e0       	ldi	r17, 0x00	; 0
         lcd_string(itoa(udiff2, outval, 10));	//output correction voltage
-  #endif
+ #endif
         wait4s();
         break;
      }
@@ -5010,7 +5009,7 @@ no_c0save:
     1daa:	0e 94 6b 14 	call	0x28d6	; 0x28d6 <wait200ms>
  wait2s();		//wait 2 seconds
  
- #ifdef AUTO_CAL
+#ifdef AUTO_CAL
  // Message C > 100nF
  cap_found = 0;
  for (ww=0;ww<64;ww++) {
@@ -5019,9 +5018,9 @@ no_c0save:
     1db2:	80 34       	cpi	r24, 0x40	; 64
     1db4:	09 f0       	breq	.+2      	; 0x1db8 <AutoCheck+0x8de>
     1db6:	f6 ce       	rjmp	.-532    	; 0x1ba4 <AutoCheck+0x6ca>
+     wait200ms();			// wait additional time
   }
 
- #endif
 #endif
 
   ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples
@@ -5157,7 +5156,6 @@ int main(void) {
     1e74:	8b e8       	ldi	r24, 0x8B	; 139
     1e76:	91 e0       	ldi	r25, 0x01	; 1
     1e78:	0e 94 60 01 	call	0x2c0	; 0x2c0 <lcd_fix_customchar>
-#ifdef C_MESS
   LCDLoadCustomChar(LCD_CHAR_CAP);	//Custom-Character  Capacitor symbol
     1e7c:	88 e5       	ldi	r24, 0x58	; 88
     1e7e:	0e 94 ea 00 	call	0x1d4	; 0x1d4 <lcd_command>
@@ -5165,8 +5163,6 @@ int main(void) {
     1e82:	83 e9       	ldi	r24, 0x93	; 147
     1e84:	91 e0       	ldi	r25, 0x01	; 1
     1e86:	0e 94 60 01 	call	0x2c0	; 0x2c0 <lcd_fix_customchar>
-#endif
-#ifdef R_MESS
   LCDLoadCustomChar(LCD_CHAR_RESIS1);	//Custom-Character Resistor symbol
     1e8a:	88 e7       	ldi	r24, 0x78	; 120
     1e8c:	0e 94 ea 00 	call	0x1d4	; 0x1d4 <lcd_command>
@@ -5258,16 +5254,12 @@ start:
     1f0e:	80 93 04 01 	sts	0x0104, r24
 #endif
 
-#ifdef R_MESS
   ResistorsFound = 0;
     1f12:	10 92 57 01 	sts	0x0157, r1
-#endif
-#ifdef C_MESS
   cap.ca = 0;
     1f16:	10 92 64 01 	sts	0x0164, r1
   cap.cb = 0;
     1f1a:	10 92 65 01 	sts	0x0165, r1
-#endif
 #ifdef WITH_UART
   uart_newline();		// start of new measurement
     1f1e:	0e 94 e3 00 	call	0x1c6	; 0x1c6 <uart_newline>
@@ -5518,7 +5510,6 @@ start:
     20c0:	80 ec       	ldi	r24, 0xC0	; 192
     20c2:	0e 94 ea 00 	call	0x1d4	; 0x1d4 <lcd_command>
 #endif
-#ifdef C_MESS
   EntladePins();		// discharge all capacitors!
     20c6:	0e 94 7e 08 	call	0x10fc	; 0x10fc <EntladePins>
   if(PartFound == PART_CELL) {
@@ -5534,7 +5525,6 @@ start:
     goto end2;
     20de:	9c c3       	rjmp	.+1848   	; 0x2818 <main+0xa00>
   }
-#endif
 
 #ifdef CHECK_CALL
   AutoCheck();			//check, if selftest should be done
@@ -5576,7 +5566,6 @@ start:
     211a:	40 e0       	ldi	r20, 0x00	; 0
     211c:	0e 94 c6 01 	call	0x38c	; 0x38c <CheckPins>
   
-#ifdef C_MESS
   //separate check if is is a capacitor
   if(((PartFound == PART_NONE) || (PartFound == PART_RESISTOR) || (PartFound == PART_DIODE)) ) {
     2120:	80 91 09 01 	lds	r24, 0x0109
@@ -5607,7 +5596,6 @@ start:
     214c:	0e 94 58 17 	call	0x2eb0	; 0x2eb0 <ReadInductance>
 #endif
   }
-#endif
   //All checks are done, output result to display
   lcd_clear();
     2150:	0e 94 fa 00 	call	0x1f4	; 0x1f4 <lcd_clear>
@@ -5637,7 +5625,6 @@ start:
         UfAusgabe(0x70);
     2186:	80 e7       	ldi	r24, 0x70	; 112
     2188:	0e 94 59 0a 	call	0x14b2	; 0x14b2 <UfAusgabe>
-#ifdef C_MESS
         lcd_fix_string(GateCap_str);	//"C="
     218c:	8c ef       	ldi	r24, 0xFC	; 252
     218e:	90 e0       	ldi	r25, 0x00	; 0
@@ -5654,7 +5641,6 @@ start:
     21b0:	40 91 66 01 	lds	r20, 0x0166
     21b4:	26 e4       	ldi	r18, 0x46	; 70
     21b6:	b1 c2       	rjmp	.+1378   	; 0x271a <main+0x902>
-#endif
         goto end;
      } else if(NumOfDiodes == 2) { // double diode
     21b8:	92 30       	cpi	r25, 0x02	; 2
@@ -6109,7 +6095,7 @@ start:
     24ee:	80 91 08 01 	lds	r24, 0x0108
     24f2:	84 30       	cpi	r24, 0x04	; 4
     24f4:	d8 f4       	brcc	.+54     	; 0x252c <main+0x714>
- #ifdef C_MESS	//Gate capacity
+	//Gate capacity
        lcd_fix_string(GateCap_str);		//"C="
     24f6:	8c ef       	ldi	r24, 0xFC	; 252
     24f8:	90 e0       	ldi	r25, 0x00	; 0
@@ -6127,7 +6113,6 @@ start:
     251e:	26 e4       	ldi	r18, 0x46	; 70
     2520:	03 e0       	ldi	r16, 0x03	; 3
     2522:	0e 94 71 09 	call	0x12e2	; 0x12e2 <DisplayValue>
- #endif
        lcd_fix_string(vt_str);		// "Vt="
     2526:	8c e1       	ldi	r24, 0x1C	; 28
     2528:	91 e0       	ldi	r25, 0x01	; 1
@@ -6202,11 +6187,11 @@ gakAusgabe:
     259e:	80 91 56 01 	lds	r24, 0x0156
     25a2:	0e 94 df 00 	call	0x1be	; 0x1be <lcd_testpin>
     25a6:	31 c1       	rjmp	.+610    	; 0x280a <main+0x9f2>
+    goto gakAusgabe;
   } else if (PartFound == PART_TRIAC) {
     lcd_fix_string(Triac);		//"Triac"
     goto gakAusgabe;
   }
- #ifdef R_MESS	//resistor measurement is wanted
   else if(PartFound == PART_RESISTOR) {
     25a8:	86 30       	cpi	r24, 0x06	; 6
     25aa:	09 f0       	breq	.+2      	; 0x25ae <main+0x796>
@@ -6427,10 +6412,10 @@ gakAusgabe:
     275a:	81 e0       	ldi	r24, 0x01	; 1
     275c:	0e 94 27 0a 	call	0x144e	; 0x144e <RvalOut>
     2760:	54 c0       	rjmp	.+168    	; 0x280a <main+0x9f2>
-  } // end (PartFound == PART_RESISTOR)
-#endif
+    goto end;
 
-#ifdef C_MESS
+  } // end (PartFound == PART_RESISTOR)
+
 //capacity measurement is wanted
   else if(PartFound == PART_CAPACITOR) {
     2762:	87 30       	cpi	r24, 0x07	; 7
@@ -6465,7 +6450,6 @@ gakAusgabe:
      goto end;
     27a4:	32 c0       	rjmp	.+100    	; 0x280a <main+0x9f2>
   }
-#endif
   if(NumOfDiodes == 0) { //no diodes are found
     27a6:	80 91 07 01 	lds	r24, 0x0107
     27aa:	88 23       	and	r24, r24

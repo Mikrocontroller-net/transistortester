@@ -217,7 +217,6 @@ void AutoCheck(void) {
   }
 #endif
 
-#ifdef C_MESS
   //measure Zero offset for Capacity measurement
   adcmv[3] = 0;
   PartFound = PART_NONE;
@@ -242,7 +241,7 @@ void AutoCheck(void) {
   lcd_string(itoa(adcmv[6], outval, 10));	//output cap0 2:3
   lcd_space();
   DisplayValue(adcmv[2],-12,'F',3);		//output cap0 1:2
- #ifdef AUTO_CAL
+#ifdef AUTO_CAL
   for (ww=0;ww<7;ww++) {
       if (adcmv[ww] > 70) goto no_c0save;
   }
@@ -251,10 +250,10 @@ void AutoCheck(void) {
       (void) eeprom_write_byte((uint8_t *)(&c_zero_tab[ww]),adcmv[ww]+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)));
   }
 no_c0save:
- #endif
+#endif
  wait2s();		//wait 2 seconds
  
- #ifdef AUTO_CAL
+#ifdef AUTO_CAL
  // Message C > 100nF
  cap_found = 0;
  for (ww=0;ww<64;ww++) {
@@ -282,7 +281,7 @@ no_c0save:
         lcd_fix_string(REF_C_str);	// "REF_C="
         lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
         eeprom_write_byte((uint8_t *)(&EE_ESR_ZERO), (uint8_t)ESR_ZERO); // set to initial zero offset
-  #ifdef AUTOSCALE_ADC
+ #ifdef AUTOSCALE_ADC
         ADC_PORT =  TXD_VAL;	//ADC-Port 1 to GND
         ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
         R_DDR = 2<<(TP3*2);		//Pin 3 over R_H to GND
@@ -303,7 +302,7 @@ no_c0save:
         udiff2 = udiff + (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
         (void) eeprom_write_byte((uint8_t *)(&RefDiff), (uint8_t)udiff2);	// hold offset for true reference Voltage
         lcd_string(itoa(udiff2, outval, 10));	//output correction voltage
-  #endif
+ #endif
         wait4s();
         break;
      }
@@ -312,7 +311,6 @@ no_c0save:
      wait200ms();			// wait additional time
   }
 
- #endif
 #endif
 
   ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples

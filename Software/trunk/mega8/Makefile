@@ -20,8 +20,6 @@ CFLAGS = -Wall
 
 #select your Part-No. for avrdude :
 # atmega8  : m8
-# atmega48 : m48 or m48p
-# atmega88 : m88 or m88p
 # atmega168: m168 or m168p
 # atmega328: m328 or m328p
 PARTNO = m8
@@ -49,18 +47,13 @@ UI_LANGUAGE = LANG_ENGLISH
 #CFLAGS += -DFREQUENCY_50HZ
 
 # the WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring
-CFLAGS += -DWITH_AUTO_REF
+#CFLAGS += -DWITH_AUTO_REF
 CFLAGS += -DREF_C_KORR=4
 CFLAGS += -DC_H_KORR=5
 
 # the WITH_UART option enables the software UART
 #CFLAGS += -DWITH_UART
 
-# the R_MESS option enables Resistor measuring 
-CFLAGS += -DR_MESS
-
-# the C_MESS option enables Capacity measuring 
-CFLAGS += -DC_MESS
 # this level defines the empty voltage level for capacitors in mV
 CFLAGS += -DCAP_EMPTY_LEVEL=3
 

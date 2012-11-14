@@ -39,12 +39,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   unsigned long c_hfe;		// amplification factor for common Collector (Emitter follower)
 #endif
 
-#ifdef R_MESS
   struct resis_t *thisR;
   unsigned long lrx1;
   unsigned long lirx1;
   unsigned long lirx2;
-#endif
   /*
     switch HighPin directls to VCC 
     switch R_L port for LowPin to GND 
@@ -565,15 +563,14 @@ savenresult:
 #endif
 
 widmes:
-#ifdef R_MESS
   if (NumOfDiodes > 0) goto clean_ports;
   // resistor measurement
   wdt_reset();
 // U_SCALE can be set to 4 for better resolution of ReadADC result
- #if U_SCALE != 1
+#if U_SCALE != 1
   ADCconfig.U_AVCC *= U_SCALE;	// scale to higher resolution, mV scale is not required
   ADCconfig.U_Bandgap *= U_SCALE;
- #endif
+#endif
 #if R_ANZ_MESS != ANZ_MESS
   ADCconfig.Samples = R_ANZ_MESS;	// switch to special number of repetitions
 #endif
@@ -607,7 +604,7 @@ widmes:
   adc.hp2 = W5msReadADC(HighPin);	// read voltage, should be down
   if (adc.hp2 > (20*U_SCALE)) {
      // if resistor, voltage should be down
- #if DebugOut == 3
+#if DebugOut == 3
      lcd_line3();
      lcd_clear_line();
      lcd_line3();
@@ -619,7 +616,7 @@ widmes:
      lcd_data('B');
      lcd_string(utoa(adc.hp2, outval, 10));
      lcd_space();
- #endif
+#endif
      goto testend;
   }
   R_PORT = HiPinRH;		//switch R_H for High-Pin to VCC
@@ -654,9 +651,9 @@ widmes:
 		
   if((adc.hp1 < (4400*U_SCALE)) && (adc.hp2 > (97*U_SCALE))) {
      //voltage break down isn't insufficient 
- #if DebugOut == 3
+#if DebugOut == 3
      lcd_data('F');
- #endif
+#endif
      goto testend; 
   }
 //    if((adc.hp2 + (adc.hp2 / 61)) < adc.hp1)
@@ -759,7 +756,7 @@ widmes:
            // resolution is 0.1 Ohm, 1 Ohm = 10 !
            lirx1 = (labs((long)lrx1 - (long)thisR->rx) * 10) / (lrx1 + thisR->rx + 100);
            if (lirx1  > 0) {
- #if DebugOut == 3
+#if DebugOut == 3
               lcd_data('R');
               lcd_data('!');
               lcd_data('=');
@@ -767,7 +764,7 @@ widmes:
               lcd_space();
               DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,3)
               lcd_space();
- #endif
+#endif
               goto testend; // <10% mismatch
            }
            PartFound = PART_RESISTOR;
@@ -789,7 +786,6 @@ widmes:
 #endif
      }
   }
-#endif
   testend:
 #if U_SCALE != 1
   ADCconfig.U_AVCC /= U_SCALE;		// scale back to mV resolution

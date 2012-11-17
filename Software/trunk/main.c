@@ -191,7 +191,7 @@ start:
      lcd_line2();
      lcd_fix_string(VCC_str);		// VCC=
      DisplayValue(ADCconfig.U_AVCC,-3,'V',3);	// Display 3 Digits of this mV units
-#if FLASHEND > 0x3fff
+#if 0
      lcd_space();
      trans.uBE[0] = ReadADC((1<<REFS1)|(1<<REFS0)|8); 	//read temperature sensor
      lcd_string(itoa(trans.uBE[0] - 345, outval, 10));    //output correction voltage

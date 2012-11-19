@@ -444,6 +444,9 @@ fuses-crystal-lp:
 
 # make upload  additionally calls make to compile the software for selected target
 upload:
+	make
+	avrdude -c $(PROGRAMMER) -B 5.0 -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTester.hex:a \
+	-U eeprom:w:./TransistorTester.eep:a
 program:
 	make
 	avrdude -c $(PROGRAMMER) -B 5.0 -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTester.hex:a \

@@ -297,7 +297,7 @@ End of configuration
   #define ADC_COMP_CONTROL SFIOR
   #define TI1_INT_FLAGS TIFR
   #define DEFAULT_BAND_GAP 1298		//mega8 1298 mV
-  #define DEFAULT_RH_FAKT  708      // mega8 1298 mV
+  #define DEFAULT_RH_FAKT  740      // mega8 1250 mV
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
 // COMMON_COLLECTOR activates measurement of current amplification factor also in common collector circuit  (Emitter follower)

@@ -14,7 +14,6 @@ CFLAGS = -Wall
 
 # ********************** Änderbare Flags zur Configuration des Transistortesters
 # ********************** config options for your Semiconductor tester
-# NOTE: Software will deselect impossible Options for atmega48 automatically!!
 #every changing of this Makefile will result in new compiling the whole
 #programs, if you call make or make upload
 
@@ -47,7 +46,7 @@ UI_LANGUAGE = LANG_ENGLISH
 #CFLAGS += -DFREQUENCY_50HZ
 
 # the WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring
-#CFLAGS += -DWITH_AUTO_REF
+CFLAGS += -DWITH_AUTO_REF
 CFLAGS += -DREF_C_KORR=4
 CFLAGS += -DC_H_KORR=5
 

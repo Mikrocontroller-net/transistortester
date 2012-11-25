@@ -468,12 +468,14 @@ COMMON  uint8_t ResistorsFound;	//Number of found resistors
 COMMON uint8_t ii;			// multipurpose counter
 COMMON struct cap_t {
   unsigned long cval;		// capacitor value 
+  unsigned long cval_max;	//capacitor with maximum value
   unsigned long cval_uncorrected;	// capacity value without corrections
 #if FLASHEND > 0x1fff
   unsigned int esr;		// serial resistance of C in 0.01 Ohm
 #endif
   uint8_t ca, cb;		//pins of capacitor
   int8_t cpre;			//Prefix for capacitor value  -12=p, -9=n, -6=µ, -3=m
+  int8_t cpre_max;		//Prefix of the biggest capacitor
 } cap;
 COMMON int16_t load_diff;		// difference voltage of loaded capacitor and internal reference
 

@@ -61,17 +61,17 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   lcd_testpin(HighPin);
   lcd_space();
 #endif
-  if(PartFound == PART_CAPACITOR) {
-#if DebugOut == 10
-     lcd_data('d');
-     lcd_data('o');
-     lcd_data('p');
-     lcd_space();
-     DisplayValue(cap.cval,cap.cpre,'F',3);
-     wait2s();
-#endif
-     return;	//We have found a capacitor already
-  }
+//  if(PartFound == PART_CAPACITOR) {
+//#if DebugOut == 10
+//     lcd_data('d');
+//     lcd_data('o');
+//     lcd_data('p');
+//     lcd_space();
+//     DisplayValue(cap.cval,cap.cpre,'F',3);
+//     wait2s();
+//#endif
+//     return;	//We have found a capacitor already
+//  }
   if(PartFound == PART_RESISTOR) {
 #if DebugOut == 10
      lcd_data('R');
@@ -363,8 +363,13 @@ checkDiodes:
       // which would be wrongly detected as capacitor 
    } else {
       PartFound = PART_CAPACITOR;	//capacitor is found
-      cap.ca = LowPin;			// save LowPin
-      cap.cb = HighPin;		// save HighPin
+      if ((cap.cpre > cap.cpre_max) || ((cap.cpre == cap.cpre_max) && (cap.cval > cap.cval_max))) {
+         // we have found a greater one
+         cap.cval_max = cap.cval;
+         cap.cpre_max = cap.cpre;
+         cap.ca = LowPin;		// save LowPin
+         cap.cb = HighPin;		// save HighPin
+      }
    }
 
 keinC:

@@ -123,12 +123,14 @@ start:
   ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND
   wait1ms();
   ADC_DDR =  TXD_MSK; 	// switch pin with reference back to input
+#if FLASHEND > 0x1fff
   trans.uBE[1] = W5msReadADC(TPREF); // read voltage of precision reference
   if ((trans.uBE[1] > 2250) && (trans.uBE[1] < 2750)) {
      // precision voltage reference connected, update U_AVCC
      WithReference = 1;
      ADCconfig.U_AVCC = (unsigned long)((unsigned long)ADCconfig.U_AVCC * 2495) / trans.uBE[1];
   }
+#endif
   lcd_line1();	//1. row 
   
 #ifdef WITH_AUTO_REF
@@ -187,19 +189,14 @@ start:
 #ifdef AUTO_RH
   RefVoltage();			//compute RHmultip = f(reference voltage)
 #endif
+#if FLASHEND > 0x1fff
   if (WithReference) {
      lcd_line2();
      lcd_fix_string(VCC_str);		// VCC=
      DisplayValue(ADCconfig.U_AVCC,-3,'V',3);	// Display 3 Digits of this mV units
-#if 0
-     lcd_space();
-     trans.uBE[0] = ReadADC((1<<REFS1)|(1<<REFS0)|8); 	//read temperature sensor
-     lcd_string(itoa(trans.uBE[0] - 345, outval, 10));    //output correction voltage
-     lcd_data(LCD_CHAR_DEGREE); // output degree
-     lcd_data('C');
-#endif
      wait1s();
   }
+#endif
 
   lcd_line2();			//LCD position row2, column 1
   lcd_fix_string(TestRunning);		//String: testing...
@@ -232,6 +229,8 @@ start:
   if(((PartFound == PART_NONE) || (PartFound == PART_RESISTOR) || (PartFound == PART_DIODE)) ) {
      EntladePins();		// discharge capacities
      //measurement of capacities in all 3 combinations
+     cap.cval_max = 0;		// set max to zero
+     cap.cpre_max = -12;	// set max to pF unit
      ReadCapacity(TP3, TP1);
      ReadCapacity(TP3, TP2);
      ReadCapacity(TP2, TP1);
@@ -525,7 +524,7 @@ start:
      lcd_fix_string(CapZeich);		// capacitor sign
      lcd_testpin(cap.cb);		//Pin number 2
      lcd_line2(); 			//2. row 
-     DisplayValue(cap.cval,cap.cpre,'F',4);
+     DisplayValue(cap.cval_max,cap.cpre_max,'F',4);
 #if FLASHEND > 0x1fff
      GetESR();				// get ESR of capacitor
 #endif

@@ -25,7 +25,7 @@ PARTNO = m168
 
 #select your language
 # available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
-#                          LANG_RUSSIAN
+#                          LANG_DUTCH, LANG_RUSSIAN
 UI_LANGUAGE = LANG_ENGLISH
 
 # the LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset

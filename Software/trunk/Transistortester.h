@@ -182,6 +182,26 @@ End of configuration
    const unsigned char ATE[] MEM_TEXT = "Selftest End";
  #endif
 #endif
+#if defined(LANG_DUTCH)                      //dutch
+   const unsigned char TestRunning[] MEM_TEXT = "Testen..."; 
+   const unsigned char BatWeak[] MEM_TEXT = "laag"; 
+   const unsigned char BatEmpty[] MEM_TEXT = "leeg!"; 
+   const unsigned char TestFailed2[] MEM_TEXT = "defect "; 
+   const unsigned char Bauteil[] MEM_TEXT = "component"; 
+   const unsigned char Diode[] MEM_TEXT = "Diode: ";
+   const unsigned char GAK[] MEM_TEXT = "GAC=";
+   const unsigned char Triac[] MEM_TEXT = "Triac";
+   const unsigned char Thyristor[] MEM_TEXT = "Thyristor";
+   const unsigned char Unknown[] MEM_TEXT = " onbekend"; 
+   const unsigned char TestFailed1[] MEM_TEXT = "Geen, onbekend,"; 
+   const unsigned char OrBroken[] MEM_TEXT = "of defect "; 
+   const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+#ifdef WITH_SELFTEST
+   const unsigned char SELFTEST[] MEM2_TEXT = "Zelftest mode..";
+   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
+   const unsigned char ATE[] MEM_TEXT = "Zelftest Einde";
+#endif
+#endif
 
 #if defined(LANG_RUSSIAN)                    //Russian
    const unsigned char TestRunning[] MEM_TEXT = {'T','e','c',Cyr_t,Cyr_i,'p','o',Cyr_v,'a',Cyr_n,Cyr_i,'e','.','.','.',0}; 

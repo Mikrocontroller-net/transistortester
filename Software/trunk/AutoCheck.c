@@ -233,13 +233,9 @@ void AutoCheck(void) {
   ReadCapacity(TP1, TP2);
   adcmv[0] = (unsigned int) cap.cval_uncorrected;	//save capacity value of empty Pin 2:1
   lcd_clear();
-  lcd_data('C');
-  lcd_data('0');
-  lcd_space();
-  lcd_string(itoa(adcmv[5], outval, 10));	//output cap0 1:3
-  lcd_space();
-  lcd_string(itoa(adcmv[6], outval, 10));	//output cap0 2:3
-  lcd_space();
+  lcd_fix_string(C0_str);			//output "C0 "
+  DisplayValue(adcmv[5],0,' ',3);		//output cap0 1:3
+  DisplayValue(adcmv[6],0,' ',3);		//output cap0 2:3
   DisplayValue(adcmv[2],-12,'F',3);		//output cap0 1:2
 #ifdef AUTO_CAL
   for (ww=0;ww<7;ww++) {
@@ -249,6 +245,8 @@ void AutoCheck(void) {
       // write all zero offsets to the EEprom 
       (void) eeprom_write_byte((uint8_t *)(&c_zero_tab[ww]),adcmv[ww]+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)));
   }
+  lcd_line2();
+  lcd_fix_string(OK_str);		// output "OK"
 no_c0save:
 #endif
  wait2s();		//wait 2 seconds

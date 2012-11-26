@@ -20,11 +20,11 @@ void GetESR() {
   uint8_t ii,jj;		// tempory values
   int8_t esr0;			// used for ESR zero correction
 
-  while (cap.cpre < -9) { // set cval to nF unit
-      cap.cval /= 10;		// reduce value by factor ten
-      cap.cpre++;		// take next decimal prefix
+  while (cap.cpre_max < -9) { // set cval to nF unit
+      cap.cval_max /= 10;		// reduce value by factor ten
+      cap.cpre_max++;		// take next decimal prefix
   }
-  if (cap.cval < 1800) return;			//capacity lower than 1.8 uF
+  if (cap.cval_max < 1800) return;			//capacity lower than 1.8 uF
   lcd_fix_string(ESR_str);		// " ESR="
   LoADC = MEM_read_byte(&PinADCtab[cap.ca]) | TXD_MSK;
   HiADC = MEM_read_byte(&PinADCtab[cap.cb]) | TXD_MSK;
@@ -139,7 +139,7 @@ void GetESR() {
    // HighPin Voltage, which is usually 2 * 14 * 8 us = 224 us.
    // With the loading of the capacitor the current will sink, so we get a too high voltage at
    // the LowPin. The velocity of degration is inversely proportional to time constant (represented by capacity value).
-   sumvolt[0] -= (sumvolt[0] * 150UL)  / cap.cval;
+   sumvolt[0] -= (sumvolt[0] * 150UL)  / cap.cval_max;
    esr0 = (int8_t)eeprom_read_byte(&EE_ESR_ZERO);
    sumvolt[0] += (((long)sumvolt[0] * esr0) / ((RR680MI - R_L_VAL) * 10)); // subtract 0.23 Ohm from ESR
    if (sumvolt[1] > sumvolt[0]) {

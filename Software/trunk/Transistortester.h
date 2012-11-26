@@ -265,6 +265,7 @@ End of configuration
 #ifdef CHECK_CALL
  const unsigned char RIHI[] MEM_TEXT = "Ri_Hi=";
  const unsigned char RILO[] MEM_TEXT = "Ri_Lo=";
+ const unsigned char C0_str[] MEM_TEXT = "C0 ";
  const unsigned char T50HZ[] MEM2_TEXT = " 50Hz";
 #endif
 #ifdef AUTO_CAL

@@ -36,6 +36,11 @@
 .global wait30us	; wait 30µs
 .global wait20us	; wait 20µs
 .global wait10us	; wait 10µs
+.global wait5us		; wait 5µs
+.global wait4us		; wait 4µs
+.global wait3us		; wait 3µs
+.global wait2us		; wait 2µs
+.global wait1us		; wait 1µs
 
 ;wait loops for ATmega8 at a clock of  1MHz / 2MHz / 4MHz und 8MHz
 ; use of flash memory is: (include 2 Byte Watch Dog reset at wait100ms)
@@ -167,6 +172,12 @@ wait10us:		;	1+x Return-Adresses
  nop   ;if call need 4 clock cycles, delete on nop!
  nop
  nop
+; shortest time possible for wait5us, wait4us, wait3us, wait2us and wait1us
+wait5us:
+wait4us:
+wait3us:
+wait2us:
+wait1us:
 ; ret needs 4 clock cycles (1 µs each)
 #endif
 
@@ -175,18 +186,19 @@ wait10us:		;	1+x Return-Adresses
  rcall wait5us		;5us
 ; runs to wait5us	;total 10µs
 
-.global wait5us		; wait 5µs
 wait5us:
  nop
  nop
+wait4us:
  nop
+; shortest time possible for  wait3us, wait2us and wait1us
+wait3us:
+wait2us:
+wait1us:
 #endif
 
 #if F_CPU == 4000000
 ; 4MHz Version			x = 2
-.global wait5us		; wait 5µs
-.global wait4us		; wait 4µs
-.global wait2us		; wait 2µs
  rcall wait5us		;5us
 wait5us:
  nop
@@ -199,15 +211,12 @@ rcall wait2us	;3us
 
 wait2us:
  nop
+; shortest time possible for wait1us
+wait1us:
 #endif
 
 #if F_CPU == 8000000
 ; 8MHz Version			x = 2
-.global wait5us		; wait 5µs
-.global wait4us		; wait 4µs
-.global wait3us		; wait 3µs
-.global wait2us		; wait 2µs
-.global wait1us		; wait 1µs
  rcall wait5us		;5us
 ; run directly to wait5us ;10us
 
@@ -228,11 +237,6 @@ wait1us:
 
 #if F_CPU == 16000000
 ; 16MHz Version			x = 2
-.global wait5us		; wait 5µs
-.global wait4us		; wait 4µs
-.global wait3us		; wait 3µs
-.global wait2us		; wait 2µs
-.global wait1us		; wait 1µs
  rcall wait5us		;5us
 ; run directly to wait5us ;10us
 

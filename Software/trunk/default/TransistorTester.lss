@@ -5283,6 +5283,7 @@ start:
     1f3e:	0e 94 82 14 	call	0x2904	; 0x2904 <wait1ms>
   ADC_DDR =  TXD_MSK; 	// switch pin with reference back to input
     1f42:	17 b9       	out	0x07, r17	; 7
+#if FLASHEND > 0x1fff
   trans.uBE[1] = W5msReadADC(TPREF); // read voltage of precision reference
     1f44:	84 e0       	ldi	r24, 0x04	; 4
     1f46:	0e 94 33 1a 	call	0x3466	; 0x3466 <W5msReadADC>
@@ -5317,6 +5318,7 @@ start:
     1f88:	30 93 40 01 	sts	0x0140, r19
     1f8c:	20 93 3f 01 	sts	0x013F, r18
   }
+#endif
   lcd_line1();	//1. row 
     1f90:	80 e8       	ldi	r24, 0x80	; 128
     1f92:	0e 94 ea 00 	call	0x1d4	; 0x1d4 <lcd_command>
@@ -5469,6 +5471,7 @@ start:
   RefVoltage();			//compute RHmultip = f(reference voltage)
     207e:	0e 94 19 09 	call	0x1232	; 0x1232 <RefVoltage>
 #endif
+#if FLASHEND > 0x1fff
   if (WithReference) {
     2082:	80 91 44 01 	lds	r24, 0x0144
     2086:	88 23       	and	r24, r24
@@ -5489,14 +5492,10 @@ start:
     20a6:	26 e5       	ldi	r18, 0x56	; 86
     20a8:	03 e0       	ldi	r16, 0x03	; 3
     20aa:	0e 94 71 09 	call	0x12e2	; 0x12e2 <DisplayValue>
-     trans.uBE[0] = ReadADC((1<<REFS1)|(1<<REFS0)|8); 	//read temperature sensor
-     lcd_string(itoa(trans.uBE[0] - 345, outval, 10));    //output correction voltage
-     lcd_data(LCD_CHAR_DEGREE); // output degree
-     lcd_data('C');
-#endif
      wait1s();
     20ae:	0e 94 72 14 	call	0x28e4	; 0x28e4 <wait1000ms>
   }
+#endif
 
   lcd_line2();			//LCD position row2, column 1
     20b2:	80 ec       	ldi	r24, 0xC0	; 192

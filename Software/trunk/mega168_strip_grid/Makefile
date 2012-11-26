@@ -140,57 +140,6 @@ FUSES_CRY = -U lfuse:w:0x3f:m -U hfuse:w:0xc9:m
 FUSES_CRY_L = -U lfuse:w:0x3f:m -U hfuse:w:0xd9:m
 endif
 endif
-ifeq ($(PARTNO),m48)
-MCU = atmega48
-HEX_FLASH_FLAGS = --change-section-lma .eeprom=0x1000
-ifeq ($(OP_MHZ),1)
-# RC operation ,CLK 1MHz
-FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-# Operation with 8MHz crystal and /8 divider , full swing crystal
-FUSES_CRY = -U lfuse:w:0x77:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-# Operation with 8MHz crystal and /8 divider , low power
-FUSES_CRY_L = -U lfuse:w:0x7f:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-else
-# RC operation ,CLK 8MHz
-FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-# Operation with 8MHz crystal and /1 divider , full swing crystal
-FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-# Operation with 8MHz crystal and /1 divider , low power
-FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-endif
-endif
-
-ifeq ($(PARTNO),m48p)
-MCU = atmega48p
-HEX_FLASH_FLAGS = --change-section-lma .eeprom=0x1000
-ifeq ($(OP_MHZ),1)
-# RC operation ,CLK 1MHz
-FUSES_INT = -U lfuse:w:0x62:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-# Operation with 8MHz crystal and /8 divider , full swing crystal
-FUSES_CRY = -U lfuse:w:0x77:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-# Operation with 8MHz crystal and /8 divider , low power
-FUSES_CRY_L = -U lfuse:w:0x7f:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-else
-# RC operation ,CLK 8MHz
-FUSES_INT = -U lfuse:w:0xe2:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-# Operation with 8MHz crystal and /1 divider , full swing crystal
-FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-# Operation with 8MHz crystal and /1 divider , low power
-FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xdc:m
-# -U efuse:w:0xff:m
-endif
-endif
 
 ifeq ($(PARTNO),m88)
 MCU = atmega88

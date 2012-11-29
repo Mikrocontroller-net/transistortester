@@ -72,9 +72,9 @@ End of configuration
    const unsigned char OrBroken[] MEM_TEXT = "oder defekt "; //€";
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
  #ifdef WITH_SELFTEST
-   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
-   const unsigned char ATE[] MEM_TEXT = "Selftest End";
+   const unsigned char SELFTEST[] MEM2_TEXT = "Selbsttest ..";
+   const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
+   const unsigned char ATE[] MEM_TEXT = "Test Ende";
  #endif
 #endif
 
@@ -94,8 +94,8 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
-   const unsigned char ATE[] MEM_TEXT = "Selftest End";
+   const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
+   const unsigned char ATE[] MEM_TEXT = "Test End";
  #endif
 #endif
 
@@ -115,8 +115,8 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
-   const unsigned char ATE[] MEM_TEXT = "Selftest End";
+   const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
+   const unsigned char ATE[] MEM_TEXT = "Test End";
  #endif
 #endif
 
@@ -136,8 +136,8 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
-   const unsigned char ATE[] MEM_TEXT = "Selftest End";
+   const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
+   const unsigned char ATE[] MEM_TEXT = "Test End";
  #endif
 #endif
 
@@ -157,8 +157,8 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
-   const unsigned char ATE[] MEM_TEXT = "Selftest End";
+   const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
+   const unsigned char ATE[] MEM_TEXT = "Test End";
  #endif
 #endif
 
@@ -178,8 +178,8 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
-   const unsigned char ATE[] MEM_TEXT = "Selftest End";
+   const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
+   const unsigned char ATE[] MEM_TEXT = "Test End";
  #endif
 #endif
 #if defined(LANG_DUTCH)                      //dutch
@@ -198,8 +198,8 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
 #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Zelftest mode..";
-   const unsigned char RELPROBE[] MEM2_TEXT = "isolate probe";
-   const unsigned char ATE[] MEM_TEXT = "Zelftest Einde";
+   const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe";
+   const unsigned char ATE[] MEM_TEXT = "Test Einde";
 #endif
 #endif
 
@@ -249,7 +249,7 @@ End of configuration
  const unsigned char KatAn[] MEM_TEXT = {'-', LCD_CHAR_DIODE2, '-',0};
  const unsigned char Dioden[] MEM_TEXT = {'*',LCD_CHAR_DIODE1, ' ', ' ',0};
  const unsigned char Resistor_str[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
- const unsigned char VERSION_str[] MEM_TEXT = "Version 1.03k";
+ const unsigned char VERSION_str[] MEM_TEXT = "Version 1.04k";
 
 
 #ifdef WITH_SELFTEST

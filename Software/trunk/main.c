@@ -19,7 +19,11 @@
 int main(void) {
   //switch on
   ON_DDR = (1<<ON_PIN);
-  ON_PORT = (1<<ON_PIN); 	// switch power on 
+#ifdef PULLUP_DISABLE
+  ON_PORT = (1<<ON_PIN); 		// switch power on 
+#else
+  ON_PORT = (1<<ON_PIN)|(1<<RST_PIN); 	// switch power on , enable internal Pullup for Start-Pin
+#endif
   uint8_t tmp;
   //ADC-Init
   ADCSRA = (1<<ADEN) | AUTO_CLOCK_DIV;	//prescaler=8 or 64 (if 8Mhz clock)
@@ -372,17 +376,31 @@ start:
     } else {
        lcd_fix_string(PNP_str);		//"PNP "
     }
-    if(NumOfDiodes > 2) {	//Transistor with protection diode
-       if(PartMode == PART_MODE_NPN) {
+    if( NumOfDiodes > 2) {	//Transistor with protection diode
+#ifdef EBC_STYLE
+       if(PartMode == PART_MODE_NPN)
+#else
+       if (((PartMode == PART_MODE_NPN) && (trans.c > trans.e)) || ((PartMode != PART_MODE_NPN) && (trans.c < trans.e)))
+#endif
+       {
           lcd_fix_string(AnKat);	//"->|-"
        } else {
           lcd_fix_string(KatAn);	//"-|<-"
        }
     }
+#ifdef EBC_STYLE
     lcd_fix_string(EBC_str);		//" EBC="
     lcd_testpin(trans.e);
     lcd_testpin(trans.b);
     lcd_testpin(trans.c);
+#else
+    lcd_fix_string(N123_str);		//" 123="
+    for (ii=0;ii<3;ii++) {
+        if (ii == trans.e)  lcd_data('E');	// Output Character in right order
+        if (ii == trans.b)  lcd_data('B');
+        if (ii == trans.c)  lcd_data('C');
+    }
+#endif
     lcd_line2(); //2. row 
     lcd_fix_string(hfe_str);		//"B="  (hFE)
     DisplayValue(trans.hfe[0],0,0,3);
@@ -413,13 +431,27 @@ start:
     } else {
        lcd_fix_string(mosfet_str);	//"-MOS "
     }
+#ifdef EBC_STYLE
     lcd_fix_string(GDS_str);		//"GDS="
     lcd_testpin(trans.b);
     lcd_testpin(trans.c);
     lcd_testpin(trans.e);
+#else
+    lcd_fix_string(N123_str);		//" 123="
+    for (ii=0;ii<3;ii++) {
+        if (ii == trans.e)  lcd_data('S');	// Output Character in right order
+        if (ii == trans.b)  lcd_data('G');
+        if (ii == trans.c)  lcd_data('D');
+    }
+#endif
     if((NumOfDiodes > 0) && (PartMode < PART_MODE_N_D_MOS)) {
        //MOSFET with protection diode; only with enhancement-FETs
-       if (PartMode&1) {
+#ifdef EBC_STYLE
+       if (PartMode&1)
+#else
+       if (((PartMode&1) && (trans.c < trans.e)) || ((!(PartMode&1)) && (trans.c > trans.e)))
+#endif
+       {
           lcd_data(LCD_CHAR_DIODE1);	//show Diode symbol >|
        } else {
           lcd_data(LCD_CHAR_DIODE2);	//show Diode symbol |<

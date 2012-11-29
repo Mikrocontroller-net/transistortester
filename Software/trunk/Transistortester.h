@@ -233,8 +233,12 @@ End of configuration
  const unsigned char hfe_str[] MEM_TEXT ="B=";
  const unsigned char NPN_str[] MEM_TEXT = "NPN ";
  const unsigned char PNP_str[] MEM_TEXT = "PNP ";
+#ifdef EBC_STYLE
  const unsigned char EBC_str[] MEM_TEXT = " EBC=";
  const unsigned char GDS_str[] MEM_TEXT = " GDS=";
+#else
+ const unsigned char N123_str[] MEM_TEXT = " 123=";
+#endif
  const unsigned char Uf_str[] MEM_TEXT = "Uf=";
  const unsigned char vt_str[] MEM_TEXT = " Vt=";
  const unsigned char Vgs_str[] MEM_TEXT = "@Vgs=";

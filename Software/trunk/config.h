@@ -449,4 +449,6 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  //define a default zero value for ESR measurement (0.01 Ohm units)
  #define ESR_ZERO 23
 #endif
+// with EBC_STYLE you can select the Pin-description in EBC= style instead of 123=??? style
+//#define EBC_STYLE
 

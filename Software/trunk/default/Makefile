@@ -77,6 +77,10 @@ OP_MHZ = 8
 # the USE_EEPROM option specify where you wish to locate fix text and tables
 CFLAGS += -DUSE_EEPROM
 
+# the old style to present the order of Transistor connection is EBC=, otherwise 123= is used
+# setting the option will save program memory.
+#CFLAGS += -DEBC_STYLE
+
 
 # the PULLUP_DISABLE option disable the pull-up Resistors of IO-Ports
 # to use this option a external pull-up Resistor (10k to 30k)

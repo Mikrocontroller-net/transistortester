@@ -64,8 +64,8 @@ CFLAGS += -DCAP_EMPTY_LEVEL=3
 CFLAGS += -DNO_AREF_CAP
 
 # the OP_MHZ option tells the software the Operating Frequency
-OP_MHZ = 8
-#OP_MHZ = 1
+#OP_MHZ = 8
+OP_MHZ = 1
 
 # the USE_EEPROM option specify where you wish to locate fix text and tables
 CFLAGS += -DUSE_EEPROM

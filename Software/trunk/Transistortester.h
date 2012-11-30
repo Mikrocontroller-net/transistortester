@@ -238,6 +238,7 @@ End of configuration
  const unsigned char GDS_str[] MEM_TEXT = " GDS=";
 #else
  const unsigned char N123_str[] MEM_TEXT = " 123=";
+// const unsigned char N123_str[] MEM_TEXT = " Pin=";
 #endif
  const unsigned char Uf_str[] MEM_TEXT = "Uf=";
  const unsigned char vt_str[] MEM_TEXT = " Vt=";

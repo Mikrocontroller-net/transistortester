@@ -1,17 +1,16 @@
-﻿Datum: 02.11.2012   Test Version Transistortester (AVR) Version 1.02k
+﻿Datum: 01.12.2012   Test Version Transistortester (AVR) Version 1.04k
 
 
 Für alle, die selber experimentieren wollen,hier eine kurze Anleitung,
 wie man die 1Mhz und 8MHz Version selbst erzeugen kann.
-Bei meiner Software handelt es sich um eine "Testversion".
-Selbstverständlich kann ich keine Gewährleistung geben.
+Selbstverständlich kann ich keine Gewährleistung für die Funktionsfähigkeit geben.
 
 Die Software für 8 Mhz Takt und 1 MHz Takt werden mit der gleichen Software
 (Sourcecode ist selbstanpassend!) erzeugt.
 Der 8 MHz Betrieb wird empfohlen, weil alle letzten Tests mit
 dieser Taktrate durchgeführt wurden.
 
-Mit einem Linuy Betriebssystem mit installierten GNU Tools und
+Mit einem Linux Betriebssystem mit installierten GNU Tools und
 installiertem Programm avrdude braucht man nur 4 Schritte
 um einen fertigen ATmega microcontroller zu erhalten.
 
@@ -28,7 +27,7 @@ um einen fertigen ATmega microcontroller zu erhalten.
     über das ISP-Interface in den AVR brennen.
 
 4.) Bei Bedarf mit dem Aufruf "make fuses" den AVR für den Betrieb konfigurieren.
-    Der ISR-Stecker wieder entfernen.
+    Den ISP-Stecker jetzt wieder entfernen.
 
 Für eine Quarz-Oszillator-Betrieb ist es erforderlich einen 8MHz Quarz an Pin 9 und Pin 10
 des AVRs anzuschliessen und anstelle des Aufrufes "make fuses" den Aufruf "make fuses-crystal"
@@ -45,7 +44,8 @@ Induktivitätsmessung ist aber sowieso der 8MHz Betrieb zu bevorzugen.
 Beim Setzen der Clockfrequenz (fuses) bitte äußerst sorgfältig arbeiten, man kann sie 
 sehr leicht so ändern, daß keine (ISP-)Programmierung mehr möglich ist!!!
 
-Ausser dem ATmega8 habe ich eine ATmega168 Version (PARTNO=m168) getestet.
+Ausser einigen ATmega8 (PARTNO=m8) habe ich einige ATmega168 (PARTNO=m168) und
+ATmega328 Versionen (PARTNO=m328) getestet.
 Die Version mit allen Funktionen läuft nur noch auf einem ATmega168 oder ATmega328.
 Ein Wechsel vom ATmega8 auf einen ATmega168 oder ATmega328 ist ohne
 Hardwareänderung möglich.
@@ -63,24 +63,27 @@ Die jeweilige Makefile ist in den Unterverzeichnissen auch vorhanden und kann
 unmittelbar benutzt werden. 
 
 Meine Tests habe ich mit dem Quarz-Oszillator (bestückter Quarz) durchgeführt.
-Ein Betrieb mit 8Mhz RC-Generator sollte aber ebenfalls möglich sein.
+Ein Betrieb mit 8Mhz RC-Generator (ohne Quarz) sollte aber ebenfalls möglich sein.
+Normalerweise sind die Fuses auf 1 Mhz Betrieb voreingestellt.
 Wegen der besseren Auflösung bei der Kapazitätsmessung bevorzuge ich die 8MHz Variante.
 So sind auch die Programmfiles für den ATmega168 für 8MHz Takt erzeugt (Verzeichnis trunk/default)!
-Normalerweise sind die Fuses auf 1 Mhz Betrieb voreingestellt.
 
+Die vorkompilierten Daten für den ATmega168 sind auch auf einem ATmega328 lauffähig!
+
+Benutzung der mega168 oder mega328 Versionen:
+=============================================
 Sie sollten einen Selbsttest mit der Selbstkalibration des Testers durchführen, um bessere
 Meßresultate der Kapazitätsmessung und der Widerstandsmessung zu erreichen,
 besonders mit der AUTOSCALE_ADC Option.
 Für die Selbstkalibration benötigen Sie einen externen Kondensator hoher Güte mit
 wenigstens 100 nF (20 uF maximal).
 Dieser Kondensator muß nach der Messung des Null-Offsets der Kondensatormessung (C0) an
-Pin 1 und Pin 3 des Testers angeschlossen werden.
-
+Pin 1 und Pin 3 des Testers angeschlossen werden, wenn der Text "1--||--3 >100nF" angezeigt wird.
 Der Nulloffset der ESR (Äquivalenter Serieller Widerstand) eines Kondensators wird abgeglichen,
 wenn Sie einen Kondensator mit hoher Kapazität und sehr niedrigem ESR anschließen.
 Der Tester nimmt an, daß ein negativer ESR nicht möglich ist und wird den Nulloffset
 so reduzieren, daß das Ergebnis Null ergibt. Da die Anzeige etwas schwankt, sollte
-dieser Abgleich mehrfach durchgeführt werden.
+dieser Abgleich (Kondensatormessung) mehrfach durchgeführt werden.
 Das Korrektur-Verhalten wird angezeigt durch die Ausgabe des Textes "ESR=0?".
 Der neue Nulloffset bleibt für die nächsten Messungen wirksam, bis der nächste Selbsttest
 den Nulloffset auf den Anfangswert zurücksetzt.
@@ -90,8 +93,8 @@ Die Steckverbindungen, die Platine, das ATmega Exemplar und die Kabelwiderständ
 Einfluß auf das Meßergebnis!
 
 
-Ich bin an Rückmeldungen von mutigen Testern durchaus interessiert, entweder im
+Ich bin an Rückmeldungen von Problemen und Fehlern durchaus interessiert, entweder im
 Forum oder auch direkt per Email (kh_kuebbeler@web.de).
 
-Viele Grüße uns viel Glück
+Viele Grüße und viel Glück
 Karl-Heinz Kübbeler

@@ -378,7 +378,7 @@ keinC:
   //ready
   // switch all ports to input
   ADC_DDR =  TXD_MSK;		// switch all ADC ports to input
-  ADC_PORT = TXD_VAL;		// switch all ADC outputs to GNG, no pull up
+  ADC_PORT = TXD_VAL;		// switch all ADC outputs to GND, no pull up
   R_DDR = 0;			// switch all resistor ports to input
   R_PORT = 0; 			// switch all resistor outputs to GND, no pull up
   return;

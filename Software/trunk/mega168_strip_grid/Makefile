@@ -13,100 +13,113 @@ CFLAGS = -Wall
 
 # ********************** Änderbare Flags zur Configuration des Transistortesters
 # ********************** config options for your Semiconductor tester
-# NOTE: Software will deselect impossible Options for atmega48 automatically!!
-#every changing of this Makefile will result in new compiling the whole
-#programs, if you call make or make upload
+# Every changing of this Makefile will result in new compiling the whole
+# programs, if you call make or make upload.
 
-#select your Part-No. for avrdude :
+# Select your Part-No. for avrdude :
 # atmega8  : m8
 # atmega168: m168 or m168p
 # atmega328: m328 or m328p
 PARTNO = m168
 
-#select your language
-# available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
+# Select your language:
+# Available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
 #                          LANG_DUTCH, LANG_RUSSIAN
 UI_LANGUAGE = LANG_ENGLISH
 
-# the LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset
-# this lcd-display don't have a character for Ohm and for µ (micro)
+# The LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset.
+# This lcd-display don't have a character for Ohm and for µ (micro).
 # Russian language requires a LCD controller with russian characterset and option LCD_CYRILLIC!
 #CFLAGS += -DLCD_CYRILLIC
 
 # Option STRIP_GRID_BOARD selects different board-layout, do not set for standard board!
+# The connection of LCD is totally different for both versions.
 CFLAGS += -DSTRIP_GRID_BOARD
 
-# the WITH_SELFTEST option enables selftest function 
+# The WITH_SELFTEST option enables selftest function (only for mega168 or mega328).
 CFLAGS += -DWITH_SELFTEST
-# AUTO_CAL will enable the autocalibration of zero offset of capacity measurement in selftest section
-# Additionally the port output resistance and correction for low capacity measurement can be done
-# with ATmega168
+
+# AUTO_CAL will enable the autocalibration of zero offset of capacity measurement and
+# also the port output resistance values will be find out in SELFTEST section.
+# With a external capacitor a additionally correction of reference voltage is figured out for 
+# low capacity measurement and also for the AUTOSCALE_ADC measurement.
+# The AUTO_CAL option is only selectable for mega168 and mega328.
 CFLAGS += -DAUTO_CAL
-# FREQUENCY_50HZ enables a 50 Hz frequency generator for up to one minute at the end of selftests
+
+# FREQUENCY_50HZ enables a 50 Hz frequency generator for up to one minute at the end of selftests.
 #CFLAGS += -DFREQUENCY_50HZ
 
 
-# the WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring
+# The WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring.
 CFLAGS += -DWITH_AUTO_REF
-# REF_C_KORR has mV units, greater values gives lower capacity results
+# REF_C_KORR corrects the reference Voltage for capacity measurement (<40uF) and has mV units.
+# Greater values gives lower capacity results.
 CFLAGS += -DREF_C_KORR=12
-CFLAGS += -DC_H_KORR=0
+# REF_L_KORR corrects the reference Voltage for inductance measurement and has mV units.
 CFLAGS += -DREF_L_KORR=50
+# C_H_KORR defines a correction of 0.1% units for big capacitor measurement.
+# Positive values will reduce measurement results.
+CFLAGS += -DC_H_KORR=0
 
-# the WITH_UART option enables the software UART
+# The WITH_UART option enables the software UART  (TTL level output at Pin PC3, 26).
 CFLAGS += -DWITH_UART
 
-# this level defines the empty voltage level for capacitors in mV
+# The CAP_EMPTY_LEVEL  defines the empty voltage level for capacitors in mV.
+# Choose a higher value, if your Tester reports "Cell!" by unloading capacitors.
 CFLAGS += -DCAP_EMPTY_LEVEL=4
 
-# the AUTOSCALE_ADC option enables the autoscale ADC (VCC and Bandgap Ref)
+# The AUTOSCALE_ADC option enables the autoscale ADC (ADC use VCC and Bandgap Ref).
 CFLAGS += -DAUTOSCALE_ADC
 CFLAGS += -DREF_R_KORR=3
 
-# the ESR_ZERO value define the zero value of ESR measurement (units = 0.01 Ohm)
+# The ESR_ZERO value define the zero value of ESR measurement (units = 0.01 Ohm).
 CFLAGS += -DESR_ZERO=29
 
-# NO_AREF_CAP tells your Software, that you have no Capacitor installed at pin AREF (21)
-# this enables a shorter wait-time for AUTOSCALE_ADC function
+# NO_AREF_CAP tells your Software, that you have no Capacitor installed at pin AREF (21).
+# This enables a shorter wait-time for AUTOSCALE_ADC function.
 CFLAGS += -DNO_AREF_CAP
 
-# the OP_MHZ option tells the software the Operating Frequency
+# The OP_MHZ option tells the software the Operating Frequency of your ATmega.
 OP_MHZ = 8
 #OP_MHZ = 1
 
-# the USE_EEPROM option specify where you wish to locate fix text and tables
+# The USE_EEPROM option specify where you wish to locate fix text and tables.
+# If USE_EEPROM is unset, program memory (flash) is taken for fix text and tables.
 CFLAGS += -DUSE_EEPROM
 
-# the old style to present the order of Transistor connection is EBC=, otherwise 123= is used
-# This option will save program memory.
+# Setting EBC_STYPE will select the old style to present the order of Transistor connection (EBC=...).
+# Omitting the option will select the 123=... style.  Every point is replaced by a character identifying 
+# type of connected transistor pin (B=Base, E=Emitter, C=Collector, G=Gate, S=Source, D=Drain).
 #CFLAGS += -DEBC_STYLE
 
 
-# the PULLUP_DISABLE option disable the pull-up Resistors of IO-Ports
-# to use this option a external pull-up Resistor (10k to 30k)
+# The PULLUP_DISABLE option disable the pull-up Resistors of IO-Ports.
+# To use this option a external pull-up Resistor (10k to 30k)
 # from Pin 13 to VCC must be installed!
 CFLAGS += -DPULLUP_DISABLE
 
-# the ANZ_MESS option specifies, how often an ADC value is read and accumulated
-# possible values of ANZ_MESS are 5 to 200
+# The ANZ_MESS option specifies, how often an ADC value is read and accumulated.
+# Possible values of ANZ_MESS are 5 to 200 .
 CFLAGS += -DANZ_MESS=25
 
 
 # The POWER_OFF option enables the power off function, otherwise loop measurements infinitely
 # until power is disconnected with a ON/OFF switch (CFLAGS += -DPOWER_OFF).
-# If you have the tester without the power off transistors, you can deselect POWER_OFF
+# If you have the tester without the power off transistors, you can deselect POWER_OFF .
 # If you have NOT selected the POWER_OFF option with the transistors installed,
 # you can stop measuring by holding the key several seconds after a result is
 # displayed. After releasing the key, the tester will be shut off by timeout.
 # Otherwise you can also specify, after how many measurements without found part
 # the tester will shut down (CFLAGS += -DPOWER_OFF=5).
 # The tester will also shut down with found part,
-# but measurements are allowed double of the specified number.
+# but successfull measurements are allowed double of the specified number.
 #  You can specify up to 255 empty measurements (CFLAGS += -DPOWER_OFF=255).
 CFLAGS += -DPOWER_OFF=5
-# option BAT_CHECK enables the Battery Voltage Check, otherwise output SW Version
-# is only needed for battery powered tester version
+
+# Option BAT_CHECK enables the Battery Voltage Check, otherwise the SW Version is displayed instead of Bat.
+# BAT_CHECK should be set for battery powered tester version.
 CFLAGS += -DBAT_CHECK
+
 # The BAT_OUT option enables Battery Voltage Output on LCD (if BAT_CHECK is selected).
 # If your 9V supply has a diode installed, use the BAT_OUT=600 form to specify the
 # threshold voltage of your diode to adjust the output value.
@@ -122,7 +135,7 @@ CFLAGS += -DBAT_OUT=150
 CFLAGS += -DBAT_POOR=64
 
 
-# select your programmer type and port if you will use avrdude
+# Select your programmer type and port, if you wish to use avrdude.
 PROGRAMMER=avrisp2
 PORT=usb
 # ********************** end of selectable options

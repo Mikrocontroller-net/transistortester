@@ -18,7 +18,12 @@
 //begin of transistortester program
 int main(void) {
   //switch on
+#ifndef EXTREF2PD6
+  // Switch on directly only without the PC4-PD6 connection.
+  // With this connection the PD6 (AIN0) is connected to the external 2.5V reference voltage
+  // and should never be switched to VCC directly.
   ON_DDR = (1<<ON_PIN);
+#endif
 #ifdef PULLUP_DISABLE
   ON_PORT = (1<<ON_PIN); 		// switch power on 
 #else
@@ -48,6 +53,7 @@ int main(void) {
      lcd_fix_string(TestTimedOut);	//Output Timeout
      wait3s();				//wait for 3 s
      ON_PORT = 0;			//shut off!
+     ON_DDR = (1<<ON_PIN);		//switch to GND
      return 0;
   }
   LCDLoadCustomChar(LCD_CHAR_DIODE1);	//Custom-Character Diode symbol
@@ -471,7 +477,7 @@ start:
        lcd_fix_string(Vgs_str);		// " Vgs="
     }
     //Gate-threshold voltage
-    DisplayValue(gthvoltage,-3,'V',2);
+    DisplayValue(gthvoltage,-3,'V',3);
     goto end;
     // end (PartFound == PART_FET)
   } else if (PartFound == PART_THYRISTOR) {
@@ -554,6 +560,9 @@ start:
 //     lcd_fix_string(Capacitor);
      lcd_testpin(cap.ca);		//Pin number 1
      lcd_fix_string(CapZeich);		// capacitor sign
+//#if FLASHEND > 0x1fff
+//     lcd_fix_string(Resistor_str);	// -[=]-
+//#endif
      lcd_testpin(cap.cb);		//Pin number 2
      lcd_line2(); 			//2. row 
      DisplayValue(cap.cval_max,cap.cpre_max,'F',4);
@@ -618,6 +627,7 @@ gakAusgabe:
   // only one Measurement requested, shut off
   wdt_disable();			//Watchdog off
   ON_PORT &= ~(1<<ON_PIN);		//switch off power
+  ON_DDR = (1<<ON_PIN);			//switch to GND
   //never ending loop 
   while(1) {
      if(!(ON_PIN_REG & (1<<RST_PIN))) {

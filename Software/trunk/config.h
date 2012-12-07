@@ -452,3 +452,7 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 // with EBC_STYLE you can select the Pin-description in EBC= style instead of 123=??? style
 //#define EBC_STYLE
 
+// EXTREF2PD6 specifies, that the external 2.5V reference is additionally connected to PD6 (AIN0)
+// The Shut Off function is not yet compatible with this approach. 
+// Alternative function of Gate threshold voltage measurement is implemented for test purpose only.
+//#define EXTREF2PD6

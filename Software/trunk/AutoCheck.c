@@ -279,6 +279,36 @@ no_c0save:
         lcd_fix_string(REF_C_str);	// "REF_C="
         lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
         eeprom_write_byte((uint8_t *)(&EE_ESR_ZERO), (uint8_t)ESR_ZERO); // set to initial zero offset
+#if 0
+//#######################################
+        // Test for switching level of the digital input of port TP3
+        for (ii=0;ii<8;ii++) {
+        ADC_PORT =  TXD_VAL;	//ADC-Port 1 to GND
+        ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
+        R_PORT = 2<<(TP3*2);		//Pin 3 over R_H to VCC
+        R_DDR = 2<<(TP3*2);		//Pin 3 over R_H to VCC
+        while (1) {
+           wdt_reset();
+           if ((ADC_PIN&(1<<TP3)) == (1<<TP3)) break;
+        }
+        R_DDR = 0;		//Pin 3 without current
+        R_PORT = 0;
+        adcmv[0] = ReadADC(TP3);
+        lcd_line3();
+        DisplayValue(adcmv[0],-3,'V',4);
+        R_DDR = 2<<(TP3*2);		//Pin 3 over R_H to GND
+        while (1) {
+           wdt_reset();
+           if ((ADC_PIN&(1<<TP3)) != (1<<TP3)) break;
+        }
+        R_DDR = 0;		//Pin 3 without current
+        lcd_line4();
+        adcmv[0] = ReadADC(TP3);
+        DisplayValue(adcmv[0],-3,'V',4);
+        wait1s();
+        }
+//#######################################
+#endif
  #ifdef AUTOSCALE_ADC
         ADC_PORT =  TXD_VAL;	//ADC-Port 1 to GND
         ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V

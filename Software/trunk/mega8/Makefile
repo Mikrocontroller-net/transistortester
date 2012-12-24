@@ -336,7 +336,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Objects that must be built in order to link
-OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o swuart.o wait1000ms.o CombineToLong.o ReadCapacity.o ReadInductance.o ReadADC.o GetESR.o
+OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o swuart.o wait1000ms.o ReadCapacity.o ReadInductance.o ReadADC.o GetESR.o
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -371,9 +371,6 @@ swuart.o: ../swuart.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 wait1000ms.o: ../wait1000ms.S Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-CombineToLong.o: ../CombineToLong.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link

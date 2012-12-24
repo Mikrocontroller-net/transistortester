@@ -31,8 +31,6 @@
 #include "config.h"
 #include "Transistortester.h"
 
-unsigned long CombineII2Long( unsigned int ovcnt16, unsigned int tmpcnt); //tricky function to build unsigned long from two unsigned int values
-
 
 //=================================================================
 void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
@@ -165,8 +163,8 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
  #endif
      goto keinC; //implausible, not yet the half voltage
   }
-  cap.cval_uncorrected = ovcnt16 + 1;
-  cap.cval_uncorrected *= getRLmultip(adcv[2]);		// get factor to convert time to capacity from table
+  cap.cval_uncorrected.dw = ovcnt16 + 1;
+  cap.cval_uncorrected.dw *= getRLmultip(adcv[2]);		// get factor to convert time to capacity from table
 #else
   // wait the same time which is required for loading
   for (tmpint=0;tmpint<=ovcnt16;tmpint++) {
@@ -194,11 +192,11 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
  #endif
      goto keinC;			// capacitor does not keep the voltage about 5ms
   }
-  cap.cval_uncorrected = ovcnt16 + 1;
+  cap.cval_uncorrected.dw = ovcnt16 + 1;
   // compute factor with load voltage + lost voltage during the voltage load time
-  cap.cval_uncorrected *= getRLmultip(adcv[2]+adcv[3]);	// get factor to convert time to capacity from table
+  cap.cval_uncorrected.dw *= getRLmultip(adcv[2]+adcv[3]);	// get factor to convert time to capacity from table
 #endif
-   cap.cval = cap.cval_uncorrected;	// set result to uncorrected
+   cap.cval = cap.cval_uncorrected.dw;	// set result to uncorrected
    Scale_C_with_vcc();
    // cap.cval for this type is at least 40000nF, so the last digit will be never shown
    cap.cval *= (1000 - C_H_KORR);	// correct with C_H_KORR with 0.1% resolution, but prevent overflow
@@ -283,16 +281,18 @@ messe_mit_rh:
   if (ovcnt16 >= (F_CPU/10000)) {
      goto keinC;	// no normal end
   }
-  cap.cval_uncorrected = CombineII2Long(ovcnt16, tmpint);
+//  cap.cval_uncorrected = CombineII2Long(ovcnt16, tmpint);
+  cap.cval_uncorrected.w[1] = ovcnt16;
+  cap.cval_uncorrected.w[0] = tmpint;
 
   cap.cpre = -12;			// cap.cval unit is pF 
   if (ovcnt16 > 65) {
-     cap.cval_uncorrected /= 100;	// switch to next unit
+     cap.cval_uncorrected.dw /= 100;	// switch to next unit
      cap.cpre += 2;			// set unit, prevent overflow
   }
-  cap.cval_uncorrected *= RHmultip;		// 708
-  cap.cval_uncorrected /= (F_CPU / 10000);	// divide by 100 (@ 1MHz clock), 800 (@ 8MHz clock)
-  cap.cval = cap.cval_uncorrected;		// set the corrected cap.cval
+  cap.cval_uncorrected.dw *= RHmultip;		// 708
+  cap.cval_uncorrected.dw /= (F_CPU / 10000);	// divide by 100 (@ 1MHz clock), 800 (@ 8MHz clock)
+  cap.cval = cap.cval_uncorrected.dw;		// set the corrected cap.cval
   Scale_C_with_vcc();
   if (cap.cpre == -12) {
 #if COMP_SLEW1 > COMP_SLEW2

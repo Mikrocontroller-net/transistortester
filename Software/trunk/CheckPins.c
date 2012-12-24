@@ -268,7 +268,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
               if((adc.lp_otr < 97) && (adc.lp1 > 2000)) {
                  //is flow voltage low enough in the closed  state?
                  //(since D-Mode-FET would be by mistake detected as E-Mode )
-        	 PartFound = PART_FET;		//P-Kanal-MOSFET if found (Basis/Gate moves not to VCC)
+        	 PartFound = PART_FET;		//P-Kanal-MOSFET is found (Basis/Gate moves not to VCC)
         	 PartMode = PART_MODE_P_E_MOS;
         	 //measure the Gate threshold voltage
 #ifdef EXTREF2PD6
@@ -305,6 +305,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         	    ChargePin10ms(TriPinRL,1);
                     R_DDR = LoPinRL | TriPinRH;		//switch R_H for Tristate-Pin (Basis) to GND
         	    while (!(ADC_PIN&PinMSK));		// Wait, until the MOSFET switches and Drain moves to VCC
+                    			// 1 is detected with more than 2.5V (up to 2.57V) with tests of mega168 and mega328
         	    R_DDR = LoPinRL;
         	    ADCSRA |= (1<<ADSC);		// Start Conversion
         	    while (ADCSRA&(1<<ADSC));		// wait
@@ -526,6 +527,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
                 R_DDR = HiPinRL | TriPinRH;	// slowly charge Gate 
                 R_PORT = HiPinRL | TriPinRH;
             	while ((ADC_PIN&PinMSK));	// Wait, until the MOSFET switch and Drain moved to low 
+                		// 0 is detected with input voltage of 2.12V to 2.24V (tested with mega168 & mega328)
                 R_DDR = HiPinRL;		// switch off current
             	ADCSRA |= (1<<ADSC);		// start ADC conversion
             	while (ADCSRA&(1<<ADSC));	// wait until ADC finished

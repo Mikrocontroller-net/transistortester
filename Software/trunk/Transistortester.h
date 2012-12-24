@@ -475,7 +475,10 @@ COMMON uint8_t ii;			// multipurpose counter
 COMMON struct cap_t {
   unsigned long cval;		// capacitor value 
   unsigned long cval_max;	//capacitor with maximum value
-  unsigned long cval_uncorrected;	// capacity value without corrections
+  union t_combi{
+  unsigned long dw;	// capacity value without corrections
+  uint16_t w[2];
+  } cval_uncorrected;
 #if FLASHEND > 0x1fff
   unsigned int esr;		// serial resistance of C in 0.01 Ohm
 #endif

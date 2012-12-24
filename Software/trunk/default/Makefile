@@ -20,7 +20,7 @@ CFLAGS = -Wall
 # atmega8  : m8
 # atmega168: m168 or m168p
 # atmega328: m328 or m328p
-PARTNO = m168
+PARTNO = m328p
 
 # Select your language:
 # Available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
@@ -47,7 +47,7 @@ CFLAGS += -DWITH_SELFTEST
 CFLAGS += -DAUTO_CAL
 
 # FREQUENCY_50HZ enables a 50 Hz frequency generator for up to one minute at the end of selftests.
-#CFLAGS += -DFREQUENCY_50HZ
+CFLAGS += -DFREQUENCY_50HZ
 
 
 # The WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring.
@@ -114,7 +114,8 @@ CFLAGS += -DANZ_MESS=25
 # The tester will also shut down with found part,
 # but successfull measurements are allowed double of the specified number.
 #  You can specify up to 255 empty measurements (CFLAGS += -DPOWER_OFF=255).
-CFLAGS += -DPOWER_OFF=5
+#CFLAGS += -DPOWER_OFF=5
+CFLAGS += -DPOWER_OFF
 
 # Option BAT_CHECK enables the Battery Voltage Check, otherwise the SW Version is displayed instead of Bat.
 # BAT_CHECK should be set for battery powered tester version.
@@ -333,7 +334,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Objects that must be built in order to link
-OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o swuart.o wait1000ms.o CombineToLong.o ReadCapacity.o ReadInductance.o ReadADC.o GetESR.o
+OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o swuart.o wait1000ms.o ReadCapacity.o ReadInductance.o ReadADC.o GetESR.o
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -368,9 +369,6 @@ swuart.o: ../swuart.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 wait1000ms.o: ../wait1000ms.S Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-CombineToLong.o: ../CombineToLong.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link

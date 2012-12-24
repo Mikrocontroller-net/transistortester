@@ -165,14 +165,19 @@ start:
   DisplayValue(cap.cval,-2,'V',2);		// Display 2 Digits of this 10mV units
   lcd_space();
  #endif
+ #if (BAT_POOR > 120)
+   #warning "Battery POOR level is set very high!"
+ #endif
+ #if (BAT_POOR < 25)
+   #warning "Battery POOR level is set very low!"
+ #endif
  #if (BAT_POOR > 52) && (BAT_POOR < 190)
  #define WARN_LEVEL (((unsigned long)(BAT_POOR*100+1000)*(unsigned long)33)/133)
- #define POOR_LEVEL (((unsigned long)(BAT_POOR*100)*(unsigned long)33)/133)
  #else
- #warning "Battery POOR level is set for 7805 regulator"
- #define WARN_LEVEL (((unsigned long)7300*(unsigned long)33)/133)
- #define POOR_LEVEL (((unsigned long)6300*(unsigned long)33)/133)
+ #warning "Battery POOR level is set for stepup regulator"
+ #define WARN_LEVEL (((unsigned long)(BAT_POOR*100+500)*(unsigned long)33)/133)
  #endif
+ #define POOR_LEVEL (((unsigned long)(BAT_POOR*100)*(unsigned long)33)/133)
   // check the battery voltage
   if (trans.uBE[0] <  WARN_LEVEL) {
      //Vcc < 7,3V; show Warning 

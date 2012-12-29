@@ -117,7 +117,8 @@ CFLAGS += -DANZ_MESS=44
 # The tester will also shut down with found part,
 # but successfull measurements are allowed double of the specified number.
 #  You can specify up to 255 empty measurements (CFLAGS += -DPOWER_OFF=255).
-CFLAGS += -DPOWER_OFF=5
+#CFLAGS += -DPOWER_OFF=5
+CFLAGS += -DPOWER_OFF
 
 # Option BAT_CHECK enables the Battery Voltage Check, otherwise the SW Version is displayed instead of Bat.
 # BAT_CHECK should be set for battery powered tester version.

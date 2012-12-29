@@ -378,8 +378,7 @@ End of configuration
 // defines for the WITH_UART option
 /*
 With define SWUART_INVERT you can specify, if the software-UART operates normal or invers.
-In der normalen Betriebsart sendet der UART in der üblichen Logik (Low = 0; High = 1).
-n the normal mode the UART sends with usual logik level (Low = 0; High = 1).
+in the normal mode the UART sends with usual logik level (Low = 0; High = 1).
 You can use this mode for direct connection to a µC, or a level converter like MAX232.
 
 With invers mode the UART sends with invers logik (Low = 1, High = 0).
@@ -412,12 +411,36 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  #else
   #define ADC_internal_reference (2560 + REF_R_KORR)
  #endif
+ // save memory, do not use the sleep mode
+ #define wait_about5ms() wait5ms()
+ #define wait_about10ms() wait10ms()
+ #define wait_about20ms() wait20ms()
+ #define wait_about50ms() wait50ms()
+ #define wait_about200ms() wait200ms()
+ #define wait_about300ms() wait300ms()
+ #define wait_about400ms() wait400ms()
+ #define wait_about500ms() wait500ms()
+ #define wait_about1s() wait1s()
+ #define wait_about2s() wait2s()
+ #define wait_about4s() wait4s()
 #else
  #ifdef AUTO_CAL
   #define ADC_internal_reference (ref_mv + (int8_t)eeprom_read_byte((uint8_t *)&RefDiff))
  #else
   #define ADC_internal_reference (ref_mv + REF_R_KORR)
  #endif
+ // use sleep mode to save current for user interface
+ #define wait_about5ms() sleep_5ms(1)
+ #define wait_about10ms() sleep_5ms(2)
+ #define wait_about20ms() sleep_5ms(4)
+ #define wait_about50ms() sleep_5ms(10)
+ #define wait_about200ms() sleep_5ms(40)
+ #define wait_about300ms() sleep_5ms(60)
+ #define wait_about400ms() sleep_5ms(80)
+ #define wait_about500ms() sleep_5ms(100)
+ #define wait_about1s() sleep_5ms(200)
+ #define wait_about2s() sleep_5ms(400)
+ #define wait_about4s() sleep_5ms(800)
 #endif
 
 #undef AUTO_RH

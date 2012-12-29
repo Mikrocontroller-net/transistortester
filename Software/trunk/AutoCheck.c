@@ -47,7 +47,7 @@ void AutoCheck(void) {
 #ifdef WITH_SELFTEST
   lcd_clear();
   lcd_fix2_string(SELFTEST);		// "Selftest mode.."
-  wait1s();
+  wait_about1s();
  #define TEST_COUNT 7
  
   for(tt=1;tt<TEST_COUNT;tt++) {		// loop for all Tests
@@ -152,14 +152,14 @@ void AutoCheck(void) {
 	   // if key is pressed, don't repeat
            break;
         }
-        wait500ms();
+        wait_about500ms();
         if(!(ON_PIN_REG & (1<<RST_PIN))) {
 	   // if key is pressed, don't repeat
            break;
         }
-        wait500ms();
+        wait_about500ms();
      } //end for ww
-     wait1s();
+     wait_about1s();
   } //end for tt
 #endif
 
@@ -208,7 +208,7 @@ void AutoCheck(void) {
   lcd_line2();
   lcd_fix_string(RILO);	// "RiLo="
   DisplayValue(pin_rm,-1,LCD_CHAR_OMEGA,3);
-  wait2s();			//wait 2 seconds
+  wait_about2s();			//wait 2 seconds
 #ifdef AUTO_CAL
   if ((pin_rp < 280) && (pin_rm < 250)) {
      // rp is below 28 Ohm and rm is below 25 Ohm
@@ -249,7 +249,7 @@ void AutoCheck(void) {
   lcd_fix_string(OK_str);		// output "OK"
 no_c0save:
 #endif
- wait2s();		//wait 2 seconds
+ wait_about2s();		//wait 2 seconds
  
 #ifdef AUTO_CAL
  // Message C > 100nF
@@ -305,7 +305,7 @@ no_c0save:
         lcd_line4();
         adcmv[0] = ReadADC(TP3);
         DisplayValue(adcmv[0],-3,'V',4);
-        wait1s();
+        wait_about1s();
         }
 //#######################################
 #endif
@@ -331,13 +331,13 @@ no_c0save:
         (void) eeprom_write_byte((uint8_t *)(&RefDiff), (uint8_t)udiff2);	// hold offset for true reference Voltage
         lcd_string(itoa(udiff2, outval, 10));	//output correction voltage
  #endif
-        wait4s();
+        wait_about4s();
         break;
      }
      lcd_line2();
      DisplayValue(cap.cval,cap.cpre,'F',4);
-     wait200ms();			// wait additional time
-  }
+     wait_about200ms();			// wait additional time
+  } // end for ww
 
 #endif
 
@@ -356,8 +356,10 @@ no_c0save:
      for (ii=0;ii<100;ii++) {	// for 2 s generate 50 Hz
          R_PORT = (1<<(TP2*2));	// Pin 2 over R_L to VCC, Pin 3 over R_L to GND
          wait10ms();
+//         sleep_5ms(2); 	// test of timing of sleep mode call  (instead of wait10ms() )
          R_PORT = (1<<(TP3*2));	// Pin 3 over R_L to VCC, Pin 2 over R_L to GND
          wait10ms();
+//         sleep_5ms(2); 	// test of timing of sleep mode call  (instead of wait10ms() )
          wdt_reset();
      }
      if (!(ON_PIN_REG & (1<<RST_PIN))) {
@@ -367,6 +369,6 @@ no_c0save:
   }
 #endif
  PartFound = PART_NONE;
- wait1s();			//wait 1 seconds
+ wait_about1s();			//wait 1 seconds
  } 
  

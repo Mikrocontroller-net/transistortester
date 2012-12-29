@@ -66,14 +66,14 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 //     lcd_data('p');
 //     lcd_space();
 //     DisplayValue(cap.cval,cap.cpre,'F',3);
-//     wait2s();
+//     wait_about2s();
 //#endif
 //     return;	//We have found a capacitor already
 //  }
   if(PartFound == PART_RESISTOR) {
 #if DebugOut == 10
      lcd_data('R');
-     wait2s();
+     wait_about2s();
 #endif
      return;	//We have found a resistor already 
   }
@@ -81,7 +81,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      if ((diodes[ii].Cathode == LowPin) && (diodes[ii].Anode == HighPin) && (diodes[ii].Voltage < 1500)) {
 #if DebugOut == 10
         lcd_data('D');
-        wait2s();
+        wait_about2s();
 #endif
         return;
      }
@@ -153,13 +153,13 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   lcd_data(':');
   lcd_string(utoa(adcv[3],outval,10));
   lcd_space();
-  wait2s();
+  wait_about2s();
  #endif
   if ((adcv[3] + adcv[3]) < adcv[2]) {
  #if DebugOut == 10
      lcd_data('H');
      lcd_space();
-     wait1s();
+     wait_about1s();
  #endif
      goto keinC; //implausible, not yet the half voltage
   }
@@ -188,7 +188,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
  #if DebugOut == 10
      lcd_data('L');
      lcd_space();
-     wait1s();
+     wait_about1s();
  #endif
      goto keinC;			// capacitor does not keep the voltage about 5ms
   }
@@ -212,7 +212,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
    DisplayValue(cap.cval,cap.cpre,'F',4);
    lcd_space();
    lcd_string(utoa(ovcnt16,outval,10));
-   wait3s();
+   wait_about3s();
 #endif
    goto checkDiodes;
 
@@ -329,7 +329,7 @@ messe_mit_rh:
   lcd_testpin(HighPin);
   lcd_space();
   DisplayValue(cap.cval,cap.cpre,'F',4);
-  wait3s();
+  wait_about3s();
 #endif
   R_DDR = HiPinR_L; 		//switch R_L for High-Pin to GND
 #if F_CPU < 2000001
@@ -342,7 +342,7 @@ messe_mit_rh:
 #if DebugOut == 10
      lcd_data('<');
      lcd_space();
-     wait1s();
+     wait_about1s();
 #endif
       goto keinC;	//capacity to low, < 70pF @1MHz (35pF @8MHz)
    }
@@ -357,7 +357,7 @@ checkDiodes:
 #if DebugOut == 10
       lcd_data('D');
       lcd_space();
-      wait1s();
+      wait_about1s();
 #endif
       // nearly shure, that there is one or more diodes in reverse direction,
       // which would be wrongly detected as capacitor 

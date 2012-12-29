@@ -181,7 +181,7 @@ void ReadInductance(void) {
         wdt_reset();
      }  //end for count
      ADC_PORT = TXD_VAL;		// switch ADC Port to GND
-     wait20ms();
+     wait_about20ms();
      if (inductance[1] > inductance[0]) {
         resis[found].lx = inductance[1];	// use value found with delayed counter start
      } else {

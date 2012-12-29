@@ -20,7 +20,7 @@ CFLAGS = -Wall
 # atmega8  : m8
 # atmega168: m168 or m168p
 # atmega328: m328 or m328p
-PARTNO = m328p
+PARTNO = m168
 
 # Select your language:
 # Available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
@@ -47,7 +47,7 @@ CFLAGS += -DWITH_SELFTEST
 CFLAGS += -DAUTO_CAL
 
 # FREQUENCY_50HZ enables a 50 Hz frequency generator for up to one minute at the end of selftests.
-CFLAGS += -DFREQUENCY_50HZ
+#CFLAGS += -DFREQUENCY_50HZ
 
 
 # The WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring.

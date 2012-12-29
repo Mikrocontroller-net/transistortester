@@ -15,6 +15,11 @@
 #define MAIN_C
 #include "Transistortester.h"
 
+#ifndef __AVR_ATmega8__
+  // prepare sleep mode
+  EMPTY_INTERRUPT(TIMER2_COMPA_vect);
+#endif
+
 //begin of transistortester program
 int main(void) {
   //switch on
@@ -41,6 +46,19 @@ int main(void) {
   tmp = (WDRF_HOME & (1<<WDRF));	// save Watch Dog Flag
   WDRF_HOME &= ~(1<<WDRF);	 	//reset Watch Dog flag
   wdt_disable();			// disable Watch Dog
+#ifndef __AVR_ATmega8__
+  // switch off unused Parts
+  PRR = (1<<PRTWI) | (1<<PRTIM0) | (1<<PRSPI) | (1<<PRUSART0);
+  DIDR0 = (1<<ADC5D) | (1<<ADC4D) | (1<<ADC3D);	
+  TCCR2A = (0<<WGM21) | (0<<WGM20);		// Counter 2 normal mode
+ #if F_CPU == 1000000UL
+  TCCR2B = (1<<CS22) | (0<<CS21) | (1<<CS20);	//prescaler 128, 128us
+ #endif 
+ #if F_CPU == 8000000UL
+  TCCR2B = (1<<CS22) | (1<<CS21) | (1<<CS20);	//prescaler 1024, 128us
+ #endif 
+  sei();				// enable interrupts
+#endif
   lcd_init();				//initialize LCD
 	
 //  ADC_PORT = TXD_VAL;
@@ -91,7 +109,7 @@ int main(void) {
   display_time = OFF_WAIT_TIME;		// LONG_WAIT_TIME for single mode, else SHORT_WAIT_TIME
   if (!(ON_PIN_REG & (1<<RST_PIN))) {
      // if power button is pressed ...
-     wait300ms();			// wait to catch a long key press
+     wait_about300ms();			// wait to catch a long key press
      if (!(ON_PIN_REG & (1<<RST_PIN))) {
         // check if power button is still pressed
         display_time = LONG_WAIT_TIME;	// ... set long time display anyway
@@ -184,7 +202,7 @@ start:
      if(trans.uBE[0] < POOR_LEVEL) {	
         //Vcc <6,3V; no proper operation is possible
         lcd_fix_string(BatEmpty);	//Battery empty!
-        wait2s();
+        wait_about2s();
         PORTD = 0;			//switch power off
         return 0;
      }
@@ -209,7 +227,7 @@ start:
      lcd_line2();
      lcd_fix_string(VCC_str);		// VCC=
      DisplayValue(ADCconfig.U_AVCC,-3,'V',3);	// Display 3 Digits of this mV units
-     wait1s();
+     wait_about1s();
   }
 #endif
 
@@ -607,16 +625,16 @@ gakAusgabe:
 
  end2:
   while(!(ON_PIN_REG & (1<<RST_PIN)));	//wait ,until button is released
-  wait200ms();
-// wait 10 seconds or 3 seconds (if repeat function)
-  for(gthvoltage = 0;gthvoltage<display_time;gthvoltage++) {
+  wait_about200ms();
+// wait 14 seconds or 5 seconds (if repeat function)
+  for(gthvoltage = 0;gthvoltage<display_time;gthvoltage+=5) {
      if(!(ON_PIN_REG & (1<<RST_PIN))) {
         // If the key is pressed again... 
         // goto start of measurement 
         goto start;
      }
      wdt_reset();
-     wait1ms();
+     wait_about10ms();
   }
 #ifdef POWER_OFF
  #if POWER_OFF > 127
@@ -909,6 +927,41 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
   if (Unit) lcd_data(Unit);
 }
 
+#ifndef __AVR_ATmega8__
+/* set the processor to sleep state */
+/* wake up will be done with compare match interrupt of counter 2 */
+void sleep_5ms(uint16_t pause){
+// pause is the delay in 5ms units
+uint8_t t2_offset;
+
+while (pause > 0)
+  {
+#if F_CPU >= 8000000UL
+   if (pause > 1)
+     {
+      // Startup time is too long with 1MHz Clock!!!!
+      t2_offset =  (10000 - (16384 / (int)(F_CPU / 1000000UL))) / 128;	/* set to 10ms above the actual counter */
+      pause -= 2;
+     } else {
+      t2_offset =  (5000 - (16384 / (int)(F_CPU / 1000000UL))) / 128;	/* set to 5ms above the actual counter */
+      pause = 0;
+     }
+   
+   OCR2A = TCNT2 + t2_offset;	/* set the compare value */
+   TIMSK2 = (0<<OCIE2B) | (1<<OCIE2A) | (0<<TOIE2); /* enable output compare match A interrupt */ 
+//   set_sleep_mode(SLEEP_MODE_PWR_SAVE);
+   set_sleep_mode(SLEEP_MODE_PWR_SAVE);
+//   set_sleep_mode(SLEEP_MODE_IDLE);
+   sleep_mode();
+// wake up after output compare match interrupt
+#else
+   wait5ms();
+#endif
+   wdt_reset();
+  }
+TIMSK2 = (0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2); /* disable output compare match A interrupt */ 
+}
+#endif
 
 #ifdef CHECK_CALL
  #include "AutoCheck.c"

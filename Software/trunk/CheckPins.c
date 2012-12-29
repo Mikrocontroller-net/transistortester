@@ -99,7 +99,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      lcd_data('F');
      lcd_testpin(HighPin);
      lcd_space();
-     wait1s();
+     wait_about1s();
 #endif
      //Test if N-JFET or if self-conducting N-MOSFET
      R_DDR = LoPinRL | TriPinRH;	//switch R_H for Tristate-Pin (probably Gate) to GND
@@ -214,7 +214,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      lcd_data('P');
      lcd_testpin(HighPin);
      lcd_space();
-     wait1s();
+     wait_about1s();
 #endif
      //Test to PNP
      R_DDR = LoPinRL | TriPinRL;	//switch R_L port for Tristate-Pin to output (GND), for Test of PNP
@@ -353,7 +353,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        lcd_data('T');
        lcd_data('P');
        lcd_string(utoa(adc.tp1,outval,10));
-       wait1s();
+       wait_about1s();
 #endif
 #endif
     //Tristate (can be Base) to VCC, Test if NPN
@@ -369,7 +369,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        lcd_data('N');
        lcd_testpin(HighPin);
        lcd_space();
-       wait1s();
+       wait_about1s();
 #endif
        if(PartReady==1) {
           goto widmes;
@@ -427,7 +427,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
       // ADC_DDR = LoADCm;	//Low-Pin to output 0V
       R_DDR = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to output
       R_PORT = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to VCC
-      wait50ms();
+      wait_about50ms();
       adc.hp2 = ADCconfig.U_AVCC - ReadADC(HighPin);	//measure the voltage at the collector resistor 
       adc.tp2 = ADCconfig.U_AVCC - ReadADC(TristatePin);	//measure the voltage at the base resistor 
 
@@ -489,7 +489,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
             lcd_line3();
             lcd_data('N');
             lcd_data('F');
-            wait1s();
+            wait_about1s();
 #endif
 #ifdef EXTREF2PD6
             // Switching of Drain is monitored with the analog comparator to 2.5V
@@ -594,7 +594,7 @@ savenresult:
   lcd_data('H');
   lcd_string(utoa(adc.hp3,outval,10));
   lcd_space();
-  wait1s();
+  wait_about1s();
 #endif
 
   if((adc.hp1 > 150) && (adc.hp1 < 4640) && (adc.hp1 > (adc.hp3+(adc.hp3/8))) && (adc.hp3*8 > adc.hp1)) {
@@ -849,7 +849,7 @@ widmes:
 #endif
 #ifdef DebugOut
 #if DebugOut < 10
-  wait2s();
+  wait_about2s();
 #endif
 #endif
  clean_ports:

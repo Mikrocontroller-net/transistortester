@@ -427,7 +427,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
       // ADC_DDR = LoADCm;	//Low-Pin to output 0V
       R_DDR = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to output
       R_PORT = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to VCC
-      wait_about50ms();
+      wait50ms();
       adc.hp2 = ADCconfig.U_AVCC - ReadADC(HighPin);	//measure the voltage at the collector resistor 
       adc.tp2 = ADCconfig.U_AVCC - ReadADC(TristatePin);	//measure the voltage at the base resistor 
 

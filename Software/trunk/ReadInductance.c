@@ -78,7 +78,7 @@ void ReadInductance(void) {
         ovcnt16 = 0;
         TCCR1A = 0;			// set Counter1 to normal Mode
         TCNT1 = 0;			//set Counter to 0
-        TI1_INT_FLAGS = (1<<ICF1) | (1<<OCF1B) | (1<<OCF1A) | (1<<TOV1);	// mega88
+        TI1_INT_FLAGS = (1<<ICF1) | (1<<OCF1B) | (1<<OCF1A) | (1<<TOV1);	// reset TIFR or TIFR1
         HiADC |= TXD_VAL;
         wait200us();			// wait for bandgap to start up
         if ((count & 0x01) == 0 ) {
@@ -159,7 +159,7 @@ void ReadInductance(void) {
            tmpint += REF_L_KORR;
            if (cap.cval_uncorrected.dw > CNT_ZERO_720) cap.cval_uncorrected.dw -= CNT_ZERO_720;
            else          cap.cval_uncorrected.dw = 0;
-           if (cap.cval > 12) cap.cval_uncorrected.dw -= 1;
+           if (cap.cval_uncorrected.dw > 12) cap.cval_uncorrected.dw -= 1;
         }
         if ((count&0x01) == 1) {
            // second pass with delayed counter start

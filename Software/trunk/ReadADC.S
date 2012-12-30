@@ -11,7 +11,7 @@
 ;// ACALL is defined in config.h as rcall for ATmega8 and as call for ATmega168
 
 
-;unsigned int igned int W20msReadADC(uint8_t Probe) {
+;unsigned int W20msReadADC(uint8_t Probe) {
 W20msReadADC:
   ACALL wait10ms
 W10msReadADC:

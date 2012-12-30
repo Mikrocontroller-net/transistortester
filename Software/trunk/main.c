@@ -18,6 +18,7 @@
 #ifndef __AVR_ATmega8__
   // prepare sleep mode
   EMPTY_INTERRUPT(TIMER2_COMPA_vect);
+  EMPTY_INTERRUPT(ADC_vect);
 #endif
 
 //begin of transistortester program

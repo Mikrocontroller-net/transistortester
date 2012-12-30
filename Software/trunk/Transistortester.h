@@ -264,6 +264,7 @@ End of configuration
  const unsigned char RH1H[] MEM2_TEXT = "RH+";
  const unsigned char RLRL[] MEM2_TEXT = "+RL- 12 13 23";
  const unsigned char RHRH[] MEM2_TEXT = "+RH- 12 13 23";
+ const unsigned char RHRL[] MEM2_TEXT = "RH/RL";
  #define LCD_CLEAR
 #endif
  

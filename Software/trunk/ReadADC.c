@@ -31,8 +31,14 @@ sample:
 #else
     wait300us(); /* time for voltage stabilization */
 #endif
+#ifdef __AVR_ATmega8__
     ADCSRA |= (1 << ADSC); /* start conversion */
     while (ADCSRA & (1 << ADSC)); /* wait until conversion is done */
+#else
+    ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV; //enable ADC and Interrupt
+    set_sleep_mode(SLEEP_MODE_ADC);
+    sleep_mode();
+#endif
     ADCconfig.RefFlag = Samples; /* update flag */
  }
 #endif
@@ -70,14 +76,14 @@ sample:
 //   return ((unsigned int)(Value / (1023 * (unsigned long)ADCconfig.Samples)));
 }
 unsigned int W5msReadADC (uint8_t Probe) {
-  wait5ms();
+  wait_about5ms();
   return (ReadADC(Probe));
 }
 unsigned int W10msReadADC (uint8_t Probe) {
-  wait10ms();
+  wait_about10ms();
   return (ReadADC(Probe));
 }
 unsigned int W20msReadADC (uint8_t Probe) {
-  wait20ms();
+  wait_about20ms();
   return (ReadADC(Probe));
 }

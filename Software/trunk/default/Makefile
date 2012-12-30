@@ -356,7 +356,7 @@ ReadCapacity.o: ../ReadCapacity.c Makefile
 ReadInductance.o: ../ReadInductance.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-ReadADC.o: ../ReadADC.S Makefile
+ReadADC.o: ../ReadADC.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 GetESR.o: ../GetESR.c Makefile

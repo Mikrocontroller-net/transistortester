@@ -205,7 +205,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   R_PORT = 0;			//switch all resistor ports to GND
   ADC_DDR = HiADCm;		//switch High-Pin to output
   ADC_PORT = HiADCp;		//switch High-Pin to VCC
-  wait5ms();
+  wait_about5ms();
   
   if(adc.lp_otr < 977) {
      //if the component has no connection between  HighPin and LowPin
@@ -383,7 +383,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 					// no Thyristor or holding current to low 
 		 	
        R_PORT = 0;			//switch R_L for High-Pin (probably Anode) to GND (turn off)
-       wait5ms();
+       wait_about5ms();
        R_PORT = HiPinRL;		//switch R_L for High-Pin (probably Anode) again to VCC
        adc.hp2 = W5msReadADC(HighPin);	//measure voltage at the High-Pin (probably Anode) again
        if((adc.hp3 < 1600) && (adc.hp2 > 4400)) {
@@ -394,7 +394,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
           R_DDR = 0;
           R_PORT = 0;
           ADC_PORT = LoADCp;	//Low-Pin fix to VCC
-          wait5ms();
+          wait_about5ms();
           R_DDR = HiPinRL;		//switch R_L port HighPin to output (GND)
           if(W5msReadADC(HighPin) > 244) {
              goto savenresult;		//measure voltage at the  High-Pin (probably A2); if too high:
@@ -413,7 +413,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
              goto savenresult; 		//component has no current without base current => no Triac => abort
           }
           R_PORT = HiPinRL;		//switch R_L port for HighPin to VCC => switch off holding current 
-          wait5ms();
+          wait_about5ms();
           R_PORT = 0;			//switch R_L port for HighPin again to GND; Triac should now switched off
           if(W5msReadADC(HighPin) > 244) {
              goto savenresult;		//measure voltage at the High-Pin (probably A2) ;
@@ -427,7 +427,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
       // ADC_DDR = LoADCm;	//Low-Pin to output 0V
       R_DDR = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to output
       R_PORT = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to VCC
-      wait50ms();
+      wait_about50ms();
       adc.hp2 = ADCconfig.U_AVCC - ReadADC(HighPin);	//measure the voltage at the collector resistor 
       adc.tp2 = ADCconfig.U_AVCC - ReadADC(TristatePin);	//measure the voltage at the base resistor 
 

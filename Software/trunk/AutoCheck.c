@@ -48,7 +48,7 @@ void AutoCheck(void) {
   lcd_clear();
   lcd_fix2_string(SELFTEST);		// "Selftest mode.."
   wait_about1s();
- #define TEST_COUNT 7
+ #define TEST_COUNT 8
  
   for(tt=1;tt<TEST_COUNT;tt++) {		// loop for all Tests
      for(ww=0;ww<MAX_REP;ww++) {	// repeat the test MAX_REP times
@@ -76,17 +76,18 @@ void AutoCheck(void) {
         }
                                         //############################################
         if (tt == 2) { // how equal are the RL resistors? 
+           u680 = ((long)ADCconfig.U_AVCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_L_VAL + PIN_RP));
            R_PORT = 1<<(TP1*2);		//RL1 to VCC
            R_DDR = (1<<(TP1*2)) | (1<<(TP2*2));	//RL2 to -
            adcmv[0] = W20msReadADC(TP1);
-           adcmv[0] -= ((long)ADCconfig.U_AVCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_L_VAL + PIN_RP));
+           adcmv[0] -= u680;
            R_DDR = (1<<(TP1*2)) | (1<<(TP3*2));	//RL3 to -
            adcmv[1] = W20msReadADC(TP1);
-           adcmv[1] -= ((long)ADCconfig.U_AVCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_L_VAL + PIN_RP));
+           adcmv[1] -= u680;
            R_PORT = 1<<(TP2*2);		//RL2 to VCC
            R_DDR = (1<<(TP2*2)) | (1<<(TP3*2));	//RL3 to -
            adcmv[2] = W20msReadADC(TP2);
-           adcmv[2] -= ((long)ADCconfig.U_AVCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_L_VAL + PIN_RP));
+           adcmv[2] -= u680;
            lcd_fix2_string(RLRL);	// "RLRL"
         }
                                         //############################################
@@ -134,6 +135,22 @@ void AutoCheck(void) {
            R_PORT = 2<<(TP3*2);
            adcmv[2] = W20msReadADC(TP3) - ADCconfig.U_AVCC;
            lcd_fix2_string(RH1H);	// "RH_Hi="
+        }
+        if (tt == 7) { // can we switch the ADC pins to VCC across the R_H resistor?
+           u680 = ((long)ADCconfig.U_AVCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_H_VAL*100));
+           R_PORT = 2<<(TP1*2);		//RH1 to VCC
+           R_DDR = (2<<(TP1*2)) | (1<<(TP1*2));	//RH1 to +, RL1 to -
+           adcmv[0] = W20msReadADC(TP1);
+           adcmv[0] -= u680;
+           R_PORT = 2<<(TP2*2);		//RH2 to VCC
+           R_DDR = (2<<(TP2*2)) | (1<<(TP2*2));	//RH2 to +, RL2 to -
+           adcmv[1] = W20msReadADC(TP2);
+           adcmv[1] -= u680;
+           R_PORT = 2<<(TP3*2);		//RH3 to VCC
+           R_DDR = (2<<(TP3*2)) | (1<<(TP3*2));	//RH3 to +, RL3 to -
+           adcmv[2] = W20msReadADC(TP3);
+           adcmv[2] -= u680;
+           lcd_fix2_string(RH1H);	// "RH_RL="
         }
                                         //############################################
         if (tt > 1) {	// output 3 voltages 

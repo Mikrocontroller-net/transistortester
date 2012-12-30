@@ -52,10 +52,13 @@ int main(void) {
   DIDR0 = (1<<ADC5D) | (1<<ADC4D) | (1<<ADC3D);	
   TCCR2A = (0<<WGM21) | (0<<WGM20);		// Counter 2 normal mode
  #if F_CPU == 1000000UL
-  TCCR2B = (1<<CS22) | (0<<CS21) | (1<<CS20);	//prescaler 128, 128us
+  TCCR2B = (1<<CS22) | (0<<CS21) | (1<<CS20);	//prescaler 128, 128us @ 1MHz
  #endif 
- #if F_CPU == 8000000UL
-  TCCR2B = (1<<CS22) | (1<<CS21) | (1<<CS20);	//prescaler 1024, 128us
+ #if F_CPU == 2000000UL
+  TCCR2B = (1<<CS22) | (1<<CS21) | (0<<CS20);	//prescaler 128, 128us @ 2MHz
+ #endif 
+ #if F_CPU >= 8000000UL
+  TCCR2B = (1<<CS22) | (1<<CS21) | (1<<CS20);	//prescaler 1024, 128us @ 8MHz, 64us @ 16MHz
  #endif 
   sei();				// enable interrupts
 #endif
@@ -940,10 +943,10 @@ while (pause > 0)
    if (pause > 1)
      {
       // Startup time is too long with 1MHz Clock!!!!
-      t2_offset =  (10000 - (16384 / (int)(F_CPU / 1000000UL))) / 128;	/* set to 10ms above the actual counter */
+      t2_offset =  (10000 - (16384 / (int)(F_CPU / 1000000UL))) / (1024 / (int)(F_CPU / 1000000UL));	/* set to 10ms above the actual counter */
       pause -= 2;
      } else {
-      t2_offset =  (5000 - (16384 / (int)(F_CPU / 1000000UL))) / 128;	/* set to 5ms above the actual counter */
+      t2_offset =  (5000 - (16384 / (int)(F_CPU / 1000000UL))) / (1024 / (int)(F_CPU / 1000000UL));	/* set to 5ms above the actual counter */
       pause = 0;
      }
    

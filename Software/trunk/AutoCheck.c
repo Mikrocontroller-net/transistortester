@@ -355,11 +355,11 @@ no_c0save:
   for(ww=0;ww<30;ww++) {	// repeat the signal up to 30 times (1 minute)
      for (ii=0;ii<100;ii++) {	// for 2 s generate 50 Hz
          R_PORT = (1<<(TP2*2));	// Pin 2 over R_L to VCC, Pin 3 over R_L to GND
-         wait10ms();
-//         sleep_5ms(2); 	// test of timing of sleep mode call  (instead of wait10ms() )
+//         wait10ms();
+         sleep_5ms(2); 	// test of timing of sleep mode call  (instead of wait10ms() )
          R_PORT = (1<<(TP3*2));	// Pin 3 over R_L to VCC, Pin 2 over R_L to GND
-         wait10ms();
-//         sleep_5ms(2); 	// test of timing of sleep mode call  (instead of wait10ms() )
+//         wait10ms();
+         sleep_5ms(2); 	// test of timing of sleep mode call  (instead of wait10ms() )
          wdt_reset();
      }
      if (!(ON_PIN_REG & (1<<RST_PIN))) {

@@ -254,7 +254,7 @@ End of configuration
  const unsigned char KatAn[] MEM_TEXT = {'-', LCD_CHAR_DIODE2, '-',0};
  const unsigned char Dioden[] MEM_TEXT = {'*',LCD_CHAR_DIODE1, ' ', ' ',0};
  const unsigned char Resistor_str[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
- const unsigned char VERSION_str[] MEM_TEXT = "Version 1.04k";
+ const unsigned char VERSION_str[] MEM_TEXT = "Version 1.05k";
 
 
 #ifdef WITH_SELFTEST

@@ -150,7 +150,7 @@ void AutoCheck(void) {
            R_DDR = (2<<(TP3*2)) | (1<<(TP3*2));	//RH3 to +, RL3 to -
            adcmv[2] = W20msReadADC(TP3);
            adcmv[2] -= u680;
-           lcd_fix2_string(RH1H);	// "RH_RL="
+           lcd_fix2_string(RHRL);	// "RH/RL"
         }
                                         //############################################
         if (tt > 1) {	// output 3 voltages 

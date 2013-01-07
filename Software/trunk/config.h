@@ -193,13 +193,13 @@ End of configuration
 #define CABLE_CAP 3
 // select the right Processor Typ
 #if defined(__AVR_ATmega48__)
- #define PROCESSOR_TYP 48
+ #define PROCESSOR_TYP 168
 #elif defined(__AVR_ATmega48P__)
- #define PROCESSOR_TYP 48
+ #define PROCESSOR_TYP 168
 #elif defined(__AVR_ATmega88__)
- #define PROCESSOR_TYP 88
+ #define PROCESSOR_TYP 168
 #elif defined(__AVR_ATmega88P__)
- #define PROCESSOR_TYP 88
+ #define PROCESSOR_TYP 168
 #elif defined(__AVR_ATmega168__)
  #define PROCESSOR_TYP 168
 #elif defined(__AVR_ATmega168P__)
@@ -208,6 +208,12 @@ End of configuration
  #define PROCESSOR_TYP 328
 #elif defined(__AVR_ATmega328P__)
  #define PROCESSOR_TYP 328
+#elif defined(__AVR_ATmega640__)
+ #define PROCESSOR_TYP 1280
+#elif defined(__AVR_ATmega1280__)
+ #define PROCESSOR_TYP 1280
+#elif defined(__AVR_ATmega2560__)
+ #define PROCESSOR_TYP 1280
 #else
  #define PROCESSOR_TYP 8
 #endif
@@ -218,30 +224,9 @@ End of configuration
  #define ACALL rcall
 #endif
 // automatic selection of option and parameters for different AVR s
-//------------------========----------
-#if PROCESSOR_TYP == 88
-//------------------========----------
-  #define MCU_STATUS_REG MCUCR
-  #define ADC_COMP_CONTROL ADCSRB
-  #define TI1_INT_FLAGS TIFR1
-  #define DEFAULT_BAND_GAP 1070
-  #define DEFAULT_RH_FAKT  884      // mega328 1070 mV
-// LONG_HFE  activates computation of current amplification factor with long variables
-  #define LONG_HFE
-// COMMON_COLLECTOR activates measurement of current amplification factor also in common collector circuit  (Emitter follower)
-  #define COMMON_COLLECTOR
-
-  #define PIN_RM 190
-  #define PIN_RP 225
-// CC0 defines the capacity of empty terminal pins 1 & 3 without cable
-  #define CC0 35
-// Slew rate correction  val += COMP_SLEW1 / (val + COMP_SLEW2)
-  #define COMP_SLEW1 4000
-  #define COMP_SLEW2 220
-  #define C_NULL CC0+CABLE_CAP+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2))
 
 //------------------=========----------
-#elif PROCESSOR_TYP == 168
+#if PROCESSOR_TYP == 168
 //------------------=========----------
   #define MCU_STATUS_REG MCUCR
   #define ADC_COMP_CONTROL ADCSRB
@@ -266,6 +251,7 @@ End of configuration
   #define COMP_SLEW1 4000
   #define COMP_SLEW2 220
   #define C_NULL CC0+CABLE_CAP+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2))
+  #define MUX_INT_REF 0x0e	/* channel number of internal 1.1 V */
 
 //------------------=========----------
 #elif PROCESSOR_TYP == 328
@@ -288,6 +274,31 @@ End of configuration
   #define COMP_SLEW1 4000
   #define COMP_SLEW2 180
   #define C_NULL CC0+CABLE_CAP+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2))
+  #define MUX_INT_REF 0x0e	/* channel number of internal 1.1 V */
+
+//------------------=========----------
+#elif PROCESSOR_TYP == 1280
+//------------------=========----------
+  #define MCU_STATUS_REG MCUCR
+  #define ADC_COMP_CONTROL ADCSRB
+  #define TI1_INT_FLAGS TIFR1
+  #define DEFAULT_BAND_GAP 1070
+  #define DEFAULT_RH_FAKT  884      // mega328 1070 mV
+// LONG_HFE  activates computation of current amplification factor with long variables
+  #define LONG_HFE
+// COMMON_COLLECTOR activates measurement of current amplification factor also in common collector circuit  (Emitter follower)
+  #define COMMON_COLLECTOR
+
+  #define PIN_RM 200
+  #define PIN_RP 220
+// CC0 defines the capacity of empty terminal pins 1 & 3 without cable
+  #define CC0 36
+// Slew rate correction  val += COMP_SLEW1 / (val + COMP_SLEW2)
+  #define COMP_SLEW1 4000
+  #define COMP_SLEW2 180
+  #define C_NULL CC0+CABLE_CAP+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2))
+  #define MUX_INT_REF 0x1e	/* channel number of internal 1.1 V */
+
 
 //------------------=========----------
 #else
@@ -311,6 +322,7 @@ End of configuration
   #define COMP_SLEW1 0
   #define COMP_SLEW2 33
   #define C_NULL CC0+CABLE_CAP+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2))
+  #define MUX_INT_REF 0x0e	/* channel number of internal 1.1 V */
 #endif
 
 #ifndef REF_R_KORR
@@ -422,6 +434,7 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  #define wait_about500ms() wait500ms()
  #define wait_about1s() wait1s()
  #define wait_about2s() wait2s()
+ #define wait_about3s() wait3s()
  #define wait_about4s() wait4s()
 #else
  #ifdef AUTO_CAL
@@ -440,6 +453,7 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  #define wait_about500ms() sleep_5ms(100)
  #define wait_about1s() sleep_5ms(200)
  #define wait_about2s() sleep_5ms(400)
+ #define wait_about3s() sleep_5ms(600)
  #define wait_about4s() sleep_5ms(800)
 #endif
 
@@ -472,6 +486,15 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  //define a default zero value for ESR measurement (0.01 Ohm units)
  #define ESR_ZERO 23
 #endif
+
+#ifndef RESTART_DELAY_TICS
+ // define the processor restart delay for crystal oscillator 16K
+ // only set, if no preset (Makefile) exists.
+ #define RESTART_DELAY_TICS 16384
+ // for ceramic oscillator 258 or 1024 Clock tics can be selected with fuses
+ // for external oscillator or RC-oscillator is only a delay of 6 clock tics.
+#endif
+
 // with EBC_STYLE you can select the Pin-description in EBC= style instead of 123=??? style
 //#define EBC_STYLE
 

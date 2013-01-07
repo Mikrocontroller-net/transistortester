@@ -100,7 +100,11 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   adcv[0] = ReadADC(HighPin);		// voltage before any load 
 // ******** should adcv[0] be measured without current???
   for (ovcnt16=0;ovcnt16<500;ovcnt16++) {
-     ChargePin10ms(HiPinR_L,1);		//HighPin with R_L 10ms to VCC ,then currentless
+     R_PORT = HiPinR_L;			//R_L to 1 (VCC) 
+     R_DDR = HiPinR_L;			//switch Pin to output, across R to GND or VCC
+     wait10ms();			// wait exactly 10ms, do not sleep
+     R_DDR = 0;				// switch back to input
+     R_PORT = 0;			// no Pull up
      wait500us();			//wait a little time
      wdt_reset();
      // read voltage without current, is already charged enough?

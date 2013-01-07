@@ -133,8 +133,10 @@ CFLAGS += -DBAT_OUT=150
 # To adjust the warning-level and poor-level of battery check to the capability of a
 # low drop voltage regulator, you can specify the Option BAT_POOR=54 .
 # The unit for this option value is 100mV (0.1 Volt), 54 means a poor level of 5.4V.
-# The warning level is always 1V higher than the specified poor level.
-# Setting the poor level to low values is not recommended for rechargeable 9V Batteries,
+# The warning level is 0.8V higher than the specified poor level (>5.3V).
+# The warning level is 0.4V higher than the specified poor level (>2.9V, <=5.3V).
+# The warning level is 0.2V higher than the specified poor level (<=2.9V).
+# Setting the poor level to low values is not recommended for rechargeable Batteries,
 # because this increase the danger for deep discharge!!
 CFLAGS += -DBAT_POOR=64
 
@@ -389,6 +391,7 @@ $(TARGET): $(OBJECTS)
 
 size: ${TARGET}
 	@echo
+	@echo $(OP_MHZ) MHz operation configured.
 	@avr-size -C --mcu=${MCU} ${TARGET}
 
 ## Clean target

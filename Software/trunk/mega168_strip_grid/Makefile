@@ -20,7 +20,7 @@ CFLAGS = -Wall
 # atmega8  : m8
 # atmega168: m168 or m168p
 # atmega328: m328 or m328p
-PARTNO = m168
+PARTNO = m328
 
 # Select your language:
 # Available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
@@ -82,6 +82,11 @@ CFLAGS += -DNO_AREF_CAP
 # The OP_MHZ option tells the software the Operating Frequency of your ATmega.
 OP_MHZ = 8
 #OP_MHZ = 1
+# Restart from sleep mode will be delayed for 16384 clock tics with crystal mode.
+# Operation with the internal RC-Generator or external clock will delay the restart by only 6 clock tics.
+# You must specify this with "CFLAGS += -DRESTART_DELAY_TICS=6", if you don't use the crystal mode.
+#CFLAGS += -DRESTART_DELAY_TICS=6
+
 
 # The USE_EEPROM option specify where you wish to locate fix text and tables.
 # If USE_EEPROM is unset, program memory (flash) is taken for fix text and tables.
@@ -130,8 +135,10 @@ CFLAGS += -DBAT_OUT=150
 # To adjust the warning-level and poor-level of battery check to the capability of a
 # low drop voltage regulator, you can specify the Option BAT_POOR=54 .
 # The unit for this option value is 100mV (0.1 Volt), 54 means a poor level of 5.4V.
-# The warning level is always 1V higher than the specified poor level.
-# Setting the poor level to low values is not recommended for rechargeable 9V Batteries,
+# The warning level is 0.8V higher than the specified poor level (>5.3V).
+# The warning level is 0.4V higher than the specified poor level (>2.9V, <=5.3V).
+# The warning level is 0.2V higher than the specified poor level (<=2.9V).
+# Setting the poor level to low values is not recommended for rechargeable Batteries,
 # because this increase the danger for deep discharge!!
 CFLAGS += -DBAT_POOR=64
 
@@ -386,6 +393,7 @@ $(TARGET): $(OBJECTS)
 
 size: ${TARGET}
 	@echo
+	@echo $(OP_MHZ) MHz operation configured.
 	@avr-size -C --mcu=${MCU} ${TARGET}
 
 ## Clean target

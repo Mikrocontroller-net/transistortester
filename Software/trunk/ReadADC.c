@@ -37,7 +37,7 @@ sample:
 #else
     ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV; //enable ADC and Interrupt
     set_sleep_mode(SLEEP_MODE_ADC);
-    sleep_mode();
+    sleep_mode();	/* Start ADC, return, if ADC has finished */
 #endif
     ADCconfig.RefFlag = Samples; /* update flag */
  }
@@ -46,13 +46,22 @@ sample:
  Value = 0UL; /* reset sampling variable */
  Samples = 0; /* number of samples to take */
  while (Samples < ADCconfig.Samples) /* take samples */ {
+#ifdef __AVR_ATmega8__
     ADCSRA |= (1 << ADSC); /* start conversion */
     while (ADCSRA & (1 << ADSC)); /* wait until conversion is done */
+#else
+    ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV; //enable ADC and Interrupt
+    set_sleep_mode(SLEEP_MODE_ADC);
+    sleep_mode();	/* Start ADC, return, if ADC has finished */
+#endif
     Value += ADCW; /* add ADC reading */
 #ifdef AUTOSCALE_ADC
     /* auto-switch voltage reference for low readings */
     if ((Samples == 4) && (ADCconfig.U_Bandgap > 255) && ((uint16_t)Value < 1024) && !(Probe & (1 << REFS1))) {
        Probe |= (1 << REFS1); /* select internal bandgap reference */
+#if PROCESSOR_TYP == 1280
+       Probe &= ~(1 << REFS0);	/* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
+#endif
        goto sample; /* re-run sampling */
     }
 #endif

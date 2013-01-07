@@ -64,8 +64,8 @@ void AutoCheck(void) {
         if (tt == 1) {   // output of reference voltage and factors for capacity measurement
            ADCconfig.Samples = 190;	// set number of ADC reads near to maximum
  #ifdef WITH_AUTO_REF
-           (void) ReadADC(0x0e);	// read reference voltage 
-           ref_mv = W5msReadADC(0x0e);	// read reference voltage 
+           (void) ReadADC(MUX_INT_REF);	// read reference voltage 
+           ref_mv = W5msReadADC(MUX_INT_REF);	// read reference voltage 
            RefVoltage();		//compute RHmultip = f(reference voltage)
  #endif
            lcd_fix2_string(URefT);	//"URef="
@@ -364,7 +364,9 @@ no_c0save:
   lcd_fix_string(VERSION_str);	//"Version ..."
   lcd_line1();
   lcd_fix_string(ATE);		//"Selftest End"
+
 #ifdef FREQUENCY_50HZ
+//#define TEST_SLEEP_MODE	/* only select for checking the sleep delay */
   lcd_fix2_string(T50HZ);	//" 50Hz"
   ADC_PORT = TXD_VAL;
   ADC_DDR = 1<<TP1 | TXD_MSK;	// Pin 1 to GND
@@ -372,11 +374,17 @@ no_c0save:
   for(ww=0;ww<30;ww++) {	// repeat the signal up to 30 times (1 minute)
      for (ii=0;ii<100;ii++) {	// for 2 s generate 50 Hz
          R_PORT = (1<<(TP2*2));	// Pin 2 over R_L to VCC, Pin 3 over R_L to GND
-         wait10ms();
-//         sleep_5ms(2); 	// test of timing of sleep mode call  (instead of wait10ms() )
+ #ifdef TEST_SLEEP_MODE
+         sleep_5ms(2); 		// test of timing of sleep mode call 
+ #else
+         wait10ms();		// normal delay
+ #endif
          R_PORT = (1<<(TP3*2));	// Pin 3 over R_L to VCC, Pin 2 over R_L to GND
-         wait10ms();
-//         sleep_5ms(2); 	// test of timing of sleep mode call  (instead of wait10ms() )
+ #ifdef TEST_SLEEP_MODE
+         sleep_5ms(2); 		// test of timing of sleep mode call 
+ #else
+         wait10ms();		// normal delay
+ #endif
          wdt_reset();
      }
      if (!(ON_PIN_REG & (1<<RST_PIN))) {

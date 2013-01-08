@@ -545,28 +545,25 @@ start:
              ii = 2;
           }
        }
-
-       if (ii == 0) {
-          lcd_data('1');
-          lcd_fix_string(Resistor_str);	// -[=]-
-          lcd_data('3');
-          lcd_fix_string(Resistor_str);	// -[=]-
-          lcd_data('2');
-       }
+       char x = '1';
+       char y = '3';
+       char z = '2';
+   
        if (ii == 1) {
-          lcd_data('1');
-          lcd_fix_string(Resistor_str);	// -[=]-
-          lcd_data('2');
-          lcd_fix_string(Resistor_str);	// -[=]-
-          lcd_data('3');
+          // x = '1';
+          y = '2';
+          z = '3';
        }
        if (ii == 2) {
-          lcd_data('2');
-          lcd_fix_string(Resistor_str);	// -[=]-
-          lcd_data('1');
-          lcd_fix_string(Resistor_str);	// -[=]-
-          lcd_data('3');
+          x = '2';
+          y = '1';
+          z = '3';
        }
+       lcd_data(x);
+       lcd_fix_string(Resistor_str);    // -[=]-
+       lcd_data(y);
+       lcd_fix_string(Resistor_str);    // -[=]-
+       lcd_data(z);
     }
     lcd_line2(); //2. row 
     if (ResistorsFound == 1) {

@@ -358,9 +358,9 @@ End of configuration
  // no MAIN_C
  #define COMMON extern
  #ifdef WITH_SELFTEST
-   extern unsigned char SELFTEST[] MEM2_TEXT;
-   extern unsigned char RELPROBE[] MEM2_TEXT;
-   extern unsigned char ATE[] MEM_TEXT;
+  extern const unsigned char SELFTEST[] MEM2_TEXT;
+  extern const unsigned char RELPROBE[] MEM2_TEXT;
+  extern const unsigned char ATE[] MEM_TEXT;
  #endif
  #ifdef AUTO_CAL
   extern uint16_t R680pl;

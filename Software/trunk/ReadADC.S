@@ -54,7 +54,7 @@ get_sample:
 ;    wait100us(); /* time for voltage stabilization */
 	ACALL	wait100us
 #else
-	ACALL	wait300us
+	ACALL	wait10ms
 #endif
 ;    ADCSRA |= (1 << ADSC); /* start conversion */
 #if ADCSRA < 32

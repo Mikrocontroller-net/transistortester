@@ -484,7 +484,7 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 
 #ifndef ESR_ZERO
  //define a default zero value for ESR measurement (0.01 Ohm units)
- #define ESR_ZERO 23
+ #define ESR_ZERO 20
 #endif
 
 #ifndef RESTART_DELAY_TICS

@@ -253,6 +253,7 @@ wait2us:
 
 wait1us:
  rcall wait500ns
+.global wait500ns		; wait 500ns
 wait500ns:
  nop
 #endif

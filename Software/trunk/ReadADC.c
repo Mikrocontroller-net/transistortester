@@ -24,23 +24,26 @@ sample:
  ADMUX = Probe; /* set input channel and U reference */
 #ifdef AUTOSCALE_ADC
  /* if voltage reference changed run a dummy conversion */
- Samples = Probe & (1 << REFS1); /* get REFS1 bit flag */
- if (Samples != ADCconfig.RefFlag) {
+// Samples = Probe & (1 << REFS1); /* get REFS1 bit flag */
+// if (Samples != ADCconfig.RefFlag) {
+ if ((Probe & (1 << REFS1)) != 0) {
+    // switch to 1.1V Reference
 #ifdef NO_AREF_CAP
     wait100us(); /* time for voltage stabilization */
 #else
-    wait300us(); /* time for voltage stabilization */
+    wait_about10ms(); /* time for voltage stabilization */
+#endif
+//    ADCconfig.RefFlag = Samples; /* update flag */
+ }
 #endif
 #ifdef __AVR_ATmega8__
+// one dummy read of ADC, 112us
     ADCSRA |= (1 << ADSC); /* start conversion */
     while (ADCSRA & (1 << ADSC)); /* wait until conversion is done */
 #else
     ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV; //enable ADC and Interrupt
     set_sleep_mode(SLEEP_MODE_ADC);
     sleep_mode();	/* Start ADC, return, if ADC has finished */
-#endif
-    ADCconfig.RefFlag = Samples; /* update flag */
- }
 #endif
  /* * sample ADC readings */
  Value = 0UL; /* reset sampling variable */

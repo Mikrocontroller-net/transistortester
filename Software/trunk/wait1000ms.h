@@ -36,4 +36,5 @@ void wait4us(void);
 void wait3us(void);
 void wait2us(void);
 void wait1us(void); //only possible at clock frequency of 8Mhz
+void wait500ns(void); //only possible at clock frequency of 16Mhz
 

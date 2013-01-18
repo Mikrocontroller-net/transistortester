@@ -3,35 +3,35 @@ TransistorTester.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000002  00800100  00003cd8  00003d8c  2**0
+  0 .data         00000002  00800100  00003cdc  00003d90  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00003cd8  00000000  00000000  000000b4  2**1
+  1 .text         00003cdc  00000000  00000000  000000b4  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000082  00800102  00800102  00003d8e  2**0
+  2 .bss          00000082  00800102  00800102  00003d92  2**0
                   ALLOC
-  3 .eeprom       000001c1  00810000  00810000  00003d8e  2**0
+  3 .eeprom       000001c1  00810000  00810000  00003d92  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  4 .stab         00000dbc  00000000  00000000  00003f50  2**2
+  4 .stab         00000dbc  00000000  00000000  00003f54  2**2
                   CONTENTS, READONLY, DEBUGGING
-  5 .stabstr      000001d2  00000000  00000000  00004d0c  2**0
+  5 .stabstr      000001d2  00000000  00000000  00004d10  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_aranges 000000c0  00000000  00000000  00004ede  2**0
+  6 .debug_aranges 000000c0  00000000  00000000  00004ee2  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_pubnames 00000711  00000000  00000000  00004f9e  2**0
+  7 .debug_pubnames 00000711  00000000  00000000  00004fa2  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_info   0000284f  00000000  00000000  000056af  2**0
+  8 .debug_info   0000284f  00000000  00000000  000056b3  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_abbrev 000007c5  00000000  00000000  00007efe  2**0
+  9 .debug_abbrev 000007c5  00000000  00000000  00007f02  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   000035af  00000000  00000000  000086c3  2**0
+ 10 .debug_line   000035bf  00000000  00000000  000086c7  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  00000280  00000000  00000000  0000bc74  2**2
+ 11 .debug_frame  00000280  00000000  00000000  0000bc88  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    000008a0  00000000  00000000  0000bef4  2**0
+ 12 .debug_str    000008a0  00000000  00000000  0000bf08  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    000013d8  00000000  00000000  0000c794  2**0
+ 13 .debug_loc    000013d8  00000000  00000000  0000c7a8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_pubtypes 0000021a  00000000  00000000  0000db6c  2**0
+ 14 .debug_pubtypes 0000021a  00000000  00000000  0000db80  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -114,7 +114,7 @@ Disassembly of section .text:
      12a:	11 e0       	ldi	r17, 0x01	; 1
      12c:	a0 e0       	ldi	r26, 0x00	; 0
      12e:	b1 e0       	ldi	r27, 0x01	; 1
-     130:	e8 ed       	ldi	r30, 0xD8	; 216
+     130:	ec ed       	ldi	r30, 0xDC	; 220
      132:	fc e3       	ldi	r31, 0x3C	; 60
      134:	02 c0       	rjmp	.+4      	; 0x13a <__do_copy_data+0x10>
      136:	05 90       	lpm	r0, Z+
@@ -137,7 +137,7 @@ Disassembly of section .text:
      14c:	b1 07       	cpc	r27, r17
      14e:	e1 f7       	brne	.-8      	; 0x148 <.do_clear_bss_loop>
      150:	0e 94 5d 0f 	call	0x1eba	; 0x1eba <main>
-     154:	0c 94 6a 1e 	jmp	0x3cd4	; 0x3cd4 <_exit>
+     154:	0c 94 6c 1e 	jmp	0x3cd8	; 0x3cd8 <_exit>
 
 00000158 <__bad_interrupt>:
      158:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -452,7 +452,7 @@ void lcd_fix_string(const unsigned char *data) {
    while(1) {
       cc = MEM_read_byte(data);
      2ac:	ce 01       	movw	r24, r28
-     2ae:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+     2ae:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
       if((cc==0) || (cc==128)) {
      2b2:	88 23       	and	r24, r24
      2b4:	31 f0       	breq	.+12     	; 0x2c2 <lcd_fix_string+0x1c>
@@ -487,7 +487,7 @@ void lcd_fix_customchar(const unsigned char *chardata) {
      2d6:	c8 01       	movw	r24, r16
      2d8:	8c 0f       	add	r24, r28
      2da:	9d 1f       	adc	r25, r29
-     2dc:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+     2dc:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
      2e0:	0e 94 ae 00 	call	0x15c	; 0x15c <lcd_data>
      2e4:	21 96       	adiw	r28, 0x01	; 1
    }
@@ -859,7 +859,7 @@ void RefVoltage(void) {
   referenz = ref_mv + (int16_t)eeprom_read_word((uint16_t *)(&ref_offset));
      496:	87 eb       	ldi	r24, 0xB7	; 183
      498:	91 e0       	ldi	r25, 0x01	; 1
-     49a:	0e 94 31 1e 	call	0x3c62	; 0x3c62 <__eerd_word_m168>
+     49a:	0e 94 33 1e 	call	0x3c66	; 0x3c66 <__eerd_word_m168>
      49e:	20 91 3f 01 	lds	r18, 0x013F
      4a2:	30 91 40 01 	lds	r19, 0x0140
      4a6:	28 0f       	add	r18, r24
@@ -885,7 +885,7 @@ void RefVoltage(void) {
   tabind = referenz / Ref_Tab_Abstand;
      4be:	62 e3       	ldi	r22, 0x32	; 50
      4c0:	70 e0       	ldi	r23, 0x00	; 0
-     4c2:	0e 94 a1 1d 	call	0x3b42	; 0x3b42 <__udivmodhi4>
+     4c2:	0e 94 a3 1d 	call	0x3b46	; 0x3b46 <__udivmodhi4>
   tabres = referenz % Ref_Tab_Abstand;
      4c6:	f8 2e       	mov	r15, r24
   tabres = Ref_Tab_Abstand-tabres;
@@ -904,7 +904,7 @@ void RefVoltage(void) {
      4d6:	99 1f       	adc	r25, r25
      4d8:	86 5a       	subi	r24, 0xA6	; 166
      4da:	9f 4f       	sbci	r25, 0xFF	; 255
-     4dc:	0e 94 31 1e 	call	0x3c62	; 0x3c62 <__eerd_word_m168>
+     4dc:	0e 94 33 1e 	call	0x3c66	; 0x3c66 <__eerd_word_m168>
      4e0:	8c 01       	movw	r16, r24
   y2 = MEM_read_word(&RHtab[tabind+1]);
      4e2:	ce 01       	movw	r24, r28
@@ -912,7 +912,7 @@ void RefVoltage(void) {
      4e6:	99 1f       	adc	r25, r25
      4e8:	84 5a       	subi	r24, 0xA4	; 164
      4ea:	9f 4f       	sbci	r25, 0xFF	; 255
-     4ec:	0e 94 31 1e 	call	0x3c62	; 0x3c62 <__eerd_word_m168>
+     4ec:	0e 94 33 1e 	call	0x3c66	; 0x3c66 <__eerd_word_m168>
      4f0:	9c 01       	movw	r18, r24
   } else  {
      referenz = 0;		// limit to begin of table
@@ -941,7 +941,7 @@ void RefVoltage(void) {
      50a:	49 96       	adiw	r24, 0x19	; 25
      50c:	62 e3       	ldi	r22, 0x32	; 50
      50e:	70 e0       	ldi	r23, 0x00	; 0
-     510:	0e 94 a1 1d 	call	0x3b42	; 0x3b42 <__udivmodhi4>
+     510:	0e 94 a3 1d 	call	0x3b46	; 0x3b46 <__udivmodhi4>
      514:	62 0f       	add	r22, r18
      516:	73 1f       	adc	r23, r19
      518:	70 93 01 01 	sts	0x0101, r23
@@ -1056,7 +1056,7 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
     Value = Value / 10;			/* scale down by 10^1 */
      59c:	a5 01       	movw	r20, r10
      59e:	94 01       	movw	r18, r8
-     5a0:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+     5a0:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
      5a4:	69 01       	movw	r12, r18
      5a6:	7a 01       	movw	r14, r20
     Exponent++;				/* increase exponent by 1 */
@@ -1107,7 +1107,7 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
      5d0:	23 e0       	ldi	r18, 0x03	; 3
   Offset = Length % 3;
      5d2:	62 2f       	mov	r22, r18
-     5d4:	0e 94 95 1d 	call	0x3b2a	; 0x3b2a <__udivmodqi4>
+     5d4:	0e 94 97 1d 	call	0x3b2e	; 0x3b2e <__udivmodqi4>
      5d8:	19 2f       	mov	r17, r25
     if (Offset > 0)
      5da:	99 23       	and	r25, r25
@@ -1123,7 +1123,7 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
      5e4:	90 e0       	ldi	r25, 0x00	; 0
      5e6:	80 55       	subi	r24, 0x50	; 80
      5e8:	9e 4f       	sbci	r25, 0xFE	; 254
-     5ea:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+     5ea:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
      5ee:	b8 2e       	mov	r11, r24
   /*
    *  display value
@@ -1139,7 +1139,7 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
      5fa:	b6 01       	movw	r22, r12
      5fc:	4a e0       	ldi	r20, 0x0A	; 10
      5fe:	50 e0       	ldi	r21, 0x00	; 0
-     600:	0e 94 13 1e 	call	0x3c26	; 0x3c26 <utoa>
+     600:	0e 94 15 1e 	call	0x3c2a	; 0x3c2a <utoa>
   Length = strlen(OutBuffer);
      604:	f6 01       	movw	r30, r12
      606:	01 90       	ld	r0, Z+
@@ -1559,7 +1559,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      7f0:	c5 01       	movw	r24, r10
      7f2:	8b 55       	subi	r24, 0x5B	; 91
      7f4:	9e 4f       	sbci	r25, 0xFE	; 254
-     7f6:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+     7f6:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
      7fa:	8a 83       	std	Y+2, r24	; 0x02
   LoPinRH = LoPinRL + LoPinRL;				// intruction for LowPin R_H
   TriPinRL = MEM_read_byte(&PinRLtab[TristatePin]);	// intruction for TristatePin R_L
@@ -1567,7 +1567,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      7fe:	90 e0       	ldi	r25, 0x00	; 0
      800:	8b 55       	subi	r24, 0x5B	; 91
      802:	9e 4f       	sbci	r25, 0xFE	; 254
-     804:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+     804:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
      808:	d8 2e       	mov	r13, r24
   TriPinRH = TriPinRL + TriPinRL;			// intruction for TristatePin R_H
      80a:	08 2f       	mov	r16, r24
@@ -1578,7 +1578,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      812:	c7 01       	movw	r24, r14
      814:	8b 55       	subi	r24, 0x5B	; 91
      816:	9e 4f       	sbci	r25, 0xFE	; 254
-     818:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+     818:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
      81c:	c8 2e       	mov	r12, r24
   HiPinRH = HiPinRL + HiPinRL;				// intruction for HighPin R_H
      81e:	28 2f       	mov	r18, r24
@@ -1589,13 +1589,13 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      824:	c7 01       	movw	r24, r14
      826:	88 55       	subi	r24, 0x58	; 88
      828:	9e 4f       	sbci	r25, 0xFE	; 254
-     82a:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+     82a:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
      82e:	89 83       	std	Y+1, r24	; 0x01
   LoADCp = MEM_read_byte(&PinADCtab[LowPin]);		// intruction for ADC Low-Pin
      830:	c5 01       	movw	r24, r10
      832:	88 55       	subi	r24, 0x58	; 88
      834:	9e 4f       	sbci	r25, 0xFE	; 254
-     836:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+     836:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
   HiADCm = HiADCp | TXD_MSK;
      83a:	39 81       	ldd	r19, Y+1	; 0x01
      83c:	38 60       	ori	r19, 0x08	; 8
@@ -1737,12 +1737,12 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      904:	33 e0       	ldi	r19, 0x03	; 3
      906:	40 e0       	ldi	r20, 0x00	; 0
      908:	50 e0       	ldi	r21, 0x00	; 0
-     90a:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+     90a:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
      90e:	20 91 02 01 	lds	r18, 0x0102
      912:	30 91 03 01 	lds	r19, 0x0103
      916:	40 e0       	ldi	r20, 0x00	; 0
      918:	50 e0       	ldi	r21, 0x00	; 0
-     91a:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+     91a:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
      91e:	30 93 51 01 	sts	0x0151, r19
      922:	20 93 50 01 	sts	0x0150, r18
         trans.b = TristatePin;		//save Pin numbers found for this FET
@@ -1832,12 +1832,12 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      9ac:	33 e0       	ldi	r19, 0x03	; 3
      9ae:	40 e0       	ldi	r20, 0x00	; 0
      9b0:	50 e0       	ldi	r21, 0x00	; 0
-     9b2:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+     9b2:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
      9b6:	20 91 08 01 	lds	r18, 0x0108
      9ba:	30 91 09 01 	lds	r19, 0x0109
      9be:	40 e0       	ldi	r20, 0x00	; 0
      9c0:	50 e0       	ldi	r21, 0x00	; 0
-     9c2:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+     9c2:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
      9c6:	30 93 51 01 	sts	0x0151, r19
      9ca:	20 93 50 01 	sts	0x0150, r18
         trans.b = TristatePin;		//save Pin numbers found for this FET
@@ -1911,10 +1911,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      a3e:	77 eb       	ldi	r23, 0xB7	; 183
      a40:	87 e4       	ldi	r24, 0x47	; 71
      a42:	90 e0       	ldi	r25, 0x00	; 0
-     a44:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+     a44:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
      a48:	c3 01       	movw	r24, r6
      a4a:	b2 01       	movw	r22, r4
-     a4c:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+     a4c:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
               (unsigned int)RR680PL)) / (unsigned int)adc.tp1;	
      a50:	94 01       	movw	r18, r8
      a52:	40 e0       	ldi	r20, 0x00	; 0
@@ -1925,7 +1925,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 #endif
  #ifdef LONG_HFE
      c_hfe = ((unsigned long)adc.hp1 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
-     a56:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+     a56:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
      a5a:	2c 83       	std	Y+4, r18	; 0x04
      a5c:	3d 83       	std	Y+5, r19	; 0x05
      a5e:	4e 83       	std	Y+6, r20	; 0x06
@@ -1949,7 +1949,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      a6a:	88 19       	sub	r24, r8
      a6c:	99 09       	sbc	r25, r9
      a6e:	b4 01       	movw	r22, r8
-     a70:	0e 94 a1 1d 	call	0x3b42	; 0x3b42 <__udivmodhi4>
+     a70:	0e 94 a3 1d 	call	0x3b46	; 0x3b46 <__udivmodhi4>
      a74:	cb 01       	movw	r24, r22
      a76:	a0 e0       	ldi	r26, 0x00	; 0
      a78:	b0 e0       	ldi	r27, 0x00	; 0
@@ -2083,17 +2083,17 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      b36:	77 eb       	ldi	r23, 0xB7	; 183
      b38:	87 e4       	ldi	r24, 0x47	; 71
      b3a:	90 e0       	ldi	r25, 0x00	; 0
-     b3c:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+     b3c:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
      b40:	c3 01       	movw	r24, r6
      b42:	b2 01       	movw	r22, r4
-     b44:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+     b44:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
                  (unsigned int)RR680MI)) / (unsigned int)adc.tp2;	
      b48:	ec 89       	ldd	r30, Y+20	; 0x14
      b4a:	fd 89       	ldd	r31, Y+21	; 0x15
      b4c:	9f 01       	movw	r18, r30
      b4e:	40 e0       	ldi	r20, 0x00	; 0
      b50:	50 e0       	ldi	r21, 0x00	; 0
-     b52:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+     b52:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
 #endif
            adc.tp2 = 53;
         }
@@ -2270,7 +2270,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
                  gthvoltage /= 9;		// gives resolution in mV
      c62:	69 e0       	ldi	r22, 0x09	; 9
      c64:	70 e0       	ldi	r23, 0x00	; 0
-     c66:	0e 94 a1 1d 	call	0x3b42	; 0x3b42 <__udivmodhi4>
+     c66:	0e 94 a3 1d 	call	0x3b46	; 0x3b46 <__udivmodhi4>
      c6a:	70 93 57 01 	sts	0x0157, r23
      c6e:	60 93 56 01 	sts	0x0156, r22
               }
@@ -2348,10 +2348,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      cf2:	77 eb       	ldi	r23, 0xB7	; 183
      cf4:	87 e4       	ldi	r24, 0x47	; 71
      cf6:	90 e0       	ldi	r25, 0x00	; 0
-     cf8:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+     cf8:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
      cfc:	c5 01       	movw	r24, r10
      cfe:	b4 01       	movw	r22, r8
-     d00:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+     d00:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
               (unsigned int)RR680MI)) / (unsigned int)adc.tp1;	
      d04:	a9 89       	ldd	r26, Y+17	; 0x11
      d06:	ba 89       	ldd	r27, Y+18	; 0x12
@@ -2364,7 +2364,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        adc.tp1 = ADCconfig.U_AVCC - ReadADC(TristatePin);	// voltage at Base resistor
  #ifdef LONG_HFE
        c_hfe = ((unsigned long)adc.lp1 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
-     d0e:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+     d0e:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
      d12:	2c 83       	std	Y+4, r18	; 0x04
      d14:	3d 83       	std	Y+5, r19	; 0x05
      d16:	4e 83       	std	Y+6, r20	; 0x06
@@ -2382,7 +2382,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      d22:	8e 1b       	sub	r24, r30
      d24:	9f 0b       	sbc	r25, r31
      d26:	bf 01       	movw	r22, r30
-     d28:	0e 94 a1 1d 	call	0x3b42	; 0x3b42 <__udivmodhi4>
+     d28:	0e 94 a3 1d 	call	0x3b46	; 0x3b46 <__udivmodhi4>
      d2c:	cb 01       	movw	r24, r22
      d2e:	a0 e0       	ldi	r26, 0x00	; 0
      d30:	b0 e0       	ldi	r27, 0x00	; 0
@@ -2651,17 +2651,17 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      eba:	77 eb       	ldi	r23, 0xB7	; 183
      ebc:	87 e4       	ldi	r24, 0x47	; 71
      ebe:	90 e0       	ldi	r25, 0x00	; 0
-     ec0:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+     ec0:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
      ec4:	6b 85       	ldd	r22, Y+11	; 0x0b
      ec6:	7c 85       	ldd	r23, Y+12	; 0x0c
      ec8:	8d 85       	ldd	r24, Y+13	; 0x0d
      eca:	9e 85       	ldd	r25, Y+14	; 0x0e
-     ecc:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+     ecc:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
               (unsigned int)RR680PL)) / (unsigned int)adc.tp2;	
      ed0:	95 01       	movw	r18, r10
      ed2:	40 e0       	ldi	r20, 0x00	; 0
      ed4:	50 e0       	ldi	r21, 0x00	; 0
-     ed6:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+     ed6:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
 #endif
          adc.tp2 = 53;
       }
@@ -2830,7 +2830,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
             gthvoltage /= 9;	//scale to mV
      fd6:	69 e0       	ldi	r22, 0x09	; 9
      fd8:	70 e0       	ldi	r23, 0x00	; 0
-     fda:	0e 94 a1 1d 	call	0x3b42	; 0x3b42 <__udivmodhi4>
+     fda:	0e 94 a3 1d 	call	0x3b46	; 0x3b46 <__udivmodhi4>
      fde:	70 93 57 01 	sts	0x0157, r23
      fe2:	60 93 56 01 	sts	0x0156, r22
          }
@@ -3303,13 +3303,13 @@ widmes:
     1238:	37 eb       	ldi	r19, 0xB7	; 183
     123a:	40 e0       	ldi	r20, 0x00	; 0
     123c:	50 e0       	ldi	r21, 0x00	; 0
-    123e:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    123e:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
     1242:	94 01       	movw	r18, r8
     1244:	2e 19       	sub	r18, r14
     1246:	3f 09       	sbc	r19, r15
     1248:	40 e0       	ldi	r20, 0x00	; 0
     124a:	50 e0       	ldi	r21, 0x00	; 0
-    124c:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    124c:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
     1250:	59 01       	movw	r10, r18
     1252:	6a 01       	movw	r12, r20
         // lirx2 (measurement at LowPin)
@@ -3323,11 +3323,11 @@ widmes:
     1260:	37 eb       	ldi	r19, 0xB7	; 183
     1262:	40 e0       	ldi	r20, 0x00	; 0
     1264:	50 e0       	ldi	r21, 0x00	; 0
-    1266:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    1266:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
     126a:	93 01       	movw	r18, r6
     126c:	40 e0       	ldi	r20, 0x00	; 0
     126e:	50 e0       	ldi	r21, 0x00	; 0
-    1270:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    1270:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
 #define FAKT_LOW 2		//resolution is about twice as good
 #else
 #define FAKT_LOW 4		//resolution is about four times better
@@ -3378,7 +3378,7 @@ widmes:
     12c0:	30 e0       	ldi	r19, 0x00	; 0
     12c2:	40 e0       	ldi	r20, 0x00	; 0
     12c4:	50 e0       	ldi	r21, 0x00	; 0
-    12c6:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    12c6:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
     12ca:	08 c0       	rjmp	.+16     	; 0x12dc <CheckPins+0xb2c>
         } else 
 #endif
@@ -3400,7 +3400,7 @@ widmes:
     12e2:	30 e0       	ldi	r19, 0x00	; 0
     12e4:	40 e0       	ldi	r20, 0x00	; 0
     12e6:	50 e0       	ldi	r21, 0x00	; 0
-    12e8:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    12e8:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
     12ec:	6b 01       	movw	r12, r22
     12ee:	7c 01       	movw	r14, r24
         lrx1 += RH_OFFSET;			// add constant for correction of systematic error
@@ -3444,14 +3444,14 @@ widmes:
     1330:	30 91 09 01 	lds	r19, 0x0109
     1334:	40 e0       	ldi	r20, 0x00	; 0
     1336:	50 e0       	ldi	r21, 0x00	; 0
-    1338:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    1338:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
     133c:	20 91 3d 01 	lds	r18, 0x013D
     1340:	30 91 3e 01 	lds	r19, 0x013E
     1344:	26 19       	sub	r18, r6
     1346:	37 09       	sbc	r19, r7
     1348:	40 e0       	ldi	r20, 0x00	; 0
     134a:	50 e0       	ldi	r21, 0x00	; 0
-    134c:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    134c:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
     1350:	49 01       	movw	r8, r18
     1352:	5a 01       	movw	r10, r20
     1354:	27 01       	movw	r4, r14
@@ -3473,11 +3473,11 @@ widmes:
     136c:	30 91 03 01 	lds	r19, 0x0103
     1370:	40 e0       	ldi	r20, 0x00	; 0
     1372:	50 e0       	ldi	r21, 0x00	; 0
-    1374:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    1374:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
     1378:	92 01       	movw	r18, r4
     137a:	40 e0       	ldi	r20, 0x00	; 0
     137c:	50 e0       	ldi	r21, 0x00	; 0
-    137e:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    137e:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
 //     lrx1 =(unsigned long)R_L_VAL * (unsigned long)adc.hp1 / (adc.hp3 - adc.hp1);
 
 #ifdef AUTOSCALE_ADC
@@ -3526,7 +3526,7 @@ widmes:
     13ce:	30 e0       	ldi	r19, 0x00	; 0
     13d0:	40 e0       	ldi	r20, 0x00	; 0
     13d2:	50 e0       	ldi	r21, 0x00	; 0
-    13d4:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    13d4:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
     13d8:	69 01       	movw	r12, r18
     13da:	7a 01       	movw	r14, r20
     13dc:	0a c0       	rjmp	.+20     	; 0x13f2 <CheckPins+0xc42>
@@ -3623,7 +3623,7 @@ widmes:
     1454:	30 e0       	ldi	r19, 0x00	; 0
     1456:	40 e0       	ldi	r20, 0x00	; 0
     1458:	50 e0       	ldi	r21, 0x00	; 0
-    145a:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    145a:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
     145e:	a5 01       	movw	r20, r10
     1460:	94 01       	movw	r18, r8
     1462:	2c 59       	subi	r18, 0x9C	; 156
@@ -3634,7 +3634,7 @@ widmes:
     146c:	3d 1d       	adc	r19, r13
     146e:	4e 1d       	adc	r20, r14
     1470:	5f 1d       	adc	r21, r15
-    1472:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    1472:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
            if (lirx1  > 0) {
     1476:	21 15       	cp	r18, r1
     1478:	31 05       	cpc	r19, r1
@@ -4016,7 +4016,7 @@ void AutoCheck(void) {
     16b8:	71 e0       	ldi	r23, 0x01	; 1
     16ba:	4a e0       	ldi	r20, 0x0A	; 10
     16bc:	50 e0       	ldi	r21, 0x00	; 0
-    16be:	0e 94 13 1e 	call	0x3c26	; 0x3c26 <utoa>
+    16be:	0e 94 15 1e 	call	0x3c2a	; 0x3c2a <utoa>
     16c2:	0e 94 2f 01 	call	0x25e	; 0x25e <lcd_string>
         lcd_space();
     16c6:	0e 94 df 00 	call	0x1be	; 0x1be <lcd_space>
@@ -4067,7 +4067,7 @@ void AutoCheck(void) {
     1724:	71 e0       	ldi	r23, 0x01	; 1
     1726:	4a e0       	ldi	r20, 0x0A	; 10
     1728:	50 e0       	ldi	r21, 0x00	; 0
-    172a:	0e 94 13 1e 	call	0x3c26	; 0x3c26 <utoa>
+    172a:	0e 94 15 1e 	call	0x3c2a	; 0x3c2a <utoa>
     172e:	09 c1       	rjmp	.+530    	; 0x1942 <AutoCheck+0x40c>
         }
                                         //############################################
@@ -4084,10 +4084,10 @@ void AutoCheck(void) {
     1744:	3b e1       	ldi	r19, 0x1B	; 27
     1746:	40 e0       	ldi	r20, 0x00	; 0
     1748:	50 e0       	ldi	r21, 0x00	; 0
-    174a:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    174a:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
     174e:	a2 01       	movw	r20, r4
     1750:	91 01       	movw	r18, r2
-    1752:	0e 94 d7 1d 	call	0x3bae	; 0x3bae <__divmodsi4>
+    1752:	0e 94 d9 1d 	call	0x3bb2	; 0x3bb2 <__divmodsi4>
     1756:	89 01       	movw	r16, r18
            R_PORT = 1<<(TP1*2);		//RL1 to VCC
     1758:	81 e0       	ldi	r24, 0x01	; 1
@@ -4293,12 +4293,12 @@ void AutoCheck(void) {
     189e:	3b e1       	ldi	r19, 0x1B	; 27
     18a0:	40 e0       	ldi	r20, 0x00	; 0
     18a2:	50 e0       	ldi	r21, 0x00	; 0
-    18a4:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    18a4:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
     18a8:	2e ea       	ldi	r18, 0xAE	; 174
     18aa:	32 ed       	ldi	r19, 0xD2	; 210
     18ac:	47 e4       	ldi	r20, 0x47	; 71
     18ae:	50 e0       	ldi	r21, 0x00	; 0
-    18b0:	0e 94 d7 1d 	call	0x3bae	; 0x3bae <__divmodsi4>
+    18b0:	0e 94 d9 1d 	call	0x3bb2	; 0x3bb2 <__divmodsi4>
     18b4:	89 01       	movw	r16, r18
            R_PORT = 2<<(TP1*2);		//RH1 to VCC
     18b6:	c5 b8       	out	0x05, r12	; 5
@@ -4358,7 +4358,7 @@ void AutoCheck(void) {
     1908:	71 e0       	ldi	r23, 0x01	; 1
     190a:	4a e0       	ldi	r20, 0x0A	; 10
     190c:	50 e0       	ldi	r21, 0x00	; 0
-    190e:	0e 94 f2 1d 	call	0x3be4	; 0x3be4 <itoa>
+    190e:	0e 94 f4 1d 	call	0x3be8	; 0x3be8 <itoa>
     1912:	0e 94 2f 01 	call	0x25e	; 0x25e <lcd_string>
            lcd_space();
     1916:	0e 94 df 00 	call	0x1be	; 0x1be <lcd_space>
@@ -4369,7 +4369,7 @@ void AutoCheck(void) {
     1920:	71 e0       	ldi	r23, 0x01	; 1
     1922:	4a e0       	ldi	r20, 0x0A	; 10
     1924:	50 e0       	ldi	r21, 0x00	; 0
-    1926:	0e 94 f2 1d 	call	0x3be4	; 0x3be4 <itoa>
+    1926:	0e 94 f4 1d 	call	0x3be8	; 0x3be8 <itoa>
     192a:	0e 94 2f 01 	call	0x25e	; 0x25e <lcd_string>
            lcd_space();
     192e:	0e 94 df 00 	call	0x1be	; 0x1be <lcd_space>
@@ -4380,7 +4380,7 @@ void AutoCheck(void) {
     1938:	71 e0       	ldi	r23, 0x01	; 1
     193a:	4a e0       	ldi	r20, 0x0A	; 10
     193c:	50 e0       	ldi	r21, 0x00	; 0
-    193e:	0e 94 f2 1d 	call	0x3be4	; 0x3be4 <itoa>
+    193e:	0e 94 f4 1d 	call	0x3be8	; 0x3be8 <itoa>
     1942:	0e 94 2f 01 	call	0x25e	; 0x25e <lcd_string>
         }
         ADC_DDR =  TXD_MSK;		// all-Pins to Input
@@ -4618,10 +4618,10 @@ void AutoCheck(void) {
     1a68:	3a e1       	ldi	r19, 0x1A	; 26
     1a6a:	40 e0       	ldi	r20, 0x00	; 0
     1a6c:	50 e0       	ldi	r21, 0x00	; 0
-    1a6e:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    1a6e:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
     1a72:	a6 01       	movw	r20, r12
     1a74:	95 01       	movw	r18, r10
-    1a76:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    1a76:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
     1a7a:	49 01       	movw	r8, r18
   adcmv[2] = pin_rm;	// for last output in row 2
     1a7c:	3e 83       	std	Y+6, r19	; 0x06
@@ -4634,10 +4634,10 @@ void AutoCheck(void) {
     1a88:	3a e1       	ldi	r19, 0x1A	; 26
     1a8a:	40 e0       	ldi	r20, 0x00	; 0
     1a8c:	50 e0       	ldi	r21, 0x00	; 0
-    1a8e:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    1a8e:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
     1a92:	a6 01       	movw	r20, r12
     1a94:	95 01       	movw	r18, r10
-    1a96:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    1a96:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
     1a9a:	79 01       	movw	r14, r18
   lcd_clear();
     1a9c:	0e 94 fe 00 	call	0x1fc	; 0x1fc <lcd_clear>
@@ -4689,14 +4689,14 @@ void AutoCheck(void) {
     1af2:	75 4e       	sbci	r23, 0xE5	; 229
     1af4:	8b ea       	ldi	r24, 0xAB	; 171
     1af6:	91 e0       	ldi	r25, 0x01	; 1
-    1af8:	0e 94 45 1e 	call	0x3c8a	; 0x3c8a <__eewr_word_m168>
+    1af8:	0e 94 47 1e 	call	0x3c8e	; 0x3c8e <__eewr_word_m168>
      (void) eeprom_write_word((uint16_t *)(&R680mi), pin_rm+R_L_VAL);  //hold GND resistance value in EEprom
     1afc:	b4 01       	movw	r22, r8
     1afe:	60 57       	subi	r22, 0x70	; 112
     1b00:	75 4e       	sbci	r23, 0xE5	; 229
     1b02:	8d ea       	ldi	r24, 0xAD	; 173
     1b04:	91 e0       	ldi	r25, 0x01	; 1
-    1b06:	0e 94 45 1e 	call	0x3c8a	; 0x3c8a <__eewr_word_m168>
+    1b06:	0e 94 47 1e 	call	0x3c8e	; 0x3c8e <__eewr_word_m168>
   }
 #endif
 
@@ -4836,7 +4836,7 @@ void AutoCheck(void) {
     1bf8:	c7 01       	movw	r24, r14
     1bfa:	87 54       	subi	r24, 0x47	; 71
     1bfc:	9e 4f       	sbci	r25, 0xFE	; 254
-    1bfe:	0e 94 37 1e 	call	0x3c6e	; 0x3c6e <__eewr_byte_m168>
+    1bfe:	0e 94 39 1e 	call	0x3c72	; 0x3c72 <__eewr_byte_m168>
     1c02:	08 94       	sec
     1c04:	e1 1c       	adc	r14, r1
     1c06:	f1 1c       	adc	r15, r1
@@ -4935,7 +4935,7 @@ no_c0save:
     1c82:	b9 01       	movw	r22, r18
     1c84:	a5 01       	movw	r20, r10
     1c86:	94 01       	movw	r18, r8
-    1c88:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    1c88:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
     1c8c:	0f 5f       	subi	r16, 0xFF	; 255
      lcd_data('3');
      lcd_fix_string(MinCap_str); // " >100nF!"
@@ -4988,7 +4988,7 @@ no_c0save:
     1cd2:	70 91 6b 01 	lds	r23, 0x016B
     1cd6:	87 eb       	ldi	r24, 0xB7	; 183
     1cd8:	91 e0       	ldi	r25, 0x01	; 1
-    1cda:	0e 94 45 1e 	call	0x3c8a	; 0x3c8a <__eewr_word_m168>
+    1cda:	0e 94 47 1e 	call	0x3c8e	; 0x3c8e <__eewr_word_m168>
         lcd_clear();
     1cde:	0e 94 fe 00 	call	0x1fc	; 0x1fc <lcd_clear>
         lcd_fix_string(REF_C_str);	// "REF_C="
@@ -5002,13 +5002,13 @@ no_c0save:
     1cf4:	71 e0       	ldi	r23, 0x01	; 1
     1cf6:	4a e0       	ldi	r20, 0x0A	; 10
     1cf8:	50 e0       	ldi	r21, 0x00	; 0
-    1cfa:	0e 94 f2 1d 	call	0x3be4	; 0x3be4 <itoa>
+    1cfa:	0e 94 f4 1d 	call	0x3be8	; 0x3be8 <itoa>
     1cfe:	0e 94 2f 01 	call	0x25e	; 0x25e <lcd_string>
         eeprom_write_byte((uint8_t *)(&EE_ESR_ZERO), (uint8_t)ESR_ZERO); // set to initial zero offset
     1d02:	80 ec       	ldi	r24, 0xC0	; 192
     1d04:	91 e0       	ldi	r25, 0x01	; 1
     1d06:	6d e1       	ldi	r22, 0x1D	; 29
-    1d08:	0e 94 37 1e 	call	0x3c6e	; 0x3c6e <__eewr_byte_m168>
+    1d08:	0e 94 39 1e 	call	0x3c72	; 0x3c72 <__eewr_byte_m168>
         wait_about1s();
         }
 //#######################################
@@ -5044,7 +5044,7 @@ no_c0save:
         ADCconfig.U_Bandgap = ADC_internal_reference;
     1d38:	8f ea       	ldi	r24, 0xAF	; 175
     1d3a:	91 e0       	ldi	r25, 0x01	; 1
-    1d3c:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+    1d3c:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
     1d40:	99 27       	eor	r25, r25
     1d42:	87 fd       	sbrc	r24, 7
     1d44:	90 95       	com	r25
@@ -5070,7 +5070,7 @@ no_c0save:
     1d76:	d0 90 40 01 	lds	r13, 0x0140
     1d7a:	8f ea       	ldi	r24, 0xAF	; 175
     1d7c:	91 e0       	ldi	r25, 0x01	; 1
-    1d7e:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+    1d7e:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
     1d82:	99 27       	eor	r25, r25
     1d84:	87 fd       	sbrc	r24, 7
     1d86:	90 95       	com	r25
@@ -5081,7 +5081,7 @@ no_c0save:
         udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1] - adcmv[1])) * ADC_internal_reference / (2*adcmv[1]))+REF_R_KORR;
     1d94:	8f ea       	ldi	r24, 0xAF	; 175
     1d96:	91 e0       	ldi	r25, 0x01	; 1
-    1d98:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+    1d98:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
     1d9c:	f8 2e       	mov	r15, r24
         lcd_line2();
     1d9e:	80 ec       	ldi	r24, 0xC0	; 192
@@ -5093,7 +5093,7 @@ no_c0save:
         udiff2 = udiff + (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
     1dac:	8f ea       	ldi	r24, 0xAF	; 175
     1dae:	91 e0       	ldi	r25, 0x01	; 1
-    1db0:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+    1db0:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
         ADCconfig.U_Bandgap = ADC_internal_reference;
         adcmv[1] = ReadADC(TP3);	// get cap voltage with internal reference
         ADCconfig.U_Bandgap = 0;	// do not use internal Ref
@@ -5122,7 +5122,7 @@ no_c0save:
     1dda:	3d 1d       	adc	r19, r13
     1ddc:	40 e0       	ldi	r20, 0x00	; 0
     1dde:	50 e0       	ldi	r21, 0x00	; 0
-    1de0:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    1de0:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
     1de4:	00 0f       	add	r16, r16
     1de6:	11 1f       	adc	r17, r17
     1de8:	98 01       	movw	r18, r16
@@ -5130,7 +5130,7 @@ no_c0save:
     1dec:	37 fd       	sbrc	r19, 7
     1dee:	40 95       	com	r20
     1df0:	54 2f       	mov	r21, r20
-    1df2:	0e 94 d7 1d 	call	0x3bae	; 0x3bae <__divmodsi4>
+    1df2:	0e 94 d9 1d 	call	0x3bb2	; 0x3bb2 <__divmodsi4>
         lcd_line2();
         lcd_fix_string(REF_R_str);	// "REF_R="
         udiff2 = udiff + (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
@@ -5139,7 +5139,7 @@ no_c0save:
     1df8:	8f ea       	ldi	r24, 0xAF	; 175
     1dfa:	91 e0       	ldi	r25, 0x01	; 1
     1dfc:	6e 2d       	mov	r22, r14
-    1dfe:	0e 94 37 1e 	call	0x3c6e	; 0x3c6e <__eewr_byte_m168>
+    1dfe:	0e 94 39 1e 	call	0x3c72	; 0x3c72 <__eewr_byte_m168>
         lcd_string(itoa(udiff2, outval, 10));	//output correction voltage
     1e02:	8e 2d       	mov	r24, r14
     1e04:	99 27       	eor	r25, r25
@@ -5149,7 +5149,7 @@ no_c0save:
     1e0c:	71 e0       	ldi	r23, 0x01	; 1
     1e0e:	4a e0       	ldi	r20, 0x0A	; 10
     1e10:	50 e0       	ldi	r21, 0x00	; 0
-    1e12:	0e 94 f2 1d 	call	0x3be4	; 0x3be4 <itoa>
+    1e12:	0e 94 f4 1d 	call	0x3be8	; 0x3be8 <itoa>
     1e16:	0e 94 2f 01 	call	0x25e	; 0x25e <lcd_string>
  #endif
         wait_about4s();
@@ -5434,13 +5434,13 @@ start:
   resis680pl = eeprom_read_word(&R680pl);
     1f90:	8b ea       	ldi	r24, 0xAB	; 171
     1f92:	91 e0       	ldi	r25, 0x01	; 1
-    1f94:	0e 94 31 1e 	call	0x3c62	; 0x3c62 <__eerd_word_m168>
+    1f94:	0e 94 33 1e 	call	0x3c66	; 0x3c66 <__eerd_word_m168>
     1f98:	90 93 09 01 	sts	0x0109, r25
     1f9c:	80 93 08 01 	sts	0x0108, r24
   resis680mi = eeprom_read_word(&R680mi);
     1fa0:	8d ea       	ldi	r24, 0xAD	; 173
     1fa2:	91 e0       	ldi	r25, 0x01	; 1
-    1fa4:	0e 94 31 1e 	call	0x3c62	; 0x3c62 <__eerd_word_m168>
+    1fa4:	0e 94 33 1e 	call	0x3c66	; 0x3c66 <__eerd_word_m168>
     1fa8:	90 93 03 01 	sts	0x0103, r25
     1fac:	80 93 02 01 	sts	0x0102, r24
 #endif
@@ -5501,11 +5501,11 @@ start:
     2012:	39 e0       	ldi	r19, 0x09	; 9
     2014:	40 e0       	ldi	r20, 0x00	; 0
     2016:	50 e0       	ldi	r21, 0x00	; 0
-    2018:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    2018:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
     201c:	9e 01       	movw	r18, r28
     201e:	40 e0       	ldi	r20, 0x00	; 0
     2020:	50 e0       	ldi	r21, 0x00	; 0
-    2022:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    2022:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
     2026:	30 93 3e 01 	sts	0x013E, r19
     202a:	20 93 3d 01 	sts	0x013D, r18
   }
@@ -5530,7 +5530,7 @@ start:
   ADCconfig.U_Bandgap = ADC_internal_reference;	// set internal reference voltage for ADC
     204a:	8f ea       	ldi	r24, 0xAF	; 175
     204c:	91 e0       	ldi	r25, 0x01	; 1
-    204e:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+    204e:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
     2052:	99 27       	eor	r25, r25
     2054:	87 fd       	sbrc	r24, 7
     2056:	90 95       	com	r25
@@ -5569,7 +5569,7 @@ start:
     2094:	99 1f       	adc	r25, r25
     2096:	6a e0       	ldi	r22, 0x0A	; 10
     2098:	70 e0       	ldi	r23, 0x00	; 0
-    209a:	0e 94 a1 1d 	call	0x3b42	; 0x3b42 <__udivmodhi4>
+    209a:	0e 94 a3 1d 	call	0x3b46	; 0x3b46 <__udivmodhi4>
     209e:	61 5f       	subi	r22, 0xF1	; 241
     20a0:	7f 4f       	sbci	r23, 0xFF	; 255
     20a2:	80 e0       	ldi	r24, 0x00	; 0
@@ -7098,7 +7098,7 @@ unsigned int getRLmultip(unsigned int cvolt) {
   tabind = uvolt / RL_Tab_Abstand;
     2a3a:	69 e1       	ldi	r22, 0x19	; 25
     2a3c:	70 e0       	ldi	r23, 0x00	; 0
-    2a3e:	0e 94 a1 1d 	call	0x3b42	; 0x3b42 <__udivmodhi4>
+    2a3e:	0e 94 a3 1d 	call	0x3b46	; 0x3b46 <__udivmodhi4>
   tabres = uvolt % RL_Tab_Abstand;
     2a42:	f8 2e       	mov	r15, r24
   tabres = RL_Tab_Abstand - tabres;
@@ -7116,7 +7116,7 @@ unsigned int getRLmultip(unsigned int cvolt) {
     2a52:	99 1f       	adc	r25, r25
     2a54:	80 50       	subi	r24, 0x00	; 0
     2a56:	90 40       	sbci	r25, 0x00	; 0
-    2a58:	0e 94 31 1e 	call	0x3c62	; 0x3c62 <__eerd_word_m168>
+    2a58:	0e 94 33 1e 	call	0x3c66	; 0x3c66 <__eerd_word_m168>
     2a5c:	8c 01       	movw	r16, r24
   y2 = MEM_read_word(&RLtab[tabind+1]);
     2a5e:	ce 01       	movw	r24, r28
@@ -7124,7 +7124,7 @@ unsigned int getRLmultip(unsigned int cvolt) {
     2a62:	99 1f       	adc	r25, r25
     2a64:	8e 5f       	subi	r24, 0xFE	; 254
     2a66:	9f 4f       	sbci	r25, 0xFF	; 255
-    2a68:	0e 94 31 1e 	call	0x3c62	; 0x3c62 <__eerd_word_m168>
+    2a68:	0e 94 33 1e 	call	0x3c66	; 0x3c66 <__eerd_word_m168>
     2a6c:	9c 01       	movw	r18, r24
   } else {
      uvolt = 0;			// limit to begin of table
@@ -7153,7 +7153,7 @@ unsigned int getRLmultip(unsigned int cvolt) {
     2a86:	0c 96       	adiw	r24, 0x0c	; 12
     2a88:	69 e1       	ldi	r22, 0x19	; 25
     2a8a:	70 e0       	ldi	r23, 0x00	; 0
-    2a8c:	0e 94 a1 1d 	call	0x3b42	; 0x3b42 <__udivmodhi4>
+    2a8c:	0e 94 a3 1d 	call	0x3b46	; 0x3b46 <__udivmodhi4>
     2a90:	62 0f       	add	r22, r18
     2a92:	73 1f       	adc	r23, r19
 }
@@ -7201,7 +7201,7 @@ void Scale_C_with_vcc(void) {
     2ad6:	b7 01       	movw	r22, r14
     2ad8:	a5 01       	movw	r20, r10
     2ada:	94 01       	movw	r18, r8
-    2adc:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    2adc:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
     2ae0:	79 01       	movw	r14, r18
     2ae2:	8a 01       	movw	r16, r20
     2ae4:	8d 2d       	mov	r24, r13
@@ -7232,13 +7232,13 @@ void Scale_C_with_vcc(void) {
     2b08:	50 e0       	ldi	r21, 0x00	; 0
     2b0a:	c8 01       	movw	r24, r16
     2b0c:	b7 01       	movw	r22, r14
-    2b0e:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    2b0e:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
    cap.cval /= U_VCC;			// Factors are computed for U_VCC
     2b12:	28 e8       	ldi	r18, 0x88	; 136
     2b14:	33 e1       	ldi	r19, 0x13	; 19
     2b16:	40 e0       	ldi	r20, 0x00	; 0
     2b18:	50 e0       	ldi	r21, 0x00	; 0
-    2b1a:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    2b1a:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
     2b1e:	20 93 58 01 	sts	0x0158, r18
     2b22:	30 93 59 01 	sts	0x0159, r19
     2b26:	40 93 5a 01 	sts	0x015A, r20
@@ -7293,7 +7293,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     2b6a:	90 e0       	ldi	r25, 0x00	; 0
     2b6c:	88 55       	subi	r24, 0x58	; 88
     2b6e:	9e 4f       	sbci	r25, 0xFE	; 254
-    2b70:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+    2b70:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
     2b74:	a8 2e       	mov	r10, r24
   HiPinR_L = MEM_read_byte(&PinRLtab[HighPin]);	//R_L mask for HighPin R_L load
     2b76:	21 2f       	mov	r18, r17
@@ -7301,7 +7301,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     2b7a:	c9 01       	movw	r24, r18
     2b7c:	8b 55       	subi	r24, 0x5B	; 91
     2b7e:	9e 4f       	sbci	r25, 0xFE	; 254
-    2b80:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+    2b80:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
     2b84:	08 2f       	mov	r16, r24
 //     DisplayValue(cap.cval,cap.cpre,'F',3);
 //     wait_about2s();
@@ -7584,7 +7584,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     2cce:	90 e0       	ldi	r25, 0x00	; 0
     2cd0:	a6 01       	movw	r20, r12
     2cd2:	95 01       	movw	r18, r10
-    2cd4:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    2cd4:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
     2cd8:	60 93 60 01 	sts	0x0160, r22
     2cdc:	70 93 61 01 	sts	0x0161, r23
     2ce0:	80 93 62 01 	sts	0x0162, r24
@@ -7607,13 +7607,13 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     2d0e:	33 e0       	ldi	r19, 0x03	; 3
     2d10:	40 e0       	ldi	r20, 0x00	; 0
     2d12:	50 e0       	ldi	r21, 0x00	; 0
-    2d14:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    2d14:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
    cap.cval /= 100;
     2d18:	24 e6       	ldi	r18, 0x64	; 100
     2d1a:	30 e0       	ldi	r19, 0x00	; 0
     2d1c:	40 e0       	ldi	r20, 0x00	; 0
     2d1e:	50 e0       	ldi	r21, 0x00	; 0
-    2d20:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    2d20:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
     2d24:	20 93 58 01 	sts	0x0158, r18
     2d28:	30 93 59 01 	sts	0x0159, r19
     2d2c:	40 93 5a 01 	sts	0x015A, r20
@@ -7819,7 +7819,7 @@ messe_mit_rh:
     2e46:	30 e0       	ldi	r19, 0x00	; 0
     2e48:	40 e0       	ldi	r20, 0x00	; 0
     2e4a:	50 e0       	ldi	r21, 0x00	; 0
-    2e4c:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    2e4c:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
     2e50:	20 93 60 01 	sts	0x0160, r18
     2e54:	30 93 61 01 	sts	0x0161, r19
     2e58:	40 93 62 01 	sts	0x0162, r20
@@ -7837,13 +7837,13 @@ messe_mit_rh:
     2e76:	30 91 61 01 	lds	r19, 0x0161
     2e7a:	40 91 62 01 	lds	r20, 0x0162
     2e7e:	50 91 63 01 	lds	r21, 0x0163
-    2e82:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    2e82:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
   cap.cval_uncorrected.dw /= (F_CPU / 10000);	// divide by 100 (@ 1MHz clock), 800 (@ 8MHz clock)
     2e86:	20 e2       	ldi	r18, 0x20	; 32
     2e88:	33 e0       	ldi	r19, 0x03	; 3
     2e8a:	40 e0       	ldi	r20, 0x00	; 0
     2e8c:	50 e0       	ldi	r21, 0x00	; 0
-    2e8e:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    2e8e:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
     2e92:	20 93 60 01 	sts	0x0160, r18
     2e96:	30 93 61 01 	sts	0x0161, r19
     2e9a:	40 93 62 01 	sts	0x0162, r20
@@ -7889,7 +7889,7 @@ messe_mit_rh:
     2eee:	7f e0       	ldi	r23, 0x0F	; 15
     2ef0:	80 e0       	ldi	r24, 0x00	; 0
     2ef2:	90 e0       	ldi	r25, 0x00	; 0
-    2ef4:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    2ef4:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
     2ef8:	2c 0d       	add	r18, r12
     2efa:	3d 1d       	adc	r19, r13
     2efc:	4e 1d       	adc	r20, r14
@@ -7907,7 +7907,7 @@ messe_mit_rh:
     2f14:	90 e0       	ldi	r25, 0x00	; 0
     2f16:	87 54       	subi	r24, 0x47	; 71
     2f18:	9e 4f       	sbci	r25, 0xFE	; 254
-    2f1a:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+    2f1a:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
      if (cap.cval > tmpint) {
     2f1e:	20 91 58 01 	lds	r18, 0x0158
     2f22:	30 91 59 01 	lds	r19, 0x0159
@@ -8185,14 +8185,14 @@ void ReadInductance(void) {
     30ce:	90 e0       	ldi	r25, 0x00	; 0
     30d0:	88 55       	subi	r24, 0x58	; 88
     30d2:	9e 4f       	sbci	r25, 0xFE	; 254
-    30d4:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+    30d4:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
     30d8:	88 2e       	mov	r8, r24
         LoPinR_L = MEM_read_byte(&PinRLtab[LowPin]);	//R_L mask for HighPin R_L load
     30da:	8e 2d       	mov	r24, r14
     30dc:	90 e0       	ldi	r25, 0x00	; 0
     30de:	8b 55       	subi	r24, 0x5B	; 91
     30e0:	9e 4f       	sbci	r25, 0xFE	; 254
-    30e2:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+    30e2:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
         //==================================================================================
         // Measurement of Inductance values
         R_PORT = 0;		// switch R port to GND
@@ -8464,7 +8464,7 @@ void ReadInductance(void) {
         tmpint = (ref_mv + (int16_t)eeprom_read_word((uint16_t *)(&ref_offset))) ;
     324e:	87 eb       	ldi	r24, 0xB7	; 183
     3250:	91 e0       	ldi	r25, 0x01	; 1
-    3252:	0e 94 31 1e 	call	0x3c62	; 0x3c62 <__eerd_word_m168>
+    3252:	0e 94 33 1e 	call	0x3c66	; 0x3c66 <__eerd_word_m168>
     3256:	60 91 3f 01 	lds	r22, 0x013F
     325a:	70 91 40 01 	lds	r23, 0x0140
     325e:	68 0f       	add	r22, r24
@@ -8593,7 +8593,7 @@ void ReadInductance(void) {
     3370:	30 e0       	ldi	r19, 0x00	; 0
     3372:	40 e0       	ldi	r20, 0x00	; 0
     3374:	50 e0       	ldi	r21, 0x00	; 0
-    3376:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    3376:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
     337a:	68 8f       	std	Y+24, r22	; 0x18
     337c:	79 8f       	std	Y+25, r23	; 0x19
     337e:	8a 8f       	std	Y+26, r24	; 0x1a
@@ -8611,10 +8611,10 @@ void ReadInductance(void) {
     338c:	30 91 3e 01 	lds	r19, 0x013E
     3390:	40 e0       	ldi	r20, 0x00	; 0
     3392:	50 e0       	ldi	r21, 0x00	; 0
-    3394:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    3394:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
     3398:	a3 01       	movw	r20, r6
     339a:	92 01       	movw	r18, r4
-    339c:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    339c:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
         per_ref = ((unsigned long)tmpint * 100) / umax;
     33a0:	40 e0       	ldi	r20, 0x00	; 0
     33a2:	50 e0       	ldi	r21, 0x00	; 0
@@ -8622,7 +8622,7 @@ void ReadInductance(void) {
     33a6:	79 8d       	ldd	r23, Y+25	; 0x19
     33a8:	8a 8d       	ldd	r24, Y+26	; 0x1a
     33aa:	9b 8d       	ldd	r25, Y+27	; 0x1b
-    33ac:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    33ac:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
         per_ref = (uint8_t)MEM2_read_byte(&LogTab[per_ref]);	// -log(1 - per_ref/100)
     33b0:	e2 2f       	mov	r30, r18
     33b2:	f0 e0       	ldi	r31, 0x00	; 0
@@ -8637,7 +8637,7 @@ void ReadInductance(void) {
     33c6:	50 91 63 01 	lds	r21, 0x0163
     33ca:	c3 01       	movw	r24, r6
     33cc:	b2 01       	movw	r22, r4
-    33ce:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    33ce:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
     33d2:	20 2f       	mov	r18, r16
     33d4:	30 e0       	ldi	r19, 0x00	; 0
     33d6:	40 e0       	ldi	r20, 0x00	; 0
@@ -8649,7 +8649,7 @@ void ReadInductance(void) {
     33e2:	55 1f       	adc	r21, r21
     33e4:	ea 95       	dec	r30
     33e6:	d1 f7       	brne	.-12     	; 0x33dc <ReadInductance+0x3bc>
-    33e8:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    33e8:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
     33ec:	f1 01       	movw	r30, r2
     33ee:	ee 0f       	add	r30, r30
     33f0:	ff 1f       	adc	r31, r31
@@ -9028,13 +9028,13 @@ sample:
  Value *= U; /* ADC readings * U_ref */
     3600:	80 e0       	ldi	r24, 0x00	; 0
     3602:	90 e0       	ldi	r25, 0x00	; 0
-    3604:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
+    3604:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
  Value /= 1023; /* / 1024 for 10bit ADC */
     3608:	2f ef       	ldi	r18, 0xFF	; 255
     360a:	33 e0       	ldi	r19, 0x03	; 3
     360c:	40 e0       	ldi	r20, 0x00	; 0
     360e:	50 e0       	ldi	r21, 0x00	; 0
-    3610:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    3610:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
     3614:	79 01       	movw	r14, r18
     3616:	8a 01       	movw	r16, r20
  /* de-sample to get average voltage */
@@ -9045,7 +9045,7 @@ sample:
     361e:	50 e0       	ldi	r21, 0x00	; 0
     3620:	c8 01       	movw	r24, r16
     3622:	b7 01       	movw	r22, r14
-    3624:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    3624:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
  U = (unsigned int)Value;
  return U;
 //   return ((unsigned int)(Value / (1023 * (unsigned long)ADCconfig.Samples)));
@@ -9170,7 +9170,7 @@ void GetESR() {
     36ce:	b9 01       	movw	r22, r18
     36d0:	a6 01       	movw	r20, r12
     36d2:	95 01       	movw	r18, r10
-    36d4:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
+    36d4:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
     36d8:	1f 5f       	subi	r17, 0xFF	; 255
   uint8_t LoADC;		// used to switch Lowpin directly to GND or VCC
   uint8_t ii,jj;		// tempory values
@@ -9197,7 +9197,7 @@ void GetESR() {
     36fc:	60 e0       	ldi	r22, 0x00	; 0
     36fe:	56 07       	cpc	r21, r22
     3700:	08 f4       	brcc	.+2      	; 0x3704 <GetESR+0x8c>
-    3702:	db c1       	rjmp	.+950    	; 0x3aba <GetESR+0x442>
+    3702:	dd c1       	rjmp	.+954    	; 0x3abe <GetESR+0x446>
   lcd_fix_string(ESR_str);		// " ESR="
     3704:	8c e2       	ldi	r24, 0x2C	; 44
     3706:	91 e0       	ldi	r25, 0x01	; 1
@@ -9209,7 +9209,7 @@ void GetESR() {
     3714:	c8 01       	movw	r24, r16
     3716:	88 55       	subi	r24, 0x58	; 88
     3718:	9e 4f       	sbci	r25, 0xFE	; 254
-    371a:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+    371a:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
     371e:	28 e0       	ldi	r18, 0x08	; 8
     3720:	82 2e       	mov	r8, r18
     3722:	88 2a       	or	r8, r24
@@ -9220,7 +9220,7 @@ void GetESR() {
     372c:	c7 01       	movw	r24, r14
     372e:	88 55       	subi	r24, 0x58	; 88
     3730:	9e 4f       	sbci	r25, 0xFE	; 254
-    3732:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+    3732:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
     3736:	98 e0       	ldi	r25, 0x08	; 8
     3738:	79 2e       	mov	r7, r25
     373a:	78 2a       	or	r7, r24
@@ -9228,13 +9228,13 @@ void GetESR() {
     373c:	c8 01       	movw	r24, r16
     373e:	8b 55       	subi	r24, 0x5B	; 91
     3740:	9e 4f       	sbci	r25, 0xFE	; 254
-    3742:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+    3742:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
     3746:	98 2e       	mov	r9, r24
   HiPinR_L = MEM_read_byte(&PinRLtab[cap.cb]);	//R_L mask for HighPin R_L load
     3748:	c7 01       	movw	r24, r14
     374a:	8b 55       	subi	r24, 0x5B	; 91
     374c:	9e 4f       	sbci	r25, 0xFE	; 254
-    374e:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
+    374e:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
     3752:	b8 2e       	mov	r11, r24
 #if PROCESSOR_TYP == 1280
     /* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
@@ -9347,779 +9347,793 @@ void GetESR() {
     37e0:	0e 94 08 15 	call	0x2a10	; 0x2a10 <wait10us>
          wait5us();			
     37e4:	0e 94 09 15 	call	0x2a12	; 0x2a12 <wait5us>
-         wdt_reset();	// 20.00  us -  
-         wdt_reset();	// 20.0625us +  
+         wdt_reset();	/* 20.1875us + */
+         wdt_reset();	/* 20.250 us + */
  #endif
 #else
  #if F_CPU == 8000000UL
          wait4us();				// with only 18 us delay the voltage goes down before SH
     37e8:	0e 94 0a 15 	call	0x2a14	; 0x2a14 <wait4us>
+//         wdt_reset();	/* 19.75  us - */
+//         wdt_reset();	/* 19.875 us - */
+//         wdt_reset();	/* 20.0   us - */
+//         wdt_reset();	/* 20.125 us + (1.1 , 0.63) */
+//         wdt_reset();	/* 20.25  us + (1.0 , 0.60) */
+           wdt_reset(); /* 20.375 us + */
+    37ec:	a8 95       	wdr
 #endif
 //         wdt_reset();				// with wdt_reset the timing can be adjusted,
 						// when time is too short, voltage is down before SH of ADC
 						// when time is too long, capacitor will be overloaded.
 						// That will cause too high voltage without current.
          R_DDR = 0;				// switch current off,  SH is 1.5 ADC clock behind real start
-    37ec:	14 b8       	out	0x04, r1	; 4
+    37ee:	14 b8       	out	0x04, r1	; 4
          R_PORT = 0;
-    37ee:	15 b8       	out	0x05, r1	; 5
+    37f0:	15 b8       	out	0x05, r1	; 5
          while (ADCSRA&(1<<ADSC));		// wait for conversion finished
-    37f0:	80 91 7a 00 	lds	r24, 0x007A
-    37f4:	86 fd       	sbrc	r24, 6
-    37f6:	fc cf       	rjmp	.-8      	; 0x37f0 <GetESR+0x178>
+    37f2:	80 91 7a 00 	lds	r24, 0x007A
+    37f6:	86 fd       	sbrc	r24, 6
+    37f8:	fc cf       	rjmp	.-8      	; 0x37f2 <GetESR+0x17a>
          adcv[1] = ADCW;			// Voltage HighPin with current
-    37f8:	20 91 78 00 	lds	r18, 0x0078
-    37fc:	30 91 79 00 	lds	r19, 0x0079
+    37fa:	20 91 78 00 	lds	r18, 0x0078
+    37fe:	30 91 79 00 	lds	r19, 0x0079
          StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-    3800:	a0 92 7a 00 	sts	0x007A, r10
-    3804:	80 91 7a 00 	lds	r24, 0x007A
-    3808:	86 fd       	sbrc	r24, 6
-    380a:	fc cf       	rjmp	.-8      	; 0x3804 <GetESR+0x18c>
+    3802:	a0 92 7a 00 	sts	0x007A, r10
+    3806:	80 91 7a 00 	lds	r24, 0x007A
+    380a:	86 fd       	sbrc	r24, 6
+    380c:	fc cf       	rjmp	.-8      	; 0x3806 <GetESR+0x18e>
          StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-    380c:	a0 92 7a 00 	sts	0x007A, r10
-    3810:	80 91 7a 00 	lds	r24, 0x007A
-    3814:	86 fd       	sbrc	r24, 6
-    3816:	fc cf       	rjmp	.-8      	; 0x3810 <GetESR+0x198>
+    380e:	a0 92 7a 00 	sts	0x007A, r10
+    3812:	80 91 7a 00 	lds	r24, 0x007A
+    3816:	86 fd       	sbrc	r24, 6
+    3818:	fc cf       	rjmp	.-8      	; 0x3812 <GetESR+0x19a>
          adcv[2] = ADCW;			// Voltage HighPin without current
-    3818:	80 91 78 00 	lds	r24, 0x0078
-    381c:	90 91 79 00 	lds	r25, 0x0079
+    381a:	80 91 78 00 	lds	r24, 0x0078
+    381e:	90 91 79 00 	lds	r25, 0x0079
          if (adcv[2] > 2) break;		// at least more than two digits required
-    3820:	83 30       	cpi	r24, 0x03	; 3
-    3822:	91 05       	cpc	r25, r1
-    3824:	10 f4       	brcc	.+4      	; 0x382a <GetESR+0x1b2>
+    3822:	83 30       	cpi	r24, 0x03	; 3
+    3824:	91 05       	cpc	r25, r1
+    3826:	10 f4       	brcc	.+4      	; 0x382c <GetESR+0x1b4>
          wdt_reset();
-    3826:	a8 95       	wdr
+    3828:	a8 95       	wdr
       } // end while (1)
-    3828:	bd cf       	rjmp	.-134    	; 0x37a4 <GetESR+0x12c>
+    382a:	bc cf       	rjmp	.-136    	; 0x37a4 <GetESR+0x12c>
       sumvolt[0] += adcv[0];			// add sum of both LowPin voltages with current
-    382a:	44 24       	eor	r4, r4
-    382c:	55 24       	eor	r5, r5
+    382c:	44 24       	eor	r4, r4
+    382e:	55 24       	eor	r5, r5
       sumvolt[1] += adcv[1];			// add  HighPin voltages with current
-    382e:	a9 01       	movw	r20, r18
-    3830:	60 e0       	ldi	r22, 0x00	; 0
-    3832:	70 e0       	ldi	r23, 0x00	; 0
-    3834:	49 87       	std	Y+9, r20	; 0x09
-    3836:	5a 87       	std	Y+10, r21	; 0x0a
-    3838:	6b 87       	std	Y+11, r22	; 0x0b
-    383a:	7c 87       	std	Y+12, r23	; 0x0c
+    3830:	a9 01       	movw	r20, r18
+    3832:	60 e0       	ldi	r22, 0x00	; 0
+    3834:	70 e0       	ldi	r23, 0x00	; 0
+    3836:	49 87       	std	Y+9, r20	; 0x09
+    3838:	5a 87       	std	Y+10, r21	; 0x0a
+    383a:	6b 87       	std	Y+11, r22	; 0x0b
+    383c:	7c 87       	std	Y+12, r23	; 0x0c
       sumvolt[2] += adcv[2]; 			// capacitor voltage without current
-    383c:	9c 01       	movw	r18, r24
-    383e:	40 e0       	ldi	r20, 0x00	; 0
-    3840:	50 e0       	ldi	r21, 0x00	; 0
-    3842:	2d 87       	std	Y+13, r18	; 0x0d
-    3844:	3e 87       	std	Y+14, r19	; 0x0e
-    3846:	4f 87       	std	Y+15, r20	; 0x0f
-    3848:	58 8b       	std	Y+16, r21	; 0x10
+    383e:	9c 01       	movw	r18, r24
+    3840:	40 e0       	ldi	r20, 0x00	; 0
+    3842:	50 e0       	ldi	r21, 0x00	; 0
+    3844:	2d 87       	std	Y+13, r18	; 0x0d
+    3846:	3e 87       	std	Y+14, r19	; 0x0e
+    3848:	4f 87       	std	Y+15, r20	; 0x0f
+    384a:	58 8b       	std	Y+16, r21	; 0x10
       /* ********* Reverse direction, connect High side with GND *********** */
       ADC_DDR = HiADC;				// switch High Pin to GND
-    384a:	77 b8       	out	0x07, r7	; 7
+    384c:	77 b8       	out	0x07, r7	; 7
       StartADCwait();				// set ADCSRA Interrupt Mode, sleep
-    384c:	a0 92 7a 00 	sts	0x007A, r10
-    3850:	80 91 7a 00 	lds	r24, 0x007A
-    3854:	86 fd       	sbrc	r24, 6
-    3856:	fc cf       	rjmp	.-8      	; 0x3850 <GetESR+0x1d8>
+    384e:	a0 92 7a 00 	sts	0x007A, r10
+    3852:	80 91 7a 00 	lds	r24, 0x007A
+    3856:	86 fd       	sbrc	r24, 6
+    3858:	fc cf       	rjmp	.-8      	; 0x3852 <GetESR+0x1da>
       while (1) {
          R_PORT = LoPinR_L;
-    3858:	95 b8       	out	0x05, r9	; 5
+    385a:	95 b8       	out	0x05, r9	; 5
          R_DDR = LoPinR_L;			// switch LowPin with 680 Ohm to VCC
-    385a:	94 b8       	out	0x04, r9	; 4
+    385c:	94 b8       	out	0x04, r9	; 4
          wdt_reset();
-    385c:	a8 95       	wdr
+    385e:	a8 95       	wdr
          ADMUX = SelectHighPin;
-    385e:	60 92 7c 00 	sts	0x007C, r6
+    3860:	60 92 7c 00 	sts	0x007C, r6
          StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-    3862:	a0 92 7a 00 	sts	0x007A, r10
-    3866:	80 91 7a 00 	lds	r24, 0x007A
-    386a:	86 fd       	sbrc	r24, 6
-    386c:	fc cf       	rjmp	.-8      	; 0x3866 <GetESR+0x1ee>
+    3864:	a0 92 7a 00 	sts	0x007A, r10
+    3868:	80 91 7a 00 	lds	r24, 0x007A
+    386c:	86 fd       	sbrc	r24, 6
+    386e:	fc cf       	rjmp	.-8      	; 0x3868 <GetESR+0x1f0>
          StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-    386e:	a0 92 7a 00 	sts	0x007A, r10
-    3872:	80 91 7a 00 	lds	r24, 0x007A
-    3876:	86 fd       	sbrc	r24, 6
-    3878:	fc cf       	rjmp	.-8      	; 0x3872 <GetESR+0x1fa>
+    3870:	a0 92 7a 00 	sts	0x007A, r10
+    3874:	80 91 7a 00 	lds	r24, 0x007A
+    3878:	86 fd       	sbrc	r24, 6
+    387a:	fc cf       	rjmp	.-8      	; 0x3874 <GetESR+0x1fc>
          adcv[0] = ADCW;			// Voltage HighPin with current
-    387a:	80 91 78 00 	lds	r24, 0x0078
-    387e:	90 91 79 00 	lds	r25, 0x0079
+    387c:	80 91 78 00 	lds	r24, 0x0078
+    3880:	90 91 79 00 	lds	r25, 0x0079
          ADMUX = SelectLowPin;
-    3882:	d0 92 7c 00 	sts	0x007C, r13
+    3884:	d0 92 7c 00 	sts	0x007C, r13
          StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-    3886:	a0 92 7a 00 	sts	0x007A, r10
-    388a:	9c 01       	movw	r18, r24
-    388c:	80 91 7a 00 	lds	r24, 0x007A
-    3890:	86 fd       	sbrc	r24, 6
-    3892:	fc cf       	rjmp	.-8      	; 0x388c <GetESR+0x214>
-    3894:	c9 01       	movw	r24, r18
+    3888:	a0 92 7a 00 	sts	0x007A, r10
+    388c:	9c 01       	movw	r18, r24
+    388e:	80 91 7a 00 	lds	r24, 0x007A
+    3892:	86 fd       	sbrc	r24, 6
+    3894:	fc cf       	rjmp	.-8      	; 0x388e <GetESR+0x216>
+    3896:	c9 01       	movw	r24, r18
 //         ADCSRA |= (1<<ADSC);			// Start Conversion, real start is next rising edge of ADC clock
          ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; // enable ADC and start with ADSC
-    3896:	a0 92 7a 00 	sts	0x007A, r10
+    3898:	a0 92 7a 00 	sts	0x007A, r10
          wait10us();				// 2.5 ADC clocks = 20 us
-    389a:	29 8b       	std	Y+17, r18	; 0x11
-    389c:	9a 8b       	std	Y+18, r25	; 0x12
-    389e:	0e 94 08 15 	call	0x2a10	; 0x2a10 <wait10us>
+    389c:	29 8b       	std	Y+17, r18	; 0x11
+    389e:	9a 8b       	std	Y+18, r25	; 0x12
+    38a0:	0e 94 08 15 	call	0x2a10	; 0x2a10 <wait10us>
          wait5us();			
-    38a2:	0e 94 09 15 	call	0x2a12	; 0x2a12 <wait5us>
-         wdt_reset();	// 20.00  us -  
-         wdt_reset();	// 20.0625us +  
+    38a4:	0e 94 09 15 	call	0x2a12	; 0x2a12 <wait5us>
+         wdt_reset();	/* 20.1875us + */
+         wdt_reset();	/* 20.250 us + */
  #endif
 #else
  #if F_CPU == 8000000UL
          wait4us();				// with only 18 us delay the voltage goes down before SH
-    38a6:	0e 94 0a 15 	call	0x2a14	; 0x2a14 <wait4us>
+    38a8:	0e 94 0a 15 	call	0x2a14	; 0x2a14 <wait4us>
+//         wdt_reset();	/* 19.75  us - */
+//         wdt_reset();	/* 19.875 us - */
+//         wdt_reset();	/* 20.0   us - */
+//         wdt_reset();	/* 20.125 us + */
+//         wdt_reset();	/* 20.25  us + */
+           wdt_reset(); /* 20.375 us + */
+    38ac:	a8 95       	wdr
 #endif
 //         wdt_reset();				// with wdt_reset the timing can be adjusted,
 						// when time is too short, voltage is down before SH of ADC
 						// when time is too long, capacitor will be overloaded.
 						// That will cause too high voltage without current.
          R_DDR = 0;				// switch current off, SH is 1.5 ADC clock ticks behind real start
-    38aa:	14 b8       	out	0x04, r1	; 4
+    38ae:	14 b8       	out	0x04, r1	; 4
          R_PORT = 0;
-    38ac:	15 b8       	out	0x05, r1	; 5
-    38ae:	89 89       	ldd	r24, Y+17	; 0x11
-    38b0:	9a 89       	ldd	r25, Y+18	; 0x12
-    38b2:	9c 01       	movw	r18, r24
+    38b0:	15 b8       	out	0x05, r1	; 5
+    38b2:	89 89       	ldd	r24, Y+17	; 0x11
+    38b4:	9a 89       	ldd	r25, Y+18	; 0x12
+    38b6:	9c 01       	movw	r18, r24
          while (ADCSRA&(1<<ADSC));		// wait for conversion finished
-    38b4:	80 91 7a 00 	lds	r24, 0x007A
-    38b8:	86 fd       	sbrc	r24, 6
-    38ba:	fc cf       	rjmp	.-8      	; 0x38b4 <GetESR+0x23c>
+    38b8:	80 91 7a 00 	lds	r24, 0x007A
+    38bc:	86 fd       	sbrc	r24, 6
+    38be:	fc cf       	rjmp	.-8      	; 0x38b8 <GetESR+0x240>
          adcv[1] = ADCW;			//  Voltage LowPin with current
-    38bc:	40 91 78 00 	lds	r20, 0x0078
-    38c0:	50 91 79 00 	lds	r21, 0x0079
+    38c0:	40 91 78 00 	lds	r20, 0x0078
+    38c4:	50 91 79 00 	lds	r21, 0x0079
 //          ADMUX = SelectLowPin;
          StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-    38c4:	a0 92 7a 00 	sts	0x007A, r10
-    38c8:	80 91 7a 00 	lds	r24, 0x007A
-    38cc:	86 fd       	sbrc	r24, 6
-    38ce:	fc cf       	rjmp	.-8      	; 0x38c8 <GetESR+0x250>
+    38c8:	a0 92 7a 00 	sts	0x007A, r10
+    38cc:	80 91 7a 00 	lds	r24, 0x007A
+    38d0:	86 fd       	sbrc	r24, 6
+    38d2:	fc cf       	rjmp	.-8      	; 0x38cc <GetESR+0x254>
          StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-    38d0:	a0 92 7a 00 	sts	0x007A, r10
-    38d4:	80 91 7a 00 	lds	r24, 0x007A
-    38d8:	86 fd       	sbrc	r24, 6
-    38da:	fc cf       	rjmp	.-8      	; 0x38d4 <GetESR+0x25c>
-    38dc:	c9 01       	movw	r24, r18
+    38d4:	a0 92 7a 00 	sts	0x007A, r10
+    38d8:	80 91 7a 00 	lds	r24, 0x007A
+    38dc:	86 fd       	sbrc	r24, 6
+    38de:	fc cf       	rjmp	.-8      	; 0x38d8 <GetESR+0x260>
+    38e0:	c9 01       	movw	r24, r18
          adcv[2] = ADCW;			// Voltage LowPin without current
-    38de:	20 91 78 00 	lds	r18, 0x0078
-    38e2:	30 91 79 00 	lds	r19, 0x0079
+    38e2:	20 91 78 00 	lds	r18, 0x0078
+    38e6:	30 91 79 00 	lds	r19, 0x0079
          if (adcv[2] > 2) break;		// at least more than two digits required
-    38e6:	23 30       	cpi	r18, 0x03	; 3
-    38e8:	31 05       	cpc	r19, r1
-    38ea:	10 f4       	brcc	.+4      	; 0x38f0 <GetESR+0x278>
+    38ea:	23 30       	cpi	r18, 0x03	; 3
+    38ec:	31 05       	cpc	r19, r1
+    38ee:	10 f4       	brcc	.+4      	; 0x38f4 <GetESR+0x27c>
          wdt_reset();
-    38ec:	a8 95       	wdr
+    38f0:	a8 95       	wdr
       } // end while (1)
-    38ee:	b4 cf       	rjmp	.-152    	; 0x3858 <GetESR+0x1e0>
+    38f2:	b3 cf       	rjmp	.-154    	; 0x385a <GetESR+0x1e2>
       R_DDR = 0;				// switch current off
-    38f0:	14 b8       	out	0x04, r1	; 4
+    38f4:	14 b8       	out	0x04, r1	; 4
       sumvolt[0] += adcv[0];			// add  LowPin voltages with current
-    38f2:	a0 e0       	ldi	r26, 0x00	; 0
-    38f4:	b0 e0       	ldi	r27, 0x00	; 0
+    38f6:	a0 e0       	ldi	r26, 0x00	; 0
+    38f8:	b0 e0       	ldi	r27, 0x00	; 0
          StartADCwait();			// set ADCSRA Interrupt Mode, sleep
          adcv[2] = ADCW;			// Voltage HighPin without current
          if (adcv[2] > 2) break;		// at least more than two digits required
          wdt_reset();
       } // end while (1)
       sumvolt[0] += adcv[0];			// add sum of both LowPin voltages with current
-    38f6:	82 0d       	add	r24, r2
-    38f8:	93 1d       	adc	r25, r3
-    38fa:	a4 1d       	adc	r26, r4
-    38fc:	b5 1d       	adc	r27, r5
+    38fa:	82 0d       	add	r24, r2
+    38fc:	93 1d       	adc	r25, r3
+    38fe:	a4 1d       	adc	r26, r4
+    3900:	b5 1d       	adc	r27, r5
          adcv[2] = ADCW;			// Voltage LowPin without current
          if (adcv[2] > 2) break;		// at least more than two digits required
          wdt_reset();
       } // end while (1)
       R_DDR = 0;				// switch current off
       sumvolt[0] += adcv[0];			// add  LowPin voltages with current
-    38fe:	e8 0e       	add	r14, r24
-    3900:	f9 1e       	adc	r15, r25
-    3902:	0a 1f       	adc	r16, r26
-    3904:	1b 1f       	adc	r17, r27
+    3902:	e8 0e       	add	r14, r24
+    3904:	f9 1e       	adc	r15, r25
+    3906:	0a 1f       	adc	r16, r26
+    3908:	1b 1f       	adc	r17, r27
       sumvolt[1] += adcv[1];			// add  HighPin voltages with current
-    3906:	ca 01       	movw	r24, r20
-    3908:	a0 e0       	ldi	r26, 0x00	; 0
-    390a:	b0 e0       	ldi	r27, 0x00	; 0
+    390a:	ca 01       	movw	r24, r20
+    390c:	a0 e0       	ldi	r26, 0x00	; 0
+    390e:	b0 e0       	ldi	r27, 0x00	; 0
          adcv[2] = ADCW;			// Voltage HighPin without current
          if (adcv[2] > 2) break;		// at least more than two digits required
          wdt_reset();
       } // end while (1)
       sumvolt[0] += adcv[0];			// add sum of both LowPin voltages with current
       sumvolt[1] += adcv[1];			// add  HighPin voltages with current
-    390c:	49 85       	ldd	r20, Y+9	; 0x09
-    390e:	5a 85       	ldd	r21, Y+10	; 0x0a
-    3910:	6b 85       	ldd	r22, Y+11	; 0x0b
-    3912:	7c 85       	ldd	r23, Y+12	; 0x0c
-    3914:	84 0f       	add	r24, r20
-    3916:	95 1f       	adc	r25, r21
-    3918:	a6 1f       	adc	r26, r22
-    391a:	b7 1f       	adc	r27, r23
+    3910:	49 85       	ldd	r20, Y+9	; 0x09
+    3912:	5a 85       	ldd	r21, Y+10	; 0x0a
+    3914:	6b 85       	ldd	r22, Y+11	; 0x0b
+    3916:	7c 85       	ldd	r23, Y+12	; 0x0c
+    3918:	84 0f       	add	r24, r20
+    391a:	95 1f       	adc	r25, r21
+    391c:	a6 1f       	adc	r26, r22
+    391e:	b7 1f       	adc	r27, r23
          if (adcv[2] > 2) break;		// at least more than two digits required
          wdt_reset();
       } // end while (1)
       R_DDR = 0;				// switch current off
       sumvolt[0] += adcv[0];			// add  LowPin voltages with current
       sumvolt[1] += adcv[1];			// add  HighPin voltages with current
-    391c:	49 81       	ldd	r20, Y+1	; 0x01
-    391e:	5a 81       	ldd	r21, Y+2	; 0x02
-    3920:	6b 81       	ldd	r22, Y+3	; 0x03
-    3922:	7c 81       	ldd	r23, Y+4	; 0x04
-    3924:	48 0f       	add	r20, r24
-    3926:	59 1f       	adc	r21, r25
-    3928:	6a 1f       	adc	r22, r26
-    392a:	7b 1f       	adc	r23, r27
-    392c:	49 83       	std	Y+1, r20	; 0x01
-    392e:	5a 83       	std	Y+2, r21	; 0x02
-    3930:	6b 83       	std	Y+3, r22	; 0x03
-    3932:	7c 83       	std	Y+4, r23	; 0x04
+    3920:	49 81       	ldd	r20, Y+1	; 0x01
+    3922:	5a 81       	ldd	r21, Y+2	; 0x02
+    3924:	6b 81       	ldd	r22, Y+3	; 0x03
+    3926:	7c 81       	ldd	r23, Y+4	; 0x04
+    3928:	48 0f       	add	r20, r24
+    392a:	59 1f       	adc	r21, r25
+    392c:	6a 1f       	adc	r22, r26
+    392e:	7b 1f       	adc	r23, r27
+    3930:	49 83       	std	Y+1, r20	; 0x01
+    3932:	5a 83       	std	Y+2, r21	; 0x02
+    3934:	6b 83       	std	Y+3, r22	; 0x03
+    3936:	7c 83       	std	Y+4, r23	; 0x04
       sumvolt[2] += adcv[2];			// add  HighPin voltages without current
-    3934:	c9 01       	movw	r24, r18
-    3936:	a0 e0       	ldi	r26, 0x00	; 0
-    3938:	b0 e0       	ldi	r27, 0x00	; 0
+    3938:	c9 01       	movw	r24, r18
+    393a:	a0 e0       	ldi	r26, 0x00	; 0
+    393c:	b0 e0       	ldi	r27, 0x00	; 0
          if (adcv[2] > 2) break;		// at least more than two digits required
          wdt_reset();
       } // end while (1)
       sumvolt[0] += adcv[0];			// add sum of both LowPin voltages with current
       sumvolt[1] += adcv[1];			// add  HighPin voltages with current
       sumvolt[2] += adcv[2]; 			// capacitor voltage without current
-    393a:	2d 85       	ldd	r18, Y+13	; 0x0d
-    393c:	3e 85       	ldd	r19, Y+14	; 0x0e
-    393e:	4f 85       	ldd	r20, Y+15	; 0x0f
-    3940:	58 89       	ldd	r21, Y+16	; 0x10
-    3942:	82 0f       	add	r24, r18
-    3944:	93 1f       	adc	r25, r19
-    3946:	a4 1f       	adc	r26, r20
-    3948:	b5 1f       	adc	r27, r21
+    393e:	2d 85       	ldd	r18, Y+13	; 0x0d
+    3940:	3e 85       	ldd	r19, Y+14	; 0x0e
+    3942:	4f 85       	ldd	r20, Y+15	; 0x0f
+    3944:	58 89       	ldd	r21, Y+16	; 0x10
+    3946:	82 0f       	add	r24, r18
+    3948:	93 1f       	adc	r25, r19
+    394a:	a4 1f       	adc	r26, r20
+    394c:	b5 1f       	adc	r27, r21
          wdt_reset();
       } // end while (1)
       R_DDR = 0;				// switch current off
       sumvolt[0] += adcv[0];			// add  LowPin voltages with current
       sumvolt[1] += adcv[1];			// add  HighPin voltages with current
       sumvolt[2] += adcv[2];			// add  HighPin voltages without current
-    394a:	4d 81       	ldd	r20, Y+5	; 0x05
-    394c:	5e 81       	ldd	r21, Y+6	; 0x06
-    394e:	6f 81       	ldd	r22, Y+7	; 0x07
-    3950:	78 85       	ldd	r23, Y+8	; 0x08
-    3952:	48 0f       	add	r20, r24
-    3954:	59 1f       	adc	r21, r25
-    3956:	6a 1f       	adc	r22, r26
-    3958:	7b 1f       	adc	r23, r27
-    395a:	4d 83       	std	Y+5, r20	; 0x05
-    395c:	5e 83       	std	Y+6, r21	; 0x06
-    395e:	6f 83       	std	Y+7, r22	; 0x07
-    3960:	78 87       	std	Y+8, r23	; 0x08
+    394e:	4d 81       	ldd	r20, Y+5	; 0x05
+    3950:	5e 81       	ldd	r21, Y+6	; 0x06
+    3952:	6f 81       	ldd	r22, Y+7	; 0x07
+    3954:	78 85       	ldd	r23, Y+8	; 0x08
+    3956:	48 0f       	add	r20, r24
+    3958:	59 1f       	adc	r21, r25
+    395a:	6a 1f       	adc	r22, r26
+    395c:	7b 1f       	adc	r23, r27
+    395e:	4d 83       	std	Y+5, r20	; 0x05
+    3960:	5e 83       	std	Y+6, r21	; 0x06
+    3962:	6f 83       	std	Y+7, r22	; 0x07
+    3964:	78 87       	std	Y+8, r23	; 0x08
 #endif
 
 // measurement frequency is given by sum of ADC-Reads < 680 Hz
    // ADC Sample and Hold (SH) is done 1.5 ADC clock number after real start of conversion.
    // Real ADC-conversion is started with the next ADC-Clock (125kHz) after setting the ADSC bit.
    for(ii=0;ii<MAX_CNT;ii++) {
-    3962:	c3 94       	inc	r12
-    3964:	5c 2d       	mov	r21, r12
-    3966:	50 38       	cpi	r21, 0x80	; 128
-    3968:	09 f0       	breq	.+2      	; 0x396c <GetESR+0x2f4>
-    396a:	13 cf       	rjmp	.-474    	; 0x3792 <GetESR+0x11a>
-   // HighPin Voltage, which is usually 2 * 14 * 8 us = 224 us.
+    3966:	c3 94       	inc	r12
+    3968:	5c 2d       	mov	r21, r12
+    396a:	50 38       	cpi	r21, 0x80	; 128
+    396c:	09 f0       	breq	.+2      	; 0x3970 <GetESR+0x2f8>
+    396e:	11 cf       	rjmp	.-478    	; 0x3792 <GetESR+0x11a>
    // With the loading of the capacitor the current will sink, so we get a too high voltage at
    // the LowPin. The velocity of degration is inversely proportional to time constant (represented by capacity value).
    // Time constant for 1uF & 720 Ohm is 720us
 //   sumvolt[0] -= (sumvolt[0] * 150UL)  / cap.cval_max;	// Version 1.04k
-   sumvolt[0] -= (sumvolt[0] * 360UL)  / cap.cval_max;
-    396c:	c8 01       	movw	r24, r16
-    396e:	b7 01       	movw	r22, r14
-    3970:	28 e6       	ldi	r18, 0x68	; 104
-    3972:	31 e0       	ldi	r19, 0x01	; 1
-    3974:	40 e0       	ldi	r20, 0x00	; 0
-    3976:	50 e0       	ldi	r21, 0x00	; 0
-    3978:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
-    397c:	20 91 5c 01 	lds	r18, 0x015C
-    3980:	30 91 5d 01 	lds	r19, 0x015D
-    3984:	40 91 5e 01 	lds	r20, 0x015E
-    3988:	50 91 5f 01 	lds	r21, 0x015F
-    398c:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
-    3990:	37 01       	movw	r6, r14
-    3992:	48 01       	movw	r8, r16
-    3994:	62 1a       	sub	r6, r18
-    3996:	73 0a       	sbc	r7, r19
-    3998:	84 0a       	sbc	r8, r20
-    399a:	95 0a       	sbc	r9, r21
+//   sumvolt[0] -= (sumvolt[0] * 360UL)  / cap.cval_max;
+   sumvolt[0] -= (sumvolt[0] * 345UL)  / cap.cval_max;
+    3970:	c8 01       	movw	r24, r16
+    3972:	b7 01       	movw	r22, r14
+    3974:	29 e5       	ldi	r18, 0x59	; 89
+    3976:	31 e0       	ldi	r19, 0x01	; 1
+    3978:	40 e0       	ldi	r20, 0x00	; 0
+    397a:	50 e0       	ldi	r21, 0x00	; 0
+    397c:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
+    3980:	20 91 5c 01 	lds	r18, 0x015C
+    3984:	30 91 5d 01 	lds	r19, 0x015D
+    3988:	40 91 5e 01 	lds	r20, 0x015E
+    398c:	50 91 5f 01 	lds	r21, 0x015F
+    3990:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
+    3994:	37 01       	movw	r6, r14
+    3996:	48 01       	movw	r8, r16
+    3998:	62 1a       	sub	r6, r18
+    399a:	73 0a       	sbc	r7, r19
+    399c:	84 0a       	sbc	r8, r20
+    399e:	95 0a       	sbc	r9, r21
    lcd_line3();
    DisplayValue(sumvolt[1],0,'H',4);	// HighPin
    lcd_data(' ');
 #endif
 
    esr0 = (int8_t)eeprom_read_byte(&EE_ESR_ZERO);
-    399c:	80 ec       	ldi	r24, 0xC0	; 192
-    399e:	91 e0       	ldi	r25, 0x01	; 1
-    39a0:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__eerd_byte_m168>
-    39a4:	28 2e       	mov	r2, r24
+    39a0:	80 ec       	ldi	r24, 0xC0	; 192
+    39a2:	91 e0       	ldi	r25, 0x01	; 1
+    39a4:	0e 94 2b 1e 	call	0x3c56	; 0x3c56 <__eerd_byte_m168>
+    39a8:	28 2e       	mov	r2, r24
 //   sumvolt[0] += (((long)sumvolt[0] * esr0) / ((RR680MI - R_L_VAL) * 10)); // subtract 0.23 Ohm from ESR, Vers. 1.04k
    sumvolt[2] += (((long)sumvolt[0] * esr0) / ((RR680MI - R_L_VAL) * 10)); // subtract 0.23 Ohm from ESR
-    39a6:	40 90 02 01 	lds	r4, 0x0102
-    39aa:	50 90 03 01 	lds	r5, 0x0103
-    39ae:	68 2f       	mov	r22, r24
-    39b0:	77 27       	eor	r23, r23
-    39b2:	67 fd       	sbrc	r22, 7
-    39b4:	70 95       	com	r23
-    39b6:	87 2f       	mov	r24, r23
-    39b8:	97 2f       	mov	r25, r23
-    39ba:	a4 01       	movw	r20, r8
-    39bc:	93 01       	movw	r18, r6
-    39be:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
-    39c2:	92 01       	movw	r18, r4
-    39c4:	22 0f       	add	r18, r18
-    39c6:	33 1f       	adc	r19, r19
-    39c8:	a2 01       	movw	r20, r4
-    39ca:	e3 e0       	ldi	r30, 0x03	; 3
-    39cc:	44 0f       	add	r20, r20
-    39ce:	55 1f       	adc	r21, r21
-    39d0:	ea 95       	dec	r30
-    39d2:	e1 f7       	brne	.-8      	; 0x39cc <GetESR+0x354>
-    39d4:	24 0f       	add	r18, r20
-    39d6:	35 1f       	adc	r19, r21
-    39d8:	20 5a       	subi	r18, 0xA0	; 160
-    39da:	39 40       	sbci	r19, 0x09	; 9
-    39dc:	40 e0       	ldi	r20, 0x00	; 0
-    39de:	50 e0       	ldi	r21, 0x00	; 0
-    39e0:	0e 94 d7 1d 	call	0x3bae	; 0x3bae <__divmodsi4>
-    39e4:	79 01       	movw	r14, r18
-    39e6:	8a 01       	movw	r16, r20
-    39e8:	6d 81       	ldd	r22, Y+5	; 0x05
-    39ea:	7e 81       	ldd	r23, Y+6	; 0x06
-    39ec:	8f 81       	ldd	r24, Y+7	; 0x07
-    39ee:	98 85       	ldd	r25, Y+8	; 0x08
-    39f0:	e6 0e       	add	r14, r22
-    39f2:	f7 1e       	adc	r15, r23
-    39f4:	08 1f       	adc	r16, r24
-    39f6:	19 1f       	adc	r17, r25
+    39aa:	40 90 02 01 	lds	r4, 0x0102
+    39ae:	50 90 03 01 	lds	r5, 0x0103
+    39b2:	68 2f       	mov	r22, r24
+    39b4:	77 27       	eor	r23, r23
+    39b6:	67 fd       	sbrc	r22, 7
+    39b8:	70 95       	com	r23
+    39ba:	87 2f       	mov	r24, r23
+    39bc:	97 2f       	mov	r25, r23
+    39be:	a4 01       	movw	r20, r8
+    39c0:	93 01       	movw	r18, r6
+    39c2:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
+    39c6:	92 01       	movw	r18, r4
+    39c8:	22 0f       	add	r18, r18
+    39ca:	33 1f       	adc	r19, r19
+    39cc:	a2 01       	movw	r20, r4
+    39ce:	e3 e0       	ldi	r30, 0x03	; 3
+    39d0:	44 0f       	add	r20, r20
+    39d2:	55 1f       	adc	r21, r21
+    39d4:	ea 95       	dec	r30
+    39d6:	e1 f7       	brne	.-8      	; 0x39d0 <GetESR+0x358>
+    39d8:	24 0f       	add	r18, r20
+    39da:	35 1f       	adc	r19, r21
+    39dc:	20 5a       	subi	r18, 0xA0	; 160
+    39de:	39 40       	sbci	r19, 0x09	; 9
+    39e0:	40 e0       	ldi	r20, 0x00	; 0
+    39e2:	50 e0       	ldi	r21, 0x00	; 0
+    39e4:	0e 94 d9 1d 	call	0x3bb2	; 0x3bb2 <__divmodsi4>
+    39e8:	79 01       	movw	r14, r18
+    39ea:	8a 01       	movw	r16, r20
+    39ec:	6d 81       	ldd	r22, Y+5	; 0x05
+    39ee:	7e 81       	ldd	r23, Y+6	; 0x06
+    39f0:	8f 81       	ldd	r24, Y+7	; 0x07
+    39f2:	98 85       	ldd	r25, Y+8	; 0x08
+    39f4:	e6 0e       	add	r14, r22
+    39f6:	f7 1e       	adc	r15, r23
+    39f8:	08 1f       	adc	r16, r24
+    39fa:	19 1f       	adc	r17, r25
 
 #ifdef ESR_DEBUG
    DisplayValue(sumvolt[0],0,'C',4);	// Lowpin corrected
 #endif
 
    if (sumvolt[1] > sumvolt[0]) {
-    39f8:	89 81       	ldd	r24, Y+1	; 0x01
-    39fa:	9a 81       	ldd	r25, Y+2	; 0x02
-    39fc:	ab 81       	ldd	r26, Y+3	; 0x03
-    39fe:	bc 81       	ldd	r27, Y+4	; 0x04
-    3a00:	68 16       	cp	r6, r24
-    3a02:	79 06       	cpc	r7, r25
-    3a04:	8a 06       	cpc	r8, r26
-    3a06:	9b 06       	cpc	r9, r27
-    3a08:	38 f4       	brcc	.+14     	; 0x3a18 <GetESR+0x3a0>
+    39fc:	89 81       	ldd	r24, Y+1	; 0x01
+    39fe:	9a 81       	ldd	r25, Y+2	; 0x02
+    3a00:	ab 81       	ldd	r26, Y+3	; 0x03
+    3a02:	bc 81       	ldd	r27, Y+4	; 0x04
+    3a04:	68 16       	cp	r6, r24
+    3a06:	79 06       	cpc	r7, r25
+    3a08:	8a 06       	cpc	r8, r26
+    3a0a:	9b 06       	cpc	r9, r27
+    3a0c:	38 f4       	brcc	.+14     	; 0x3a1c <GetESR+0x3a4>
       sumvolt[1] -= sumvolt[0];		// difference HighPin - LowPin Voltage with current
-    3a0a:	5c 01       	movw	r10, r24
-    3a0c:	6d 01       	movw	r12, r26
-    3a0e:	a6 18       	sub	r10, r6
-    3a10:	b7 08       	sbc	r11, r7
-    3a12:	c8 08       	sbc	r12, r8
-    3a14:	d9 08       	sbc	r13, r9
-    3a16:	03 c0       	rjmp	.+6      	; 0x3a1e <GetESR+0x3a6>
+    3a0e:	5c 01       	movw	r10, r24
+    3a10:	6d 01       	movw	r12, r26
+    3a12:	a6 18       	sub	r10, r6
+    3a14:	b7 08       	sbc	r11, r7
+    3a16:	c8 08       	sbc	r12, r8
+    3a18:	d9 08       	sbc	r13, r9
+    3a1a:	03 c0       	rjmp	.+6      	; 0x3a22 <GetESR+0x3aa>
    } else {
       sumvolt[1] = 0;
-    3a18:	aa 24       	eor	r10, r10
-    3a1a:	bb 24       	eor	r11, r11
-    3a1c:	65 01       	movw	r12, r10
-    3a1e:	b2 01       	movw	r22, r4
-    3a20:	60 59       	subi	r22, 0x90	; 144
-    3a22:	7a 41       	sbci	r23, 0x1A	; 26
+    3a1c:	aa 24       	eor	r10, r10
+    3a1e:	bb 24       	eor	r11, r11
+    3a20:	65 01       	movw	r12, r10
+    3a22:	b2 01       	movw	r22, r4
+    3a24:	60 59       	subi	r22, 0x90	; 144
+    3a26:	7a 41       	sbci	r23, 0x1A	; 26
 #ifdef ESR_DEBUG
    DisplayValue(sumvolt[2],0,' ',4);	// HighPin without current
 #endif
 
    jj = 0;
    if (sumvolt[1] >= sumvolt[2]) {
-    3a24:	ae 14       	cp	r10, r14
-    3a26:	bf 04       	cpc	r11, r15
-    3a28:	c0 06       	cpc	r12, r16
-    3a2a:	d1 06       	cpc	r13, r17
-    3a2c:	08 f1       	brcs	.+66     	; 0x3a70 <GetESR+0x3f8>
+    3a28:	ae 14       	cp	r10, r14
+    3a2a:	bf 04       	cpc	r11, r15
+    3a2c:	c0 06       	cpc	r12, r16
+    3a2e:	d1 06       	cpc	r13, r17
+    3a30:	08 f1       	brcs	.+66     	; 0x3a74 <GetESR+0x3fc>
       // mean voltage at the capacitor is higher with current
       // sumvolt[0] is the sum of voltages at LowPin, caused by output resistance of Port
       // (RR680MI - R_L_VAL) is the port output resistance in 0.1 Ohm units.
       // we scale up the difference voltage with 10 to get 0.01 Ohm units of ESR
       cap.esr = ((sumvolt[1] - sumvolt[2]) * 10 * (unsigned long)(RR680MI - R_L_VAL)) / sumvolt[0];
-    3a2e:	80 e0       	ldi	r24, 0x00	; 0
-    3a30:	90 e0       	ldi	r25, 0x00	; 0
-    3a32:	2a e0       	ldi	r18, 0x0A	; 10
-    3a34:	30 e0       	ldi	r19, 0x00	; 0
-    3a36:	40 e0       	ldi	r20, 0x00	; 0
-    3a38:	50 e0       	ldi	r21, 0x00	; 0
-    3a3a:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
-    3a3e:	a6 01       	movw	r20, r12
-    3a40:	95 01       	movw	r18, r10
-    3a42:	2e 19       	sub	r18, r14
-    3a44:	3f 09       	sbc	r19, r15
-    3a46:	40 0b       	sbc	r20, r16
-    3a48:	51 0b       	sbc	r21, r17
-    3a4a:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
-    3a4e:	a4 01       	movw	r20, r8
-    3a50:	93 01       	movw	r18, r6
-    3a52:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
-    3a56:	30 93 65 01 	sts	0x0165, r19
-    3a5a:	20 93 64 01 	sts	0x0164, r18
+    3a32:	80 e0       	ldi	r24, 0x00	; 0
+    3a34:	90 e0       	ldi	r25, 0x00	; 0
+    3a36:	2a e0       	ldi	r18, 0x0A	; 10
+    3a38:	30 e0       	ldi	r19, 0x00	; 0
+    3a3a:	40 e0       	ldi	r20, 0x00	; 0
+    3a3c:	50 e0       	ldi	r21, 0x00	; 0
+    3a3e:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
+    3a42:	a6 01       	movw	r20, r12
+    3a44:	95 01       	movw	r18, r10
+    3a46:	2e 19       	sub	r18, r14
+    3a48:	3f 09       	sbc	r19, r15
+    3a4a:	40 0b       	sbc	r20, r16
+    3a4c:	51 0b       	sbc	r21, r17
+    3a4e:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
+    3a52:	a4 01       	movw	r20, r8
+    3a54:	93 01       	movw	r18, r6
+    3a56:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
+    3a5a:	30 93 65 01 	sts	0x0165, r19
+    3a5e:	20 93 64 01 	sts	0x0164, r18
       DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
-    3a5e:	b9 01       	movw	r22, r18
-    3a60:	80 e0       	ldi	r24, 0x00	; 0
-    3a62:	90 e0       	ldi	r25, 0x00	; 0
-    3a64:	4e ef       	ldi	r20, 0xFE	; 254
-    3a66:	24 ef       	ldi	r18, 0xF4	; 244
-    3a68:	02 e0       	ldi	r16, 0x02	; 2
-    3a6a:	0e 94 9e 02 	call	0x53c	; 0x53c <DisplayValue>
-    3a6e:	25 c0       	rjmp	.+74     	; 0x3aba <GetESR+0x442>
+    3a62:	b9 01       	movw	r22, r18
+    3a64:	80 e0       	ldi	r24, 0x00	; 0
+    3a66:	90 e0       	ldi	r25, 0x00	; 0
+    3a68:	4e ef       	ldi	r20, 0xFE	; 254
+    3a6a:	24 ef       	ldi	r18, 0xF4	; 244
+    3a6c:	02 e0       	ldi	r16, 0x02	; 2
+    3a6e:	0e 94 9e 02 	call	0x53c	; 0x53c <DisplayValue>
+    3a72:	25 c0       	rjmp	.+74     	; 0x3abe <GetESR+0x446>
    } else {
       jj = ((sumvolt[2] - sumvolt[1]) * 10 * (unsigned long)(RR680MI - R_L_VAL)) / sumvolt[0];
-    3a70:	80 e0       	ldi	r24, 0x00	; 0
-    3a72:	90 e0       	ldi	r25, 0x00	; 0
-    3a74:	2a e0       	ldi	r18, 0x0A	; 10
-    3a76:	30 e0       	ldi	r19, 0x00	; 0
-    3a78:	40 e0       	ldi	r20, 0x00	; 0
-    3a7a:	50 e0       	ldi	r21, 0x00	; 0
-    3a7c:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
-    3a80:	a8 01       	movw	r20, r16
-    3a82:	97 01       	movw	r18, r14
-    3a84:	2a 19       	sub	r18, r10
-    3a86:	3b 09       	sbc	r19, r11
-    3a88:	4c 09       	sbc	r20, r12
-    3a8a:	5d 09       	sbc	r21, r13
-    3a8c:	0e 94 76 1d 	call	0x3aec	; 0x3aec <__mulsi3>
-    3a90:	a4 01       	movw	r20, r8
-    3a92:	93 01       	movw	r18, r6
-    3a94:	0e 94 b5 1d 	call	0x3b6a	; 0x3b6a <__udivmodsi4>
-    3a98:	12 2f       	mov	r17, r18
+    3a74:	80 e0       	ldi	r24, 0x00	; 0
+    3a76:	90 e0       	ldi	r25, 0x00	; 0
+    3a78:	2a e0       	ldi	r18, 0x0A	; 10
+    3a7a:	30 e0       	ldi	r19, 0x00	; 0
+    3a7c:	40 e0       	ldi	r20, 0x00	; 0
+    3a7e:	50 e0       	ldi	r21, 0x00	; 0
+    3a80:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
+    3a84:	a8 01       	movw	r20, r16
+    3a86:	97 01       	movw	r18, r14
+    3a88:	2a 19       	sub	r18, r10
+    3a8a:	3b 09       	sbc	r19, r11
+    3a8c:	4c 09       	sbc	r20, r12
+    3a8e:	5d 09       	sbc	r21, r13
+    3a90:	0e 94 78 1d 	call	0x3af0	; 0x3af0 <__mulsi3>
+    3a94:	a4 01       	movw	r20, r8
+    3a96:	93 01       	movw	r18, r6
+    3a98:	0e 94 b7 1d 	call	0x3b6e	; 0x3b6e <__udivmodsi4>
+    3a9c:	12 2f       	mov	r17, r18
       lcd_data('0');
-    3a9a:	80 e3       	ldi	r24, 0x30	; 48
-    3a9c:	0e 94 ae 00 	call	0x15c	; 0x15c <lcd_data>
+    3a9e:	80 e3       	ldi	r24, 0x30	; 48
+    3aa0:	0e 94 ae 00 	call	0x15c	; 0x15c <lcd_data>
       if ((jj < 100) && (jj > 0)) {
-    3aa0:	81 2f       	mov	r24, r17
-    3aa2:	81 50       	subi	r24, 0x01	; 1
-    3aa4:	83 36       	cpi	r24, 0x63	; 99
-    3aa6:	48 f4       	brcc	.+18     	; 0x3aba <GetESR+0x442>
+    3aa4:	81 2f       	mov	r24, r17
+    3aa6:	81 50       	subi	r24, 0x01	; 1
+    3aa8:	83 36       	cpi	r24, 0x63	; 99
+    3aaa:	48 f4       	brcc	.+18     	; 0x3abe <GetESR+0x446>
          lcd_data('?');			// mark ESR zero correction
-    3aa8:	8f e3       	ldi	r24, 0x3F	; 63
-    3aaa:	0e 94 ae 00 	call	0x15c	; 0x15c <lcd_data>
+    3aac:	8f e3       	ldi	r24, 0x3F	; 63
+    3aae:	0e 94 ae 00 	call	0x15c	; 0x15c <lcd_data>
          esr0 -= jj;			// correct ESR_ZERO by negative resistance
-    3aae:	62 2d       	mov	r22, r2
-    3ab0:	61 1b       	sub	r22, r17
+    3ab2:	62 2d       	mov	r22, r2
+    3ab4:	61 1b       	sub	r22, r17
          eeprom_write_byte((uint8_t *)(&EE_ESR_ZERO), (int8_t)esr0);       // fix new zero offset 
-    3ab2:	80 ec       	ldi	r24, 0xC0	; 192
-    3ab4:	91 e0       	ldi	r25, 0x01	; 1
-    3ab6:	0e 94 37 1e 	call	0x3c6e	; 0x3c6e <__eewr_byte_m168>
+    3ab6:	80 ec       	ldi	r24, 0xC0	; 192
+    3ab8:	91 e0       	ldi	r25, 0x01	; 1
+    3aba:	0e 94 39 1e 	call	0x3c72	; 0x3c72 <__eewr_byte_m168>
 //   lcd_line3();
 //   DisplayValue(jj,0,' ',4);	// correction for ESR_ZERO
 //   DisplayValue(1000+esr0,0,' ',4);	// new ESR_ZERO
 #endif
   return;
 }
-    3aba:	62 96       	adiw	r28, 0x12	; 18
-    3abc:	0f b6       	in	r0, 0x3f	; 63
-    3abe:	f8 94       	cli
-    3ac0:	de bf       	out	0x3e, r29	; 62
-    3ac2:	0f be       	out	0x3f, r0	; 63
-    3ac4:	cd bf       	out	0x3d, r28	; 61
-    3ac6:	cf 91       	pop	r28
-    3ac8:	df 91       	pop	r29
-    3aca:	1f 91       	pop	r17
-    3acc:	0f 91       	pop	r16
-    3ace:	ff 90       	pop	r15
-    3ad0:	ef 90       	pop	r14
-    3ad2:	df 90       	pop	r13
-    3ad4:	cf 90       	pop	r12
-    3ad6:	bf 90       	pop	r11
-    3ad8:	af 90       	pop	r10
-    3ada:	9f 90       	pop	r9
-    3adc:	8f 90       	pop	r8
-    3ade:	7f 90       	pop	r7
-    3ae0:	6f 90       	pop	r6
-    3ae2:	5f 90       	pop	r5
-    3ae4:	4f 90       	pop	r4
-    3ae6:	3f 90       	pop	r3
-    3ae8:	2f 90       	pop	r2
-    3aea:	08 95       	ret
+    3abe:	62 96       	adiw	r28, 0x12	; 18
+    3ac0:	0f b6       	in	r0, 0x3f	; 63
+    3ac2:	f8 94       	cli
+    3ac4:	de bf       	out	0x3e, r29	; 62
+    3ac6:	0f be       	out	0x3f, r0	; 63
+    3ac8:	cd bf       	out	0x3d, r28	; 61
+    3aca:	cf 91       	pop	r28
+    3acc:	df 91       	pop	r29
+    3ace:	1f 91       	pop	r17
+    3ad0:	0f 91       	pop	r16
+    3ad2:	ff 90       	pop	r15
+    3ad4:	ef 90       	pop	r14
+    3ad6:	df 90       	pop	r13
+    3ad8:	cf 90       	pop	r12
+    3ada:	bf 90       	pop	r11
+    3adc:	af 90       	pop	r10
+    3ade:	9f 90       	pop	r9
+    3ae0:	8f 90       	pop	r8
+    3ae2:	7f 90       	pop	r7
+    3ae4:	6f 90       	pop	r6
+    3ae6:	5f 90       	pop	r5
+    3ae8:	4f 90       	pop	r4
+    3aea:	3f 90       	pop	r3
+    3aec:	2f 90       	pop	r2
+    3aee:	08 95       	ret
 
-00003aec <__mulsi3>:
-    3aec:	62 9f       	mul	r22, r18
-    3aee:	d0 01       	movw	r26, r0
-    3af0:	73 9f       	mul	r23, r19
-    3af2:	f0 01       	movw	r30, r0
-    3af4:	82 9f       	mul	r24, r18
-    3af6:	e0 0d       	add	r30, r0
-    3af8:	f1 1d       	adc	r31, r1
-    3afa:	64 9f       	mul	r22, r20
-    3afc:	e0 0d       	add	r30, r0
-    3afe:	f1 1d       	adc	r31, r1
-    3b00:	92 9f       	mul	r25, r18
-    3b02:	f0 0d       	add	r31, r0
-    3b04:	83 9f       	mul	r24, r19
+00003af0 <__mulsi3>:
+    3af0:	62 9f       	mul	r22, r18
+    3af2:	d0 01       	movw	r26, r0
+    3af4:	73 9f       	mul	r23, r19
+    3af6:	f0 01       	movw	r30, r0
+    3af8:	82 9f       	mul	r24, r18
+    3afa:	e0 0d       	add	r30, r0
+    3afc:	f1 1d       	adc	r31, r1
+    3afe:	64 9f       	mul	r22, r20
+    3b00:	e0 0d       	add	r30, r0
+    3b02:	f1 1d       	adc	r31, r1
+    3b04:	92 9f       	mul	r25, r18
     3b06:	f0 0d       	add	r31, r0
-    3b08:	74 9f       	mul	r23, r20
+    3b08:	83 9f       	mul	r24, r19
     3b0a:	f0 0d       	add	r31, r0
-    3b0c:	65 9f       	mul	r22, r21
+    3b0c:	74 9f       	mul	r23, r20
     3b0e:	f0 0d       	add	r31, r0
-    3b10:	99 27       	eor	r25, r25
-    3b12:	72 9f       	mul	r23, r18
-    3b14:	b0 0d       	add	r27, r0
-    3b16:	e1 1d       	adc	r30, r1
-    3b18:	f9 1f       	adc	r31, r25
-    3b1a:	63 9f       	mul	r22, r19
-    3b1c:	b0 0d       	add	r27, r0
-    3b1e:	e1 1d       	adc	r30, r1
-    3b20:	f9 1f       	adc	r31, r25
-    3b22:	bd 01       	movw	r22, r26
-    3b24:	cf 01       	movw	r24, r30
-    3b26:	11 24       	eor	r1, r1
-    3b28:	08 95       	ret
+    3b10:	65 9f       	mul	r22, r21
+    3b12:	f0 0d       	add	r31, r0
+    3b14:	99 27       	eor	r25, r25
+    3b16:	72 9f       	mul	r23, r18
+    3b18:	b0 0d       	add	r27, r0
+    3b1a:	e1 1d       	adc	r30, r1
+    3b1c:	f9 1f       	adc	r31, r25
+    3b1e:	63 9f       	mul	r22, r19
+    3b20:	b0 0d       	add	r27, r0
+    3b22:	e1 1d       	adc	r30, r1
+    3b24:	f9 1f       	adc	r31, r25
+    3b26:	bd 01       	movw	r22, r26
+    3b28:	cf 01       	movw	r24, r30
+    3b2a:	11 24       	eor	r1, r1
+    3b2c:	08 95       	ret
 
-00003b2a <__udivmodqi4>:
-    3b2a:	99 1b       	sub	r25, r25
-    3b2c:	79 e0       	ldi	r23, 0x09	; 9
-    3b2e:	04 c0       	rjmp	.+8      	; 0x3b38 <__udivmodqi4_ep>
+00003b2e <__udivmodqi4>:
+    3b2e:	99 1b       	sub	r25, r25
+    3b30:	79 e0       	ldi	r23, 0x09	; 9
+    3b32:	04 c0       	rjmp	.+8      	; 0x3b3c <__udivmodqi4_ep>
 
-00003b30 <__udivmodqi4_loop>:
-    3b30:	99 1f       	adc	r25, r25
-    3b32:	96 17       	cp	r25, r22
-    3b34:	08 f0       	brcs	.+2      	; 0x3b38 <__udivmodqi4_ep>
-    3b36:	96 1b       	sub	r25, r22
+00003b34 <__udivmodqi4_loop>:
+    3b34:	99 1f       	adc	r25, r25
+    3b36:	96 17       	cp	r25, r22
+    3b38:	08 f0       	brcs	.+2      	; 0x3b3c <__udivmodqi4_ep>
+    3b3a:	96 1b       	sub	r25, r22
 
-00003b38 <__udivmodqi4_ep>:
-    3b38:	88 1f       	adc	r24, r24
-    3b3a:	7a 95       	dec	r23
-    3b3c:	c9 f7       	brne	.-14     	; 0x3b30 <__udivmodqi4_loop>
-    3b3e:	80 95       	com	r24
-    3b40:	08 95       	ret
+00003b3c <__udivmodqi4_ep>:
+    3b3c:	88 1f       	adc	r24, r24
+    3b3e:	7a 95       	dec	r23
+    3b40:	c9 f7       	brne	.-14     	; 0x3b34 <__udivmodqi4_loop>
+    3b42:	80 95       	com	r24
+    3b44:	08 95       	ret
 
-00003b42 <__udivmodhi4>:
-    3b42:	aa 1b       	sub	r26, r26
-    3b44:	bb 1b       	sub	r27, r27
-    3b46:	51 e1       	ldi	r21, 0x11	; 17
-    3b48:	07 c0       	rjmp	.+14     	; 0x3b58 <__udivmodhi4_ep>
+00003b46 <__udivmodhi4>:
+    3b46:	aa 1b       	sub	r26, r26
+    3b48:	bb 1b       	sub	r27, r27
+    3b4a:	51 e1       	ldi	r21, 0x11	; 17
+    3b4c:	07 c0       	rjmp	.+14     	; 0x3b5c <__udivmodhi4_ep>
 
-00003b4a <__udivmodhi4_loop>:
-    3b4a:	aa 1f       	adc	r26, r26
-    3b4c:	bb 1f       	adc	r27, r27
-    3b4e:	a6 17       	cp	r26, r22
-    3b50:	b7 07       	cpc	r27, r23
-    3b52:	10 f0       	brcs	.+4      	; 0x3b58 <__udivmodhi4_ep>
-    3b54:	a6 1b       	sub	r26, r22
-    3b56:	b7 0b       	sbc	r27, r23
+00003b4e <__udivmodhi4_loop>:
+    3b4e:	aa 1f       	adc	r26, r26
+    3b50:	bb 1f       	adc	r27, r27
+    3b52:	a6 17       	cp	r26, r22
+    3b54:	b7 07       	cpc	r27, r23
+    3b56:	10 f0       	brcs	.+4      	; 0x3b5c <__udivmodhi4_ep>
+    3b58:	a6 1b       	sub	r26, r22
+    3b5a:	b7 0b       	sbc	r27, r23
 
-00003b58 <__udivmodhi4_ep>:
-    3b58:	88 1f       	adc	r24, r24
-    3b5a:	99 1f       	adc	r25, r25
-    3b5c:	5a 95       	dec	r21
-    3b5e:	a9 f7       	brne	.-22     	; 0x3b4a <__udivmodhi4_loop>
-    3b60:	80 95       	com	r24
-    3b62:	90 95       	com	r25
-    3b64:	bc 01       	movw	r22, r24
-    3b66:	cd 01       	movw	r24, r26
-    3b68:	08 95       	ret
+00003b5c <__udivmodhi4_ep>:
+    3b5c:	88 1f       	adc	r24, r24
+    3b5e:	99 1f       	adc	r25, r25
+    3b60:	5a 95       	dec	r21
+    3b62:	a9 f7       	brne	.-22     	; 0x3b4e <__udivmodhi4_loop>
+    3b64:	80 95       	com	r24
+    3b66:	90 95       	com	r25
+    3b68:	bc 01       	movw	r22, r24
+    3b6a:	cd 01       	movw	r24, r26
+    3b6c:	08 95       	ret
 
-00003b6a <__udivmodsi4>:
-    3b6a:	a1 e2       	ldi	r26, 0x21	; 33
-    3b6c:	1a 2e       	mov	r1, r26
-    3b6e:	aa 1b       	sub	r26, r26
-    3b70:	bb 1b       	sub	r27, r27
-    3b72:	fd 01       	movw	r30, r26
-    3b74:	0d c0       	rjmp	.+26     	; 0x3b90 <__udivmodsi4_ep>
+00003b6e <__udivmodsi4>:
+    3b6e:	a1 e2       	ldi	r26, 0x21	; 33
+    3b70:	1a 2e       	mov	r1, r26
+    3b72:	aa 1b       	sub	r26, r26
+    3b74:	bb 1b       	sub	r27, r27
+    3b76:	fd 01       	movw	r30, r26
+    3b78:	0d c0       	rjmp	.+26     	; 0x3b94 <__udivmodsi4_ep>
 
-00003b76 <__udivmodsi4_loop>:
-    3b76:	aa 1f       	adc	r26, r26
-    3b78:	bb 1f       	adc	r27, r27
-    3b7a:	ee 1f       	adc	r30, r30
-    3b7c:	ff 1f       	adc	r31, r31
-    3b7e:	a2 17       	cp	r26, r18
-    3b80:	b3 07       	cpc	r27, r19
-    3b82:	e4 07       	cpc	r30, r20
-    3b84:	f5 07       	cpc	r31, r21
-    3b86:	20 f0       	brcs	.+8      	; 0x3b90 <__udivmodsi4_ep>
-    3b88:	a2 1b       	sub	r26, r18
-    3b8a:	b3 0b       	sbc	r27, r19
-    3b8c:	e4 0b       	sbc	r30, r20
-    3b8e:	f5 0b       	sbc	r31, r21
+00003b7a <__udivmodsi4_loop>:
+    3b7a:	aa 1f       	adc	r26, r26
+    3b7c:	bb 1f       	adc	r27, r27
+    3b7e:	ee 1f       	adc	r30, r30
+    3b80:	ff 1f       	adc	r31, r31
+    3b82:	a2 17       	cp	r26, r18
+    3b84:	b3 07       	cpc	r27, r19
+    3b86:	e4 07       	cpc	r30, r20
+    3b88:	f5 07       	cpc	r31, r21
+    3b8a:	20 f0       	brcs	.+8      	; 0x3b94 <__udivmodsi4_ep>
+    3b8c:	a2 1b       	sub	r26, r18
+    3b8e:	b3 0b       	sbc	r27, r19
+    3b90:	e4 0b       	sbc	r30, r20
+    3b92:	f5 0b       	sbc	r31, r21
 
-00003b90 <__udivmodsi4_ep>:
-    3b90:	66 1f       	adc	r22, r22
-    3b92:	77 1f       	adc	r23, r23
-    3b94:	88 1f       	adc	r24, r24
-    3b96:	99 1f       	adc	r25, r25
-    3b98:	1a 94       	dec	r1
-    3b9a:	69 f7       	brne	.-38     	; 0x3b76 <__udivmodsi4_loop>
-    3b9c:	60 95       	com	r22
-    3b9e:	70 95       	com	r23
-    3ba0:	80 95       	com	r24
-    3ba2:	90 95       	com	r25
-    3ba4:	9b 01       	movw	r18, r22
-    3ba6:	ac 01       	movw	r20, r24
-    3ba8:	bd 01       	movw	r22, r26
-    3baa:	cf 01       	movw	r24, r30
-    3bac:	08 95       	ret
+00003b94 <__udivmodsi4_ep>:
+    3b94:	66 1f       	adc	r22, r22
+    3b96:	77 1f       	adc	r23, r23
+    3b98:	88 1f       	adc	r24, r24
+    3b9a:	99 1f       	adc	r25, r25
+    3b9c:	1a 94       	dec	r1
+    3b9e:	69 f7       	brne	.-38     	; 0x3b7a <__udivmodsi4_loop>
+    3ba0:	60 95       	com	r22
+    3ba2:	70 95       	com	r23
+    3ba4:	80 95       	com	r24
+    3ba6:	90 95       	com	r25
+    3ba8:	9b 01       	movw	r18, r22
+    3baa:	ac 01       	movw	r20, r24
+    3bac:	bd 01       	movw	r22, r26
+    3bae:	cf 01       	movw	r24, r30
+    3bb0:	08 95       	ret
 
-00003bae <__divmodsi4>:
-    3bae:	97 fb       	bst	r25, 7
-    3bb0:	09 2e       	mov	r0, r25
-    3bb2:	05 26       	eor	r0, r21
-    3bb4:	0e d0       	rcall	.+28     	; 0x3bd2 <__divmodsi4_neg1>
-    3bb6:	57 fd       	sbrc	r21, 7
-    3bb8:	04 d0       	rcall	.+8      	; 0x3bc2 <__divmodsi4_neg2>
-    3bba:	d7 df       	rcall	.-82     	; 0x3b6a <__udivmodsi4>
-    3bbc:	0a d0       	rcall	.+20     	; 0x3bd2 <__divmodsi4_neg1>
-    3bbe:	00 1c       	adc	r0, r0
-    3bc0:	38 f4       	brcc	.+14     	; 0x3bd0 <__divmodsi4_exit>
+00003bb2 <__divmodsi4>:
+    3bb2:	97 fb       	bst	r25, 7
+    3bb4:	09 2e       	mov	r0, r25
+    3bb6:	05 26       	eor	r0, r21
+    3bb8:	0e d0       	rcall	.+28     	; 0x3bd6 <__divmodsi4_neg1>
+    3bba:	57 fd       	sbrc	r21, 7
+    3bbc:	04 d0       	rcall	.+8      	; 0x3bc6 <__divmodsi4_neg2>
+    3bbe:	d7 df       	rcall	.-82     	; 0x3b6e <__udivmodsi4>
+    3bc0:	0a d0       	rcall	.+20     	; 0x3bd6 <__divmodsi4_neg1>
+    3bc2:	00 1c       	adc	r0, r0
+    3bc4:	38 f4       	brcc	.+14     	; 0x3bd4 <__divmodsi4_exit>
 
-00003bc2 <__divmodsi4_neg2>:
-    3bc2:	50 95       	com	r21
-    3bc4:	40 95       	com	r20
-    3bc6:	30 95       	com	r19
-    3bc8:	21 95       	neg	r18
-    3bca:	3f 4f       	sbci	r19, 0xFF	; 255
-    3bcc:	4f 4f       	sbci	r20, 0xFF	; 255
-    3bce:	5f 4f       	sbci	r21, 0xFF	; 255
+00003bc6 <__divmodsi4_neg2>:
+    3bc6:	50 95       	com	r21
+    3bc8:	40 95       	com	r20
+    3bca:	30 95       	com	r19
+    3bcc:	21 95       	neg	r18
+    3bce:	3f 4f       	sbci	r19, 0xFF	; 255
+    3bd0:	4f 4f       	sbci	r20, 0xFF	; 255
+    3bd2:	5f 4f       	sbci	r21, 0xFF	; 255
 
-00003bd0 <__divmodsi4_exit>:
-    3bd0:	08 95       	ret
+00003bd4 <__divmodsi4_exit>:
+    3bd4:	08 95       	ret
 
-00003bd2 <__divmodsi4_neg1>:
-    3bd2:	f6 f7       	brtc	.-4      	; 0x3bd0 <__divmodsi4_exit>
-    3bd4:	90 95       	com	r25
-    3bd6:	80 95       	com	r24
-    3bd8:	70 95       	com	r23
-    3bda:	61 95       	neg	r22
-    3bdc:	7f 4f       	sbci	r23, 0xFF	; 255
-    3bde:	8f 4f       	sbci	r24, 0xFF	; 255
-    3be0:	9f 4f       	sbci	r25, 0xFF	; 255
-    3be2:	08 95       	ret
+00003bd6 <__divmodsi4_neg1>:
+    3bd6:	f6 f7       	brtc	.-4      	; 0x3bd4 <__divmodsi4_exit>
+    3bd8:	90 95       	com	r25
+    3bda:	80 95       	com	r24
+    3bdc:	70 95       	com	r23
+    3bde:	61 95       	neg	r22
+    3be0:	7f 4f       	sbci	r23, 0xFF	; 255
+    3be2:	8f 4f       	sbci	r24, 0xFF	; 255
+    3be4:	9f 4f       	sbci	r25, 0xFF	; 255
+    3be6:	08 95       	ret
 
-00003be4 <itoa>:
-    3be4:	fb 01       	movw	r30, r22
-    3be6:	9f 01       	movw	r18, r30
-    3be8:	e8 94       	clt
-    3bea:	42 30       	cpi	r20, 0x02	; 2
-    3bec:	c4 f0       	brlt	.+48     	; 0x3c1e <itoa+0x3a>
-    3bee:	45 32       	cpi	r20, 0x25	; 37
-    3bf0:	b4 f4       	brge	.+44     	; 0x3c1e <itoa+0x3a>
-    3bf2:	4a 30       	cpi	r20, 0x0A	; 10
-    3bf4:	29 f4       	brne	.+10     	; 0x3c00 <itoa+0x1c>
-    3bf6:	97 fb       	bst	r25, 7
-    3bf8:	1e f4       	brtc	.+6      	; 0x3c00 <itoa+0x1c>
-    3bfa:	90 95       	com	r25
-    3bfc:	81 95       	neg	r24
-    3bfe:	9f 4f       	sbci	r25, 0xFF	; 255
-    3c00:	64 2f       	mov	r22, r20
-    3c02:	77 27       	eor	r23, r23
-    3c04:	0e 94 a1 1d 	call	0x3b42	; 0x3b42 <__udivmodhi4>
-    3c08:	80 5d       	subi	r24, 0xD0	; 208
-    3c0a:	8a 33       	cpi	r24, 0x3A	; 58
-    3c0c:	0c f0       	brlt	.+2      	; 0x3c10 <itoa+0x2c>
-    3c0e:	89 5d       	subi	r24, 0xD9	; 217
-    3c10:	81 93       	st	Z+, r24
-    3c12:	cb 01       	movw	r24, r22
-    3c14:	00 97       	sbiw	r24, 0x00	; 0
-    3c16:	a1 f7       	brne	.-24     	; 0x3c00 <itoa+0x1c>
-    3c18:	16 f4       	brtc	.+4      	; 0x3c1e <itoa+0x3a>
-    3c1a:	5d e2       	ldi	r21, 0x2D	; 45
-    3c1c:	51 93       	st	Z+, r21
-    3c1e:	10 82       	st	Z, r1
-    3c20:	c9 01       	movw	r24, r18
-    3c22:	0c 94 4a 1e 	jmp	0x3c94	; 0x3c94 <strrev>
+00003be8 <itoa>:
+    3be8:	fb 01       	movw	r30, r22
+    3bea:	9f 01       	movw	r18, r30
+    3bec:	e8 94       	clt
+    3bee:	42 30       	cpi	r20, 0x02	; 2
+    3bf0:	c4 f0       	brlt	.+48     	; 0x3c22 <itoa+0x3a>
+    3bf2:	45 32       	cpi	r20, 0x25	; 37
+    3bf4:	b4 f4       	brge	.+44     	; 0x3c22 <itoa+0x3a>
+    3bf6:	4a 30       	cpi	r20, 0x0A	; 10
+    3bf8:	29 f4       	brne	.+10     	; 0x3c04 <itoa+0x1c>
+    3bfa:	97 fb       	bst	r25, 7
+    3bfc:	1e f4       	brtc	.+6      	; 0x3c04 <itoa+0x1c>
+    3bfe:	90 95       	com	r25
+    3c00:	81 95       	neg	r24
+    3c02:	9f 4f       	sbci	r25, 0xFF	; 255
+    3c04:	64 2f       	mov	r22, r20
+    3c06:	77 27       	eor	r23, r23
+    3c08:	0e 94 a3 1d 	call	0x3b46	; 0x3b46 <__udivmodhi4>
+    3c0c:	80 5d       	subi	r24, 0xD0	; 208
+    3c0e:	8a 33       	cpi	r24, 0x3A	; 58
+    3c10:	0c f0       	brlt	.+2      	; 0x3c14 <itoa+0x2c>
+    3c12:	89 5d       	subi	r24, 0xD9	; 217
+    3c14:	81 93       	st	Z+, r24
+    3c16:	cb 01       	movw	r24, r22
+    3c18:	00 97       	sbiw	r24, 0x00	; 0
+    3c1a:	a1 f7       	brne	.-24     	; 0x3c04 <itoa+0x1c>
+    3c1c:	16 f4       	brtc	.+4      	; 0x3c22 <itoa+0x3a>
+    3c1e:	5d e2       	ldi	r21, 0x2D	; 45
+    3c20:	51 93       	st	Z+, r21
+    3c22:	10 82       	st	Z, r1
+    3c24:	c9 01       	movw	r24, r18
+    3c26:	0c 94 4c 1e 	jmp	0x3c98	; 0x3c98 <strrev>
 
-00003c26 <utoa>:
-    3c26:	fb 01       	movw	r30, r22
-    3c28:	9f 01       	movw	r18, r30
-    3c2a:	42 30       	cpi	r20, 0x02	; 2
-    3c2c:	74 f0       	brlt	.+28     	; 0x3c4a <utoa+0x24>
-    3c2e:	45 32       	cpi	r20, 0x25	; 37
-    3c30:	64 f4       	brge	.+24     	; 0x3c4a <utoa+0x24>
-    3c32:	64 2f       	mov	r22, r20
-    3c34:	77 27       	eor	r23, r23
-    3c36:	0e 94 a1 1d 	call	0x3b42	; 0x3b42 <__udivmodhi4>
-    3c3a:	80 5d       	subi	r24, 0xD0	; 208
-    3c3c:	8a 33       	cpi	r24, 0x3A	; 58
-    3c3e:	0c f0       	brlt	.+2      	; 0x3c42 <utoa+0x1c>
-    3c40:	89 5d       	subi	r24, 0xD9	; 217
-    3c42:	81 93       	st	Z+, r24
-    3c44:	cb 01       	movw	r24, r22
-    3c46:	00 97       	sbiw	r24, 0x00	; 0
-    3c48:	a1 f7       	brne	.-24     	; 0x3c32 <utoa+0xc>
-    3c4a:	10 82       	st	Z, r1
-    3c4c:	c9 01       	movw	r24, r18
-    3c4e:	0c 94 4a 1e 	jmp	0x3c94	; 0x3c94 <strrev>
+00003c2a <utoa>:
+    3c2a:	fb 01       	movw	r30, r22
+    3c2c:	9f 01       	movw	r18, r30
+    3c2e:	42 30       	cpi	r20, 0x02	; 2
+    3c30:	74 f0       	brlt	.+28     	; 0x3c4e <utoa+0x24>
+    3c32:	45 32       	cpi	r20, 0x25	; 37
+    3c34:	64 f4       	brge	.+24     	; 0x3c4e <utoa+0x24>
+    3c36:	64 2f       	mov	r22, r20
+    3c38:	77 27       	eor	r23, r23
+    3c3a:	0e 94 a3 1d 	call	0x3b46	; 0x3b46 <__udivmodhi4>
+    3c3e:	80 5d       	subi	r24, 0xD0	; 208
+    3c40:	8a 33       	cpi	r24, 0x3A	; 58
+    3c42:	0c f0       	brlt	.+2      	; 0x3c46 <utoa+0x1c>
+    3c44:	89 5d       	subi	r24, 0xD9	; 217
+    3c46:	81 93       	st	Z+, r24
+    3c48:	cb 01       	movw	r24, r22
+    3c4a:	00 97       	sbiw	r24, 0x00	; 0
+    3c4c:	a1 f7       	brne	.-24     	; 0x3c36 <utoa+0xc>
+    3c4e:	10 82       	st	Z, r1
+    3c50:	c9 01       	movw	r24, r18
+    3c52:	0c 94 4c 1e 	jmp	0x3c98	; 0x3c98 <strrev>
 
-00003c52 <__eerd_byte_m168>:
-    3c52:	f9 99       	sbic	0x1f, 1	; 31
-    3c54:	fe cf       	rjmp	.-4      	; 0x3c52 <__eerd_byte_m168>
-    3c56:	92 bd       	out	0x22, r25	; 34
-    3c58:	81 bd       	out	0x21, r24	; 33
-    3c5a:	f8 9a       	sbi	0x1f, 0	; 31
-    3c5c:	99 27       	eor	r25, r25
-    3c5e:	80 b5       	in	r24, 0x20	; 32
-    3c60:	08 95       	ret
+00003c56 <__eerd_byte_m168>:
+    3c56:	f9 99       	sbic	0x1f, 1	; 31
+    3c58:	fe cf       	rjmp	.-4      	; 0x3c56 <__eerd_byte_m168>
+    3c5a:	92 bd       	out	0x22, r25	; 34
+    3c5c:	81 bd       	out	0x21, r24	; 33
+    3c5e:	f8 9a       	sbi	0x1f, 0	; 31
+    3c60:	99 27       	eor	r25, r25
+    3c62:	80 b5       	in	r24, 0x20	; 32
+    3c64:	08 95       	ret
 
-00003c62 <__eerd_word_m168>:
-    3c62:	a8 e1       	ldi	r26, 0x18	; 24
-    3c64:	b0 e0       	ldi	r27, 0x00	; 0
-    3c66:	42 e0       	ldi	r20, 0x02	; 2
-    3c68:	50 e0       	ldi	r21, 0x00	; 0
-    3c6a:	0c 94 5c 1e 	jmp	0x3cb8	; 0x3cb8 <__eerd_blraw_m168>
+00003c66 <__eerd_word_m168>:
+    3c66:	a8 e1       	ldi	r26, 0x18	; 24
+    3c68:	b0 e0       	ldi	r27, 0x00	; 0
+    3c6a:	42 e0       	ldi	r20, 0x02	; 2
+    3c6c:	50 e0       	ldi	r21, 0x00	; 0
+    3c6e:	0c 94 5e 1e 	jmp	0x3cbc	; 0x3cbc <__eerd_blraw_m168>
 
-00003c6e <__eewr_byte_m168>:
-    3c6e:	26 2f       	mov	r18, r22
+00003c72 <__eewr_byte_m168>:
+    3c72:	26 2f       	mov	r18, r22
 
-00003c70 <__eewr_r18_m168>:
-    3c70:	f9 99       	sbic	0x1f, 1	; 31
-    3c72:	fe cf       	rjmp	.-4      	; 0x3c70 <__eewr_r18_m168>
-    3c74:	1f ba       	out	0x1f, r1	; 31
-    3c76:	92 bd       	out	0x22, r25	; 34
-    3c78:	81 bd       	out	0x21, r24	; 33
-    3c7a:	20 bd       	out	0x20, r18	; 32
-    3c7c:	0f b6       	in	r0, 0x3f	; 63
-    3c7e:	f8 94       	cli
-    3c80:	fa 9a       	sbi	0x1f, 2	; 31
-    3c82:	f9 9a       	sbi	0x1f, 1	; 31
-    3c84:	0f be       	out	0x3f, r0	; 63
-    3c86:	01 96       	adiw	r24, 0x01	; 1
-    3c88:	08 95       	ret
+00003c74 <__eewr_r18_m168>:
+    3c74:	f9 99       	sbic	0x1f, 1	; 31
+    3c76:	fe cf       	rjmp	.-4      	; 0x3c74 <__eewr_r18_m168>
+    3c78:	1f ba       	out	0x1f, r1	; 31
+    3c7a:	92 bd       	out	0x22, r25	; 34
+    3c7c:	81 bd       	out	0x21, r24	; 33
+    3c7e:	20 bd       	out	0x20, r18	; 32
+    3c80:	0f b6       	in	r0, 0x3f	; 63
+    3c82:	f8 94       	cli
+    3c84:	fa 9a       	sbi	0x1f, 2	; 31
+    3c86:	f9 9a       	sbi	0x1f, 1	; 31
+    3c88:	0f be       	out	0x3f, r0	; 63
+    3c8a:	01 96       	adiw	r24, 0x01	; 1
+    3c8c:	08 95       	ret
 
-00003c8a <__eewr_word_m168>:
-    3c8a:	0e 94 37 1e 	call	0x3c6e	; 0x3c6e <__eewr_byte_m168>
-    3c8e:	27 2f       	mov	r18, r23
-    3c90:	0c 94 38 1e 	jmp	0x3c70	; 0x3c70 <__eewr_r18_m168>
+00003c8e <__eewr_word_m168>:
+    3c8e:	0e 94 39 1e 	call	0x3c72	; 0x3c72 <__eewr_byte_m168>
+    3c92:	27 2f       	mov	r18, r23
+    3c94:	0c 94 3a 1e 	jmp	0x3c74	; 0x3c74 <__eewr_r18_m168>
 
-00003c94 <strrev>:
-    3c94:	dc 01       	movw	r26, r24
-    3c96:	fc 01       	movw	r30, r24
-    3c98:	67 2f       	mov	r22, r23
-    3c9a:	71 91       	ld	r23, Z+
-    3c9c:	77 23       	and	r23, r23
-    3c9e:	e1 f7       	brne	.-8      	; 0x3c98 <strrev+0x4>
-    3ca0:	32 97       	sbiw	r30, 0x02	; 2
-    3ca2:	04 c0       	rjmp	.+8      	; 0x3cac <strrev+0x18>
-    3ca4:	7c 91       	ld	r23, X
-    3ca6:	6d 93       	st	X+, r22
-    3ca8:	70 83       	st	Z, r23
-    3caa:	62 91       	ld	r22, -Z
-    3cac:	ae 17       	cp	r26, r30
-    3cae:	bf 07       	cpc	r27, r31
-    3cb0:	c8 f3       	brcs	.-14     	; 0x3ca4 <strrev+0x10>
-    3cb2:	08 95       	ret
+00003c98 <strrev>:
+    3c98:	dc 01       	movw	r26, r24
+    3c9a:	fc 01       	movw	r30, r24
+    3c9c:	67 2f       	mov	r22, r23
+    3c9e:	71 91       	ld	r23, Z+
+    3ca0:	77 23       	and	r23, r23
+    3ca2:	e1 f7       	brne	.-8      	; 0x3c9c <strrev+0x4>
+    3ca4:	32 97       	sbiw	r30, 0x02	; 2
+    3ca6:	04 c0       	rjmp	.+8      	; 0x3cb0 <strrev+0x18>
+    3ca8:	7c 91       	ld	r23, X
+    3caa:	6d 93       	st	X+, r22
+    3cac:	70 83       	st	Z, r23
+    3cae:	62 91       	ld	r22, -Z
+    3cb0:	ae 17       	cp	r26, r30
+    3cb2:	bf 07       	cpc	r27, r31
+    3cb4:	c8 f3       	brcs	.-14     	; 0x3ca8 <strrev+0x10>
+    3cb6:	08 95       	ret
 
-00003cb4 <__eerd_block_m168>:
-    3cb4:	dc 01       	movw	r26, r24
-    3cb6:	cb 01       	movw	r24, r22
+00003cb8 <__eerd_block_m168>:
+    3cb8:	dc 01       	movw	r26, r24
+    3cba:	cb 01       	movw	r24, r22
 
-00003cb8 <__eerd_blraw_m168>:
-    3cb8:	fc 01       	movw	r30, r24
-    3cba:	f9 99       	sbic	0x1f, 1	; 31
-    3cbc:	fe cf       	rjmp	.-4      	; 0x3cba <__eerd_blraw_m168+0x2>
-    3cbe:	06 c0       	rjmp	.+12     	; 0x3ccc <__eerd_blraw_m168+0x14>
-    3cc0:	f2 bd       	out	0x22, r31	; 34
-    3cc2:	e1 bd       	out	0x21, r30	; 33
-    3cc4:	f8 9a       	sbi	0x1f, 0	; 31
-    3cc6:	31 96       	adiw	r30, 0x01	; 1
-    3cc8:	00 b4       	in	r0, 0x20	; 32
-    3cca:	0d 92       	st	X+, r0
-    3ccc:	41 50       	subi	r20, 0x01	; 1
-    3cce:	50 40       	sbci	r21, 0x00	; 0
-    3cd0:	b8 f7       	brcc	.-18     	; 0x3cc0 <__eerd_blraw_m168+0x8>
-    3cd2:	08 95       	ret
+00003cbc <__eerd_blraw_m168>:
+    3cbc:	fc 01       	movw	r30, r24
+    3cbe:	f9 99       	sbic	0x1f, 1	; 31
+    3cc0:	fe cf       	rjmp	.-4      	; 0x3cbe <__eerd_blraw_m168+0x2>
+    3cc2:	06 c0       	rjmp	.+12     	; 0x3cd0 <__eerd_blraw_m168+0x14>
+    3cc4:	f2 bd       	out	0x22, r31	; 34
+    3cc6:	e1 bd       	out	0x21, r30	; 33
+    3cc8:	f8 9a       	sbi	0x1f, 0	; 31
+    3cca:	31 96       	adiw	r30, 0x01	; 1
+    3ccc:	00 b4       	in	r0, 0x20	; 32
+    3cce:	0d 92       	st	X+, r0
+    3cd0:	41 50       	subi	r20, 0x01	; 1
+    3cd2:	50 40       	sbci	r21, 0x00	; 0
+    3cd4:	b8 f7       	brcc	.-18     	; 0x3cc4 <__eerd_blraw_m168+0x8>
+    3cd6:	08 95       	ret
 
-00003cd4 <_exit>:
-    3cd4:	f8 94       	cli
+00003cd8 <_exit>:
+    3cd8:	f8 94       	cli
 
-00003cd6 <__stop_program>:
-    3cd6:	ff cf       	rjmp	.-2      	; 0x3cd6 <__stop_program>
+00003cda <__stop_program>:
+    3cda:	ff cf       	rjmp	.-2      	; 0x3cda <__stop_program>

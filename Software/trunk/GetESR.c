@@ -101,29 +101,33 @@ void GetESR() {
          wait1us();				// with only 17 us delay the voltage goes down before SH
          // delay 16us + 3 clock tics (CALL instead of RCALL) = 16.375 us @ 8 MHz
          // + 24 clock tics delay from interrupt return, +3.00us = 19.375
-         wdt_reset();	// 19.5   us -
-         wdt_reset();	// 19.625 us -
-         wdt_reset();	// 19.75  us -
-         wdt_reset();	// 19.875 us -
-         wdt_reset();	// 20.0   us -
-         wdt_reset();	// 20.125 us +
+         wdt_reset();	/* 19.5   us - */
+         wdt_reset();	/* 19.625 us - */
+         wdt_reset();	/* 19.75  us - */
+         wdt_reset();	/* 19.875 us - */
+         wdt_reset();	/* 20.0   us - */
+         wdt_reset();	/* 20.125 us + */
+         wdt_reset();	/* 20.25  us + */
  #endif
  #if F_CPU == 16000000UL
          wait3us();				// with only 18 us delay the voltage goes down before SH
          // delay 18us + 3 clock tics (CALL instead of RCALL) = 18.1875 us
          // + 24 clock tics delay from interrupt return, +1.50us = 19.6875
-         wdt_reset();	// 19.75  us -
-         wdt_reset();	// 19.8125us -
-         wdt_reset();	// 19.875 us -
-         wdt_reset();	// 19.9375us -
-         wdt_reset();	// 20.00  us -  
-         wdt_reset();	// 20.0625us +  
+         wdt_reset();	/* 19.75  us - */
+         wdt_reset();	/* 19.8125us - */
+         wdt_reset();	/* 19.875 us - */
+         wdt_reset();	/* 19.9375us - */
+         wdt_reset();	/* 20.00  us - */
+         wdt_reset();	/* 20.0625us + */
+         wdt_reset();	/* 20.125 us + */
+         wdt_reset();	/* 20.1875us + */
+         wdt_reset();	/* 20.250 us + */
  #endif
 #else
  #if F_CPU == 8000000UL
          wait4us();				// with only 18 us delay the voltage goes down before SH
-         // delay 18us + 3 clock tics (CALL instead of RCALL) = 18.375 us @ 8 MHz
-         // + 7 clock tics delay from while loop, +0.875us  = 19.25
+         // delay 19us + 3 clock tics (CALL instead of RCALL) = 19.375 us @ 8 MHz
+         // + 7 clock tics delay from while loop, +0.875us  = 20.25
 //         wdt_reset();	/* 19.375 us - */
 //         wdt_reset();	/* 19.5   us - */
 //         wdt_reset();	/* 19.625 us - */
@@ -132,21 +136,24 @@ void GetESR() {
 //         wdt_reset();	/* 20.0   us - */
 //         wdt_reset();	/* 20.125 us + (1.1 , 0.63) */
 //         wdt_reset();	/* 20.25  us + (1.0 , 0.60) */
-//         wdt_reset();	/* 20.75  us + (0.86 , 0.52) */
+           wdt_reset(); /* 20.375 us + */
  #endif
  #if F_CPU == 16000000UL
          wait4us();				// with only 18 us delay the voltage goes down before SH
          // delay 19us + 3 clock tics (CALL instead of RCALL) = 19.1875 us
          // + 7 clock tics delay from "while (ADCSRA&(1<<ADSC))" loop = 19.625
-         wdt_reset();	// 19.6875us -
-         wdt_reset();	// 19.75  us -
-         wdt_reset();	// 19.8125us -
-         wdt_reset();	// 19.875 us -
-         wdt_reset();	// 19.9375us -
-         wdt_reset();	// 20.00  us -  
-         wdt_reset();	// 20.0625us +  
-         wdt_reset();	// 20.125 us +  
-         wdt_reset();	// 20.1875us +  
+//         wdt_reset();	/* 19.6875us - */
+//         wdt_reset();	/* 19.75  us - */
+//         wdt_reset();	/* 19.8125us - */
+//         wdt_reset();	/* 19.875 us - */
+//         wdt_reset();	/* 19.9375us - */
+//         wdt_reset();	/* 20.00  us - */
+//         wdt_reset();	/* 20.0625us + */
+//         wdt_reset();	/* 20.125 us + */
+//         wdt_reset();	/* 20.1875us + */
+         wait500ns();
+         wdt_reset();	/* 20.250 us + */
+         wdt_reset();	/* 20.3125us + */
  #endif
 #endif
 //         wdt_reset();				// with wdt_reset the timing can be adjusted,
@@ -188,29 +195,33 @@ void GetESR() {
          wait1us();				// with only 16 us delay the voltage goes down before SH
          // delay 16us + 3 clock tics (CALL instead of RCALL) = 16.375 us @ 8 MHz
          // + 24 clock tics delay from interrupt return, +3.00us = 19.375
-         wdt_reset();	// 19.5   us -
-         wdt_reset();	// 19.625 us -
-         wdt_reset();	// 19.75  us -
-         wdt_reset();	// 19.875 us -
-         wdt_reset();	// 20.0   us -
-         wdt_reset();	// 20.125 us +
+         wdt_reset();	/* 19.5   us - */
+         wdt_reset();	/* 19.625 us - */
+         wdt_reset();	/* 19.75  us - */
+         wdt_reset();	/* 19.875 us - */
+         wdt_reset();	/* 20.0   us - */
+         wdt_reset();	/* 20.125 us + */
+         wdt_reset();	/* 20.25  us + */
  #endif
  #if F_CPU == 16000000UL
          wait3us();				// with only 18 us delay the voltage goes down before SH
          // delay 18us + 3 clock tics (CALL instead of RCALL) = 18.1875 us
          // + 24 clock tics delay from interrupt return, +1.50us = 19.6875
-         wdt_reset();	// 19.75  us -
-         wdt_reset();	// 19.8125us -
-         wdt_reset();	// 19.875 us -
-         wdt_reset();	// 19.9375us -
-         wdt_reset();	// 20.00  us -  
-         wdt_reset();	// 20.0625us +  
+         wdt_reset();	/* 19.75  us - */
+         wdt_reset();	/* 19.8125us - */
+         wdt_reset();	/* 19.875 us - */
+         wdt_reset();	/* 19.9375us - */
+         wdt_reset();	/* 20.00  us - */
+         wdt_reset();	/* 20.0625us + */
+         wdt_reset();	/* 20.125 us + */
+         wdt_reset();	/* 20.1875us + */
+         wdt_reset();	/* 20.250 us + */
  #endif
 #else
  #if F_CPU == 8000000UL
          wait4us();				// with only 18 us delay the voltage goes down before SH
-         // delay 18us + 3 clock tics (CALL instead of RCALL) = 18.375 us @ 8 MHz
-         // + 7 clock tics delay from while loop, +0.875us  = 19.25
+         // delay 18us + 3 clock tics (CALL instead of RCALL) = 19.375 us @ 8 MHz
+         // + 7 clock tics delay from while loop, +0.875us  = 20.25
 //         wdt_reset();	/* 19.375 us - */
 //         wdt_reset();	/* 19.5   us - */
 //         wdt_reset();	/* 19.625 us - */
@@ -219,20 +230,24 @@ void GetESR() {
 //         wdt_reset();	/* 20.0   us - */
 //         wdt_reset();	/* 20.125 us + */
 //         wdt_reset();	/* 20.25  us + */
+           wdt_reset(); /* 20.375 us + */
  #endif
  #if F_CPU == 16000000UL
          wait4us();				// with only 18 us delay the voltage goes down before SH
          // delay 19us + 3 clock tics (CALL instead of RCALL) = 19.1875 us
          // + 7 clock tics delay from "while (ADCSRA&(1<<ADSC))" loop = 19.625
-         wdt_reset();	// 19.6875us -
-         wdt_reset();	// 19.75  us -
-         wdt_reset();	// 19.8125us -
-         wdt_reset();	// 19.875 us -
-         wdt_reset();	// 19.9375us -
-         wdt_reset();	// 20.00  us -  
-         wdt_reset();	// 20.0625us +  
-         wdt_reset();	// 20.125 us +  
-         wdt_reset();	// 20.1875us +  
+//         wdt_reset();	/* 19.6875us - */
+//         wdt_reset();	/* 19.75  us - */
+//         wdt_reset();	/* 19.8125us - */
+//         wdt_reset();	/* 19.875 us - */
+//         wdt_reset();	/* 19.9375us - */
+//         wdt_reset();	/* 20.00  us - */
+//         wdt_reset();	/* 20.0625us + */
+//         wdt_reset();	/* 20.125 us + */
+//         wdt_reset();	/* 20.1875us + */
+         wait500ns();
+         wdt_reset();	/* 20.250 us + */
+         wdt_reset();	/* 20.3125us + */
  #endif
 #endif
 //         wdt_reset();				// with wdt_reset the timing can be adjusted,
@@ -267,7 +282,7 @@ void GetESR() {
    // the LowPin. The velocity of degration is inversely proportional to time constant (represented by capacity value).
    // Time constant for 1uF & 720 Ohm is 720us
 //   sumvolt[0] -= (sumvolt[0] * 150UL)  / cap.cval_max;	// Version 1.04k
-   sumvolt[0] -= (sumvolt[0] * 360UL)  / cap.cval_max;
+   sumvolt[0] -= (sumvolt[0] * 345UL)  / cap.cval_max;
 #ifdef ESR_DEBUG
    lcd_line3();
    DisplayValue(sumvolt[1],0,'H',4);	// HighPin

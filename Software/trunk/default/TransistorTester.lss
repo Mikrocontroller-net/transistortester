@@ -9629,11 +9629,11 @@ void GetESR() {
     396a:	50 38       	cpi	r21, 0x80	; 128
     396c:	09 f0       	breq	.+2      	; 0x3970 <GetESR+0x2f8>
     396e:	11 cf       	rjmp	.-478    	; 0x3792 <GetESR+0x11a>
+   // HighPin Voltage, which is usually 2 * 14 * 8 us = 224 us.
    // With the loading of the capacitor the current will sink, so we get a too high voltage at
    // the LowPin. The velocity of degration is inversely proportional to time constant (represented by capacity value).
    // Time constant for 1uF & 720 Ohm is 720us
 //   sumvolt[0] -= (sumvolt[0] * 150UL)  / cap.cval_max;	// Version 1.04k
-//   sumvolt[0] -= (sumvolt[0] * 360UL)  / cap.cval_max;
    sumvolt[0] -= (sumvolt[0] * 345UL)  / cap.cval_max;
     3970:	c8 01       	movw	r24, r16
     3972:	b7 01       	movw	r22, r14

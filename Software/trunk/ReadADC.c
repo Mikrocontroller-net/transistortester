@@ -36,7 +36,7 @@ sample:
 //    ADCconfig.RefFlag = Samples; /* update flag */
  }
 #endif
-#ifdef __AVR_ATmega8__
+#ifdef INHIBIT_SLEEP_MODE
 // one dummy read of ADC, 112us
     ADCSRA |= (1 << ADSC); /* start conversion */
     while (ADCSRA & (1 << ADSC)); /* wait until conversion is done */
@@ -49,7 +49,7 @@ sample:
  Value = 0UL; /* reset sampling variable */
  Samples = 0; /* number of samples to take */
  while (Samples < ADCconfig.Samples) /* take samples */ {
-#ifdef __AVR_ATmega8__
+#ifdef INHIBIT_SLEEP_MODE
     ADCSRA |= (1 << ADSC); /* start conversion */
     while (ADCSRA & (1 << ADSC)); /* wait until conversion is done */
 #else

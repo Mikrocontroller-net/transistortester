@@ -15,7 +15,7 @@
 #define MAIN_C
 #include "Transistortester.h"
 
-#ifndef __AVR_ATmega8__
+#ifndef INHIBIT_SLEEP_MODE
   // prepare sleep mode
   EMPTY_INTERRUPT(TIMER2_COMPA_vect);
   EMPTY_INTERRUPT(ADC_vect);
@@ -47,7 +47,7 @@ int main(void) {
   tmp = (WDRF_HOME & (1<<WDRF));	// save Watch Dog Flag
   WDRF_HOME &= ~(1<<WDRF);	 	//reset Watch Dog flag
   wdt_disable();			// disable Watch Dog
-#ifndef __AVR_ATmega8__
+#ifndef INHIBIT_SLEEP_MODE
   // switch off unused Parts
   PRR = (1<<PRTWI) | (1<<PRTIM0) | (1<<PRSPI) | (1<<PRUSART0);
   DIDR0 = (1<<ADC5D) | (1<<ADC4D) | (1<<ADC3D);	
@@ -944,7 +944,7 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
   if (Unit) lcd_data(Unit);
 }
 
-#ifndef __AVR_ATmega8__
+#ifndef INHIBIT_SLEEP_MODE
 /* set the processor to sleep state */
 /* wake up will be done with compare match interrupt of counter 2 */
 void sleep_5ms(uint16_t pause){
@@ -955,7 +955,7 @@ uint8_t t2_offset;
 
 while (pause > 0)
   {
-#if 3000 > RESTART_DELAY_US
+ #if 3000 > RESTART_DELAY_US
    if (pause > 1)
      {
       // Startup time is too long with 1MHz Clock!!!!
@@ -973,10 +973,10 @@ while (pause > 0)
 //   set_sleep_mode(SLEEP_MODE_IDLE);
    sleep_mode();
 // wake up after output compare match interrupt
-#else
+ #else
    // restart delay ist too long, use normal delay of 5ms
    wait5ms();
-#endif
+ #endif
    wdt_reset();
   }
 TIMSK2 = (0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2); /* disable output compare match A interrupt */ 

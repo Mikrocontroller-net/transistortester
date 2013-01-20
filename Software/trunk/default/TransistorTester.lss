@@ -561,7 +561,7 @@ void lcd_fix_customchar(const unsigned char *chardata) {
 #define MAIN_C
 #include "Transistortester.h"
 
-#ifndef __AVR_ATmega8__
+#ifndef INHIBIT_SLEEP_MODE
   // prepare sleep mode
   EMPTY_INTERRUPT(TIMER2_COMPA_vect);
      352:	18 95       	reti
@@ -1385,7 +1385,7 @@ uint8_t t2_offset;
 while (pause > 0)
      736:	1c c0       	rjmp	.+56     	; 0x770 <sleep_5ms+0x3c>
   {
-#if 3000 > RESTART_DELAY_US
+ #if 3000 > RESTART_DELAY_US
    if (pause > 1)
      738:	82 30       	cpi	r24, 0x02	; 2
      73a:	91 05       	cpc	r25, r1
@@ -1396,7 +1396,7 @@ while (pause > 0)
       pause -= 2;
      73e:	02 97       	sbiw	r24, 0x02	; 2
   {
-#if 3000 > RESTART_DELAY_US
+ #if 3000 > RESTART_DELAY_US
    if (pause > 1)
      {
       // Startup time is too long with 1MHz Clock!!!!
@@ -1434,10 +1434,10 @@ while (pause > 0)
      76a:	2e 7f       	andi	r18, 0xFE	; 254
      76c:	23 bf       	out	0x33, r18	; 51
 // wake up after output compare match interrupt
-#else
+ #else
    // restart delay ist too long, use normal delay of 5ms
    wait5ms();
-#endif
+ #endif
    wdt_reset();
      76e:	a8 95       	wdr
 // pause is the delay in 5ms units
@@ -1450,7 +1450,7 @@ while (pause > 0)
      772:	11 f7       	brne	.-60     	; 0x738 <sleep_5ms+0x4>
    // restart delay ist too long, use normal delay of 5ms
    wait5ms();
-#endif
+ #endif
    wdt_reset();
   }
 TIMSK2 = (0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2); /* disable output compare match A interrupt */ 
@@ -5306,7 +5306,7 @@ int main(void) {
     1edc:	80 93 60 00 	sts	0x0060, r24
     1ee0:	10 92 60 00 	sts	0x0060, r1
     1ee4:	0f be       	out	0x3f, r0	; 63
-#ifndef __AVR_ATmega8__
+#ifndef INHIBIT_SLEEP_MODE
   // switch off unused Parts
   PRR = (1<<PRTWI) | (1<<PRTIM0) | (1<<PRSPI) | (1<<PRUSART0);
     1ee6:	86 ea       	ldi	r24, 0xA6	; 166
@@ -8886,7 +8886,7 @@ unsigned int ReadADC (uint8_t Probe) {
  Probe |= (1 << REFS0); /* use internal reference anyway */
     3558:	18 2f       	mov	r17, r24
     355a:	10 64       	ori	r17, 0x40	; 64
-#ifdef __AVR_ATmega8__
+#ifdef INHIBIT_SLEEP_MODE
 // one dummy read of ADC, 112us
     ADCSRA |= (1 << ADSC); /* start conversion */
     while (ADCSRA & (1 << ADSC)); /* wait until conversion is done */
@@ -8911,7 +8911,7 @@ sample:
 #ifdef NO_AREF_CAP
     wait100us(); /* time for voltage stabilization */
     3566:	0e 94 03 15 	call	0x2a06	; 0x2a06 <wait100us>
-#ifdef __AVR_ATmega8__
+#ifdef INHIBIT_SLEEP_MODE
 // one dummy read of ADC, 112us
     ADCSRA |= (1 << ADSC); /* start conversion */
     while (ADCSRA & (1 << ADSC)); /* wait until conversion is done */
@@ -8941,7 +8941,7 @@ sample:
     358a:	e0 e0       	ldi	r30, 0x00	; 0
  while (Samples < ADCconfig.Samples) /* take samples */ {
     358c:	2a c0       	rjmp	.+84     	; 0x35e2 <ReadADC+0x94>
-#ifdef __AVR_ATmega8__
+#ifdef INHIBIT_SLEEP_MODE
     ADCSRA |= (1 << ADSC); /* start conversion */
     while (ADCSRA & (1 << ADSC)); /* wait until conversion is done */
 #else

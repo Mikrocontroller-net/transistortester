@@ -323,6 +323,9 @@ End of configuration
   #define COMP_SLEW2 33
   #define C_NULL CC0+CABLE_CAP+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2))
   #define MUX_INT_REF 0x0e	/* channel number of internal 1.1 V */
+ #ifndef INHIBIT_SLEEP_MODE
+  #define INHIBIT_SLEEP_MODE	/* do not use the sleep mode of ATmega */
+ #endif
 #endif
 
 #ifndef REF_R_KORR
@@ -416,8 +419,8 @@ Is SWUART_INVERT defined, the UART works is inverse mode
   #define TXD_VAL TXD_MSK
 #endif
 
-#ifdef __AVR_ATmega8__
- // 2.54V reference voltage + korrection (fix for ATmega8)
+#ifdef INHIBIT_SLEEP_MODE
+ // 2.54V reference voltage + correction (fix for ATmega8)
  #ifdef AUTO_CAL
   #define ADC_internal_reference (2560 + (int8_t)eeprom_read_byte((uint8_t *)&RefDiff))
  #else

@@ -77,6 +77,7 @@ CFLAGS += -DESR_ZERO=29
 
 # NO_AREF_CAP tells your Software, that you have no Capacitor installed at pin AREF (21).
 # This enables a shorter wait-time for AUTOSCALE_ADC function.
+# A capacitor with 1nF can be used with the option NO_AREF_CAP set.
 CFLAGS += -DNO_AREF_CAP
 
 # The OP_MHZ option tells the software the Operating Frequency of your ATmega.

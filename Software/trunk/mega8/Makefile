@@ -80,6 +80,7 @@ CFLAGS += -DESR_ZERO=29
 
 # NO_AREF_CAP tells your Software, that you have no Capacitor installed at pin AREF (21).
 # This enables a shorter wait-time for AUTOSCALE_ADC function.
+# A capacitor with 1nF can be used with the option NO_AREF_CAP set.
 CFLAGS += -DNO_AREF_CAP
 
 # The OP_MHZ option tells the software the Operating Frequency of your ATmega.
@@ -93,7 +94,7 @@ CFLAGS += -DUSE_EEPROM
 # Setting EBC_STYPE will select the old style to present the order of Transistor connection (EBC=...).
 # Omitting the option will select the 123=... style.  Every point is replaced by a character identifying 
 # type of connected transistor pin (B=Base, E=Emitter, C=Collector, G=Gate, S=Source, D=Drain).
-CFLAGS += -DEBC_STYLE
+#CFLAGS += -DEBC_STYLE
 
 
 # The PULLUP_DISABLE option disable the pull-up Resistors of IO-Ports.

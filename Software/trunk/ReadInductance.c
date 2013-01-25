@@ -14,7 +14,7 @@ void ReadInductance(void) {
 #if FLASHEND > 0x1fff
   // check if inductor and measure the inductance value
   unsigned int tmpint;
-  unsigned int ovcnt16;	// overrun counter for 16 bit counter
+  unsigned int ov_cnt16;	// overrun counter for 16 bit counter
   unsigned int umax;
   unsigned int total_r;		// total resistance of current loop
   unsigned int mess_r;		// value of resistor used for current measurement
@@ -75,7 +75,7 @@ void ReadInductance(void) {
         ADCSRA = (1<<ADIF) | AUTO_CLOCK_DIV; //disable ADC
    
       // setup Counter1
-        ovcnt16 = 0;
+        ov_cnt16 = 0;
         TCCR1A = 0;			// set Counter1 to normal Mode
         TCNT1 = 0;			//set Counter to 0
         TI1_INT_FLAGS = (1<<ICF1) | (1<<OCF1B) | (1<<OCF1A) | (1<<TOV1);	// reset TIFR or TIFR1
@@ -109,8 +109,8 @@ void ReadInductance(void) {
            if((ii & (1<<TOV1))) {		// counter overflow, 65.536 ms @ 1MHz, 8.192ms @ 8MHz
               TI1_INT_FLAGS = (1<<TOV1);	// Reset OV Flag
               wdt_reset();
-              ovcnt16++;
-              if(ovcnt16 == (F_CPU/100000)) {
+              ov_cnt16++;
+              if(ov_cnt16 == (F_CPU/100000)) {
                  break; 	//Timeout for Charging, above 0.13 s
               }
            }
@@ -122,7 +122,7 @@ void ReadInductance(void) {
         if((TCNT1 > tmpint) && (ii & (1<<TOV1))) {
            // this OV was not counted, but was before the Input Capture
            TI1_INT_FLAGS = (1<<TOV1);		// Reset OV Flag
-           ovcnt16++;
+           ov_cnt16++;
         }
         ADC_PORT = TXD_VAL;		// switch ADC-Port to GND
         ADCSRA = (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; //enable ADC
@@ -132,8 +132,8 @@ void ReadInductance(void) {
             total_r =  ReadADC(HighPin);
             if ((umax < 2) && (total_r < 2)) break;	// low current detected
         }
-//      cap.cval_uncorrected.dw = CombineII2Long(ovcnt16, tmpint);
-        cap.cval_uncorrected.w[1] = ovcnt16;
+//      cap.cval_uncorrected.dw = CombineII2Long(ov_cnt16, tmpint);
+        cap.cval_uncorrected.w[1] = ov_cnt16;
         cap.cval_uncorrected.w[0] = tmpint;
   #define CNT_ZERO_42 6
   #define CNT_ZERO_720 7
@@ -165,7 +165,7 @@ void ReadInductance(void) {
            // second pass with delayed counter start
            cap.cval_uncorrected.dw += (3 * (F_CPU/1000000))+10;
         }
-        if (ovcnt16 >= (F_CPU/100000)) cap.cval_uncorrected.dw = 0; // no transition found
+        if (ov_cnt16 >= (F_CPU/100000)) cap.cval_uncorrected.dw = 0; // no transition found
         total_r = (mess_r + resis[found].rx + RR680PL - R_L_VAL);
         // compute the maximum Voltage umax with the Resistor of the coil
         umax = ((unsigned long)mess_r * (unsigned long)ADCconfig.U_AVCC) / total_r;

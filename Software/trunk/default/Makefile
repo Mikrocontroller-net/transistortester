@@ -77,6 +77,7 @@ CFLAGS += -DESR_ZERO=29
 
 # NO_AREF_CAP tells your Software, that you have no Capacitor installed at pin AREF (21).
 # This enables a shorter wait-time for AUTOSCALE_ADC function.
+# A capacitor with 1nF can be used with the option NO_AREF_CAP set.
 CFLAGS += -DNO_AREF_CAP
 
 # The OP_MHZ option tells the software the Operating Frequency of your ATmega.
@@ -89,7 +90,7 @@ OP_MHZ = 8
 
 # The USE_EEPROM option specify where you wish to locate fix text and tables.
 # If USE_EEPROM is unset, program memory (flash) is taken for fix text and tables.
-CFLAGS += -DUSE_EEPROM
+#CFLAGS += -DUSE_EEPROM
 
 # Setting EBC_STYPE will select the old style to present the order of Transistor connection (EBC=...).
 # Omitting the option will select the 123=... style.  Every point is replaced by a character identifying 

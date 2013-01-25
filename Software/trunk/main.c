@@ -436,19 +436,7 @@ start:
           lcd_fix_string(KatAn);	//"-|<-"
        }
     }
-#ifdef EBC_STYLE
-    lcd_fix_string(EBC_str);		//" EBC="
-    lcd_testpin(trans.e);
-    lcd_testpin(trans.b);
-    lcd_testpin(trans.c);
-#else
-    lcd_fix_string(N123_str);		//" 123="
-    for (ii=0;ii<3;ii++) {
-        if (ii == trans.e)  lcd_data('E');	// Output Character in right order
-        if (ii == trans.b)  lcd_data('B');
-        if (ii == trans.c)  lcd_data('C');
-    }
-#endif
+    PinLayout('E','B','C'); 		//  EBC= or 123=...
     lcd_line2(); //2. row 
     lcd_fix_string(hfe_str);		//"B="  (hFE)
     DisplayValue(trans.hfe[0],0,0,3);
@@ -479,19 +467,7 @@ start:
     } else {
        lcd_fix_string(mosfet_str);	//"-MOS "
     }
-#ifdef EBC_STYLE
-    lcd_fix_string(GDS_str);		//"GDS="
-    lcd_testpin(trans.b);
-    lcd_testpin(trans.c);
-    lcd_testpin(trans.e);
-#else
-    lcd_fix_string(N123_str);		//" 123="
-    for (ii=0;ii<3;ii++) {
-        if (ii == trans.e)  lcd_data('S');	// Output Character in right order
-        if (ii == trans.b)  lcd_data('G');
-        if (ii == trans.c)  lcd_data('D');
-    }
-#endif
+    PinLayout('S','G','D'); 		//  SGD= or 123=...
     if((NumOfDiodes > 0) && (PartMode < PART_MODE_N_D_MOS)) {
        //MOSFET with protection diode; only with enhancement-FETs
 #ifdef EBC_STYLE
@@ -630,10 +606,7 @@ start:
 
 gakAusgabe:
   lcd_line2(); //2. row 
-  lcd_fix_string(GAK);		//"GAK="
-  lcd_testpin(trans.b);
-  lcd_testpin(trans.c);
-  lcd_testpin(trans.e);
+  PinLayout(Cathode_char,'G','A'); 	// CGA= or 123=...
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - 
  end:
   empty_count = 0;		// reset counter, if part is found
@@ -665,6 +638,7 @@ gakAusgabe:
   }
  #endif
   // only one Measurement requested, shut off
+//  MCUSR = 0;
   wdt_disable();			//Watchdog off
   ON_PORT &= ~(1<<ON_PIN);		//switch off power
   ON_DDR = (1<<ON_PIN);			//switch to GND
@@ -677,6 +651,7 @@ gakAusgabe:
   }
 #else
   goto start;	// POWER_OFF not selected, repeat measurement
+//  goto end2;	// POWER_OFF not selected, wait more time
 #endif
   return 0;
 }   // end main
@@ -982,6 +957,28 @@ while (pause > 0)
 TIMSK2 = (0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2); /* disable output compare match A interrupt */ 
 }
 #endif
+
+// show the Pin Layout of the device 
+void PinLayout(char pin1, char pin2, char pin3) {
+// pin1-3 is EBC or SGD or CGA
+#ifndef EBC_STYLE
+   lcd_fix_string(N123_str);		//" 123="
+   for (ii=0;ii<3;ii++) {
+       if (ii == trans.e)  lcd_data(pin1);	// Output Character in right order
+       if (ii == trans.b)  lcd_data(pin2);
+       if (ii == trans.c)  lcd_data(pin3);
+   }
+#else
+   lcd_space();
+   lcd_data(pin1);
+   lcd_data(pin2);
+   lcd_data(pin3);
+   lcd_data('=');
+   lcd_testpin(trans.e);
+   lcd_testpin(trans.b);
+   lcd_testpin(trans.c);
+#endif
+}
 
 #ifdef CHECK_CALL
  #include "AutoCheck.c"

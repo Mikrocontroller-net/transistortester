@@ -64,13 +64,13 @@ End of configuration
    const unsigned char TestFailed2[] MEM_TEXT = "defektes "; //€€€";
    const unsigned char Bauteil[] MEM_TEXT = "Bauteil"; //€€€";
    const unsigned char Diode[] MEM_TEXT = "Diode: ";
-   const unsigned char GAK[] MEM_TEXT = "GAK=";
    const unsigned char Triac[] MEM_TEXT = "Triac";
    const unsigned char Thyristor[] MEM_TEXT = "Thyristor";
    const unsigned char Unknown[] MEM_TEXT = " unbek."; //€€";
    const unsigned char TestFailed1[] MEM_TEXT = "Kein,unbek. oder";
    const unsigned char OrBroken[] MEM_TEXT = "oder defekt "; //€";
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+   #define Cathode_char 'K'
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selbsttest ..";
    const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
@@ -85,13 +85,13 @@ End of configuration
    const unsigned char TestFailed2[] MEM_TEXT = "damaged "; //€€€€";
    const unsigned char Bauteil[] MEM_TEXT = "part"; //€€€€€€";
    const unsigned char Diode[] MEM_TEXT = "Diode: ";
-   const unsigned char GAK[] MEM_TEXT = "GAC=";
    const unsigned char Triac[] MEM_TEXT = "Triac";
    const unsigned char Thyristor[] MEM_TEXT = "Thyristor";
    const unsigned char Unknown[] MEM_TEXT = " unknown"; //€";
    const unsigned char TestFailed1[] MEM_TEXT = "No, unknown, or"; //€";
    const unsigned char OrBroken[] MEM_TEXT = "or damaged "; //€€";
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+   #define Cathode_char 'C'
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
    const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
@@ -106,13 +106,13 @@ End of configuration
    const unsigned char TestFailed2[] MEM_TEXT = "lub uszkodz.";
    const unsigned char Bauteil[] MEM_TEXT = "Elemen"; //t€€€";
    const unsigned char Diode[] MEM_TEXT = "Dioda: ";
-   const unsigned char GAK[] MEM_TEXT = "GAK=";
    const unsigned char Triac[] MEM_TEXT = "Triak";
    const unsigned char Thyristor[] MEM_TEXT = "Tyrystor"; //€";
    const unsigned char Unknown[] MEM_TEXT = " nieznany";
    const unsigned char TestFailed1[] MEM_TEXT = "brak elementu"; //€€€";
    const unsigned char OrBroken[] MEM_TEXT = "lub uszkodz. ";
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+   #define Cathode_char 'K'
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
    const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
@@ -127,13 +127,13 @@ End of configuration
    const unsigned char TestFailed2[] MEM_TEXT = "vadna "; //€€€€€€";
    const unsigned char Bauteil[] MEM_TEXT = "soucastka"; //€";
    const unsigned char Diode[] MEM_TEXT = "Dioda: ";
-   const unsigned char GAK[] MEM_TEXT = "GAK=";
    const unsigned char Triac[] MEM_TEXT = "Triak";
    const unsigned char Thyristor[] MEM_TEXT = "Tyristor"; //€";
    const unsigned char Unknown[] MEM_TEXT = " neznama"; //€";
    const unsigned char TestFailed1[] MEM_TEXT = "Zadna, neznama"; //€€";
    const unsigned char OrBroken[] MEM_TEXT = "nebo vadna "; //€€";
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+   #define Cathode_char 'K'
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
    const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
@@ -148,13 +148,13 @@ End of configuration
    const unsigned char TestFailed2[] MEM_TEXT = "vadna "; //€€€€€€";
    const unsigned char Bauteil[] MEM_TEXT = "suciastka!";
    const unsigned char Diode[] MEM_TEXT = "Dioda: ";
-   const unsigned char GAK[] MEM_TEXT = "GAK=";
    const unsigned char Triac[] MEM_TEXT = "Triak";
    const unsigned char Thyristor[] MEM_TEXT = "Tyristor"; //€";
    const unsigned char Unknown[] MEM_TEXT = " neznama"; //€";
    const unsigned char TestFailed1[] MEM_TEXT = "Ziadna, neznama"; //€";
    const unsigned char OrBroken[] MEM_TEXT = "alebo vadna "; //€";
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+   #define Cathode_char 'K'
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
    const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
@@ -169,13 +169,13 @@ End of configuration
    const unsigned char TestFailed2[] MEM_TEXT = "pokvarjen "; 
    const unsigned char Bauteil[] MEM_TEXT = "del"; 
    const unsigned char Diode[] MEM_TEXT = "Dioda: ";
-   const unsigned char GAK[] MEM_TEXT = "GAC=";
    const unsigned char Triac[] MEM_TEXT = "Triak";
    const unsigned char Thyristor[] MEM_TEXT = "Tiristor";
    const unsigned char Unknown[] MEM_TEXT = " neznan"; 
    const unsigned char TestFailed1[] MEM_TEXT = "Ni, neznan, ali"; 
    const unsigned char OrBroken[] MEM_TEXT = "ali zanic "; 
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+   #define Cathode_char 'C'
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
    const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
@@ -189,13 +189,13 @@ End of configuration
    const unsigned char TestFailed2[] MEM_TEXT = "defect "; 
    const unsigned char Bauteil[] MEM_TEXT = "component"; 
    const unsigned char Diode[] MEM_TEXT = "Diode: ";
-   const unsigned char GAK[] MEM_TEXT = "GAC=";
    const unsigned char Triac[] MEM_TEXT = "Triac";
    const unsigned char Thyristor[] MEM_TEXT = "Thyristor";
    const unsigned char Unknown[] MEM_TEXT = " onbekend"; 
    const unsigned char TestFailed1[] MEM_TEXT = "Geen, onbekend,"; 
    const unsigned char OrBroken[] MEM_TEXT = "of defect "; 
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+   #define Cathode_char 'C'
 #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Zelftest mode..";
    const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe";
@@ -210,13 +210,13 @@ End of configuration
    const unsigned char TestFailed2[] MEM_TEXT = {Cyr_p,'o',Cyr_v,'p','e',Cyr_zsch,Cyr_d,'e',Cyr_n,' ',0};
    const unsigned char Bauteil[] MEM_TEXT = {Cyr_tsch,'a','c',Cyr_t,Cyr_hh,0}; 
    const unsigned char Diode[] MEM_TEXT = {Cyr_D,Cyr_i,'o',Cyr_d,':',0};
-   const unsigned char GAK[] MEM_TEXT = "GAC=";
    const unsigned char Triac[] MEM_TEXT = {'C',Cyr_i,Cyr_m,Cyr_i,'c',Cyr_t,'o','p',0};
    const unsigned char Thyristor[] MEM_TEXT = {Cyr_t,Cyr_i,'p',Cyr_i,'c',Cyr_t,'o','p',0};
    const unsigned char Unknown[] MEM_TEXT = {' ',Cyr_n,'e',Cyr_i,Cyr_z,Cyr_v,'e','c',Cyr_t,Cyr_n,Cyr_y,Cyr_j,0}; 
    const unsigned char TestFailed1[] MEM_TEXT = {'o',Cyr_t,'c',Cyr_U,Cyr_t,'c',Cyr_t,Cyr_v,Cyr_U,'e',Cyr_t,0};
    const unsigned char OrBroken[] MEM_TEXT = {Cyr_i,Cyr_l,Cyr_i,' ',Cyr_p,'o',Cyr_v,'p','e',Cyr_zsch,Cyr_d,'e',Cyr_n,0};
    const unsigned char TestTimedOut[] MEM_TEXT = {Cyr_v,'p','e',Cyr_m,Cyr_ja,' ',Cyr_t,'e','c',Cyr_t,Cyr_i,'p','o',Cyr_v,'a',Cyr_n,Cyr_i,Cyr_ja,Cyr_v,Cyr_y,Cyr_sch,Cyr_l,'o','!',0};
+   #define Cathode_char 'C'
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
    const unsigned char RELPROBE[] MEM2_TEXT = {'o',Cyr_t,Cyr_k,Cyr_l,Cyr_ju,Cyr_tsch,Cyr_i,Cyr_t,'b',' ',Cyr_z,'o',Cyr_n,Cyr_d,0};
@@ -233,10 +233,7 @@ End of configuration
  const unsigned char hfe_str[] MEM_TEXT ="B=";
  const unsigned char NPN_str[] MEM_TEXT = "NPN ";
  const unsigned char PNP_str[] MEM_TEXT = "PNP ";
-#ifdef EBC_STYLE
- const unsigned char EBC_str[] MEM_TEXT = " EBC=";
- const unsigned char GDS_str[] MEM_TEXT = " GDS=";
-#else
+#ifndef EBC_STYLE
  const unsigned char N123_str[] MEM_TEXT = " 123=";
 // const unsigned char N123_str[] MEM_TEXT = " Pin=";
 #endif
@@ -412,6 +409,7 @@ void scale_intref_adc();		// get scale factors for ReadADC with internal referen
 void DisplayValue(unsigned long vval,int8_t Expo,unsigned char Unit, unsigned char Digits); //output Digits characters with exponent and unit
 unsigned int compute_hfe(unsigned int lpx, unsigned int tpy);
 void sleep_5ms(uint16_t xxx);		// set processor to sleep state for xxx times 5ms
+void PinLayout(char pin1, char pin2, char pin3); // show pin layout with EBC= or 123=
 
 
 //definitions of parts
@@ -488,6 +486,11 @@ COMMON struct cap_t {
   int8_t cpre;			//Prefix for capacitor value  -12=p, -9=n, -6=µ, -3=m
   int8_t cpre_max;		//Prefix of the biggest capacitor
 } cap;
+#ifndef INHIBIT_SLEEP_MODE
+ /* with sleep mode we need a global ovcnt16 */
+COMMON  uint16_t ovcnt16;
+COMMON uint8_t unfinished;
+#endif
 COMMON int16_t load_diff;		// difference voltage of loaded capacitor and internal reference
 
 COMMON uint8_t WithReference;		// Marker for found precision voltage reference = 1

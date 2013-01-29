@@ -79,10 +79,10 @@ void lcd_command(unsigned char temp1) {
 // Must be called first .
  
 void lcd_init(void) {
-   wait30ms();
+   wait_about30ms();
    // to initialise, send 3 times to be shure to be in 8 Bit mode
    lcd_write_init(1);
-   wait5ms();
+   wait_about5ms();
    
    lcd_write_init(1);
    wait1ms();
@@ -91,7 +91,7 @@ void lcd_init(void) {
    wait1ms();
 
    lcd_write_init(0);		// switch to 4 Bit mode
-   wait10ms();
+   wait_about10ms();
 
    // 4Bit / 2 rows / 5x7
    lcd_command(CMD_SetIFOptions | 0x08);
@@ -108,7 +108,7 @@ void lcd_init(void) {
  
 void lcd_clear(void) {
    lcd_command(CLEAR_DISPLAY);
-   wait10ms();
+   wait_about10ms();
 #ifdef WITH_UART
    uart_newline();
 #endif

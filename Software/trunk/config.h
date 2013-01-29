@@ -327,6 +327,21 @@ End of configuration
   #define INHIBIT_SLEEP_MODE	/* do not use the sleep mode of ATmega */
  #endif
 #endif
+#if PROCESSOR_TYP == 8
+ // 2.54V reference voltage + correction (fix for ATmega8)
+ #ifdef AUTO_CAL
+  #define ADC_internal_reference (2560 + (int8_t)eeprom_read_byte((uint8_t *)&RefDiff))
+ #else
+  #define ADC_internal_reference (2560 + REF_R_KORR)
+ #endif
+#else
+ // all other processors use a 1.1V reference
+ #ifdef AUTO_CAL
+  #define ADC_internal_reference (ref_mv + (int8_t)eeprom_read_byte((uint8_t *)&RefDiff))
+ #else
+  #define ADC_internal_reference (ref_mv + REF_R_KORR)
+ #endif
+#endif
 
 #ifndef REF_R_KORR
  #define REF_R_KORR 0
@@ -420,16 +435,11 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 #endif
 
 #ifdef INHIBIT_SLEEP_MODE
- // 2.54V reference voltage + correction (fix for ATmega8)
- #ifdef AUTO_CAL
-  #define ADC_internal_reference (2560 + (int8_t)eeprom_read_byte((uint8_t *)&RefDiff))
- #else
-  #define ADC_internal_reference (2560 + REF_R_KORR)
- #endif
  // save memory, do not use the sleep mode
  #define wait_about5ms() wait5ms()
  #define wait_about10ms() wait10ms()
  #define wait_about20ms() wait20ms()
+ #define wait_about30ms() wait30ms()
  #define wait_about50ms() wait50ms()
  #define wait_about200ms() wait200ms()
  #define wait_about300ms() wait300ms()
@@ -440,15 +450,11 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  #define wait_about3s() wait3s()
  #define wait_about4s() wait4s()
 #else
- #ifdef AUTO_CAL
-  #define ADC_internal_reference (ref_mv + (int8_t)eeprom_read_byte((uint8_t *)&RefDiff))
- #else
-  #define ADC_internal_reference (ref_mv + REF_R_KORR)
- #endif
  // use sleep mode to save current for user interface
  #define wait_about5ms() sleep_5ms(1)
  #define wait_about10ms() sleep_5ms(2)
  #define wait_about20ms() sleep_5ms(4)
+ #define wait_about30ms() sleep_5ms(6)
  #define wait_about50ms() sleep_5ms(10)
  #define wait_about200ms() sleep_5ms(40)
  #define wait_about300ms() sleep_5ms(60)

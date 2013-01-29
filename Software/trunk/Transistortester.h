@@ -1,4 +1,5 @@
 #include <avr/io.h>
+#include "tt_function.h"
 #include "lcd-routines.h"
 #include "wait1000ms.h"
 #include "config.h"
@@ -383,33 +384,6 @@ End of configuration
   extern unsigned char PinADCtab[];
   extern unsigned int RHmultip;
 #endif
-
-
-void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin);
-void ChargePin10ms(uint8_t PinToCharge, uint8_t ChargeDirection);
-unsigned int ReadADC(uint8_t mux);		// read Routine for ADC
-unsigned int W5msReadADC(uint8_t mux);		// wait 5ms and read than ADC
-unsigned int W10msReadADC(uint8_t mux);		// wait 10ms and read than ADC
-unsigned int W20msReadADC(uint8_t mux);		// wait 20ms and read then ADC
-void lcd_show_format_cap(void);
-void ReadCapacity(uint8_t HighPin, uint8_t LowPin);	//capacity measurement
-void ReadInductance(void);		//inductance measurement
-void GetESR();				//get ESR of capacitor
-void UfAusgabe(uint8_t bcdchar);	// Output of the threshold voltage(s) Uf
-void mVAusgabe(uint8_t nn);		// Output of the theshold voltage for Diode nn 
-void RvalOut(uint8_t ii);		// Output of the resistore value(s)
-void ShowResistor(void);		// show one or two Resistors
-void EntladePins();			// discharge capacitors
-void RefVoltage();			// compensate the reference voltage for comparator 
-void AutoCheck();			// check if self-test should be done 
-unsigned int getRLmultip(unsigned int cvolt);  // get C-Multiplikator for voltage cvolt
-void Scale_C_with_vcc();		// scale capacity value for different VCC Voltages
-void scale_intref_adc();		// get scale factors for ReadADC with internal reference
-//uint8_t value_out(unsigned long vval,uint8_t pp);    // output 4 digits with (pp-1) digits after point
-void DisplayValue(unsigned long vval,int8_t Expo,unsigned char Unit, unsigned char Digits); //output Digits characters with exponent and unit
-unsigned int compute_hfe(unsigned int lpx, unsigned int tpy);
-void sleep_5ms(uint16_t xxx);		// set processor to sleep state for xxx times 5ms
-void PinLayout(char pin1, char pin2, char pin3); // show pin layout with EBC= or 123=
 
 
 //definitions of parts

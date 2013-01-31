@@ -1,4 +1,14 @@
-﻿Date: 01.12.2012   Test version Transistortester (AVR) Version 1.04k
+﻿Date: 31.01.2013   Test version Transistortester (AVR) Version 1.06k
+
+Attention: 
+=========
+Beginning with version 1.05k the Atmega168/328 uses the sleep state of
+the processor for waiting. For that reason the current vary more than
+with older software revisions. If you notice any problem with
+the new version, you should check the blocking capacitors of the
+VCC Voltage. 100nF ceramic capacitors should be placed near by the
+power pins of the ATmega for correct operating.
+You can also deselect the using of sleep state by the Makefile option INHIBIT_SLEEP_MODE.
 
 
 For all adventurous people here is my short intruction, how to get

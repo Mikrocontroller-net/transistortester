@@ -24,12 +24,7 @@
 //begin of transistortester program
 int main(void) {
   //switch on
-#ifndef EXTREF2PD6
-  // Switch on directly only without the PC4-PD6 connection.
-  // With this connection the PD6 (AIN0) is connected to the external 2.5V reference voltage
-  // and should never be switched to VCC directly.
-  ON_DDR = (1<<ON_PIN);
-#endif
+  ON_DDR = (1<<ON_PIN);			// switch to output
 #ifdef PULLUP_DISABLE
   ON_PORT = (1<<ON_PIN); 		// switch power on 
 #else
@@ -137,19 +132,19 @@ int main(void) {
 //*****************************************************************
 //Entry: if start key is pressed before shut down
 start:
-  PartFound = PART_NONE;
-  NumOfDiodes = 0;
+  PartFound = PART_NONE;	// no part found
+  NumOfDiodes = 0;		// Number of diodes = 0
   PartReady = 0;
   PartMode = 0;
   WithReference = 0;		// no precision reference voltage
   lcd_clear();
   ADC_DDR = TXD_MSK;		//activate Software-UART 
 #ifdef AUTO_CAL
-  resis680pl = eeprom_read_word(&R680pl);
-  resis680mi = eeprom_read_word(&R680mi);
+  resis680pl = eeprom_read_word(&R680pl); // 680 Ohm resistance plus output resistance to +
+  resis680mi = eeprom_read_word(&R680mi); // 680 Ohm resistance plus output resistance to -
 #endif
 
-  ResistorsFound = 0;
+  ResistorsFound = 0;		// no resistors found
   cap.ca = 0;
   cap.cb = 0;
 #ifdef WITH_UART
@@ -158,8 +153,8 @@ start:
   ADCconfig.RefFlag = 0;
   ADCconfig.U_AVCC = U_VCC;	// set initial VCC Voltage
   ADCconfig.Samples = 190;		// set number of ADC samples near to max
-  ADC_PORT = TXD_VAL;
-  ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND
+  ADC_PORT = TXD_VAL;			// switch to 0V
+  ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with 2.5V reference to GND
   wait1ms();
   ADC_DDR =  TXD_MSK; 	// switch pin with reference back to input
 #if FLASHEND > 0x1fff
@@ -173,8 +168,8 @@ start:
   lcd_line1();	//1. row 
   
 #ifdef WITH_AUTO_REF
-  (void) ReadADC(MUX_INT_REF);		// read Reference-voltage 
-  ref_mv = W20msReadADC(MUX_INT_REF);	// read Reference-voltage
+  (void) ReadADC(MUX_INT_REF);		// read internal Reference-voltage 
+  ref_mv = W20msReadADC(MUX_INT_REF);	// read internal Reference-voltage
 #else
   ref_mv = DEFAULT_BAND_GAP;	// set to default Reference Voltage
 #endif
@@ -247,6 +242,18 @@ start:
          DisplayValue(ADCconfig.U_AVCC,-3,'V',3);	// Display 3 Digits of this mV units
          wait_about1s();
      }
+  }
+#endif
+#ifdef WITH_VEXT
+  // show the external voltage
+  while (!(ON_PIN_REG & (1<<RST_PIN))) {
+     lcd_line2();
+     lcd_clear_line();
+     lcd_line2();
+     lcd_fix_string(Vext_str);		// Vext=
+     trans.uBE[1] = W5msReadADC(TPext);	// read external voltage 
+     DisplayValue(trans.uBE[1]*10,-3,'V',3);	// Display 3 Digits of this mV units
+     wait_about300ms();
   }
 #endif
 

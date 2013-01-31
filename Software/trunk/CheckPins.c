@@ -271,29 +271,6 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         	 PartFound = PART_FET;		//P-Kanal-MOSFET is found (Basis/Gate moves not to VCC)
         	 PartMode = PART_MODE_P_E_MOS;
         	 //measure the Gate threshold voltage
-#ifdef EXTREF2PD6
-                 // Switching of Drain is monitored with the analog comparator to 2.5V
-                 gthvoltage = 1;				// round up ((1*4)/9)
-                 for(ii=0;ii<11;ii++) {
-                    // setup Analog Comparator
-                    ADC_COMP_CONTROL = (1<<ACME);		//enable Analog Comparator Multiplexer (negative input)
-                    ACSR =   (1<<ACI)  | (0<<ACIC);		// enable, positive AIN0 input, no Interrupt
-                    ADMUX = (1<<REFS0) | LowPin;			// switch Mux to Low-Pin
-                    ADCSRA = (1<<ADIF) | AUTO_CLOCK_DIV;	//disable ADC
-                    wdt_reset();
-               	    ChargePin10ms(TriPinRL,1);			// discharge Gate 10ms with RL 
-                    R_DDR = LoPinRL | TriPinRH;			// slowly charge Gate 
-                    R_PORT = 0;
-                    while ((ACSR & (1<<ACO)));			// Wait, until Highpin < 2.5V
-                    R_DDR = LoPinRL;				// switch off current
-
-                    ADCSRA = (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; //enable ADC
-                    ADMUX = TristatePin | (1<<REFS0);		// measure TristatePin, Ref. VCC
-                    ADCSRA |= (1<<ADSC);			// start ADC conversion
-                    while (ADCSRA&(1<<ADSC));			// wait until ADC finished
-                    gthvoltage += (1023 - ADCW);		// add result of ADC
-                 }
-#else
                  //Switching of Drain is monitored with digital input
                  // Low level is specified up to 0.3 * VCC
                  // High level is specified above 0.6 * VCC
@@ -311,7 +288,6 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         	    while (ADCSRA&(1<<ADSC));		// wait
       		    gthvoltage += (1023 - ADCW);	// Add Tristatepin-Voltage
                  }
-#endif
                  gthvoltage *= 4;		// is equal to 44*ADCW
                  gthvoltage /= 9;		// gives resolution in mV
               }
@@ -491,29 +467,6 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
             lcd_data('F');
             wait_about1s();
 #endif
-#ifdef EXTREF2PD6
-            // Switching of Drain is monitored with the analog comparator to 2.5V
-            gthvoltage = 1;				// round up ((1*4)/9)
-            for(ii=0;ii<11;ii++) {
-               // setup Analog Comparator
-               ADC_COMP_CONTROL = (1<<ACME);		//enable Analog Comparator Multiplexer (negative input)
-               ACSR =   (1<<ACI)  | (0<<ACIC);		// enable, positive AIN0 input, no Interrupt, no connection to timer
-               ADMUX = (1<<REFS0) | HighPin;		// switch Mux to High-Pin
-               ADCSRA = (1<<ADIF) | AUTO_CLOCK_DIV;	//disable ADC
-               wdt_reset();
-               ChargePin10ms(TriPinRL,0);		// discharge Gate 10ms with RL 
-               R_DDR = HiPinRL | TriPinRH;		// slowly charge Gate 
-               R_PORT = HiPinRL | TriPinRH;
-               while (!(ACSR & (1<<ACO)));		// Wait, until Highpin > 2.5V
-               R_DDR = HiPinRL;				// switch off current
-
-               ADCSRA = (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; //enable ADC
-               ADMUX = TristatePin | (1<<REFS0);	// measure TristatePin, Ref. VCC
-               ADCSRA |= (1<<ADSC);			// start ADC conversion
-               while (ADCSRA&(1<<ADSC));		// wait until ADC finished
-               gthvoltage += ADCW;			// add result of ADC
-            }
-#else
             //Switching of Drain is monitored with digital input
             // Low level is specified up to 0.3 * VCC
             // High level is specified above 0.6 * VCC
@@ -533,7 +486,6 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
             	while (ADCSRA&(1<<ADSC));	// wait until ADC finished
             	gthvoltage += ADCW;		// add result of ADC
             }
-#endif
             gthvoltage *= 4;	//is equal to 44 * ADCW
             gthvoltage /= 9;	//scale to mV
          }

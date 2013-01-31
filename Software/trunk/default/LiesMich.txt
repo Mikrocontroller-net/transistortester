@@ -1,5 +1,15 @@
-﻿Datum: 01.12.2012   Test Version Transistortester (AVR) Version 1.04k
+﻿Datum: 31.01.2013   Test Version Transistortester (AVR) Version 1.06k
 
+Achtung: 
+=======
+Ab der Version 1.05k wird in Pausen der Schafzustand (sleep) des
+ATmega168/328 benutzt. Dadurch schwankt die Stromaufnahme stärker als in
+den vorigen Versionen. Falls es hierbei zu Problemen kommt, sollte man
+die Abblockung der VCC Spannung überprüfen. Eine direkte Abblockung
+mit keramischen 100nF Kondensatoren in unmittelbarer Nähe der Versorgungsanschlüsse
+des ATmega sind erforderlich für einen einwandfreien Betrieb.
+Sie können auch die Benutzung des Schlafzustandes mit der Makefile Option
+INHIBIT_SLEEP_MODE verhindern.
 
 Für alle, die selber experimentieren wollen,hier eine kurze Anleitung,
 wie man die 1Mhz und 8MHz Version selbst erzeugen kann.

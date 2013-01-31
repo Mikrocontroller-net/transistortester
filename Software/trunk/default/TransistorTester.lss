@@ -19,19 +19,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   7 .debug_pubnames 00000752  00000000  00000000  0000501a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_info   00002910  00000000  00000000  0000576c  2**0
+  8 .debug_info   000028f2  00000000  00000000  0000576c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_abbrev 000007db  00000000  00000000  0000807c  2**0
+  9 .debug_abbrev 000007c5  00000000  00000000  0000805e  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   000035c9  00000000  00000000  00008857  2**0
+ 10 .debug_line   000035c9  00000000  00000000  00008823  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  000002b0  00000000  00000000  0000be20  2**2
+ 11 .debug_frame  000002b0  00000000  00000000  0000bdec  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    000008e5  00000000  00000000  0000c0d0  2**0
+ 12 .debug_str    000008e5  00000000  00000000  0000c09c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    000013f1  00000000  00000000  0000c9b5  2**0
+ 13 .debug_loc    000013f1  00000000  00000000  0000c981  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_pubtypes 0000021a  00000000  00000000  0000dda6  2**0
+ 14 .debug_pubtypes 0000021a  00000000  00000000  0000dd72  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -2198,8 +2198,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      bf2:	80 93 07 01 	sts	0x0107, r24
         	 PartMode = PART_MODE_P_E_MOS;
      bf6:	80 93 06 01 	sts	0x0106, r24
-                 }
-#else
+        	 //measure the Gate threshold voltage
                  //Switching of Drain is monitored with digital input
                  // Low level is specified up to 0.3 * VCC
                  // High level is specified above 0.6 * VCC
@@ -2265,11 +2264,11 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      c64:	4f 5f       	subi	r20, 0xFF	; 255
      c66:	4b 30       	cpi	r20, 0x0B	; 11
      c68:	b1 f6       	brne	.-84     	; 0xc16 <CheckPins+0x456>
+        	    R_DDR = LoPinRL;
         	    ADCSRA |= (1<<ADSC);		// Start Conversion
         	    while (ADCSRA&(1<<ADSC));		// wait
       		    gthvoltage += (1023 - ADCW);	// Add Tristatepin-Voltage
                  }
-#endif
                  gthvoltage *= 4;		// is equal to 44*ADCW
      c6a:	88 0f       	add	r24, r24
      c6c:	99 1f       	adc	r25, r25
@@ -2761,8 +2760,8 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
             PartMode = PART_MODE_N_E_MOS;
      f72:	82 e0       	ldi	r24, 0x02	; 2
      f74:	80 93 06 01 	sts	0x0106, r24
-            }
-#else
+            wait_about1s();
+#endif
             //Switching of Drain is monitored with digital input
             // Low level is specified up to 0.3 * VCC
             // High level is specified above 0.6 * VCC
@@ -2825,11 +2824,11 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
             gthvoltage = 1;			// round up ((1*4)/9)
             for(ii=0;ii<11;ii++) {
      fdc:	e1 f6       	brne	.-72     	; 0xf96 <CheckPins+0x7d6>
+                R_DDR = HiPinRL;		// switch off current
             	ADCSRA |= (1<<ADSC);		// start ADC conversion
             	while (ADCSRA&(1<<ADSC));	// wait until ADC finished
             	gthvoltage += ADCW;		// add result of ADC
             }
-#endif
             gthvoltage *= 4;	//is equal to 44 * ADCW
      fde:	88 0f       	add	r24, r24
      fe0:	99 1f       	adc	r25, r25
@@ -5342,14 +5341,9 @@ int main(void) {
     1f34:	cf 93       	push	r28
     1f36:	df 93       	push	r29
   //switch on
-#ifndef EXTREF2PD6
-  // Switch on directly only without the PC4-PD6 connection.
-  // With this connection the PD6 (AIN0) is connected to the external 2.5V reference voltage
-  // and should never be switched to VCC directly.
-  ON_DDR = (1<<ON_PIN);
+  ON_DDR = (1<<ON_PIN);			// switch to output
     1f38:	10 e4       	ldi	r17, 0x40	; 64
     1f3a:	1a b9       	out	0x0a, r17	; 10
-#endif
 #ifdef PULLUP_DISABLE
   ON_PORT = (1<<ON_PIN); 		// switch power on 
     1f3c:	1b b9       	out	0x0b, r17	; 11
@@ -5488,9 +5482,9 @@ int main(void) {
 //*****************************************************************
 //Entry: if start key is pressed before shut down
 start:
-  PartFound = PART_NONE;
+  PartFound = PART_NONE;	// no part found
     1fea:	10 92 07 01 	sts	0x0107, r1
-  NumOfDiodes = 0;
+  NumOfDiodes = 0;		// Number of diodes = 0
     1fee:	10 92 05 01 	sts	0x0105, r1
   PartReady = 0;
     1ff2:	10 92 04 01 	sts	0x0104, r1
@@ -5504,13 +5498,13 @@ start:
     2002:	18 e0       	ldi	r17, 0x08	; 8
     2004:	17 b9       	out	0x07, r17	; 7
 #ifdef AUTO_CAL
-  resis680pl = eeprom_read_word(&R680pl);
+  resis680pl = eeprom_read_word(&R680pl); // 680 Ohm resistance plus output resistance to +
     2006:	86 ea       	ldi	r24, 0xA6	; 166
     2008:	91 e0       	ldi	r25, 0x01	; 1
     200a:	0e 94 71 1e 	call	0x3ce2	; 0x3ce2 <__eerd_word_m168>
     200e:	90 93 09 01 	sts	0x0109, r25
     2012:	80 93 08 01 	sts	0x0108, r24
-  resis680mi = eeprom_read_word(&R680mi);
+  resis680mi = eeprom_read_word(&R680mi); // 680 Ohm resistance plus output resistance to -
     2016:	88 ea       	ldi	r24, 0xA8	; 168
     2018:	91 e0       	ldi	r25, 0x01	; 1
     201a:	0e 94 71 1e 	call	0x3ce2	; 0x3ce2 <__eerd_word_m168>
@@ -5518,7 +5512,7 @@ start:
     2022:	80 93 02 01 	sts	0x0102, r24
 #endif
 
-  ResistorsFound = 0;
+  ResistorsFound = 0;		// no resistors found
     2026:	10 92 57 01 	sts	0x0157, r1
   cap.ca = 0;
     202a:	10 92 69 01 	sts	0x0169, r1
@@ -5538,9 +5532,9 @@ start:
   ADCconfig.Samples = 190;		// set number of ADC samples near to max
     2046:	8e eb       	ldi	r24, 0xBE	; 190
     2048:	80 93 39 01 	sts	0x0139, r24
-  ADC_PORT = TXD_VAL;
+  ADC_PORT = TXD_VAL;			// switch to 0V
     204c:	18 b9       	out	0x08, r17	; 8
-  ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND
+  ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with 2.5V reference to GND
     204e:	88 e1       	ldi	r24, 0x18	; 24
     2050:	87 b9       	out	0x07, r24	; 7
   wait1ms();
@@ -5588,10 +5582,10 @@ start:
     20a6:	0e 94 ee 00 	call	0x1dc	; 0x1dc <lcd_command>
   
 #ifdef WITH_AUTO_REF
-  (void) ReadADC(MUX_INT_REF);		// read Reference-voltage 
+  (void) ReadADC(MUX_INT_REF);		// read internal Reference-voltage 
     20aa:	8e e0       	ldi	r24, 0x0E	; 14
     20ac:	0e 94 e5 1a 	call	0x35ca	; 0x35ca <ReadADC>
-  ref_mv = W20msReadADC(MUX_INT_REF);	// read Reference-voltage
+  ref_mv = W20msReadADC(MUX_INT_REF);	// read internal Reference-voltage
     20b0:	8e e0       	ldi	r24, 0x0E	; 14
     20b2:	0e 94 6f 1b 	call	0x36de	; 0x36de <W20msReadADC>
     20b6:	ec 01       	movw	r28, r24
@@ -5756,7 +5750,8 @@ start:
     21ca:	88 ec       	ldi	r24, 0xC8	; 200
     21cc:	90 e0       	ldi	r25, 0x00	; 0
     21ce:	0e 94 a2 03 	call	0x744	; 0x744 <sleep_5ms>
-     }
+     DisplayValue(trans.uBE[1]*10,-3,'V',3);	// Display 3 Digits of this mV units
+     wait_about300ms();
   }
 #endif
 

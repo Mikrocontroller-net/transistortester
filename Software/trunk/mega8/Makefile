@@ -65,6 +65,8 @@ CFLAGS += -DREF_L_KORR=50
 CFLAGS += -DC_H_KORR=5
 
 # The WITH_UART option enables the software UART  (TTL level output at Pin PC3, 26).
+# If the option is deselected, PC3 can be used as external voltage input with a
+# 10:1 resistor divider (only without the BAT_CHECK option for ATmega8).
 #CFLAGS += -DWITH_UART
 
 # The CAP_EMPTY_LEVEL  defines the empty voltage level for capacitors in mV.

@@ -13,6 +13,7 @@
   The lower pins of this Port must be used for measurements.
   Please don't change the definitions of TP1, TP2 and TP3!
   The TPREF pin can be connected with a 2.5V precision voltage reference
+  The TPext can be used with a 10:1 resistor divider as external voltage probe up to 50V
 */
 
 #define ADC_PORT PORTC
@@ -21,6 +22,7 @@
 #define TP1 PC0
 #define TP2 PC1
 #define TP3 PC2
+#define TPext PC3
 // Port pin for 2.5V precision reference used for VCC check (optional)
 #define TPREF PC4
 // Port pin for Battery voltage measuring
@@ -506,8 +508,3 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 
 // with EBC_STYLE you can select the Pin-description in EBC= style instead of 123=??? style
 //#define EBC_STYLE
-
-// EXTREF2PD6 specifies, that the external 2.5V reference is additionally connected to PD6 (AIN0)
-// The Shut Off function is not yet compatible with this approach. 
-// Alternative function of Gate threshold voltage measurement is implemented for test purpose only.
-//#define EXTREF2PD6

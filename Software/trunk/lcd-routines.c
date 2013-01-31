@@ -4,6 +4,7 @@
 // Pin selection can be changed in lcd-routines.h with define
  
 #include <avr/io.h>
+#include "tt_function.h"
 #include "config.h"
 #include "lcd-routines.h"
 #include "wait1000ms.h"

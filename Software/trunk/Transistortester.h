@@ -247,12 +247,25 @@ End of configuration
 #if FLASHEND > 0x1fff
  const unsigned char ESR_str[] MEM_TEXT = " ESR=";
  const unsigned char Lis_str[] MEM_TEXT = "L=";
+ #ifndef WITH_UART
+  #define WITH_VEXT
+ #endif
+#else
+ #ifndef BAT_CHECK
+  #ifndef WITH_UART
+   #define WITH_VEXT
+  #endif
+ #endif
+#endif
+#ifdef WITH_VEXT
+ const unsigned char Vext_str[] MEM_TEXT = "Vext=";
+ #define LCD_CLEAR
 #endif
  const unsigned char AnKat[] MEM_TEXT = {'-', LCD_CHAR_DIODE1, '-',0};
  const unsigned char KatAn[] MEM_TEXT = {'-', LCD_CHAR_DIODE2, '-',0};
  const unsigned char Dioden[] MEM_TEXT = {'*',LCD_CHAR_DIODE1, ' ', ' ',0};
  const unsigned char Resistor_str[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
- const unsigned char VERSION_str[] MEM_TEXT = "Version 1.05k";
+ const unsigned char VERSION_str[] MEM_TEXT = "Version 1.06k";
 
 
 #ifdef WITH_SELFTEST

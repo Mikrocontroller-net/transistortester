@@ -101,6 +101,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   R_DDR = HiPinR_L;			// switch R_L port for HighPin to output (GND)
   adcv[0] = ReadADC(HighPin);		// voltage before any load 
 // ******** should adcv[0] be measured without current???
+  adcv[2] = adcv[0];			// preset to prevent compiler warning
   for (ovcnt16=0;ovcnt16<500;ovcnt16++) {
      R_PORT = HiPinR_L;			//R_L to 1 (VCC) 
      R_DDR = HiPinR_L;			//switch Pin to output, across R to GND or VCC
@@ -173,6 +174,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   cap.cval_uncorrected.dw *= getRLmultip(adcv[2]);		// get factor to convert time to capacity from table
 #else
   // wait the same time which is required for loading
+  adcv[3] = adcv[2];			// preset to prevent compiler warning
   for (tmpint=0;tmpint<=ovcnt16;tmpint++) {
      wait5ms();
      adcv[3] = ReadADC(HighPin);	// read voltage again, is discharged only a little bit ?

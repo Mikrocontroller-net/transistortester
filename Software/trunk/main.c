@@ -646,7 +646,7 @@ gakAusgabe:
  #endif
   // only one Measurement requested, shut off
 //  MCUSR = 0;
-  wdt_disable();			//Watchdog off
+//  wdt_disable();			//Watchdog off
   ON_PORT &= ~(1<<ON_PIN);		//switch off power
   ON_DDR = (1<<ON_PIN);			//switch to GND
   //never ending loop 
@@ -655,6 +655,8 @@ gakAusgabe:
         // The statement is only reached if no auto off equipment is installed
         goto start;
      }
+     wdt_reset();
+     wait_about10ms();
   }
 #else
   goto start;	// POWER_OFF not selected, repeat measurement

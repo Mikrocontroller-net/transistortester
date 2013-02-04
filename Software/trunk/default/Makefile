@@ -20,7 +20,7 @@ CFLAGS = -Wall
 # atmega8  : m8
 # atmega168: m168 or m168p
 # atmega328: m328 or m328p
-PARTNO = m168
+PARTNO = m328p
 
 # Select your language:
 # Available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
@@ -84,7 +84,7 @@ CFLAGS += -DNO_AREF_CAP
 
 # The OP_MHZ option tells the software the Operating Frequency of your ATmega.
 OP_MHZ = 8
-#OP_MHZ = 1
+
 # Restart from sleep mode will be delayed for 16384 clock tics with crystal mode.
 # Operation with the internal RC-Generator or external clock will delay the restart by only 6 clock tics.
 # You must specify this with "CFLAGS += -DRESTART_DELAY_TICS=6", if you don't use the crystal mode.

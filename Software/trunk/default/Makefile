@@ -20,7 +20,7 @@ CFLAGS = -Wall
 # atmega8  : m8
 # atmega168: m168 or m168p
 # atmega328: m328 or m328p
-PARTNO = m328p
+PARTNO = m328
 
 # Select your language:
 # Available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
@@ -76,6 +76,7 @@ CFLAGS += -DREF_R_KORR=3
 
 # The ESR_ZERO value define the zero value of ESR measurement (units = 0.01 Ohm).
 CFLAGS += -DESR_ZERO=29
+#CFLAGS += -DESR_ZERO=45
 
 # NO_AREF_CAP tells your Software, that you have no Capacitor installed at pin AREF (21).
 # This enables a shorter wait-time for AUTOSCALE_ADC function.
@@ -133,6 +134,7 @@ CFLAGS += -DBAT_CHECK
 # threshold voltage of your diode to adjust the output value.
 # This threshold level is added to LCD-output and does not affect the voltage checking levels.
 CFLAGS += -DBAT_OUT=150
+#CFLAGS += -DBAT_OUT=850
 
 # To adjust the warning-level and poor-level of battery check to the capability of a
 # low drop voltage regulator, you can specify the Option BAT_POOR=54 .

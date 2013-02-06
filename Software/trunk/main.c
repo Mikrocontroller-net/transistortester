@@ -646,9 +646,7 @@ gakAusgabe:
  #endif
   // only one Measurement requested, shut off
 //  MCUSR = 0;
-//  wdt_disable();			//Watchdog off
   ON_PORT &= ~(1<<ON_PIN);		//switch off power
-  ON_DDR = (1<<ON_PIN);			//switch to GND
   //never ending loop 
   while(1) {
      if(!(ON_PIN_REG & (1<<RST_PIN))) {

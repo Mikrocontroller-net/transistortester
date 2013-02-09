@@ -98,6 +98,7 @@ CFLAGS += -DUSE_EEPROM
 # Setting EBC_STYPE will select the old style to present the order of Transistor connection (EBC=...).
 # Omitting the option will select the 123=... style.  Every point is replaced by a character identifying 
 # type of connected transistor pin (B=Base, E=Emitter, C=Collector, G=Gate, S=Source, D=Drain).
+# If you select EBC_STYLE=321 , the style will be 321=... , the inverted order to the 123=... style.
 #CFLAGS += -DEBC_STYLE
 
 

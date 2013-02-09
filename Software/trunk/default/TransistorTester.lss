@@ -3791,6 +3791,7 @@ void PinLayout(char pin1, char pin2, char pin3) {
     1550:	f4 2e       	mov	r15, r20
 // pin1-3 is EBC or SGD or CGA
 #ifndef EBC_STYLE
+   // Layout with 123= style
    lcd_fix_string(N123_str);		//" 123="
     1552:	83 e0       	ldi	r24, 0x03	; 3
     1554:	91 e0       	ldi	r25, 0x01	; 1
@@ -3818,10 +3819,10 @@ void PinLayout(char pin1, char pin2, char pin3) {
     158a:	19 f4       	brne	.+6      	; 0x1592 <PinLayout+0x4c>
     158c:	8f 2d       	mov	r24, r15
     158e:	0e 94 ae 00 	call	0x15c	; 0x15c <lcd_data>
-// show the Pin Layout of the device 
 void PinLayout(char pin1, char pin2, char pin3) {
 // pin1-3 is EBC or SGD or CGA
 #ifndef EBC_STYLE
+   // Layout with 123= style
    lcd_fix_string(N123_str);		//" 123="
    for (ii=0;ii<3;ii++) {
     1592:	80 91 44 01 	lds	r24, 0x0144
@@ -3830,10 +3831,10 @@ void PinLayout(char pin1, char pin2, char pin3) {
     159c:	80 91 44 01 	lds	r24, 0x0144
     15a0:	83 30       	cpi	r24, 0x03	; 3
     15a2:	f0 f2       	brcs	.-68     	; 0x1560 <PinLayout+0x1a>
-   lcd_data('=');
    lcd_testpin(trans.e);
    lcd_testpin(trans.b);
    lcd_testpin(trans.c);
+ #endif
 #endif
 }
     15a4:	1f 91       	pop	r17
@@ -6207,9 +6208,11 @@ start:
     2512:	80 91 05 01 	lds	r24, 0x0105
     2516:	83 30       	cpi	r24, 0x03	; 3
     2518:	a0 f0       	brcs	.+40     	; 0x2542 <main+0x612>
-#ifdef EBC_STYLE
+       // Layout with EBC= style
        if(PartMode == PART_MODE_NPN)
+ #endif
 #else
+       // Layout with 123= style
        if (((PartMode == PART_MODE_NPN) && (trans.c > trans.e)) || ((PartMode != PART_MODE_NPN) && (trans.c < trans.e)))
     251a:	20 91 06 01 	lds	r18, 0x0106
     251e:	90 91 55 01 	lds	r25, 0x0155
@@ -6280,7 +6283,6 @@ start:
     2598:	80 91 06 01 	lds	r24, 0x0106
     259c:	80 ff       	sbrs	r24, 0
     259e:	02 c0       	rjmp	.+4      	; 0x25a4 <main+0x674>
-       //N-Kanal
        lcd_data('P');			//P-channel
     25a0:	80 e5       	ldi	r24, 0x50	; 80
     25a2:	01 c0       	rjmp	.+2      	; 0x25a6 <main+0x676>
@@ -6338,10 +6340,11 @@ start:
     25f4:	80 f4       	brcc	.+32     	; 0x2616 <main+0x6e6>
     25f6:	90 91 55 01 	lds	r25, 0x0155
     25fa:	80 91 56 01 	lds	r24, 0x0156
-       //MOSFET with protection diode; only with enhancement-FETs
-#ifdef EBC_STYLE
-       if (PartMode&1)
+       // Layout with SGD= style
+       if (PartMode&1) /* N or P MOS */
+ #endif
 #else
+       // layout with 123= style
        if (((PartMode&1) && (trans.c < trans.e)) || ((!(PartMode&1)) && (trans.c > trans.e)))
     25fe:	20 ff       	sbrs	r18, 0
     2600:	03 c0       	rjmp	.+6      	; 0x2608 <main+0x6d8>

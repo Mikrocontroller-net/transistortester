@@ -433,8 +433,15 @@ start:
     }
     if( NumOfDiodes > 2) {	//Transistor with protection diode
 #ifdef EBC_STYLE
+ #if EBC_STYLE == 321
+       // Layout with 321= style
+       if (((PartMode == PART_MODE_NPN) && (trans.c < trans.e)) || ((PartMode != PART_MODE_NPN) && (trans.c > trans.e)))
+ #else
+       // Layout with EBC= style
        if(PartMode == PART_MODE_NPN)
+ #endif
 #else
+       // Layout with 123= style
        if (((PartMode == PART_MODE_NPN) && (trans.c > trans.e)) || ((PartMode != PART_MODE_NPN) && (trans.c < trans.e)))
 #endif
        {
@@ -455,7 +462,6 @@ start:
     // end (PartFound == PART_TRANSISTOR)
   } else if (PartFound == PART_FET) {	//JFET or MOSFET
     if(PartMode&1) {
-       //N-Kanal
        lcd_data('P');			//P-channel
     } else {
        lcd_data('N');			//N-channel
@@ -478,8 +484,15 @@ start:
     if((NumOfDiodes > 0) && (PartMode < PART_MODE_N_D_MOS)) {
        //MOSFET with protection diode; only with enhancement-FETs
 #ifdef EBC_STYLE
-       if (PartMode&1)
+ #if EBC_STYLE == 321
+       // layout with 321= style
+       if (((PartMode&1) && (trans.c > trans.e)) || ((!(PartMode&1)) && (trans.c < trans.e)))
+ #else
+       // Layout with SGD= style
+       if (PartMode&1) /* N or P MOS */
+ #endif
 #else
+       // layout with 123= style
        if (((PartMode&1) && (trans.c < trans.e)) || ((!(PartMode&1)) && (trans.c > trans.e)))
 #endif
        {
@@ -969,6 +982,7 @@ TIMSK2 = (0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2); /* disable output compare match
 void PinLayout(char pin1, char pin2, char pin3) {
 // pin1-3 is EBC or SGD or CGA
 #ifndef EBC_STYLE
+   // Layout with 123= style
    lcd_fix_string(N123_str);		//" 123="
    for (ii=0;ii<3;ii++) {
        if (ii == trans.e)  lcd_data(pin1);	// Output Character in right order
@@ -976,6 +990,18 @@ void PinLayout(char pin1, char pin2, char pin3) {
        if (ii == trans.c)  lcd_data(pin3);
    }
 #else
+ #if EBC_STYLE == 321
+   // Layout with 321= style
+   lcd_fix_string(N321_str);		//" 321="
+   ii = 3;
+   while (ii != 0) {
+       ii--;
+       if (ii == trans.e)  lcd_data(pin1);	// Output Character in right order
+       if (ii == trans.b)  lcd_data(pin2);
+       if (ii == trans.c)  lcd_data(pin3);
+   }
+ #else 
+   // Layout with EBC= style
    lcd_space();
    lcd_data(pin1);
    lcd_data(pin2);
@@ -984,6 +1010,7 @@ void PinLayout(char pin1, char pin2, char pin3) {
    lcd_testpin(trans.e);
    lcd_testpin(trans.b);
    lcd_testpin(trans.c);
+ #endif
 #endif
 }
 

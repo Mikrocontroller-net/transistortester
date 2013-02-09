@@ -237,6 +237,10 @@ End of configuration
 #ifndef EBC_STYLE
  const unsigned char N123_str[] MEM_TEXT = " 123=";
 // const unsigned char N123_str[] MEM_TEXT = " Pin=";
+ #else
+ #if EBC_STYLE == 321
+  const unsigned char N321_str[] MEM_TEXT = " 321=";
+ #endif
 #endif
  const unsigned char Uf_str[] MEM_TEXT = "Uf=";
  const unsigned char vt_str[] MEM_TEXT = " Vt=";

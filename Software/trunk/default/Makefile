@@ -76,7 +76,7 @@ CFLAGS += -DREF_R_KORR=3
 
 # The ESR_ZERO value define the zero value of ESR measurement (units = 0.01 Ohm).
 CFLAGS += -DESR_ZERO=29
-#CFLAGS += -DESR_ZERO=45
+#CFLAGS += -DESR_ZERO=40
 
 # NO_AREF_CAP tells your Software, that you have no Capacitor installed at pin AREF (21).
 # This enables a shorter wait-time for AUTOSCALE_ADC function.
@@ -98,6 +98,7 @@ CFLAGS += -DUSE_EEPROM
 # Setting EBC_STYPE will select the old style to present the order of Transistor connection (EBC=...).
 # Omitting the option will select the 123=... style.  Every point is replaced by a character identifying 
 # type of connected transistor pin (B=Base, E=Emitter, C=Collector, G=Gate, S=Source, D=Drain).
+# If you select EBC_STYLE=321 , the style will be 321=... , the inverted order to the 123=... style.
 #CFLAGS += -DEBC_STYLE
 
 
@@ -134,7 +135,6 @@ CFLAGS += -DBAT_CHECK
 # threshold voltage of your diode to adjust the output value.
 # This threshold level is added to LCD-output and does not affect the voltage checking levels.
 CFLAGS += -DBAT_OUT=150
-#CFLAGS += -DBAT_OUT=850
 
 # To adjust the warning-level and poor-level of battery check to the capability of a
 # low drop voltage regulator, you can specify the Option BAT_POOR=54 .

@@ -508,3 +508,7 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 
 // with EBC_STYLE you can select the Pin-description in EBC= style instead of 123=??? style
 //#define EBC_STYLE
+#if EBC_STYLE == 123
+ // unset the option for the 123 selection, since this style is default.
+ #undef EBC_STYLE
+#endif

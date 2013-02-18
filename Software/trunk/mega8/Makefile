@@ -58,7 +58,7 @@ CFLAGS += -DWITH_AUTO_REF
 CFLAGS += -DREF_C_KORR=4
 
 # REF_L_KORR corrects the reference Voltage for inductance measurement and has mV units.
-CFLAGS += -DREF_L_KORR=50
+CFLAGS += -DREF_L_KORR=40
 
 # C_H_KORR defines a correction of 0.1% units for big capacitor measurement.
 # Positive values will reduce measurement results.
@@ -149,7 +149,7 @@ CFLAGS += -DBAT_POOR=64
 CFLAGS += -DINHIBIT_SLEEP_MODE
 
 
-# Select your programmer type and port, if you wish to use avrdude .
+# Select your programmer type and port, if you wish to use avrdude.
 PROGRAMMER=avrisp2
 PORT=usb
 # ********************** end of selectable options
@@ -347,7 +347,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Objects that must be built in order to link
-OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o swuart.o wait1000ms.o ReadCapacity.o ReadInductance.o ReadADC.o GetESR.o
+OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o swuart.o wait1000ms.o ReadCapacity.o ReadInductance.o ReadADC.o GetESR.o Calibrate_UR.o
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -367,6 +367,9 @@ ReadCapacity.o: ../ReadCapacity.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ReadInductance.o: ../ReadInductance.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+Calibrate_UR.o: ../Calibrate_UR.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ReadADC.o: ../ReadADC.S Makefile

@@ -4,13 +4,13 @@
 // Pin selection can be changed in lcd-routines.h with define
  
 #include <avr/io.h>
+#include <util/delay.h>
+#include <avr/pgmspace.h>
+#include <avr/eeprom.h>
 #include "tt_function.h"
 #include "config.h"
 #include "lcd-routines.h"
 #include "wait1000ms.h"
-#include <util/delay.h>
-#include <avr/pgmspace.h>
-#include <avr/eeprom.h>
 
 #ifdef STRIP_GRID_BOARD
  #warning "strip-grid-board layout selectet!"

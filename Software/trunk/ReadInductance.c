@@ -5,7 +5,6 @@
 // L in the inductance of the coil.
 #include <avr/io.h>
 #include <stdlib.h>
-#include "config.h"
 #include "Transistortester.h"
 
 
@@ -14,19 +13,21 @@ void ReadInductance(void) {
 #if FLASHEND > 0x1fff
   // check if inductor and measure the inductance value
   unsigned int tmpint;
-  unsigned int ov_cnt16;	// overrun counter for 16 bit counter
   unsigned int umax;
+  unsigned int ov_cnt16;	// overflow counter of counter 1
   unsigned int total_r;		// total resistance of current loop
   unsigned int mess_r;		// value of resistor used for current measurement
   unsigned long inductance[4];	// four inductance values for different measurements
-  uint8_t per_ref;	// percentage
+  uint16_t per_ref1,per_ref2;	// percentage
   uint8_t LoPinR_L;	// Mask for switching R_L resistor of low pin
   uint8_t HiADC;	// Mask for switching the high pin direct to VCC
   uint8_t ii;
   uint8_t count;	// counter for the different measurements
   uint8_t found;	// variable used for searching resistors 
+  uint8_t cnt_diff;     // resistance dependent offset
   uint8_t LowPin;	// number of pin with low voltage
   uint8_t HighPin;	// number of pin with high voltage 
+  int8_t ukorr;		// correction of comparator voltage
 
 
   if(PartFound != PART_RESISTOR) {
@@ -34,6 +35,7 @@ void ReadInductance(void) {
   }
   for (found=0;found<ResistorsFound;found++) {
      if (resis[found].rx > 21000) continue;
+
      // we can check for Inductance, if resistance is below 2800 Ohm
      for (count=0;count<4;count++) {
         // Try four times (different direction and with delayed counter start)
@@ -54,7 +56,7 @@ void ReadInductance(void) {
         ADC_PORT =   TXD_VAL;		// switch ADC-Port to GND
         if ((resis[found].rx < 240) && ((count & 0x01) == 0)) {
            // we can use PinR_L for measurement
-           mess_r = RR680MI - R_L_VAL;
+           mess_r = RR680MI - R_L_VAL;			// use only pin output resistance
            ADC_DDR = HiADC | (1<<LowPin) | TXD_MSK;	// switch HiADC and Low Pin to GND, 
         } else {
            R_DDR = LoPinR_L;   		// switch R_L resistor port for LowPin to output (GND)
@@ -124,6 +126,7 @@ void ReadInductance(void) {
            TI1_INT_FLAGS = (1<<TOV1);		// Reset OV Flag
            ov_cnt16++;
         }
+
         ADC_PORT = TXD_VAL;		// switch ADC-Port to GND
         ADCSRA = (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; //enable ADC
         for (ii=0;ii<20;ii++) {
@@ -137,42 +140,78 @@ void ReadInductance(void) {
         cap.cval_uncorrected.w[0] = tmpint;
   #define CNT_ZERO_42 6
   #define CNT_ZERO_720 7
-#if F_CPU == 16000000UL
-  #undef CNT_ZERO_42
-  #undef CNT_ZERO_720
-  #define CNT_ZERO_42 4
-  #define CNT_ZERO_720 10
-#endif
+//#if F_CPU == 16000000UL
+//  #undef CNT_ZERO_42
+//  #undef CNT_ZERO_720
+//  #define CNT_ZERO_42 7
+//  #define CNT_ZERO_720 10
+//#endif
+        total_r = (mess_r + resis[found].rx + RRpinMI);
+//        cnt_diff = 0;
+//        if (total_r > 7000) cnt_diff = 1;
+//        if (total_r > 14000) cnt_diff = 2;
+        cnt_diff = total_r / ((14000UL * 8) / (F_CPU/1000000UL));
         // Voltage of comparator in % of umax
-        #ifdef AUTO_CAL
+     #ifdef AUTO_CAL
         tmpint = (ref_mv + (int16_t)eeprom_read_word((uint16_t *)(&ref_offset))) ;
-        #else
+     #else
         tmpint = (ref_mv + REF_C_KORR);
-        #endif
+     #endif
         if (mess_r < R_L_VAL) {
            // measurement without 680 Ohm
-           if (cap.cval_uncorrected.dw > CNT_ZERO_42) cap.cval_uncorrected.dw -= CNT_ZERO_42;
-           else          cap.cval_uncorrected.dw = 0;
+           cnt_diff = CNT_ZERO_42;
+           if (cap.cval_uncorrected.dw < 225) {
+              ukorr = (cap.cval_uncorrected.w[0] / 5) - 20;
+           } else {
+              ukorr = 25;
+           }
+           tmpint -= (((REF_L_KORR * 10) / 10) + ukorr);
         } else {
            // measurement with 680 Ohm resistor
            // if 680 Ohm resistor is used, use REF_L_KORR for correction
+           cnt_diff += CNT_ZERO_720;
            tmpint += REF_L_KORR;
-           if (cap.cval_uncorrected.dw > CNT_ZERO_720) cap.cval_uncorrected.dw -= CNT_ZERO_720;
-           else          cap.cval_uncorrected.dw = 0;
-           if (cap.cval_uncorrected.dw > 12) cap.cval_uncorrected.dw -= 1;
         }
+        if (cap.cval_uncorrected.dw > cnt_diff) cap.cval_uncorrected.dw -= cnt_diff;
+        else          cap.cval_uncorrected.dw = 0;
+       
         if ((count&0x01) == 1) {
            // second pass with delayed counter start
            cap.cval_uncorrected.dw += (3 * (F_CPU/1000000))+10;
         }
         if (ov_cnt16 >= (F_CPU/100000)) cap.cval_uncorrected.dw = 0; // no transition found
-        total_r = (mess_r + resis[found].rx + RR680PL - R_L_VAL);
+        if (cap.cval_uncorrected.dw > 10) {
+           cap.cval_uncorrected.dw -= 1;
+        }
         // compute the maximum Voltage umax with the Resistor of the coil
         umax = ((unsigned long)mess_r * (unsigned long)ADCconfig.U_AVCC) / total_r;
-        per_ref = ((unsigned long)tmpint * 100) / umax;
-        per_ref = (uint8_t)MEM2_read_byte(&LogTab[per_ref]);	// -log(1 - per_ref/100)
+        per_ref1 = ((unsigned long)tmpint * 1000) / umax;
+//        per_ref2 = (uint8_t)MEM2_read_byte(&LogTab[per_ref1]);	// -log(1 - per_ref1/100)
+        per_ref2 = get_log(per_ref1);
+/* ********************************************************* */
+#if 0
+          if (count == 0) {
+             lcd_line3();
+             DisplayValue(count,0,' ',4);
+             DisplayValue(cap.cval_uncorrected.dw,0,'+',4);
+             DisplayValue(cnt_diff,0,' ',4);
+             DisplayValue(total_r,-1,'r',4);
+             lcd_space();
+             DisplayValue(per_ref1,0,'%',4);
+             lcd_line4();
+             DisplayValue(tmpint,-3,'V',4);
+             lcd_space();
+             DisplayValue(umax,-3,'V',4);
+             lcd_space();
+             DisplayValue(per_ref2,0,'%',4);
+             wait_about4s();
+             wait_about2s();
+          }
+#endif
+/* ********************************************************* */
         // lx in 0.01mH units,  L = Tau * R
-        inductance[count] = (cap.cval_uncorrected.dw * total_r ) / ((unsigned int)per_ref * (F_CPU/1000000));
+        per_ref1 = ((per_ref2 * (F_CPU/1000000)) + 5) / 10;
+        inductance[count] = (cap.cval_uncorrected.dw * total_r ) / per_ref1;
         if (((count&0x01) == 0) && (inductance[count] > (F_CPU/1000000))) {
            // transition is found, measurement with delayed counter start is not necessary
            inductance[count+1] = inductance[count];	// set delayed measurement to same value
@@ -197,3 +236,28 @@ void ReadInductance(void) {
 #endif
   return;
  } // end ReadInductance()
+
+
+#if FLASHEND > 0x1fff
+// get_log interpolate a table with the function -log(1 - (permil/1000))
+uint16_t get_log(uint16_t permil) {
+// for remember:
+// uint16_t LogTab[] PROGMEM = {0, 20, 41, 62, 83, 105, 128, 151, 174, 198, 223, 248, 274, 301, 329, 357, 386, 416, 446, 478, 511, 545, 580, 616, 654, 693, 734, 777, 821, 868, 916, 968, 1022, 1079, 1139, 1204, 1273, 1347, 1427, 1514, 1609, 1715, 1833, 1966, 2120, 2303, 2526 };
+
+
+#define Log_Tab_Distance 20              // displacement of table is 20 mil
+
+  uint16_t y1, y2;			// table values
+  uint16_t result;			// result of interpolation
+  uint8_t tabind;			// index to table value
+  uint8_t tabres;			// distance to lower table value, fraction of Log_Tab_Distance
+
+  tabind = permil / Log_Tab_Distance;	// index to table
+  tabres = permil % Log_Tab_Distance;	// fraction of table distance
+  // interpolate the table of factors
+  y1 = pgm_read_word(&LogTab[tabind]);	// get the lower table value
+  y2 = pgm_read_word(&LogTab[tabind+1]); // get the higher table value
+  result = ((y2 - y1) * tabres ) / Log_Tab_Distance + y1; // interpolate
+  return(result);
+ }
+#endif

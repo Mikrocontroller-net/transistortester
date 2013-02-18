@@ -1,8 +1,5 @@
 
 #include <avr/io.h>
-#include "lcd-routines.h"
-#include "wait1000ms.h"
-#include "config.h"
 #include <util/delay.h>
 #include <avr/sleep.h>
 #include <stdlib.h>
@@ -77,7 +74,7 @@ int main(void) {
      lcd_fix_string(TestTimedOut);	//Output Timeout
      wait_about3s();				//wait for 3 s
      ON_PORT = 0;			//shut off!
-     ON_DDR = (1<<ON_PIN);		//switch to GND
+//     ON_DDR = (1<<ON_PIN);		//switch to GND
      return 0;
   }
   LCDLoadCustomChar(LCD_CHAR_DIODE1);	//Custom-Character Diode symbol
@@ -139,11 +136,6 @@ start:
   WithReference = 0;		// no precision reference voltage
   lcd_clear();
   ADC_DDR = TXD_MSK;		//activate Software-UART 
-#ifdef AUTO_CAL
-  resis680pl = eeprom_read_word(&R680pl); // 680 Ohm resistance plus output resistance to +
-  resis680mi = eeprom_read_word(&R680mi); // 680 Ohm resistance plus output resistance to -
-#endif
-
   ResistorsFound = 0;		// no resistors found
   cap.ca = 0;
   cap.cb = 0;
@@ -151,30 +143,10 @@ start:
   uart_newline();		// start of new measurement
 #endif
   ADCconfig.RefFlag = 0;
-  ADCconfig.U_AVCC = U_VCC;	// set initial VCC Voltage
-  ADCconfig.Samples = 190;		// set number of ADC samples near to max
-  ADC_PORT = TXD_VAL;			// switch to 0V
-  ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with 2.5V reference to GND
-  wait1ms();
-  ADC_DDR =  TXD_MSK; 	// switch pin with reference back to input
-#if FLASHEND > 0x1fff
-  trans.uBE[1] = W5msReadADC(TPREF); // read voltage of 2.5V precision reference
-  if ((trans.uBE[1] > 2250) && (trans.uBE[1] < 2750)) {
-     // precision voltage reference connected, update U_AVCC
-     WithReference = 1;
-     ADCconfig.U_AVCC = (unsigned long)((unsigned long)ADCconfig.U_AVCC * 2495) / trans.uBE[1];
-  }
-#endif
+  Calibrate_UR();		// get Ref Voltages and Pin resistance
   lcd_line1();	//1. row 
   
-#ifdef WITH_AUTO_REF
-  (void) ReadADC(MUX_INT_REF);		// read internal Reference-voltage 
-  ref_mv = W20msReadADC(MUX_INT_REF);	// read internal Reference-voltage
-#else
-  ref_mv = DEFAULT_BAND_GAP;	// set to default Reference Voltage
-#endif
   ADCconfig.U_Bandgap = ADC_internal_reference;	// set internal reference voltage for ADC
-  ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples
 
 #ifdef BAT_CHECK
   // Battery check is selected
@@ -240,6 +212,8 @@ start:
          lcd_line2();
          lcd_fix_string(VCC_str);		// VCC=
          DisplayValue(ADCconfig.U_AVCC,-3,'V',3);	// Display 3 Digits of this mV units
+//         lcd_space();
+//         DisplayValue(RRpinMI,-1,LCD_CHAR_OMEGA,4);
          wait_about1s();
      }
   }
@@ -671,7 +645,6 @@ gakAusgabe:
   }
 #else
   goto start;	// POWER_OFF not selected, repeat measurement
-//  goto end2;	// POWER_OFF not selected, wait more time
 #endif
   return 0;
 }   // end main

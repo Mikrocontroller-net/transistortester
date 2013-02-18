@@ -1,8 +1,6 @@
 #include <avr/io.h>
 #include "config.h"
 #include <stdlib.h>
-#include "wait1000ms.h"
-#include "lcd-routines.h"
 #include "Transistortester.h"
 
 /*
@@ -20,7 +18,9 @@ unsigned int ReadADC (uint8_t Probe) {
  uint8_t Samples; /* loop counter */
  unsigned long Value; /* ADC value */
  Probe |= (1 << REFS0); /* use internal reference anyway */
+#ifdef AUTOSCALE_ADC
 sample:
+#endif
  ADMUX = Probe; /* set input channel and U reference */
 #ifdef AUTOSCALE_ADC
  /* if voltage reference changed run a dummy conversion */
@@ -28,11 +28,11 @@ sample:
 // if (Samples != ADCconfig.RefFlag) {
  if ((Probe & (1 << REFS1)) != 0) {
     // switch to 1.1V Reference
-#ifdef NO_AREF_CAP
+ #ifdef NO_AREF_CAP
     wait100us(); /* time for voltage stabilization */
-#else
+ #else
     wait_about10ms(); /* time for voltage stabilization */
-#endif
+ #endif
 //    ADCconfig.RefFlag = Samples; /* update flag */
  }
 #endif
@@ -62,9 +62,9 @@ sample:
     /* auto-switch voltage reference for low readings */
     if ((Samples == 4) && (ADCconfig.U_Bandgap > 255) && ((uint16_t)Value < 1024) && !(Probe & (1 << REFS1))) {
        Probe |= (1 << REFS1); /* select internal bandgap reference */
-#if PROCESSOR_TYP == 1280
+ #if PROCESSOR_TYP == 1280
        Probe &= ~(1 << REFS0);	/* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
-#endif
+ #endif
        goto sample; /* re-run sampling */
     }
 #endif

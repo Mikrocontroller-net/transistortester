@@ -28,7 +28,6 @@
 
 #include <avr/io.h>
 #include <stdlib.h>
-#include "config.h"
 #include "Transistortester.h"
 
 

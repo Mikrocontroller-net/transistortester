@@ -1,8 +1,5 @@
 #include <avr/io.h>
 #include <stdlib.h>
-#include "config.h"
-#include "wait1000ms.h"
-#include "lcd-routines.h"
 #include "Transistortester.h"
 
 #define MAX_CNT 128
@@ -290,8 +287,8 @@ void GetESR() {
 #endif
 
    esr0 = (int8_t)eeprom_read_byte(&EE_ESR_ZERO);
-//   sumvolt[0] += (((long)sumvolt[0] * esr0) / ((RR680MI - R_L_VAL) * 10)); // subtract 0.23 Ohm from ESR, Vers. 1.04k
-   sumvolt[2] += (((long)sumvolt[0] * esr0) / ((RR680MI - R_L_VAL) * 10)); // subtract 0.23 Ohm from ESR
+//   sumvolt[0] += (((long)sumvolt[0] * esr0) / (RRpinMI * 10)); // subtract 0.23 Ohm from ESR, Vers. 1.04k
+   sumvolt[2] += (((long)sumvolt[0] * esr0) / (RRpinMI * 10)); // subtract 0.23 Ohm from ESR
 
 #ifdef ESR_DEBUG
    DisplayValue(sumvolt[0],0,'C',4);	// Lowpin corrected
@@ -319,12 +316,12 @@ void GetESR() {
    if (sumvolt[1] >= sumvolt[2]) {
       // mean voltage at the capacitor is higher with current
       // sumvolt[0] is the sum of voltages at LowPin, caused by output resistance of Port
-      // (RR680MI - R_L_VAL) is the port output resistance in 0.1 Ohm units.
+      // RRpinMI is the port output resistance in 0.1 Ohm units.
       // we scale up the difference voltage with 10 to get 0.01 Ohm units of ESR
-      cap.esr = ((sumvolt[1] - sumvolt[2]) * 10 * (unsigned long)(RR680MI - R_L_VAL)) / sumvolt[0];
+      cap.esr = ((sumvolt[1] - sumvolt[2]) * 10 * (unsigned long)RRpinMI) / sumvolt[0];
       DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
    } else {
-      jj = ((sumvolt[2] - sumvolt[1]) * 10 * (unsigned long)(RR680MI - R_L_VAL)) / sumvolt[0];
+      jj = ((sumvolt[2] - sumvolt[1]) * 10 * (unsigned long)RRpinMI) / sumvolt[0];
       lcd_data('0');
       if ((jj < 100) && (jj > 0)) {
          lcd_data('?');			// mark ESR zero correction

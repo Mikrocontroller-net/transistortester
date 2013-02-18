@@ -1,4 +1,5 @@
 #include "config.h"
+#include <stdint.h>
 
 // Interfacing of a HD44780 compatible LCD with 4-Bit-Interface mode
 // http://www.mikrocontroller.net/articles/AVR-GCC-Tutorial

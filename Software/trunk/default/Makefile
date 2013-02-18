@@ -56,7 +56,7 @@ CFLAGS += -DWITH_AUTO_REF
 # Greater values gives lower capacity results.
 CFLAGS += -DREF_C_KORR=12
 # REF_L_KORR corrects the reference Voltage for inductance measurement and has mV units.
-CFLAGS += -DREF_L_KORR=50
+CFLAGS += -DREF_L_KORR=40
 # C_H_KORR defines a correction of 0.1% units for big capacitor measurement.
 # Positive values will reduce measurement results.
 CFLAGS += -DC_H_KORR=0
@@ -100,6 +100,7 @@ CFLAGS += -DUSE_EEPROM
 # type of connected transistor pin (B=Base, E=Emitter, C=Collector, G=Gate, S=Source, D=Drain).
 # If you select EBC_STYLE=321 , the style will be 321=... , the inverted order to the 123=... style.
 #CFLAGS += -DEBC_STYLE
+#CFLAGS += -DEBC_STYLE=321
 
 
 # The PULLUP_DISABLE option disable the pull-up Resistors of IO-Ports.
@@ -349,7 +350,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Objects that must be built in order to link
-OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o swuart.o wait1000ms.o ReadCapacity.o ReadInductance.o ReadADC.o GetESR.o
+OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o swuart.o wait1000ms.o ReadCapacity.o ReadInductance.o ReadADC.o GetESR.o Calibrate_UR.o
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -369,6 +370,9 @@ ReadCapacity.o: ../ReadCapacity.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ReadInductance.o: ../ReadInductance.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+Calibrate_UR.o: ../Calibrate_UR.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ReadADC.o: ../ReadADC.c Makefile

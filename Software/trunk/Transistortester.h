@@ -1,8 +1,4 @@
 #include <avr/io.h>
-#include "tt_function.h"
-#include "lcd-routines.h"
-#include "wait1000ms.h"
-#include "config.h"
 #include <util/delay.h>
 #include <avr/sleep.h>
 #include <stdlib.h>
@@ -12,6 +8,10 @@
 #include <avr/wdt.h>
 #include <avr/interrupt.h>
 #include <math.h>
+#include "tt_function.h"
+#include "config.h"
+#include "lcd-routines.h"
+#include "wait1000ms.h"
 
 
 #if defined (MAIN_C)
@@ -35,7 +35,10 @@
 COMMON const uint16_t RLtab[] MEM_TEXT = {22447,20665,19138,17815,16657,15635,14727,13914,13182,12520,11918,11369,10865,10401, 9973, 9577, 9209, 8866, 8546, 8247, 7966, 7702, 7454, 7220, 6999, 6789, 6591, 6403, 6224, 6054, 5892, 5738, 5590, 5449, 5314, 5185, 5061, 4942, 4828, 4718, 4613, 4511, 4413, 4319, 4228};
 
 #if FLASHEND > 0x1fff
-COMMON const uint8_t LogTab[] MEM2_TEXT = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 24, 25, 26, 27, 29, 30, 31, 33, 34, 36, 37, 39, 40, 42, 43, 45, 46, 48, 49, 51, 53, 54, 56, 58, 60, 62, 63, 65, 67, 69, 71, 73, 76, 78, 80, 82, 84, 87, 89, 92, 94, 97, 99, 102, 105, 108, 111, 114, 117, 120, 124, 127, 131, 135, 139, 143, 147, 151, 156, 161, 166, 171, 177, 183, 190, 197, 204, 212, 221, 230, 241 };
+//                                        {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63,  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91 };
+//COMMON const uint8_t LogTab[] MEM2_TEXT = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 24, 25, 26, 27, 29, 30, 31, 33, 34, 36, 37, 39, 40, 42, 43, 45, 46, 48, 49, 51, 53, 54, 56, 58, 60, 62, 63, 65, 67, 69, 71, 73, 76, 78, 80, 82, 84, 87, 89, 92, 94, 97, 99, 102, 105, 108, 111, 114, 117, 120, 124, 127, 131, 135, 139, 143, 147, 151, 156, 161, 166, 171, 177, 183, 190, 197, 204, 212, 221, 230, 241 };
+COMMON const uint16_t LogTab[] PROGMEM = {0, 20, 41, 62, 83, 105, 128, 151, 174, 198, 223, 248, 274, 301, 329, 357, 386, 416, 446, 478, 511, 545, 580, 616, 654, 693, 734, 777, 821, 868, 916, 968, 1022, 1079, 1139, 1204, 1273, 1347, 1427, 1514, 1609, 1715, 1833, 1966, 2120, 2303, 2526 };
+
 #endif
 
 
@@ -354,8 +357,8 @@ End of configuration
 #endif
 
 #ifdef AUTO_CAL
-   const uint16_t R680pl EEMEM = R_L_VAL+PIN_RP;	// total resistor to VCC
-   const uint16_t R680mi EEMEM = R_L_VAL+PIN_RM;	// total resistor to GND
+//   const uint16_t R680pl EEMEM = R_L_VAL+PIN_RP;	// total resistor to VCC
+//   const uint16_t R680mi EEMEM = R_L_VAL+PIN_RM;	// total resistor to GND
    const int8_t RefDiff EEMEM = REF_R_KORR;	// correction of internal Reference Voltage
 #endif
   const uint8_t PrefixTab[] MEM_TEXT = { 'p','n',LCD_CHAR_U,'m',0,'k','M'}; // p,n,u,m,-,k,M
@@ -378,27 +381,27 @@ End of configuration
   extern const unsigned char ATE[] MEM_TEXT;
  #endif
  #ifdef AUTO_CAL
-  extern uint16_t R680pl;
-  extern uint16_t R680mi;
+//  extern uint16_t R680pl;
+//  extern uint16_t R680mi;
   extern int8_t RefDiff;
   extern uint16_t ref_offset;
   extern uint8_t c_zero_tab[];
  #endif
-  extern uint8_t EE_ESR_ZERO EEMEM;	// zero offset of ESR measurement
-  extern  uint16_t RLtab[];
+  extern const uint8_t EE_ESR_ZERO EEMEM;	// zero offset of ESR measurement
+  extern  const uint16_t RLtab[];
 
  #if FLASHEND > 0x1fff
-  extern uint8_t LogTab[];
+  extern uint16_t LogTab[];
   extern const unsigned char ESR_str[];
  #endif
 
 
 
  #ifdef AUTO_RH
-  extern uint16_t RHtab[];
+  extern const uint16_t RHtab[];
  #endif
-  extern unsigned char PinRLtab[];
-  extern unsigned char PinADCtab[];
+  extern const unsigned char PinRLtab[];
+  extern const unsigned char PinADCtab[];
   extern unsigned int RHmultip;
 #endif
 
@@ -498,9 +501,11 @@ COMMON struct ADCconfig_t {
 } ADCconfig;
 
 #ifdef AUTO_CAL
-COMMON   uint16_t resis680pl;
-COMMON   uint16_t resis680mi;
-COMMON   uint8_t pin_combination;		// coded Pin-combination  2:1,3:1,1:2,x:x,3:2,1:3,2:3
+COMMON uint8_t pin_combination;		// coded Pin-combination  2:1,3:1,1:2,x:x,3:2,1:3,2:3
+COMMON uint16_t resis680pl;	// port output resistance + 680
+COMMON uint16_t resis680mi;	// port output resistance + 680
+COMMON uint16_t pin_rmi;	// port output resistance to GND side, 0.1 Ohm units
+COMMON uint16_t pin_rpl;	// port output resistance to VCC side, 0.1 Ohm units
 #endif
 
 

@@ -2,6 +2,7 @@
 /*########################################################################################
         Configuration
 */
+#ifndef ADC_PORT
 //#define DebugOut 3		// if set, output of voltages of resistor measurements in row 2,3,4
 //#define DebugOut 4		// if set, output of voltages of Diode measurement in row 3+4
 //#define DebugOut 5		// if set, output of Transistor checks in row 2+3
@@ -488,9 +489,13 @@ Is SWUART_INVERT defined, the UART works is inverse mode
   #define CHECK_CALL
   #define RR680PL resis680pl
   #define RR680MI resis680mi
+  #define RRpinPL pin_rpl
+  #define RRpinMI pin_rmi
 #else
   #define RR680PL (R_L_VAL + PIN_RP)
   #define RR680MI (R_L_VAL + PIN_RM)
+  #define RRpinPL (PIN_RP)
+  #define RRpinMI (PIN_RM)
 #endif
 
 #ifndef ESR_ZERO
@@ -511,4 +516,5 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 #if EBC_STYLE == 123
  // unset the option for the 123 selection, since this style is default.
  #undef EBC_STYLE
+#endif
 #endif

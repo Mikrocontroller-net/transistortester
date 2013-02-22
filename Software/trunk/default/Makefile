@@ -75,8 +75,8 @@ CFLAGS += -DAUTOSCALE_ADC
 CFLAGS += -DREF_R_KORR=3
 
 # The ESR_ZERO value define the zero value of ESR measurement (units = 0.01 Ohm).
-CFLAGS += -DESR_ZERO=29
-#CFLAGS += -DESR_ZERO=40
+#CFLAGS += -DESR_ZERO=29
+CFLAGS += -DESR_ZERO=40
 
 # NO_AREF_CAP tells your Software, that you have no Capacitor installed at pin AREF (21).
 # This enables a shorter wait-time for AUTOSCALE_ADC function.

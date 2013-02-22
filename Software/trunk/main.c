@@ -936,7 +936,6 @@ while (pause > 0)
    
    OCR2A = TCNT2 + t2_offset;	/* set the compare value */
    TIMSK2 = (0<<OCIE2B) | (1<<OCIE2A) | (0<<TOIE2); /* enable output compare match A interrupt */ 
-//   set_sleep_mode(SLEEP_MODE_PWR_SAVE);
    set_sleep_mode(SLEEP_MODE_PWR_SAVE);
 //   set_sleep_mode(SLEEP_MODE_IDLE);
    sleep_mode();

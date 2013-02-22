@@ -248,7 +248,6 @@ messe_mit_rh:
 #ifndef INHIBIT_SLEEP_MODE
   TIMSK1 = (1<<TOIE1) | (1<<ICIE1);	// enable Timer overflow interrupt and input capture interrupt
   unfinished = 1;
-  sei();
 #endif
   R_PORT = HiPinR_H;           	// switch R_H resistor port for HighPin to VCC
   if(PartFound == PART_FET) {
@@ -289,7 +288,6 @@ messe_mit_rh:
   while(unfinished) {
     set_sleep_mode(SLEEP_MODE_IDLE);
     sleep_mode();       /* wait for interrupt */
-    sei();
     wdt_reset();
     if(ovcnt16 == (F_CPU/5000)) {
        break; 		//Timeout for Charging, above 12 s
@@ -459,9 +457,8 @@ void Scale_C_with_vcc(void) {
 {
  ovcnt16++;				// count overflow
 }
- ISR(TIMER1_CAPT_vect, ISR_NAKED)
+ ISR(TIMER1_CAPT_vect, ISR_BLOCK)
 {
  unfinished = 0;			// clear unfinished flag
- reti();
 }
 #endif

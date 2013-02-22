@@ -197,13 +197,13 @@ void ReadInductance(void) {
              DisplayValue(cnt_diff,0,' ',4);
              DisplayValue(total_r,-1,'r',4);
              lcd_space();
-             DisplayValue(per_ref1,0,'%',4);
+             DisplayValue(per_ref1,-1,'%',4);
              lcd_line4();
              DisplayValue(tmpint,-3,'V',4);
              lcd_space();
              DisplayValue(umax,-3,'V',4);
              lcd_space();
-             DisplayValue(per_ref2,0,'%',4);
+             DisplayValue(per_ref2,-1,'%',4);
              wait_about4s();
              wait_about2s();
           }

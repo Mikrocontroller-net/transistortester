@@ -482,8 +482,8 @@ COMMON struct cap_t {
 } cap;
 #ifndef INHIBIT_SLEEP_MODE
  /* with sleep mode we need a global ovcnt16 */
-COMMON  uint16_t ovcnt16;
-COMMON uint8_t unfinished;
+COMMON volatile uint16_t ovcnt16;
+COMMON volatile uint8_t unfinished;
 #endif
 COMMON int16_t load_diff;		// difference voltage of loaded capacitor and internal reference
 

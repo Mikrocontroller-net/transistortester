@@ -51,13 +51,16 @@ void lcd_data(unsigned char temp1) {
     case LCD_CHAR_RESIS2:
     	uart_putc('R');
     	break;
-    case 225:	//ä
-    	uart_putc('ä');
-    	break;
+//    case 225:	//ä
+//    	uart_putc('ä');
+//    	break;
     case 228:	//µ
-    	uart_putc('µ');
+    	uart_putc('u');
     	break;
     case 244:	//Omega
+        uart_putc('O');
+        uart_putc('h');
+        uart_putc('m');
     	break;
     default:
     	uart_putc(temp1);

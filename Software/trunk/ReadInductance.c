@@ -112,7 +112,7 @@ void ReadInductance(void) {
               TI1_INT_FLAGS = (1<<TOV1);	// Reset OV Flag
               wdt_reset();
               ov_cnt16++;
-              if(ov_cnt16 == (F_CPU/100000)) {
+              if(ov_cnt16 == (F_CPU/100000UL)) {
                  break; 	//Timeout for Charging, above 0.13 s
               }
            }
@@ -177,9 +177,9 @@ void ReadInductance(void) {
        
         if ((count&0x01) == 1) {
            // second pass with delayed counter start
-           cap.cval_uncorrected.dw += (3 * (F_CPU/1000000))+10;
+           cap.cval_uncorrected.dw += (3 * (F_CPU/1000000UL))+10;
         }
-        if (ov_cnt16 >= (F_CPU/100000)) cap.cval_uncorrected.dw = 0; // no transition found
+        if (ov_cnt16 >= (F_CPU/100000UL)) cap.cval_uncorrected.dw = 0; // no transition found
         if (cap.cval_uncorrected.dw > 10) {
            cap.cval_uncorrected.dw -= 1;
         }
@@ -210,9 +210,9 @@ void ReadInductance(void) {
 #endif
 /* ********************************************************* */
         // lx in 0.01mH units,  L = Tau * R
-        per_ref1 = ((per_ref2 * (F_CPU/1000000)) + 5) / 10;
+        per_ref1 = ((per_ref2 * (F_CPU/1000000UL)) + 5) / 10;
         inductance[count] = (cap.cval_uncorrected.dw * total_r ) / per_ref1;
-        if (((count&0x01) == 0) && (inductance[count] > (F_CPU/1000000))) {
+        if (((count&0x01) == 0) && (cap.cval_uncorrected.dw > ((F_CPU/1000000UL)+3))) {
            // transition is found, measurement with delayed counter start is not necessary
            inductance[count+1] = inductance[count];	// set delayed measurement to same value
            count++;		// skip the delayed measurement

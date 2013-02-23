@@ -51,13 +51,15 @@ void lcd_data(unsigned char temp1) {
     case LCD_CHAR_RESIS2:
     	uart_putc('R');
     	break;
-//    case 225:	//ä
-//    	uart_putc('ä');
+//    case LCD_CHAR_DEGREE:	// degree sign
+//    	uart_putc(0xf8);	// codepage 437 or 850 has degree
 //    	break;
-    case 228:	//µ
-    	uart_putc('u');
+    case LCD_CHAR_U:		//µ
+//    	uart_putc(0xe6);	// codepage 437 or 850 has my
+    	uart_putc('u');		// better use the ASCII u
     	break;
-    case 244:	//Omega
+    case LCD_CHAR_OMEGA:	//Omega
+//	uart_putc(0xea);	// only codepage 437 has Omega
         uart_putc('O');
         uart_putc('h');
         uart_putc('m');

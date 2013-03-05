@@ -570,7 +570,7 @@ start:
        if (resis[0].lx != 0) {
 	  // resistor have also Inductance
           lcd_fix_string(Lis_str);	// "L="
-          DisplayValue(resis[0].lx,-5,'H',3);	// output inductance
+          DisplayValue(resis[0].lx,resis[0].lpre,'H',3);	// output inductance
        }
 #endif
     } else {
@@ -734,7 +734,7 @@ void EntladePins() {
   unsigned int adcmv[3];	// voltages of 3 Pins in mV
   unsigned int clr_cnt;		// Clear Counter
   uint8_t lop_cnt;		// loop counter
-// time of discharge in ms  (10000/20)
+// max. time of discharge in ms  (10000/20) == 10s
 #define MAX_ENTLADE_ZEIT  (10000/20)
 
   for(lop_cnt=0;lop_cnt<10;lop_cnt++) {
@@ -793,7 +793,7 @@ void EntladePins() {
         // for safety, discharge 5% of discharge  time
         wait1ms();
      }
-  } // end while
+  } // end for lop_cnt
  }
 
 

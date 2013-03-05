@@ -272,7 +272,7 @@ End of configuration
  const unsigned char KatAn[] MEM_TEXT = {'-', LCD_CHAR_DIODE2, '-',0};
  const unsigned char Dioden[] MEM_TEXT = {'*',LCD_CHAR_DIODE1, ' ', ' ',0};
  const unsigned char Resistor_str[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
- const unsigned char VERSION_str[] MEM_TEXT = "Version 1.06k";
+ const unsigned char VERSION_str[] MEM_TEXT = "Version 1.07k";
 
 
 #ifdef WITH_SELFTEST
@@ -456,7 +456,8 @@ COMMON unsigned int ref_mv;            //Reference-voltage  in mV units
 COMMON struct resis_t{
    unsigned long rx;		// value of resistor RX  
 #if FLASHEND > 0x1fff
-   unsigned long lx;		// inductance uH
+   unsigned long lx;		// inductance 10uH or 100uH
+   int8_t lpre;			// prefix for inductance
 #endif
    uint8_t ra,rb;		// Pins of RX
    uint8_t rt;			// Tristate-Pin (inactive)

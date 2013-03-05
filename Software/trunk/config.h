@@ -378,6 +378,9 @@ End of configuration
 // clock divider is 128, when CPU_Clock==16MHz and ADC_Clock==125kHz
 #define F_ADC 125000
 //#define F_ADC 250000
+#if F_CPU/F_ADC == 2
+ #define AUTO_CLOCK_DIV (1<<ADPS0) 
+#endif
 #if F_CPU/F_ADC == 4
  #define AUTO_CLOCK_DIV (1<<ADPS1) 
 #endif
@@ -395,6 +398,29 @@ End of configuration
 #endif
 #if F_CPU/F_ADC == 128
  #define AUTO_CLOCK_DIV (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0)
+#endif
+//**********************************************************
+#define F_ADC_F 500000
+#if F_CPU/F_ADC_F == 2
+ #define FAST_CLOCK_DIV (1<<ADPS0) 
+#endif
+#if F_CPU/F_ADC_F == 4
+ #define FAST_CLOCK_DIV (1<<ADPS1) 
+#endif
+#if F_CPU/F_ADC_F == 8
+ #define FAST_CLOCK_DIV (1<<ADPS1) | (1<<ADPS0)
+#endif
+#if F_CPU/F_ADC_F == 16
+ #define FAST_CLOCK_DIV (1<<ADPS2)
+#endif
+#if F_CPU/F_ADC_F == 32
+ #define FAST_CLOCK_DIV (1<<ADPS2) | (1<<ADPS0)
+#endif
+#if F_CPU/F_ADC_F == 64
+ #define FAST_CLOCK_DIV (1<<ADPS2) | (1<<ADPS1)
+#endif
+#if F_CPU/F_ADC_F == 128
+ #define FAST_CLOCK_DIV (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0)
 #endif
 
 #ifndef PIN_RP

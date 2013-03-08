@@ -63,7 +63,7 @@ End of configuration
 
 #if defined(LANG_GERMAN)		//deutsch
    const unsigned char TestRunning[] MEM_TEXT = "Testen..."; //€€€€€€€";
-   const unsigned char BatWeak[] MEM_TEXT = "schwach";
+   const unsigned char BatWeak[] MEM_TEXT = "gering";
    const unsigned char BatEmpty[] MEM_TEXT = "leer!"; //€€€";
    const unsigned char TestFailed2[] MEM_TEXT = "defektes "; //€€€";
    const unsigned char Bauteil[] MEM_TEXT = "Bauteil"; //€€€";
@@ -253,6 +253,7 @@ End of configuration
  const unsigned char VCC_str[] MEM_TEXT = "VCC=";
 #if FLASHEND > 0x1fff
  const unsigned char ESR_str[] MEM_TEXT = " ESR=";
+ const unsigned char EPR_str[] MEM_TEXT = "  EPR=";
  const unsigned char Lis_str[] MEM_TEXT = "L=";
  #ifndef WITH_UART
   #define WITH_VEXT
@@ -476,6 +477,7 @@ COMMON struct cap_t {
   } cval_uncorrected;
 #if FLASHEND > 0x1fff
   unsigned int esr;		// serial resistance of C in 0.01 Ohm
+//  unsigned long epr;		// parallel resistance of C in 0.1 Ohm units
 #endif
   uint8_t ca, cb;		//pins of capacitor
   int8_t cpre;			//Prefix for capacitor value  -12=p, -9=n, -6=µ, -3=m

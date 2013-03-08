@@ -8,6 +8,7 @@ void lcd_show_format_cap(void);
 void ReadCapacity(uint8_t HighPin, uint8_t LowPin);	//capacity measurement
 void ReadInductance(void);		//inductance measurement
 void GetESR(void);			//get ESR of capacitor
+void GetEPR(void);			//get EPR of capacitor
 void UfAusgabe(uint8_t bcdchar);	// Output of the threshold voltage(s) Uf
 void mVAusgabe(uint8_t nn);		// Output of the theshold voltage for Diode nn 
 void RvalOut(uint8_t ii);		// Output of the resistore value(s)

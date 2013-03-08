@@ -157,27 +157,32 @@ start:
   // display Battery voltage
   // The divisor to get the voltage in 0.01V units is ((10*33)/133) witch is about 2.4812
   // A good result can be get with multiply by 4 and divide by 10 (about 0.75%).
-  cap.cval = (trans.uBE[0]*4)/10+((BAT_OUT+5)/10); // usually output only 2 digits
-  DisplayValue(cap.cval,-2,'V',2);		// Display 2 Digits of this 10mV units
+//  cap.cval = (trans.uBE[0]*4)/10+((BAT_OUT+5)/10); // usually output only 2 digits
+//  DisplayValue(cap.cval,-2,'V',2);		// Display 2 Digits of this 10mV units
+  cap.cval = (trans.uBE[0]*4)+BAT_OUT;		// usually output only 2 digits
+  DisplayValue(cap.cval,-3,'V',2);		// Display 2 Digits of this 10mV units
   lcd_space();
  #endif
- #if (BAT_POOR > 120)
+ #if (BAT_POOR > 12000)
    #warning "Battery POOR level is set very high!"
  #endif
- #if (BAT_POOR < 25)
+ #if (BAT_POOR < 2500)
    #warning "Battery POOR level is set very low!"
  #endif
- #if (BAT_POOR > 53)
+ #if (BAT_POOR > 5300)
   // use .8 V difference to Warn-Level
-  #define WARN_LEVEL (((unsigned long)(BAT_POOR*100+800)*(unsigned long)33)/133)
- #elif (BAT_POOR > 29)
+  #define WARN_LEVEL (((unsigned long)(BAT_POOR+800)*(unsigned long)33)/133)
+ #elif (BAT_POOR > 2900)
   // less than 5.4 V only .4V difference to Warn-Level
-  #define WARN_LEVEL (((unsigned long)(BAT_POOR*100+400)*(unsigned long)33)/133)
+  #define WARN_LEVEL (((unsigned long)(BAT_POOR+400)*(unsigned long)33)/133)
+ #elif (BAT_POOR > 1300)
+  // less than 2.9 V only .2V difference to Warn-Level
+  #define WARN_LEVEL (((unsigned long)(BAT_POOR+200)*(unsigned long)33)/133)
  #else
-  // less than 3.0 V only .2V difference to Warn-Level
-  #define WARN_LEVEL (((unsigned long)(BAT_POOR*100+200)*(unsigned long)33)/133)
+  // less than 1.3 V only .1V difference to Warn-Level
+  #define WARN_LEVEL (((unsigned long)(BAT_POOR+100)*(unsigned long)33)/133)
  #endif
- #define POOR_LEVEL (((unsigned long)(BAT_POOR*100)*(unsigned long)33)/133)
+ #define POOR_LEVEL (((unsigned long)(BAT_POOR)*(unsigned long)33)/133)
   // check the battery voltage
   if (trans.uBE[0] <  WARN_LEVEL) {
      //Vcc < 7,3V; show Warning 
@@ -597,10 +602,15 @@ start:
 //     lcd_fix_string(Capacitor);
      lcd_testpin(cap.ca);		//Pin number 1
      lcd_fix_string(CapZeich);		// capacitor sign
-//#if FLASHEND > 0x1fff
-//     lcd_fix_string(Resistor_str);	// -[=]-
-//#endif
      lcd_testpin(cap.cb);		//Pin number 2
+#if FLASHEND > 0x1fff
+//     wait_about1s();
+//     GetEPR();				// get EPR of capacitor
+//     if (cap.epr != 0) {
+//        lcd_fix_string(EPR_str);	// "  EPR="
+//        DisplayValue(cap.epr,-1,LCD_CHAR_OMEGA,2);
+//     }
+#endif
      lcd_line2(); 			//2. row 
      DisplayValue(cap.cval_max,cap.cpre_max,'F',4);
 #if FLASHEND > 0x1fff

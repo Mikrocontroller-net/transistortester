@@ -44,7 +44,7 @@ void AutoCheck(void) {
      return;				//difference to big, no selftest
   }
   lcd_clear();
-  lcd_fix2_string(SELFTEST);		// "Selftest mode.."
+  lcd_fix_string(SELFTEST);		// "Selftest mode.."
   wait_about1s();
  #define TEST_COUNT 8
  
@@ -82,7 +82,7 @@ void AutoCheck(void) {
            R_DDR = (1<<(TP2*2)) | (1<<(TP3*2));	//RL3 to -
            adcmv[2] = W20msReadADC(TP2);
            adcmv[2] -= u680;
-           lcd_fix2_string(RLRL);	// "RLRL"
+           lcd_fix_string(RLRL);	// "RLRL"
         }
                                         //############################################
         if (tt == 3) { // how equal are the RH resistors
@@ -98,11 +98,11 @@ void AutoCheck(void) {
            R_DDR = (2<<(TP2*2)) | (2<<(TP3*2));	//RH3 to -
            adcmv[2] = W20msReadADC(TP2);
            adcmv[2] -= adcmv[3];
-           lcd_fix2_string(RHRH);	// "RHRH"
+           lcd_fix_string(RHRH);	// "RHRH"
         }
                                         //############################################
         if (tt == 4) { // Text release probes
-           lcd_fix2_string(RELPROBE);	// "Release Probes"
+           lcd_fix_string(RELPROBE);	// "Release Probes"
         }
                                         //############################################
         if (tt == 5) { // can we switch the ADC pins to GND across R_H resistor?
@@ -115,7 +115,7 @@ void AutoCheck(void) {
 
            R_DDR = 2<<(TP3*2);		//Pin 3 over R_H to GND
            adcmv[2] = W20msReadADC(TP3);
-           lcd_fix2_string(RH1L);	// "RH_Lo="
+           lcd_fix_string(RH1L);	// "RH_Lo="
         }
                                         //############################################
         if (tt == 6) { // can we switch the ADC pins to VCC across the R_H resistor?
@@ -128,7 +128,7 @@ void AutoCheck(void) {
            R_DDR = 2<<(TP3*2);		//Pin 3 over R_H to VCC
            R_PORT = 2<<(TP3*2);
            adcmv[2] = W20msReadADC(TP3) - ADCconfig.U_AVCC;
-           lcd_fix2_string(RH1H);	// "RH_Hi="
+           lcd_fix_string(RH1H);	// "RH_Hi="
         }
         if (tt == 7) { // can we switch the ADC pins to VCC across the R_H resistor?
            u680 = ((long)ADCconfig.U_AVCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_H_VAL*100));
@@ -144,7 +144,7 @@ void AutoCheck(void) {
            R_DDR = (2<<(TP3*2)) | (1<<(TP3*2));	//RH3 to +, RL3 to -
            adcmv[2] = W20msReadADC(TP3);
            adcmv[2] -= u680;
-           lcd_fix2_string(RHRL);	// "RH/RL"
+           lcd_fix_string(RHRL);	// "RH/RL"
         }
                                         //############################################
         if (tt > 1) {	// output 3 voltages 
@@ -314,7 +314,7 @@ no_c0save:
 
  #ifdef FREQUENCY_50HZ
 //#define TEST_SLEEP_MODE	/* only select for checking the sleep delay */
-  lcd_fix2_string(T50HZ);	//" 50Hz"
+  lcd_fix_string(T50HZ);	//" 50Hz"
   ADC_PORT = TXD_VAL;
   ADC_DDR = 1<<TP1 | TXD_MSK;	// Pin 1 to GND
   R_DDR = (1<<(TP3*2)) | (1<<(TP2*2));

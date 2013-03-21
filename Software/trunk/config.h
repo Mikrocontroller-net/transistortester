@@ -353,7 +353,7 @@ End of configuration
  #define REF_C_KORR 0
 #endif
 
-#define LONG_WAIT_TIME 14000
+#define LONG_WAIT_TIME 28000
 #define SHORT_WAIT_TIME 5000
 
 #ifdef POWER_OFF
@@ -544,3 +544,22 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  #undef EBC_STYLE
 #endif
 #endif
+
+//self build characters 
+#define LCD_CHAR_DIODE1  1      //Diode-Icon; will be generated as custom character
+#define LCD_CHAR_DIODE2  2      //Diode-Icon;  will be generated as custom character
+#define LCD_CHAR_CAP 3          //Capacitor-Icon;  will be generated as custom character
+        // numbers of RESIS1 and RESIS2 are swapped for OLED display, which shows a corrupt RESIS1 character otherwise ???
+#define LCD_CHAR_RESIS1 7       // Resistor left part will be generated as custom character
+#define LCD_CHAR_RESIS2 6       // Resistor right part will be generated as custom character
+
+#ifdef LCD_CYRILLIC
+        #define LCD_CHAR_OMEGA  4       //Omega-character 
+        #define LCD_CHAR_U  5           //µ-character 
+#else
+        #define LCD_CHAR_OMEGA  244     //Omega-character
+        #define LCD_CHAR_U  228         //µ-character
+#endif
+
+#define LCD_CHAR_DEGREE 0xdf            // Character for degree
+

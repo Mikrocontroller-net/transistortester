@@ -36,7 +36,6 @@ COMMON const uint16_t RLtab[] MEM_TEXT = {22447,20665,19138,17815,16657,15635,14
 
 #if FLASHEND > 0x1fff
 //                                        {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63,  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91 };
-//COMMON const uint8_t LogTab[] MEM2_TEXT = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 24, 25, 26, 27, 29, 30, 31, 33, 34, 36, 37, 39, 40, 42, 43, 45, 46, 48, 49, 51, 53, 54, 56, 58, 60, 62, 63, 65, 67, 69, 71, 73, 76, 78, 80, 82, 84, 87, 89, 92, 94, 97, 99, 102, 105, 108, 111, 114, 117, 120, 124, 127, 131, 135, 139, 143, 147, 151, 156, 161, 166, 171, 177, 183, 190, 197, 204, 212, 221, 230, 241 };
 COMMON const uint16_t LogTab[] PROGMEM = {0, 20, 41, 62, 83, 105, 128, 151, 174, 198, 223, 248, 274, 301, 329, 357, 386, 416, 446, 478, 511, 545, 580, 616, 654, 693, 734, 777, 821, 868, 916, 968, 1022, 1079, 1139, 1204, 1273, 1347, 1427, 1514, 1609, 1715, 1833, 1966, 2120, 2303, 2526 };
 
 #endif
@@ -46,7 +45,7 @@ COMMON const uint16_t LogTab[] PROGMEM = {0, 20, 41, 62, 83, 105, 128, 151, 174,
 #ifdef AUTO_RH
 
 //resistor   470000 Ohm      1000 1050 1100 1150 1200 1250 1300 1350 1400  mV
- const uint16_t RHtab[] MEM_TEXT = { 954, 903, 856, 814, 775, 740, 707, 676, 648};
+ const uint16_t RHtab[] PROGMEM = { 954, 903, 856, 814, 775, 740, 707, 676, 648};
 
 #endif
 
@@ -76,8 +75,8 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'K'
  #ifdef WITH_SELFTEST
-   const unsigned char SELFTEST[] MEM2_TEXT = "Selbsttest ..";
-   const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
+   const unsigned char SELFTEST[] MEM_TEXT = "Selbsttest ..";
+   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!";
    const unsigned char ATE[] MEM_TEXT = "Test Ende";
  #endif
 #endif
@@ -97,8 +96,8 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'C'
  #ifdef WITH_SELFTEST
-   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
+   const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
+   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!";
    const unsigned char ATE[] MEM_TEXT = "Test End";
  #endif
 #endif
@@ -118,8 +117,8 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'K'
  #ifdef WITH_SELFTEST
-   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
+   const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
+   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!";
    const unsigned char ATE[] MEM_TEXT = "Test End";
  #endif
 #endif
@@ -139,8 +138,8 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'K'
  #ifdef WITH_SELFTEST
-   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
+   const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
+   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!";
    const unsigned char ATE[] MEM_TEXT = "Test End";
  #endif
 #endif
@@ -160,8 +159,8 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'K'
  #ifdef WITH_SELFTEST
-   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
+   const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
+   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!";
    const unsigned char ATE[] MEM_TEXT = "Test End";
  #endif
 #endif
@@ -181,8 +180,8 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'C'
  #ifdef WITH_SELFTEST
-   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe!";
+   const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
+   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!";
    const unsigned char ATE[] MEM_TEXT = "Test End";
  #endif
 #endif
@@ -201,8 +200,8 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'C'
 #ifdef WITH_SELFTEST
-   const unsigned char SELFTEST[] MEM2_TEXT = "Zelftest mode..";
-   const unsigned char RELPROBE[] MEM2_TEXT = "isolate Probe";
+   const unsigned char SELFTEST[] MEM_TEXT = "Zelftest mode..";
+   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe";
    const unsigned char ATE[] MEM_TEXT = "Test Einde";
 #endif
 #endif
@@ -222,8 +221,8 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = {Cyr_v,'p','e',Cyr_m,Cyr_ja,' ',Cyr_t,'e','c',Cyr_t,Cyr_i,'p','o',Cyr_v,'a',Cyr_n,Cyr_i,Cyr_ja,Cyr_v,Cyr_y,Cyr_sch,Cyr_l,'o','!',0};
    #define Cathode_char 'C'
  #ifdef WITH_SELFTEST
-   const unsigned char SELFTEST[] MEM2_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM2_TEXT = {'o',Cyr_t,Cyr_k,Cyr_l,Cyr_ju,Cyr_tsch,Cyr_i,Cyr_t,'b',' ',Cyr_z,'o',Cyr_n,Cyr_d,0};
+   const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
+   const unsigned char RELPROBE[] MEM_TEXT = {'o',Cyr_t,Cyr_k,Cyr_l,Cyr_ju,Cyr_tsch,Cyr_i,Cyr_t,'b',' ',Cyr_z,'o',Cyr_n,Cyr_d,0};
    const unsigned char ATE[] MEM_TEXT = {Cyr_k,'o',Cyr_n,'e',Cyr_c,' ','c','a',Cyr_m,'o',Cyr_t,'e','c',Cyr_t,Cyr_i,'p','o',Cyr_v,'a',Cyr_n,Cyr_i,Cyr_ja,0};
  #endif
 #endif
@@ -253,7 +252,7 @@ End of configuration
  const unsigned char VCC_str[] MEM_TEXT = "VCC=";
 #if FLASHEND > 0x1fff
  const unsigned char ESR_str[] MEM_TEXT = " ESR=";
- const unsigned char EPR_str[] MEM_TEXT = "  EPR=";
+ const unsigned char VLOSS_str[] MEM_TEXT = " Vloss=";
  const unsigned char Lis_str[] MEM_TEXT = "L=";
  #ifndef WITH_UART
   #define WITH_VEXT
@@ -279,11 +278,11 @@ End of configuration
 #ifdef WITH_SELFTEST
  const unsigned char URefT[] MEM2_TEXT = "Ref=";
  const unsigned char RHfakt[] MEM2_TEXT = "RHf=";
- const unsigned char RH1L[] MEM2_TEXT = "RH-";
- const unsigned char RH1H[] MEM2_TEXT = "RH+";
- const unsigned char RLRL[] MEM2_TEXT = "+RL- 12 13 23";
- const unsigned char RHRH[] MEM2_TEXT = "+RH- 12 13 23";
- const unsigned char RHRL[] MEM2_TEXT = "RH/RL";
+ const unsigned char RH1L[] MEM_TEXT = "RH-";
+ const unsigned char RH1H[] MEM_TEXT = "RH+";
+ const unsigned char RLRL[] MEM_TEXT = "+RL- 12 13 23";
+ const unsigned char RHRH[] MEM_TEXT = "+RH- 12 13 23";
+ const unsigned char RHRL[] MEM_TEXT = "RH/RL";
  #define LCD_CLEAR
 #endif
  
@@ -291,7 +290,7 @@ End of configuration
  const unsigned char RIHI[] MEM_TEXT = "Ri_Hi=";
  const unsigned char RILO[] MEM_TEXT = "Ri_Lo=";
  const unsigned char C0_str[] MEM_TEXT = "C0 ";
- const unsigned char T50HZ[] MEM2_TEXT = " 50Hz";
+ const unsigned char T50HZ[] MEM_TEXT = " 50Hz";
 #endif
 #ifdef AUTO_CAL
  const unsigned char MinCap_str[] MEM_TEXT = " >100nF";
@@ -344,11 +343,11 @@ End of configuration
 				     0x00,
 				     0x00};	// Resistor Icon2
 
- const unsigned char PinRLtab[] MEM_TEXT = { (1<<(TP1*2)),
+ const unsigned char PinRLtab[] PROGMEM = { (1<<(TP1*2)),
 				     (1<<(TP2*2)),
 				     (1<<(TP3*2))};	// Table of commands to switch the  R-L resistors Pin 0,1,2
 
- const unsigned char PinADCtab[] MEM_TEXT = { (1<<TP1),
+ const unsigned char PinADCtab[] PROGMEM = { (1<<TP1),
 				     (1<<TP2),
 				     (1<<TP3)};	// Table of commands to switch the ADC-Pins 0,1,2
 
@@ -377,8 +376,8 @@ End of configuration
  // no MAIN_C
  #define COMMON extern
  #ifdef WITH_SELFTEST
-  extern const unsigned char SELFTEST[] MEM2_TEXT;
-  extern const unsigned char RELPROBE[] MEM2_TEXT;
+  extern const unsigned char SELFTEST[] MEM_TEXT;
+  extern const unsigned char RELPROBE[] MEM_TEXT;
   extern const unsigned char ATE[] MEM_TEXT;
  #endif
  #ifdef AUTO_CAL
@@ -477,7 +476,7 @@ COMMON struct cap_t {
   } cval_uncorrected;
 #if FLASHEND > 0x1fff
   unsigned int esr;		// serial resistance of C in 0.01 Ohm
-//  unsigned long epr;		// parallel resistance of C in 0.1 Ohm units
+  unsigned int v_loss;		// voltage loss 0.1%
 #endif
   uint8_t ca, cb;		//pins of capacitor
   int8_t cpre;			//Prefix for capacitor value  -12=p, -9=n, -6=µ, -3=m

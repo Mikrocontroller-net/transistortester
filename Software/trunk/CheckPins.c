@@ -60,15 +60,15 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 //  #define RR680PL (R_L_VAL + PIN_RP)
 //  #define RR680MI (R_L_VAL + PIN_RM)
 //#endif
-  LoPinRL = MEM_read_byte(&PinRLtab[LowPin]);		// intruction for LowPin R_L
+  LoPinRL = pgm_read_byte(&PinRLtab[LowPin]);		// intruction for LowPin R_L
   LoPinRH = LoPinRL + LoPinRL;				// intruction for LowPin R_H
-  TriPinRL = MEM_read_byte(&PinRLtab[TristatePin]);	// intruction for TristatePin R_L
+  TriPinRL = pgm_read_byte(&PinRLtab[TristatePin]);	// intruction for TristatePin R_L
   TriPinRH = TriPinRL + TriPinRL;			// intruction for TristatePin R_H
-  HiPinRL = MEM_read_byte(&PinRLtab[HighPin]);		// intruction for HighPin R_L
+  HiPinRL = pgm_read_byte(&PinRLtab[HighPin]);		// intruction for HighPin R_L
   HiPinRH = HiPinRL + HiPinRL;				// intruction for HighPin R_H
 
-  HiADCp = MEM_read_byte(&PinADCtab[HighPin]);		// intruction for ADC High-Pin 
-  LoADCp = MEM_read_byte(&PinADCtab[LowPin]);		// intruction for ADC Low-Pin
+  HiADCp = pgm_read_byte(&PinADCtab[HighPin]);		// intruction for ADC High-Pin 
+  LoADCp = pgm_read_byte(&PinADCtab[LowPin]);		// intruction for ADC Low-Pin
   HiADCm = HiADCp | TXD_MSK;
   HiADCp |= TXD_VAL;
   LoADCm = LoADCp | TXD_MSK;

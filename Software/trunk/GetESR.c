@@ -16,12 +16,109 @@
 
 #ifdef ADC_Sleep_Mode
 //  #define StartADCwait() ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV; /* enable ADC and Interrupt */
-  #define StartADCwait() set_sleep_mode(SLEEP_MODE_ADC);\
-    sleep_mode()		/* Start ADC, return if ADC has finished */
+//  #define StartADCwait() set_sleep_mode(SLEEP_MODE_ADC);
+//    sleep_mode()		/* Start ADC, return if ADC has finished */
+    #define StartADCwait() sleep_cpu()
 #else
 //  #define StartADCwait() ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; /* enable ADC and start */
     #define StartADCwait() ADCSRA = StartADCmsk; /* Start conversion */\
     while (ADCSRA & (1 << ADSC))  /* wait until conversion is done */
+#endif
+
+/************************************************************************/
+/* Predefine the wait time for switch off the load current for big caps */
+/************************************************************************/
+//         wdt_reset();		// with wdt_reset the timing can be adjusted,
+				// when time is too short, voltage is down before SH of ADC
+				// when time is too long, capacitor will be overloaded.
+				// That will cause too high voltage without current.
+#ifdef ADC_Sleep_Mode
+            /* Interrupt mode, big cap */
+ #if F_CPU == 8000000UL
+    #define DelayBigCap() wait10us();	/* 2.5 ADC clocks = 20us */ \
+           wait5us();		/*  */ \
+           wait2us();	/* with only 17 us delay the voltage goes down before SH */ \
+            /* delay 17us + 3 clock tics (CALL instead of RCALL) = 17.375 us @ 8 MHz */ \
+            /* + 21 clock tics delay from interrupt return, +2.625us = 20.0 */	\
+            wdt_reset();	/* 20.125 us  */ \
+            wdt_reset()		/* 20.25  us  */
+ #endif
+ #if F_CPU == 16000000UL
+    #define DelayBigCap() wait10us();	/* 2.5 ADC clocks = 20us */ \
+           wait5us();		/*  */ \
+           wait3us();	/* with only 18 us delay the voltage goes down before SH */ \
+            /* delay 18us + 3 clock tics (CALL instead of RCALL) = 18.1875 us */ \
+            /* + 21 clock tics delay from interrupt return, +1.3125us = 19.5 */ \
+            wait500ns(); 	/* 20.0626us   */ \
+            wdt_reset();	/* 20.125 us  */ \
+            wdt_reset();	/* 20.1875us  */ \
+            wdt_reset()		/* 20.25  us  */
+ #endif
+#else
+            /* Polling mode, big cap */
+ #if F_CPU == 8000000UL
+    #define DelayBigCap() wait10us();	/* 2.5 ADC clocks = 20us */ \
+           wait5us();		/*  */ \
+           wait3us();	/* with only 18 us delay the voltage goes down before SH */ \
+            /* delay 19us + 3 clock tics (CALL instead of RCALL) = 19.375 us @ 8 MHz */ \
+            /* + 7 clock tics delay from while loop, +0.875us  = 20.25 */ \
+           wdt_reset(); \
+           wdt_reset(); \
+           wdt_reset(); \
+           wdt_reset(); \
+           wdt_reset(); 
+ //             wdt_reset()	/* 20.375 us + */
+ #endif
+ #if F_CPU == 16000000UL
+    #define DelayBigCap() wait10us();	/* 2.5 ADC clocks = 20us */ \
+           wait5us();		/*  */ \
+           wait4us();	/* with only 18 us delay the voltage goes down before SH */ \
+         /* delay 19us + 3 clock tics (CALL instead of RCALL) = 19.1875 us */ \
+         /* + 7 clock tics delay from "while (ADCSRA&(1<<ADSC))" loop = 19.625 */ \
+            wait500ns(); 	/* 20.1875us   */ 
+//            wdt_reset();	/* 20.250 us + */ 
+//            wdt_reset()		/* 20.3125us + */
+ #endif
+#endif
+
+/************************************************************************/
+/* Predefine the wait time for switch off the load current for small caps */
+/************************************************************************/
+      	/* SH at 2.5 ADC clocks behind start = 5 us */
+#ifdef ADC_Sleep_Mode
+            /* Interrupt mode, small cap */
+ #if F_CPU == 8000000UL
+    #define DelaySmallCap() wait2us();	/* with only 4 us delay the voltage goes down before SH */ \
+            /* delay 2us + 1 clock tics (CALL instead of RCALL) = 2.125 us @ 8 MHz */ \
+            /* + 21 clock tics delay from interrupt return, +2.625us = 4.75 */ \
+            wdt_reset();	/* 4.8750 us  */ \
+            wdt_reset();	/* 5.0    us  */ \
+            wdt_reset()		/* 5.125  us  */
+ #endif
+ #if F_CPU == 16000000UL
+    #define DelaySmallCap() wait3us();	/* with only 18 us delay the voltage goes down before SH */ \
+            /* delay 3us + 1 clock tics (CALL instead of RCALL) = 3.0625 us */ \
+            /* + 21 clock tics delay from interrupt return, +1.3125us = 4.375 */ \
+            wdt_reset();	/* 4.4375 us  */ \
+            wait500ns(); 	/* 5.0    us  */ \
+            wdt_reset();	/* 5.0625 us  */ \
+            wdt_reset()		/* 5.1250 us  */ 
+ #endif
+#else
+            /* Polling mode, small cap */
+ #if F_CPU == 8000000UL
+    #define DelaySmallCap() wait4us();	/* with only 4 us delay the voltage goes down before SH */ \
+            /* delay 4us + 1 clock tics (CALL instead of RCALL) = 4.125 us @ 8 MHz */ \
+            /* + 7 clock tics delay from while loop, +0.875us  = 5.000 */ 
+//            wdt_reset()		/* 5.125 us   */
+ #endif
+ #if F_CPU == 16000000UL
+    #define DelaySmallCap() wait4us();	/* with only 4 us delay the voltage goes down before SH */ \
+            /* delay 4us + 1 clock tics (CALL instead of RCALL) = 4.0625 us */ \
+            /* + 7 clock tics delay from "while (ADCSRA&(1<<ADSC))" loop, +0.4375 = 4.5000 */ \
+            wait500ns(); 	/* 5.0625 us  */ \
+            wdt_reset()		/* 5.1250 us  */ 
+ #endif
 #endif
 
 //=================================================================
@@ -30,6 +127,7 @@ void GetESR() {
   //  measure the ESR value of capacitor
   unsigned int adcv[3];		// array for 3 ADC readings
   unsigned long sumvolt[3];	// array for 3 sums of ADC readings
+  unsigned long cap_val_nF;
   uint8_t HiPinR_L;		// used to switch 680 Ohm to HighPin
   uint8_t HiADC;		// used to switch Highpin directly to GND or VCC
   uint8_t LoPinR_L;		// used to switch 680 Ohm to LowPin
@@ -40,12 +138,14 @@ void GetESR() {
   uint8_t big_cap;
   int8_t esr0;			// used for ESR zero correction
 
-  while (cap.cpre_max < -9) { // set cval to nF unit
-      cap.cval_max /= 10;		// reduce value by factor ten
-      cap.cpre_max++;		// take next decimal prefix
+  ii = cap.cpre_max;
+  cap_val_nF = cap.cval_max;
+  while (ii < -9) { // set cval to nF unit
+      cap_val_nF /= 10;		// reduce value by factor ten
+      ii++;		// take next decimal prefix
   }
-  if (cap.cval_max < (1800/4)) return;			//capacity lower than 1.8 uF
-  if (cap.cval_max > (1800*2)) {
+  if (cap_val_nF < (1800/4)) return;			//capacity lower than 1.8 uF
+  if (cap_val_nF > (1800*2)) {
      /* normal ADC-speed, ADC-Clock 8us */
 #ifdef ADC_Sleep_Mode
      StartADCmsk = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV; /* enable ADC and Interrupt */
@@ -54,21 +154,25 @@ void GetESR() {
      StartADCmsk =  (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; /* enable and start ADC */
 #endif
      big_cap = 1;
+     if (cap_val_nF > 50000) {
+        big_cap = 2;	/* very big cap */
+     }
   } else {
      /* fast ADC-speed, ADC-Clock 2us */
 #ifdef ADC_Sleep_Mode
      StartADCmsk = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | FAST_CLOCK_DIV; /* enable ADC and Interrupt */
      ADCSRA = StartADCmsk;		/* enable ADC and Interrupt */
+     SMCR = (1 << SM0) | (1 <<SE);	/* set ADC Noise Reduction and Sleep Enable */
 #else
      StartADCmsk =  (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | FAST_CLOCK_DIV; /* enable and start ADC */
 #endif
      big_cap = 0;
   }
   lcd_fix_string(ESR_str);		// " ESR="
-  LoADC = MEM_read_byte(&PinADCtab[cap.ca]) | TXD_MSK;
-  HiADC = MEM_read_byte(&PinADCtab[cap.cb]) | TXD_MSK;
-  LoPinR_L = MEM_read_byte(&PinRLtab[cap.ca]);  //R_L mask for LowPin R_L load
-  HiPinR_L = MEM_read_byte(&PinRLtab[cap.cb]);	//R_L mask for HighPin R_L load
+  LoADC = pgm_read_byte(&PinADCtab[cap.ca]) | TXD_MSK;
+  HiADC = pgm_read_byte(&PinADCtab[cap.cb]) | TXD_MSK;
+  LoPinR_L = pgm_read_byte(&PinRLtab[cap.ca]);  //R_L mask for LowPin R_L load
+  HiPinR_L = pgm_read_byte(&PinRLtab[cap.cb]);	//R_L mask for HighPin R_L load
 
 #if PROCESSOR_TYP == 1280
     /* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
@@ -110,139 +214,16 @@ void GetESR() {
          StartADCwait();			// set ADCSRA Interrupt Mode, sleep
          adcv[0] = ADCW;			// Voltage LowPin with current
          ADMUX = SelectHighPin;
-         if (big_cap) {
+         if (big_cap != 0) {
             StartADCwait();			// ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV;	
 //         ADCSRA |= (1<<ADSC);			// Start Conversion, real start is next rising edge of ADC clock
             ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; // enable ADC and start with ADSC
-            wait10us();				// SH at 2.5 ADC clocks behind start = 20 us
-            wait5us();			
-#ifdef ADC_Sleep_Mode
-            // Interrupt mode, big cap
- #if F_CPU == 8000000UL
-            wait1us();				// with only 17 us delay the voltage goes down before SH
-            // delay 16us + 3 clock tics (CALL instead of RCALL) = 16.375 us @ 8 MHz
-            // + 24 clock tics delay from interrupt return, +3.00us = 19.375
-            wdt_reset();	/* 19.5   us - */
-            wdt_reset();	/* 19.625 us - */
-            wdt_reset();	/* 19.75  us - */
-            wdt_reset();	/* 19.875 us - */
-            wdt_reset();	/* 20.0   us - */
-            wdt_reset();	/* 20.125 us  */
-            wdt_reset();	/* 20.25  us  */
- #endif
- #if F_CPU == 16000000UL
-            wait3us();				// with only 18 us delay the voltage goes down before SH
-            // delay 18us + 3 clock tics (CALL instead of RCALL) = 18.1875 us
-            // + 24 clock tics delay from interrupt return, +1.50us = 19.6875
-            wdt_reset();	/* 19.75  us - */
-            wdt_reset();	/* 19.8125us - */
-            wdt_reset();	/* 19.875 us - */
-            wdt_reset();	/* 19.9375us - */
-            wdt_reset();	/* 20.00  us - */
-            wdt_reset();	/* 20.0625us  */
-            wdt_reset();	/* 20.125 us  */
-            wdt_reset();	/* 20.1875us  */
-            wdt_reset();	/* 20.25  us  */
- #endif
-#else
-            // Polling mode, big cap
- #if F_CPU == 8000000UL
-            wait4us();				// with only 18 us delay the voltage goes down before SH
-            // delay 19us + 3 clock tics (CALL instead of RCALL) = 19.375 us @ 8 MHz
-            // + 7 clock tics delay from while loop, +0.875us  = 20.25
-//         wdt_reset();	/* 19.375 us - */
-//         wdt_reset();	/* 19.5   us - */
-//         wdt_reset();	/* 19.625 us - */
-//         wdt_reset();	/* 19.75  us - */
-//         wdt_reset();	/* 19.875 us - */
-//         wdt_reset();	/* 20.0   us - */
-//         wdt_reset();	/* 20.125 us  (1.1 , 0.63) */
-//         wdt_reset();	/* 20.25  us  (1.0 , 0.60) */
-              wdt_reset(); /* 20.375 us + */
- #endif
- #if F_CPU == 16000000UL
-         wait4us();				// with only 18 us delay the voltage goes down before SH
-         // delay 19us + 3 clock tics (CALL instead of RCALL) = 19.1875 us
-         // + 7 clock tics delay from "while (ADCSRA&(1<<ADSC))" loop = 19.625
-//         wdt_reset();	/* 19.6875us - */
-//         wdt_reset();	/* 19.75  us - */
-//         wdt_reset();	/* 19.8125us - */
-//         wdt_reset();	/* 19.875 us - */
-//         wdt_reset();	/* 19.9375us - */
-//         wdt_reset();	/* 20.00  us - */
-//         wdt_reset();	/* 20.0625us  */
-//         wdt_reset();	/* 20.125 us  */
-//         wdt_reset();	/* 20.1875us  */
-            wait500ns();
-            wdt_reset();	/* 20.250 us + */
-            wdt_reset();	/* 20.3125us + */
- #endif
-#endif
-//         wdt_reset();				// with wdt_reset the timing can be adjusted,
-						// when time is too short, voltage is down before SH of ADC
-						// when time is too long, capacitor will be overloaded.
-						// That will cause too high voltage without current.
+            DelayBigCap();		// wait predefined time
          } else {
             StartADCwait();			// ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV;	
             ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | FAST_CLOCK_DIV; // enable ADC and start with ADSC
          		// SH at 2.5 ADC clocks behind start = 5 us
-#ifdef ADC_Sleep_Mode
-            // Interrupt mode, small cap
- #if F_CPU == 8000000UL
-            wait4us();				// with only 4 us delay the voltage goes down before SH
-            // delay 4us + 1 clock tics (CALL instead of RCALL) = 4.125 us @ 8 MHz
-            // + 24 clock tics delay from interrupt return, +3.00us = 7.125
-//            wdt_reset();	/* 7.25  us  */
- #endif
- #if F_CPU == 16000000UL
-            wait3us();				// with only 18 us delay the voltage goes down before SH
-            // delay 3us + 1 clock tics (CALL instead of RCALL) = 3.0625 us
-            // + 24 clock tics delay from interrupt return, +1.50us = 4.5625
-//            wdt_reset();	/* 4.625  us  */
-//            wdt_reset();	/* 4.6875 us  */
-//            wdt_reset();	/* 4.750  us  */
-//            wdt_reset();	/* 4.8125 us  */
-//            wdt_reset();	/* 4.875  us  */
-//            wdt_reset();	/* 4.9375 us  */
-//            wdt_reset();	/* 5.0    us  */
-//            wdt_reset();	/* 5.0625 us  */
-            wait500ns();	/* 5.125  us  */
-//            wdt_reset();	/* 5.1875 us  */
-//            wdt_reset();	/* 5.25   us  */
- #endif
-#else
-            // Polling mode, small cap
- #if F_CPU == 8000000UL
-            wait4us();				// with only 4 us delay the voltage goes down before SH
-            // delay 4us + 1 clock tics (CALL instead of RCALL) = 4.125 us @ 8 MHz
-            // + 7 clock tics delay from while loop, +0.875us  = 5.000
-            wdt_reset();	/* 5.125 us   */
-//            wdt_reset();	/* 5.25  us   */
-//            wdt_reset();	/* 4.375 us   */
-//            wdt_reset();	/* 4.5   us   */
-//            wdt_reset();	/* 4.625 us   */
-//            wdt_reset();	/* 4.75  us   */
-//            wdt_reset();	/* 4.875 us   */
-//            wdt_reset();	/* 5.0   us   */
- #endif
- #if F_CPU == 16000000UL
-            wait4us();				// with only 4 us delay the voltage goes down before SH
-            // delay 4us + 1 clock tics (CALL instead of RCALL) = 4.0625 us
-            // + 7 clock tics delay from "while (ADCSRA&(1<<ADSC))" loop, +0.4375 = 4.5000
-//            wdt_reset();	/* 4.5625 us  */
-//            wdt_reset();	/* 4.625  us  */
-//            wdt_reset();	/* 4.6875 us  */
-//            wdt_reset();	/* 4.750  us  */
-//            wdt_reset();	/* 4.8125 us  */
-//            wdt_reset();	/* 4.875  us  */
-//            wdt_reset();	/* 4.9375 us  */
-//            wdt_reset();	/* 5.0    us  */
-            wait500ns(); 	/* 5.0625 us  */
-            wdt_reset();	/* 5.1250 us  */
-//            wdt_reset();	/* 5.1875 us  */
-//            wdt_reset();	/* 5.25   us  */
- #endif
-#endif
+            DelaySmallCap();		// wait predefined time
          }
          R_DDR = 0;				// switch current off,  SH is 1.5 ADC clock behind real start
          R_PORT = 0;
@@ -272,127 +253,17 @@ void GetESR() {
          StartADCwait();			// set ADCSRA Interrupt Mode, sleep
          adcv[0] = ADCW;			// Voltage HighPin with current
          ADMUX = SelectLowPin;
-         if (big_cap) {
+         if (big_cap != 0) {
             StartADCwait();			// set ADCSRA Interrupt Mode, sleep
 //         ADCSRA |= (1<<ADSC);			// Start Conversion, real start is next rising edge of ADC clock
             ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; // enable ADC and start with ADSC
-            wait10us();				// 2.5 ADC clocks = 20 us
-            wait5us();			
-#ifdef ADC_Sleep_Mode
- #if F_CPU == 8000000UL
-            // Interrupt mode, big cap
-            wait1us();				// with only 16 us delay the voltage goes down before SH
-            // delay 16us + 3 clock tics (CALL instead of RCALL) = 16.375 us @ 8 MHz
-            // + 24 clock tics delay from interrupt return, +3.00us = 19.375
-            wdt_reset();	/* 19.5   us - */
-            wdt_reset();	/* 19.625 us - */
-            wdt_reset();	/* 19.75  us - */
-            wdt_reset();	/* 19.875 us - */
-            wdt_reset();	/* 20.0   us - */
-            wdt_reset();	/* 20.125 us  */
-            wdt_reset();	/* 20.25  us  */
- #endif
- #if F_CPU == 16000000UL
-            wait3us();				// with only 18 us delay the voltage goes down before SH
-            // delay 18us + 3 clock tics (CALL instead of RCALL) = 18.1875 us
-            // + 24 clock tics delay from interrupt return, +1.50us = 19.6875
-            wdt_reset();	/* 19.75  us - */
-            wdt_reset();	/* 19.8125us - */
-            wdt_reset();	/* 19.875 us - */
-            wdt_reset();	/* 19.9375us - */
-            wdt_reset();	/* 20.00  us - */
-            wdt_reset();	/* 20.0625us  */
-            wdt_reset();	/* 20.125 us  */
-            wdt_reset();	/* 20.1875us  */
-            wdt_reset();	/* 20.250 us  */
- #endif
-#else
-            // Polling mode big cap
- #if F_CPU == 8000000UL
-            wait4us();				// with only 18 us delay the voltage goes down before SH
-            // delay 18us + 3 clock tics (CALL instead of RCALL) = 19.375 us @ 8 MHz
-            // + 7 clock tics delay from while loop, +0.875us  = 20.25
-            wdt_reset(); /* 20.375 us + */
- #endif
- #if F_CPU == 16000000UL
-            wait4us();				// with only 18 us delay the voltage goes down before SH
-            // delay 19us + 3 clock tics (CALL instead of RCALL) = 19.1875 us
-            // + 7 clock tics delay from "while (ADCSRA&(1<<ADSC))" loop = 19.625
-            wait500ns();
-            wdt_reset();	/* 20.250 us  */
-            wdt_reset();	/* 20.3125us  */
- #endif
-#endif
-//         wdt_reset();				// with wdt_reset the timing can be adjusted,
-						// when time is too short, voltage is down before SH of ADC
-						// when time is too long, capacitor will be overloaded.
-						// That will cause too high voltage without current.
+            DelayBigCap();		// wait predefined time
          } else {
             StartADCwait();			// set ADCSRA Interrupt Mode, sleep
 //         ADCSRA |= (1<<ADSC);			// Start Conversion, real start is next rising edge of ADC clock
             ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | FAST_CLOCK_DIV; // enable ADC and start with ADSC
          			// 2.5 ADC clocks = 5 us
-#ifdef ADC_Sleep_Mode
-            // Interrupt mode, small cap
- #if F_CPU == 8000000UL
-            wait4us();				// with only 2 us delay the voltage goes down before SH
-            // delay 4us + 1 clock tic (CALL instead of RCALL) = 4.125 us @ 8 MHz
-            // + 24 clock tics delay from interrupt return, +3.00us = 7.125
-//            wdt_reset();	/* 7.25  us  */
- #endif
- #if F_CPU == 16000000UL
-            wait3us();				// with only 18 us delay the voltage goes down before SH
-            // delay 3us + 1 clock tic (CALL instead of RCALL) = 3.0625 us
-            // + 24 clock tics delay from interrupt return, +1.50us = 4.5625
-//            wdt_reset();	/* 4.625 us  */
-//            wdt_reset();	/* 4.6875us  */
-//            wdt_reset();	/* 4.750 us  */
-//            wdt_reset();	/* 4.8125us  */
-//            wdt_reset();	/* 4.875 us  */
-//            wdt_reset();	/* 4.9375us  */
-//            wdt_reset();	/* 5.0   us  */
-//            wdt_reset();	/* 5.0625us  */
-            wait500ns();	/* 5.125  us   */
-//            wdt_reset();	/* 5.1875us  */
-//            wdt_reset();	/* 5.250 us  */
- #endif
-#else
-            // Polling mode small cap
- #if F_CPU == 8000000UL
-            wait4us();				// with only 18 us delay the voltage goes down before SH
-            // delay 4us + 1 clock tic (CALL instead of RCALL) = 4.125 us @ 8 MHz
-            // + 7 clock tics delay from while loop, +0.875us  = 5.00 us
-            wdt_reset();	/* 5.125 us   */
-//            wdt_reset();	/* 5.25  us   */
-//            wdt_reset();	/* 4.375 us   */
-//            wdt_reset();	/* 4.5   us   */
-//            wdt_reset();	/* 4.625 us   */
-//            wdt_reset();	/* 4.75  us   */
-//            wdt_reset();	/* 4.875 us   */
-//            wdt_reset();	/* 5.0   us   */
- #endif
- #if F_CPU == 16000000UL
-            wait4us();				// with only 18 us delay the voltage goes down before SH
-            // delay 4us + 1 clock tic (CALL instead of RCALL) = 4.0625 us
-            // + 7 clock tics delay from "while (ADCSRA&(1<<ADSC))" loop, 0.4375 = 4.5
-//            wdt_reset();	/* 4.5625us  */
-//            wdt_reset();	/* 4.625 us  */
-//            wdt_reset();	/* 4.6875us  */
-//            wdt_reset();	/* 4.750 us  */
-//            wdt_reset();	/* 4.8125us  */
-//            wdt_reset();	/* 4.875 us  */
-//            wdt_reset();	/* 4.9375us  */
-//            wdt_reset();	/* 5.0   us  */
-            wait500ns();	/* 5.0625 us  */
-            wdt_reset();	/* 5.125  us  */
-//            wdt_reset();	/* 5.1875 us  */
-//            wdt_reset();	/* 5.250  us  */
- #endif
-#endif
-//         wdt_reset();				// with wdt_reset the timing can be adjusted,
-						// when time is too short, voltage is down before SH of ADC
-						// when time is too long, capacitor will be overloaded.
-						// That will cause too high voltage without current.
+            DelaySmallCap();		// wait predefined time
          }
          R_DDR = 0;				// switch current off, SH is 1.5 ADC clock ticks behind real start
          R_PORT = 0;
@@ -414,26 +285,26 @@ void GetESR() {
       sumvolt[2] += adcv[2];			// add  HighPin voltages without current
    } // end for
 
-//#define ESR_DEBUG
+#define ESR_DEBUG
 
 #ifdef ESR_DEBUG
    DisplayValue(sumvolt[0],0,'L',4);	// LowPin
 #endif
-   if (big_cap) {
+   if (big_cap != 0) {
    // we need to compensate the time delay between reading the LowPin Voltage and the
    // HighPin Voltage, which is usually 2 * 14 * 8 us = 224 us.
    // With the loading of the capacitor the current will sink, so we get a too high voltage at
    // the LowPin. The velocity of degration is inversely proportional to time constant (represented by capacity value).
    // Time constant for 1uF & 720 Ohm is 720us
-//   sumvolt[0] -= (sumvolt[0] * 150UL)  / cap.cval_max;	// Version 1.04k
-      sumvolt[0] -= (sumvolt[0] * 345UL)  / cap.cval_max;
+//   sumvolt[0] -= (sumvolt[0] * 150UL)  / cap_val_nF;	// Version 1.04k
+      sumvolt[0] -= (sumvolt[0] * 345UL)  / cap_val_nF;
    } else {
-//      sumvolt[0] -= (sumvolt[0] * 86UL)  / cap.cval_max;
-//      sumvolt[0] -= (sumvolt[0] * 56UL)  / cap.cval_max;
+//      sumvolt[0] -= (sumvolt[0] * 86UL)  / cap_val_nF;
+//      sumvolt[0] -= (sumvolt[0] * 56UL)  / cap_val_nF;
 #ifdef ESR_DEBUG
-      sumvolt[0] -= (sumvolt[0] * 119UL)  / cap.cval_max;
+      sumvolt[0] -= (sumvolt[0] * 119UL)  / cap_val_nF;
 #else
-      sumvolt[0] -= (sumvolt[0] * 121UL)  / cap.cval_max;
+      sumvolt[0] -= (sumvolt[0] * 121UL)  / cap_val_nF;
 #endif
    }
 #ifdef ESR_DEBUG
@@ -480,7 +351,7 @@ void GetESR() {
       jj = ((sumvolt[2] - sumvolt[1]) * 10 * (unsigned long)RRpinMI) / sumvolt[0];
       lcd_data('0');
       if ((jj < 100) && (jj > 0)) {
-         if (big_cap) {
+         if (big_cap == 2) {
             lcd_data('?');			// mark ESR zero correction
             esr0 -= jj;			// correct ESR_ZERO by negative resistance
             eeprom_write_byte((uint8_t *)(&EE_ESR_ZERO), (int8_t)esr0);       // fix new zero offset 
@@ -492,6 +363,10 @@ void GetESR() {
 //   lcd_line3();
 //   DisplayValue(jj,0,' ',4);	// correction for ESR_ZERO
 //   DisplayValue(1000+esr0,0,' ',4);	// new ESR_ZERO
+
+ #ifdef ADC_Sleep_Mode
+     SMCR = (0 << SM0) | (0 << SE);	/* clear ADC Noise Reduction and Sleep Enable */
+ #endif
 #endif
   return;
 }

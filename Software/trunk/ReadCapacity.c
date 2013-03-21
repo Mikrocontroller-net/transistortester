@@ -43,15 +43,15 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   uint8_t LoADC;
   uint8_t ii;
 #if FLASHEND > 0x1fff
-//  unsigned long parallel_resistance;	// equivalent parallel resistance 
+  unsigned int vloss;	// lost voltage after load pulse in 0.1% 
 #endif
 
 #ifdef AUTO_CAL
   pin_combination = (HighPin * 3) + LowPin - 1;	// coded Pin combination for capacity zero offset
 #endif
 
-  LoADC = MEM_read_byte(&PinADCtab[LowPin]) | TXD_MSK;
-  HiPinR_L = MEM_read_byte(&PinRLtab[HighPin]);	//R_L mask for HighPin R_L load
+  LoADC = pgm_read_byte(&PinADCtab[LowPin]) | TXD_MSK;
+  HiPinR_L = pgm_read_byte(&PinRLtab[HighPin]);	//R_L mask for HighPin R_L load
   HiPinR_H = HiPinR_L + HiPinR_L;	//double for HighPin R_H load
 
 #if DebugOut == 10
@@ -82,7 +82,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   
 #if FLASHEND > 0x1fff
   cap.esr = 0;				// set ESR of capacitor to zero
-//  parallel_resistance = 0;				// set EPR of capacitor to zero
+  vloss = 0;				// set lost voltage to zero
 #endif
   cap.cval = 0;				// set capacity value to zero
   cap.cpre = -12;			//default unit is pF
@@ -184,16 +184,12 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      adcv[3] = 0;			// no lost voltage
   }
 #if FLASHEND > 0x1fff
-//  // compute equivalent parallel resistance from voltage drop
-//  if (adcv[3] > 0) {
-//     // there is any voltage drop (adcv[3]) !
-//     // adcv[2] is the loaded voltage.
-//     // First step compute the resistance with same current for
-//     // discharging the loaded voltage as loading with (RR680PL + RRpinMI). 
-//     parallel_resistance = (adcv[2] * (unsigned long)(RR680PL + RRpinMI)) / ADCconfig.U_AVCC;
-//     // scale this resistance with the real voltage drop in relation to the loaded voltage.
-//     parallel_resistance = (parallel_resistance * adcv[2]) / adcv[3];
-//  }
+  // compute equivalent parallel resistance from voltage drop
+  if (adcv[3] > 0) {
+     // there is any voltage drop (adcv[3]) !
+     // adcv[2] is the loaded voltage.
+     vloss = (unsigned long)(adcv[3] * 1000UL) / adcv[2];
+  }
 #endif
   if (adcv[3] > 100) {
      // more than 100mV is lost during load time
@@ -397,7 +393,9 @@ checkDiodes:
          // we have found a greater one
          cap.cval_max = cap.cval;
          cap.cpre_max = cap.cpre;
-//         cap.epr = parallel_resistance;
+#if FLASHEND > 0x1fff
+         cap.v_loss = vloss;		// lost voltage in 0.01%
+#endif
          cap.ca = LowPin;		// save LowPin
          cap.cb = HighPin;		// save HighPin
       }

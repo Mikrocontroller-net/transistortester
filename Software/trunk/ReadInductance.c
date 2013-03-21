@@ -58,8 +58,8 @@ void ReadInductance(void) {
            LowPin = resis[found].rb;
            HighPin = resis[found].ra;
         }
-        HiADC = MEM_read_byte(&PinADCtab[HighPin]);
-        LoPinR_L = MEM_read_byte(&PinRLtab[LowPin]);	//R_L mask for HighPin R_L load
+        HiADC = pgm_read_byte(&PinADCtab[HighPin]);
+        LoPinR_L = pgm_read_byte(&PinRLtab[LowPin]);	//R_L mask for HighPin R_L load
         //==================================================================================
         // Measurement of Inductance values
         R_PORT = 0;		// switch R port to GND

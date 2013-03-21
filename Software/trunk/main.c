@@ -604,12 +604,13 @@ start:
      lcd_fix_string(CapZeich);		// capacitor sign
      lcd_testpin(cap.cb);		//Pin number 2
 #if FLASHEND > 0x1fff
-//     wait_about1s();
-//     GetEPR();				// get EPR of capacitor
-//     if (cap.epr != 0) {
-//        lcd_fix_string(EPR_str);	// "  EPR="
-//        DisplayValue(cap.epr,-1,LCD_CHAR_OMEGA,2);
-//     }
+ #if FLASHEND > 0x3fff
+     GetVloss();			// get Voltage loss of capacitor
+ #endif
+     if (cap.v_loss != 0) {
+        lcd_fix_string(VLOSS_str);	// "  Vloss="
+        DisplayValue(cap.v_loss,-1,'%',2);
+     }
 #endif
      lcd_line2(); 			//2. row 
      DisplayValue(cap.cval_max,cap.cpre_max,'F',4);
@@ -842,8 +843,8 @@ void RefVoltage(void) {
      tabind = 7;		// limit to end of table
   }
   // interpolate the table of factors
-  y1 = MEM_read_word(&RHtab[tabind]);
-  y2 = MEM_read_word(&RHtab[tabind+1]);
+  y1 = pgm_read_word(&RHtab[tabind]);
+  y2 = pgm_read_word(&RHtab[tabind+1]);
   // RHmultip is the interpolated factor to compute capacity from load time with 470k
   RHmultip = ((y1 - y2) * tabres + (Ref_Tab_Abstand/2)) / Ref_Tab_Abstand + y2;
  }
@@ -886,11 +887,11 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
 
 
   Limit = 100;				/* scale value down to 2 digits */
-  if (digits == 3) Limit = 1000;
-  if (digits == 4) Limit = 10000;
+  if (digits == 3) Limit = 1000;	/* scale value down to 3 digits */
+  if (digits == 4) Limit = 10000;	/* scale value down to 4 digits */
   while (Value >= Limit)
   {
-    Value += 5;				/* for automagic rounding */
+    Value += 5;				/* for automatic rounding */
     Value = Value / 10;			/* scale down by 10^1 */
     Exponent++;				/* increase exponent by 1 */
   }

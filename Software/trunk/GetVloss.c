@@ -14,7 +14,7 @@ void GetVloss() {
   unsigned int tmpint;
   unsigned int adcv[4];
   union t_combi{
-  unsigned long dw;     // capacity value without corrections
+  unsigned long dw;     // capacity value  in 100nF units
   uint16_t w[2];
   } lval;
   uint8_t ii;
@@ -32,17 +32,15 @@ void GetVloss() {
   R_DDR = HiPinR_L;			// switch R_L port for HighPin to output (GND)
   adcv[0] = ReadADC(cap.cb);		// voltage before any load 
 // ******** should adcv[0] be measured without current???
-//  ovcnt16 = 0;
-//  if (cap.cpre_max == -12) ovcnt16 = (cap.cval_max + 50000) / 100000UL;
-//  if (cap.cpre_max == -11) ovcnt16 = (cap.cval_max + 5000) / 10000UL;
-//  if (cap.cpre_max == -10) ovcnt16 = (cap.cval_max + 500) / 1000;
-//  if (cap.cpre_max == -9)  ovcnt16 = (cap.cval_max + 50) / 100;
   if (cap.cpre_max > -9) return;	// too much capacity
   lval.dw = cap.cval_max;
   for (ii=cap.cpre_max+12;ii<5;ii++) {
      lval.dw = (lval.dw + 5) / 10;
   }
-  if ((lval.w[0] == 0) || (lval.w[0] > 500)) return;
+  if ((lval.dw == 0) || (lval.dw > 500)) {
+     /* capacity more than 50uF, Voltage loss is already measured  */
+     return;
+  }
   R_PORT = HiPinR_L;			//R_L to 1 (VCC) 
   R_DDR = HiPinR_L;			//switch Pin to output, across R to GND or VCC
   for (tmpint=0;tmpint<lval.w[0];tmpint+=2) {
@@ -82,7 +80,6 @@ void GetVloss() {
   if (adcv[1] > 0) {
      // there is any voltage drop (adcv[1]) !
      // adcv[2] is the loaded voltage.
-//     cap.v_loss = (unsigned long)(adcv[1] * 500UL) / adcv[2];
      cap.v_loss = (unsigned long)(adcv[1] * 500UL) / adcv[2];
   }
 #if 0

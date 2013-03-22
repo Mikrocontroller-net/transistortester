@@ -604,9 +604,7 @@ start:
      lcd_fix_string(CapZeich);		// capacitor sign
      lcd_testpin(cap.cb);		//Pin number 2
 #if FLASHEND > 0x1fff
- #if FLASHEND > 0x3fff
      GetVloss();			// get Voltage loss of capacitor
- #endif
      if (cap.v_loss != 0) {
         lcd_fix_string(VLOSS_str);	// "  Vloss="
         DisplayValue(cap.v_loss,-1,'%',2);

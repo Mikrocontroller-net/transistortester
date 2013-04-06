@@ -613,7 +613,11 @@ start:
      lcd_line2(); 			//2. row 
      DisplayValue(cap.cval_max,cap.cpre_max,'F',4);
 #if FLASHEND > 0x1fff
-     GetESR();				// get ESR of capacitor
+     cap.esr = GetESR(cap.cb, cap.ca);		// get ESR of capacitor
+     if ( cap.esr < 65530) {
+        lcd_fix_string(ESR_str);
+        DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
+     }
 #endif
      goto end;
   }
@@ -710,8 +714,17 @@ void mVAusgabe(uint8_t nn) {
 
 void RvalOut(uint8_t ii) {	
    // output of resistor value
-
+#if FLASHEND > 0x1fff
+   uint16_t rr;
+   if ((resis[ii].rx < 100) && (resis[0].lx == 0)) {
+      rr = GetESR(resis[ii].ra,resis[ii].rb);
+      DisplayValue(rr,-2,LCD_CHAR_OMEGA,3);
+   } else {
+      DisplayValue(resis[ii].rx,-1,LCD_CHAR_OMEGA,4);
+   }
+#else
    DisplayValue(resis[ii].rx,-1,LCD_CHAR_OMEGA,4);
+#endif
    lcd_space();
  }
 

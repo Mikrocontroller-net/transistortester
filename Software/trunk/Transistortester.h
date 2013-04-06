@@ -12,6 +12,7 @@
 #include "config.h"
 #include "lcd-routines.h"
 #include "wait1000ms.h"
+#include "part_defs.h"
 
 
 #if defined (MAIN_C)
@@ -368,7 +369,7 @@ End of configuration
   // LoPin:HiPin                        2:1    3:1    1:2                    :     3:2                   1:3    2:3
    const uint8_t c_zero_tab[] EEMEM = { C_NULL,C_NULL,C_NULL+TP2_CAP_OFFSET,C_NULL,C_NULL+TP2_CAP_OFFSET,C_NULL,C_NULL }; //table of zero offsets
 #endif
-  const uint8_t EE_ESR_ZERO EEMEM = ESR_ZERO;	// zero offset of ESR measurement
+  const uint8_t EE_ESR_ZEROtab[] EEMEM = {ESR_ZERO, ESR_ZERO, ESR_ZERO, ESR_ZERO};	// zero offset of ESR measurement
 //End of EEPROM-Strings
 // Multiplier for capacity measurement with R_H (470KOhm)
   unsigned int RHmultip=DEFAULT_RH_FAKT;
@@ -387,7 +388,7 @@ End of configuration
   extern uint16_t ref_offset;
   extern uint8_t c_zero_tab[];
  #endif
-  extern const uint8_t EE_ESR_ZERO EEMEM;	// zero offset of ESR measurement
+  extern const uint8_t EE_ESR_ZEROtab[] EEMEM;	// zero offset of ESR measurement
   extern  const uint16_t RLtab[];
 
  #if FLASHEND > 0x1fff
@@ -404,32 +405,6 @@ End of configuration
   extern const unsigned char PinADCtab[];
   extern unsigned int RHmultip;
 #endif
-
-
-//definitions of parts
-#define PART_NONE 0
-#define PART_DIODE 1
-#define PART_TRANSISTOR 2
-#define PART_FET 3
-#define PART_TRIAC 4
-#define PART_THYRISTOR 5
-#define PART_RESISTOR 6
-#define PART_CAPACITOR 7
-#define PART_CELL 8
-
-//End (parts)
-//special definition for different parts 
-//FETs
-#define PART_MODE_N_E_MOS 2
-#define PART_MODE_P_E_MOS 3
-#define PART_MODE_N_D_MOS 4
-#define PART_MODE_P_D_MOS 5
-#define PART_MODE_N_JFET 6
-#define PART_MODE_P_JFET 7
-
-//Bipolar
-#define PART_MODE_NPN 1
-#define PART_MODE_PNP 2
 
 
 struct Diode_t {

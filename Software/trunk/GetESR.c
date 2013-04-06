@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "Transistortester.h"
 
-#define MAX_CNT 128
+#define MAX_CNT 255
 
 /* The sleep mode for ADC can be used. It is implemented for 8MHz and 16MHz operation */
 /* But the ESR result is allways higher than the results with wait mode. */
@@ -13,6 +13,7 @@
 /* I have found no reason, why a reset of the ADC clock divider should occur during ESR measurement. */ 
 //#define ADC_Sleep_Mode
 
+#define ESR_DEBUG
 
 #ifdef ADC_Sleep_Mode
 //  #define StartADCwait() ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV; /* enable ADC and Interrupt */
@@ -35,9 +36,9 @@
 #ifdef ADC_Sleep_Mode
             /* Interrupt mode, big cap */
  #if F_CPU == 8000000UL
-    #define DelayBigCap() wait10us();	/* 2.5 ADC clocks = 20us */ \
-           wait5us();		/*  */ \
-           wait2us();	/* with only 17 us delay the voltage goes down before SH */ \
+    #define DelayBigCap() wait30us();	/* 2.5 ADC clocks = 20us */ \
+           wait1us();		/*  */ \
+           wait1us();	/* with only 17 us delay the voltage goes down before SH */ \
             /* delay 17us + 3 clock tics (CALL instead of RCALL) = 17.375 us @ 8 MHz */ \
             /* + 21 clock tics delay from interrupt return, +2.625us = 20.0 */	\
             wdt_reset();	/* 20.125 us  */ \
@@ -57,16 +58,12 @@
 #else
             /* Polling mode, big cap */
  #if F_CPU == 8000000UL
-    #define DelayBigCap() wait10us();	/* 2.5 ADC clocks = 20us */ \
+    #define DelayBigCap() wait20us();	/* 2.5 ADC clocks = 20us */ \
            wait5us();		/*  */ \
-           wait3us();	/* with only 18 us delay the voltage goes down before SH */ \
-            /* delay 19us + 3 clock tics (CALL instead of RCALL) = 19.375 us @ 8 MHz */ \
-            /* + 7 clock tics delay from while loop, +0.875us  = 20.25 */ \
-           wdt_reset(); \
-           wdt_reset(); \
-           wdt_reset(); \
-           wdt_reset(); \
-           wdt_reset(); 
+           wait2us();	/* pulse length 27.375 us */ 
+//	   wdt_reset(); 
+            /* delay 19us + 3 clock tics (CALL instead of RCALL) = 19.375 us @ 8 MHz */ 
+            /* + 7 clock tics delay from while loop, +0.875us  = 20.25 */ 
  //             wdt_reset()	/* 20.375 us + */
  #endif
  #if F_CPU == 16000000UL
@@ -107,7 +104,7 @@
 #else
             /* Polling mode, small cap */
  #if F_CPU == 8000000UL
-    #define DelaySmallCap() wait4us();	/* with only 4 us delay the voltage goes down before SH */ \
+    #define DelaySmallCap() wait5us();	/* with only 4 us delay the voltage goes down before SH */ \
             /* delay 4us + 1 clock tics (CALL instead of RCALL) = 4.125 us @ 8 MHz */ \
             /* + 7 clock tics delay from while loop, +0.875us  = 5.000 */ 
 //            wdt_reset()		/* 5.125 us   */
@@ -122,12 +119,13 @@
 #endif
 
 //=================================================================
-void GetESR() {
+uint16_t GetESR(uint8_t hipin, uint8_t lopin) {
 #if FLASHEND > 0x1fff
   //  measure the ESR value of capacitor
-  unsigned int adcv[3];		// array for 3 ADC readings
-  unsigned long sumvolt[3];	// array for 3 sums of ADC readings
+  unsigned int adcv[4];		// array for 4 ADC readings
+  unsigned long sumvolt[4];	// array for 3 sums of ADC readings
   unsigned long cap_val_nF;
+  uint16_t esrvalue;
   uint8_t HiPinR_L;		// used to switch 680 Ohm to HighPin
   uint8_t HiADC;		// used to switch Highpin directly to GND or VCC
   uint8_t LoPinR_L;		// used to switch 680 Ohm to LowPin
@@ -138,57 +136,57 @@ void GetESR() {
   uint8_t big_cap;
   int8_t esr0;			// used for ESR zero correction
 
-  ii = cap.cpre_max;
-  cap_val_nF = cap.cval_max;
-  while (ii < -9) { // set cval to nF unit
-      cap_val_nF /= 10;		// reduce value by factor ten
-      ii++;		// take next decimal prefix
-  }
-  if (cap_val_nF < (1800/4)) return;			//capacity lower than 1.8 uF
-  if (cap_val_nF > (1800*2)) {
-     /* normal ADC-speed, ADC-Clock 8us */
-#ifdef ADC_Sleep_Mode
-     StartADCmsk = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV; /* enable ADC and Interrupt */
-     ADCSRA = StartADCmsk;		/* enable ADC and Interrupt */
-#else
-     StartADCmsk =  (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; /* enable and start ADC */
-#endif
-     big_cap = 1;
-     if (cap_val_nF > 50000) {
-        big_cap = 2;	/* very big cap */
+  big_cap = 1;
+  if (PartFound == PART_CAPACITOR) {
+     ii = cap.cpre_max;
+     cap_val_nF = cap.cval_max;
+     while (ii < -9) { // set cval to nF unit
+         cap_val_nF /= 10;		// reduce value by factor ten
+         ii++;		// take next decimal prefix
      }
-  } else {
-     /* fast ADC-speed, ADC-Clock 2us */
+     if (cap_val_nF < (1800/18)) return(0xffff);			//capacity lower than 1.8 uF
+//     if (cap_val_nF > (1800/18)) {
+        /* normal ADC-speed, ADC-Clock 8us */
 #ifdef ADC_Sleep_Mode
-     StartADCmsk = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | FAST_CLOCK_DIV; /* enable ADC and Interrupt */
-     ADCSRA = StartADCmsk;		/* enable ADC and Interrupt */
-     SMCR = (1 << SM0) | (1 <<SE);	/* set ADC Noise Reduction and Sleep Enable */
+        StartADCmsk = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV; /* enable ADC and Interrupt */
+        ADCSRA = StartADCmsk;		/* enable ADC and Interrupt */
 #else
-     StartADCmsk =  (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | FAST_CLOCK_DIV; /* enable and start ADC */
+        StartADCmsk =  (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; /* enable and start ADC */
 #endif
-     big_cap = 0;
+
+//     } else {
+        /* fast ADC-speed, ADC-Clock 2us */
+#ifdef ADC_Sleep_Mode
+//        StartADCmsk = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | FAST_CLOCK_DIV; /* enable ADC and Interrupt */
+//        ADCSRA = StartADCmsk;		/* enable ADC and Interrupt */
+//        SMCR = (1 << SM0) | (1 <<SE);	/* set ADC Noise Reduction and Sleep Enable */
+#else
+//        StartADCmsk =  (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | FAST_CLOCK_DIV; /* enable and start ADC */
+#endif
+//        big_cap = 0;
+//     }
   }
-  lcd_fix_string(ESR_str);		// " ESR="
-  LoADC = pgm_read_byte(&PinADCtab[cap.ca]) | TXD_MSK;
-  HiADC = pgm_read_byte(&PinADCtab[cap.cb]) | TXD_MSK;
-  LoPinR_L = pgm_read_byte(&PinRLtab[cap.ca]);  //R_L mask for LowPin R_L load
-  HiPinR_L = pgm_read_byte(&PinRLtab[cap.cb]);	//R_L mask for HighPin R_L load
+  LoADC = pgm_read_byte(&PinADCtab[lopin]) | TXD_MSK;
+  HiADC = pgm_read_byte(&PinADCtab[hipin]) | TXD_MSK;
+  LoPinR_L = pgm_read_byte(&PinRLtab[lopin]);  //R_L mask for LowPin R_L load
+  HiPinR_L = pgm_read_byte(&PinRLtab[hipin]);	//R_L mask for HighPin R_L load
 
 #if PROCESSOR_TYP == 1280
     /* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
-  SelectLowPin = (cap.ca | (1<<REFS1) | (0<<REFS0));	// switch ADC to LowPin, Internal Ref. 
-  SelectHighPin = (cap.cb | (1<<REFS1) | (0<<REFS0));	// switch ADC to HighPin, Internal Ref. 
+  SelectLowPin = (lopin | (1<<REFS1) | (0<<REFS0));	// switch ADC to LowPin, Internal Ref. 
+  SelectHighPin = (hipin | (1<<REFS1) | (0<<REFS0));	// switch ADC to HighPin, Internal Ref. 
 #else
-  SelectLowPin = (cap.ca | (1<<REFS1) | (1<<REFS0));	// switch ADC to LowPin, Internal Ref. 
-  SelectHighPin = (cap.cb | (1<<REFS1) | (1<<REFS0));	// switch ADC to HighPin, Internal Ref. 
+  SelectLowPin = (lopin | (1<<REFS1) | (1<<REFS0));	// switch ADC to LowPin, Internal Ref. 
+  SelectHighPin = (hipin | (1<<REFS1) | (1<<REFS0));	// switch ADC to HighPin, Internal Ref. 
 #endif
 
 
 // Measurement of ESR of capacitors AC Mode
    sumvolt[0] = 1;		// set sum of LowPin voltage to 1 to prevent divide by zero
-   sumvolt[1] = 1;		// clear sum of HighPin voltage with current
+   sumvolt[2] = 1;		// clear sum of HighPin voltage with current
                                 // offset is about (x*10*200)/34000 in 0.01 Ohm units
-   sumvolt[2] = 0;		// clear sum of HighPin voltage without current
+   sumvolt[1] = 0;		// clear sum of HighPin voltage without current
+   sumvolt[3] = 0;		// clear sum of HighPin voltage without current
    EntladePins();		// discharge capacitor
    ADC_PORT = TXD_VAL;		// switch ADC-Port to GND
    ADMUX = SelectLowPin;	// set Mux input and Voltage Reference to internal 1.1V
@@ -197,6 +195,15 @@ void GetESR() {
 #else
    wait_about10ms();		/* time for voltage stabilization with 100nF */
 #endif
+   /* start voltage must be negativ */
+   ADC_DDR = HiADC;				// switch High Pin to GND
+   R_PORT = LoPinR_L;			// switch R-Port to VCC
+   R_DDR = LoPinR_L;			// switch R_L port for HighPin to output (VCC)
+   wait10us();
+   wait2us();
+   R_DDR = 0;				// switch off current
+   R_PORT = 0;
+   StartADCwait();				// set ADCSRA Interrupt Mode, sleep
 
    // Measurement frequency is given by sum of ADC-Reads < 680 Hz for normal ADC speed.
    // For fast ADC mode the frequency is below 2720 Hz (used for capacity value below 3.6 uF).
@@ -204,169 +211,117 @@ void GetESR() {
    // Real ADC-conversion is started with the next ADC-Clock (125kHz) after setting the ADSC bit.
    for(ii=0;ii<MAX_CNT;ii++) {
       ADC_DDR = LoADC;				// switch Low-Pin to output (GND)
+      R_PORT = LoPinR_L;			// switch R-Port to VCC
+      R_DDR = LoPinR_L;			// switch R_L port for LowPin to output (VCC)
       ADMUX = SelectLowPin;
-      StartADCwait();				// set ADCSRA Interrupt Mode, sleep
-      while (1) {
+      StartADCwait();			// set ADCSRA Interrupt Mode, sleep
+      StartADCwait();			// set ADCSRA Interrupt Mode, sleep
+      adcv[0] = ADCW;			// Voltage LowPin with current
+      ADMUX = SelectHighPin;
+//      if (big_cap != 0) {
+         StartADCwait();			// ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV;	
+         ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; // enable ADC and start with ADSC
+         wait4us();
          R_PORT = HiPinR_L;			// switch R-Port to VCC
          R_DDR = HiPinR_L;			// switch R_L port for HighPin to output (VCC)
-         ADMUX = SelectLowPin;
-         StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-         StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-         adcv[0] = ADCW;			// Voltage LowPin with current
-         ADMUX = SelectHighPin;
-         if (big_cap != 0) {
-            StartADCwait();			// ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV;	
-//         ADCSRA |= (1<<ADSC);			// Start Conversion, real start is next rising edge of ADC clock
-            ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; // enable ADC and start with ADSC
-            DelayBigCap();		// wait predefined time
-         } else {
-            StartADCwait();			// ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV;	
-            ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | FAST_CLOCK_DIV; // enable ADC and start with ADSC
-         		// SH at 2.5 ADC clocks behind start = 5 us
-            DelaySmallCap();		// wait predefined time
-         }
-         R_DDR = 0;				// switch current off,  SH is 1.5 ADC clock behind real start
-         R_PORT = 0;
-         while (ADCSRA&(1<<ADSC));		// wait for conversion finished
-         adcv[1] = ADCW;			// Voltage HighPin with current
+         DelayBigCap();		// wait predefined time
+//      } else {
+//         StartADCwait();			// ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV;	
+//         R_PORT = HiPinR_L;			// switch R-Port to VCC
+//         R_DDR = HiPinR_L;			// switch R_L port for HighPin to output (VCC)
+//         ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | FAST_CLOCK_DIV; // enable ADC and start with ADSC
+//      		// SH at 2.5 ADC clocks behind start = 5 us
+//         DelaySmallCap();		// wait predefined time
+//      }
+      R_DDR = 0;				// switch current off,  SH is 1.5 ADC clock behind real start
+      R_PORT = 0;
+      while (ADCSRA&(1<<ADSC));		// wait for conversion finished
+      adcv[1] = ADCW;			// Voltage HighPin with current
 #ifdef ADC_Sleep_Mode
-         ADCSRA = StartADCmsk;		/* enable ADC and Interrupt */
+      ADCSRA = StartADCmsk;		/* enable ADC and Interrupt */
 #endif
-         StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-         StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-         adcv[2] = ADCW;			// Voltage HighPin without current
-         if (adcv[2] > 2) break;		// at least more than two digits required
-         wdt_reset();
-      } // end while (1)
-      sumvolt[0] += adcv[0];			// add sum of both LowPin voltages with current
-      sumvolt[1] += adcv[1];			// add  HighPin voltages with current
-      sumvolt[2] += adcv[2]; 			// capacitor voltage without current
+      wdt_reset();
       /* ********* Reverse direction, connect High side with GND *********** */
       ADC_DDR = HiADC;				// switch High Pin to GND
-      StartADCwait();				// set ADCSRA Interrupt Mode, sleep
-      while (1) {
+      R_PORT = HiPinR_L;			// switch R-Port to VCC
+      R_DDR = HiPinR_L;			// switch R_L port for HighPin to output (VCC)
+      wdt_reset();
+      ADMUX = SelectHighPin;
+      StartADCwait();			// set ADCSRA Interrupt Mode, sleep
+      StartADCwait();			// set ADCSRA Interrupt Mode, sleep
+      adcv[2] = ADCW;			// Voltage HighPin with current
+      ADMUX = SelectLowPin;
+//      if (big_cap != 0) {
+         StartADCwait();			// set ADCSRA Interrupt Mode, sleep
+         ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; // enable ADC and start with ADSC
+         wait4us();
          R_PORT = LoPinR_L;
          R_DDR = LoPinR_L;			// switch LowPin with 680 Ohm to VCC
-         wdt_reset();
-         ADMUX = SelectHighPin;
-         StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-         StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-         adcv[0] = ADCW;			// Voltage HighPin with current
-         ADMUX = SelectLowPin;
-         if (big_cap != 0) {
-            StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-//         ADCSRA |= (1<<ADSC);			// Start Conversion, real start is next rising edge of ADC clock
-            ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; // enable ADC and start with ADSC
-            DelayBigCap();		// wait predefined time
-         } else {
-            StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-//         ADCSRA |= (1<<ADSC);			// Start Conversion, real start is next rising edge of ADC clock
-            ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | FAST_CLOCK_DIV; // enable ADC and start with ADSC
-         			// 2.5 ADC clocks = 5 us
-            DelaySmallCap();		// wait predefined time
-         }
-         R_DDR = 0;				// switch current off, SH is 1.5 ADC clock ticks behind real start
-         R_PORT = 0;
-         while (ADCSRA&(1<<ADSC));		// wait for conversion finished
-         adcv[1] = ADCW;			//  Voltage LowPin with current
-#ifdef ADC_Sleep_Mode
-         ADCSRA = StartADCmsk;		/* enable ADC and Interrupt */
-#endif
-//          ADMUX = SelectLowPin;
-         StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-         StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-         adcv[2] = ADCW;			// Voltage LowPin without current
-         if (adcv[2] > 2) break;		// at least more than two digits required
-         wdt_reset();
-      } // end while (1)
+         DelayBigCap();		// wait predefined time
+//      } else {
+//         StartADCwait();			// set ADCSRA Interrupt Mode, sleep
+//         R_PORT = LoPinR_L;
+//         R_DDR = LoPinR_L;			// switch LowPin with 680 Ohm to VCC
+//         ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | FAST_CLOCK_DIV; // enable ADC and start with ADSC
+//      			// 2.5 ADC clocks = 5 us
+//         DelaySmallCap();		// wait predefined time
+//      }
       R_DDR = 0;				// switch current off
-      sumvolt[0] += adcv[0];			// add  LowPin voltages with current
+      R_PORT = 0;
+      while (ADCSRA&(1<<ADSC));		// wait for conversion finished
+      adcv[3] = ADCW;			//  Voltage LowPin with current
+#ifdef ADC_Sleep_Mode
+      ADCSRA = StartADCmsk;		/* enable ADC and Interrupt */
+#endif
+      sumvolt[0] += adcv[0];			// add sum of both LowPin voltages with current
       sumvolt[1] += adcv[1];			// add  HighPin voltages with current
-      sumvolt[2] += adcv[2];			// add  HighPin voltages without current
+      sumvolt[2] += adcv[2];			// add  LowPin voltages with current
+      sumvolt[3] += adcv[3];			// add  HighPin voltages with current
    } // end for
 
-#define ESR_DEBUG
 
+   sumvolt[0] += sumvolt[2];
 #ifdef ESR_DEBUG
-   DisplayValue(sumvolt[0],0,'L',4);	// LowPin
-#endif
-   if (big_cap != 0) {
-   // we need to compensate the time delay between reading the LowPin Voltage and the
-   // HighPin Voltage, which is usually 2 * 14 * 8 us = 224 us.
-   // With the loading of the capacitor the current will sink, so we get a too high voltage at
-   // the LowPin. The velocity of degration is inversely proportional to time constant (represented by capacity value).
-   // Time constant for 1uF & 720 Ohm is 720us
-//   sumvolt[0] -= (sumvolt[0] * 150UL)  / cap_val_nF;	// Version 1.04k
-      sumvolt[0] -= (sumvolt[0] * 345UL)  / cap_val_nF;
-   } else {
-//      sumvolt[0] -= (sumvolt[0] * 86UL)  / cap_val_nF;
-//      sumvolt[0] -= (sumvolt[0] * 56UL)  / cap_val_nF;
-#ifdef ESR_DEBUG
-      sumvolt[0] -= (sumvolt[0] * 119UL)  / cap_val_nF;
-#else
-      sumvolt[0] -= (sumvolt[0] * 121UL)  / cap_val_nF;
-#endif
-   }
-#ifdef ESR_DEBUG
+   lcd_testpin(hipin);
+   lcd_testpin(lopin);
+   lcd_data(' ');
+   DisplayValue(sumvolt[0],0,'L',4);	// LowPin 1
    lcd_line3();
-   DisplayValue(sumvolt[1],0,'H',4);	// HighPin
+   DisplayValue(sumvolt[1],0,'h',4);	// HighPin 1
    lcd_data(' ');
-#endif
-
-   esr0 = (int8_t)eeprom_read_byte(&EE_ESR_ZERO);
-//   sumvolt[0] += (((long)sumvolt[0] * esr0) / (RRpinMI * 10)); // subtract 0.23 Ohm from ESR, Vers. 1.04k
-   sumvolt[2] += (((long)sumvolt[0] * esr0) / (RRpinMI * 10)); // subtract 0.23 Ohm from ESR
-
-#ifdef ESR_DEBUG
-   DisplayValue(sumvolt[0],0,'C',4);	// Lowpin corrected
-#endif
-
-   if (sumvolt[1] > sumvolt[0]) {
-      sumvolt[1] -= sumvolt[0];		// difference HighPin - LowPin Voltage with current
-   } else {
-      sumvolt[1] = 0;
-   }
-
-#ifdef ESR_DEBUG
+   DisplayValue(sumvolt[3],0,'H',4);	// LowPin 2
    lcd_line4();
-   DisplayValue(sumvolt[1],0,'d',4);	// HighPin - LowPin
-   lcd_data(' ');
 #endif
 
-//   sumvolt[2] = (sumvolt[2] * 980) / 1000;	// scale down the voltage without current with 98.0% 1.04k
+
+   if ((sumvolt[1] + sumvolt[3]) > sumvolt[0]) {
+      sumvolt[2] = (sumvolt[1] + sumvolt[3]) - sumvolt[0];	// difference HighPin - LowPin Voltage with current
+   } else {
+      sumvolt[2] = 0;
+   }
+  if (PartFound == PART_CAPACITOR) {
+      sumvolt[2] -= (1745098UL*MAX_CNT) / (cap_val_nF * (cap_val_nF + 19));
+  }
 
 #ifdef ESR_DEBUG
-   DisplayValue(sumvolt[2],0,' ',4);	// HighPin without current
+   DisplayValue(sumvolt[2],0,'d',4);	// HighPin - LowPin
+   lcd_data(' ');
 #endif
-
-   jj = 0;
-   if (sumvolt[1] >= sumvolt[2]) {
-      // mean voltage at the capacitor is higher with current
-      // sumvolt[0] is the sum of voltages at LowPin, caused by output resistance of Port
-      // RRpinMI is the port output resistance in 0.1 Ohm units.
-      // we scale up the difference voltage with 10 to get 0.01 Ohm units of ESR
-      cap.esr = ((sumvolt[1] - sumvolt[2]) * 10 * (unsigned long)RRpinMI) / sumvolt[0];
-      DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
+   esrvalue = (sumvolt[2] * 10 * (unsigned long)RRpinMI) / (sumvolt[0]+sumvolt[2]);
+   esrvalue += esrvalue / 14;		/* esrvalue + 7% */
+   esr0 = (int8_t)eeprom_read_byte(&EE_ESR_ZEROtab[hipin+lopin]);
+   if (esrvalue > esr0) {
+      esrvalue -= esr0;
    } else {
-      jj = ((sumvolt[2] - sumvolt[1]) * 10 * (unsigned long)RRpinMI) / sumvolt[0];
-      lcd_data('0');
-      if ((jj < 100) && (jj > 0)) {
-         if (big_cap == 2) {
-            lcd_data('?');			// mark ESR zero correction
-            esr0 -= jj;			// correct ESR_ZERO by negative resistance
-            eeprom_write_byte((uint8_t *)(&EE_ESR_ZERO), (int8_t)esr0);       // fix new zero offset 
-         } else {
-            lcd_data('!');			// mark ESR zero without correction
-         }
-      }
+      esrvalue = 0;
    }
-//   lcd_line3();
-//   DisplayValue(jj,0,' ',4);	// correction for ESR_ZERO
-//   DisplayValue(1000+esr0,0,' ',4);	// new ESR_ZERO
+
 
  #ifdef ADC_Sleep_Mode
      SMCR = (0 << SM0) | (0 << SE);	/* clear ADC Noise Reduction and Sleep Enable */
  #endif
+  return (esrvalue);
+#else
+  return (0);
 #endif
-  return;
 }

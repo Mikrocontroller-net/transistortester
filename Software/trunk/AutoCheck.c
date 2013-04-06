@@ -45,7 +45,38 @@ void AutoCheck(void) {
   }
   lcd_clear();
   lcd_fix_string(SELFTEST);		// "Selftest mode.."
-  wait_about1s();
+
+  lcd_line2();
+  lcd_data('R');
+  lcd_data('0');
+  lcd_data('=');
+  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (int8_t)0);	// clear zero offset
+  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[3]), (int8_t)0);	// clear zero offset
+  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (int8_t)0);	// clear zero offset
+
+  adcmv[0] = GetESR(TP3, TP1);
+  adcmv[1] = GetESR(TP3, TP2);
+  adcmv[2] = GetESR(TP2, TP1);
+  DisplayValue(adcmv[0],-2,' ',3);
+  DisplayValue(adcmv[1],-2,' ',3);
+  DisplayValue(adcmv[2],-2,LCD_CHAR_OMEGA,3);
+  if (adcmv[0] < 60) {
+     eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (int8_t)adcmv[0]);	// fix zero offset
+  }
+  if (adcmv[1] < 60) {
+     eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[3]), (int8_t)adcmv[1]);	// fix zero offset
+  }
+  if (adcmv[2] < 60) {
+     eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (int8_t)adcmv[2]);	// fix zero offset
+  }
+  for(tt=0;tt<12;tt++) {
+     wait_about500ms();
+     if(!(ON_PIN_REG & (1<<RST_PIN))) {
+        // if key is pressed, don't repeat
+        break;
+     }
+  } /* end for tt */
+
  #define TEST_COUNT 8
  
   for(tt=1;tt<TEST_COUNT;tt++) {		// loop for all Tests
@@ -242,7 +273,6 @@ no_c0save:
         lcd_clear();
         lcd_fix_string(REF_C_str);	// "REF_C="
         lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
-        eeprom_write_byte((uint8_t *)(&EE_ESR_ZERO), (uint8_t)ESR_ZERO); // set to initial zero offset
 #if 0
 //#######################################
         // Test for switching level of the digital input of port TP3

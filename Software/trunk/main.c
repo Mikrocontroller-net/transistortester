@@ -198,7 +198,7 @@ start:
      lcd_fix_string(OK_str); 		// "OK"
   }
 #else
-  lcd_fix_string(VERSION_str);		// if no Battery check, Version .. in row 1
+  lcd_fix2_string(VERSION_str);		// if no Battery check, Version .. in row 1
 #endif
 #ifdef WDT_enabled
   wdt_enable(WDTO_2S);		//Watchdog on
@@ -230,7 +230,9 @@ start:
      lcd_clear_line();
      lcd_line2();
      lcd_fix_string(Vext_str);		// Vext=
+     ADC_DDR = 0;		//deactivate Software-UART
      trans.uBE[1] = W5msReadADC(TPext);	// read external voltage 
+     ADC_DDR = TXD_MSK;		//activate Software-UART 
      DisplayValue(trans.uBE[1]*10,-3,'V',3);	// Display 3 Digits of this mV units
      wait_about300ms();
   }
@@ -916,11 +918,18 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
   if (Length > 18) Length = 18;		/* Limit to maximum prefix */
   Index = Length / 3;
   Offset = Length % 3;
-    if (Offset > 0)
+  if (Offset > 0)
     {
       Index++;				/* adjust index for exponent offset, take next prefix */
       Offset = 3 - Offset;		/* reverse value (1 or 2) */
     }
+#ifdef NO_NANO
+  if (Index == 1)
+    { /* use no nano */
+      Index++;				/* use mikro instead of nano */
+      Offset += 3;			/* can be 3,4 or 5 */
+    }
+#endif
   Prefix = MEM_read_byte((uint8_t *)(&PrefixTab[Index]));   /* look up prefix in table */
   /*
    *  display value
@@ -938,7 +947,15 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
     /* 0: factor 10 / -1: factor 100 */
 //    lcd_data('0');
     lcd_data('.');
+#ifdef NO_NANO
+    while (Exponent < 0)
+      {
+       lcd_data('0');	/* extra 0 for factor 10 */
+       Exponent++;
+      }
+#else
     if (Exponent < 0) lcd_data('0');	/* extra 0 for factor 100 */
+#endif
   }
 
   if (Offset == 0) Exponent = -1;	/* disable dot if not needed */

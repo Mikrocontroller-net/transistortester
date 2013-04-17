@@ -26,3 +26,5 @@ void sleep_5ms(uint16_t xxx);		// set processor to sleep state for xxx times 5ms
 void PinLayout(char pin1, char pin2, char pin3); // show pin layout with EBC= or 123=
 void Calibrate_UR(void);		// get reference voltages and port resistance
 uint16_t get_log(uint16_t permil);	// get -log(1-(permil/1000))
+uint8_t ShortedProbes(uint8_t p1, uint8_t p2);	// check if two probes are shorted
+uint8_t AllProbesShorted();		// check if all probes are shorted, return 3 if true

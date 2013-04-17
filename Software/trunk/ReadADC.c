@@ -11,6 +11,16 @@ extern struct ADCconfig_t{
   uint16_t U_AVCC;		// Voltage of AVCC
 } ADCconfig;
 */
+#ifdef INHIBIT_SLEEP_MODE
+//  #define StartADCwait() ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; /* enable ADC and start */
+    #define StartADCwait() ADCSRA = StartADCmsk; /* Start conversion */\
+    while (ADCSRA & (1 << ADSC))  /* wait until conversion is done */
+#else
+    #define StartADCwait() ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV; /*enable ADC and Interrupt */\
+    set_sleep_mode(SLEEP_MODE_ADC);\
+    sleep_mode();	/* Start ADC, return, if ADC has finished */
+#endif
+
 
 
 unsigned int ReadADC (uint8_t Probe) {
@@ -23,9 +33,7 @@ sample:
 #endif
  ADMUX = Probe; /* set input channel and U reference */
 #ifdef AUTOSCALE_ADC
- /* if voltage reference changed run a dummy conversion */
-// Samples = Probe & (1 << REFS1); /* get REFS1 bit flag */
-// if (Samples != ADCconfig.RefFlag) {
+ /* if voltage reference changes, wait for voltage stabilization */
  if ((Probe & (1 << REFS1)) != 0) {
     // switch to 1.1V Reference
  #ifdef NO_AREF_CAP
@@ -33,30 +41,15 @@ sample:
  #else
     wait_about10ms(); /* time for voltage stabilization */
  #endif
-//    ADCconfig.RefFlag = Samples; /* update flag */
  }
 #endif
-#ifdef INHIBIT_SLEEP_MODE
-// one dummy read of ADC, 112us
-    ADCSRA |= (1 << ADSC); /* start conversion */
-    while (ADCSRA & (1 << ADSC)); /* wait until conversion is done */
-#else
-    ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV; //enable ADC and Interrupt
-    set_sleep_mode(SLEEP_MODE_ADC);
-    sleep_mode();	/* Start ADC, return, if ADC has finished */
-#endif
+// allways do one dummy read of ADC, 112us
+    StartADCwait();		/* start ADC and wait */
  /* * sample ADC readings */
  Value = 0UL; /* reset sampling variable */
  Samples = 0; /* number of samples to take */
  while (Samples < ADCconfig.Samples) /* take samples */ {
-#ifdef INHIBIT_SLEEP_MODE
-    ADCSRA |= (1 << ADSC); /* start conversion */
-    while (ADCSRA & (1 << ADSC)); /* wait until conversion is done */
-#else
-    ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV; //enable ADC and Interrupt
-    set_sleep_mode(SLEEP_MODE_ADC);
-    sleep_mode();	/* Start ADC, return, if ADC has finished */
-#endif
+    StartADCwait();		/* start ADC and wait */
     Value += ADCW; /* add ADC reading */
 #ifdef AUTOSCALE_ADC
     /* auto-switch voltage reference for low readings */

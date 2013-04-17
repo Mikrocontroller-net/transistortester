@@ -273,7 +273,7 @@ End of configuration
  const unsigned char KatAn[] MEM_TEXT = {'-', LCD_CHAR_DIODE2, '-',0};
  const unsigned char Dioden[] MEM_TEXT = {'*',LCD_CHAR_DIODE1, ' ', ' ',0};
  const unsigned char Resistor_str[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
- const unsigned char VERSION_str[] MEM_TEXT = "Version 1.07k";
+ const unsigned char VERSION_str[] MEM2_TEXT = "Version 1.07k";
 
 
 #ifdef WITH_SELFTEST
@@ -284,6 +284,7 @@ End of configuration
  const unsigned char RLRL[] MEM_TEXT = "+RL- 12 13 23";
  const unsigned char RHRH[] MEM_TEXT = "+RH- 12 13 23";
  const unsigned char RHRL[] MEM_TEXT = "RH/RL";
+ const unsigned char R0_str[] MEM2_TEXT = "R0=";
  #define LCD_CLEAR
 #endif
  
@@ -294,9 +295,9 @@ End of configuration
  const unsigned char T50HZ[] MEM_TEXT = " 50Hz";
 #endif
 #ifdef AUTO_CAL
- const unsigned char MinCap_str[] MEM_TEXT = " >100nF";
- const unsigned char REF_C_str[] MEM_TEXT = "REF_C=";
- const unsigned char REF_R_str[] MEM_TEXT = "REF_R=";
+ const unsigned char MinCap_str[] MEM2_TEXT = " >100nF";
+ const unsigned char REF_C_str[] MEM2_TEXT = "REF_C=";
+ const unsigned char REF_R_str[] MEM2_TEXT = "REF_R=";
 #endif
 #ifdef DebugOut
  #define LCD_CLEAR

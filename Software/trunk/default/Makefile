@@ -376,7 +376,7 @@ ReadInductance.o: ../ReadInductance.c Makefile
 Calibrate_UR.o: ../Calibrate_UR.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-ReadADC.o: ../ReadADC.c Makefile
+ReadADC.o: ../ReadADC.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 GetESR.o: ../GetESR.S Makefile

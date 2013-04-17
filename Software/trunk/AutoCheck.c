@@ -16,40 +16,13 @@ void AutoCheck(void) {
  #endif
   ADC_PORT = TXD_VAL;
   ADC_DDR = TXD_MSK;
-  R_PORT = (1<<(TP1*2));		//Pin 1 over RL to +
-  R_DDR = (1<<(TP1*2)) | (1<<(TP2*2));	//Pin 2 over RL to -
-  adcmv[0] = W5msReadADC(PC0);		// voltage at Pin 1
-  adcmv[1] = ReadADC(PC1);		// voltage at Pin 2
-  adcmv[2] = ReadADC(PC2);		// voltage at Pin 3
-  if (abs((int)(adcmv[1] - adcmv[0])) > 20) {
-     return;				//difference to big, no selftest
-  }
-  if (abs((int)(adcmv[2] - adcmv[0])) > 20) {
-     return;				//difference to big, no selftest
-  }
-  if (abs((int)((adcmv[0]*2) - ADCconfig.U_AVCC)) > 60) {
-     return;				//difference to big, no selftest
-  }
-  R_DDR = (1<<(TP1*2)) | (1<<(TP3*2));	//Pin 3 over RL to - (Pin 1 over RL to +)
-  adcmv[0] = W5msReadADC(PC0);		// voltage at Pin 1
-  adcmv[1] = ReadADC(PC1);		// voltage at Pin 2
-  adcmv[2] = ReadADC(PC2);		// voltage at Pin 3
-  if (abs((int)(adcmv[1] - adcmv[0])) > 20) {
-     return;				//difference to big, no selftest
-  }
-  if (abs((int)(adcmv[2] - adcmv[0])) > 20) {
-     return;				//difference to big, no selftest
-  }
-  if (abs((int)((adcmv[0]*2) - ADCconfig.U_AVCC)) > 60) {
-     return;				//difference to big, no selftest
-  }
+  #define RequireShortedProbes
+  if (AllProbesShorted() != 3) return;
   lcd_clear();
   lcd_fix_string(SELFTEST);		// "Selftest mode.."
 
   lcd_line2();
-  lcd_data('R');
-  lcd_data('0');
-  lcd_data('=');
+  lcd_fix2_string(R0_str);		// "R0="
   eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (int8_t)0);	// clear zero offset
   eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[3]), (int8_t)0);	// clear zero offset
   eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (int8_t)0);	// clear zero offset
@@ -134,6 +107,7 @@ void AutoCheck(void) {
                                         //############################################
         if (tt == 4) { // Text release probes
            lcd_fix_string(RELPROBE);	// "Release Probes"
+           if (AllProbesShorted() != 0) ww = MAX_REP-2;
         }
                                         //############################################
         if (tt == 5) { // can we switch the ADC pins to GND across R_H resistor?
@@ -254,7 +228,7 @@ no_c0save:
      lcd_data('1');
      lcd_fix_string(CapZeich);	// "-||-"
      lcd_data('3');
-     lcd_fix_string(MinCap_str); // " >100nF!"
+     lcd_fix2_string(MinCap_str); // " >100nF!"
      PartFound = PART_NONE;
      //measure  offset Voltage of analog Comparator for Capacity measurement
      ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
@@ -271,7 +245,7 @@ no_c0save:
         // value of capacitor is correct
         (void) eeprom_write_word((uint16_t *)(&ref_offset), load_diff);	// hold zero offset + slew rate dependend offset
         lcd_clear();
-        lcd_fix_string(REF_C_str);	// "REF_C="
+        lcd_fix2_string(REF_C_str);	// "REF_C="
         lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
 #if 0
 //#######################################
@@ -320,7 +294,7 @@ no_c0save:
         ADCconfig.U_Bandgap = ADC_internal_reference;
         udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1] - adcmv[1])) * ADC_internal_reference / (2*adcmv[1]))+REF_R_KORR;
         lcd_line2();
-        lcd_fix_string(REF_R_str);	// "REF_R="
+        lcd_fix2_string(REF_R_str);	// "REF_R="
         udiff2 = udiff + (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
         (void) eeprom_write_byte((uint8_t *)(&RefDiff), (uint8_t)udiff2);	// hold offset for true reference Voltage
         lcd_string(itoa(udiff2, outval, 10));	//output correction voltage
@@ -338,7 +312,7 @@ no_c0save:
   ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples
   lcd_clear();
   lcd_line2();
-  lcd_fix_string(VERSION_str);	//"Version ..."
+  lcd_fix2_string(VERSION_str);	//"Version ..."
   lcd_line1();
   lcd_fix_string(ATE);		//"Selftest End"
 
@@ -375,3 +349,78 @@ no_c0save:
 #endif
  } 
  
+#ifdef RequireShortedProbes
+/*
+ *  check for a short circuit between two probes
+ *  from Markus R.
+ *
+ *  requires:
+ *  - ID of first probe (0-2)
+ *  - ID of second probe (0-2)
+ *
+ *  returns:
+ *  - 0 if not shorted
+ *  - 1 if shorted
+ */
+
+uint8_t ShortedProbes(uint8_t Probe1, uint8_t Probe2)
+{
+  uint8_t           Flag1 = 0;      /* return value */
+  unsigned int      U1;            /* voltage at probe #1 in mV */
+  unsigned int      U2;            /* voltage at probe #2 in mV */
+  unsigned int      URH;	   /* half of reference voltage */
+
+  /*
+   *  Set up a voltage divider between the two probes:
+   *  - Probe1: Rl pull-up
+   *  - Probe2: Rl pull-down
+   */
+
+  R_PORT = pgm_read_byte(&PinRLtab[Probe1]);
+  R_DDR = pgm_read_byte(&PinRLtab[Probe1]) | pgm_read_byte(&PinRLtab[Probe2]);
+
+  /* read voltages */
+  U1 = ReadADC(Probe1);
+  U2 = ReadADC(Probe2);
+
+  /*
+   *  We expect both probe voltages to be about the same and
+   *  to be half of Vcc (allowed difference +/- 20mV).
+   */
+
+  URH = ADCconfig.U_AVCC / 2;
+  if ((U1 > URH - 20) && (U1 < URH + 20))
+  {
+    if ((U2 > URH - 20) && (U2 < URH + 20))
+    {
+      Flag1 = 1;
+    }
+  }
+
+  /* reset port */
+  R_DDR = 0;
+
+  return Flag1;
+}
+/*
+ *  check for a short circuit between all probes
+ *  from Markus R.
+ *
+ *  returns:
+ *  - 0 if no probes are short-circuited
+ *  - number of probe pairs short-circuited (3 = all)
+ */
+
+uint8_t AllProbesShorted(void)
+{
+  uint8_t           Flag2;      /* return value */
+
+  /* check all possible combinations */
+  Flag2 = ShortedProbes(TP1, TP2);
+  Flag2 += ShortedProbes(TP1, TP3);
+  Flag2 += ShortedProbes(TP2, TP3);
+
+  return Flag2;
+}
+#endif
+

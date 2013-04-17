@@ -88,7 +88,7 @@
     .macro StartADCwait
         ldi	r24, (1 << SM0) | (1 << SE);
        	out	_SFR_IO_ADDR(SMCR), r24; 	/*  SMCR = (1 << SM0) | (1 << SE); */
-    sleep;			/* wait for ADC */
+	sleep;			/* wait for ADC */
         ldi	r24, (1 << SM0) | (0 << SE);
        	out	_SFR_IO_ADDR(SMCR), r24; 	/*  SMCR = (1 << SM0) | (1 << SE); */
      .endm
@@ -117,22 +117,27 @@
  /* 3+1 clock tics (sts,out) are needed for instructions before the current is switched off. */
  #if F_CPU == 8000000UL
          /* current begin after last ADCready:  2.25us (wakeup) + 5us + 5tics = 7.875us  */
- 	call	wait3us
-	call	wait1us;
-	/* pulse length 24us + 3 clock tics (CALL instead of RCALL) = 24.375 us @ 8 MHz */ 
+	/* half puls length = (20us - 7.875us) = 12.125us (PL=24.25us) */
+	call	wait3us; /* pulse length 23us + 2 clock tics (CALL instead of RCALL) = 23.25 us @ 8 MHz */ 
+	wdr	;
  #endif
  #if F_CPU == 16000000UL
-         /* current begin after last ADCready:  1.125us (wakeup) + 5us + 5tics = 6.4375us  */
+        /* current begin after last ADCready:  1.125us (wakeup) + 5us + 5tics = 6.4375us  */
+	/* half puls length = (20us - 6.4375us) = 13.5625us (PL=27.125us) */
  	call	wait5us
-	call	wait2us;
-            /* pulse length 27us + 3 clock tics (CALL instead of RCALL) = 27.1875 us */
+	call	wait1us; /* pulse length 26us + 3 clock tics (CALL instead of RCALL) = 26.1875 us */
+	push	r24;		/* 26.3125 us */
+	pop	r24;            /* 26.4375 us */
+	push	r24;		/* 26.5625 us */
+	pop	r24;            /* 26.6875 us */
  #endif
 
 
 #else
  /* Polling mode: lds,sbrc,sts and out Instructions are 7 clock tics */
  #if F_CPU == 8000000UL
-         /* current begin after last ADCready:  0.875us (loop) + 5us + 5tics = 6.5us  */
+        /* current begin after last ADCready:  0.875us (loop) + 5us + 5tics = 6.5us  */
+	/* half puls length = (20us - 6.5us) = 13.5us  (PL=27us) */
  	call	wait5us
 	call	wait1us;
          /* pulse length 26us + 3 clock tics (CALL instead of RCALL) = 26.375 us @ 8 MHz */
@@ -140,14 +145,16 @@
 	pop	r24;            /* 26.875 us */
 	wdr	;
 	wdr	;		/* 27.125 us */
-//	wdr	;
  #endif
  #if F_CPU == 16000000UL
-         /* current begin after last ADCready:  0.4375us (loop) + 5us + 5tics = 5.75us  */
+        /* current begin after last ADCready:  0.4375us (loop) + 5us + 5tics = 5.75us  */
+	/* half puls length = (20us - 5.75us) = 14.25us (PL=28.5us) */
  	call	wait5us
  	call	wait3us;
         /* pulse length 28us + 3 clock tics (CALL instead of RCALL) = 28.1875 us */
-	wdr	;		/* wdt_reset();  // 28.25 us  */
+	push	r24;		/* 28.3125 us */
+	pop	r24;            /* 28.4375 us */
+	wdr	;		/* 28.50   us */
  #endif
 #endif
  .endm
@@ -330,7 +337,15 @@ ad_3604:
 	out	_SFR_IO_ADDR(R_PORT), LoPinR_L;	/* R_PORT = LoPinR_L */
 	out	_SFR_IO_ADDR(R_DDR), LoPinR_L;	/* R_DDR = LoPinR_L */
 	call	wait10us;	/* Delay about half the current puls-length of measurement loop */
+#ifdef ADC_Sleep_Mode
+ #if F_CPU == 8000000UL
+	call	wait1us;	/* shorter pulse-length */
+ #else
 	call	wait2us;
+ #endif
+#else
+	call	wait2us;
+#endif
 	out	_SFR_IO_ADDR(R_PORT), zero_reg;	/* R_PORT = 0 */
 	out	_SFR_IO_ADDR(R_DDR), zero_reg;	/* R_DDR = 0 */
 

@@ -720,6 +720,17 @@ widmes:
            lrx1 = (lirx1 + lirx2) / 2;		//average of both R_L measurements
         }
      }
+//   lrx1  is tempory result
+#if 0
+     /* The zero resistance is in 0.01 Ohm units and usually so little, that correction for resistors above 10 Ohm */
+     /* is not necassary.  */
+     ii = eeprom_read_byte(&EE_ESR_ZEROtab[LowPin+HighPin]) / 10; /* Resistance offset in 0,1 Ohm units */
+     if (ii < lrx1) {
+       lrx1 -= ii;
+     } else {
+       lrx1 = 0;
+     }
+#endif
 #if DebugOut == 3
   lcd_line3();
   lcd_clear_line();

@@ -102,6 +102,8 @@ CFLAGS += -DUSE_EEPROM
 #CFLAGS += -DEBC_STYLE
 #CFLAGS += -DEBC_STYLE=321
 
+# Setting of NO_NANO avoids the use of n as prefix for Farad (nF), the mikro prefix is used insted (uF).
+# CFLAGS += -DNO_NANO
 
 # The PULLUP_DISABLE option disable the pull-up Resistors of IO-Ports.
 # To use this option a external pull-up Resistor (10k to 30k)

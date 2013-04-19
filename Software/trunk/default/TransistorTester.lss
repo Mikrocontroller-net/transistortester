@@ -9623,7 +9623,8 @@ void GetVloss() {
     3a3e:	30 91 67 01 	lds	r19, 0x0167
     3a42:	40 91 68 01 	lds	r20, 0x0168
     3a46:	50 91 69 01 	lds	r21, 0x0169
-  for (ii=cap.cpre_max+12;ii<5;ii++) {
+//  for (ii=cap.cpre_max+12;ii<5;ii++) {
+  for (ii=cap.cpre_max+12;ii<4;ii++) {
     3a4a:	04 5f       	subi	r16, 0xF4	; 244
      lval.dw = (lval.dw + 5) / 10;
     3a4c:	8a e0       	ldi	r24, 0x0A	; 10
@@ -9631,12 +9632,12 @@ void GetVloss() {
     3a50:	d1 2c       	mov	r13, r1
     3a52:	e1 2c       	mov	r14, r1
     3a54:	f1 2c       	mov	r15, r1
-  R_DDR = HiPinR_L;			// switch R_L port for HighPin to output (GND)
   adcv[0] = ReadADC(cap.cb);		// voltage before any load 
 // ******** should adcv[0] be measured without current???
   if (cap.cpre_max > -9) return;	// too much capacity
   lval.dw = cap.cval_max;
-  for (ii=cap.cpre_max+12;ii<5;ii++) {
+//  for (ii=cap.cpre_max+12;ii<5;ii++) {
+  for (ii=cap.cpre_max+12;ii<4;ii++) {
     3a56:	0b c0       	rjmp	.+22     	; 0x3a6e <GetVloss+0x8e>
      lval.dw = (lval.dw + 5) / 10;
     3a58:	ca 01       	movw	r24, r20
@@ -9648,25 +9649,26 @@ void GetVloss() {
     3a64:	a7 01       	movw	r20, r14
     3a66:	96 01       	movw	r18, r12
     3a68:	0e 94 ec 1e 	call	0x3dd8	; 0x3dd8 <__udivmodsi4>
-  R_DDR = HiPinR_L;			// switch R_L port for HighPin to output (GND)
   adcv[0] = ReadADC(cap.cb);		// voltage before any load 
 // ******** should adcv[0] be measured without current???
   if (cap.cpre_max > -9) return;	// too much capacity
   lval.dw = cap.cval_max;
-  for (ii=cap.cpre_max+12;ii<5;ii++) {
+//  for (ii=cap.cpre_max+12;ii<5;ii++) {
+  for (ii=cap.cpre_max+12;ii<4;ii++) {
     3a6c:	0f 5f       	subi	r16, 0xFF	; 255
-    3a6e:	05 30       	cpi	r16, 0x05	; 5
+    3a6e:	04 30       	cpi	r16, 0x04	; 4
     3a70:	98 f3       	brcs	.-26     	; 0x3a58 <GetVloss+0x78>
     3a72:	79 01       	movw	r14, r18
      lval.dw = (lval.dw + 5) / 10;
   }
-  if ((lval.dw == 0) || (lval.dw > 500)) {
+//  if ((lval.dw == 0) || (lval.dw > 500)) {
+  if ((lval.dw == 0) || (lval.dw > 5000)) {
     3a74:	21 50       	subi	r18, 0x01	; 1
     3a76:	30 40       	sbci	r19, 0x00	; 0
     3a78:	40 40       	sbci	r20, 0x00	; 0
     3a7a:	50 40       	sbci	r21, 0x00	; 0
-    3a7c:	24 3f       	cpi	r18, 0xF4	; 244
-    3a7e:	81 e0       	ldi	r24, 0x01	; 1
+    3a7c:	28 38       	cpi	r18, 0x88	; 136
+    3a7e:	83 e1       	ldi	r24, 0x13	; 19
     3a80:	38 07       	cpc	r19, r24
     3a82:	80 e0       	ldi	r24, 0x00	; 0
     3a84:	48 07       	cpc	r20, r24
@@ -9685,8 +9687,9 @@ void GetVloss() {
     3a92:	00 e0       	ldi	r16, 0x00	; 0
     3a94:	10 e0       	ldi	r17, 0x00	; 0
     3a96:	04 c0       	rjmp	.+8      	; 0x3aa0 <GetVloss+0xc0>
-     wait50us();			// wait exactly 50us
-    3a98:	0e 94 77 14 	call	0x28ee	; 0x28ee <wait50us>
+//     wait50us();			// wait exactly 50us
+     wait5us();			// wait exactly 5us
+    3a98:	0e 94 7c 14 	call	0x28f8	; 0x28f8 <wait5us>
      /* capacity more than 50uF, Voltage loss is already measured  */
      return;
   }
@@ -9699,7 +9702,8 @@ void GetVloss() {
     3aa2:	0e 15       	cp	r16, r14
     3aa4:	1f 05       	cpc	r17, r15
     3aa6:	c0 f3       	brcs	.-16     	; 0x3a98 <GetVloss+0xb8>
-     wait50us();			// wait exactly 50us
+//     wait50us();			// wait exactly 50us
+     wait5us();			// wait exactly 5us
   }
   R_DDR = 0;				// switch back to input
     3aa8:	14 b8       	out	0x04, r1	; 4
@@ -9734,8 +9738,9 @@ void GetVloss() {
     3ace:	ee 24       	eor	r14, r14
     3ad0:	ff 24       	eor	r15, r15
     3ad2:	05 c0       	rjmp	.+10     	; 0x3ade <GetVloss+0xfe>
-     wait50us();
-    3ad4:	0e 94 77 14 	call	0x28ee	; 0x28ee <wait50us>
+//     wait50us();
+     wait5us();
+    3ad4:	0e 94 7c 14 	call	0x28f8	; 0x28f8 <wait5us>
      adcv[2] -= adcv[0];		//difference to beginning voltage
   } else {
      adcv[2] = 0;			// voltage is lower or same as beginning voltage
@@ -9748,7 +9753,8 @@ void GetVloss() {
     3ade:	ec 14       	cp	r14, r12
     3ae0:	fd 04       	cpc	r15, r13
     3ae2:	c0 f3       	brcs	.-16     	; 0x3ad4 <GetVloss+0xf4>
-     wait50us();
+//     wait50us();
+     wait5us();
   }
   adcv[3] = ReadADC(cap.cb);	// read voltage again, is discharged only a little bit ?
     3ae4:	80 91 73 01 	lds	r24, 0x0173

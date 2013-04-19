@@ -34,17 +34,20 @@ void GetVloss() {
 // ******** should adcv[0] be measured without current???
   if (cap.cpre_max > -9) return;	// too much capacity
   lval.dw = cap.cval_max;
-  for (ii=cap.cpre_max+12;ii<5;ii++) {
+//  for (ii=cap.cpre_max+12;ii<5;ii++) {
+  for (ii=cap.cpre_max+12;ii<4;ii++) {
      lval.dw = (lval.dw + 5) / 10;
   }
-  if ((lval.dw == 0) || (lval.dw > 500)) {
+//  if ((lval.dw == 0) || (lval.dw > 500)) {
+  if ((lval.dw == 0) || (lval.dw > 5000)) {
      /* capacity more than 50uF, Voltage loss is already measured  */
      return;
   }
   R_PORT = HiPinR_L;			//R_L to 1 (VCC) 
   R_DDR = HiPinR_L;			//switch Pin to output, across R to GND or VCC
   for (tmpint=0;tmpint<lval.w[0];tmpint+=2) {
-     wait50us();			// wait exactly 50us
+//     wait50us();			// wait exactly 50us
+     wait5us();			// wait exactly 5us
   }
   R_DDR = 0;				// switch back to input
   R_PORT = 0;			// no Pull up
@@ -60,7 +63,8 @@ void GetVloss() {
   }
   // wait 2x the time which was required for loading
   for (tmpint=0;tmpint<lval.w[0];tmpint++) {
-     wait50us();
+//     wait50us();
+     wait5us();
   }
   adcv[3] = ReadADC(cap.cb);	// read voltage again, is discharged only a little bit ?
   ADCconfig.Samples = ANZ_MESS;		// set ADC back to configured No. of samples

@@ -99,6 +99,8 @@ CFLAGS += -DUSE_EEPROM
 # If you select EBC_STYLE=321 , the style will be 321=... , the inverted order to the 123=... style.
 #CFLAGS += -DEBC_STYLE
 
+# Setting of NO_NANO avoids the use of n as prefix for Farad (nF), the mikro prefix is used insted (uF).
+# CFLAGS += -DNO_NANO
 
 # The PULLUP_DISABLE option disable the pull-up Resistors of IO-Ports.
 # To use this option a external pull-up Resistor (10k to 30k)

@@ -504,23 +504,12 @@ savenresult:
   // component has current
   //Test if Diode
   ADC_PORT = TXD_VAL;
-  ADC_DDR = LoADCm;	//Low-Pin fix to GND
-  R_DDR = HiPinRL;		//switch R_L port for High-Pin to output (VCC)
-  R_PORT = HiPinRL;
-  ChargePin10ms(TriPinRL,1);	//discharge of P-Kanal-MOSFET gate
-  adc.lp_otr = W5msReadADC(HighPin) - ReadADC(LowPin);
-  R_DDR = HiPinRH;		//switch R_H port for High-Pin output (VCC)
-  R_PORT = HiPinRH;
-  adc.hp2 = W5msReadADC(HighPin); 		// M--|<--HP--R_H--VCC
-
-  R_DDR = HiPinRL;		//switch R_L port for High-Pin to output (VCC)
-  R_PORT = HiPinRL;
-  ChargePin10ms(TriPinRL,0);	//discharge for N-Kanal-MOSFET gate
-  adc.hp1 = W5msReadADC(HighPin) - W5msReadADC(LowPin);
-  R_DDR = HiPinRH;		//switch R_H port for High-Pin to output (VCC)
-  R_PORT = HiPinRH;
-  adc.hp3 = W5msReadADC(HighPin);		// M--|<--HP--R_H--VCC
-
+  do {
+     ADC_DDR = LoADCm | HiADCm; // discharge by short of Low and High side
+     wait_about5ms();		// Low and Highpin to GND for discharge
+     ADC_DDR = LoADCm;		// switch only Low-Pin fix to GND
+     adc.hp1 = ReadADC(HighPin); // read voltage at High-Pin
+  } while (adc.hp1 > ((150/8)-1));
     /*It is possible, that wrong Parts are detected without discharging, because
       the gate of a MOSFET can be charged.
       The additional measurement with the big resistor R_H is made, to differ antiparallel diodes
@@ -528,6 +517,20 @@ savenresult:
       A diode has a voltage, that is nearly independent from the current.
       The voltage of a resistor is proportional to the current.
     */
+
+  R_DDR = HiPinRH;		//switch R_H port for High-Pin output (VCC)
+  R_PORT = HiPinRH;
+  ChargePin10ms(TriPinRL,1);	//discharge of P-Kanal-MOSFET gate
+  adc.hp2 = W5msReadADC(HighPin); 		// M--|<--HP--R_H--VCC
+  ChargePin10ms(TriPinRL,0);	//discharge for N-Kanal-MOSFET gate
+  adc.hp3 = W5msReadADC(HighPin);		// M--|<--HP--R_H--VCC
+
+  R_DDR = HiPinRL;		//switch R_L port for High-Pin to output (VCC)
+  R_PORT = HiPinRL;
+  adc.hp1 = W5msReadADC(HighPin) - ReadADC(LowPin);
+  ChargePin10ms(TriPinRL,1);	//discharge for N-Kanal-MOSFET gate
+  adc.lp_otr = W5msReadADC(HighPin) - ReadADC(LowPin);
+
   if(adc.lp_otr > adc.hp1) {
       adc.hp1 = adc.lp_otr;	//the higher value wins
       adc.hp3 = adc.hp2;

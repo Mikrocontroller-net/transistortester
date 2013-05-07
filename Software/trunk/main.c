@@ -125,7 +125,6 @@ int main(void) {
   empty_count = 0;
   mess_count = 0;
 
-
 //*****************************************************************
 //Entry: if start key is pressed before shut down
 start:
@@ -233,6 +232,9 @@ start:
      ADC_DDR = 0;		//deactivate Software-UART
      trans.uBE[1] = W5msReadADC(TPext);	// read external voltage 
      ADC_DDR = TXD_MSK;		//activate Software-UART 
+#ifdef WITH_UART
+     uart_newline();		// start of new measurement
+#endif
      DisplayValue(trans.uBE[1]*10,-3,'V',3);	// Display 3 Digits of this mV units
      wait_about300ms();
   }

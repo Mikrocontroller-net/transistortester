@@ -470,6 +470,7 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  #define wait_about20ms() wait20ms()
  #define wait_about30ms() wait30ms()
  #define wait_about50ms() wait50ms()
+ #define wait_about100ms() wait100ms()
  #define wait_about200ms() wait200ms()
  #define wait_about300ms() wait300ms()
  #define wait_about400ms() wait400ms()
@@ -485,6 +486,7 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  #define wait_about20ms() sleep_5ms(4)
  #define wait_about30ms() sleep_5ms(6)
  #define wait_about50ms() sleep_5ms(10)
+ #define wait_about100ms() sleep_5ms(20)
  #define wait_about200ms() sleep_5ms(40)
  #define wait_about300ms() sleep_5ms(60)
  #define wait_about400ms() sleep_5ms(80)
@@ -543,7 +545,6 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  // unset the option for the 123 selection, since this style is default.
  #undef EBC_STYLE
 #endif
-#endif
 
 //self build characters 
 #define LCD_CHAR_DIODE1  1      //Diode-Icon; will be generated as custom character
@@ -563,3 +564,4 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 
 #define LCD_CHAR_DEGREE 0xdf            // Character for degree
 
+#endif

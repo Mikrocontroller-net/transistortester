@@ -157,6 +157,9 @@ CFLAGS += -DBAT_POOR=6400
 
 # Select your programmer type and port, if you wish to use avrdude.
 PROGRAMMER=avrisp2
+BitClock=5.0
+#PROGRAMMER=usbasp
+#BitClock=20
 PORT=usb
 # ********************** end of selectable options
 
@@ -430,29 +433,29 @@ steril:
 # device programming
 # make fuses  call if you don't have installed a crystal
 fuses:
-	avrdude -c $(PROGRAMMER) -B 10.0 -p $(PARTNO) -P $(PORT)  $(FUSES_INT)
+	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT)  $(FUSES_INT)
 
 # fuses-crytal can only used if a 8MHz Crytal is installed (between Pin 9 and 10)
 fuses-crystal:
-	avrdude -c $(PROGRAMMER) -B 10.0 -p $(PARTNO) -P $(PORT)  $(FUSES_CRY)
+	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT)  $(FUSES_CRY)
 fuses-crystal-lp:
-	avrdude -c $(PROGRAMMER) -B 10.0 -p $(PARTNO) -P $(PORT)  $(FUSES_CRY_L)
+	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT)  $(FUSES_CRY_L)
 
 # make upload  additionally calls make to compile the software for selected target
 upload:
 	make
-	avrdude -c $(PROGRAMMER) -B 5.0 -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTester.hex:a \
+	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTester.hex:a \
 	-U eeprom:w:./TransistorTester.eep:a
 program:
 	make
-	avrdude -c $(PROGRAMMER) -B 5.0 -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTester.hex:a \
+	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTester.hex:a \
 	-U eeprom:w:./TransistorTester.eep:a
 eeprom:
-	avrdude -c $(PROGRAMMER) -B 5.0 -p $(PARTNO) -P $(PORT) \
+	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) \
 	-U eeprom:w:./TransistorTester.eep:a
 verify:
-	avrdude -D -c $(PROGRAMMER) -B 5.0 -p $(PARTNO) -P $(PORT) -U flash:v:./TransistorTester.hex:a \
+	avrdude -D -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:v:./TransistorTester.hex:a \
 	-U eeprom:v:./TransistorTester.eep:a -v
 upload_orig:
-	avrdude -c $(PROGRAMMER) -B 5.0 -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTestorig.hex:a \
+	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTestorig.hex:a \
 	-U eeprom:w:./TransistorTestorig.eep:a

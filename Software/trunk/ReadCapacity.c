@@ -310,6 +310,10 @@ messe_mit_rh:
   load_diff = adcv[2] + REF_C_KORR - ref_mv;	// build difference of capacitor voltage to Reference Voltage
 //############################################################
   if (ovcnt16 >= (F_CPU/10000)) {
+#if DebugOut == 10
+     lcd_data('k');
+     wait_about1s();
+#endif
      goto keinC;	// no normal end
   }
 //  cap.cval_uncorrected = CombineII2Long(ovcnt16, tmpint);
@@ -375,7 +379,7 @@ messe_mit_rh:
      lcd_space();
      wait_about1s();
 #endif
-      goto keinC;	//capacity to low, < 70pF @1MHz (35pF @8MHz)
+      goto keinC;	//capacity to low, < 50pF @1MHz (25pF @8MHz)
    }
    // end low capacity 
 checkDiodes:
@@ -452,11 +456,12 @@ void Scale_C_with_vcc(void) {
    cap.cval /= U_VCC;			// Factors are computed for U_VCC
 }
 #ifndef INHIBIT_SLEEP_MODE
-
+/* Interrupt Service Routine for timer1 Overflow */
  ISR(TIMER1_OVF_vect, ISR_BLOCK)
 {
  ovcnt16++;				// count overflow
 }
+/* Interrupt Service Routine for timer1 capture event (Comparator) */
  ISR(TIMER1_CAPT_vect, ISR_BLOCK)
 {
  unfinished = 0;			// clear unfinished flag

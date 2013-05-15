@@ -504,12 +504,15 @@ savenresult:
   // component has current
   //Test if Diode
   ADC_PORT = TXD_VAL;
-  do {
+//  do {
+  for (ii=0;ii<200;ii++) {
      ADC_DDR = LoADCm | HiADCm; // discharge by short of Low and High side
      wait_about5ms();		// Low and Highpin to GND for discharge
      ADC_DDR = LoADCm;		// switch only Low-Pin fix to GND
      adc.hp1 = ReadADC(HighPin); // read voltage at High-Pin
-  } while (adc.hp1 > ((150/8)-1));
+//  } while (adc.hp1 > ((150/8)-1));
+     if (adc.hp1 < (150/8)) break;
+  }
     /*It is possible, that wrong Parts are detected without discharging, because
       the gate of a MOSFET can be charged.
       The additional measurement with the big resistor R_H is made, to differ antiparallel diodes

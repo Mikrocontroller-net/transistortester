@@ -521,6 +521,29 @@ savenresult:
       The voltage of a resistor is proportional to the current.
     */
 
+#if 0
+  /* first check with higher current (R_L=680) */
+  /* A diode is found better with a parallel mounted capacitor, */
+  /* but some capacitors can be detected a a diode. */
+  R_DDR = HiPinRL;              //switch R_L port for High-Pin to output (VCC)
+  R_PORT = HiPinRL;
+  ChargePin10ms(TriPinRL,1);    //discharge of P-Kanal-MOSFET gate
+  adc.lp_otr = W5msReadADC(HighPin) - ReadADC(LowPin);
+  R_DDR = HiPinRH;              //switch R_H port for High-Pin output (VCC)
+  R_PORT = HiPinRH;
+  adc.hp2 = W5msReadADC(HighPin);               // M--|<--HP--R_H--VCC
+
+  R_DDR = HiPinRL;              //switch R_L port for High-Pin to output (VCC)
+  R_PORT = HiPinRL;
+  ChargePin10ms(TriPinRL,0);    //discharge for N-Kanal-MOSFET gate
+  adc.hp1 = W5msReadADC(HighPin) - W5msReadADC(LowPin);
+  R_DDR = HiPinRH;              //switch R_H port for High-Pin to output (VCC)
+  R_PORT = HiPinRH;
+  adc.hp3 = W5msReadADC(HighPin);               // M--|<--HP--R_H--VCC
+#else
+  /* check first with low current (R_H=470k) */
+  /* With this method the diode can be better differed from a capacitor, */
+  /* but a parallel to a capacitor mounted diode can not be found. */
   R_DDR = HiPinRH;		//switch R_H port for High-Pin output (VCC)
   R_PORT = HiPinRH;
   ChargePin10ms(TriPinRL,1);	//discharge of P-Kanal-MOSFET gate
@@ -528,11 +551,13 @@ savenresult:
   ChargePin10ms(TriPinRL,0);	//discharge for N-Kanal-MOSFET gate
   adc.hp3 = W5msReadADC(HighPin);		// M--|<--HP--R_H--VCC
 
+  /* check with higher current (R_L=680) */
   R_DDR = HiPinRL;		//switch R_L port for High-Pin to output (VCC)
   R_PORT = HiPinRL;
   adc.hp1 = W5msReadADC(HighPin) - ReadADC(LowPin);
   ChargePin10ms(TriPinRL,1);	//discharge for N-Kanal-MOSFET gate
   adc.lp_otr = W5msReadADC(HighPin) - ReadADC(LowPin);
+#endif
 
   if(adc.lp_otr > adc.hp1) {
       adc.hp1 = adc.lp_otr;	//the higher value wins

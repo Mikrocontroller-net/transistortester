@@ -98,7 +98,7 @@ void AutoCheck(void) {
            R_DDR = (2<<(TP1*2)) | (2<<(TP3*2));	//RH3 to -
            adcmv[1] = W20msReadADC(TP1);
            adcmv[1] -= adcmv[3];
-           R_PORT = 2<<(TP2*2);		//RL2 to VCC
+           R_PORT = 2<<(TP2*2);		//RH2 to VCC
            R_DDR = (2<<(TP2*2)) | (2<<(TP3*2));	//RH3 to -
            adcmv[2] = W20msReadADC(TP2);
            adcmv[2] -= adcmv[3];

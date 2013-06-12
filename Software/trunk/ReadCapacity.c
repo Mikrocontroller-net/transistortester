@@ -120,24 +120,24 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   // wait 5ms and read voltage again, does the capacitor keep the voltage?
 //  adcv[1] = W5msReadADC(HighPin) - adcv[0];
 //  wdt_reset();
+#if DebugOut == 10
+  DisplayValue(ovcnt16,0,' ',4);
+  DisplayValue(adcv[2],-3,'V',4);
+#endif
   if (adcv[2] < 301) {
 #if DebugOut == 10
      lcd_data('K');
      lcd_space();
      wait1s();
 #endif
+//     if (NumOfDiodes != 0) goto messe_mit_rh; /* ****************************** */
      goto keinC;		// was never charged enough, >100mF or shorted
   }
-#if DebugOut == 10
-  DisplayValue(ovcnt16,0,' ',4);
-  DisplayValue(adcv[2],-3,'V',4);
-#endif
   //voltage is rised properly and keeps the voltage enough
   if ((ovcnt16 == 0 ) && (adcv[2] > 1300)) {
-     goto messe_mit_rh;		// Voltage of more than 1300mV is reached in one pulse, to fast loaded
+     goto messe_mit_rh;		// Voltage of more than 1300mV is reached in one pulse, too fast loaded
   }
   // Capacity is more than about 50µF
-  cap.cpre = -9;		// switch units to nF 
 #ifdef NO_CAP_HOLD_TIME
   ChargePin10ms(HiPinR_H,0);		//switch HighPin with R_H 10ms auf GND, then currentless
   adcv[3] = ReadADC(HighPin) - adcv[0]; // read voltage again, is discharged only a little bit ?
@@ -160,6 +160,9 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      lcd_space();
      wait_about1s();
  #endif
+     if (ovcnt16 == 0 )  {
+        goto messe_mit_rh;		// Voltage of more than 1300mV is reached in one pulse, but not hold
+     }
      goto keinC; //implausible, not yet the half voltage
   }
   cap.cval_uncorrected.dw = ovcnt16 + 1;
@@ -198,6 +201,9 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      lcd_space();
      wait_about1s();
  #endif
+     if (ovcnt16 == 0 )  {
+        goto messe_mit_rh;		// Voltage of more than 1300mV is reached in one pulse, but not hold
+     }
      goto keinC;			// capacitor does not keep the voltage about 5ms
   }
   cap.cval_uncorrected.dw = ovcnt16 + 1;
@@ -205,6 +211,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   cap.cval_uncorrected.dw *= getRLmultip(adcv[2]+adcv[3]);	// get factor to convert time to capacity from table
 #endif
    cap.cval = cap.cval_uncorrected.dw;	// set result to uncorrected
+   cap.cpre = -9;		// switch units to nF 
    Scale_C_with_vcc();
    // cap.cval for this type is at least 40000nF, so the last digit will be never shown
    cap.cval *= (1000 - C_H_KORR);	// correct with C_H_KORR with 0.1% resolution, but prevent overflow

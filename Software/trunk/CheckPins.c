@@ -60,15 +60,15 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 //  #define RR680PL (R_L_VAL + PIN_RP)
 //  #define RR680MI (R_L_VAL + PIN_RM)
 //#endif
-  LoPinRL = pgm_read_byte(&PinRLtab[LowPin]);		// intruction for LowPin R_L
-  LoPinRH = LoPinRL + LoPinRL;				// intruction for LowPin R_H
-  TriPinRL = pgm_read_byte(&PinRLtab[TristatePin]);	// intruction for TristatePin R_L
-  TriPinRH = TriPinRL + TriPinRL;			// intruction for TristatePin R_H
-  HiPinRL = pgm_read_byte(&PinRLtab[HighPin]);		// intruction for HighPin R_L
-  HiPinRH = HiPinRL + HiPinRL;				// intruction for HighPin R_H
+  LoPinRL = pgm_read_byte(&PinRLtab[LowPin]);		// instruction for LowPin R_L
+  LoPinRH = LoPinRL + LoPinRL;				// instruction for LowPin R_H
+  TriPinRL = pgm_read_byte(&PinRLtab[TristatePin]);	// instruction for TristatePin R_L
+  TriPinRH = TriPinRL + TriPinRL;			// instruction for TristatePin R_H
+  HiPinRL = pgm_read_byte(&PinRLtab[HighPin]);		// instruction for HighPin R_L
+  HiPinRH = HiPinRL + HiPinRL;				// instruction for HighPin R_H
 
-  HiADCp = pgm_read_byte(&PinADCtab[HighPin]);		// intruction for ADC High-Pin 
-  LoADCp = pgm_read_byte(&PinADCtab[LowPin]);		// intruction for ADC Low-Pin
+  HiADCp = pgm_read_byte(&PinADCtab[HighPin]);		// instruction for ADC High-Pin 
+  LoADCp = pgm_read_byte(&PinADCtab[LowPin]);		// instruction for ADC Low-Pin
   HiADCm = HiADCp | TXD_MSK;
   HiADCp |= TXD_VAL;
   LoADCm = LoADCp | TXD_MSK;
@@ -109,27 +109,33 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      adc.lp2 = W20msReadADC(LowPin);	//measure voltage at the assumed Source again
      //If it is a self-conducting MOSFET or JFET, then must be: adc.lp2 > adc.lp1 
      if(adc.lp2>(adc.lp1+488)) {
-        //measure voltage at the  Gate, differ between MOSFET and JFET
-        ADC_PORT = TXD_VAL;
-        ADC_DDR = LoADCm;	//Low-Pin fix to GND
-        R_DDR = TriPinRH | HiPinRL;	//High-Pin to output
-        R_PORT = TriPinRH | HiPinRL;	//switch R_L for High-Pin to VCC
-        adc.lp2 = W20msReadADC(TristatePin); //read voltage of assumed Gate 
-        if(adc.lp2>3911) {  //MOSFET
-           PartFound = PART_FET;	//N-Kanal-MOSFET
-           PartMode = PART_MODE_N_D_MOS; //Depletion-MOSFET
-        } else {  //JFET (pn-passage between Gate and Source is conducting )
-           PartFound = PART_FET;	//N-Kanal-JFET
-           PartMode = PART_MODE_N_JFET;
+        if (PartFound != PART_FET) {
+           //measure voltage at the  Gate, differ between MOSFET and JFET
+           ADC_PORT = TXD_VAL;
+           ADC_DDR = LoADCm;	//Low-Pin fix to GND
+           R_DDR = TriPinRH | HiPinRL;	//High-Pin to output
+           R_PORT = TriPinRH | HiPinRL;	//switch R_L for High-Pin to VCC
+           adc.lp2 = W20msReadADC(TristatePin); //read voltage of assumed Gate 
+           if(adc.lp2>3911) {  //MOSFET
+              PartFound = PART_FET;	//N-Kanal-MOSFET
+              PartMode = PART_MODE_N_D_MOS; //Depletion-MOSFET
+           } else {  //JFET (pn-passage between Gate and Source is conducting )
+              PartFound = PART_FET;	//N-Kanal-JFET
+              PartMode = PART_MODE_N_JFET;
+           }
+#if DebugOut == 5
+           lcd_data('N');
+           lcd_data('J');
+#endif
+//         if ((PartReady == 0) || (adc.lp1 > trans.uBE[0])) 
+//         there is no way to find out the right Source / Drain
+           trans.uBE[0] = adc.lp1;
+           gthvoltage = adc.lp1 - adc.tp1;	//voltage GS (Source - Gate)
+           trans.uBE[1] = (unsigned int)(((unsigned long)adc.lp1 * 1000) / RR680MI); // Id 0.01mA
+           trans.b = TristatePin;		//save Pin numbers found for this FET
+           trans.c = HighPin;
+           trans.e = LowPin;
         }
-//      if ((PartReady == 0) || (adc.lp1 > trans.uBE[0])) 
-//      there is no way to find out the right Source / Drain
-        trans.uBE[0] = adc.lp1;
-        gthvoltage = adc.lp1 - adc.tp1;	//voltage GS (Source - Gate)
-        trans.uBE[1] = (unsigned int)(((unsigned long)adc.lp1 * 1000) / RR680MI); // Id 0.01mA
-        trans.b = TristatePin;		//save Pin numbers found for this FET
-        trans.c = HighPin;
-        trans.e = LowPin;
      }
 
      ADC_PORT = TXD_VAL;		// direct outputs to GND
@@ -145,22 +151,28 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      adc.hp2 = W20msReadADC(HighPin);	//read voltage at assumed Source again
      //if it is a self-conducting P_MOSFET or P-JFET , then must be:  adc.hp1 > adc.hp2 
      if(adc.hp1>(adc.hp2+488)) {
-        //read voltage at the Gate , to differ between MOSFET and JFET
-        ADC_PORT = HiADCp;	//switch High-Pin directly to VCC
-        ADC_DDR = HiADCm;	//switch High-Pin to output
-        adc.tp2 = W20msReadADC(TristatePin); //read voltage at the assumed Gate 
-        if(adc.tp2<977) { 		//MOSFET
-           PartFound = PART_FET;	//P-Kanal-MOSFET
-           PartMode = PART_MODE_P_D_MOS; //Depletion-MOSFET
-        } else { 			//JFET (pn-passage between Gate and Source is conducting)
-           PartFound = PART_FET;	//P-Kanal-JFET
-           PartMode = PART_MODE_P_JFET;
+        if (PartFound != PART_FET) {
+           //read voltage at the Gate , to differ between MOSFET and JFET
+           ADC_PORT = HiADCp;	//switch High-Pin directly to VCC
+           ADC_DDR = HiADCm;	//switch High-Pin to output
+           adc.tp2 = W20msReadADC(TristatePin); //read voltage at the assumed Gate 
+           if(adc.tp2<977) { 		//MOSFET
+              PartFound = PART_FET;	//P-Kanal-MOSFET
+              PartMode = PART_MODE_P_D_MOS; //Depletion-MOSFET
+           } else { 			//JFET (pn-passage between Gate and Source is conducting)
+              PartFound = PART_FET;	//P-Kanal-JFET
+              PartMode = PART_MODE_P_JFET;
+           }
+#if DebugOut == 5
+           lcd_data('P');
+           lcd_data('J');
+#endif
+           gthvoltage = adc.tp1 - adc.hp1;		//voltage GS (Gate - Source)
+           trans.uBE[1] = (unsigned int)(((unsigned long)(ADCconfig.U_AVCC - adc.hp1) * 1000) / RR680PL); // Id 0.01mA
+           trans.b = TristatePin;		//save Pin numbers found for this FET
+           trans.c = LowPin;
+           trans.e = HighPin;
         }
-        gthvoltage = adc.tp1 - adc.hp1;		//voltage GS (Gate - Source)
-        trans.uBE[1] = (unsigned int)(((unsigned long)(ADCconfig.U_AVCC - adc.hp1) * 1000) / RR680PL); // Id 0.01mA
-        trans.b = TristatePin;		//save Pin numbers found for this FET
-        trans.c = LowPin;
-        trans.e = HighPin;
      }
   } // end component has current without TristatePin signal
 

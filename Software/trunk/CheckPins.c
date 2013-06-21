@@ -93,7 +93,8 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   lcd_line2();
 #endif
 
-  if(adc.lp_otr > 92) {  //there is some current without TristatePin current 
+//  if(adc.lp_otr > 92) {  //there is some current without TristatePin current 
+  if(adc.lp_otr > 455) {  //there is more than 650uA current without TristatePin current 
 #if DebugOut == 5
      lcd_testpin(LowPin);
      lcd_data('F');

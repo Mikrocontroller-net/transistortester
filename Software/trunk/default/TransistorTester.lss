@@ -77,7 +77,7 @@ Disassembly of section .text:
       d6:	88 02                                               ..
 
 000000d8 <VERSION_str>:
-      d8:	56 65 72 73 69 6f 6e 20 31 2e 30 37 6b 00           Version 1.07k.
+      d8:	56 65 72 73 69 6f 6e 20 31 2e 30 38 6b 00           Version 1.08k.
 
 000000e6 <URefT>:
       e6:	52 65 66 3d 00                                      Ref=.
@@ -1680,264 +1680,264 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      892:	0e 94 f2 1a 	call	0x35e4	; 0x35e4 <ReadADC>
      896:	9b 87       	std	Y+11, r25	; 0x0b
      898:	8a 87       	std	Y+10, r24	; 0x0a
-  lcd_line2();
   lcd_clear_line();
   lcd_line2();
 #endif
 
-  if(adc.lp_otr > 92) {  //there is some current without TristatePin current 
+//  if(adc.lp_otr > 92) {  //there is some current without TristatePin current 
+  if(adc.lp_otr > 455) {  //there is more than 650uA current without TristatePin current 
      89a:	8a 85       	ldd	r24, Y+10	; 0x0a
      89c:	9b 85       	ldd	r25, Y+11	; 0x0b
-     89e:	8d 35       	cpi	r24, 0x5D	; 93
-     8a0:	91 05       	cpc	r25, r1
-     8a2:	08 f4       	brcc	.+2      	; 0x8a6 <CheckPins+0xca>
-     8a4:	b6 c0       	rjmp	.+364    	; 0xa12 <CheckPins+0x236>
+     89e:	a1 e0       	ldi	r26, 0x01	; 1
+     8a0:	88 3c       	cpi	r24, 0xC8	; 200
+     8a2:	9a 07       	cpc	r25, r26
+     8a4:	08 f4       	brcc	.+2      	; 0x8a8 <CheckPins+0xcc>
+     8a6:	b6 c0       	rjmp	.+364    	; 0xa14 <CheckPins+0x238>
      lcd_testpin(HighPin);
      lcd_space();
      wait_about1s();
 #endif
      //Test if N-JFET or if self-conducting N-MOSFET
      R_DDR = LoPinRL | TriPinRH;	//switch R_H for Tristate-Pin (probably Gate) to GND
-     8a6:	8d 81       	ldd	r24, Y+5	; 0x05
-     8a8:	89 29       	or	r24, r9
-     8aa:	84 b9       	out	0x04, r24	; 4
+     8a8:	8d 81       	ldd	r24, Y+5	; 0x05
+     8aa:	89 29       	or	r24, r9
+     8ac:	84 b9       	out	0x04, r24	; 4
      adc.lp1 = W20msReadADC(LowPin);	//measure voltage at the assumed Source 
-     8ac:	88 2d       	mov	r24, r8
-     8ae:	0e 94 e0 1a 	call	0x35c0	; 0x35c0 <W20msReadADC>
-     8b2:	6c 01       	movw	r12, r24
+     8ae:	88 2d       	mov	r24, r8
+     8b0:	0e 94 e0 1a 	call	0x35c0	; 0x35c0 <W20msReadADC>
+     8b4:	6c 01       	movw	r12, r24
      adc.tp1 = ReadADC(TristatePin);	// measure Gate voltage
-     8b4:	89 81       	ldd	r24, Y+1	; 0x01
-     8b6:	0e 94 f2 1a 	call	0x35e4	; 0x35e4 <ReadADC>
-     8ba:	7c 01       	movw	r14, r24
+     8b6:	89 81       	ldd	r24, Y+1	; 0x01
+     8b8:	0e 94 f2 1a 	call	0x35e4	; 0x35e4 <ReadADC>
+     8bc:	7c 01       	movw	r14, r24
      R_PORT = TriPinRH;			//switch R_H for Tristate-Pin (probably Gate) to VCC
-     8bc:	95 b8       	out	0x05, r9	; 5
+     8be:	95 b8       	out	0x05, r9	; 5
      adc.lp2 = W20msReadADC(LowPin);	//measure voltage at the assumed Source again
-     8be:	88 2d       	mov	r24, r8
-     8c0:	0e 94 e0 1a 	call	0x35c0	; 0x35c0 <W20msReadADC>
+     8c0:	88 2d       	mov	r24, r8
+     8c2:	0e 94 e0 1a 	call	0x35c0	; 0x35c0 <W20msReadADC>
      //If it is a self-conducting MOSFET or JFET, then must be: adc.lp2 > adc.lp1 
      if(adc.lp2>(adc.lp1+488)) {
-     8c4:	96 01       	movw	r18, r12
-     8c6:	28 51       	subi	r18, 0x18	; 24
-     8c8:	3e 4f       	sbci	r19, 0xFE	; 254
-     8ca:	28 17       	cp	r18, r24
-     8cc:	39 07       	cpc	r19, r25
-     8ce:	08 f0       	brcs	.+2      	; 0x8d2 <CheckPins+0xf6>
-     8d0:	46 c0       	rjmp	.+140    	; 0x95e <CheckPins+0x182>
+     8c6:	96 01       	movw	r18, r12
+     8c8:	28 51       	subi	r18, 0x18	; 24
+     8ca:	3e 4f       	sbci	r19, 0xFE	; 254
+     8cc:	28 17       	cp	r18, r24
+     8ce:	39 07       	cpc	r19, r25
+     8d0:	08 f0       	brcs	.+2      	; 0x8d4 <CheckPins+0xf8>
+     8d2:	46 c0       	rjmp	.+140    	; 0x960 <CheckPins+0x184>
         if (PartFound != PART_FET) {
-     8d2:	80 91 07 01 	lds	r24, 0x0107
-     8d6:	83 30       	cpi	r24, 0x03	; 3
-     8d8:	09 f4       	brne	.+2      	; 0x8dc <CheckPins+0x100>
-     8da:	41 c0       	rjmp	.+130    	; 0x95e <CheckPins+0x182>
+     8d4:	80 91 07 01 	lds	r24, 0x0107
+     8d8:	83 30       	cpi	r24, 0x03	; 3
+     8da:	09 f4       	brne	.+2      	; 0x8de <CheckPins+0x102>
+     8dc:	41 c0       	rjmp	.+130    	; 0x960 <CheckPins+0x184>
            //measure voltage at the  Gate, differ between MOSFET and JFET
            ADC_PORT = TXD_VAL;
-     8dc:	88 e0       	ldi	r24, 0x08	; 8
-     8de:	88 b9       	out	0x08, r24	; 8
+     8de:	88 e0       	ldi	r24, 0x08	; 8
+     8e0:	88 b9       	out	0x08, r24	; 8
            ADC_DDR = LoADCm;	//Low-Pin fix to GND
-     8e0:	9c 81       	ldd	r25, Y+4	; 0x04
-     8e2:	97 b9       	out	0x07, r25	; 7
+     8e2:	bc 81       	ldd	r27, Y+4	; 0x04
+     8e4:	b7 b9       	out	0x07, r27	; 7
            R_DDR = TriPinRH | HiPinRL;	//High-Pin to output
-     8e4:	89 2d       	mov	r24, r9
-     8e6:	80 2b       	or	r24, r16
-     8e8:	84 b9       	out	0x04, r24	; 4
+     8e6:	89 2d       	mov	r24, r9
+     8e8:	80 2b       	or	r24, r16
+     8ea:	84 b9       	out	0x04, r24	; 4
            R_PORT = TriPinRH | HiPinRL;	//switch R_L for High-Pin to VCC
-     8ea:	85 b9       	out	0x05, r24	; 5
+     8ec:	85 b9       	out	0x05, r24	; 5
            adc.lp2 = W20msReadADC(TristatePin); //read voltage of assumed Gate 
-     8ec:	89 81       	ldd	r24, Y+1	; 0x01
-     8ee:	0e 94 e0 1a 	call	0x35c0	; 0x35c0 <W20msReadADC>
+     8ee:	89 81       	ldd	r24, Y+1	; 0x01
+     8f0:	0e 94 e0 1a 	call	0x35c0	; 0x35c0 <W20msReadADC>
            if(adc.lp2>3911) {  //MOSFET
-     8f2:	af e0       	ldi	r26, 0x0F	; 15
-     8f4:	88 34       	cpi	r24, 0x48	; 72
-     8f6:	9a 07       	cpc	r25, r26
-     8f8:	28 f0       	brcs	.+10     	; 0x904 <CheckPins+0x128>
+     8f4:	ef e0       	ldi	r30, 0x0F	; 15
+     8f6:	88 34       	cpi	r24, 0x48	; 72
+     8f8:	9e 07       	cpc	r25, r30
+     8fa:	28 f0       	brcs	.+10     	; 0x906 <CheckPins+0x12a>
               PartFound = PART_FET;	//N-Kanal-MOSFET
-     8fa:	83 e0       	ldi	r24, 0x03	; 3
-     8fc:	80 93 07 01 	sts	0x0107, r24
+     8fc:	83 e0       	ldi	r24, 0x03	; 3
+     8fe:	80 93 07 01 	sts	0x0107, r24
               PartMode = PART_MODE_N_D_MOS; //Depletion-MOSFET
-     900:	84 e0       	ldi	r24, 0x04	; 4
-     902:	04 c0       	rjmp	.+8      	; 0x90c <CheckPins+0x130>
+     902:	84 e0       	ldi	r24, 0x04	; 4
+     904:	04 c0       	rjmp	.+8      	; 0x90e <CheckPins+0x132>
            } else {  //JFET (pn-passage between Gate and Source is conducting )
               PartFound = PART_FET;	//N-Kanal-JFET
-     904:	83 e0       	ldi	r24, 0x03	; 3
-     906:	80 93 07 01 	sts	0x0107, r24
+     906:	83 e0       	ldi	r24, 0x03	; 3
+     908:	80 93 07 01 	sts	0x0107, r24
               PartMode = PART_MODE_N_JFET;
-     90a:	86 e0       	ldi	r24, 0x06	; 6
-     90c:	80 93 06 01 	sts	0x0106, r24
+     90c:	86 e0       	ldi	r24, 0x06	; 6
+     90e:	80 93 06 01 	sts	0x0106, r24
            lcd_data('N');
            lcd_data('J');
 #endif
 //         if ((PartReady == 0) || (adc.lp1 > trans.uBE[0])) 
 //         there is no way to find out the right Source / Drain
            trans.uBE[0] = adc.lp1;
-     910:	d0 92 58 01 	sts	0x0158, r13
-     914:	c0 92 57 01 	sts	0x0157, r12
+     912:	d0 92 58 01 	sts	0x0158, r13
+     916:	c0 92 57 01 	sts	0x0157, r12
            gthvoltage = adc.lp1 - adc.tp1;	//voltage GS (Source - Gate)
-     918:	c6 01       	movw	r24, r12
-     91a:	8e 19       	sub	r24, r14
-     91c:	9f 09       	sbc	r25, r15
-     91e:	90 93 60 01 	sts	0x0160, r25
-     922:	80 93 5f 01 	sts	0x015F, r24
+     91a:	c6 01       	movw	r24, r12
+     91c:	8e 19       	sub	r24, r14
+     91e:	9f 09       	sbc	r25, r15
+     920:	90 93 60 01 	sts	0x0160, r25
+     924:	80 93 5f 01 	sts	0x015F, r24
            trans.uBE[1] = (unsigned int)(((unsigned long)adc.lp1 * 1000) / RR680MI); // Id 0.01mA
-     926:	b6 01       	movw	r22, r12
-     928:	80 e0       	ldi	r24, 0x00	; 0
-     92a:	90 e0       	ldi	r25, 0x00	; 0
-     92c:	28 ee       	ldi	r18, 0xE8	; 232
-     92e:	33 e0       	ldi	r19, 0x03	; 3
-     930:	40 e0       	ldi	r20, 0x00	; 0
-     932:	50 e0       	ldi	r21, 0x00	; 0
-     934:	0e 94 de 1e 	call	0x3dbc	; 0x3dbc <__mulsi3>
-     938:	20 91 02 01 	lds	r18, 0x0102
-     93c:	30 91 03 01 	lds	r19, 0x0103
-     940:	40 e0       	ldi	r20, 0x00	; 0
-     942:	50 e0       	ldi	r21, 0x00	; 0
-     944:	0e 94 1d 1f 	call	0x3e3a	; 0x3e3a <__udivmodsi4>
-     948:	30 93 5a 01 	sts	0x015A, r19
-     94c:	20 93 59 01 	sts	0x0159, r18
+     928:	b6 01       	movw	r22, r12
+     92a:	80 e0       	ldi	r24, 0x00	; 0
+     92c:	90 e0       	ldi	r25, 0x00	; 0
+     92e:	28 ee       	ldi	r18, 0xE8	; 232
+     930:	33 e0       	ldi	r19, 0x03	; 3
+     932:	40 e0       	ldi	r20, 0x00	; 0
+     934:	50 e0       	ldi	r21, 0x00	; 0
+     936:	0e 94 de 1e 	call	0x3dbc	; 0x3dbc <__mulsi3>
+     93a:	20 91 02 01 	lds	r18, 0x0102
+     93e:	30 91 03 01 	lds	r19, 0x0103
+     942:	40 e0       	ldi	r20, 0x00	; 0
+     944:	50 e0       	ldi	r21, 0x00	; 0
+     946:	0e 94 1d 1f 	call	0x3e3a	; 0x3e3a <__udivmodsi4>
+     94a:	30 93 5a 01 	sts	0x015A, r19
+     94e:	20 93 59 01 	sts	0x0159, r18
            trans.b = TristatePin;		//save Pin numbers found for this FET
-     950:	b9 81       	ldd	r27, Y+1	; 0x01
-     952:	b0 93 5b 01 	sts	0x015B, r27
+     952:	f9 81       	ldd	r31, Y+1	; 0x01
+     954:	f0 93 5b 01 	sts	0x015B, r31
            trans.c = HighPin;
-     956:	10 93 5c 01 	sts	0x015C, r17
+     958:	10 93 5c 01 	sts	0x015C, r17
            trans.e = LowPin;
-     95a:	80 92 5d 01 	sts	0x015D, r8
+     95c:	80 92 5d 01 	sts	0x015D, r8
         }
      }
 
      ADC_PORT = TXD_VAL;		// direct outputs to GND
-     95e:	88 e0       	ldi	r24, 0x08	; 8
-     960:	88 b9       	out	0x08, r24	; 8
+     960:	88 e0       	ldi	r24, 0x08	; 8
+     962:	88 b9       	out	0x08, r24	; 8
 
      //Test, if P-JFET or if self-conducting P-MOSFET
      ADC_DDR = LoADCm;		//switch Low-Pin (assumed Drain) direct to GND,
-     962:	ec 81       	ldd	r30, Y+4	; 0x04
-     964:	e7 b9       	out	0x07, r30	; 7
+     964:	2c 81       	ldd	r18, Y+4	; 0x04
+     966:	27 b9       	out	0x07, r18	; 7
 				//R_H for Tristate-Pin (assumed Gate) is already switched to VCC
      R_DDR = TriPinRH | HiPinRL;	//High-Pin to output
-     966:	89 2d       	mov	r24, r9
-     968:	80 2b       	or	r24, r16
-     96a:	84 b9       	out	0x04, r24	; 4
+     968:	89 2d       	mov	r24, r9
+     96a:	80 2b       	or	r24, r16
+     96c:	84 b9       	out	0x04, r24	; 4
      R_PORT = TriPinRH | HiPinRL;	//High-Pin across R_L to Vcc
-     96c:	85 b9       	out	0x05, r24	; 5
+     96e:	85 b9       	out	0x05, r24	; 5
      adc.hp1 = W20msReadADC(HighPin);	//measure voltage at assumed Source 
-     96e:	81 2f       	mov	r24, r17
-     970:	0e 94 e0 1a 	call	0x35c0	; 0x35c0 <W20msReadADC>
-     974:	6c 01       	movw	r12, r24
+     970:	81 2f       	mov	r24, r17
+     972:	0e 94 e0 1a 	call	0x35c0	; 0x35c0 <W20msReadADC>
+     976:	6c 01       	movw	r12, r24
      adc.tp1 = ReadADC(TristatePin);	// measure Gate voltage
-     976:	89 81       	ldd	r24, Y+1	; 0x01
-     978:	0e 94 f2 1a 	call	0x35e4	; 0x35e4 <ReadADC>
-     97c:	7c 01       	movw	r14, r24
+     978:	89 81       	ldd	r24, Y+1	; 0x01
+     97a:	0e 94 f2 1a 	call	0x35e4	; 0x35e4 <ReadADC>
+     97e:	7c 01       	movw	r14, r24
      R_PORT = HiPinRL;			//switch R_H for Tristate-Pin (assumed Gate) to GND
-     97e:	05 b9       	out	0x05, r16	; 5
+     980:	05 b9       	out	0x05, r16	; 5
      adc.hp2 = W20msReadADC(HighPin);	//read voltage at assumed Source again
-     980:	81 2f       	mov	r24, r17
-     982:	0e 94 e0 1a 	call	0x35c0	; 0x35c0 <W20msReadADC>
+     982:	81 2f       	mov	r24, r17
+     984:	0e 94 e0 1a 	call	0x35c0	; 0x35c0 <W20msReadADC>
      //if it is a self-conducting P_MOSFET or P-JFET , then must be:  adc.hp1 > adc.hp2 
      if(adc.hp1>(adc.hp2+488)) {
-     986:	88 51       	subi	r24, 0x18	; 24
-     988:	9e 4f       	sbci	r25, 0xFE	; 254
-     98a:	8c 15       	cp	r24, r12
-     98c:	9d 05       	cpc	r25, r13
-     98e:	08 f0       	brcs	.+2      	; 0x992 <CheckPins+0x1b6>
-     990:	40 c0       	rjmp	.+128    	; 0xa12 <CheckPins+0x236>
+     988:	88 51       	subi	r24, 0x18	; 24
+     98a:	9e 4f       	sbci	r25, 0xFE	; 254
+     98c:	8c 15       	cp	r24, r12
+     98e:	9d 05       	cpc	r25, r13
+     990:	08 f0       	brcs	.+2      	; 0x994 <CheckPins+0x1b8>
+     992:	40 c0       	rjmp	.+128    	; 0xa14 <CheckPins+0x238>
         if (PartFound != PART_FET) {
-     992:	80 91 07 01 	lds	r24, 0x0107
-     996:	83 30       	cpi	r24, 0x03	; 3
-     998:	e1 f1       	breq	.+120    	; 0xa12 <CheckPins+0x236>
+     994:	80 91 07 01 	lds	r24, 0x0107
+     998:	83 30       	cpi	r24, 0x03	; 3
+     99a:	e1 f1       	breq	.+120    	; 0xa14 <CheckPins+0x238>
            //read voltage at the Gate , to differ between MOSFET and JFET
            ADC_PORT = HiADCp;	//switch High-Pin directly to VCC
-     99a:	fb 81       	ldd	r31, Y+3	; 0x03
-     99c:	f8 b9       	out	0x08, r31	; 8
+     99c:	3b 81       	ldd	r19, Y+3	; 0x03
+     99e:	38 b9       	out	0x08, r19	; 8
            ADC_DDR = HiADCm;	//switch High-Pin to output
-     99e:	f7 b9       	out	0x07, r31	; 7
+     9a0:	37 b9       	out	0x07, r19	; 7
            adc.tp2 = W20msReadADC(TristatePin); //read voltage at the assumed Gate 
-     9a0:	89 81       	ldd	r24, Y+1	; 0x01
-     9a2:	0e 94 e0 1a 	call	0x35c0	; 0x35c0 <W20msReadADC>
+     9a2:	89 81       	ldd	r24, Y+1	; 0x01
+     9a4:	0e 94 e0 1a 	call	0x35c0	; 0x35c0 <W20msReadADC>
            if(adc.tp2<977) { 		//MOSFET
-     9a6:	23 e0       	ldi	r18, 0x03	; 3
-     9a8:	81 3d       	cpi	r24, 0xD1	; 209
-     9aa:	92 07       	cpc	r25, r18
-     9ac:	28 f4       	brcc	.+10     	; 0x9b8 <CheckPins+0x1dc>
+     9a8:	43 e0       	ldi	r20, 0x03	; 3
+     9aa:	81 3d       	cpi	r24, 0xD1	; 209
+     9ac:	94 07       	cpc	r25, r20
+     9ae:	28 f4       	brcc	.+10     	; 0x9ba <CheckPins+0x1de>
               PartFound = PART_FET;	//P-Kanal-MOSFET
-     9ae:	83 e0       	ldi	r24, 0x03	; 3
-     9b0:	80 93 07 01 	sts	0x0107, r24
+     9b0:	83 e0       	ldi	r24, 0x03	; 3
+     9b2:	80 93 07 01 	sts	0x0107, r24
               PartMode = PART_MODE_P_D_MOS; //Depletion-MOSFET
-     9b4:	85 e0       	ldi	r24, 0x05	; 5
-     9b6:	04 c0       	rjmp	.+8      	; 0x9c0 <CheckPins+0x1e4>
+     9b6:	85 e0       	ldi	r24, 0x05	; 5
+     9b8:	04 c0       	rjmp	.+8      	; 0x9c2 <CheckPins+0x1e6>
            } else { 			//JFET (pn-passage between Gate and Source is conducting)
               PartFound = PART_FET;	//P-Kanal-JFET
-     9b8:	83 e0       	ldi	r24, 0x03	; 3
-     9ba:	80 93 07 01 	sts	0x0107, r24
+     9ba:	83 e0       	ldi	r24, 0x03	; 3
+     9bc:	80 93 07 01 	sts	0x0107, r24
               PartMode = PART_MODE_P_JFET;
-     9be:	87 e0       	ldi	r24, 0x07	; 7
-     9c0:	80 93 06 01 	sts	0x0106, r24
+     9c0:	87 e0       	ldi	r24, 0x07	; 7
+     9c2:	80 93 06 01 	sts	0x0106, r24
            }
 #if DebugOut == 5
            lcd_data('P');
            lcd_data('J');
 #endif
            gthvoltage = adc.tp1 - adc.hp1;		//voltage GS (Gate - Source)
-     9c4:	ec 18       	sub	r14, r12
-     9c6:	fd 08       	sbc	r15, r13
-     9c8:	f0 92 60 01 	sts	0x0160, r15
-     9cc:	e0 92 5f 01 	sts	0x015F, r14
+     9c6:	ec 18       	sub	r14, r12
+     9c8:	fd 08       	sbc	r15, r13
+     9ca:	f0 92 60 01 	sts	0x0160, r15
+     9ce:	e0 92 5f 01 	sts	0x015F, r14
            trans.uBE[1] = (unsigned int)(((unsigned long)(ADCconfig.U_AVCC - adc.hp1) * 1000) / RR680PL); // Id 0.01mA
-     9d0:	60 91 40 01 	lds	r22, 0x0140
-     9d4:	70 91 41 01 	lds	r23, 0x0141
-     9d8:	6c 19       	sub	r22, r12
-     9da:	7d 09       	sbc	r23, r13
-     9dc:	80 e0       	ldi	r24, 0x00	; 0
-     9de:	90 e0       	ldi	r25, 0x00	; 0
-     9e0:	28 ee       	ldi	r18, 0xE8	; 232
-     9e2:	33 e0       	ldi	r19, 0x03	; 3
-     9e4:	40 e0       	ldi	r20, 0x00	; 0
-     9e6:	50 e0       	ldi	r21, 0x00	; 0
-     9e8:	0e 94 de 1e 	call	0x3dbc	; 0x3dbc <__mulsi3>
-     9ec:	20 91 08 01 	lds	r18, 0x0108
-     9f0:	30 91 09 01 	lds	r19, 0x0109
-     9f4:	40 e0       	ldi	r20, 0x00	; 0
-     9f6:	50 e0       	ldi	r21, 0x00	; 0
-     9f8:	0e 94 1d 1f 	call	0x3e3a	; 0x3e3a <__udivmodsi4>
-     9fc:	30 93 5a 01 	sts	0x015A, r19
-     a00:	20 93 59 01 	sts	0x0159, r18
+     9d2:	60 91 40 01 	lds	r22, 0x0140
+     9d6:	70 91 41 01 	lds	r23, 0x0141
+     9da:	6c 19       	sub	r22, r12
+     9dc:	7d 09       	sbc	r23, r13
+     9de:	80 e0       	ldi	r24, 0x00	; 0
+     9e0:	90 e0       	ldi	r25, 0x00	; 0
+     9e2:	28 ee       	ldi	r18, 0xE8	; 232
+     9e4:	33 e0       	ldi	r19, 0x03	; 3
+     9e6:	40 e0       	ldi	r20, 0x00	; 0
+     9e8:	50 e0       	ldi	r21, 0x00	; 0
+     9ea:	0e 94 de 1e 	call	0x3dbc	; 0x3dbc <__mulsi3>
+     9ee:	20 91 08 01 	lds	r18, 0x0108
+     9f2:	30 91 09 01 	lds	r19, 0x0109
+     9f6:	40 e0       	ldi	r20, 0x00	; 0
+     9f8:	50 e0       	ldi	r21, 0x00	; 0
+     9fa:	0e 94 1d 1f 	call	0x3e3a	; 0x3e3a <__udivmodsi4>
+     9fe:	30 93 5a 01 	sts	0x015A, r19
+     a02:	20 93 59 01 	sts	0x0159, r18
            trans.b = TristatePin;		//save Pin numbers found for this FET
-     a04:	39 81       	ldd	r19, Y+1	; 0x01
-     a06:	30 93 5b 01 	sts	0x015B, r19
+     a06:	89 81       	ldd	r24, Y+1	; 0x01
+     a08:	80 93 5b 01 	sts	0x015B, r24
            trans.c = LowPin;
-     a0a:	80 92 5c 01 	sts	0x015C, r8
+     a0c:	80 92 5c 01 	sts	0x015C, r8
            trans.e = HighPin;
-     a0e:	10 93 5d 01 	sts	0x015D, r17
+     a10:	10 93 5d 01 	sts	0x015D, r17
   } // end component has current without TristatePin signal
 
 
 #ifdef COMMON_COLLECTOR
   // Test circuit with common collector (Emitter follower) PNP
   ADC_PORT = TXD_VAL;
-     a12:	88 e0       	ldi	r24, 0x08	; 8
-     a14:	88 b9       	out	0x08, r24	; 8
+     a14:	88 e0       	ldi	r24, 0x08	; 8
+     a16:	88 b9       	out	0x08, r24	; 8
   ADC_DDR = LoADCm;			// Collector direct to GND
-     a16:	4c 81       	ldd	r20, Y+4	; 0x04
-     a18:	47 b9       	out	0x07, r20	; 7
+     a18:	9c 81       	ldd	r25, Y+4	; 0x04
+     a1a:	97 b9       	out	0x07, r25	; 7
   R_PORT = HiPinRL;			// switch R_L port for HighPin (Emitter) to VCC
-     a1a:	05 b9       	out	0x05, r16	; 5
+     a1c:	05 b9       	out	0x05, r16	; 5
   R_DDR = TriPinRL | HiPinRL;		// Base resistor  R_L to GND
-     a1c:	8a 81       	ldd	r24, Y+2	; 0x02
-     a1e:	80 2b       	or	r24, r16
-     a20:	89 8b       	std	Y+17, r24	; 0x11
-     a22:	84 b9       	out	0x04, r24	; 4
+     a1e:	aa 81       	ldd	r26, Y+2	; 0x02
+     a20:	a0 2b       	or	r26, r16
+     a22:	a9 8b       	std	Y+17, r26	; 0x11
+     a24:	a4 b9       	out	0x04, r26	; 4
   adc.hp1 = ADCconfig.U_AVCC - W5msReadADC(HighPin);	// voltage at the Emitter resistor
-     a24:	c0 90 40 01 	lds	r12, 0x0140
-     a28:	d0 90 41 01 	lds	r13, 0x0141
-     a2c:	81 2f       	mov	r24, r17
-     a2e:	0e 94 ec 1a 	call	0x35d8	; 0x35d8 <W5msReadADC>
-     a32:	7c 01       	movw	r14, r24
+     a26:	c0 90 40 01 	lds	r12, 0x0140
+     a2a:	d0 90 41 01 	lds	r13, 0x0141
+     a2e:	81 2f       	mov	r24, r17
+     a30:	0e 94 ec 1a 	call	0x35d8	; 0x35d8 <W5msReadADC>
+     a34:	7c 01       	movw	r14, r24
   adc.tp1 = ReadADC(TristatePin);	// voltage at the base resistor
-     a34:	89 81       	ldd	r24, Y+1	; 0x01
-     a36:	0e 94 f2 1a 	call	0x35e4	; 0x35e4 <ReadADC>
-     a3a:	5c 01       	movw	r10, r24
+     a36:	89 81       	ldd	r24, Y+1	; 0x01
+     a38:	0e 94 f2 1a 	call	0x35e4	; 0x35e4 <ReadADC>
+     a3c:	5c 01       	movw	r10, r24
 
   if (adc.tp1 < 10) {
-     a3c:	9a e0       	ldi	r25, 0x0A	; 10
-     a3e:	a9 16       	cp	r10, r25
-     a40:	b1 04       	cpc	r11, r1
+     a3e:	8a 30       	cpi	r24, 0x0A	; 10
+     a40:	91 05       	cpc	r25, r1
      a42:	68 f5       	brcc	.+90     	; 0xa9e <CheckPins+0x2c2>
      R_DDR =  TriPinRH | HiPinRL;	// Tripin=RH-
      a44:	89 2d       	mov	r24, r9

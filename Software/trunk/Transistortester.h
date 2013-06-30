@@ -67,7 +67,7 @@ End of configuration
    const unsigned char BatEmpty[] MEM_TEXT = "leer!"; //€€€";
    const unsigned char TestFailed2[] MEM_TEXT = "defektes "; //€€€";
    const unsigned char Bauteil[] MEM_TEXT = "Bauteil"; //€€€";
-   const unsigned char Diode[] MEM_TEXT = "Diode: ";
+//   const unsigned char Diode[] MEM_TEXT = "Diode: ";
    const unsigned char Triac[] MEM_TEXT = "Triac";
    const unsigned char Thyristor[] MEM_TEXT = "Thyristor";
    const unsigned char Unknown[] MEM_TEXT = " unbek."; //€€";
@@ -88,7 +88,7 @@ End of configuration
    const unsigned char BatEmpty[] MEM_TEXT = "empty!"; //€€";
    const unsigned char TestFailed2[] MEM_TEXT = "damaged "; //€€€€";
    const unsigned char Bauteil[] MEM_TEXT = "part"; //€€€€€€";
-   const unsigned char Diode[] MEM_TEXT = "Diode: ";
+//   const unsigned char Diode[] MEM_TEXT = "Diode: ";
    const unsigned char Triac[] MEM_TEXT = "Triac";
    const unsigned char Thyristor[] MEM_TEXT = "Thyristor";
    const unsigned char Unknown[] MEM_TEXT = " unknown"; //€";
@@ -109,7 +109,7 @@ End of configuration
    const unsigned char BatEmpty[] MEM_TEXT = "za slaba";
    const unsigned char TestFailed2[] MEM_TEXT = "lub uszkodz.";
    const unsigned char Bauteil[] MEM_TEXT = "Elemen"; //t€€€";
-   const unsigned char Diode[] MEM_TEXT = "Dioda: ";
+//   const unsigned char Diode[] MEM_TEXT = "Dioda: ";
    const unsigned char Triac[] MEM_TEXT = "Triak";
    const unsigned char Thyristor[] MEM_TEXT = "Tyrystor"; //€";
    const unsigned char Unknown[] MEM_TEXT = " nieznany";
@@ -130,7 +130,7 @@ End of configuration
    const unsigned char BatEmpty[] MEM_TEXT = "prazdna!";
    const unsigned char TestFailed2[] MEM_TEXT = "vadna "; //€€€€€€";
    const unsigned char Bauteil[] MEM_TEXT = "soucastka"; //€";
-   const unsigned char Diode[] MEM_TEXT = "Dioda: ";
+//   const unsigned char Diode[] MEM_TEXT = "Dioda: ";
    const unsigned char Triac[] MEM_TEXT = "Triak";
    const unsigned char Thyristor[] MEM_TEXT = "Tyristor"; //€";
    const unsigned char Unknown[] MEM_TEXT = " neznama"; //€";
@@ -151,7 +151,7 @@ End of configuration
    const unsigned char BatEmpty[] MEM_TEXT = "prazdna!";
    const unsigned char TestFailed2[] MEM_TEXT = "vadna "; //€€€€€€";
    const unsigned char Bauteil[] MEM_TEXT = "suciastka!";
-   const unsigned char Diode[] MEM_TEXT = "Dioda: ";
+//   const unsigned char Diode[] MEM_TEXT = "Dioda: ";
    const unsigned char Triac[] MEM_TEXT = "Triak";
    const unsigned char Thyristor[] MEM_TEXT = "Tyristor"; //€";
    const unsigned char Unknown[] MEM_TEXT = " neznama"; //€";
@@ -172,7 +172,7 @@ End of configuration
    const unsigned char BatEmpty[] MEM_TEXT = "prazna!"; 
    const unsigned char TestFailed2[] MEM_TEXT = "pokvarjen "; 
    const unsigned char Bauteil[] MEM_TEXT = "del"; 
-   const unsigned char Diode[] MEM_TEXT = "Dioda: ";
+//   const unsigned char Diode[] MEM_TEXT = "Dioda: ";
    const unsigned char Triac[] MEM_TEXT = "Triak";
    const unsigned char Thyristor[] MEM_TEXT = "Tiristor";
    const unsigned char Unknown[] MEM_TEXT = " neznan"; 
@@ -192,7 +192,7 @@ End of configuration
    const unsigned char BatEmpty[] MEM_TEXT = "leeg!"; 
    const unsigned char TestFailed2[] MEM_TEXT = "defect "; 
    const unsigned char Bauteil[] MEM_TEXT = "component"; 
-   const unsigned char Diode[] MEM_TEXT = "Diode: ";
+//   const unsigned char Diode[] MEM_TEXT = "Diode: ";
    const unsigned char Triac[] MEM_TEXT = "Triac";
    const unsigned char Thyristor[] MEM_TEXT = "Thyristor";
    const unsigned char Unknown[] MEM_TEXT = " onbekend"; 
@@ -213,7 +213,7 @@ End of configuration
    const unsigned char BatEmpty[] MEM_TEXT = "acabou!"; 	//€€"; +2
    const unsigned char TestFailed2[] MEM_TEXT = "ou danificada..."; 	//€€€€";
    const unsigned char Bauteil[] MEM_TEXT = "peca"; 		//€€€€€€";
-   const unsigned char Diode[] MEM_TEXT = "Diodo: ";
+//   const unsigned char Diode[] MEM_TEXT = "Diodo: ";
    const unsigned char Triac[] MEM_TEXT = "Triac";
    const unsigned char Thyristor[] MEM_TEXT = "Tiristor ";
    const unsigned char Unknown[] MEM_TEXT = " O que? "; 	//€";
@@ -235,7 +235,7 @@ End of configuration
    const unsigned char BatEmpty[] MEM_TEXT = {Cyr_p,Cyr_U,'c',Cyr_t,'o',Cyr_j,'!',0};
    const unsigned char TestFailed2[] MEM_TEXT = {Cyr_p,'o',Cyr_v,'p','e',Cyr_zsch,Cyr_d,'e',Cyr_n,' ',0};
    const unsigned char Bauteil[] MEM_TEXT = {Cyr_tsch,'a','c',Cyr_t,Cyr_hh,0}; 
-   const unsigned char Diode[] MEM_TEXT = {Cyr_D,Cyr_i,'o',Cyr_d,':',0};
+//   const unsigned char Diode[] MEM_TEXT = {Cyr_D,Cyr_i,'o',Cyr_d,':',0};
    const unsigned char Triac[] MEM_TEXT = {'C',Cyr_i,Cyr_m,Cyr_i,'c',Cyr_t,'o','p',0};
    const unsigned char Thyristor[] MEM_TEXT = {Cyr_t,Cyr_i,'p',Cyr_i,'c',Cyr_t,'o','p',0};
    const unsigned char Unknown[] MEM_TEXT = {' ',Cyr_n,'e',Cyr_i,Cyr_z,Cyr_v,'e','c',Cyr_t,Cyr_n,Cyr_y,Cyr_j,0}; 
@@ -277,6 +277,7 @@ End of configuration
  const unsigned char ESR_str[] MEM_TEXT = " ESR=";
  const unsigned char VLOSS_str[] MEM_TEXT = " Vloss=";
  const unsigned char Lis_str[] MEM_TEXT = "L=";
+ const unsigned char Ir_str[] MEM_TEXT = "  Ir=";
  #ifndef WITH_UART
   #define WITH_VEXT
  #endif

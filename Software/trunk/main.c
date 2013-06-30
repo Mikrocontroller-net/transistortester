@@ -285,7 +285,7 @@ start:
   lcd_clear();
   if(PartFound == PART_DIODE) {
      if(NumOfDiodes == 1) {		//single Diode
-        lcd_fix_string(Diode);		//"Diode: "
+//        lcd_fix_string(Diode);		//"Diode: "
 #if FLASHEND > 0x1fff
         // enough memory to sort the pins
  #if EBC_STYLE == 321
@@ -317,7 +317,11 @@ start:
         lcd_fix_string(AnKat);		//"->|-"
         lcd_testpin(diodes[0].Cathode);
 #endif
+#if FLASHEND > 0x1fff
+	GetIr(diodes[0].Cathode,diodes[0].Anode);
+#endif
         UfAusgabe(0x70);
+        /* load current of capacity is (5V-1.1V)/(470000 Ohm) = 8298nA */
         lcd_fix_string(GateCap_str);	//"C="
         ReadCapacity(diodes[0].Cathode,diodes[0].Anode);	// Capacity opposite flow direction
         DisplayValue(cap.cval,cap.cpre,'F',3);
@@ -1057,4 +1061,7 @@ void PinLayout(char pin1, char pin2, char pin3) {
 
 #ifdef CHECK_CALL
  #include "AutoCheck.c"
+#endif
+#if FLASHEND > 0x1fff
+ #include "GetIr.c"
 #endif

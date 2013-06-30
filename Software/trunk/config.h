@@ -238,7 +238,7 @@ End of configuration
   #define DEFAULT_RH_FAKT  884      // mega328 1070 mV
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
-// COMMON_COLLECTOR activates measurement of current amplification factor also in common collector circuit  (Emitter follower)
+// COMMON_COLLECTOR activates measurement of current amplification factor in common collector circuit  (Emitter follower)
   #define COMMON_COLLECTOR
   #define MEGA168A 17
   #define MEGA168PA 18
@@ -266,7 +266,7 @@ End of configuration
   #define DEFAULT_RH_FAKT  884      // mega328 1070 mV
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
-// COMMON_COLLECTOR activates measurement of current amplification factor also in common collector circuit  (Emitter follower)
+// COMMON_COLLECTOR activates measurement of current amplification factor in common collector circuit  (Emitter follower)
   #define COMMON_COLLECTOR
 
   #define PIN_RM 200
@@ -289,7 +289,7 @@ End of configuration
   #define DEFAULT_RH_FAKT  884      // mega328 1070 mV
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
-// COMMON_COLLECTOR activates measurement of current amplification factor also in common collector circuit  (Emitter follower)
+// COMMON_COLLECTOR activates measurement of current amplification factor in common collector circuit  (Emitter follower)
   #define COMMON_COLLECTOR
 
   #define PIN_RM 200
@@ -314,7 +314,7 @@ End of configuration
   #define DEFAULT_RH_FAKT  740      // mega8 1250 mV
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
-// COMMON_COLLECTOR activates measurement of current amplification factor also in common collector circuit  (Emitter follower)
+// COMMON_COLLECTOR activates measurement of current amplification factor in common collector circuit  (Emitter follower)
   #define COMMON_COLLECTOR
 
   #define PIN_RM 196
@@ -565,3 +565,13 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 #define LCD_CHAR_DEGREE 0xdf            // Character for degree
 
 #endif
+/* the hFE (B) can be determined with common collector and common emitter circuit */
+/* with more than 16K both methodes are possible */
+#ifdef COMMON_COLLECTOR
+ #if FLASHEND > 0x3fff
+   #define COMMON_EMITTER
+ #endif
+#else
+   #define COMMON_EMITTER
+#endif
+

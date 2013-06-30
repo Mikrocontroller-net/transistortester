@@ -30,7 +30,12 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   uint8_t HiADCm;		// mask to switch the ADC DDR port High-Pin
   uint8_t LoADCm;		// mask to switch the ADC DDR port Low-Pin
   uint8_t PinMSK;
-  uint8_t ii;			// Hilfsvariable
+  uint8_t ii;			// temporary variable
+#ifdef COMMON_EMITTER
+  unsigned int tmp16;		// temporary variable
+#else
+ #warning "without common emitter hFE"
+#endif
 #if FLASHEND > 0x1fff
   int udiff;
 #endif
@@ -191,22 +196,11 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      R_DDR =  TriPinRH | HiPinRL;	// Tripin=RH-
      adc.hp1 = ADCconfig.U_AVCC - W5msReadADC(HighPin);
      adc.tp1 = ReadADC(TristatePin);	// voltage at base resistor 
-#if DebugOut == 5
-       lcd_line3();
-       lcd_clear_line();
-       lcd_line3();
-       lcd_data('H');
-       lcd_string(utoa(adc.hp1,outval,10));
-       lcd_space();
-       lcd_data('T');
-       lcd_string(utoa(adc.tp1,outval,10));
-       lcd_space();
-#endif
  #ifdef LONG_HFE
      c_hfe = ((unsigned long)adc.hp1 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
               (unsigned int)RR680PL)) / (unsigned int)adc.tp1;	
  #else
-     c_hfe = ((adc.hp1 / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
+     c_hfe = ((adc.hp1 / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.tp1/500);
  #endif
   } else {
      c_hfe = (unsigned long)((adc.hp1 - adc.tp1) / adc.tp1);
@@ -243,32 +237,42 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         if((PartFound == PART_TRANSISTOR) || (PartFound == PART_FET)) {
            PartReady = 1;
         }
+ #ifdef COMMON_EMITTER
         trans.uBE[PartReady] = ReadADC(HighPin) - adc.tp2;	// Base Emitter Voltage
 
         //compute current amplification factor for circuit with common Emitter
         //hFE = B = Collector current / Base current
         if(adc.tp2 < 53) {
-#if DebugOut == 5
+  #if DebugOut == 5
            lcd_data('<');
            lcd_data('5');
            lcd_data('3');
-#endif
+  #endif
            adc.tp2 = 53;
         }
+        tmp16 = adc.lp1;
+        if (tmp16 > adc.lp_otr) {
+           tmp16 -= adc.lp_otr;
+        }
 
- #ifdef LONG_HFE
-        trans.hfe[PartReady] = ((unsigned int)adc.lp1 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
+  #ifdef LONG_HFE
+        trans.hfe[PartReady] = ((unsigned int)tmp16 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
                  (unsigned int)RR680MI)) / (unsigned int)adc.tp2;	
- #else
-        trans.hfe[PartReady] = ((adc.lp1 / ((RR680MI+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
+  #else
+        trans.hfe[PartReady] = ((tmp16 / ((RR680MI+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
+  #endif
  #endif
 #ifdef COMMON_COLLECTOR
         //current amplification factor for common  Collector (Emitter follower)
         // c_hFE = (Emitter current - Base current) / Base current
+ #ifdef COMMON_EMITTER
         if (c_hfe > trans.hfe[PartReady]) {
+ #endif
            trans.hfe[PartReady] = c_hfe;
            trans.uBE[PartReady] = ADCconfig.U_AVCC - adc.hp1 - adc.tp1;	// Base Emitter Voltage common collector
+ #ifdef COMMON_EMITTER
         }
+ #endif
 #endif
 
  
@@ -435,32 +439,42 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
       if((PartFound == PART_TRANSISTOR) || (PartFound == PART_FET)) {
          PartReady = 1;	//check, if test is already done once
       }
+ #ifdef COMMON_EMITTER
       trans.uBE[PartReady] = ADCconfig.U_AVCC - adc.tp2 - ReadADC(LowPin);
 
       //compute current amplification factor for common Emitter
       //hFE = B = Collector current / Base current
       if(adc.tp2 < 53) {
-#if DebugOut == 5
+  #if DebugOut == 5
          lcd_data('<');
          lcd_data('5');
          lcd_data('3');
-#endif
+  #endif
          adc.tp2 = 53;
       }
+      tmp16 = adc.hp2;
+      if (tmp16 > adc.lp_otr) {
+         tmp16 -= adc.lp_otr;
+      }
 
-#ifdef LONG_HFE
-      trans.hfe[PartReady] = ((unsigned int)adc.hp2 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
+  #ifdef LONG_HFE
+      trans.hfe[PartReady] = ((unsigned int)tmp16 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
               (unsigned int)RR680PL)) / (unsigned int)adc.tp2;	
-#else
-      trans.hfe[PartReady] = ((adc.hp2 / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
-#endif
+  #else
+      trans.hfe[PartReady] = ((tmp16 / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
+  #endif
+ #endif
 #ifdef COMMON_COLLECTOR
        //compare current amplification factor for common Collector (Emitter follower)
        // hFE = (Emitterstrom - Basisstrom) / Basisstrom
+ #ifdef COMMON_EMITTER
        if (c_hfe >  trans.hfe[PartReady]) {
+ #endif
           trans.hfe[PartReady] = c_hfe;
           trans.uBE[PartReady] = ADCconfig.U_AVCC - adc.lp1 - adc.tp1;
+ #ifdef COMMON_EMITTER
        }
+ #endif
 #endif
 
       if(adc.tp2 > 2557) {		// Basis-voltage R_H is low enough
@@ -593,7 +607,8 @@ savenresult:
   wait_about1s();
 #endif
 
-  if((adc.hp1 > 150) && (adc.hp1 < 4640) && (adc.hp1 > (adc.hp3+(adc.hp3/8))) && (adc.hp3*8 > adc.hp1)) {
+//  if((adc.hp1 > 150) && (adc.hp1 < 4640) && (adc.hp1 > (adc.hp3+(adc.hp3/8))) && (adc.hp3*8 > adc.hp1)) {
+  if((adc.hp1 > 150) && (adc.hp1 < 4640) && (adc.hp1 > (adc.hp3+(adc.hp3/8))) && (adc.hp3*16 > adc.hp1)) {
      //voltage is above 0,15V and below 4,64V => Ok
      if((PartFound == PART_NONE) || (PartFound == PART_RESISTOR)) {
         PartFound = PART_DIODE;	//mark for diode only, if no other component is found

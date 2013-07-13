@@ -920,7 +920,7 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
    *  determine prefix
    */
   Length = Exponent + 12;
-  if (Length <  0) Length = 0;		/* Limit to minimum prefix */
+  if ((int8_t)Length <  0) Length = 0;		/* Limit to minimum prefix */
   if (Length > 18) Length = 18;		/* Limit to maximum prefix */
   Index = Length / 3;
   Offset = Length % 3;

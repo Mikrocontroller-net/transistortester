@@ -531,13 +531,11 @@ savenresult:
   // component has current
   //Test if Diode
   ADC_PORT = TXD_VAL;
-//  do {
   for (ii=0;ii<200;ii++) {
      ADC_DDR = LoADCm | HiADCm; // discharge by short of Low and High side
      wait_about5ms();		// Low and Highpin to GND for discharge
      ADC_DDR = LoADCm;		// switch only Low-Pin fix to GND
      adc.hp1 = ReadADC(HighPin); // read voltage at High-Pin
-//  } while (adc.hp1 > ((150/8)-1));
      if (adc.hp1 < (150/8)) break;
   }
     /*It is possible, that wrong Parts are detected without discharging, because
@@ -586,10 +584,15 @@ savenresult:
   adc.lp_otr = W5msReadADC(HighPin) - ReadADC(LowPin);
 #endif
 
+  R_DDR = HiPinRH;		//switch R_H port for High-Pin output (VCC)
+  R_PORT = HiPinRH;
   if(adc.lp_otr > adc.hp1) {
       adc.hp1 = adc.lp_otr;	//the higher value wins
       adc.hp3 = adc.hp2;
+  } else {
+      ChargePin10ms(TriPinRL,0);	//discharge for N-Kanal-MOSFET gate
   }
+  adc.hp2 = W5msReadADC(HighPin); 		// M--|<--HP--R_H--VCC
 #if DebugOut == 4
   lcd_line3();
   lcd_clear_line();
@@ -598,17 +601,20 @@ savenresult:
   lcd_data('D');
   lcd_testpin(LowPin);
   lcd_space();
+  lcd_data('h');
+  lcd_string(utoa(adc.hp3,outval,10));
+  lcd_space();
   lcd_data('L');
   lcd_string(utoa(adc.hp1,outval,10));
   lcd_space();
   lcd_data('H');
-  lcd_string(utoa(adc.hp3,outval,10));
+  lcd_string(utoa(adc.hp2,outval,10));
   lcd_space();
   wait_about1s();
 #endif
 
 //  if((adc.hp1 > 150) && (adc.hp1 < 4640) && (adc.hp1 > (adc.hp3+(adc.hp3/8))) && (adc.hp3*8 > adc.hp1)) {
-  if((adc.hp1 > 150) && (adc.hp1 < 4640) && (adc.hp1 > (adc.hp3+(adc.hp3/8))) && (adc.hp3*16 > adc.hp1)) {
+  if((adc.hp1 > 150) && (adc.hp1 < 4640) && (adc.hp2 < adc.hp1) && (adc.hp1 > (adc.hp3+(adc.hp3/8))) && (adc.hp3*16 > adc.hp1)) {
      //voltage is above 0,15V and below 4,64V => Ok
      if((PartFound == PART_NONE) || (PartFound == PART_RESISTOR)) {
         PartFound = PART_DIODE;	//mark for diode only, if no other component is found

@@ -7,9 +7,9 @@
 
 extern void _lcd_hw_write(uint8_t flags, uint8_t data);
 
-#define lcd_write_cmd(cmd)                     _lcd_hw_write(0b00000000, cmd); wait50us();
-#define lcd_write_data(data)                   _lcd_hw_write(0b00000001, data); wait50us();
-#define lcd_write_init(data_length)            _lcd_hw_write(0b10000000, CMD_SetIFOptions | (data_length << 4))
+#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd); wait50us();
+#define lcd_write_data(data)                   _lcd_hw_write(0x01, data); wait50us();
+#define lcd_write_init(data_length)            _lcd_hw_write(0x80, CMD_SetIFOptions | (data_length << 4))
 
 
 //LCD

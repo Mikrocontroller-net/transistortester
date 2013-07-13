@@ -20,7 +20,7 @@ CFLAGS = -Wall
 # atmega8  : m8
 # atmega168: m168 or m168p
 # atmega328: m328 or m328p
-PARTNO = m168
+PARTNO = m328
 
 # Select your language:
 # Available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
@@ -34,7 +34,7 @@ UI_LANGUAGE = LANG_ENGLISH
 
 # Option STRIP_GRID_BOARD selects different board-layout, do not set for standard board!
 # The connection of LCD is totally different for both versions.
-CFLAGS += -DSTRIP_GRID_BOARD
+#CFLAGS += -DSTRIP_GRID_BOARD
 
 # The WITH_SELFTEST option enables selftest function (only for mega168 or mega328).
 CFLAGS += -DWITH_SELFTEST
@@ -75,7 +75,8 @@ CFLAGS += -DAUTOSCALE_ADC
 CFLAGS += -DREF_R_KORR=3
 
 # The ESR_ZERO value define the zero value of ESR measurement (units = 0.01 Ohm).
-CFLAGS += -DESR_ZERO=29
+#CFLAGS += -DESR_ZERO=29
+CFLAGS += -DESR_ZERO=20
 
 # NO_AREF_CAP tells your Software, that you have no Capacitor installed at pin AREF (21).
 # This enables a shorter wait-time for AUTOSCALE_ADC function.
@@ -89,7 +90,6 @@ OP_MHZ = 8
 # Operation with the internal RC-Generator or external clock will delay the restart by only 6 clock tics.
 # You must specify this with "CFLAGS += -DRESTART_DELAY_TICS=6", if you don't use the crystal mode.
 #CFLAGS += -DRESTART_DELAY_TICS=6
-
 
 # The USE_EEPROM option specify where you wish to locate fix text and tables.
 # If USE_EEPROM is unset, program memory (flash) is taken for fix text and tables.
@@ -155,7 +155,7 @@ CFLAGS += -DBAT_POOR=6400
 #CFLAGS += -DINHIBIT_SLEEP_MODE
 
 
-# Select your programmer type and port, if you wish to use avrdude.
+# Select your programmer type, speed and port, if you wish to use avrdude.
 PROGRAMMER=avrisp2
 BitClock=5.0
 #PROGRAMMER=usbasp

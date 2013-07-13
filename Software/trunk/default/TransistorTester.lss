@@ -6332,14 +6332,14 @@ start:
     251a:	0e 94 58 01 	call	0x2b0	; 0x2b0 <lcd_fix_string>
     }
     //Gate-threshold voltage
-    DisplayValue(gthvoltage,-3,'V',3);
+    DisplayValue(gthvoltage,-3,'V',2);
     251e:	60 91 5f 01 	lds	r22, 0x015F
     2522:	70 91 60 01 	lds	r23, 0x0160
     2526:	80 e0       	ldi	r24, 0x00	; 0
     2528:	90 e0       	ldi	r25, 0x00	; 0
     252a:	4d ef       	ldi	r20, 0xFD	; 253
     252c:	26 e5       	ldi	r18, 0x56	; 86
-    252e:	28 ce       	rjmp	.-944    	; 0x2180 <main+0x336>
+    252e:	22 c1       	rjmp	.+580    	; 0x2774 <main+0x92a>
     goto end;
     // end (PartFound == PART_FET)
   } else if (PartFound == PART_THYRISTOR) {

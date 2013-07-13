@@ -530,7 +530,7 @@ start:
        lcd_fix_string(Vgs_str);		// " Vgs="
     }
     //Gate-threshold voltage
-    DisplayValue(gthvoltage,-3,'V',3);
+    DisplayValue(gthvoltage,-3,'V',2);
     goto end;
     // end (PartFound == PART_FET)
   } else if (PartFound == PART_THYRISTOR) {

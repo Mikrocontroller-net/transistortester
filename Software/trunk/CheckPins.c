@@ -565,6 +565,10 @@ savenresult:
   R_DDR = HiPinRH;              //switch R_H port for High-Pin to output (VCC)
   R_PORT = HiPinRH;
   adc.hp3 = W5msReadADC(HighPin);               // M--|<--HP--R_H--VCC
+  if(adc.lp_otr > adc.hp1) {
+      adc.hp1 = adc.lp_otr;	//the higher value wins
+      adc.hp3 = adc.hp2;
+  }
 #else
   /* check first with low current (R_H=470k) */
   /* With this method the diode can be better differed from a capacitor, */
@@ -582,7 +586,6 @@ savenresult:
   adc.hp1 = W5msReadADC(HighPin) - ReadADC(LowPin);
   ChargePin10ms(TriPinRL,1);	//discharge for N-Kanal-MOSFET gate
   adc.lp_otr = W5msReadADC(HighPin) - ReadADC(LowPin);
-#endif
 
   R_DDR = HiPinRH;		//switch R_H port for High-Pin output (VCC)
   R_PORT = HiPinRH;
@@ -593,6 +596,7 @@ savenresult:
       ChargePin10ms(TriPinRL,0);	//discharge for N-Kanal-MOSFET gate
   }
   adc.hp2 = W5msReadADC(HighPin); 		// M--|<--HP--R_H--VCC
+#endif
 #if DebugOut == 4
   lcd_line3();
   lcd_clear_line();

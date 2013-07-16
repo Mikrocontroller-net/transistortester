@@ -2790,7 +2790,7 @@ savenresult:
   ADC_PORT = TXD_VAL;
   for (ii=0;ii<200;ii++) {
      f3e:	89 f7       	brne	.-30     	; 0xf22 <CheckPins+0x73c>
-  adc.hp3 = W5msReadADC(HighPin);               // M--|<--HP--R_H--VCC
+  }
 #else
   /* check first with low current (R_H=470k) */
   /* With this method the diode can be better differed from a capacitor, */
@@ -2843,7 +2843,6 @@ savenresult:
      f90:	0e 94 a6 1a 	call	0x354c	; 0x354c <ReadADC>
      f94:	28 1a       	sub	r2, r24
      f96:	39 0a       	sbc	r3, r25
-#endif
 
   R_DDR = HiPinRH;		//switch R_H port for High-Pin output (VCC)
      f98:	2c 81       	ldd	r18, Y+4	; 0x04

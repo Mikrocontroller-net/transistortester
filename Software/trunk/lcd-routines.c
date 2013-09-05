@@ -98,15 +98,19 @@ void lcd_init(void) {
 
    lcd_write_init(0);		// switch to 4 Bit mode
    wait_about10ms();
+#ifdef LCD_DOGM
+   lcd_command(CMD_SetIFOptions | 0x09);	// 4Bit / 2 rows / 5x7 / Instr. table 1
+   lcd_command(CMD1_SetBias | 0x0c);		// 1/4 bias
+   lcd_command(CMD1_PowerControl | 0x02);	// booster off / set contrast C5:C4
+   lcd_command(CMD1_FollowerControl | 0x09);	// set follower amplified ratio
+   lcd_command(CMD1_SetContrast | 0x04);	// set contrast C3:0
 
-   // 4Bit / 2 rows / 5x7
-   lcd_command(CMD_SetIFOptions | 0x08);
+#endif
+   lcd_command(CMD_SetIFOptions | 0x08);	// 4Bit / 2 rows / 5x7
 
-   // Display on / Cursor off / no Blinking
-   lcd_command(CMD_SetDisplayAndCursor | 0x04);
+   lcd_command(CMD_SetDisplayAndCursor | 0x04); // Display on / Cursor off / no Blinking
 
-   // increment / no Scroll    
-   lcd_command(CMD_SetEntryMode | 0x02);	
+   lcd_command(CMD_SetEntryMode | 0x02);	// increment / no Scroll    
    lcd_clear();
 }
  

@@ -396,8 +396,11 @@ End of configuration
 				     (1<<TP2),
 				     (1<<TP3)};	// Table of commands to switch the ADC-Pins 0,1,2
 
-#ifdef LCD_CYRILLIC	//generate Omega- and µ-character as Custom-character, because these characters are not inclluded with the cyrillic character set
+//generate Omega- and µ-character as Custom-character, if these characters has a number of loadable type
+#if LCD_CHAR_OMEGA < 8
    const unsigned char CyrillicOmegaIcon[] MEM_TEXT = {0,0,14,17,17,10,27,0};	//Omega
+#endif
+#if LCD_CHAR_U < 8
    const unsigned char CyrillicMuIcon[] MEM_TEXT = {0,17,17,17,19,29,16,16};	//µ
 #endif
 

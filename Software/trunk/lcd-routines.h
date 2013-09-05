@@ -36,6 +36,10 @@ void uart_newline(void);
 #define CMD_SetIFOptions         0x20
 #define CMD_SetCGRAMAddress      0x40    // for Custom character
 #define CMD_SetDDRAMAddress      0x80    // set Cursor 
+#define CMD1_SetBias             0x10	// set Bias (instruction table 1, DOGM)
+#define CMD1_PowerControl        0x50	// Power Control, set Contrast C5:C4 (instruction table 1, DOGM)
+#define CMD1_FollowerControl     0x60	// Follower Control, amplified ratio (instruction table 1, DOGM)
+#define CMD1_SetContrast         0x70	// set Contrast C3:C0 (instruction table 1, DOGM)
 
 //Makros for LCD
 #define lcd_line1() lcd_command((uint8_t)(CMD_SetDDRAMAddress))		//move to the beginning of the 1. row

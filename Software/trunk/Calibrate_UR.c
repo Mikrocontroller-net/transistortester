@@ -73,11 +73,8 @@ void Calibrate_UR(void) {
   pin_rmi = (unsigned long)((unsigned long)sum_rm * (unsigned long)R_L_VAL) / (unsigned long)u680;
 //  adcmv[2] = pin_rm;	// for last output in row 2
   pin_rpl = (unsigned long)((unsigned long)sum_rp * (unsigned long)R_L_VAL) / (unsigned long)u680;
-  if ((pin_rpl < 280) && (pin_rmi < 250)) {
-     // rp is below 28 Ohm and rm is below 25 Ohm
-     resis680pl = pin_rpl + R_L_VAL;
-     resis680mi = pin_rmi + R_L_VAL;
-  }
+  resis680pl = pin_rpl + R_L_VAL;
+  resis680mi = pin_rmi + R_L_VAL;
 #endif
 
   ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples

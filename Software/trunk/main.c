@@ -88,13 +88,13 @@ int main(void) {
   LCDLoadCustomChar(LCD_CHAR_RESIS2);	//Custom-Character 
   lcd_fix_customchar(ResIcon2);		//load Character  ]
   
-#ifdef LCD_CYRILLIC
-  //if kyrillish LCD-Characterset, load  Omega- and µ-Character
-  LCDLoadCustomChar(LCD_CHAR_OMEGA);	//Custom-Character
-  //load Omega-Character to LCD
+  //if kyrillish LCD-Characterset is defined, load  Omega- and µ-Character
+#if LCD_CHAR_OMEGA < 8
+  LCDLoadCustomChar(LCD_CHAR_OMEGA);	//load omega as Custom-Character
   lcd_fix_customchar(CyrillicOmegaIcon);
-  LCDLoadCustomChar(LCD_CHAR_U);	//Custom-Character
-  //load µ-Character to LCD 
+#endif
+#if LCD_CHAR_U < 8
+  LCDLoadCustomChar(LCD_CHAR_U);	//load mu as Custom-Character
   lcd_fix_customchar(CyrillicMuIcon);
 #endif
 #ifdef PULLUP_DISABLE

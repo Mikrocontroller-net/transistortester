@@ -171,10 +171,10 @@ start:
  #if (BAT_POOR > 5300)
   // use .8 V difference to Warn-Level
   #define WARN_LEVEL (((unsigned long)(BAT_POOR+800)*(unsigned long)33)/133)
- #elif (BAT_POOR > 2900)
+ #elif (BAT_POOR > 3249)
   // less than 5.4 V only .4V difference to Warn-Level
   #define WARN_LEVEL (((unsigned long)(BAT_POOR+400)*(unsigned long)33)/133)
- #elif (BAT_POOR > 1300)
+ #elif (BAT_POOR > 1299)
   // less than 2.9 V only .2V difference to Warn-Level
   #define WARN_LEVEL (((unsigned long)(BAT_POOR+200)*(unsigned long)33)/133)
  #else

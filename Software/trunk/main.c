@@ -659,7 +659,7 @@ gakAusgabe:
   ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
   while(!(ON_PIN_REG & (1<<RST_PIN)));	//wait ,until button is released
   wait_about200ms();
-// wait 14 seconds or 5 seconds (if repeat function)
+// wait 28 seconds or 5 seconds (if repeat function)
   for(gthvoltage = 0;gthvoltage<display_time;gthvoltage+=10) {
      if(!(ON_PIN_REG & (1<<RST_PIN))) {
         // If the key is pressed again... 

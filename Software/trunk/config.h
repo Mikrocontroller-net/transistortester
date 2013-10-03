@@ -357,7 +357,7 @@ End of configuration
 #define SHORT_WAIT_TIME 5000
 
 #ifdef POWER_OFF
-// if POWER OFF function is selected, wait 14s
+// if POWER OFF function is selected, wait 28s
 // if POWER_OFF with parameter > 2, wait only 5s before repeating
  #if (POWER_OFF+0) > 2
   #define OFF_WAIT_TIME SHORT_WAIT_TIME
@@ -365,7 +365,7 @@ End of configuration
   #define OFF_WAIT_TIME LONG_WAIT_TIME
  #endif
 #else
-// if POWER OFF function is not selected, wait 14s before repeat measurement
+// if POWER OFF function is not selected, wait 28s before repeat measurement
  #define OFF_WAIT_TIME  LONG_WAIT_TIME
 #endif
 

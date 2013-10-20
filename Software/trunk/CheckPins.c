@@ -45,6 +45,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 #endif
 
   struct resis_t *thisR;
+  unsigned int volt_dif;
   unsigned long lrx1;
   unsigned long lirx1;
   unsigned long lirx2;
@@ -616,10 +617,13 @@ savenresult:
   lcd_space();
   wait_about1s();
 #endif
+  volt_dif = adc.hp3/8;
+  if (volt_dif > 200) volt_dif = 200;
 
 //  if((adc.hp1 > 150) && (adc.hp1 < 4640) && (adc.hp1 > (adc.hp3+(adc.hp3/8))) && (adc.hp3*8 > adc.hp1)) {
-  if((adc.hp1 > 150) && (adc.hp1 < 4640) && (adc.hp2 < adc.hp1) && (adc.hp1 > (adc.hp3+(adc.hp3/8))) && (adc.hp3*16 > adc.hp1)) {
+  if((adc.hp1 > 150) && (adc.hp1 < 4640) && (adc.hp2 < adc.hp1) && (adc.hp1 > (adc.hp3+volt_dif)) && (adc.hp3 > adc.hp1/16)) {
      //voltage is above 0,15V and below 4,64V => Ok
+     // hp2 >= hp1 is only possible with capacitor, not with a diode, hp2 is measured with 470k
      if((PartFound == PART_NONE) || (PartFound == PART_RESISTOR)) {
         PartFound = PART_DIODE;	//mark for diode only, if no other component is found
 				//since there is a problem with Transistors with a protection diode

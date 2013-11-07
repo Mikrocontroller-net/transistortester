@@ -20,7 +20,23 @@ void AutoCheck(void) {
   if (AllProbesShorted() != 3) return;
   lcd_clear();
   lcd_fix_string(SELFTEST);		// "Selftest mode.."
-
+  lcd_line2();
+  lcd_data('?');			// wait for key pressed
+  for (tt=0;tt<50;tt++) {
+     if ((ON_PIN_REG & (1<<RST_PIN)) != 0) break;	// key is unpressed
+     wait_about10ms();			// key is still pressed, wait for release
+    }
+  if (tt == 50) goto no_selftest;		// key is more than 500ms pressed
+  for (tt=0;tt<200;tt++) {
+     if(!(ON_PIN_REG & (1<<RST_PIN))) goto begin_selftest;	// key is pressed again
+     wait_about10ms();
+    }
+  // no key pressed for 2s
+no_selftest:
+  lcd_clear();
+  lcd_fix2_string(VERSION_str);	//"Version ..."
+  return;
+begin_selftest:
   lcd_line2();
   lcd_fix2_string(R0_str);		// "R0="
   eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (int8_t)0);	// clear zero offset
@@ -311,9 +327,8 @@ no_c0save:
 
   ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples
   lcd_clear();
-  lcd_line2();
   lcd_fix2_string(VERSION_str);	//"Version ..."
-  lcd_line1();
+  lcd_line2();
   lcd_fix_string(ATE);		//"Selftest End"
 
  #ifdef FREQUENCY_50HZ
@@ -346,6 +361,8 @@ no_c0save:
  #endif
  PartFound = PART_NONE;
  wait_about1s();			//wait 1 seconds
+ lcd_line2();
+ lcd_clear_line();			// clear total line
 #endif
  } 
  

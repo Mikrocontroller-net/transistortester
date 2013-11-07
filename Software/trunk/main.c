@@ -240,8 +240,6 @@ start:
   }
 #endif
 
-  lcd_line2();			//LCD position row2, column 1
-  lcd_fix_string(TestRunning);		//String: testing...
 #ifndef DebugOut
   lcd_line2();			//LCD position row 2, column 1
 #endif
@@ -255,6 +253,8 @@ start:
 #ifdef CHECK_CALL
   AutoCheck();			//check, if selftest should be done
 #endif
+  lcd_line2();			//LCD position row2, column 1
+  lcd_fix_string(TestRunning);		//String: testing...
      
   // check all 6 combinations for the 3 pins 
 //         High  Low  Tri

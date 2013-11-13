@@ -68,7 +68,7 @@ CFLAGS += -DC_H_KORR=0
 # The WITH_UART option enables the software UART  (TTL level output at Pin PC3, 26).
 # If the option is deselected, PC3 can be used as external voltage input with a
 # 10:1 resistor divider.
-CFLAGS += -DWITH_UART
+#CFLAGS += -DWITH_UART
 
 # The CAP_EMPTY_LEVEL  defines the empty voltage level for capacitors in mV.
 # Choose a higher value, if your Tester reports "Cell!" by unloading capacitors.

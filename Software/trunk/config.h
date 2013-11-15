@@ -238,8 +238,6 @@ End of configuration
   #define DEFAULT_RH_FAKT  884      // mega328 1070 mV
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
-// COMMON_COLLECTOR activates measurement of current amplification factor in common collector circuit  (Emitter follower)
-  #define COMMON_COLLECTOR
   #define MEGA168A 17
   #define MEGA168PA 18
 
@@ -266,8 +264,6 @@ End of configuration
   #define DEFAULT_RH_FAKT  884      // mega328 1070 mV
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
-// COMMON_COLLECTOR activates measurement of current amplification factor in common collector circuit  (Emitter follower)
-  #define COMMON_COLLECTOR
 
   #define PIN_RM 200
   #define PIN_RP 220
@@ -289,8 +285,6 @@ End of configuration
   #define DEFAULT_RH_FAKT  884      // mega328 1070 mV
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
-// COMMON_COLLECTOR activates measurement of current amplification factor in common collector circuit  (Emitter follower)
-  #define COMMON_COLLECTOR
 
   #define PIN_RM 200
   #define PIN_RP 220
@@ -314,8 +308,6 @@ End of configuration
   #define DEFAULT_RH_FAKT  740      // mega8 1250 mV
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
-// COMMON_COLLECTOR activates measurement of current amplification factor in common collector circuit  (Emitter follower)
-  #define COMMON_COLLECTOR
 
   #define PIN_RM 196
   #define PIN_RP 240
@@ -571,13 +563,45 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 #define LCD_CHAR_DEGREE 0xdf            // Character for degree
 
 #endif
-/* the hFE (B) can be determined with common collector and common emitter circuit */
-/* with more than 16K both methodes are possible */
-#ifdef COMMON_COLLECTOR
- #if FLASHEND > 0x3fff
+
+// COMMON_COLLECTOR activates measurement of current amplification factor in common collector circuit  (Emitter follower)
+#ifndef NO_COMMON_COLLECTOR_HFE
+ #define COMMON_COLLECTOR
+#endif
+/* the hFE (B) can also be determined with  common emitter circuit (not for atmega8) */
+#if FLASHEND > 0x1fff
+ #ifndef NO_COMMON_EMITTER_HFE
+   // only define the common emitter, if the extended tests are not explicitly requested
    #define COMMON_EMITTER
  #endif
+#endif
+
+// automatic check, if the extended tests are possible!
+#ifdef COMMON_EMITTER
+ #ifdef COMMON_COLLECTOR
+  // both measurement methodes
+  #if FLASHEND > 0x3fff
+    // extended tests are only possible with enough memory!
+    #define EXTENDED_TESTS
+  #endif
+ #else
+    // by only selecting one hFE measurement methode, the extended tests are always possible!
+    #define EXTENDED_TESTS
+ #endif
+#endif
+
+#ifdef COMMON_COLLECTOR
+ #ifndef COMMON_EMITTER
+    // by only selecting one hFE measurement methode, the extended tests are always possible!
+    #define EXTENDED_TESTS
+ #endif
 #else
-   #define COMMON_EMITTER
+ #ifndef COMMON_EMITTER
+    // both measurement methodes are unselected, use COMMON_COLLECTOR
+    #warning "No hFE measurement type selected, common collector circuit choosed!"
+    #define COMMON_COLLECTOR
+    // by only selecting one hFE measurement methode, the extended tests are always possible!
+    #define EXTENDED_TESTS
+ #endif
 #endif
 

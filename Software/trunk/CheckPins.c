@@ -34,7 +34,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 #ifdef COMMON_EMITTER
   unsigned int tmp16;		// temporary variable
 #else
- #warning "without common emitter hFE"
+ #warning "hFE measurement without common emitter circuit"
+#endif
+#ifndef COMMON_COLLECTOR
+ #warning "hFE measurement without common collector circuit"
 #endif
 #if FLASHEND > 0x1fff
   int udiff;

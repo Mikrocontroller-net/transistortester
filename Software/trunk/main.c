@@ -346,14 +346,20 @@ start:
            UfAusgabe(0x01);
            goto end;
           }
-        else if ((diodes[0].Cathode == diodes[1].Anode) && (diodes[1].Cathode == diodes[0].Anode)) {
-           //Antiparallel
-           lcd_testpin(diodes[0].Anode);
-           lcd_fix_string(AnKat);	//"->|-"
-           lcd_testpin(diodes[0].Cathode);
-           lcd_fix_string(AnKat);	//"->|-"
-           lcd_testpin(diodes[1].Cathode);
-           UfAusgabe(0x01);
+//        else if ((diodes[0].Cathode == diodes[1].Anode) && (diodes[1].Cathode == diodes[0].Anode)) {
+        else if (diodes[0].Cathode == diodes[1].Anode) {
+           // normaly two serial diodes are detected as three diodes, but if the threshold is high
+           // for both diodes, the third diode is not detected.
+           // can also be Antiparallel
+           trans.b = 0;
+           trans.c = 1;
+           SerienDiodenAusgabe();
+           goto end;
+        }
+        else if (diodes[1].Cathode == diodes[0].Anode) {
+           trans.b = 1;
+           trans.c = 0;
+           SerienDiodenAusgabe();
            goto end;
         }
      } else if(NumOfDiodes == 3) {
@@ -418,12 +424,13 @@ start:
         if((trans.b<3) && (trans.c<3)) {
            lcd_data('3');
            lcd_fix_string(Dioden);	//"Diodes "
-           lcd_testpin(diodes[trans.b].Anode);
-           lcd_fix_string(AnKat);	//"->|-"
-           lcd_testpin(diodes[trans.b].Cathode);
-           lcd_fix_string(AnKat);	//"->|-"
-           lcd_testpin(diodes[trans.c].Cathode);
-           UfAusgabe( (trans.b<<4)|trans.c);
+           SerienDiodenAusgabe();
+//           lcd_testpin(diodes[trans.b].Anode);
+//           lcd_fix_string(AnKat);	//"->|-"
+//           lcd_testpin(diodes[trans.b].Cathode);
+//           lcd_fix_string(AnKat);	//"->|-"
+//           lcd_testpin(diodes[trans.c].Cathode);
+//           UfAusgabe( (trans.b<<4)|trans.c);
            goto end;
         }
      }
@@ -697,6 +704,16 @@ gakAusgabe:
 #endif
   return 0;
 }   // end main
+
+void SerienDiodenAusgabe() {
+
+   lcd_testpin(diodes[trans.b].Anode);
+   lcd_fix_string(AnKat);	//"->|-"
+   lcd_testpin(diodes[trans.b].Cathode);
+   lcd_fix_string(AnKat);	//"->|-"
+   lcd_testpin(diodes[trans.c].Cathode);
+   UfAusgabe( (trans.b<<4)|trans.c);
+}
 
 
 //******************************************************************

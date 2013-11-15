@@ -10,6 +10,7 @@ void ReadInductance(void);		//inductance measurement
 uint16_t GetESR(uint8_t hipin, uint8_t lopin);	//get ESR of capacitor
 void GetVloss(void);			//get Voltage loss of capacitor
 void GetIr(uint8_t HighPin, uint8_t LowPin);	// get residual current of diode
+void SerienDiodenAusgabe();		// output diodes as ->|-->|- with voltages
 void UfAusgabe(uint8_t bcdchar);	// Output of the threshold voltage(s) Uf
 void mVAusgabe(uint8_t nn);		// Output of the theshold voltage for Diode nn 
 void RvalOut(uint8_t ii);		// Output of the resistore value(s)

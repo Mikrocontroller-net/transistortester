@@ -24,7 +24,7 @@ PARTNO = m328
 
 # Select your language:
 # Available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
-#                          LANG_DUTCH, LANG_BRASIL, LANG_RUSSIAN, LANG_UKRAINIAN
+#                          LANG_DUTCH, LANG_BRASIL, LANG_RUSSIAN, LANG_UKRAINIAN, LANG_LITHUANIAN
 UI_LANGUAGE = LANG_ENGLISH
 
 # The LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset.
@@ -40,8 +40,17 @@ UI_LANGUAGE = LANG_ENGLISH
 # The connection of LCD is totally different for both versions.
 CFLAGS += -DSTRIP_GRID_BOARD
 
-# The WITH_SELFTEST option enables selftest function (only for mega168 or mega328).
+# The WITH_SELFTEST option enables selftest function (only for mega168 or mega328) including the calibration.
+# Normally the mega168 uses selftest without T1 to T7 to enable both hFE measurements.
 CFLAGS += -DWITH_SELFTEST
+# You can enable the extended tests T1 to T7 for the atmega168 by selecting one of the
+# NO_COMMON_COLLECTOR_HFE or NO_COMMON_EMITTER_HFE option.
+# The T1 to T7 tests are usefull to find problems with your tester.
+#CFLAGS += -DNO_COMMON_COLLECTOR_HFE
+#CFLAGS += -DNO_COMMON_EMITTER_HFE
+# You can also disable the extended tests T1 to T7 with the option NO_TEST_T1_T7 to accelerate the calibration
+# for the atmega328 and atmega168.
+#CFLAGS += -DNO_TEST_T1_T7
 
 # AUTO_CAL will enable the autocalibration of zero offset of capacity measurement and
 # also the port output resistance values will be find out in SELFTEST section.
@@ -159,7 +168,7 @@ CFLAGS += -DBAT_POOR=6400
 #CFLAGS += -DINHIBIT_SLEEP_MODE
 
 
-# Select your programmer type and port, if you wish to use avrdude.
+# Select your programmer type, speed and port, if you wish to use avrdude.
 PROGRAMMER=avrisp2
 BitClock=5.0
 #PROGRAMMER=usbasp

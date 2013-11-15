@@ -270,6 +270,27 @@ End of configuration
  #endif
 #endif
 
+#if defined(LANG_LITHUANIAN) //Lithuanian
+   const unsigned char TestRunning[] MEM_TEXT = "Tikrinu..."; //"Testing...";
+   const unsigned char BatWeak[] MEM_TEXT = "silpnas"; //"weak";
+   const unsigned char BatEmpty[] MEM_TEXT = "tuscias!"; //"empty!"
+   const unsigned char TestFailed2[] MEM_TEXT = "sugadinta "; //"damaged ";
+   const unsigned char Bauteil[] MEM_TEXT = "dalis"; //"part";
+// const unsigned char Diode[] MEM_TEXT = "Diodas: ";
+   const unsigned char Triac[] MEM_TEXT = "Simistorius"; //"Triac";
+   const unsigned char Thyristor[] MEM_TEXT = "Tiristorius"; //"Thyristor";
+   const unsigned char Unknown[] MEM_TEXT = " nezinoma"; //" unknown";
+   const unsigned char TestFailed1[] MEM_TEXT = "Nezinoma, arba"; //"No, unknown, or";
+   const unsigned char OrBroken[] MEM_TEXT = "sugadinta "; //"or damamaged";
+   const unsigned char TestTimedOut[] MEM_TEXT = "Darbas Baigtas!"; //"Timeout!";
+   #define Cathode_char 'C'
+ #ifdef WITH_SELFTEST
+   const unsigned char SELFTEST[] MEM_TEXT = "Prasites rezimas"; //"Selftest mode..";
+   const unsigned char RELPROBE[] MEM_TEXT = "Atjung laidus!"; //"isolate Probe!";
+   const unsigned char ATE[] MEM_TEXT = "Testas baigtas"; //"Test End";
+ #endif
+#endif
+
 // Strings, which are not dependent of any language
  const unsigned char Bat_str[] MEM_TEXT = "Bat. ";
  const unsigned char OK_str[] MEM_TEXT = "OK";
@@ -320,6 +341,7 @@ End of configuration
 
 
 #ifdef WITH_SELFTEST
+ #ifdef EXTENDED_TESTS
  const unsigned char URefT[] MEM2_TEXT = "Ref=";
  const unsigned char RHfakt[] MEM2_TEXT = "RHf=";
  const unsigned char RH1L[] MEM_TEXT = "RH-";
@@ -327,6 +349,7 @@ End of configuration
  const unsigned char RLRL[] MEM_TEXT = "+RL- 12 13 23";
  const unsigned char RHRH[] MEM_TEXT = "+RH- 12 13 23";
  const unsigned char RHRL[] MEM_TEXT = "RH/RL";
+ #endif
  const unsigned char R0_str[] MEM2_TEXT = "R0=";
  #define LCD_CLEAR
 #endif

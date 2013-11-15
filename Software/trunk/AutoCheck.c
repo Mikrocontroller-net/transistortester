@@ -3,7 +3,11 @@ void AutoCheck(void) {
   uint8_t tt;		// number of running test
   uint8_t ww;		// counter for repeating the tests
   int  adcmv[7];
+#ifdef EXTENDED_TESTS
   uint16_t u680;	// 3 * (Voltage at 680 Ohm)
+#else
+ #warning "Selftest without extended tests T1 to T7!"
+#endif
 // define the maximum count of repetitions MAX_REP
 #define MAX_REP 4
 
@@ -14,8 +18,6 @@ void AutoCheck(void) {
   int8_t udiff2;
   #endif
  #endif
-  ADC_PORT = TXD_VAL;
-  ADC_DDR = TXD_MSK;
   #define RequireShortedProbes
   if (AllProbesShorted() != 3) return;
   lcd_clear();
@@ -66,6 +68,7 @@ begin_selftest:
      }
   } /* end for tt */
 
+#ifdef EXTENDED_TESTS
  #define TEST_COUNT 8
  
   for(tt=1;tt<TEST_COUNT;tt++) {		// loop for all Tests
@@ -151,7 +154,7 @@ begin_selftest:
            adcmv[2] = W20msReadADC(TP3) - ADCconfig.U_AVCC;
            lcd_fix_string(RH1H);	// "RH_Hi="
         }
-        if (tt == 7) { // can we switch the ADC pins to VCC across the R_H resistor?
+        if (tt == 7) { // is the voltage of all R_H / R_L dividers correct?
            u680 = ((long)ADCconfig.U_AVCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_H_VAL*100));
            R_PORT = 2<<(TP1*2);		//RH1 to VCC
            R_DDR = (2<<(TP1*2)) | (1<<(TP1*2));	//RH1 to +, RL1 to -
@@ -193,6 +196,17 @@ begin_selftest:
      } //end for ww
      wait_about1s();
   } //end for tt
+#else
+  for (ww=0;ww<120;ww++) {
+     // wait 1 minute for releasing the probes
+     lcd_line2();		//Cursor to column 1, row 2
+     lcd_clear_line();		// clear total line
+     lcd_line2();		//Cursor to column 1, row 2
+     lcd_fix_string(RELPROBE);	// "Release Probes"
+     wait_about500ms();
+     if (AllProbesShorted() == 0) break;
+  }
+#endif
 
   lcd_clear();
   lcd_fix_string(RIHI);	// "RiHi="
@@ -224,7 +238,7 @@ begin_selftest:
   DisplayValue(adcmv[2],-12,'F',3);		//output cap0 1:2
  #ifdef AUTO_CAL
   for (ww=0;ww<7;ww++) {
-      if (adcmv[ww] > 70) goto no_c0save;
+      if ((adcmv[ww] > 70) || (adcmv[ww] <10)) goto no_c0save;
   }
   for (ww=0;ww<7;ww++) {
       // write all zero offsets to the EEprom 
@@ -386,13 +400,14 @@ uint8_t ShortedProbes(uint8_t Probe1, uint8_t Probe2)
   unsigned int      U1;            /* voltage at probe #1 in mV */
   unsigned int      U2;            /* voltage at probe #2 in mV */
   unsigned int      URH;	   /* half of reference voltage */
-
   /*
    *  Set up a voltage divider between the two probes:
    *  - Probe1: Rl pull-up
    *  - Probe2: Rl pull-down
    */
 
+  ADC_DDR =  TXD_MSK;		// all-Pins to Input
+  ADC_PORT = TXD_VAL;		// all ADC-Ports to GND
   R_PORT = pgm_read_byte(&PinRLtab[Probe1]);
   R_DDR = pgm_read_byte(&PinRLtab[Probe1]) | pgm_read_byte(&PinRLtab[Probe2]);
 
@@ -404,11 +419,12 @@ uint8_t ShortedProbes(uint8_t Probe1, uint8_t Probe2)
    *  We expect both probe voltages to be about the same and
    *  to be half of Vcc (allowed difference +/- 20mV).
    */
+  #define MAX_UH_DIFF 20
 
   URH = ADCconfig.U_AVCC / 2;
-  if ((U1 > URH - 20) && (U1 < URH + 20))
+  if ((U1 > (URH - MAX_UH_DIFF)) && (U1 < (URH + MAX_UH_DIFF)))
   {
-    if ((U2 > URH - 20) && (U2 < URH + 20))
+    if ((U2 > (URH - MAX_UH_DIFF)) && (U2 < (URH + MAX_UH_DIFF)))
     {
       Flag1 = 1;
     }

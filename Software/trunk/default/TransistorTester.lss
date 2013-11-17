@@ -3771,7 +3771,7 @@ widmes:
     14fc:	d7 94       	ror	r13
     14fe:	c7 94       	ror	r12
   lcd_line4();
-  DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4)
+  DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4);
   lcd_space();
   lcd_line2();
 #endif
@@ -3806,7 +3806,7 @@ widmes:
     1532:	ba 81       	ldd	r27, Y+2	; 0x02
     1534:	8b 17       	cp	r24, r27
     1536:	11 f0       	breq	.+4      	; 0x153c <CheckPins+0xce0>
-  DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4)
+  DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4);
   lcd_space();
   lcd_line2();
 #endif
@@ -3861,7 +3861,7 @@ widmes:
     158a:	41 05       	cpc	r20, r1
     158c:	51 05       	cpc	r21, r1
     158e:	21 f5       	brne	.+72     	; 0x15d8 <CheckPins+0xd7c>
-              DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,3)
+              DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,3);
               lcd_space();
 #endif
               goto testend; // <10% mismatch
@@ -3871,7 +3871,7 @@ widmes:
     1592:	80 93 07 01 	sts	0x0107, r24
            goto testend;
     1596:	20 c0       	rjmp	.+64     	; 0x15d8 <CheckPins+0xd7c>
-  DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4)
+  DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4);
   lcd_space();
   lcd_line2();
 #endif

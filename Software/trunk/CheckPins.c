@@ -817,23 +817,23 @@ widmes:
   lcd_space();
   if (ii == 'H') {
      lcd_data('X');
-     DisplayValue(lirx1,1,LCD_CHAR_OMEGA,4)
+     DisplayValue(lirx1,1,LCD_CHAR_OMEGA,4);
      lcd_space();
      lcd_data('Y');
-     DisplayValue(lirx2,1,LCD_CHAR_OMEGA,4)
+     DisplayValue(lirx2,1,LCD_CHAR_OMEGA,4);
      lcd_space();
   } else {
      lcd_data('x');
-     DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,4)
+     DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,4);
      lcd_space();
      lcd_data('y');
-     DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4)
+     DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4);
   }
   lcd_space();
   lcd_line4();
   lcd_clear_line();
   lcd_line4();
-  DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4)
+  DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4);
   lcd_space();
   lcd_line2();
 #endif
@@ -852,9 +852,9 @@ widmes:
               lcd_data('R');
               lcd_data('!');
               lcd_data('=');
-              DisplayValue(thisR->rx,-1,LCD_CHAR_OMEGA,3)
+              DisplayValue(thisR->rx,-1,LCD_CHAR_OMEGA,3);
               lcd_space();
-              DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,3)
+              DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,3);
               lcd_space();
 #endif
               goto testend; // <10% mismatch

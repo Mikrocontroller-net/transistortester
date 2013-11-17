@@ -272,20 +272,20 @@ End of configuration
 
 #if defined(LANG_LITHUANIAN) //Lithuanian
    const unsigned char TestRunning[] MEM_TEXT = "Tikrinu..."; //"Testing...";
-   const unsigned char BatWeak[] MEM_TEXT = "silpnas"; //"weak";
-   const unsigned char BatEmpty[] MEM_TEXT = "tuscias!"; //"empty!"
-   const unsigned char TestFailed2[] MEM_TEXT = "sugadinta "; //"damaged ";
+   const unsigned char BatWeak[] MEM_TEXT = "silpna"; //"weak";
+   const unsigned char BatEmpty[] MEM_TEXT = "negera"; //"empty!"
+   const unsigned char TestFailed2[] MEM_TEXT = "sugedusi "; //"damaged ";
    const unsigned char Bauteil[] MEM_TEXT = "dalis"; //"part";
 // const unsigned char Diode[] MEM_TEXT = "Diodas: ";
    const unsigned char Triac[] MEM_TEXT = "Simistorius"; //"Triac";
    const unsigned char Thyristor[] MEM_TEXT = "Tiristorius"; //"Thyristor";
    const unsigned char Unknown[] MEM_TEXT = " nezinoma"; //" unknown";
-   const unsigned char TestFailed1[] MEM_TEXT = "Nezinoma, arba"; //"No, unknown, or";
-   const unsigned char OrBroken[] MEM_TEXT = "sugadinta "; //"or damamaged";
-   const unsigned char TestTimedOut[] MEM_TEXT = "Darbas Baigtas!"; //"Timeout!";
+   const unsigned char TestFailed1[] MEM_TEXT = "Nezinoma arba"; //"Pajunkite detale" "No, unknown, or";
+   const unsigned char OrBroken[] MEM_TEXT = "sugedusi "; //"or damaged";
+   const unsigned char TestTimedOut[] MEM_TEXT = "Viso gero!"; //"Timeout!";
    #define Cathode_char 'C'
  #ifdef WITH_SELFTEST
-   const unsigned char SELFTEST[] MEM_TEXT = "Prasites rezimas"; //"Selftest mode..";
+   const unsigned char SELFTEST[] MEM_TEXT = "Testuoju.."; //"Selftest mode..";
    const unsigned char RELPROBE[] MEM_TEXT = "Atjung laidus!"; //"isolate Probe!";
    const unsigned char ATE[] MEM_TEXT = "Testas baigtas"; //"Test End";
  #endif

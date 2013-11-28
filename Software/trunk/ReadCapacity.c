@@ -266,6 +266,7 @@ messe_mit_rh:
      TCCR1B =  (1<<CS10);	//start counter 1MHz or 8MHz
      ADC_DDR = LoADC;		// stay LoADC Pin switched to GND, charge capacitor with R_H slowly
   }
+  ovcnt16 = 0;
 //******************************
 #ifdef INHIBIT_SLEEP_MODE
   while(1) {
@@ -304,9 +305,6 @@ messe_mit_rh:
   TCCR1B = (0<<ICNC1) | (0<<ICES1) | (0<<CS10);  // stop counter
   tmpint = ICR1;		// get previous Input Capture Counter flag
   TIMSK1 = (0<<TOIE1) | (0<<ICIE1);	// disable Timer overflow interrupt and input capture interrupt
-  if (TCNT1 < tmpint) {
-     ovcnt16--;			// one ov to much
-  }
 
 #endif
 //############################################################
@@ -446,8 +444,9 @@ unsigned int getRLmultip(unsigned int cvolt) {
   tabind = uvolt / RL_Tab_Abstand;
   tabres = uvolt % RL_Tab_Abstand;
   tabres = RL_Tab_Abstand - tabres;
-  if (tabind > (RL_Tab_Length/RL_Tab_Abstand)) {
-     tabind = (RL_Tab_Length/RL_Tab_Abstand);	// limit to end of table
+  if (tabind > ((RL_Tab_Length/RL_Tab_Abstand)-1)) {
+     tabind = (RL_Tab_Length/RL_Tab_Abstand)-1;	// limit to end of table
+     tabres = 0;
   }
   y1 = MEM_read_word(&RLtab[tabind]);
   y2 = MEM_read_word(&RLtab[tabind+1]);
@@ -466,7 +465,9 @@ void Scale_C_with_vcc(void) {
 /* Interrupt Service Routine for timer1 Overflow */
  ISR(TIMER1_OVF_vect, ISR_BLOCK)
 {
- ovcnt16++;				// count overflow
+ if (unfinished != 0) {
+    ovcnt16++;				// count overflow
+ }
 }
 /* Interrupt Service Routine for timer1 capture event (Comparator) */
  ISR(TIMER1_CAPT_vect, ISR_BLOCK)

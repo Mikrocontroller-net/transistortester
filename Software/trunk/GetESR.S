@@ -571,8 +571,10 @@ ad_3924:
  	brne	no_sub;			/* it is not a capacitor */
 
 /* First half of load pulse (13.5us) loads quicker than the second half of load pulse. */
-/* Aproximation of 5000*(1 - exp(13.5e-6/(cap_val_nF*1.e-9*720)) - 2500*(1 - exp(-27e-6/(cap_val_nF*1.e-9*720)))) */
-/*  is done by 4450.e5 / (cap_val_nF * (cap_val_nF + 19)) */
+/* Aproximation of 5000*(1 - exp(13.5e-6/(cap_val_nF*1.e-9*(0.1*(PIN_RM+PIN_RP+R_L_VAL)))) - 2500*(1 - exp(-27e-6/(cap_val_nF*1.e-9*(0.1*(PIN_RM+PIN_RP+R_L_VAL))))) */
+/*  is done by ((9537620/(PIN_RM+PIN_RP+R_L_VAL))*(9537620/(PIN_RM+PIN_RP+R_L_VAL))) / (cap_val_nF * (cap_val_nF + (137180/(PIN_RM+PIN_RP+R_L_VAL)))) */
+/*  is done by 4450.e5 / (cap_val_nF * (cap_val_nF + (137180/(PIN_RM+PIN_RP+R_L_VAL))) */
+ #define FAKTOR_ESR (9537620/(PIN_RM+PIN_RP+R_L_VAL))
 
 	ldd	r22, Y+cap_val_nF;	/* sumvolt1 -= (1745098UL*MAX_CNT) / (cap_val_nF * (cap_val_nF + 19)); */
 	ldd	r23, Y+cap_val_nF+1;
@@ -580,17 +582,17 @@ ad_3924:
 	ldd	r25, Y+cap_val_nF+3;
 	movw	r18, r22;		/* r18:21 = r22:25 = cap_val_nF; */
 	movw	r20, r24;
-       	subi	r22, lo8(-19); 0xED; 237
-       	sbci	r23, hi8(-19); 0xFF; 255
-       	sbci	r24, hlo8(-19); 0xFF; 255
-       	sbci	r25, hhi8(-19); 0xFF; 255
+       	subi	r22, lo8(-137180/(PIN_RM+PIN_RP+R_L_VAL)); 0xED; 237
+       	sbci	r23, hi8(-137180/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
+       	sbci	r24, hlo8(-137180/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
+       	sbci	r25, hhi8(-137180/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
 	call	__mulsi3;		/* cap_val_nF * (cap_val_nF + 19) */
        	movw	r18, r22;
        	movw	r20, r24;
-       	ldi	r22, lo8(1745098*MAX_CNT); 0x36; 54
-       	ldi	r23, hi8(1745098*MAX_CNT); 0x29; 41
-       	ldi	r24, hlo8(1745098*MAX_CNT); 0x86; 134
-       	ldi	r25, hhi8(1745098*MAX_CNT); 0x1A; 26
+       	ldi	r22, lo8(FAKTOR_ESR*FAKTOR_ESR*MAX_CNT); 0x36; 54
+       	ldi	r23, hi8(FAKTOR_ESR*FAKTOR_ESR*MAX_CNT); 0x29; 41
+       	ldi	r24, hlo8(FAKTOR_ESR*FAKTOR_ESR*MAX_CNT); 0x86; 134
+       	ldi	r25, hhi8(FAKTOR_ESR*FAKTOR_ESR*MAX_CNT); 0x1A; 26
 	call	__udivmodsi4;
 	sub	r6, r18
 	sbc	r7, r19

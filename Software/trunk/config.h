@@ -36,9 +36,17 @@
   
   To calibrate your tester the resistor-values can be adjusted:
 */
+#ifndef R_L_VAL
   #define R_L_VAL 6800          // standard value 680 Ohm, multiplied by 10 for 0.1 Ohm resolution
+#else
+  #warning "no standard RL !=680"
+#endif
 //  #define R_L_VAL 6690          // this will be define a 669 Ohm
+#ifndef R_H_VAL
   #define R_H_VAL 47000         // standard value 470000 Ohm, multiplied by 10, divided by 100 
+#else
+  #warning "no standard RH !=470k"
+#endif
 //  #define R_H_VAL 47900               // this will be define a 479000 Ohm, divided by 100 
 
 #define R_DDR DDRB
@@ -235,7 +243,11 @@ End of configuration
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1
   #define DEFAULT_BAND_GAP 1070
-  #define DEFAULT_RH_FAKT  884      // mega328 1070 mV
+ #if R_H_VAL == 10000
+  #define DEFAULT_RH_FAKT 4022      // mega168 1101 mV, 100.0 kOhm
+ #else
+  #define DEFAULT_RH_FAKT  856      // mega168 1101 mV, 470.0 kOhm
+ #endif
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
   #define MEGA168A 17
@@ -261,7 +273,11 @@ End of configuration
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1
   #define DEFAULT_BAND_GAP 1070
-  #define DEFAULT_RH_FAKT  884      // mega328 1070 mV
+ #if R_H_VAL == 10000
+  #define DEFAULT_RH_FAKT 4022      // mega328 1101 mV, 100.0 kOhm
+ #else
+  #define DEFAULT_RH_FAKT  856      // mega328 1101 mV, 470.0 kOhm
+ #endif
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
 
@@ -282,7 +298,11 @@ End of configuration
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1
   #define DEFAULT_BAND_GAP 1070
-  #define DEFAULT_RH_FAKT  884      // mega328 1070 mV
+ #if R_H_VAL == 10000
+  #define DEFAULT_RH_FAKT 4022      // mega1280 1101 mV, 100.0 kOhm
+ #else
+  #define DEFAULT_RH_FAKT  856      // mega1280 1101 mV, 470.0 kOhm
+ #endif
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
 
@@ -305,7 +325,12 @@ End of configuration
   #define ADC_COMP_CONTROL SFIOR
   #define TI1_INT_FLAGS TIFR
   #define DEFAULT_BAND_GAP 1298		//mega8 1298 mV
-  #define DEFAULT_RH_FAKT  740      // mega8 1250 mV
+ #if R_H_VAL == 10000
+  #define DEFAULT_RH_FAKT 3328      // mega8 1298 mV, 100.0 kOhm
+ #else
+  #define DEFAULT_RH_FAKT  740      // mega8 1250 mV, 470.0 kOhm
+ //#define DEFAULT_RH_FAKT  708      // mega8 1298 mV, 470.0 kOhm
+ #endif
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
 

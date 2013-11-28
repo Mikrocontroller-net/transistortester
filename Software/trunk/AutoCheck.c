@@ -155,7 +155,7 @@ begin_selftest:
            lcd_fix_string(RH1H);	// "RH_Hi="
         }
         if (tt == 7) { // is the voltage of all R_H / R_L dividers correct?
-           u680 = ((long)ADCconfig.U_AVCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_H_VAL*100));
+           u680 = ((long)ADCconfig.U_AVCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + (unsigned long)R_H_VAL*100));
            R_PORT = 2<<(TP1*2);		//RH1 to VCC
            R_DDR = (2<<(TP1*2)) | (1<<(TP1*2));	//RH1 to +, RL1 to -
            adcmv[0] = W20msReadADC(TP1);
@@ -217,7 +217,6 @@ begin_selftest:
   wait_about2s();			//wait 2 seconds
 
   //measure Zero offset for Capacity measurement
-  adcmv[3] = 0;
   PartFound = PART_NONE;
   ReadCapacity(TP3, TP1);
   adcmv[5] = (unsigned int) cap.cval_uncorrected.dw;	//save capacity value of empty Pin 1:3
@@ -231,14 +230,15 @@ begin_selftest:
   adcmv[4] = (unsigned int) cap.cval_uncorrected.dw;	//save capacity value of empty Pin 3:2
   ReadCapacity(TP1, TP2);
   adcmv[0] = (unsigned int) cap.cval_uncorrected.dw;	//save capacity value of empty Pin 2:1
+  adcmv[3] = adcmv[0];				// same as first for the checking loop
   lcd_clear();
   lcd_fix_string(C0_str);			//output "C0 "
   DisplayValue(adcmv[5],0,' ',3);		//output cap0 1:3
   DisplayValue(adcmv[6],0,' ',3);		//output cap0 2:3
   DisplayValue(adcmv[2],-12,'F',3);		//output cap0 1:2
  #ifdef AUTO_CAL
-  for (ww=0;ww<7;ww++) {
-      if ((adcmv[ww] > 70) || (adcmv[ww] <10)) goto no_c0save;
+  for (ww=0;ww<7;ww++) {			//checking loop
+      if ((adcmv[ww] > 90) || (adcmv[ww] <10)) goto no_c0save;
   }
   for (ww=0;ww<7;ww++) {
       // write all zero offsets to the EEprom 

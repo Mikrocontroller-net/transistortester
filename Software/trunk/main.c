@@ -282,7 +282,18 @@ start:
 #endif
   }
   //All checks are done, output result to display
-  lcd_clear();
+#ifdef DebugOut 
+  // only clear two lines of LCD
+  lcd_line2();
+  lcd_clear_line();
+  lcd_line2();
+  lcd_line1();
+  lcd_clear_line();
+  lcd_line1();
+#else
+  lcd_clear();				// clear total display
+#endif
+
   if(PartFound == PART_DIODE) {
      if(NumOfDiodes == 1) {		//single Diode
 //        lcd_fix_string(Diode);		//"Diode: "

@@ -260,13 +260,12 @@ messe_mit_rh:
   R_PORT = HiPinR_H;           	// switch R_H resistor port for HighPin to VCC
   if(PartFound == PART_FET) {
      // charge capacitor with R_H resistor
-     TCCR1B = (1<<CS10);	//Start counter 1MHz or 8MHz
+     TCCR1B = (0<<ICNC1) | (1<<CS10);	//Start counter 1MHz or 8MHz without Noise Canceler
      ADC_DDR = (((1<<TP1) | (1<<TP2) | (1<<TP3) | TXD_MSK) & ~(1<<HighPin));	// release only HighPin ADC port
   } else {
-     TCCR1B =  (1<<CS10);	//start counter 1MHz or 8MHz
+     TCCR1B =  (0<<ICNC1) | (1<<CS10);	//start counter 1MHz or 8MHz without Noise Canceler
      ADC_DDR = LoADC;		// stay LoADC Pin switched to GND, charge capacitor with R_H slowly
   }
-  ovcnt16 = 0;
 //******************************
 #ifdef INHIBIT_SLEEP_MODE
   while(1) {
@@ -294,19 +293,39 @@ messe_mit_rh:
      ovcnt16++;
   }
 #else
+  cli();		// disable interrupts to prevent wakeup Interrupts before sleeping
+  set_sleep_mode(SLEEP_MODE_IDLE);
   while(unfinished) {
-    set_sleep_mode(SLEEP_MODE_IDLE);
-    sleep_mode();       /* wait for interrupt */
-    wdt_reset();
+    sleep_enable();
+    sei();		// enable interrupts after next instruction
+    sleep_cpu();	// only enable interrupts during sleeping
+    sleep_disable();
+    cli();		// disable interrupts again
+    wdt_reset();	// reset watch dog during waiting
     if(ovcnt16 == (F_CPU/5000)) {
        break; 		//Timeout for Charging, above 12 s
     }
   }
+  sei();		// enable interrupts again
   TCCR1B = (0<<ICNC1) | (0<<ICES1) | (0<<CS10);  // stop counter
   tmpint = ICR1;		// get previous Input Capture Counter flag
   TIMSK1 = (0<<TOIE1) | (0<<ICIE1);	// disable Timer overflow interrupt and input capture interrupt
-
 #endif
+
+#if DebugOut == 11
+  // test output for checking error free load time measurement
+  // select a capacitor, which gives a load time of about 65536 clock tics
+  if ((LowPin == 0) && (HighPin == 2)) {
+    lcd_line3();
+    lcd_clear_line();
+    lcd_line3();
+    if (ovcnt16 != 0) {
+      DisplayValue(ovcnt16,0,',',4);
+    }
+    lcd_string(utoa(tmpint,outval,10));
+  }
+#endif
+
 //############################################################
   ADCSRA = (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; //enable ADC
   R_DDR = 0;			// switch R_H resistor port for input
@@ -465,13 +484,25 @@ void Scale_C_with_vcc(void) {
 /* Interrupt Service Routine for timer1 Overflow */
  ISR(TIMER1_OVF_vect, ISR_BLOCK)
 {
- if (unfinished != 0) {
-    ovcnt16++;				// count overflow
+ if ((!(TI1_INT_FLAGS & (1<<ICF1)) && (unfinished !=0)) || ((TI1_INT_FLAGS & (1<<ICF1)) && (ICR1 < 250))) {
+    // Capture Event not pending or (Capture Event pending and ICR1 < 250
+    // the ICR1H is buffered and can not examined alone, we must read the ICR1L first (with ICR1 access) !
+   ovcnt16++;				// count Overflow
  }
 }
 /* Interrupt Service Routine for timer1 capture event (Comparator) */
  ISR(TIMER1_CAPT_vect, ISR_BLOCK)
 {
  unfinished = 0;			// clear unfinished flag
+ // With unfinished set to 0, we prevent further counting the Overflow.s
+ // Is already a Overflow detected?
+ if((TI1_INT_FLAGS & (1<<TOV1))) {	// counter overflow, 65.536 ms @ 1MHz, 8.192ms @ 8MHz
+   //there is already a Overflow detected, before or after the capture event?
+   // ICR1H is buffered and can not examined alone, we must read the ICR1L first (with ICR1 access) !
+   if (ICR1 < 250) {
+     //  Yes, Input Capture Counter is low, Overflow has occured before the capture event
+     ovcnt16++;				// count Overflow
+   }
+ }
 }
 #endif

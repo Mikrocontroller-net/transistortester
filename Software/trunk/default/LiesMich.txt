@@ -1,4 +1,4 @@
-﻿Datum: 31.01.2013   Test Version Transistortester (AVR) Version 1.06k
+﻿Datum: 30.11.2013   Test Version Transistortester (AVR) Version 1.09k
 
 Achtung: 
 =======
@@ -10,6 +10,9 @@ mit keramischen 100nF Kondensatoren in unmittelbarer Nähe der Versorgungsanschl
 des ATmega sind erforderlich für einen einwandfreien Betrieb.
 Sie können auch die Benutzung des Schlafzustandes mit der Makefile Option
 INHIBIT_SLEEP_MODE verhindern.
+Die Behandlung der Ladezeitmessung mit dem Schlafzustand war bei den Versionen
+ab 1.05k nicht fehlerfrei implementiert. In der Version 1.09k habe ich keine
+Fehler im Zusammenhang mit dem Zählerüberlauf feststellen können.
 
 Für alle, die selber experimentieren wollen,hier eine kurze Anleitung,
 wie man die 1Mhz und 8MHz Version selbst erzeugen kann.
@@ -36,14 +39,13 @@ um einen fertigen ATmega microcontroller zu erhalten.
 3.) Das Programmiergerät anschließen und mit dem Aufruf "make upload" die Programmierdaten
     über das ISP-Interface in den AVR brennen.
 
-4.) Bei Bedarf mit dem Aufruf "make fuses" den AVR für den Betrieb konfigurieren.
+4.) Bei Bedarf mit dem Aufruf "make fuses-crystal" den AVR für den Betrieb mit Quarz konfigurieren.
     Den ISP-Stecker jetzt wieder entfernen.
 
 Für eine Quarz-Oszillator-Betrieb ist es erforderlich einen 8MHz Quarz an Pin 9 und Pin 10
-des AVRs anzuschliessen und anstelle des Aufrufes "make fuses" den Aufruf "make fuses-crystal"
-aufzurufen.
+des AVRs anzuschliessen.
 Bei der ATmega168 Linie ist auch der Quarz-betriebene 1MHz Betrieb möglich, es wird dann
-ein Vorteiler für die Clock programmiert.
+ein Vorteiler für die 8 MHz Clock programmiert.
 
 Wenn man Strom sparen möchte, kann man auch mit dem "make fuses-crystal-lp" Aufruf
 den Low Power Crystal Oscillator Mode benutzen. Mit dem Standard fuses-crystal Aufruf
@@ -53,6 +55,12 @@ angeschlossen werden, wegen der besseren Auflösung der Kondensatormessung und
 Induktivitätsmessung ist aber sowieso der 8MHz Betrieb zu bevorzugen.
 Beim Setzen der Clockfrequenz (fuses) bitte äußerst sorgfältig arbeiten, man kann sie 
 sehr leicht so ändern, daß keine (ISP-)Programmierung mehr möglich ist!!!
+================================================
+Achtung bei Benutzung des Sleep Mode ohne Quarz!
+================================================
+Bei der Benutzung der Software ohne Quarz (make fuses) muß der Parameter RESTART_DELAY_TICS=6
+in der Makefile gesetzt werden wegen einem unterschiedlichen Aufwach-Verhaltens beim Sleep Mode.
+================================================
 
 Ausser einigen ATmega8 (PARTNO=m8) habe ich einige ATmega168 (PARTNO=m168) und
 ATmega328 Versionen (PARTNO=m328) getestet.
@@ -89,15 +97,8 @@ Für die Selbstkalibration benötigen Sie einen externen Kondensator hoher Güte
 wenigstens 100 nF (20 uF maximal).
 Dieser Kondensator muß nach der Messung des Null-Offsets der Kondensatormessung (C0) an
 Pin 1 und Pin 3 des Testers angeschlossen werden, wenn der Text "1--||--3 >100nF" angezeigt wird.
-Der Nulloffset der ESR (Äquivalenter Serieller Widerstand) eines Kondensators wird abgeglichen,
-wenn Sie einen Kondensator mit hoher Kapazität und sehr niedrigem ESR anschließen.
-Der Tester nimmt an, daß ein negativer ESR nicht möglich ist und wird den Nulloffset
-so reduzieren, daß das Ergebnis Null ergibt. Da die Anzeige etwas schwankt, sollte
-dieser Abgleich (Kondensatormessung) mehrfach durchgeführt werden.
-Das Korrektur-Verhalten wird angezeigt durch die Ausgabe des Textes "ESR=0?".
 Der neue Nulloffset bleibt für die nächsten Messungen wirksam, bis der nächste Selbsttest
 den Nulloffset auf den Anfangswert zurücksetzt.
-Aus diesem Grund muß diese Kalibration nach jedem Selbsttest wiederholt werden!
 Die Messung des ESR-Wertes ist sehr schwierig, da die Widerstandauflösung 0.01 Ohm beträgt.
 Die Steckverbindungen, die Platine, das ATmega Exemplar und die Kabelwiderstände haben
 Einfluß auf das Meßergebnis!

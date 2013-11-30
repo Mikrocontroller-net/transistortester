@@ -1,15 +1,17 @@
 This directory contains the program source for all TransistorTester versions.
 To build the programming files for your ATmega microcontroller
 please change to one of the following subdirectories:
-mega8, default, mega328, mega168_strip_grid or mega328_strip_grid
+mega8, default, mega328, mega168_strip_grid, mega328_strip_grid, mega328_dogm and mega328_strip_grid_dogm
 
 The mega8 subdirectory contains the Makefile to build the programming data for a ATmega8 microcontroller.
 The default subdirectory contains the Makefile to build the programming data for a ATmega168 controller.
 The mega328 subdirectory contains the Makefile to build the programming data for a ATmega328 controller.
 The subdirectories with the _strip_grid ending contains the Makefiles for the different connection
 of the LCD used for the strip grid board and can not be used with the normal connection of the LCD.
+You can find the programming data and the matching Makefile for the DOGM style LCD in the subdirectories
+with dogm ending (mega328_dogm and mega328_strip_grid_dogm). 
 
-Additionally all subdirectories hold the compiled data TransistorTester.hex and TransistorTester.eep!
+All subdirectories hold the Makefile the compiled data TransistorTester.hex and TransistorTester.eep!
 The .hex data must be loaded to the flash memory and the .eep data must be loaded to the EEprom memory.
 With the Linux operating system or with WinAVR the data can be loaded with the program avrdude to the
 memory of the ATmega, controled with the Makefile. The connected ISP programmer must be supported by the program avrdude.

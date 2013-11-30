@@ -1,7 +1,7 @@
 In diesem Verzeichnis sind die Quelldateien für alle TransistorTester Versionen.
 Um die Programmdaten für ihren ATmega Mikrocontroller zu generieren, wechseln
 Sie bitte in eins der folgenden Unterverzeichnisse:
-mega8, default, mega328, mega168_strip_grid oder mega328_strip_grid
+mega8, default, mega328, mega168_strip_grid, mega328_strip_grid, mega328_dogm and mega328_strip_grid_dogm.
 
 Das mega8 Unterverzeichnis enthält die Makefile für die Erzeugung von Programmdaten eines ATmega8 Microcontroller.
 Das default Unterverzeichnis enthält die Makefile für die Erzeugung von Programmdaten eines ATmega168 Controller.
@@ -9,14 +9,18 @@ Das mega328 Unterverzeichnis enthält die Makefile für Erzeugung von die Progra
 Die Unterverzeichnisse mit der _strip_grid Endung enthalten die Makefiles für einen anderen Anschluß
 des LCDs, wie er für das Streifenleiter Board benutzt wird. Diese Daten können nicht für Transistertester
 mit dem normalen Anschluß des LCD benutzt werden.
+Man kann die Programmierdaten und die passende Makefile für DOGM LCDs in den Unterverzeichnissen
+mit der dogm Endung finden (meha328_dogm und mega328_strip_grid_dogm).
 
-Alle Unterverzeichnisse enthalten auch die übersetzten TransistorTester.hex und TransistorTester.eep Daten!
+Alle Unterverzeichnisse enthalten die Makefile und die übersetzten TransistorTester.hex und TransistorTester.eep
+Daten!
 Die .hex Daten müssen in den Flash Speicher geladen und die .eep Daten in das EEprom geladen werden.
 Unter Linux oder mit WinAVR können die Daten auch über der Makefile gesteuert mit dem Programm avrdude in den
 Speicher des ATmega geladen werden, wenn ein von avrdude unterstütztes ISP-Programmiergerät angeschlossen ist.
 Die Daten können aber auch mit jedem anderen Programm in den ATmega geladen werden.
 
-Man kann auch ein eigenes Unterverzeichnis anlegen und hier eine Kopie einer Makefile aus einem anderen Verzeichnis anlegen.
+Man kann auch ein eigenes Unterverzeichnis anlegen und hier eine Kopie einer Makefile aus einem anderen
+Verzeichnis anlegen.
 Hier kann man dann andere Optionen in dieser Makefile-Kopie setzen und so eine eigene
 Version von TransistorTester Programmdaten in diesem Verzeichnis zu erzeugen.
 

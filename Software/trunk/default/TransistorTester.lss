@@ -5357,7 +5357,7 @@ start:
     1e64:	90 e0       	ldi	r25, 0x00	; 0
     1e66:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
 //  DisplayValue(cap.cval,-2,'V',2);		// Display 2 Digits of this 10mV units
-#if BAT_NUMERATOR <= (65535/U_VCC)
+#if BAT_NUMERATOR <= (0xffff/U_VCC)
   cap.cval = (trans.uBE[0]*BAT_NUMERATOR)/BAT_DENOMINATOR + BAT_OUT;
 #else
  #if (BAT_NUMERATOR == 133) && (BAT_DENOMINATOR == 33)

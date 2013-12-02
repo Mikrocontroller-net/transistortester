@@ -24,12 +24,32 @@
 #define TP1 PC0
 #define TP2 PC1
 #define TP3 PC2
+// Port pin for external Voltage measurement (zener voltage extension)
 #define TPext PC3
 // Port pin for 2.5V precision reference used for VCC check (optional)
 #define TPREF PC4
 // Port pin for Battery voltage measuring
 #define TPBAT PC5
 
+// setting for voltage devider of Batterie voltage measurement 10K and 3.3k
+#ifndef BAT_NUMERATOR
+ // factor corresponding to the sum of both resistors (10k + 3.3k)
+ #define BAT_NUMERATOR 133
+#endif
+#ifndef BAT_DENOMINATOR
+ // factor corresponding to the resistor at the GND side (3.3k)
+ #define BAT_DENOMINATOR 33
+#endif
+
+// setting for Voltage divider of the external Voltage measurement 180k and 20k
+#ifndef EXT_NUMERATOR
+ // factor correcponding to the sum of both resistors (180k + 20k)
+ #define EXT_NUMERATOR 10
+#endif
+#ifndef EXT_DENOMINATOR
+ // factor corresponding to the resistor at the GND side (20k)
+ #define EXT_DENOMINATOR 1
+#endif
 
 /*
   exact values of used resistors (Ohm).

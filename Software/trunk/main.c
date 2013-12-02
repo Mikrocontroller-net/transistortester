@@ -158,7 +158,15 @@ start:
   // A good result can be get with multiply by 4 and divide by 10 (about 0.75%).
 //  cap.cval = (trans.uBE[0]*4)/10+((BAT_OUT+5)/10); // usually output only 2 digits
 //  DisplayValue(cap.cval,-2,'V',2);		// Display 2 Digits of this 10mV units
+#if BAT_NUMERATOR < 13
+  cap.cval = (trans.uBE[0]*BAT_NUMERATOR)/BAT_DENOMINATOR + BAT_OUT;
+#else
+ #if (BAT_NUMERATOR == 133) && (BAT_DENOMINATOR == 33)
   cap.cval = (trans.uBE[0]*4)+BAT_OUT;		// usually output only 2 digits
+ #else
+  cap.cval = ((unsigned long)trans.uBE[0]*BAT_NUMERATOR)/BAT_DENOMINATOR + BAT_OUT;
+ #endif
+#endif
   DisplayValue(cap.cval,-3,'V',2);		// Display 2 Digits of this 10mV units
   lcd_space();
  #endif
@@ -170,18 +178,18 @@ start:
  #endif
  #if (BAT_POOR > 5300)
   // use .8 V difference to Warn-Level
-  #define WARN_LEVEL (((unsigned long)(BAT_POOR+800)*(unsigned long)33)/133)
+  #define WARN_LEVEL (((unsigned long)(BAT_POOR+800)*(unsigned long)BAT_DENOMINATOR)/BAT_NUMERATOR)
  #elif (BAT_POOR > 3249)
   // less than 5.4 V only .4V difference to Warn-Level
-  #define WARN_LEVEL (((unsigned long)(BAT_POOR+400)*(unsigned long)33)/133)
+  #define WARN_LEVEL (((unsigned long)(BAT_POOR+400)*(unsigned long)BAT_DENOMINATOR)/BAT_NUMERATOR)
  #elif (BAT_POOR > 1299)
   // less than 2.9 V only .2V difference to Warn-Level
-  #define WARN_LEVEL (((unsigned long)(BAT_POOR+200)*(unsigned long)33)/133)
+  #define WARN_LEVEL (((unsigned long)(BAT_POOR+200)*(unsigned long)BAT_DENOMINATOR)/BAT_NUMERATOR)
  #else
   // less than 1.3 V only .1V difference to Warn-Level
-  #define WARN_LEVEL (((unsigned long)(BAT_POOR+100)*(unsigned long)33)/133)
+  #define WARN_LEVEL (((unsigned long)(BAT_POOR+100)*(unsigned long)BAT_DENOMINATOR)/BAT_NUMERATOR)
  #endif
- #define POOR_LEVEL (((unsigned long)(BAT_POOR)*(unsigned long)33)/133)
+ #define POOR_LEVEL (((unsigned long)(BAT_POOR)*(unsigned long)BAT_DENOMINATOR)/BAT_NUMERATOR)
   // check the battery voltage
   if (trans.uBE[0] <  WARN_LEVEL) {
      //Vcc < 7,3V; show Warning 
@@ -235,7 +243,11 @@ start:
 #ifdef WITH_UART
      uart_newline();		// start of new measurement
 #endif
-     DisplayValue(trans.uBE[1]*10,-3,'V',3);	// Display 3 Digits of this mV units
+ #if EXT_NUMERATOR < 14
+     DisplayValue(trans.uBE[1]*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);	// Display 3 Digits of this mV units
+ #else
+     DisplayValue((unsigned long)trans.uBE[1]*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);	// Display 3 Digits of this mV units
+ #endif
      wait_about300ms();
   }
 #endif

@@ -29,9 +29,9 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  12 .debug_str    0000097c  00000000  00000000  0000c420  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    00001a40  00000000  00000000  0000cd9c  2**0
+ 13 .debug_loc    00001a22  00000000  00000000  0000cd9c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_pubtypes 0000021f  00000000  00000000  0000e7dc  2**0
+ 14 .debug_pubtypes 0000021f  00000000  00000000  0000e7be  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -5356,11 +5356,11 @@ start:
     1e62:	85 ee       	ldi	r24, 0xE5	; 229
     1e64:	90 e0       	ldi	r25, 0x00	; 0
     1e66:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
-  // display Battery voltage
-  // The divisor to get the voltage in 0.01V units is ((10*33)/133) witch is about 2.4812
-  // A good result can be get with multiply by 4 and divide by 10 (about 0.75%).
-//  cap.cval = (trans.uBE[0]*4)/10+((BAT_OUT+5)/10); // usually output only 2 digits
 //  DisplayValue(cap.cval,-2,'V',2);		// Display 2 Digits of this 10mV units
+#if BAT_NUMERATOR < 13
+  cap.cval = (trans.uBE[0]*BAT_NUMERATOR)/BAT_DENOMINATOR + BAT_OUT;
+#else
+ #if (BAT_NUMERATOR == 133) && (BAT_DENOMINATOR == 33)
   cap.cval = (trans.uBE[0]*4)+BAT_OUT;		// usually output only 2 digits
     1e6a:	60 91 57 01 	lds	r22, 0x0157
     1e6e:	70 91 58 01 	lds	r23, 0x0158
@@ -5376,6 +5376,10 @@ start:
     1e86:	70 93 63 01 	sts	0x0163, r23
     1e8a:	80 93 64 01 	sts	0x0164, r24
     1e8e:	90 93 65 01 	sts	0x0165, r25
+ #else
+  cap.cval = ((unsigned long)trans.uBE[0]*BAT_NUMERATOR)/BAT_DENOMINATOR + BAT_OUT;
+ #endif
+#endif
   DisplayValue(cap.cval,-3,'V',2);		// Display 2 Digits of this 10mV units
     1e92:	4d ef       	ldi	r20, 0xFD	; 253
     1e94:	26 e5       	ldi	r18, 0x56	; 86
@@ -5384,9 +5388,9 @@ start:
   lcd_space();
     1e9c:	0e 94 d7 00 	call	0x1ae	; 0x1ae <lcd_space>
   // less than 1.3 V only .1V difference to Warn-Level
-  #define WARN_LEVEL (((unsigned long)(BAT_POOR+100)*(unsigned long)33)/133)
+  #define WARN_LEVEL (((unsigned long)(BAT_POOR+100)*(unsigned long)BAT_DENOMINATOR)/BAT_NUMERATOR)
  #endif
- #define POOR_LEVEL (((unsigned long)(BAT_POOR)*(unsigned long)33)/133)
+ #define POOR_LEVEL (((unsigned long)(BAT_POOR)*(unsigned long)BAT_DENOMINATOR)/BAT_NUMERATOR)
   // check the battery voltage
   if (trans.uBE[0] <  WARN_LEVEL) {
     1ea0:	80 91 57 01 	lds	r24, 0x0157

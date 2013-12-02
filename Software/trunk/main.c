@@ -158,7 +158,7 @@ start:
   // A good result can be get with multiply by 4 and divide by 10 (about 0.75%).
 //  cap.cval = (trans.uBE[0]*4)/10+((BAT_OUT+5)/10); // usually output only 2 digits
 //  DisplayValue(cap.cval,-2,'V',2);		// Display 2 Digits of this 10mV units
-#if BAT_NUMERATOR < 13
+#if BAT_NUMERATOR <= (65535/U_VCC)
   cap.cval = (trans.uBE[0]*BAT_NUMERATOR)/BAT_DENOMINATOR + BAT_OUT;
 #else
  #if (BAT_NUMERATOR == 133) && (BAT_DENOMINATOR == 33)
@@ -243,7 +243,7 @@ start:
 #ifdef WITH_UART
      uart_newline();		// start of new measurement
 #endif
- #if EXT_NUMERATOR < 14
+ #if EXT_NUMERATOR <= (65635/U_VCC)
      DisplayValue(trans.uBE[1]*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);	// Display 3 Digits of this mV units
  #else
      DisplayValue((unsigned long)trans.uBE[1]*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);	// Display 3 Digits of this mV units

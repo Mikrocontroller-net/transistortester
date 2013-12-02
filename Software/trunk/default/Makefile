@@ -164,11 +164,11 @@ CFLAGS += -DBAT_OUT=150
 CFLAGS += -DBAT_POOR=6400
 
 # Voltage divider for battery voltage measurement  10k / 3.3k = 133/33
-#CFLAGS += -DBAT_NUMERATOR 133
-#CFLAGS += -DBAT_DENOMINATOR 33
+#CFLAGS += -DBAT_NUMERATOR=133
+#CFLAGS += -DBAT_DENOMINATOR=33
 # Voltage divider for the external zener voltage measurement 180k / 20k = 10/1
-#CFLAGS += -DEXT_NUMERATOR 10
-#CFLAGS += -DEXT_DENOMINATOR 1
+#CFLAGS += -DEXT_NUMERATOR=10
+#CFLAGS += -DEXT_DENOMINATOR=1
 
 # The sleep mode of the ATmega168 or ATmega328 is normally used by the software to save current.
 # You can inhibit this with the option INHIBIT_SLEEP_MODE .

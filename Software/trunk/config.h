@@ -37,8 +37,11 @@
  #define BAT_NUMERATOR 133
 #endif
 #ifndef BAT_DENOMINATOR
- // factor corresponding to the resistor at the GND side (3.3k)
+ // divider corresponding to the resistor at the GND side (3.3k)
  #define BAT_DENOMINATOR 33
+#endif
+#if BAT_NUMERATOR < BAT_DENOMINATOR
+ #warning "Wrong BAT_NUMERATOR / BAT_DENOMINATOR setting!"
 #endif
 
 // setting for Voltage divider of the external Voltage measurement 180k and 20k
@@ -47,8 +50,11 @@
  #define EXT_NUMERATOR 10
 #endif
 #ifndef EXT_DENOMINATOR
- // factor corresponding to the resistor at the GND side (20k)
+ // divider corresponding to the resistor at the GND side (20k)
  #define EXT_DENOMINATOR 1
+#endif
+#if EXT_NUMERATOR < EXT_DENOMINATOR
+ #warning "Wrong EXT_NUMERATOR / EXT_DENOMINATOR setting!"
 #endif
 
 /*

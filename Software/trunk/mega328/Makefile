@@ -442,7 +442,7 @@ size: ${TARGET}
 clean:
 	-rm -rf $(OBJECTS) TransistorTester.elf dep/* TransistorTester.hex TransistorTester.eep TransistorTester.lss TransistorTester.map
 steril:
-	make
+	$(MAKE)
 	-rm -rf $(OBJECTS) TransistorTester.elf dep/* TransistorTester.lss TransistorTester.map
 
 
@@ -463,11 +463,11 @@ fuses-crystal-lp:
 
 # make upload  additionally calls make to compile the software for selected target
 upload:
-	make
+	$(MAKE)
 	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTester.hex:a \
 	-U eeprom:w:./TransistorTester.eep:a
 program:
-	make
+	$(MAKE)
 	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTester.hex:a \
 	-U eeprom:w:./TransistorTester.eep:a
 eeprom:

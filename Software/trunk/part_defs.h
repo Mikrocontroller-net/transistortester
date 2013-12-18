@@ -12,7 +12,7 @@
 
 //End (parts)
 //special definition for different parts 
-//FETs
+//FETs , even numbers are N-type
 #define PART_MODE_N_E_MOS 2
 #define PART_MODE_P_E_MOS 3
 #define PART_MODE_N_D_MOS 4

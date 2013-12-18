@@ -13,7 +13,7 @@ void GetIr(uint8_t HighPin, uint8_t LowPin);	// get residual current of diode
 void SerienDiodenAusgabe();		// output diodes as ->|-->|- with voltages
 void UfAusgabe(uint8_t bcdchar);	// Output of the threshold voltage(s) Uf
 void mVAusgabe(uint8_t nn);		// Output of the theshold voltage for Diode nn 
-void RvalOut(uint8_t ii);		// Output of the resistore value(s)
+void RvalOut(uint8_t nrr);		// Output of the resistor value(s)
 void ShowResistor(void);		// show one or two Resistors
 void EntladePins(void);			// discharge capacitors
 void RefVoltage(void);			// compensate the reference voltage for comparator 

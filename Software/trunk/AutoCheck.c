@@ -280,7 +280,7 @@ no_c0save:
 #if 0
 //#######################################
         // Test for switching level of the digital input of port TP3
-        for (ii=0;ii<8;ii++) {
+        for (tt=0;tt<8;tt++) {
         ADC_PORT =  TXD_VAL;	//ADC-Port 1 to GND
         ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
         R_PORT = 2<<(TP3*2);		//Pin 3 over R_H to VCC
@@ -352,7 +352,7 @@ no_c0save:
   ADC_DDR = 1<<TP1 | TXD_MSK;	// Pin 1 to GND
   R_DDR = (1<<(TP3*2)) | (1<<(TP2*2));
   for(ww=0;ww<30;ww++) {	// repeat the signal up to 30 times (1 minute)
-     for (ii=0;ii<100;ii++) {	// for 2 s generate 50 Hz
+     for (tt=0;tt<100;tt++) {	// for 2 s generate 50 Hz
          R_PORT = (1<<(TP2*2));	// Pin 2 over R_L to VCC, Pin 3 over R_L to GND
   #ifdef TEST_SLEEP_MODE
          sleep_5ms(2); 		// test of timing of sleep mode call 

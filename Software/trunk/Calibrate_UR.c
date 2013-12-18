@@ -3,39 +3,40 @@ void Calibrate_UR(void) {
  // get reference voltage, calibrate VCC with external 2.5V and
  // get the port output resistance
 
- #ifdef AUTO_CAL
+#ifdef AUTO_CAL
   uint16_t sum_rm;	// sum of 3 Pin voltages with 680 Ohm load
   uint16_t sum_rp;	// sum of 3 Pin voltages with 680 Ohm load
   uint16_t u680;	// 3 * (Voltage at 680 Ohm)
- #endif
+#endif
 
 
-                                        //############################################
   ADCconfig.U_AVCC = U_VCC;     // set initial VCC Voltage
   ADCconfig.Samples = 190;	// set number of ADC reads near to maximum
+                                        //############################################
 #if FLASHEND > 0x1fff
+  uint16_t mv2500;
   ADC_PORT = TXD_VAL;                   // switch to 0V
   ADC_DDR = (1<<TPREF) | TXD_MSK;       // switch pin with 2.5V reference to GND
-  wait1ms();
-  ADC_DDR =  TXD_MSK;   // switch pin with reference back to input
-  trans.uBE[1] = W5msReadADC(TPREF); // read voltage of 2.5V precision reference
-  if ((trans.uBE[1] > 2250) && (trans.uBE[1] < 2750)) {
+  wait20us();			// switch only short time, so that the relais do not really switch
+  ADC_DDR =  TXD_MSK;		// switch pin with reference back to input
+  mv2500 = W5msReadADC(TPREF); // read voltage of 2.5V precision reference
+  if ((mv2500 > 2250) && (mv2500 < 2750)) {
      // precision voltage reference connected, update U_AVCC
      WithReference = 1;
-     ADCconfig.U_AVCC = (unsigned long)((unsigned long)ADCconfig.U_AVCC * 2495) / trans.uBE[1];
+     ADCconfig.U_AVCC = (unsigned long)((unsigned long)ADCconfig.U_AVCC * 2495) / mv2500;
   }
 #endif
- #ifdef WITH_AUTO_REF
+#ifdef WITH_AUTO_REF
   (void) ReadADC(MUX_INT_REF);	// read reference voltage 
   ref_mv = W5msReadADC(MUX_INT_REF);	// read reference voltage 
-  RefVoltage();		//compute RHmultip = f(reference voltage)
- #else
+  RefVoltage();			//compute RHmultip = f(reference voltage)
+#else
   ref_mv = DEFAULT_BAND_GAP;    // set to default Reference Voltage
- #endif
+#endif
   ADCconfig.U_Bandgap = ADC_internal_reference; // set internal reference voltage for ADC
                                         //############################################
 
- #ifdef AUTO_CAL
+#ifdef AUTO_CAL
   // measurement of internal resistance of the ADC port outputs switched to GND
   ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
   R_PORT = 1<<(TP1*2);		//R_L-PORT 1 to VCC

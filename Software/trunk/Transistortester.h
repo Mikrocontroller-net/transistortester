@@ -79,7 +79,7 @@ End of configuration
    const unsigned char Bauteil[] MEM_TEXT = "Bauteil"; //€€€";
 //   const unsigned char Diode[] MEM_TEXT = "Diode: ";
    const unsigned char Triac[] MEM_TEXT = "Triac";
-   const unsigned char Thyristor[] MEM_TEXT = "Thyristor";
+   const unsigned char Thyristor[] MEM_TEXT = "Thyrist.";
    const unsigned char Unknown[] MEM_TEXT = " unbek."; //€€";
    const unsigned char TestFailed1[] MEM_TEXT = "Kein,unbek. oder";
    const unsigned char OrBroken[] MEM_TEXT = "oder defekt "; //€";
@@ -100,7 +100,7 @@ End of configuration
    const unsigned char Bauteil[] MEM_TEXT = "part"; //€€€€€€";
 //   const unsigned char Diode[] MEM_TEXT = "Diode: ";
    const unsigned char Triac[] MEM_TEXT = "Triac";
-   const unsigned char Thyristor[] MEM_TEXT = "Thyristor";
+   const unsigned char Thyristor[] MEM_TEXT = "Thyrist.";
    const unsigned char Unknown[] MEM_TEXT = " unknown"; //€";
    const unsigned char TestFailed1[] MEM_TEXT = "No, unknown, or"; //€";
    const unsigned char OrBroken[] MEM_TEXT = "or damaged "; //€€";
@@ -204,7 +204,7 @@ End of configuration
    const unsigned char Bauteil[] MEM_TEXT = "component"; 
 //   const unsigned char Diode[] MEM_TEXT = "Diode: ";
    const unsigned char Triac[] MEM_TEXT = "Triac";
-   const unsigned char Thyristor[] MEM_TEXT = "Thyristor";
+   const unsigned char Thyristor[] MEM_TEXT = "Thyrist.";
    const unsigned char Unknown[] MEM_TEXT = " onbekend"; 
    const unsigned char TestFailed1[] MEM_TEXT = "Geen, onbekend,"; 
    const unsigned char OrBroken[] MEM_TEXT = "of defect "; 
@@ -225,7 +225,7 @@ End of configuration
    const unsigned char Bauteil[] MEM_TEXT = "peca"; 		//€€€€€€";
 //   const unsigned char Diode[] MEM_TEXT = "Diodo: ";
    const unsigned char Triac[] MEM_TEXT = "Triac";
-   const unsigned char Thyristor[] MEM_TEXT = "Tiristor ";
+   const unsigned char Thyristor[] MEM_TEXT = "Tiristor";
    const unsigned char Unknown[] MEM_TEXT = " O que? "; 	//€";
    const unsigned char TestFailed1[] MEM_TEXT = "Sem peca, ruim"; //€";
    const unsigned char OrBroken[] MEM_TEXT = "danificada "; 	//€€";
@@ -288,7 +288,7 @@ End of configuration
    const unsigned char Bauteil[] MEM_TEXT = "dalis"; //"part";
 // const unsigned char Diode[] MEM_TEXT = "Diodas: ";
    const unsigned char Triac[] MEM_TEXT = "Simistorius"; //"Triac";
-   const unsigned char Thyristor[] MEM_TEXT = "Tiristorius"; //"Thyristor";
+   const unsigned char Thyristor[] MEM_TEXT = "Tirist."; //"Thyristor";
    const unsigned char Unknown[] MEM_TEXT = " nezinoma"; //" unknown";
    const unsigned char TestFailed1[] MEM_TEXT = "Nezinoma arba"; //"Pajunkite detale" "No, unknown, or";
    const unsigned char OrBroken[] MEM_TEXT = "sugedusi "; //"or damaged";
@@ -308,8 +308,8 @@ End of configuration
  const unsigned char jfet_str[] MEM_TEXT = "JFET";
  const unsigned char GateCap_str[] MEM_TEXT = "C=";
  const unsigned char hfe_str[] MEM_TEXT ="B=";
- const unsigned char NPN_str[] MEM_TEXT = "NPN ";
- const unsigned char PNP_str[] MEM_TEXT = "PNP ";
+ const unsigned char NPN_str[] MEM_TEXT = "NPN";
+ const unsigned char PNP_str[] MEM_TEXT = "PNP";
 #ifndef EBC_STYLE
  const unsigned char N123_str[] MEM_TEXT = " 123=";
 // const unsigned char N123_str[] MEM_TEXT = " Pin=";
@@ -347,7 +347,7 @@ End of configuration
  const unsigned char KatAn[] MEM_TEXT = {'-', LCD_CHAR_DIODE2, '-',0};
  const unsigned char Dioden[] MEM_TEXT = {'*',LCD_CHAR_DIODE1, ' ', ' ',0};
  const unsigned char Resistor_str[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
- const unsigned char VERSION_str[] MEM2_TEXT = "Version 1.09k";
+ const unsigned char VERSION_str[] MEM2_TEXT = "Version 1.10k";
 
 
 #ifdef WITH_SELFTEST
@@ -495,16 +495,21 @@ struct Diode_t {
 
 COMMON struct Diode_t diodes[6];
 COMMON uint8_t NumOfDiodes;
+COMMON uint8_t diode_sequence;
 
-COMMON struct {
-  unsigned long hfe[2];		//current amplification factor 
-  unsigned int uBE[2];		//B-E-voltage of the Transistor
+typedef struct {
+  unsigned long hfe;		//current amplification factor 
+  unsigned int uBE;		//B-E-voltage of the Transistor
+  unsigned int current;		// current of Drain in 0.01mA
+  unsigned int gthvoltage;	//Gate-threshold voltage 
   uint8_t b,c,e;		//pins of the Transistor
-}trans;
-COMMON unsigned int gthvoltage;	//Gate-threshold voltage 
+  uint8_t count;
+}trans_t;
 
-COMMON uint8_t PartReady;		//part detection is finished 
-COMMON uint8_t PartMode;
+COMMON trans_t ptrans;		// parameters of P type transistor
+COMMON trans_t ntrans;		// parameters of N type transistor
+COMMON trans_t *_trans;		// pointer to trans_t structure
+
 COMMON uint8_t tmpval, tmpval2;
 COMMON unsigned int ref_mv;            //Reference-voltage  in mV units
 
@@ -520,8 +525,6 @@ COMMON struct resis_t{
 COMMON  uint8_t ResistorsFound;	//Number of found resistors
 
 
-
-COMMON uint8_t ii;			// multipurpose counter
 COMMON struct cap_t {
   unsigned long cval;		// capacitor value 
   unsigned long cval_max;	//capacitor with maximum value
@@ -537,15 +540,18 @@ COMMON struct cap_t {
   int8_t cpre;			//Prefix for capacitor value  -12=p, -9=n, -6=µ, -3=m
   int8_t cpre_max;		//Prefix of the biggest capacitor
 } cap;
+
 #ifndef INHIBIT_SLEEP_MODE
  /* with sleep mode we need a global ovcnt16 */
 COMMON volatile uint16_t ovcnt16;
 COMMON volatile uint8_t unfinished;
 #endif
+
 COMMON int16_t load_diff;		// difference voltage of loaded capacitor and internal reference
 
 COMMON uint8_t WithReference;		// Marker for found precision voltage reference = 1
-COMMON uint8_t PartFound;	 	// the found part 
+COMMON uint8_t PartFound;	 	// type of the found part 
+COMMON uint8_t PartMode;		// description of the found part
 COMMON char outval[12];		// String for ASCII-outpu
 COMMON uint8_t empty_count;		// counter for max count of empty measurements
 COMMON uint8_t mess_count;		// counter for max count of nonempty measurements

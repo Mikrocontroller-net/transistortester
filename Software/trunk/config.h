@@ -657,3 +657,10 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  #endif
 #endif
 
+// SEARCH_PARASITIC let the Tester search for greater Base-Emitter capacity, if two transistors are detected.
+// The one with the lower capacity value is the parasitic, the other is shown by default
+// This is enabled for all processors (deselecting save about 120 bytes flash)
+#define SEARCH_PARASITIC
+
+// you can save about 14 bytes of Flash, if you deselect Thyristor gate voltage
+#define WITH_THYRISTOR_GATE_V

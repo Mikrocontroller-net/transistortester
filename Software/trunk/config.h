@@ -616,6 +616,15 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 
 #endif
 
+// SEARCH_PARASITIC let the Tester search for greater Base-Emitter capacity, if two transistors are detected.
+// The one with the lower capacity value is the parasitic, the other is shown by default
+// This is enabled for all processors (deselecting save about 120 bytes flash)
+// Otherwise the shown type (NPNp or PNPn) depends on the selected pin sequence of the tester!
+#define SEARCH_PARASITIC
+
+// you can save about 14 bytes of Flash, if you deselect Thyristor gate voltage
+#define WITH_THYRISTOR_GATE_V
+
 // COMMON_COLLECTOR activates measurement of current amplification factor in common collector circuit  (Emitter follower)
 #ifndef NO_COMMON_COLLECTOR_HFE
  #define COMMON_COLLECTOR
@@ -644,7 +653,7 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 
 #ifdef COMMON_COLLECTOR
  #ifndef COMMON_EMITTER
-    // by only selecting one hFE measurement methode, the extended tests are always possible!
+    // Only by selecting one hFE measurement methode, the extended tests are always possible!
     #define EXTENDED_TESTS
  #endif
 #else
@@ -652,15 +661,17 @@ Is SWUART_INVERT defined, the UART works is inverse mode
     // both measurement methodes are unselected, use COMMON_COLLECTOR
     #warning "No hFE measurement type selected, common collector circuit choosed!"
     #define COMMON_COLLECTOR
-    // by only selecting one hFE measurement methode, the extended tests are always possible!
+    // Only by selecting one hFE measurement methode, the extended tests are always possible!
     #define EXTENDED_TESTS
  #endif
 #endif
 
-// SEARCH_PARASITIC let the Tester search for greater Base-Emitter capacity, if two transistors are detected.
-// The one with the lower capacity value is the parasitic, the other is shown by default
-// This is enabled for all processors (deselecting save about 120 bytes flash)
-#define SEARCH_PARASITIC
-
-// you can save about 14 bytes of Flash, if you deselect Thyristor gate voltage
-#define WITH_THYRISTOR_GATE_V
+#ifdef EXTENDED_TESTS
+ #if FLASHEND <= 0x3fff
+  // we have to save some memory to enable the extended tests!
+  #ifdef WITH_UART
+   #undef SEARCH_PARASITIC
+   #warning "Search of parasitic transistor not possible. NPNp or PNPn result depends on the selected pin sequence!"
+  #endif
+ #endif
+#endif

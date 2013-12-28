@@ -695,6 +695,17 @@ ad_3972:
 	sbc	r25, zero_reg;
 	rjmp	ad_exit;
 esr_too_less:
+#ifdef AUTO_CAL
+        subi	r24, lo8(-R_LIMIT_TO_UNCALIBRATED);		/* + 0.20 Ohm */
+        sbci	r25, hi8(-R_LIMIT_TO_UNCALIBRATED);		/* esrvalue + 20 */
+	cp	r24, r6;		/* if ((esrvalue+20) < esr0) ; */
+	cpc	r25, zero_reg;
+	brcc	esr_too_less2;
+	call	mark_as_uncalibrated;
+/*	ldi	r24,'<'; */
+/*	call	lcd_data; */
+esr_too_less2:
+#endif
 	mov	r24, zero_reg;
 	mov	r25, zero_reg;
 	

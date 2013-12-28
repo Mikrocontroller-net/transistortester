@@ -87,7 +87,7 @@ End of configuration
    #define Cathode_char 'K'
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM_TEXT = "Selbsttest ..";
-   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!";
+   const unsigned char RELPROBE[] MEM_TEXT = "Trenne Pins!";
    const unsigned char ATE[] MEM_TEXT = "Test Ende";
  #endif
 #endif
@@ -108,7 +108,7 @@ End of configuration
    #define Cathode_char 'C'
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!";
+   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!"; // or "separate pins!";
    const unsigned char ATE[] MEM_TEXT = "Test End";
  #endif
 #endif
@@ -128,9 +128,9 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'K'
  #ifdef WITH_SELFTEST
-   const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!";
-   const unsigned char ATE[] MEM_TEXT = "Test End";
+   const unsigned char SELFTEST[] MEM_TEXT = "Tryb auto-test..";
+   const unsigned char RELPROBE[] MEM_TEXT = "osobne pins!";
+   const unsigned char ATE[] MEM_TEXT = "Testu End";
  #endif
 #endif
 
@@ -212,7 +212,7 @@ End of configuration
    #define Cathode_char 'C'
 #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM_TEXT = "Zelftest mode..";
-   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe";
+   const unsigned char RELPROBE[] MEM_TEXT = "aparte Pinnen!";
    const unsigned char ATE[] MEM_TEXT = "Test Einde";
 #endif
 #endif
@@ -311,11 +311,15 @@ End of configuration
  const unsigned char NPN_str[] MEM_TEXT = "NPN";
  const unsigned char PNP_str[] MEM_TEXT = "PNP";
 #ifndef EBC_STYLE
+ // default is the 123= style
  const unsigned char N123_str[] MEM_TEXT = " 123=";
 // const unsigned char N123_str[] MEM_TEXT = " Pin=";
- #else
+#else
  #if EBC_STYLE == 321
   const unsigned char N321_str[] MEM_TEXT = " 321=";
+ #endif
+ #if EBC_STYLE == 123
+  const unsigned char N123_str[] MEM_TEXT = " 123=";
  #endif
 #endif
  const unsigned char Uf_str[] MEM_TEXT = "Uf=";
@@ -342,6 +346,97 @@ End of configuration
 #ifdef WITH_VEXT
  const unsigned char Vext_str[] MEM_TEXT = "Vext=";
  #define LCD_CLEAR
+#endif
+#if FLASHEND > 0x3fff
+ #if defined(LANG_GERMAN)		//deutsch
+ const unsigned char HelpCalibration_str[] PROGMEM = {'U','n','k','a','l','i','b','r','i','e','r','t','!',' ',
+'Z','u','m',' '+0x80,
+'K','a','l','i','b','r','i','e','r','e','n',' ',
+
+'k','l','e','m','m','e',' ','3',' '+0x80,'P','i','n','n','e',' ',
+'z','u','s','a','m','m','e','n',' ','u','n','d',' ',
+
+'s','t','a','r','t','e',' ','m','i','t',' ','d','e','r',' ',
+'T','a','s','t','e','.',' ',
+
+'B','e','s','t','a','e','t','i','g','e',' ','d','e','n',' ',
+'S','e','l','b','s','t','t','e','s','t',' ','m','i','t',' ',
+
+'d','e','r',' ','T','a','s','t','e',' ','i','n',' ','2','s','.',' ',
+'T','r','e','n','n','e',' ','d','i','e',' ','P','i','n','n','e',' ',
+
+'e','r','s','t',' ','n','a','c','h',' ','d','e','r',' ',
+'M','e','l','d','u','n','g',' ',
+
+'"','T','r','e','n','n','e',' '+0x80,'P','i','n','s','!','"',' ',
+'u','n','d',' ','s','c','h','l','i','e','s','s','e',' ',
+
+'e','r','s','t',' ', 'n','a','c','h',' ','d','e','r',' ',
+'M','e','l','d','u','n','g',' ',
+
+'"','1','-',LCD_CHAR_CAP,'-','3',' '+0x80,'>','1','0','0','n','F','"',' ',
+'e','i','n','e','n',' ','g','u','t','e','n',' ',
+
+'K','o','n','d','e','n','s','a','t','o','r',' ',
+'m','i','t',' ','m','e','h','r',' ','a','l','s',' ','1','0','0','n','F',' ',
+
+'a','n',' ','P','i','n',' '+0x80,'1',' '+0x80,'+',' '+0x80,'3',' ','a','n','.',' ',
+'S','o','f','t','w','a','r','e',' ','u','n','d',' ',
+
+'D','o','k','u','m','e','n','t','a','t','i','o','n',' ',
+'i','s','t',' ','a','u','f',' ','s','v','n',':','/','/',' ',
+
+'m','i','k','r','o','c','o','n','t','r','o','l','l','e','r','.',' ',
+'n','e','t','/','t','r','a','n','s','i','s','t','o','r',' ',
+
+'t','e','s','t','e','r',' ',0};
+
+ #else
+ const unsigned char HelpCalibration_str[] PROGMEM = {'N','o','t',' ','c','a','l','i','b','r','a','t','e','d','!',' ',
+'F','o','r',' '+0x80,
+'c','a','l','i','b','r','a','t','i','o','n',' ',
+
+'c','l','a','m','b',' ','t','h','e',' ','3',' '+0x80,'p','i','n','s',' ',
+'t','o','g','e','t','h','e','r',' ','a','n','d',' ',
+
+'s','t','a','r','t',' ','w','i','t','h',' ',
+'t','h','e',' '+0x80 ,'k','e','y','.',' ',
+
+'A','c','k','n','o','w','l','e','g','e',' ','t','h','e',' ',
+'s','e','l','f','-','t','e','s','t',' ','w','i','t','h',' ',
+
+'t','h','e',' ','k','e','y',' ',
+'w','i','t','h','i','n',' '+0x80,'2','s','.', ' ',
+
+'D','i','s','c','o','n','n','e','c','t',' ',
+'p','i','n','s',' ','a','f','t','e','r',' ',
+
+'t','h','e',' '+0x80,'m','e','s','s','a','g','e',' ',
+'"','i','s','o','l','a','t','e',' '+0x80,'P','r','o','b','e','!','"',' ',
+
+'i','s',' ','s','h','o','w','n',' ','a','n','d',' ',
+'c','o','n','n','e','c','t',' ','a',' ','g','o','o','d',' ',
+
+'c','a','p','a','c','i','t','o','r',' ','w','i','t','h',' ',
+'a','t',' ','l','e','a','s','t',' ','1','0','0','n','F',' ',
+
+'t','o',' ','p','i','n',' '+0x80,'1',' '+0x80,'a','n','d',' '+0x80,'3',' ',
+'o','n','l','y',' ','a','f','t','e','r',' ',
+
+'t','h','e',' ','m','e','s','s','a','g','e',' ',
+'"','1','-',LCD_CHAR_CAP,'-','3',' '+0x80,'>','1','0','0','n','F','"',' ',
+
+'i','s',' '+0x80,'s','h','o','w','n','.',' ',
+'S','o','f','t','w','a','r','e',' ','a','n','d',' ',
+
+'d','o','c','u','m','e','n','t','a','t','i','o','n',' ',
+'i','s',' ','a','t',' ','s','v','n',':','/','/',' ',
+
+'m','i','k','r','o','c','o','n','t','r','o','l','l','e','r','.',' ',
+
+'n','e','t','/','t','r','a','n','s','i','s','t','o','r',' ',
+'t','e','s','t','e','r',' ',0};
+ #endif
 #endif
  const unsigned char AnKat[] MEM_TEXT = {'-', LCD_CHAR_DIODE1, '-',0};
  const unsigned char KatAn[] MEM_TEXT = {'-', LCD_CHAR_DIODE2, '-',0};
@@ -446,8 +541,10 @@ End of configuration
 #ifdef AUTO_CAL
 //  const uint16_t cap_null EEMEM = C_NULL;	// Zero offset of capacity measurement 
    const int16_t ref_offset EEMEM = REF_C_KORR;	// default correction of internal reference voltage for capacity measurement
-  // LoPin:HiPin                        2:1    3:1    1:2                    :     3:2                   1:3    2:3
-   const uint8_t c_zero_tab[] EEMEM = { C_NULL,C_NULL,C_NULL+TP2_CAP_OFFSET,C_NULL,C_NULL+TP2_CAP_OFFSET,C_NULL,C_NULL }; //table of zero offsets
+   // the zero offset for capacity measurement for all pin combinations
+  // LoPin:HiPin                        2:1    3:1    1:2                    marker  3:2                   1:3    2:3
+   const uint8_t c_zero_tab[] EEMEM = { C_NULL,C_NULL,C_NULL+TP2_CAP_OFFSET,C_NULL+1,C_NULL+TP2_CAP_OFFSET,C_NULL,C_NULL }; //table of zero offsets
+   // if the marker position of c_zero_tab is not equal the first position, the calibration has not run before
 #endif
   const uint8_t EE_ESR_ZEROtab[] EEMEM = {ESR_ZERO, ESR_ZERO, ESR_ZERO, ESR_ZERO};	// zero offset of ESR measurement
 //End of EEPROM-Strings
@@ -540,6 +637,7 @@ COMMON struct cap_t {
   int8_t cpre;			//Prefix for capacitor value  -12=p, -9=n, -6=µ, -3=m
   int8_t cpre_max;		//Prefix of the biggest capacitor
 } cap;
+  unsigned int cell_mv[3];	//remaining load voltages after discharge cycle
 
 #ifndef INHIBIT_SLEEP_MODE
  /* with sleep mode we need a global ovcnt16 */
@@ -569,6 +667,7 @@ COMMON uint16_t resis680pl;	// port output resistance + 680
 COMMON uint16_t resis680mi;	// port output resistance + 680
 COMMON uint16_t pin_rmi;	// port output resistance to GND side, 0.1 Ohm units
 COMMON uint16_t pin_rpl;	// port output resistance to VCC side, 0.1 Ohm units
+COMMON uint8_t UnCalibrated;	// 0, if the tester is calibrated
 #endif
 
 

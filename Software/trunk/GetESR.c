@@ -124,19 +124,18 @@ uint16_t GetESR(uint8_t hipin, uint8_t lopin) {
   //  measure the ESR value of capacitor
   unsigned int adcv[4];		// array for 4 ADC readings
   unsigned long sumvolt[4];	// array for 3 sums of ADC readings
-  unsigned long cap_val_nF;
+  unsigned long cap_val_nF;	// measured capacity value in nF units
   uint16_t esrvalue;
   uint8_t HiPinR_L;		// used to switch 680 Ohm to HighPin
   uint8_t HiADC;		// used to switch Highpin directly to GND or VCC
   uint8_t LoPinR_L;		// used to switch 680 Ohm to LowPin
   uint8_t LoADC;		// used to switch Lowpin directly to GND or VCC
-  uint8_t ii,jj;		// tempory values
+  uint8_t ii;			// tempory value
   uint8_t StartADCmsk;		// Bit mask to start the ADC
   uint8_t SelectLowPin,SelectHighPin;
-  uint8_t big_cap;
   int8_t esr0;			// used for ESR zero correction
 
-  big_cap = 1;
+  cap_val_nF = 10000;
   if (PartFound == PART_CAPACITOR) {
      ii = cap.cpre_max;
      cap_val_nF = cap.cval_max;
@@ -218,21 +217,12 @@ uint16_t GetESR(uint8_t hipin, uint8_t lopin) {
       StartADCwait();			// set ADCSRA Interrupt Mode, sleep
       adcv[0] = ADCW;			// Voltage LowPin with current
       ADMUX = SelectHighPin;
-//      if (big_cap != 0) {
          StartADCwait();			// ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV;	
          ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; // enable ADC and start with ADSC
          wait4us();
          R_PORT = HiPinR_L;			// switch R-Port to VCC
          R_DDR = HiPinR_L;			// switch R_L port for HighPin to output (VCC)
          DelayBigCap();		// wait predefined time
-//      } else {
-//         StartADCwait();			// ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV;	
-//         R_PORT = HiPinR_L;			// switch R-Port to VCC
-//         R_DDR = HiPinR_L;			// switch R_L port for HighPin to output (VCC)
-//         ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | FAST_CLOCK_DIV; // enable ADC and start with ADSC
-//      		// SH at 2.5 ADC clocks behind start = 5 us
-//         DelaySmallCap();		// wait predefined time
-//      }
       R_DDR = 0;				// switch current off,  SH is 1.5 ADC clock behind real start
       R_PORT = 0;
       while (ADCSRA&(1<<ADSC));		// wait for conversion finished
@@ -251,21 +241,12 @@ uint16_t GetESR(uint8_t hipin, uint8_t lopin) {
       StartADCwait();			// set ADCSRA Interrupt Mode, sleep
       adcv[2] = ADCW;			// Voltage HighPin with current
       ADMUX = SelectLowPin;
-//      if (big_cap != 0) {
          StartADCwait();			// set ADCSRA Interrupt Mode, sleep
          ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; // enable ADC and start with ADSC
          wait4us();
          R_PORT = LoPinR_L;
          R_DDR = LoPinR_L;			// switch LowPin with 680 Ohm to VCC
          DelayBigCap();		// wait predefined time
-//      } else {
-//         StartADCwait();			// set ADCSRA Interrupt Mode, sleep
-//         R_PORT = LoPinR_L;
-//         R_DDR = LoPinR_L;			// switch LowPin with 680 Ohm to VCC
-//         ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | FAST_CLOCK_DIV; // enable ADC and start with ADSC
-//      			// 2.5 ADC clocks = 5 us
-//         DelaySmallCap();		// wait predefined time
-//      }
       R_DDR = 0;				// switch current off
       R_PORT = 0;
       while (ADCSRA&(1<<ADSC));		// wait for conversion finished
@@ -313,6 +294,11 @@ uint16_t GetESR(uint8_t hipin, uint8_t lopin) {
    if (esrvalue > esr0) {
       esrvalue -= esr0;
    } else {
+#ifdef AUTO_CAL
+      if ((esrvalue + R_LIMIT_TO_UNCALIBRATED) < esr0) {
+         mark_as_uncalibrated();
+      }
+#endif
       esrvalue = 0;
    }
 

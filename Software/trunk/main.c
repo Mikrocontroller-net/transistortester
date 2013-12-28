@@ -21,6 +21,7 @@
 //begin of transistortester program
 int main(void) {
   uint8_t ii;
+  unsigned int start_loop;
 #ifdef SEARCH_PARASITIC
   unsigned long n_cval;		// capacitor value of NPN B-E diode, for deselecting the parasitic Transistor
   int8_t n_cpre;		// capacitor prefix of NPN B-E diode
@@ -244,10 +245,10 @@ start:
      lcd_fix_string(Vext_str);		// Vext=
      ADC_DDR = 0;		//deactivate Software-UART
      Vext = W5msReadADC(TPext);	// read external voltage 
-     ADC_DDR = TXD_MSK;		//activate Software-UART 
-#ifdef WITH_UART
-     uart_newline();		// start of new measurement
-#endif
+//     ADC_DDR = TXD_MSK;		//activate Software-UART 
+//#ifdef WITH_UART
+//     uart_newline();		// start of new measurement
+//#endif
  #if EXT_NUMERATOR <= (0xffff/U_VCC)
      DisplayValue(Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);	// Display 3 Digits of this mV units
  #else
@@ -264,13 +265,29 @@ start:
   if(PartFound == PART_CELL) {
     lcd_clear();
     lcd_fix_string(Cell_str);	// display "Cell!"
-    goto end2;
+#if FLASHEND > 0x3fff
+    lcd_line2();		// use LCD line 2
+    DisplayValue(cell_mv[0],-3,'V',3);
+    lcd_space();
+    DisplayValue(cell_mv[1],-3,'V',3);
+    lcd_space();
+    DisplayValue(cell_mv[2],-3,'V',3);
+#endif
+    goto end;
   }
 
 #ifdef CHECK_CALL
   AutoCheck();			//check, if selftest should be done
-#endif
   lcd_line2();			//LCD position row2, column 1
+  UnCalibrated = 0;
+  if (eeprom_read_byte(&c_zero_tab[0]) != eeprom_read_byte(&c_zero_tab[3])) {
+     // if calibrated, both c_zero_tab values are identical! c_zero_tab[3] is not used otherwise
+     UnCalibrated = 1;
+     lcd_data('!');
+  }
+#else
+  lcd_line2();			//LCD position row2, column 1
+#endif
   lcd_fix_string(TestRunning);		//String: testing...
      
   // check all 6 combinations for the 3 pins 
@@ -289,7 +306,9 @@ start:
 //  if(((PartFound == PART_NONE) || (PartFound == PART_RESISTOR) || (PartFound == PART_DIODE)) ) {
   if(PartFound == PART_NONE) {
      // If no part is found yet, check separate if is is a capacitor
+#if FLASHEND > 0x1fff
      lcd_data('C');
+#endif
      EntladePins();		// discharge capacities
      //measurement of capacities in all 3 combinations
      cap.cval_max = 0;		// set max to zero
@@ -370,7 +389,8 @@ start:
            lcd_testpin(diodes[1].Cathode);
            UfAusgabe(0x01);
            goto end;
-        } else if(diodes[0].Cathode == diodes[1].Cathode) { //Common Cathode
+        } 
+        if(diodes[0].Cathode == diodes[1].Cathode) { //Common Cathode
            lcd_testpin(diodes[0].Anode);
            lcd_fix_string(AnKat);	//"->|-"
 	   lcd_testpin(diodes[0].Cathode);
@@ -378,17 +398,17 @@ start:
            lcd_testpin(diodes[1].Anode);
            UfAusgabe(0x01);
            goto end;
-          }
-//        else if ((diodes[0].Cathode == diodes[1].Anode) && (diodes[1].Cathode == diodes[0].Anode)) {
-        else if (diodes[0].Cathode == diodes[1].Anode) {
+//        else if ((diodes[0].Cathode == diodes[1].Anode) && (diodes[1].Cathode == diodes[0].Anode)) 
+        } 
+        if (diodes[0].Cathode == diodes[1].Anode) {
            // normaly two serial diodes are detected as three diodes, but if the threshold is high
            // for both diodes, the third diode is not detected.
            // can also be Antiparallel
            diode_sequence = 0x01;	// 0 1
            SerienDiodenAusgabe();
            goto end;
-        }
-        else if (diodes[1].Cathode == diodes[0].Anode) {
+        } 
+        if (diodes[1].Cathode == diodes[0].Anode) {
            diode_sequence = 0x10;	// 1 0
            SerienDiodenAusgabe();
            goto end;
@@ -458,7 +478,7 @@ start:
 //           UfAusgabe( (diode_sequence);
            goto end;
         }
-     }
+     }  // end (NumOfDiodes == 3)
      // end (PartFound == PART_DIODE)
   } else if (PartFound == PART_TRANSISTOR) {
 #ifdef SEARCH_PARASITIC
@@ -478,6 +498,7 @@ start:
        }
     }
 #endif
+#if FLASHEBD > 0x1fff
     if(!(ON_PIN_REG & (1<<RST_PIN))) {
        // if the Start key is still pressed, use the other Transistor
        if (PartMode == PART_MODE_NPN) {
@@ -486,18 +507,23 @@ start:
           PartMode = PART_MODE_NPN;	// switch to parasitic transistor
        }
     }
+#endif
 
     if(PartMode == PART_MODE_NPN) {
        lcd_fix_string(NPN_str);		//"NPN "
+#if FLASHEND > 0x1fff
        if (ptrans.count != 0) {
           lcd_data('p');		// mark for parasitic PNp
        }
+#endif
 //       _trans = &ntrans;  is allready selected a default
     } else {
        lcd_fix_string(PNP_str);		//"PNP "
+#if FLASHEND > 0x1fff
        if (ntrans.count != 0) {
           lcd_data('n');		// mark for parasitic NPn
        }
+#endif
        _trans = &ptrans;		// change transistor structure
     }
     lcd_space();
@@ -542,10 +568,10 @@ start:
 
     tmp = PartMode/2;
     if (tmp == (PART_MODE_N_D_MOS/2)) {
-       lcd_data('D');			// N-D
+       lcd_data('D');			// N-D or P-D
     }
     if (tmp == (PART_MODE_N_E_MOS/2)) {
-       lcd_data('E');			// N-E
+       lcd_data('E');			// N-E or P-E
     }
     if (tmp == (PART_MODE_N_JFET/2)) {
        lcd_fix_string(jfet_str);	//"JFET"
@@ -702,6 +728,7 @@ start:
   }
   empty_count++;
   mess_count = 0;
+  start_loop = display_time - SHORT_WAIT_TIME;
   goto end2;
 
 
@@ -716,13 +743,14 @@ gakAusgabe:
  end:
   empty_count = 0;		// reset counter, if part is found
   mess_count++;			// count measurements
+  start_loop = 0;		// full wait time
 
  end2:
   ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
   while(!(ON_PIN_REG & (1<<RST_PIN)));	//wait ,until button is released
   wait_about200ms();
 // wait 28 seconds or 5 seconds (if repeat function)
-  for(ptrans.gthvoltage = 0;ptrans.gthvoltage<display_time;ptrans.gthvoltage+=10) {
+  for(ptrans.gthvoltage = start_loop;ptrans.gthvoltage<display_time;ptrans.gthvoltage+=10) {
      if(!(ON_PIN_REG & (1<<RST_PIN))) {
         // If the key is pressed again... 
         // goto start of measurement 
@@ -743,6 +771,10 @@ gakAusgabe:
   }
  #endif
   // only one Measurement requested, shut off
+#if FLASHEND > 0x3fff
+  // look, if the tester is uncalibrated (C-source will be included directly)
+ #include "HelpCalibration.c"
+#endif
 //  MCUSR = 0;
   ON_PORT &= ~(1<<ON_PIN);		//switch off power
   //never ending loop 
@@ -847,13 +879,19 @@ void EntladePins() {
      ADC_DDR = adc_gnd;
      ADC_PORT = TXD_VAL;		// ADC-outputs auf 0
      R_PORT = 0;			// R-outputs auf 0
-     R_DDR = (2<<(PC2*2)) | (2<<(PC1*2)) | (2<<(PC0*2)); // R_H for all Pins to GND
+//     R_DDR = (2<<(PC2*2)) | (2<<(PC1*2)) | (2<<(PC0*2)); // R_H for all Pins to GND
+     R_DDR = (3<<(PC2*2)) | (3<<(PC1*2)) | (3<<(PC0*2)); // R_H and R_L for all Pins to GND
      adcmv[0] = W5msReadADC(PC0);	// which voltage has Pin 1?
      adcmv[1] = ReadADC(PC1);	// which voltage has Pin 2?
      adcmv[2] = ReadADC(PC2);	// which voltage has Pin 3?
      if ((PartFound == PART_CELL) || (adcmv[0] < CAP_EMPTY_LEVEL) & (adcmv[1] < CAP_EMPTY_LEVEL) & (adcmv[2] < CAP_EMPTY_LEVEL)) {
         ADC_DDR = TXD_MSK;		// switch all ADC-Pins to input
         R_DDR = 0;			// switch all R_L Ports (and R_H) to input
+#if FLASHEND > 0x3fff
+        cell_mv[0] = adcmv[0];		// save the voltage of pin 1
+        cell_mv[1] = adcmv[1];		// save the voltage of pin 2
+        cell_mv[2] = adcmv[2];		// save the voltage of pin 3
+#endif
         return;			// all is discharged
      }
      // all Pins with voltage lower than 1V can be connected directly to GND (ADC-Port)
@@ -871,7 +909,7 @@ void EntladePins() {
      // additionally switch the leaving Ports with R_L to GND.
      // since there is no disadvantage for the already directly switched pins, we can
      // simply switch all  R_L resistors to GND
-     R_DDR = (1<<(PC2*2)) | (1<<(PC1*2)) | (1<<(PC0*2));	// Pins across R_L resistors to GND
+//     R_DDR = (1<<(PC2*2)) | (1<<(PC1*2)) | (1<<(PC0*2));	// Pins across R_L resistors to GND
      for(clr_cnt=0;clr_cnt<MAX_ENTLADE_ZEIT;clr_cnt++) {
         wdt_reset();
         adcmv[0] = W20msReadADC(PC0);	// which voltage has Pin 1?
@@ -894,6 +932,14 @@ void EntladePins() {
         PartFound = PART_CELL;	// mark as Battery
         // there is charge on capacitor, warn later!
      }
+#if DebugOut == 99
+        lcd_line4();
+        lcd_string(utoa(adcmv[0], outval, 10));
+        lcd_space();
+        lcd_string(utoa(adcmv[1], outval, 10));
+        lcd_space();
+        lcd_string(utoa(adcmv[2], outval, 10));
+#endif
      for(adcmv[0]=0;adcmv[0]<clr_cnt;adcmv[0]++) {
         // for safety, discharge 5% of discharge  time
         wait1ms();
@@ -1137,6 +1183,7 @@ void PinLayout(char pin1, char pin2, char pin3) {
 
 #ifdef CHECK_CALL
  #include "AutoCheck.c"
+ #include "mark_as_uncalibrated.c"
 #endif
 #if FLASHEND > 0x1fff
  #include "GetIr.c"

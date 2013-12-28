@@ -153,7 +153,11 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 //      if ((PartReady == 0) || (adc.lp1 > ntrans.uBE)) 
 //      there is no way to find out the right Source / Drain
         ntrans.uBE = adc.lp1;
-        ntrans.gthvoltage = adc.lp1 - adc.tp1;	//voltage GS (Source - Gate)
+        if(adc.lp1 > adc.tp1) {
+          ntrans.gthvoltage = adc.lp1 - adc.tp1;	//voltage GS (Source - Gate)
+        } else {
+          ntrans.gthvoltage = 0;	//voltage GS (Source - Gate)
+        }
         ntrans.current = (unsigned int)(((unsigned long)adc.lp1 * 1000) / RR680MI); // Id 0.01mA
         ntrans.count++;			// count as two, the inverse is identical
         goto saveNresult;		// save Pin numbers and exit
@@ -187,7 +191,11 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         lcd_data('P');
         lcd_data('J');
 #endif
-        ptrans.gthvoltage = adc.tp1 - adc.hp1;		//voltage GS (Gate - Source)
+        if(adc.tp1 > adc.hp1) {
+          ptrans.gthvoltage = adc.tp1 - adc.hp1;	//voltage GS (Gate - Source)
+        } else {
+          ptrans.gthvoltage = 0;
+        }
         ptrans.current = (unsigned int)(((unsigned long)(ADCconfig.U_AVCC - adc.hp1) * 1000) / RR680PL); // Id 0.01mA
         ptrans.count++;			// count as two, the inverse is identical
         goto savePresult;		// save pin numbers and exit
@@ -660,7 +668,9 @@ checkDiode:
 // Search for resistors
 //##########################################################################################
 widmes:
-  if (NumOfDiodes > 0) goto clean_ports;	// no resistors are searched, if diodes are detected
+  if ((NumOfDiodes + ptrans.count  + ntrans.count) > 0) {
+     goto clean_ports;	// no resistors are searched, if diodes are detected
+  }
   // resistor measurement
   wdt_reset();
 // U_SCALE can be set to 4 for better resolution of ReadADC result

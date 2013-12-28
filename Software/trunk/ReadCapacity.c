@@ -90,7 +90,8 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   ADC_PORT = TXD_VAL;			// switch ADC-Port to GND
   R_PORT = 0;				// switch R-Port to GND
   ADC_DDR = LoADC;			// switch Low-Pin to output (GND)
-  R_DDR = HiPinR_L;			// switch R_L port for HighPin to output (GND)
+//  R_DDR = HiPinR_L;			// switch R_L port for HighPin to output (GND)
+  R_DDR = 0;				// set all R Ports to input (no current)
   adcv[0] = ReadADC(HighPin);		// voltage before any load 
 // ******** should adcv[0] be measured without current???
   adcv[2] = adcv[0];			// preset to prevent compiler warning
@@ -366,6 +367,18 @@ messe_mit_rh:
      if (cap.cval > tmpint) {
          cap.cval -= tmpint;		//subtract zero offset (pF)
      } else {
+#if FLASHEND > 0x3fff
+       if ((cap.cval+C_LIMIT_TO_UNCALIBRATED) < tmpint) {
+         mark_as_uncalibrated();	// set in EEprom to uncalibrated
+#if DebugOut == 11
+         lcd_line3();
+         lcd_testpin(LowPin);
+         lcd_data('y');
+         lcd_testpin(HighPin);
+         lcd_space();
+#endif
+       }
+#endif
          cap.cval = 0;			//unsigned long may not reach negativ value
      }
 #else

@@ -230,7 +230,7 @@ begin_selftest:
   adcmv[4] = (unsigned int) cap.cval_uncorrected.dw;	//save capacity value of empty Pin 3:2
   ReadCapacity(TP1, TP2);
   adcmv[0] = (unsigned int) cap.cval_uncorrected.dw;	//save capacity value of empty Pin 2:1
-  adcmv[3] = adcmv[0];				// same as first for the checking loop
+  adcmv[3] = adcmv[0];			// same as first for the checking loop, mark as calibrated
   lcd_clear();
   lcd_fix_string(C0_str);			//output "C0 "
   DisplayValue(adcmv[5],0,' ',3);		//output cap0 1:3
@@ -238,7 +238,7 @@ begin_selftest:
   DisplayValue(adcmv[2],-12,'F',3);		//output cap0 1:2
  #ifdef AUTO_CAL
   for (ww=0;ww<7;ww++) {			//checking loop
-      if ((adcmv[ww] > 90) || (adcmv[ww] <10)) goto no_c0save;
+      if ((adcmv[ww] > 190) || (adcmv[ww] < 10)) goto no_c0save;
   }
   for (ww=0;ww<7;ww++) {
       // write all zero offsets to the EEprom 
@@ -266,7 +266,8 @@ no_c0save:
         cap.cpre++;
         cap.cval /= 10;
      }
-     if ((cap.cpre == -9) && (cap.cval > 95) && (cap.cval < 22000)) {
+     if ((cap.cpre == -9) && (cap.cval > 95) && (cap.cval < 22000) &&
+         (load_diff > -150) && (load_diff < 150)) {
         cap_found++;
      } else {
         cap_found = 0;		// wait for stable connection
@@ -319,10 +320,11 @@ no_c0save:
         adcmv[0] = ReadADC(TP3);  // get cap voltage with VCC reference
         ADCconfig.U_Bandgap = ADC_internal_reference;
         adcmv[1] = ReadADC(TP3);	// get cap voltage with internal reference
+        adcmv[1] += adcmv[1];		// double the value
         ADCconfig.U_Bandgap = 0;	// do not use internal Ref
         adcmv[2] = ReadADC(TP3);  // get cap voltage with VCC reference
         ADCconfig.U_Bandgap = ADC_internal_reference;
-        udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1] - adcmv[1])) * ADC_internal_reference / (2*adcmv[1]))+REF_R_KORR;
+        udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1])) * ADC_internal_reference / adcmv[1])+REF_R_KORR;
         lcd_line2();
         lcd_fix2_string(REF_R_str);	// "REF_R="
         udiff2 = udiff + (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));

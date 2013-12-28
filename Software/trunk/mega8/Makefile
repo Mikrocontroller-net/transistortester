@@ -110,7 +110,7 @@ CFLAGS += -DUSE_EEPROM
 # Omitting the option will select the 123=... style.  Every point is replaced by a character identifying 
 # type of connected transistor pin (B=Base, E=Emitter, C=Collector, G=Gate, S=Source, D=Drain).
 # If you select EBC_STYLE=321 , the style will be 321=... , the inverted order to the 123=... style.
-#CFLAGS += -DEBC_STYLE
+CFLAGS += -DEBC_STYLE
 
 # Setting of NO_NANO avoids the use of n as prefix for Farad (nF), the mikro prefix is used insted (uF).
 # CFLAGS += -DNO_NANO
@@ -373,7 +373,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Objects that must be built in order to link
-OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o swuart.o wait1000ms.o ReadCapacity.o ReadInductance.o ReadADC.o GetESR.o Calibrate_UR.o
+OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o wait1000ms.o ReadCapacity.o ReadADC.o Calibrate_UR.o
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 

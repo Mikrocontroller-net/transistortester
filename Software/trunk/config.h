@@ -523,6 +523,7 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  #define wait_about2s() wait2s()
  #define wait_about3s() wait3s()
  #define wait_about4s() wait4s()
+ #define wait_about5s() wait5s()
 #else
  // use sleep mode to save current for user interface
  #define wait_about5ms() sleep_5ms(1)
@@ -539,6 +540,7 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  #define wait_about2s() sleep_5ms(400)
  #define wait_about3s() sleep_5ms(600)
  #define wait_about4s() sleep_5ms(800)
+ #define wait_about5s() sleep_5ms(1000)
 #endif
 
 #undef AUTO_RH
@@ -635,6 +637,7 @@ Is SWUART_INVERT defined, the UART works is inverse mode
    // only define the common emitter, if the extended tests are not explicitly requested
    #define COMMON_EMITTER
  #endif
+ #undef WITH_THYRISTOR_GATE_V
 #endif
 
 // automatic check, if the extended tests are possible!
@@ -675,3 +678,9 @@ Is SWUART_INVERT defined, the UART works is inverse mode
   #endif
  #endif
 #endif
+
+// all capacity measurement results does not go C_LIMIT_TO_UNCALIBRATED pF below the calibrated zero capacity.
+#define C_LIMIT_TO_UNCALIBRATED 20
+
+// all ESR measurements results does not go R_LIMIT_TO_UNCALIBRATED 0.01 Ohm units below the calibrated zero resistance.
+#define R_LIMIT_TO_UNCALIBRATED 20   

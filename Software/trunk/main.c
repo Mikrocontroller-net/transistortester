@@ -21,7 +21,7 @@
 //begin of transistortester program
 int main(void) {
   uint8_t ii;
-  unsigned int start_loop;
+  unsigned int max_time;
 #ifdef SEARCH_PARASITIC
   unsigned long n_cval;		// capacitor value of NPN B-E diode, for deselecting the parasitic Transistor
   int8_t n_cpre;		// capacitor prefix of NPN B-E diode
@@ -498,7 +498,7 @@ start:
        }
     }
 #endif
-#if FLASHEBD > 0x1fff
+#if FLASHEND > 0x1fff
     if(!(ON_PIN_REG & (1<<RST_PIN))) {
        // if the Start key is still pressed, use the other Transistor
        if (PartMode == PART_MODE_NPN) {
@@ -548,6 +548,24 @@ start:
     }
     PinLayout('E','B','C'); 		//  EBC= or 123=...
     lcd_line2(); //2. row 
+#if FLASHEND > 0x3fff
+    if (_trans->ice0 > 0) {
+       lcd_fix2_string(ICE0_str);		// "ICE0="
+       DisplayValue(_trans->ice0,-5,'A',3);
+       wait_for_key_ms(5000);
+       lcd_line2(); //2. row 
+       lcd_clear_line();
+       lcd_line2(); //2. row 
+    }
+    if (_trans->ices > 0) {
+       lcd_fix2_string(ICEs_str);		// "ICEs="
+       DisplayValue(_trans->ices,-5,'A',3);
+       wait_for_key_ms(5000);
+       lcd_line2(); //2. row 
+       lcd_clear_line();
+       lcd_line2(); //2. row 
+    }
+#endif
     lcd_fix_string(hfe_str);		//"B="  (hFE)
     DisplayValue(_trans->hfe,0,0,3);
     lcd_space();
@@ -728,7 +746,7 @@ start:
   }
   empty_count++;
   mess_count = 0;
-  start_loop = display_time - SHORT_WAIT_TIME;
+  max_time = SHORT_WAIT_TIME;		// use allways the short wait time
   goto end2;
 
 
@@ -743,22 +761,12 @@ gakAusgabe:
  end:
   empty_count = 0;		// reset counter, if part is found
   mess_count++;			// count measurements
-  start_loop = 0;		// full wait time
+  max_time = display_time;	// full specified wait time
 
  end2:
   ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
   while(!(ON_PIN_REG & (1<<RST_PIN)));	//wait ,until button is released
-  wait_about200ms();
-// wait 28 seconds or 5 seconds (if repeat function)
-  for(ptrans.gthvoltage = start_loop;ptrans.gthvoltage<display_time;ptrans.gthvoltage+=10) {
-     if(!(ON_PIN_REG & (1<<RST_PIN))) {
-        // If the key is pressed again... 
-        // goto start of measurement 
-        goto start;
-     }
-     wdt_reset();
-     wait_about10ms();
-  }
+  if ((wait_for_key_ms(display_time)) != 0 ) goto start;
 #ifdef POWER_OFF
  #if POWER_OFF > 127
   #define POWER2_OFF 255
@@ -771,21 +779,13 @@ gakAusgabe:
   }
  #endif
   // only one Measurement requested, shut off
-#if FLASHEND > 0x3fff
+ #if FLASHEND > 0x3fff
   // look, if the tester is uncalibrated (C-source will be included directly)
- #include "HelpCalibration.c"
-#endif
+  #include "HelpCalibration.c"
+ #endif
 //  MCUSR = 0;
   ON_PORT &= ~(1<<ON_PIN);		//switch off power
-  //never ending loop 
-  while(1) {
-     if(!(ON_PIN_REG & (1<<RST_PIN))) {
-        // The statement is only reached if no auto off equipment is installed
-        goto start;
-     }
-     wdt_reset();
-     wait_about10ms();
-  }
+  wait_for_key_ms(0); //never ending loop 
 #else
   goto start;	// POWER_OFF not selected, repeat measurement
 #endif
@@ -1179,6 +1179,26 @@ void PinLayout(char pin1, char pin2, char pin3) {
    lcd_testpin(_trans->c);
  #endif
 #endif
+}
+uint8_t wait_for_key_ms(int max_time) {
+  // if key is pressed, return 1
+  // if max_time == 0 , do not count, wait endless
+  wait_about200ms();
+// wait 28 seconds or 5 seconds (if repeat function)
+  while (max_time >= 0) {
+     wait_about10ms();
+     if(!(ON_PIN_REG & (1<<RST_PIN))) {
+        // If the key is pressed again... 
+        // goto start of measurement 
+        return(1);    // key is pressed
+     }
+     wdt_reset();
+     if (max_time > 0) {		// count only, if counter > 0
+        max_time -= 10;			// 10 ms are done, count down
+        if (max_time == 0) max_time = -1;	// never count to zero, zero is endless!
+     }
+  }
+ return(0);		// no key pressed within the specified time
 }
 
 #ifdef CHECK_CALL

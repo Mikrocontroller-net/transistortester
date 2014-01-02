@@ -624,8 +624,10 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 // Otherwise the shown type (NPNp or PNPn) depends on the selected pin sequence of the tester!
 #define SEARCH_PARASITIC
 
+#if FLASHEND > 0x1fff
 // you can save about 14 bytes of Flash, if you deselect Thyristor gate voltage
-#define WITH_THYRISTOR_GATE_V
+ #define WITH_THYRISTOR_GATE_V
+#endif
 
 // COMMON_COLLECTOR activates measurement of current amplification factor in common collector circuit  (Emitter follower)
 #ifndef NO_COMMON_COLLECTOR_HFE
@@ -637,7 +639,6 @@ Is SWUART_INVERT defined, the UART works is inverse mode
    // only define the common emitter, if the extended tests are not explicitly requested
    #define COMMON_EMITTER
  #endif
- #undef WITH_THYRISTOR_GATE_V
 #endif
 
 // automatic check, if the extended tests are possible!

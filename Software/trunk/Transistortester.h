@@ -493,6 +493,10 @@ End of configuration
  const unsigned char Dioden[] MEM_TEXT = {'*',LCD_CHAR_DIODE1, ' ', ' ',0};
  const unsigned char Resistor_str[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
  const unsigned char VERSION_str[] MEM2_TEXT = "Version 1.10k";
+#if FLASHEND > 0x3fff
+ const unsigned char ICE0_str[] MEM2_TEXT = "ICE0=";
+ const unsigned char ICEs_str[] MEM2_TEXT = "ICEs=";
+#endif
 
 
 #ifdef WITH_SELFTEST
@@ -648,7 +652,11 @@ typedef struct {
   unsigned long hfe;		//current amplification factor 
   unsigned int uBE;		//B-E-voltage of the Transistor
   unsigned int current;		// current of Drain in 0.01mA
+  				// for bipolar current is ICE0
+ #define ice0 current
   unsigned int gthvoltage;	//Gate-threshold voltage 
+  				// for bipolar gthvoltage is ICEs in 0.01mA
+ #define ices gthvoltage
   uint8_t b,c,e;		//pins of the Transistor
   uint8_t count;
 }trans_t;

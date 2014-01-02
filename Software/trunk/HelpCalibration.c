@@ -6,7 +6,6 @@
   char zeich;
   uint8_t space_pos;
   uint8_t line_nr;
-  uint8_t ww;
   jj = 0;
   if (UnCalibrated) {
     // Output the help text for calibration.
@@ -21,22 +20,18 @@
        }
        if (line_nr == 0) {
           // it is the first LCD line, wait for showing the last message
-          for (ww=0;ww<50;ww++) {
-             wait_about100ms();
-             if(!(ON_PIN_REG & (1<<RST_PIN))) break;	// key pressed
-          }
+          if ((wait_for_key_ms(5000)) != 0) break;	// key pressed
           lcd_clear();
-          if (ww != 50) break;		// is interrupted, leave the loop
        }
        if (line_nr == 1) lcd_line2(); // write to the second LCD line
 #ifdef FOUR_LINE_LCD
        if (line_nr == 2) lcd_line3(); // write to the third LCD line
        if (line_nr == 3) lcd_line4(); // write to the fourth LCD line
        line_nr = (line_nr + 1) & 3;
- #define TIME_TO_READ 100
+ #define TIME_TO_READ 10000
 #else
        line_nr = (line_nr + 1) & 1;
- #define TIME_TO_READ 50
+ #define TIME_TO_READ 5000
 #endif
        for (ii=0;ii<space_pos;ii++) {
          zeich = pgm_read_byte(&HelpCalibration_str[ii+jj]);
@@ -48,9 +43,6 @@
        jj += space_pos;		// start position of line 2
        if((pgm_read_byte(&HelpCalibration_str[jj])) == ' ') jj++; // no space at begin of line
     }  /* end while */
-    for (ww=0;ww<TIME_TO_READ;ww++) {
-       wait_about100ms();
-       if(!(ON_PIN_REG & (1<<RST_PIN))) break;	// key pressed
-    }
+    wait_for_key_ms(TIME_TO_READ);	// key pressed
   }
 #endif

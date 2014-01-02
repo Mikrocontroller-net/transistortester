@@ -31,3 +31,4 @@ uint16_t get_log(uint16_t permil);	// get -log(1-(permil/1000))
 uint8_t ShortedProbes(uint8_t p1, uint8_t p2);	// check if two probes are shorted
 uint8_t AllProbesShorted();		// check if all probes are shorted, return 3 if true
 void mark_as_uncalibrated();		// mark in EEprom as uncalibrated device
+uint8_t wait_for_key_ms(int max_time); // wait max_time ms units for key is pressed

@@ -333,7 +333,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 #if DebugOut == 5
            lcd_data('B');
 #endif
-#if FLASHEND > 0x3fff
+#ifdef SHOW_ICE
            if (update_pins != 0) {
 	      // update residual collector current without base current
               ptrans.ice0 = (unsigned int)(((unsigned long)adc.lp_otr * 1000) / RR680MI); // ICE0 0.01mA
@@ -403,7 +403,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     ADC_DDR = LoADCm;		//Low-Pin to output 0V
     ADC_PORT = TXD_VAL;			//switch Low-Pin to GND
     R_DDR = TriPinRL | HiPinRL;		//RL port for High-Pin and Tristate-Pin to output
-#if FLASHEND > 0x3fff
+#ifdef SHOW_ICE
     R_PORT =  HiPinRL;	//RL port for High-Pin and Tristate-Pin to GND
     adc.vCEs = ADCconfig.U_AVCC - W5msReadADC(HighPin); // measure voltage a High-Pin, Base low
 #endif
@@ -521,7 +521,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 #if DebugOut == 5
          lcd_data('B');
 #endif
-#if FLASHEND > 0x3fff
+#ifdef SHOW_ICE
          if (update_pins != 0) {
 	    // update residual collector (emitter) current without base current
             ntrans.ice0 = (unsigned int)(((unsigned long)adc.lp_otr * 1000) / RR680MI); // ICE0 0.01mA

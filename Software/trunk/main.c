@@ -548,22 +548,16 @@ start:
     }
     PinLayout('E','B','C'); 		//  EBC= or 123=...
     lcd_line2(); //2. row 
-#if FLASHEND > 0x3fff
+#ifdef SHOW_ICE
     if (_trans->ice0 > 0) {
        lcd_fix2_string(ICE0_str);		// "ICE0="
        DisplayValue(_trans->ice0,-5,'A',3);
-       wait_for_key_ms(5000);
-       lcd_line2(); //2. row 
-       lcd_clear_line();
-       lcd_line2(); //2. row 
+       wait_for_key_5s_line2();		// wait 5s and clear line 2
     }
     if (_trans->ices > 0) {
        lcd_fix2_string(ICEs_str);		// "ICEs="
        DisplayValue(_trans->ices,-5,'A',3);
-       wait_for_key_ms(5000);
-       lcd_line2(); //2. row 
-       lcd_clear_line();
-       lcd_line2(); //2. row 
+       wait_for_key_5s_line2();		// wait 5s and clear line 2
     }
 #endif
     lcd_fix_string(hfe_str);		//"B="  (hFE)
@@ -1147,9 +1141,9 @@ TIMSK2 = (0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2); /* disable output compare match
 // show the Pin Layout of the device 
 void PinLayout(char pin1, char pin2, char pin3) {
 // pin1-3 is EBC or SGD or CGA
-   uint8_t ipp;
 #ifndef EBC_STYLE
    // Layout with 123= style
+   uint8_t ipp;
    lcd_fix_string(N123_str);		//" 123="
    for (ipp=0;ipp<3;ipp++) {
        if (ipp == _trans->e)  lcd_data(pin1);	// Output Character in right order
@@ -1159,6 +1153,7 @@ void PinLayout(char pin1, char pin2, char pin3) {
 #else
  #if EBC_STYLE == 321
    // Layout with 321= style
+   uint8_t ipp;
    lcd_fix_string(N321_str);		//" 321="
    ipp = 3;
    while (ipp != 0) {
@@ -1180,6 +1175,9 @@ void PinLayout(char pin1, char pin2, char pin3) {
  #endif
 #endif
 }
+
+/* wait max_time or previous key press */
+/* return value: 1 == key is pressed, 0 == time expired */
 uint8_t wait_for_key_ms(int max_time) {
   // if key is pressed, return 1
   // if max_time == 0 , do not count, wait endless
@@ -1200,6 +1198,17 @@ uint8_t wait_for_key_ms(int max_time) {
   }
  return(0);		// no key pressed within the specified time
 }
+
+#ifdef SHOW_ICE
+/* wait 5 seconds or previous key press, then clear line 2 of LCD and */
+/* set the cursor to the beginning of line 2 */
+void wait_for_key_5s_line2(void) {
+  wait_for_key_ms(SHORT_WAIT_TIME);
+  lcd_line2(); //2. row 
+  lcd_clear_line();		// clear the whole line
+  lcd_line2(); //2. row 
+}
+#endif
 
 #ifdef CHECK_CALL
  #include "AutoCheck.c"

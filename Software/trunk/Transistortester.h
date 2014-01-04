@@ -324,7 +324,7 @@ End of configuration
 #endif
  const unsigned char Uf_str[] MEM_TEXT = "Uf=";
  const unsigned char vt_str[] MEM_TEXT = " Vt=";
- const unsigned char Vgs_str[] MEM_TEXT = "@Vgs=";
+ const unsigned char Vgs_str[] MEM_TEXT = "@Vg=";
  const unsigned char CapZeich[] MEM_TEXT = {'-',LCD_CHAR_CAP,'-',0};
  const unsigned char Cell_str[] MEM_TEXT = "Cell!";
  const unsigned char VCC_str[] MEM_TEXT = "VCC=";
@@ -347,6 +347,7 @@ End of configuration
  const unsigned char Vext_str[] MEM_TEXT = "Vext=";
  #define LCD_CLEAR
 #endif
+
 #if FLASHEND > 0x3fff
  #if defined(LANG_GERMAN)		//deutsch
  const unsigned char HelpCalibration_str[] PROGMEM = {'U','n','k','a','l','i','b','r','i','e','r','t','!',' ',
@@ -493,7 +494,7 @@ End of configuration
  const unsigned char Dioden[] MEM_TEXT = {'*',LCD_CHAR_DIODE1, ' ', ' ',0};
  const unsigned char Resistor_str[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
  const unsigned char VERSION_str[] MEM2_TEXT = "Version 1.10k";
-#if FLASHEND > 0x3fff
+#ifdef SHOW_ICE
  const unsigned char ICE0_str[] MEM2_TEXT = "ICE0=";
  const unsigned char ICEs_str[] MEM2_TEXT = "ICEs=";
 #endif

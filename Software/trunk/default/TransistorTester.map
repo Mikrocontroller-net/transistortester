@@ -567,9 +567,9 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
                 0x00000000008001a3                _end = .
                 0x00000000008001a3                PROVIDE (__heap_start, .)
 
-.eeprom         0x0000000000810000      0x1a7
+.eeprom         0x0000000000810000      0x1a6
  *(.eeprom*)
- .eeprom        0x0000000000810000      0x1a7 main.o
+ .eeprom        0x0000000000810000      0x1a6 main.o
                 0x0000000000810000                RLtab
                 0x000000000081005a                TestRunning
                 0x0000000000810065                BatWeak
@@ -597,32 +597,32 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
                 0x000000000081010b                Uf_str
                 0x000000000081010f                vt_str
                 0x0000000000810114                Vgs_str
-                0x000000000081011a                CapZeich
-                0x000000000081011e                Cell_str
-                0x0000000000810124                VCC_str
-                0x0000000000810129                ESR_str
-                0x000000000081012f                VLOSS_str
-                0x0000000000810137                Lis_str
-                0x000000000081013a                Ir_str
-                0x0000000000810140                AnKat
-                0x0000000000810144                KatAn
-                0x0000000000810148                Dioden
-                0x000000000081014d                Resistor_str
-                0x0000000000810152                RIHI
-                0x0000000000810159                RILO
-                0x0000000000810160                C0_str
-                0x0000000000810164                T50HZ
-                0x000000000081016a                DiodeIcon1
-                0x0000000000810172                DiodeIcon2
-                0x000000000081017a                CapIcon
-                0x0000000000810182                ResIcon1
-                0x000000000081018a                ResIcon2
-                0x0000000000810192                RefDiff
-                0x0000000000810193                PrefixTab
-                0x000000000081019a                ref_offset
-                0x000000000081019c                c_zero_tab
-                0x00000000008101a3                EE_ESR_ZEROtab
-                0x00000000008101a7                __eeprom_end = .
+                0x0000000000810119                CapZeich
+                0x000000000081011d                Cell_str
+                0x0000000000810123                VCC_str
+                0x0000000000810128                ESR_str
+                0x000000000081012e                VLOSS_str
+                0x0000000000810136                Lis_str
+                0x0000000000810139                Ir_str
+                0x000000000081013f                AnKat
+                0x0000000000810143                KatAn
+                0x0000000000810147                Dioden
+                0x000000000081014c                Resistor_str
+                0x0000000000810151                RIHI
+                0x0000000000810158                RILO
+                0x000000000081015f                C0_str
+                0x0000000000810163                T50HZ
+                0x0000000000810169                DiodeIcon1
+                0x0000000000810171                DiodeIcon2
+                0x0000000000810179                CapIcon
+                0x0000000000810181                ResIcon1
+                0x0000000000810189                ResIcon2
+                0x0000000000810191                RefDiff
+                0x0000000000810192                PrefixTab
+                0x0000000000810199                ref_offset
+                0x000000000081019b                c_zero_tab
+                0x00000000008101a2                EE_ESR_ZEROtab
+                0x00000000008101a6                __eeprom_end = .
 
 .fuse
  *(.fuse)
@@ -773,9 +773,9 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
 .debug_loc      0x0000000000000000     0x1ccd
  *(.debug_loc)
  .debug_loc     0x0000000000000000      0x1e1 lcd-routines.o
- .debug_loc     0x00000000000001e1     0x1253 main.o
- .debug_loc     0x0000000000001434      0x2e8 ReadCapacity.o
- .debug_loc     0x000000000000171c      0x403 ReadInductance.o
+ .debug_loc     0x00000000000001e1     0x1263 main.o
+ .debug_loc     0x0000000000001444      0x2e8 ReadCapacity.o
+ .debug_loc     0x000000000000172c      0x3f3 ReadInductance.o
  .debug_loc     0x0000000000001b1f       0xda GetVloss.o
  .debug_loc     0x0000000000001bf9       0xd4 Calibrate_UR.o
 

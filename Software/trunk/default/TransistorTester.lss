@@ -9,7 +9,7 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
   2 .bss          000000a1  00800102  00800102  00004000  2**0
                   ALLOC
-  3 .eeprom       000001a7  00810000  00810000  00004000  2**0
+  3 .eeprom       000001a6  00810000  00810000  00004000  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
   4 .stab         00000dbc  00000000  00000000  000041a8  2**2
                   CONTENTS, READONLY, DEBUGGING
@@ -855,7 +855,7 @@ void EntladePins() {
 
   #ifdef AUTO_CAL
   referenz = ref_mv + (int16_t)eeprom_read_word((uint16_t *)(&ref_offset));
-     486:	8a e9       	ldi	r24, 0x9A	; 154
+     486:	89 e9       	ldi	r24, 0x99	; 153
      488:	91 e0       	ldi	r25, 0x01	; 1
      48a:	0e 94 6a 1f 	call	0x3ed4	; 0x3ed4 <__eerd_word_m168>
      48e:	20 91 44 01 	lds	r18, 0x0144
@@ -1127,7 +1127,7 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
 #endif
   Prefix = MEM_read_byte((uint8_t *)(&PrefixTab[Index]));   /* look up prefix in table */
      5cc:	90 e0       	ldi	r25, 0x00	; 0
-     5ce:	8d 56       	subi	r24, 0x6D	; 109
+     5ce:	8e 56       	subi	r24, 0x6E	; 110
      5d0:	9e 4f       	sbci	r25, 0xFE	; 254
      5d2:	0e 94 62 1f 	call	0x3ec4	; 0x3ec4 <__eerd_byte_m168>
      5d6:	b8 2e       	mov	r11, r24
@@ -1450,7 +1450,7 @@ void SerienDiodenAusgabe() {
      782:	88 81       	ld	r24, Y
      784:	0e 94 db 00 	call	0x1b6	; 0x1b6 <lcd_testpin>
    lcd_fix_string(AnKat);	//"->|-"
-     788:	80 e4       	ldi	r24, 0x40	; 64
+     788:	8f e3       	ldi	r24, 0x3F	; 63
      78a:	e8 2e       	mov	r14, r24
      78c:	81 e0       	ldi	r24, 0x01	; 1
      78e:	f8 2e       	mov	r15, r24
@@ -2607,7 +2607,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      e1c:	88 b9       	out	0x08, r24	; 8
     R_DDR = TriPinRL | HiPinRL;		//RL port for High-Pin and Tristate-Pin to output
      e1e:	24 b8       	out	0x04, r2	; 4
-#if FLASHEND > 0x3fff
+#ifdef SHOW_ICE
     R_PORT =  HiPinRL;	//RL port for High-Pin and Tristate-Pin to GND
     adc.vCEs = ADCconfig.U_AVCC - W5msReadADC(HighPin); // measure voltage a High-Pin, Base low
 #endif
@@ -4145,9 +4145,9 @@ void PinLayout(char pin1, char pin2, char pin3) {
     16f4:	06 2f       	mov	r16, r22
     16f6:	f4 2e       	mov	r15, r20
 // pin1-3 is EBC or SGD or CGA
-   uint8_t ipp;
 #ifndef EBC_STYLE
    // Layout with 123= style
+   uint8_t ipp;
    lcd_fix_string(N123_str);		//" 123="
     16f8:	85 e0       	ldi	r24, 0x05	; 5
     16fa:	91 e0       	ldi	r25, 0x01	; 1
@@ -4179,9 +4179,9 @@ void PinLayout(char pin1, char pin2, char pin3) {
     1738:	8f 2d       	mov	r24, r15
     173a:	0e 94 a2 00 	call	0x144	; 0x144 <lcd_data>
 // pin1-3 is EBC or SGD or CGA
-   uint8_t ipp;
 #ifndef EBC_STYLE
    // Layout with 123= style
+   uint8_t ipp;
    lcd_fix_string(N123_str);		//" 123="
    for (ipp=0;ipp<3;ipp++) {
     173e:	e3 94       	inc	r14
@@ -4201,6 +4201,9 @@ void PinLayout(char pin1, char pin2, char pin3) {
     174e:	08 95       	ret
 
 00001750 <wait_for_key_ms>:
+
+/* wait max_time or previous key press */
+/* return value: 1 == key is pressed, 0 == time expired */
 uint8_t wait_for_key_ms(int max_time) {
     1750:	cf 93       	push	r28
     1752:	df 93       	push	r29
@@ -4512,17 +4515,17 @@ begin_selftest:
     18b6:	90 e0       	ldi	r25, 0x00	; 0
     18b8:	0e 94 43 01 	call	0x286	; 0x286 <lcd_pgm_string>
   eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (int8_t)0);	// clear zero offset
-    18bc:	85 ea       	ldi	r24, 0xA5	; 165
+    18bc:	84 ea       	ldi	r24, 0xA4	; 164
     18be:	91 e0       	ldi	r25, 0x01	; 1
     18c0:	60 e0       	ldi	r22, 0x00	; 0
     18c2:	0e 94 70 1f 	call	0x3ee0	; 0x3ee0 <__eewr_byte_m168>
   eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[3]), (int8_t)0);	// clear zero offset
-    18c6:	86 ea       	ldi	r24, 0xA6	; 166
+    18c6:	85 ea       	ldi	r24, 0xA5	; 165
     18c8:	91 e0       	ldi	r25, 0x01	; 1
     18ca:	60 e0       	ldi	r22, 0x00	; 0
     18cc:	0e 94 70 1f 	call	0x3ee0	; 0x3ee0 <__eewr_byte_m168>
   eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (int8_t)0);	// clear zero offset
-    18d0:	84 ea       	ldi	r24, 0xA4	; 164
+    18d0:	83 ea       	ldi	r24, 0xA3	; 163
     18d2:	91 e0       	ldi	r25, 0x01	; 1
     18d4:	60 e0       	ldi	r22, 0x00	; 0
     18d6:	0e 94 70 1f 	call	0x3ee0	; 0x3ee0 <__eewr_byte_m168>
@@ -4582,7 +4585,7 @@ begin_selftest:
     1940:	f1 04       	cpc	r15, r1
     1942:	2c f4       	brge	.+10     	; 0x194e <AutoCheck+0x122>
      eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (int8_t)adcmv[0]);	// fix zero offset
-    1944:	85 ea       	ldi	r24, 0xA5	; 165
+    1944:	84 ea       	ldi	r24, 0xA4	; 164
     1946:	91 e0       	ldi	r25, 0x01	; 1
     1948:	6e 2d       	mov	r22, r14
     194a:	0e 94 70 1f 	call	0x3ee0	; 0x3ee0 <__eewr_byte_m168>
@@ -4593,7 +4596,7 @@ begin_selftest:
     1952:	d1 04       	cpc	r13, r1
     1954:	2c f4       	brge	.+10     	; 0x1960 <AutoCheck+0x134>
      eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[3]), (int8_t)adcmv[1]);	// fix zero offset
-    1956:	86 ea       	ldi	r24, 0xA6	; 166
+    1956:	85 ea       	ldi	r24, 0xA5	; 165
     1958:	91 e0       	ldi	r25, 0x01	; 1
     195a:	6c 2d       	mov	r22, r12
     195c:	0e 94 70 1f 	call	0x3ee0	; 0x3ee0 <__eewr_byte_m168>
@@ -4604,7 +4607,7 @@ begin_selftest:
     1964:	b1 04       	cpc	r11, r1
     1966:	2c f4       	brge	.+10     	; 0x1972 <AutoCheck+0x146>
      eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (int8_t)adcmv[2]);	// fix zero offset
-    1968:	84 ea       	ldi	r24, 0xA4	; 164
+    1968:	83 ea       	ldi	r24, 0xA3	; 163
     196a:	91 e0       	ldi	r25, 0x01	; 1
     196c:	6a 2d       	mov	r22, r10
     196e:	0e 94 70 1f 	call	0x3ee0	; 0x3ee0 <__eewr_byte_m168>
@@ -4681,7 +4684,7 @@ begin_selftest:
   lcd_clear();
     19b6:	0e 94 f6 00 	call	0x1ec	; 0x1ec <lcd_clear>
   lcd_fix_string(RIHI);	// "RiHi="
-    19ba:	82 e5       	ldi	r24, 0x52	; 82
+    19ba:	81 e5       	ldi	r24, 0x51	; 81
     19bc:	91 e0       	ldi	r25, 0x01	; 1
     19be:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
   DisplayValue(RRpinPL,-1,LCD_CHAR_OMEGA,3);
@@ -4697,7 +4700,7 @@ begin_selftest:
     19d8:	80 ec       	ldi	r24, 0xC0	; 192
     19da:	0e 94 e6 00 	call	0x1cc	; 0x1cc <lcd_command>
   lcd_fix_string(RILO);	// "RiLo="
-    19de:	89 e5       	ldi	r24, 0x59	; 89
+    19de:	88 e5       	ldi	r24, 0x58	; 88
     19e0:	91 e0       	ldi	r25, 0x01	; 1
     19e2:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
   DisplayValue(RRpinMI,-1,LCD_CHAR_OMEGA,3);
@@ -4776,7 +4779,7 @@ begin_selftest:
   lcd_clear();
     1a82:	0e 94 f6 00 	call	0x1ec	; 0x1ec <lcd_clear>
   lcd_fix_string(C0_str);			//output "C0 "
-    1a86:	80 e6       	ldi	r24, 0x60	; 96
+    1a86:	8f e5       	ldi	r24, 0x5F	; 95
     1a88:	91 e0       	ldi	r25, 0x01	; 1
     1a8a:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
   DisplayValue(adcmv[5],0,' ',3);		//output cap0 1:3
@@ -4849,7 +4852,7 @@ void AutoCheck(void) {
     1af0:	1f 4f       	sbci	r17, 0xFF	; 255
     1af2:	61 5f       	subi	r22, 0xF1	; 241
     1af4:	c7 01       	movw	r24, r14
-    1af6:	84 56       	subi	r24, 0x64	; 100
+    1af6:	85 56       	subi	r24, 0x65	; 101
     1af8:	9e 4f       	sbci	r25, 0xFE	; 254
     1afa:	0e 94 70 1f 	call	0x3ee0	; 0x3ee0 <__eewr_byte_m168>
     1afe:	08 94       	sec
@@ -4920,7 +4923,7 @@ no_c0save:
     1b3c:	81 e3       	ldi	r24, 0x31	; 49
     1b3e:	0e 94 a2 00 	call	0x144	; 0x144 <lcd_data>
      lcd_fix_string(CapZeich);	// "-||-"
-    1b42:	8a e1       	ldi	r24, 0x1A	; 26
+    1b42:	89 e1       	ldi	r24, 0x19	; 25
     1b44:	91 e0       	ldi	r25, 0x01	; 1
     1b46:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
      lcd_data('3');
@@ -5018,7 +5021,7 @@ no_c0save:
     1be0:	a1 c0       	rjmp	.+322    	; 0x1d24 <AutoCheck+0x4f8>
         // value of capacitor is correct
         (void) eeprom_write_word((uint16_t *)(&ref_offset), load_diff);	// hold zero offset + slew rate dependend offset
-    1be2:	8a e9       	ldi	r24, 0x9A	; 154
+    1be2:	89 e9       	ldi	r24, 0x99	; 153
     1be4:	91 e0       	ldi	r25, 0x01	; 1
     1be6:	0e 94 7e 1f 	call	0x3efc	; 0x3efc <__eewr_word_m168>
         lcd_clear();
@@ -5069,7 +5072,7 @@ no_c0save:
     1c34:	0e 94 c7 1a 	call	0x358e	; 0x358e <ReadADC>
     1c38:	4c 01       	movw	r8, r24
         ADCconfig.U_Bandgap = ADC_internal_reference;
-    1c3a:	82 e9       	ldi	r24, 0x92	; 146
+    1c3a:	81 e9       	ldi	r24, 0x91	; 145
     1c3c:	91 e0       	ldi	r25, 0x01	; 1
     1c3e:	0e 94 62 1f 	call	0x3ec4	; 0x3ec4 <__eerd_byte_m168>
     1c42:	99 27       	eor	r25, r25
@@ -5098,7 +5101,7 @@ no_c0save:
         ADCconfig.U_Bandgap = ADC_internal_reference;
     1c78:	00 91 44 01 	lds	r16, 0x0144
     1c7c:	10 91 45 01 	lds	r17, 0x0145
-    1c80:	82 e9       	ldi	r24, 0x92	; 146
+    1c80:	81 e9       	ldi	r24, 0x91	; 145
     1c82:	91 e0       	ldi	r25, 0x01	; 1
     1c84:	0e 94 62 1f 	call	0x3ec4	; 0x3ec4 <__eerd_byte_m168>
     1c88:	99 27       	eor	r25, r25
@@ -5109,7 +5112,7 @@ no_c0save:
     1c92:	90 93 3f 01 	sts	0x013F, r25
     1c96:	80 93 3e 01 	sts	0x013E, r24
         udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1])) * ADC_internal_reference / adcmv[1])+REF_R_KORR;
-    1c9a:	82 e9       	ldi	r24, 0x92	; 146
+    1c9a:	81 e9       	ldi	r24, 0x91	; 145
     1c9c:	91 e0       	ldi	r25, 0x01	; 1
     1c9e:	0e 94 62 1f 	call	0x3ec4	; 0x3ec4 <__eerd_byte_m168>
     1ca2:	f8 2e       	mov	r15, r24
@@ -5121,7 +5124,7 @@ no_c0save:
     1cac:	90 e0       	ldi	r25, 0x00	; 0
     1cae:	0e 94 43 01 	call	0x286	; 0x286 <lcd_pgm_string>
         udiff2 = udiff + (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
-    1cb2:	82 e9       	ldi	r24, 0x92	; 146
+    1cb2:	81 e9       	ldi	r24, 0x91	; 145
     1cb4:	91 e0       	ldi	r25, 0x01	; 1
     1cb6:	0e 94 62 1f 	call	0x3ec4	; 0x3ec4 <__eerd_byte_m168>
         adcmv[1] = ReadADC(TP3);	// get cap voltage with internal reference
@@ -5162,7 +5165,7 @@ no_c0save:
         udiff2 = udiff + (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
     1cf4:	e2 0e       	add	r14, r18
         (void) eeprom_write_byte((uint8_t *)(&RefDiff), (uint8_t)udiff2);	// hold offset for true reference Voltage
-    1cf6:	82 e9       	ldi	r24, 0x92	; 146
+    1cf6:	81 e9       	ldi	r24, 0x91	; 145
     1cf8:	91 e0       	ldi	r25, 0x01	; 1
     1cfa:	6e 2d       	mov	r22, r14
     1cfc:	0e 94 70 1f 	call	0x3ee0	; 0x3ee0 <__eewr_byte_m168>
@@ -5291,7 +5294,7 @@ void mark_as_uncalibrated( void) {
     1dba:	69 f4       	brne	.+26     	; 0x1dd6 <mark_as_uncalibrated+0x22>
     // equipment has changed, zero capacity value is too high or zero resistance is too high
     ii = eeprom_read_byte((uint8_t *)&c_zero_tab[0]);	// read first zero offset
-    1dbc:	8c e9       	ldi	r24, 0x9C	; 156
+    1dbc:	8b e9       	ldi	r24, 0x9B	; 155
     1dbe:	91 e0       	ldi	r25, 0x01	; 1
     1dc0:	0e 94 62 1f 	call	0x3ec4	; 0x3ec4 <__eerd_byte_m168>
     ii++;
@@ -5299,7 +5302,7 @@ void mark_as_uncalibrated( void) {
     1dc6:	6f 5f       	subi	r22, 0xFF	; 255
     // make the unused c_zero_tab[3] different to c_zero_tab[0] to mark uncalibrated 
     eeprom_write_byte((uint8_t *)&c_zero_tab[3], ii);	// mark uncalibrated permanent
-    1dc8:	8f e9       	ldi	r24, 0x9F	; 159
+    1dc8:	8e e9       	ldi	r24, 0x9E	; 158
     1dca:	91 e0       	ldi	r25, 0x01	; 1
     1dcc:	0e 94 70 1f 	call	0x3ee0	; 0x3ee0 <__eewr_byte_m168>
     UnCalibrated = 1;
@@ -5352,7 +5355,7 @@ void GetIr(uint8_t hipin, uint8_t lopin) {
     1e06:	00 97       	sbiw	r24, 0x00	; 0
     1e08:	f9 f0       	breq	.+62     	; 0x1e48 <GetIr+0x70>
   lcd_fix_string(Ir_str);		// output text "  Ir="
-    1e0a:	8a e3       	ldi	r24, 0x3A	; 58
+    1e0a:	89 e3       	ldi	r24, 0x39	; 57
     1e0c:	91 e0       	ldi	r25, 0x01	; 1
     1e0e:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
 #ifdef WITH_IRMICRO
@@ -5512,35 +5515,35 @@ int main(void) {
     1ec4:	88 e4       	ldi	r24, 0x48	; 72
     1ec6:	0e 94 e6 00 	call	0x1cc	; 0x1cc <lcd_command>
   lcd_fix_customchar(DiodeIcon1);	//load Character  >|
-    1eca:	8a e6       	ldi	r24, 0x6A	; 106
+    1eca:	89 e6       	ldi	r24, 0x69	; 105
     1ecc:	91 e0       	ldi	r25, 0x01	; 1
     1ece:	0e 94 64 01 	call	0x2c8	; 0x2c8 <lcd_fix_customchar>
   LCDLoadCustomChar(LCD_CHAR_DIODE2);	//Custom-Character 
     1ed2:	80 e5       	ldi	r24, 0x50	; 80
     1ed4:	0e 94 e6 00 	call	0x1cc	; 0x1cc <lcd_command>
   lcd_fix_customchar(DiodeIcon2);	//load Character  |<
-    1ed8:	82 e7       	ldi	r24, 0x72	; 114
+    1ed8:	81 e7       	ldi	r24, 0x71	; 113
     1eda:	91 e0       	ldi	r25, 0x01	; 1
     1edc:	0e 94 64 01 	call	0x2c8	; 0x2c8 <lcd_fix_customchar>
   LCDLoadCustomChar(LCD_CHAR_CAP);	//Custom-Character  Capacitor symbol
     1ee0:	88 e5       	ldi	r24, 0x58	; 88
     1ee2:	0e 94 e6 00 	call	0x1cc	; 0x1cc <lcd_command>
   lcd_fix_customchar(CapIcon);		//load Character  ||
-    1ee6:	8a e7       	ldi	r24, 0x7A	; 122
+    1ee6:	89 e7       	ldi	r24, 0x79	; 121
     1ee8:	91 e0       	ldi	r25, 0x01	; 1
     1eea:	0e 94 64 01 	call	0x2c8	; 0x2c8 <lcd_fix_customchar>
   LCDLoadCustomChar(LCD_CHAR_RESIS1);	//Custom-Character Resistor symbol
     1eee:	88 e7       	ldi	r24, 0x78	; 120
     1ef0:	0e 94 e6 00 	call	0x1cc	; 0x1cc <lcd_command>
   lcd_fix_customchar(ResIcon1);		//load Character  [
-    1ef4:	82 e8       	ldi	r24, 0x82	; 130
+    1ef4:	81 e8       	ldi	r24, 0x81	; 129
     1ef6:	91 e0       	ldi	r25, 0x01	; 1
     1ef8:	0e 94 64 01 	call	0x2c8	; 0x2c8 <lcd_fix_customchar>
   LCDLoadCustomChar(LCD_CHAR_RESIS2);	//Custom-Character 
     1efc:	80 e7       	ldi	r24, 0x70	; 112
     1efe:	0e 94 e6 00 	call	0x1cc	; 0x1cc <lcd_command>
   lcd_fix_customchar(ResIcon2);		//load Character  ]
-    1f02:	8a e8       	ldi	r24, 0x8A	; 138
+    1f02:	89 e8       	ldi	r24, 0x89	; 137
     1f04:	91 e0       	ldi	r25, 0x01	; 1
     1f06:	0e 94 64 01 	call	0x2c8	; 0x2c8 <lcd_fix_customchar>
 #endif
@@ -5621,7 +5624,7 @@ start:
     1f60:	0e 94 e6 00 	call	0x1cc	; 0x1cc <lcd_command>
   
   ADCconfig.U_Bandgap = ADC_internal_reference;	// set internal reference voltage for ADC
-    1f64:	82 e9       	ldi	r24, 0x92	; 146
+    1f64:	81 e9       	ldi	r24, 0x91	; 145
     1f66:	91 e0       	ldi	r25, 0x01	; 1
     1f68:	0e 94 62 1f 	call	0x3ec4	; 0x3ec4 <__eerd_byte_m168>
     1f6c:	99 27       	eor	r25, r25
@@ -5761,7 +5764,7 @@ start:
     2044:	80 ec       	ldi	r24, 0xC0	; 192
     2046:	0e 94 e6 00 	call	0x1cc	; 0x1cc <lcd_command>
          lcd_fix_string(VCC_str);		// VCC=
-    204a:	84 e2       	ldi	r24, 0x24	; 36
+    204a:	83 e2       	ldi	r24, 0x23	; 35
     204c:	91 e0       	ldi	r25, 0x01	; 1
     204e:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
          DisplayValue(ADCconfig.U_AVCC,-3,'V',3);	// Display 3 Digits of this mV units
@@ -5795,7 +5798,7 @@ start:
     lcd_clear();
     2082:	0e 94 f6 00 	call	0x1ec	; 0x1ec <lcd_clear>
     lcd_fix_string(Cell_str);	// display "Cell!"
-    2086:	8e e1       	ldi	r24, 0x1E	; 30
+    2086:	8d e1       	ldi	r24, 0x1D	; 29
     2088:	91 e0       	ldi	r25, 0x01	; 1
     208a:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
     lcd_space();
@@ -5816,11 +5819,11 @@ start:
   UnCalibrated = 0;
     209a:	10 92 47 01 	sts	0x0147, r1
   if (eeprom_read_byte(&c_zero_tab[0]) != eeprom_read_byte(&c_zero_tab[3])) {
-    209e:	8c e9       	ldi	r24, 0x9C	; 156
+    209e:	8b e9       	ldi	r24, 0x9B	; 155
     20a0:	91 e0       	ldi	r25, 0x01	; 1
     20a2:	0e 94 62 1f 	call	0x3ec4	; 0x3ec4 <__eerd_byte_m168>
     20a6:	18 2f       	mov	r17, r24
-    20a8:	8f e9       	ldi	r24, 0x9F	; 159
+    20a8:	8e e9       	ldi	r24, 0x9E	; 158
     20aa:	91 e0       	ldi	r25, 0x01	; 1
     20ac:	0e 94 62 1f 	call	0x3ec4	; 0x3ec4 <__eerd_byte_m168>
     20b0:	18 17       	cp	r17, r24
@@ -5948,7 +5951,7 @@ start:
     216e:	89 2f       	mov	r24, r25
     2170:	0e 94 db 00 	call	0x1b6	; 0x1b6 <lcd_testpin>
            lcd_fix_string(AnKat);	//"->|-"
-    2174:	80 e4       	ldi	r24, 0x40	; 64
+    2174:	8f e3       	ldi	r24, 0x3F	; 63
     2176:	91 e0       	ldi	r25, 0x01	; 1
     2178:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
            lcd_testpin(diodes[0].Cathode);
@@ -5958,7 +5961,7 @@ start:
            lcd_testpin(diodes[0].Cathode);
     2182:	0e 94 db 00 	call	0x1b6	; 0x1b6 <lcd_testpin>
            lcd_fix_string(KatAn);	//"-|<-"
-    2186:	84 e4       	ldi	r24, 0x44	; 68
+    2186:	83 e4       	ldi	r24, 0x43	; 67
     2188:	91 e0       	ldi	r25, 0x01	; 1
     218a:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
            lcd_testpin(diodes[0].Anode);
@@ -6004,7 +6007,7 @@ start:
     21dc:	82 e3       	ldi	r24, 0x32	; 50
     21de:	0e 94 a2 00 	call	0x144	; 0x144 <lcd_data>
         lcd_fix_string(Dioden);		//"diodes "
-    21e2:	88 e4       	ldi	r24, 0x48	; 72
+    21e2:	87 e4       	ldi	r24, 0x47	; 71
     21e4:	91 e0       	ldi	r25, 0x01	; 1
     21e6:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
         if(diodes[0].Anode == diodes[1].Anode) { //Common Anode
@@ -6016,14 +6019,14 @@ start:
     21f6:	80 91 8c 01 	lds	r24, 0x018C
     21fa:	0e 94 db 00 	call	0x1b6	; 0x1b6 <lcd_testpin>
            lcd_fix_string(KatAn);	//"-|<-"
-    21fe:	84 e4       	ldi	r24, 0x44	; 68
+    21fe:	83 e4       	ldi	r24, 0x43	; 67
     2200:	91 e0       	ldi	r25, 0x01	; 1
     2202:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
            lcd_testpin(diodes[0].Anode);
     2206:	80 91 8b 01 	lds	r24, 0x018B
     220a:	0e 94 db 00 	call	0x1b6	; 0x1b6 <lcd_testpin>
            lcd_fix_string(AnKat);	//"->|-"
-    220e:	80 e4       	ldi	r24, 0x40	; 64
+    220e:	8f e3       	ldi	r24, 0x3F	; 63
     2210:	91 e0       	ldi	r25, 0x01	; 1
     2212:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
            lcd_testpin(diodes[1].Cathode);
@@ -6040,14 +6043,14 @@ start:
            lcd_testpin(diodes[0].Anode);
     2228:	0e 94 db 00 	call	0x1b6	; 0x1b6 <lcd_testpin>
            lcd_fix_string(AnKat);	//"->|-"
-    222c:	80 e4       	ldi	r24, 0x40	; 64
+    222c:	8f e3       	ldi	r24, 0x3F	; 63
     222e:	91 e0       	ldi	r25, 0x01	; 1
     2230:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
 	   lcd_testpin(diodes[0].Cathode);
     2234:	80 91 8c 01 	lds	r24, 0x018C
     2238:	0e 94 db 00 	call	0x1b6	; 0x1b6 <lcd_testpin>
            lcd_fix_string(KatAn);	//"-|<-"
-    223c:	84 e4       	ldi	r24, 0x44	; 68
+    223c:	83 e4       	ldi	r24, 0x43	; 67
     223e:	91 e0       	ldi	r25, 0x01	; 1
     2240:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
            lcd_testpin(diodes[1].Anode);
@@ -6162,7 +6165,7 @@ start:
     22d8:	83 e3       	ldi	r24, 0x33	; 51
     22da:	0e 94 a2 00 	call	0x144	; 0x144 <lcd_data>
            lcd_fix_string(Dioden);	//"Diodes "
-    22de:	88 e4       	ldi	r24, 0x48	; 72
+    22de:	87 e4       	ldi	r24, 0x47	; 71
     22e0:	91 e0       	ldi	r25, 0x01	; 1
     22e2:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
     22e6:	c1 cf       	rjmp	.-126    	; 0x226a <main+0x41a>
@@ -6314,12 +6317,12 @@ start:
 #endif
        {
           lcd_fix_string(AnKat);	//"->|-"
-    23de:	80 e4       	ldi	r24, 0x40	; 64
+    23de:	8f e3       	ldi	r24, 0x3F	; 63
     23e0:	91 e0       	ldi	r25, 0x01	; 1
     23e2:	02 c0       	rjmp	.+4      	; 0x23e8 <main+0x598>
        } else {
           lcd_fix_string(KatAn);	//"-|<-"
-    23e4:	84 e4       	ldi	r24, 0x44	; 68
+    23e4:	83 e4       	ldi	r24, 0x43	; 67
     23e6:	91 e0       	ldi	r25, 0x01	; 1
     23e8:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
        }
@@ -6332,9 +6335,9 @@ start:
     lcd_line2(); //2. row 
     23f6:	80 ec       	ldi	r24, 0xC0	; 192
     23f8:	0e 94 e6 00 	call	0x1cc	; 0x1cc <lcd_command>
-       lcd_line2(); //2. row 
-       lcd_clear_line();
-       lcd_line2(); //2. row 
+       lcd_fix2_string(ICEs_str);		// "ICEs="
+       DisplayValue(_trans->ices,-5,'A',3);
+       wait_for_key_5s_line2();		// wait 5s and clear line 2
     }
 #endif
     lcd_fix_string(hfe_str);		//"B="  (hFE)
@@ -6585,7 +6588,7 @@ gakAusgabe:
     25a2:	80 91 22 01 	lds	r24, 0x0122
     25a6:	0e 94 db 00 	call	0x1b6	; 0x1b6 <lcd_testpin>
        lcd_fix_string(Resistor_str);
-    25aa:	8d e4       	ldi	r24, 0x4D	; 77
+    25aa:	8c e4       	ldi	r24, 0x4C	; 76
     25ac:	91 e0       	ldi	r25, 0x01	; 1
     25ae:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
        lcd_testpin(resis[0].ra);		//Pin-number 2
@@ -6727,7 +6730,7 @@ gakAusgabe:
     2646:	29 83       	std	Y+1, r18	; 0x01
     2648:	0e 94 a2 00 	call	0x144	; 0x144 <lcd_data>
        lcd_fix_string(Resistor_str);    // -[=]-
-    264c:	8d e4       	ldi	r24, 0x4D	; 77
+    264c:	8c e4       	ldi	r24, 0x4C	; 76
     264e:	91 e0       	ldi	r25, 0x01	; 1
     2650:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
        lcd_data(y);
@@ -6735,7 +6738,7 @@ gakAusgabe:
     2656:	82 2f       	mov	r24, r18
     2658:	0e 94 a2 00 	call	0x144	; 0x144 <lcd_data>
        lcd_fix_string(Resistor_str);    // -[=]-
-    265c:	8d e4       	ldi	r24, 0x4D	; 77
+    265c:	8c e4       	ldi	r24, 0x4C	; 76
     265e:	91 e0       	ldi	r25, 0x01	; 1
     2660:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
        lcd_data(z);
@@ -6767,7 +6770,7 @@ gakAusgabe:
     269a:	ae c0       	rjmp	.+348    	; 0x27f8 <main+0x9a8>
 	  // resistor have also Inductance
           lcd_fix_string(Lis_str);	// "L="
-    269c:	87 e3       	ldi	r24, 0x37	; 55
+    269c:	86 e3       	ldi	r24, 0x36	; 54
     269e:	91 e0       	ldi	r25, 0x01	; 1
     26a0:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
           DisplayValue(resis[0].lx,resis[0].lpre,'H',3);	// output inductance
@@ -6822,7 +6825,7 @@ gakAusgabe:
     26e6:	80 91 85 01 	lds	r24, 0x0185
     26ea:	0e 94 db 00 	call	0x1b6	; 0x1b6 <lcd_testpin>
      lcd_fix_string(CapZeich);		// capacitor sign
-    26ee:	8a e1       	ldi	r24, 0x1A	; 26
+    26ee:	89 e1       	ldi	r24, 0x19	; 25
     26f0:	91 e0       	ldi	r25, 0x01	; 1
     26f2:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
      lcd_testpin(cap.cb);		//Pin number 2
@@ -6837,7 +6840,7 @@ gakAusgabe:
     270a:	00 97       	sbiw	r24, 0x00	; 0
     270c:	79 f0       	breq	.+30     	; 0x272c <main+0x8dc>
         lcd_fix_string(VLOSS_str);	// "  Vloss="
-    270e:	8f e2       	ldi	r24, 0x2F	; 47
+    270e:	8e e2       	ldi	r24, 0x2E	; 46
     2710:	91 e0       	ldi	r25, 0x01	; 1
     2712:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
         DisplayValue(cap.v_loss,-1,'%',2);
@@ -6877,7 +6880,7 @@ gakAusgabe:
     2768:	08 f0       	brcs	.+2      	; 0x276c <main+0x91c>
     276a:	46 c0       	rjmp	.+140    	; 0x27f8 <main+0x9a8>
         lcd_fix_string(ESR_str);
-    276c:	89 e2       	ldi	r24, 0x29	; 41
+    276c:	88 e2       	ldi	r24, 0x28	; 40
     276e:	91 e0       	ldi	r25, 0x01	; 1
     2770:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
         DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
@@ -6932,7 +6935,7 @@ gakAusgabe:
     27cc:	80 5d       	subi	r24, 0xD0	; 208
     27ce:	0e 94 a2 00 	call	0x144	; 0x144 <lcd_data>
      lcd_fix_string(AnKat);		//"->|-"
-    27d2:	80 e4       	ldi	r24, 0x40	; 64
+    27d2:	8f e3       	ldi	r24, 0x3F	; 63
     27d4:	91 e0       	ldi	r25, 0x01	; 1
     27d6:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
   }
@@ -8116,7 +8119,7 @@ messe_mit_rh:
      tmpint = eeprom_read_byte(&c_zero_tab[pin_combination]);	// read zero offset
     2e68:	80 91 5c 01 	lds	r24, 0x015C
     2e6c:	90 e0       	ldi	r25, 0x00	; 0
-    2e6e:	84 56       	subi	r24, 0x64	; 100
+    2e6e:	85 56       	subi	r24, 0x65	; 101
     2e70:	9e 4f       	sbci	r25, 0xFE	; 254
     2e72:	0e 94 62 1f 	call	0x3ec4	; 0x3ec4 <__eerd_byte_m168>
      if (cap.cval > tmpint) {
@@ -8800,7 +8803,7 @@ void ReadInductance(void) {
         // Voltage of comparator in % of umax
      #ifdef AUTO_CAL
         tmpint = (ref_mv + (int16_t)eeprom_read_word((uint16_t *)(&ref_offset))) ;
-    3280:	8a e9       	ldi	r24, 0x9A	; 154
+    3280:	89 e9       	ldi	r24, 0x99	; 153
     3282:	91 e0       	ldi	r25, 0x01	; 1
     3284:	0e 94 6a 1f 	call	0x3ed4	; 0x3ed4 <__eerd_word_m168>
     3288:	20 91 44 01 	lds	r18, 0x0144
@@ -9769,7 +9772,7 @@ void ReadInductance(void) {
     3982:	95 01       	movw	r18, r10
     3984:	a6 01       	movw	r20, r12
     3986:	0e 94 ee 1e 	call	0x3ddc	; 0x3ddc <__udivmodsi4>
-    398a:	83 ea       	ldi	r24, 0xA3	; 163
+    398a:	82 ea       	ldi	r24, 0xA2	; 162
     398c:	91 e0       	ldi	r25, 0x01	; 1
     398e:	79 81       	ldd	r23, Y+1	; 0x01
     3990:	87 0f       	add	r24, r23
@@ -10200,7 +10203,7 @@ void Calibrate_UR(void) {
   ref_mv = DEFAULT_BAND_GAP;    // set to default Reference Voltage
 #endif
   ADCconfig.U_Bandgap = ADC_internal_reference; // set internal reference voltage for ADC
-    3c02:	82 e9       	ldi	r24, 0x92	; 146
+    3c02:	81 e9       	ldi	r24, 0x91	; 145
     3c04:	91 e0       	ldi	r25, 0x01	; 1
     3c06:	0e 94 62 1f 	call	0x3ec4	; 0x3ec4 <__eerd_byte_m168>
     3c0a:	99 27       	eor	r25, r25

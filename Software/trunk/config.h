@@ -629,6 +629,13 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  #define WITH_THYRISTOR_GATE_V
 #endif
 
+#if FLASHEND > 0x3fff
+ // You can save about 328 bytes of Flash, if you don't show the ICE0 and ICEs Collector cutoff current.
+ // Only enabled for mega328, but you can also enable it for mega168, if you deselect other functions.
+ // You can save about 250 bytes flash, if you deselect the WITH_UART option.
+ #define SHOW_ICE
+#endif
+
 // COMMON_COLLECTOR activates measurement of current amplification factor in common collector circuit  (Emitter follower)
 #ifndef NO_COMMON_COLLECTOR_HFE
  #define COMMON_COLLECTOR
@@ -644,7 +651,7 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 // automatic check, if the extended tests are possible!
 #ifdef COMMON_EMITTER
  #ifdef COMMON_COLLECTOR
-  // both measurement methodes
+  // both hFE measurement methodes
   #if FLASHEND > 0x3fff
     // extended tests are only possible with enough memory!
     #define EXTENDED_TESTS

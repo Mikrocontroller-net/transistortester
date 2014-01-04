@@ -32,3 +32,4 @@ uint8_t ShortedProbes(uint8_t p1, uint8_t p2);	// check if two probes are shorte
 uint8_t AllProbesShorted();		// check if all probes are shorted, return 3 if true
 void mark_as_uncalibrated();		// mark in EEprom as uncalibrated device
 uint8_t wait_for_key_ms(int max_time); // wait max_time ms units for key is pressed
+void wait_for_key_5s_line2(void);	// wait 5 seconds and clear line 2

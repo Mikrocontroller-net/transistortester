@@ -1,5 +1,5 @@
+// Selftest of the device and calibration 
 void AutoCheck(void) {
-#ifdef WITH_SELFTEST
   uint8_t tt;		// number of running test
   uint8_t ww;		// counter for repeating the tests
   int  adcmv[7];
@@ -51,22 +51,23 @@ begin_selftest:
   DisplayValue(adcmv[0],-2,' ',3);
   DisplayValue(adcmv[1],-2,' ',3);
   DisplayValue(adcmv[2],-2,LCD_CHAR_OMEGA,3);
-  if (adcmv[0] < 60) {
+  if (adcmv[0] < 90) {
      eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (int8_t)adcmv[0]);	// fix zero offset
   }
-  if (adcmv[1] < 60) {
+  if (adcmv[1] < 90) {
      eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[3]), (int8_t)adcmv[1]);	// fix zero offset
   }
-  if (adcmv[2] < 60) {
+  if (adcmv[2] < 90) {
      eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (int8_t)adcmv[2]);	// fix zero offset
   }
-  for(tt=0;tt<12;tt++) {
-     wait_about500ms();
-     if(!(ON_PIN_REG & (1<<RST_PIN))) {
-        // if key is pressed, don't repeat
-        break;
-     }
-  } /* end for tt */
+  wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
+//  for(tt=0;tt<12;tt++) {
+//     wait_about500ms();
+//     if(!(ON_PIN_REG & (1<<RST_PIN))) {
+//        // if key is pressed, don't repeat
+//        break;
+//     }
+//  } /* end for tt */
 
 #ifdef EXTENDED_TESTS
  #define TEST_COUNT 8
@@ -197,6 +198,7 @@ begin_selftest:
      wait_about1s();
   } //end for tt
 #else
+  // without extended tests
   for (ww=0;ww<120;ww++) {
      // wait 1 minute for releasing the probes
      lcd_line2();		//Cursor to column 1, row 2
@@ -214,10 +216,12 @@ begin_selftest:
   lcd_line2();
   lcd_fix_string(RILO);	// "RiLo="
   DisplayValue(RRpinMI,-1,LCD_CHAR_OMEGA,3);
-  wait_about2s();			//wait 2 seconds
+  wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 
   //measure Zero offset for Capacity measurement
   PartFound = PART_NONE;
+  lcd_clear();
+  lcd_fix_string(C0_str);			//output "C0 "
   ReadCapacity(TP3, TP1);
   adcmv[5] = (unsigned int) cap.cval_uncorrected.dw;	//save capacity value of empty Pin 1:3
   ReadCapacity(TP3, TP2);
@@ -231,8 +235,6 @@ begin_selftest:
   ReadCapacity(TP1, TP2);
   adcmv[0] = (unsigned int) cap.cval_uncorrected.dw;	//save capacity value of empty Pin 2:1
   adcmv[3] = adcmv[0];			// same as first for the checking loop, mark as calibrated
-  lcd_clear();
-  lcd_fix_string(C0_str);			//output "C0 "
   DisplayValue(adcmv[5],0,' ',3);		//output cap0 1:3
   DisplayValue(adcmv[6],0,' ',3);		//output cap0 2:3
   DisplayValue(adcmv[2],-12,'F',3);		//output cap0 1:2
@@ -248,7 +250,7 @@ begin_selftest:
   lcd_fix_string(OK_str);		// output "OK"
 no_c0save:
  #endif
- wait_about2s();		//wait 2 seconds
+ wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
  
  #ifdef AUTO_CAL
  // Message C > 100nF
@@ -304,7 +306,7 @@ no_c0save:
         lcd_line4();
         adcmv[0] = ReadADC(TP3);
         DisplayValue(adcmv[0],-3,'V',4);
-        wait_about1s();
+        wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
         }
 //#######################################
 #endif
@@ -331,7 +333,7 @@ no_c0save:
         (void) eeprom_write_byte((uint8_t *)(&RefDiff), (uint8_t)udiff2);	// hold offset for true reference Voltage
         lcd_string(itoa(udiff2, outval, 10));	//output correction voltage
   #endif
-        wait_about4s();
+        wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
         break;
      }
      lcd_line2();
@@ -376,10 +378,7 @@ no_c0save:
   }
  #endif
  PartFound = PART_NONE;
- wait_about1s();			//wait 1 seconds
- lcd_line2();
- lcd_clear_line();			// clear total line
-#endif
+ wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
  } 
  
 #ifdef RequireShortedProbes

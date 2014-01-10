@@ -138,7 +138,7 @@ start:
   NumOfDiodes = 0;		// Number of diodes = 0
   ptrans.count = 0;		// Number of found P type transistors
   ntrans.count = 0;		// Number of found N type transistors
-  PartMode = 0;
+  PartMode = PART_MODE_NONE;
   WithReference = 0;		// no precision reference voltage
   lcd_clear();			// clear the LCD
   ADC_DDR = TXD_MSK;		//activate Software-UART 
@@ -499,7 +499,7 @@ start:
     }
 #endif
 #if FLASHEND > 0x1fff
-    if(!(ON_PIN_REG & (1<<RST_PIN))) {
+    if ((ptrans.count != 0) && (ntrans.count !=0) && (!(ON_PIN_REG & (1<<RST_PIN)))) {
        // if the Start key is still pressed, use the other Transistor
        if (PartMode == PART_MODE_NPN) {
           PartMode = PART_MODE_PNP;	// switch to parasitic transistor
@@ -569,7 +569,7 @@ start:
     goto end;
     // end (PartFound == PART_TRANSISTOR)
   } else if (PartFound == PART_FET) {	//JFET or MOSFET
-    if(PartMode&1) {
+    if((PartMode&P_CHANNEL) == P_CHANNEL) {
        lcd_data('P');			//P-channel
        _trans = &ptrans;
     } else {
@@ -578,41 +578,68 @@ start:
     }
     lcd_data('-');
 
-    tmp = PartMode/2;
-    if (tmp == (PART_MODE_N_D_MOS/2)) {
-       lcd_data('D');			// N-D or P-D
-    }
-    if (tmp == (PART_MODE_N_E_MOS/2)) {
-       lcd_data('E');			// N-E or P-E
-    }
-    if (tmp == (PART_MODE_N_JFET/2)) {
+    tmp = PartMode&0x0f;
+    if (tmp == PART_MODE_JFET) {
        lcd_fix_string(jfet_str);	//"JFET"
     } else {
-       lcd_fix_string(mosfet_str);	//"-MOS "
+       if ((PartMode&D_MODE) == D_MODE) {
+          lcd_data('D');			// N-D or P-D
+       } else {
+          lcd_data('E');			// N-E or P-E
+       }
+       if (tmp == (PART_MODE_IGBT)) {
+          lcd_fix_string(igbt_str);	//"-IGBT"
+       } else {
+          lcd_fix_string(mosfet_str);	//"-MOS "
+       }
     }
-    PinLayout('S','G','D'); 		//  SGD= or 123=...
-    if((NumOfDiodes > 0) && (PartMode < PART_MODE_N_D_MOS)) {
+    if (tmp == PART_MODE_IGBT) {
+       PinLayout('E','G','C'); 		//  SGD= or 123=...
+    } else {
+       PinLayout('S','G','D'); 		//  SGD= or 123=...
+    }
+    if((NumOfDiodes == 1) && ((PartMode&D_MODE) != D_MODE)) {
        //MOSFET with protection diode; only with enhancement-FETs
 #ifdef EBC_STYLE
  #if EBC_STYLE == 321
        // layout with 321= style
-       if (((PartMode&1) && (ptrans.c > ptrans.e)) || ((!(PartMode&1)) && (ntrans.c < ntrans.e)))
+       if (((PartMode&P_CHANNEL) && (ptrans.c > ptrans.e)) || ((!(PartMode&P_CHANNEL)) && (ntrans.c < ntrans.e)))
  #else
        // Layout with SGD= style
-       if (PartMode&1) /* N or P MOS */
+       if (PartMode&P_CHANNEL) /* N or P MOS */
  #endif
 #else
        // layout with 123= style
-       if (((PartMode&1) && (ptrans.c < ptrans.e)) || ((!(PartMode&1)) && (ntrans.c > ntrans.e)))
+       if (((PartMode&P_CHANNEL) && (ptrans.c < ptrans.e)) || ((!(PartMode&P_CHANNEL)) && (ntrans.c > ntrans.e)))
 #endif
+#if FLASHEND > 0x1fff
+       // there is enough space for long form of showing protection diode
+       {
+          lcd_line2();			//2. Row
+          lcd_testpin(diodes[0].Anode);
+          lcd_fix_string(AnKat);	//"->|-"
+          lcd_testpin(diodes[0].Cathode);
+       } else {
+          lcd_line2();			//2. Row
+          lcd_testpin(diodes[0].Cathode);
+          lcd_fix_string(KatAn);	//"-|<-"
+          lcd_testpin(diodes[0].Anode);
+       }
+       lcd_space();
+       lcd_fix_string(Uf_str);			//"Uf="
+       mVAusgabe(0);
+       wait_for_key_5s_line2();		// wait 5s and clear line 2
+#else
+       // only little space in the flash memory show only diode symbol in right direction
        {
           lcd_data(LCD_CHAR_DIODE1);	//show Diode symbol >|
        } else {
           lcd_data(LCD_CHAR_DIODE2);	//show Diode symbol |<
        }
+#endif
     }
     lcd_line2();			//2. Row
-    if(PartMode < PART_MODE_N_D_MOS) {	//enhancement-MOSFET
+    if((PartMode&D_MODE) != D_MODE) {	//enhancement-MOSFET
 	//Gate capacity
        lcd_fix_string(GateCap_str);		//"C="
        ReadCapacity(_trans->b,_trans->e);	//measure capacity
@@ -760,7 +787,7 @@ gakAusgabe:
  end2:
   ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
   while(!(ON_PIN_REG & (1<<RST_PIN)));	//wait ,until button is released
-  if ((wait_for_key_ms(display_time)) != 0 ) goto start;
+  if ((wait_for_key_ms(max_time)) != 0 ) goto start;
 #ifdef POWER_OFF
  #if POWER_OFF > 127
   #define POWER2_OFF 255
@@ -1199,7 +1226,7 @@ uint8_t wait_for_key_ms(int max_time) {
  return(0);		// no key pressed within the specified time
 }
 
-#ifdef SHOW_ICE
+#ifdef WAIT_LINE2_CLEAR
 /* wait 5 seconds or previous key press, then clear line 2 of LCD and */
 /* set the cursor to the beginning of line 2 */
 void wait_for_key_5s_line2(void) {

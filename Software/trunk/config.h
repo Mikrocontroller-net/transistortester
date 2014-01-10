@@ -46,11 +46,11 @@
 
 // setting for Voltage divider of the external Voltage measurement 180k and 20k
 #ifndef EXT_NUMERATOR
- // factor correcponding to the sum of both resistors (180k + 20k)
+ // smallest factor correcponding to the sum of both resistors (180k + 20k)
  #define EXT_NUMERATOR 10
 #endif
 #ifndef EXT_DENOMINATOR
- // divider corresponding to the resistor at the GND side (20k)
+ // smallest divider corresponding to the resistor at the GND side (20k)
  #define EXT_DENOMINATOR 1
 #endif
 #if EXT_NUMERATOR < EXT_DENOMINATOR
@@ -178,7 +178,8 @@ End of configuration
  #undef R_ANZ_MESS
  #define R_ANZ_MESS ANZ_MESS
 #endif
-#if U_SCALE < 0
+
+#if U_SCALE < 1
  // limit U_SCALE
  #undef U_SCALE
  #define U_SCALE 1
@@ -188,6 +189,7 @@ End of configuration
  #undef U_SCALE
  #define U_SCALE 4
 #endif
+
 #ifndef REF_L_KORR
  #define REF_L_KORR 50
 #endif
@@ -255,12 +257,14 @@ End of configuration
 #else
  #define PROCESSOR_TYP 8
 #endif
-// automatic selection of right call type
+
+// automatic selection of right assembler call type
 #if FLASHEND > 0X1FFF
  #define ACALL call
 #else
  #define ACALL rcall
 #endif
+
 // automatic selection of option and parameters for different AVR s
 
 //------------------=========----------
@@ -277,8 +281,6 @@ End of configuration
  #endif
 // LONG_HFE  activates computation of current amplification factor with long variables
   #define LONG_HFE
-  #define MEGA168A 17
-  #define MEGA168PA 18
 
 // Pin resistor values of ATmega168
 //  #define PIN_RM 196
@@ -374,6 +376,7 @@ End of configuration
   #define INHIBIT_SLEEP_MODE	/* do not use the sleep mode of ATmega */
  #endif
 #endif
+
 #if PROCESSOR_TYP == 8
  // 2.54V reference voltage + correction (fix for ATmega8)
  #ifdef AUTO_CAL
@@ -556,11 +559,13 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 #ifdef WITH_SELFTEST
  // AutoCheck Function is needed
  #define CHECK_CALL
+ #define WAIT_LINE2_CLEAR
 #endif
 
 #ifdef AUTO_CAL
   // AutoCheck Function is needed
   #define CHECK_CALL
+  #define WAIT_LINE2_CLEAR
   #define RR680PL resis680pl
   #define RR680MI resis680mi
   #define RRpinPL pin_rpl
@@ -634,6 +639,7 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  // Only enabled for mega328, but you can also enable it for mega168, if you deselect other functions.
  // You can save about 250 bytes flash, if you deselect the WITH_UART option.
  #define SHOW_ICE
+ #define WAIT_LINE2_CLEAR
 #endif
 
 // COMMON_COLLECTOR activates measurement of current amplification factor in common collector circuit  (Emitter follower)

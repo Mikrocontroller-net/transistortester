@@ -15,10 +15,12 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      unsigned int hp1;
      unsigned int hp2;
      unsigned int hp3;
+     unsigned int rhp;
      unsigned int lp1;
      unsigned int lp2;
      unsigned int tp1;
      unsigned int tp2;
+     unsigned int rtp;
   }adc;
   uint8_t LoPinRL;		// mask to switch the LowPin with R_L
   uint8_t LoPinRH;		// mask to switch the LowPin with R_H
@@ -96,6 +98,18 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   adc.vCEs = W5msReadADC(LowPin);	// lp1 is the voltage at 680 Ohm with - Gate
   R_DDR = LoPinRL;	
   adc.lp_otr = W5msReadADC(LowPin);	//read voltage of Low-Pin  , without Gate current (-)
+#if 0
+  if (((LowPin == TP1) && (HighPin == TP3)) || ((LowPin == TP3) && (HighPin == TP1))) {
+     lcd_line2();
+     lcd_testpin(LowPin);
+     lcd_data('p');
+     lcd_testpin(HighPin);
+     lcd_space();
+     DisplayValue(adc.vCEs,-3,' ',4);
+     DisplayValue(adc.lp_otr,-3,' ',4);
+     wait_for_key_5s_line2();
+  }
+#endif
   R_DDR = 0;
   wait5ms();				// release all current (clear TRIAC and Thyristor)
   R_PORT = TriPinRL;
@@ -104,9 +118,24 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   R_DDR = LoPinRL;
   R_PORT = 0;
   if (adc.lp2 < adc.vCEs) {
-     adc.vCEs = adc.lp2;
      adc.lp_otr = W5msReadADC(LowPin);	//read voltage of Low-Pin again, without Gate current (+)
+     if ((adc.lp2+288) > adc.vCEs) goto checkDiode;	// no significant change
+     adc.vCEs = adc.lp2;
+  } else {
+     if ((adc.vCEs+288) > adc.lp2) goto checkDiode;	// no significant change
   }
+#if 0
+  if (((LowPin == TP1) && (HighPin == TP3)) || ((LowPin == TP3) && (HighPin == TP1))) {
+     lcd_line2();
+     lcd_testpin(LowPin);
+     lcd_data('P');
+     lcd_testpin(HighPin);
+     lcd_space();
+     DisplayValue(adc.lp2,-3,' ',4);
+     DisplayValue(adc.lp_otr,-3,' ',4);
+     wait_for_key_5s_line2();
+  }
+#endif
 //  ChargePin10ms(TriPinRL,0);		//discharge for N-Kanal
 //  adc.lp_otr = W5msReadADC(LowPin);	//read voltage of Low-Pin 
 //  if(adc.lp_otr >= 977) {		//no current now? 
@@ -135,36 +164,38 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   // Germanium transistors have also high collector current with higher temperature.
   // But this current is lower, if the base is hold at emitter level (adc.hp1).
   // Additional checking of adc.lp1 will prevent to detect a PNP as P-JFET.
+//  if((PartMode <= PART_MODE_P_JFET) && (adc.lp_otr > 455)  && (adc.vCEs > 455))
   if((adc.lp_otr > 455)  && (adc.vCEs > 455))
      {  //there is more than 650uA current without TristatePin current 
      // can be JFET or D-FET
-#if DebugOut == 5
-     lcd_testpin(LowPin);
-     lcd_data('D');
-     lcd_testpin(HighPin);
-     lcd_space();
-     wait_about1s();
-#endif
      //Test if N-JFET or if self-conducting N-MOSFET
      R_DDR = LoPinRL | TriPinRH;	//switch R_H for Tristate-Pin (probably Gate) to GND
-     adc.lp1 = W20msReadADC(LowPin);	//measure voltage at the assumed Source 
+     adc.lp1 = W10msReadADC(LowPin);	//measure voltage at the assumed Source 
      adc.tp1 = ReadADC(TristatePin);	// measure Gate voltage
      R_PORT = TriPinRH;			//switch R_H for Tristate-Pin (probably Gate) to VCC
-     adc.lp2 = W20msReadADC(LowPin);	//measure voltage at the assumed Source again
+     adc.lp2 = W10msReadADC(LowPin);	//measure voltage at the assumed Source again
+#if DebugOut == 5
+     lcd_testpin(LowPin);
+     lcd_data('f');
+     lcd_testpin(HighPin);
+     lcd_space();
+     DisplayValue(adc.lp2,-3,' ',3);
+     DisplayValue(adc.lp1,-3,' ',3);
+#endif
      //If it is a self-conducting MOSFET or JFET, then must be: adc.lp2 > adc.lp1 
-     if(adc.lp2>(adc.lp1+488)) {
+     if(adc.lp2>(adc.lp1+599)) {
         //measure voltage at the  Gate, differ between MOSFET and JFET
         ADC_PORT = TXD_VAL;
         ADC_DDR = LoADCm;	//Low-Pin fix to GND
         R_DDR = TriPinRH | HiPinRL;	//High-Pin to output
         R_PORT = TriPinRH | HiPinRL;	//switch R_L for High-Pin to VCC
-        adc.lp2 = W20msReadADC(TristatePin); //read voltage of assumed Gate 
+        adc.lp2 = W10msReadADC(TristatePin); //read voltage of assumed Gate 
         if(adc.lp2>3911) {  //MOSFET
            PartFound = PART_FET;	//N-Kanal-MOSFET
-           PartMode = PART_MODE_N_D_MOS; //Depletion-MOSFET
+           PartMode = PART_MODE_MOS|N_CHANNEL|D_MODE; //Depletion-MOSFET
         } else {  //JFET (pn-passage between Gate and Source is conducting )
            PartFound = PART_FET;	//N-Kanal-JFET
-           PartMode = PART_MODE_N_JFET;
+           PartMode = PART_MODE_JFET|N_CHANNEL|D_MODE;
         }
 #if DebugOut == 5
         lcd_data('N');
@@ -190,22 +221,22 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 				//R_H for Tristate-Pin (assumed Gate) is already switched to VCC
      R_DDR = TriPinRH | HiPinRL;	//High-Pin to output
      R_PORT = TriPinRH | HiPinRL;	//High-Pin across R_L to Vcc
-     adc.hp1 = W20msReadADC(HighPin);	//measure voltage at assumed Source 
+     adc.hp1 = W10msReadADC(HighPin);	//measure voltage at assumed Source 
      adc.tp1 = ReadADC(TristatePin);	// measure Gate voltage
      R_PORT = HiPinRL;			//switch R_H for Tristate-Pin (assumed Gate) to GND
-     adc.hp2 = W20msReadADC(HighPin);	//read voltage at assumed Source again
+     adc.hp2 = W10msReadADC(HighPin);	//read voltage at assumed Source again
      //if it is a self-conducting P_MOSFET or P-JFET , then must be:  adc.hp1 > adc.hp2 
-     if(adc.hp1>(adc.hp2+488)) {
+     if(adc.hp1>(adc.hp2+599)) {
         //read voltage at the Gate , to differ between MOSFET and JFET
         ADC_PORT = HiADCp;	//switch High-Pin directly to VCC
         ADC_DDR = HiADCm;	//switch High-Pin to output
-        adc.tp2 = W20msReadADC(TristatePin); //read voltage at the assumed Gate 
+        adc.tp2 = W10msReadADC(TristatePin); //read voltage at the assumed Gate 
         if(adc.tp2<977) { 		//MOSFET
            PartFound = PART_FET;	//P-Kanal-MOSFET
-           PartMode = PART_MODE_P_D_MOS; //Depletion-MOSFET
+           PartMode = PART_MODE_MOS|P_CHANNEL|D_MODE; //Depletion-MOSFET
         } else { 			//JFET (pn-passage between Gate and Source is conducting)
            PartFound = PART_FET;	//P-Kanal-JFET
-           PartMode = PART_MODE_P_JFET;
+           PartMode = PART_MODE_JFET|P_CHANNEL|D_MODE;
         }
 #if DebugOut == 5
         lcd_data('P');
@@ -232,23 +263,25 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   ADC_DDR = LoADCm;			// Collector direct to GND
   R_PORT = HiPinRL;			// switch R_L port for HighPin (Emitter) to VCC
   R_DDR = TriPinRL | HiPinRL;		// Base resistor  R_L to GND
-  adc.hp1 = ADCconfig.U_AVCC - W5msReadADC(HighPin);	// voltage at the Emitter resistor
+  adc.hp1 = W5msReadADC(HighPin);	// voltage at the Emitter resistor
+  adc.rhp = ADCconfig.U_AVCC - adc.hp1;	// voltage at the Emitter resistor
   adc.tp1 = ReadADC(TristatePin);	// voltage at the base resistor
 
   if (adc.tp1 < 10) {
      R_DDR = 0;
      wait_about5ms();		// clear TRIAC and Thyristor
      R_DDR =  TriPinRH | HiPinRL;	// Tripin=RH-
-     adc.hp1 = ADCconfig.U_AVCC - W5msReadADC(HighPin);
+     adc.hp1 = W5msReadADC(HighPin);
+     adc.rhp = ADCconfig.U_AVCC - adc.hp1;	// voltage at the Emitter resistor
      adc.tp1 = ReadADC(TristatePin);	// voltage at base resistor 
  #ifdef LONG_HFE
-     c_hfe = ((unsigned long)adc.hp1 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
+     c_hfe = ((unsigned long)adc.rhp * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
               (unsigned int)RR680PL)) / (unsigned int)adc.tp1;	
  #else
-     c_hfe = ((adc.hp1 / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.tp1/500);
+     c_hfe = ((adc.rhp / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.tp1/500);
  #endif
   } else {
-     c_hfe = (unsigned long)((adc.hp1 - adc.tp1) / adc.tp1);
+     c_hfe = (unsigned long)((adc.rhp - adc.tp1) / adc.tp1);
   }
 #endif
 
@@ -267,7 +300,6 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      lcd_data('E');
      lcd_testpin(HighPin);
      lcd_space();
-     wait_about1s();
 #endif
      //Test to PNP
      R_DDR = LoPinRL | TriPinRL;	//switch R_L port for Tristate-Pin to output (GND), for Test of PNP
@@ -281,6 +313,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 
         adc.lp1 = W5msReadADC(LowPin);	//measure voltage at LowPin (assumed Collector)
         adc.tp2 = ReadADC(TristatePin);	//measure voltage at TristatePin (Base) 
+        adc.hp2 = ReadADC(HighPin);	//measure voltage at HighPin (assumed Emitter)
         //check, if Test is done before 
 //        if((PartFound == PART_TRANSISTOR) || (PartFound == PART_FET)) {
 //           PartReady = 1;
@@ -310,7 +343,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
            // first hFE or e_hfe is greater than last hfe ?
            if ((ptrans.count == 0) || (e_hfe > ptrans.hfe)){
               ptrans.hfe = e_hfe;				// hFE with common emitter
-              ptrans.uBE = ReadADC(HighPin) - adc.tp2;	// Base Emitter Voltage
+              ptrans.uBE = adc.hp2 - adc.tp2;	// Base Emitter Voltage
               update_pins = 1;		// trans.ebc must be updated
            }
 #endif
@@ -326,7 +359,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
  #endif
            {
               ptrans.hfe = c_hfe;		// c_hfe is the best
-              ptrans.uBE = ADCconfig.U_AVCC - adc.hp1 - adc.tp1;	// Base Emitter Voltage common collector
+              ptrans.uBE = adc.hp1 - adc.tp1;	// Base Emitter Voltage common collector
               update_pins = 1;		// trans.ebc must be updated
            }
 #endif
@@ -347,7 +380,11 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
            //is flow voltage low enough in the closed  state?
            //(since D-Mode-FET would be by mistake detected as E-Mode )
            PartFound = PART_FET;		//P-Kanal-MOSFET is found (Basis/Gate moves not to VCC)
-           PartMode = PART_MODE_P_E_MOS;
+           PartMode = PART_MODE_MOS|P_CHANNEL|E_MODE;
+           if (adc.hp2 > (adc.lp1+250)) {
+              //Drain-Source Voltage to high, must be a IGBT
+              PartMode = PART_MODE_IGBT|P_CHANNEL|E_MODE;
+           }
        	   //measure the Gate threshold voltage
            //Switching of Drain is monitored with digital input
            // Low level is specified up to 0.3 * VCC
@@ -381,22 +418,24 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     R_DDR = LoPinRL | TriPinRL;
     R_PORT = TriPinRL;			// TriPin=RL+  NPN with common Collector
     adc.lp1 = W5msReadADC(LowPin);	// voltage at Emitter resistor
-    adc.tp1 = ADCconfig.U_AVCC - ReadADC(TristatePin);	// voltage at Base resistor
-    if (adc.tp1 < 10) { 
+    adc.tp1 = ReadADC(TristatePin);	// voltage at the Base 
+    adc.rtp = ADCconfig.U_AVCC - adc.tp1;	// voltage at Base resistor
+    if (adc.rtp < 10) { 
        R_DDR = 0;
        wait_about5ms();		// clear TRIAC and Thyristor
        R_DDR = LoPinRL | TriPinRH;
        R_PORT = TriPinRH;		// Tripin=RH+
        adc.lp1 = W5msReadADC(LowPin);
-       adc.tp1 = ADCconfig.U_AVCC - ReadADC(TristatePin);	// voltage at Base resistor
+       adc.tp1 = ReadADC(TristatePin);	// voltage at the Base 
+       adc.rtp = ADCconfig.U_AVCC - adc.tp1;	// voltage at Base resistor
  #ifdef LONG_HFE
        c_hfe = ((unsigned long)adc.lp1 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
-              (unsigned int)RR680MI)) / (unsigned int)adc.tp1;	
+              (unsigned int)RR680MI)) / (unsigned int)adc.rtp;	
  #else
        c_hfe = ((adc.lp1 / ((RR680MI+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
  #endif
     } else {
-       c_hfe = (adc.lp1 - adc.tp1) / adc.tp1;
+       c_hfe = (adc.lp1 - adc.rtp) / adc.rtp;
     }
 #endif
     //Tristate (can be Base) to VCC, Test if NPN
@@ -472,14 +511,17 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
       // ADC_DDR = LoADCm;	//Low-Pin to output 0V
       R_DDR = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to output
       R_PORT = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to VCC
-      adc.hp2 = ADCconfig.U_AVCC - W20msReadADC(HighPin);	//measure the voltage at the collector resistor 
-      adc.tp2 = ADCconfig.U_AVCC - ReadADC(TristatePin);	//measure the voltage at the base resistor 
+      adc.hp2 = W20msReadADC(HighPin);	//measure the voltage at the collector  
+      adc.rhp = ADCconfig.U_AVCC - adc.hp2;	// voltage at the collector resistor
+      adc.tp2 = ReadADC(TristatePin);	//measure the voltage at the base 
+      adc.rtp = ADCconfig.U_AVCC - adc.tp2;	// voltage at the base resistor
+      adc.lp2 = ReadADC(LowPin);
 
 //      if((PartFound == PART_TRANSISTOR) || (PartFound == PART_FET)) {
 //         PartReady = 1;	//check, if test is already done once
 //      }
 
-      if(adc.tp2 > 2557) {		// Basis-voltage R_H is low enough
+      if(adc.rtp > 2557) {		// Basis-voltage R_H is low enough
          PartFound = PART_TRANSISTOR;	//NPN-Transistor is found (Base is near GND)
          PartMode = PART_MODE_NPN;
          update_pins = 0;		// only update pins, if better hFE
@@ -487,20 +529,20 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 
          //compute current amplification factor for common Emitter
          //hFE = B = Collector current / Base current
-         tmp16 = adc.hp2;
+         tmp16 = adc.rhp;
          if (tmp16 > adc.lp_otr) {
             tmp16 -= adc.lp_otr;
          }
 
   #ifdef LONG_HFE
          e_hfe = ((unsigned int)tmp16 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
-              (unsigned int)RR680PL)) / (unsigned int)adc.tp2;	
+              (unsigned int)RR680PL)) / (unsigned int)adc.rtp;	
   #else
-         e_hfe = ((tmp16 / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
+         e_hfe = ((tmp16 / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.rtp/500);
   #endif
          if ((ntrans.count == 0) || (e_hfe > ntrans.hfe)){
             ntrans.hfe = e_hfe;
-            ntrans.uBE = ADCconfig.U_AVCC - adc.tp2 - ReadADC(LowPin);
+            ntrans.uBE = adc.tp2 - adc.lp2;
             update_pins = 1;
          }
  #endif
@@ -514,7 +556,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
  #endif
           {
             ntrans.hfe = c_hfe;
-            ntrans.uBE = ADCconfig.U_AVCC - adc.lp1 - adc.tp1;
+            ntrans.uBE = adc.tp1 - adc.lp1;
             update_pins = 1;
           }
 #endif
@@ -531,11 +573,15 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
          goto saveNresult;		// count the found N-Type and exit
       } 
       // Base has low current
-      if((adc.lp_otr < 97) && (adc.hp2 > 3400)) {
+      if((adc.lp_otr < 97) && (adc.rhp > 3400)) {
          //if flow voltage in switched off mode low enough?
          //(since D-Mode-FET will be detected in error as E-Mode )
          PartFound = PART_FET;	//N-Kanal-MOSFET is found (Basis/Gate will Not be pulled down)
-         PartMode = PART_MODE_N_E_MOS;
+         PartMode = PART_MODE_MOS|N_CHANNEL|E_MODE;
+         if (adc.hp2 > (250+adc.lp2)) {
+            // Drain-Source Voltage is too high for N_E_MOS
+            PartMode = PART_MODE_IGBT|N_CHANNEL|E_MODE;
+         }
 #if DebugOut == 5
          lcd_data('F');
 #endif
@@ -655,15 +701,11 @@ checkDiode:
   lcd_testpin(LowPin);
   lcd_space();
   lcd_data('h');
-  lcd_string(utoa(adc.hp3,outval,10));
-  lcd_space();
+  DisplayValue(adc.hp3,-3,' ',2);
   lcd_data('L');
-  lcd_string(utoa(adc.hp1,outval,10));
-  lcd_space();
+  DisplayValue(adc.hp1,-3,' ',2);
   lcd_data('H');
-  lcd_string(utoa(adc.hp2,outval,10));
-  lcd_space();
-  wait_about1s();
+  DisplayValue(adc.hp2,-3,' ',2);
 #endif
   volt_dif = adc.hp3/8;
   if (volt_dif > 200) volt_dif = 200;
@@ -943,7 +985,7 @@ widmes:
  clean_ports:
 #ifdef DebugOut
 #if DebugOut < 10
-  wait_about2s();
+  wait_for_key_5s_line2();
 #endif
 #endif
   ADC_DDR = TXD_MSK;		// all ADC-Pins Input
@@ -958,7 +1000,6 @@ widmes:
 savePresult:
 #if DebugOut == 5
  lcd_data('P');
- wait_about1s();
 #endif
  ptrans.count++;
  if (update_pins != 0) {
@@ -974,7 +1015,6 @@ savePresult:
 saveNresult:
 #if DebugOut == 5
  lcd_data('N');
- wait_about1s();
 #endif
  ntrans.count++;
  if (update_pins != 0) {

@@ -90,27 +90,7 @@ End of configuration
    const unsigned char RELPROBE[] MEM_TEXT = "Trenne Pins!";
    const unsigned char ATE[] MEM_TEXT = "Test Ende";
  #endif
-#endif
-
-#if defined(LANG_ENGLISH)		//english
-   const unsigned char TestRunning[] MEM_TEXT = "Testing..."; //€€€€€€";
-   const unsigned char BatWeak[] MEM_TEXT = "weak"; //€€€";
-   const unsigned char BatEmpty[] MEM_TEXT = "empty!"; //€€";
-   const unsigned char TestFailed2[] MEM_TEXT = "damaged "; //€€€€";
-   const unsigned char Bauteil[] MEM_TEXT = "part"; //€€€€€€";
-//   const unsigned char Diode[] MEM_TEXT = "Diode: ";
-   const unsigned char Triac[] MEM_TEXT = "Triac";
-   const unsigned char Thyristor[] MEM_TEXT = "Thyrist.";
-   const unsigned char Unknown[] MEM_TEXT = " unknown"; //€";
-   const unsigned char TestFailed1[] MEM_TEXT = "No, unknown, or"; //€";
-   const unsigned char OrBroken[] MEM_TEXT = "or damaged "; //€€";
-   const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
-   #define Cathode_char 'C'
- #ifdef WITH_SELFTEST
-   const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!"; // or "separate pins!";
-   const unsigned char ATE[] MEM_TEXT = "Test End";
- #endif
+ #define LANG_SELECTED
 #endif
 
 #if defined(LANG_POLISH)		//polnisch
@@ -132,6 +112,7 @@ End of configuration
    const unsigned char RELPROBE[] MEM_TEXT = "osobne pins!";
    const unsigned char ATE[] MEM_TEXT = "Testu End";
  #endif
+ #define LANG_SELECTED
 #endif
 
 #if defined(LANG_CZECH)		//Tschechisch
@@ -153,6 +134,7 @@ End of configuration
    const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!";
    const unsigned char ATE[] MEM_TEXT = "Test End";
  #endif
+ #define LANG_SELECTED
 #endif
 
 #if defined(LANG_SLOVAK)		//slowakisch
@@ -174,6 +156,7 @@ End of configuration
    const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!";
    const unsigned char ATE[] MEM_TEXT = "Test End";
  #endif
+ #define LANG_SELECTED
 #endif
 
 #if defined(LANG_SLOVENE)                    //slovenian
@@ -195,7 +178,9 @@ End of configuration
    const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!";
    const unsigned char ATE[] MEM_TEXT = "Test End";
  #endif
+ #define LANG_SELECTED
 #endif
+
 #if defined(LANG_DUTCH)                      //dutch
    const unsigned char TestRunning[] MEM_TEXT = "Testen..."; 
    const unsigned char BatWeak[] MEM_TEXT = "laag"; 
@@ -210,11 +195,12 @@ End of configuration
    const unsigned char OrBroken[] MEM_TEXT = "of defect "; 
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'C'
-#ifdef WITH_SELFTEST
+ #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM_TEXT = "Zelftest mode..";
    const unsigned char RELPROBE[] MEM_TEXT = "aparte Pinnen!";
    const unsigned char ATE[] MEM_TEXT = "Test Einde";
-#endif
+ #endif
+ #define LANG_SELECTED
 #endif
 
 #if defined(LANG_BRASIL)					// Brazilian Portuguese
@@ -236,6 +222,7 @@ End of configuration
    const unsigned char RELPROBE[] MEM_TEXT = "Isole Pontas!";
    const unsigned char ATE[] MEM_TEXT = "Fim do Teste";
  #endif
+ #define LANG_SELECTED
 #endif
 
 #if defined(LANG_RUSSIAN)		//Russian
@@ -257,6 +244,7 @@ End of configuration
    const unsigned char RELPROBE[] MEM_TEXT = {Cyr_I,Cyr_z,'o',Cyr_l,Cyr_ja,Cyr_c,Cyr_i,Cyr_ja,'!',0}; //ˆ§®«ïæ¨ï! 
    const unsigned char ATE[] MEM_TEXT = {'T','e','c',Cyr_t,' ',Cyr_z,'a',Cyr_k,'o',Cyr_n,Cyr_tsch,'e',Cyr_n,0}; //’¥áâ § ª®­ç¥­
  #endif
+ #define LANG_SELECTED
 #endif
 
 #if defined(LANG_UKRAINIAN)		//Ukrainian
@@ -278,6 +266,7 @@ End of configuration
    const unsigned char RELPROBE[] MEM_TEXT = {'I',Cyr_z,'o',Cyr_l,Cyr_ja,Cyr_c,'i',Cyr_ja,'!',0}; //I§®«ïæiï! 
    const unsigned char ATE[] MEM_TEXT = {'T','e','c',Cyr_t,' ',Cyr_z,'a',Cyr_k,'i',Cyr_n,Cyr_tsch,'e',Cyr_n,'o',0}; //’¥áâ § ªi­ç¥­®
  #endif
+ #define LANG_SELECTED
 #endif
 
 #if defined(LANG_LITHUANIAN) //Lithuanian
@@ -299,6 +288,30 @@ End of configuration
    const unsigned char RELPROBE[] MEM_TEXT = "Atjung laidus!"; //"isolate Probe!";
    const unsigned char ATE[] MEM_TEXT = "Testas baigtas"; //"Test End";
  #endif
+ #define LANG_SELECTED
+#endif
+
+// All languages must be placed before the english text.
+// If none is actually selected, LANG_SELECTED is not set.
+#ifndef LANG_SELECTED		//default language is english
+   const unsigned char TestRunning[] MEM_TEXT = "Testing..."; //€€€€€€";
+   const unsigned char BatWeak[] MEM_TEXT = "weak"; //€€€";
+   const unsigned char BatEmpty[] MEM_TEXT = "empty!"; //€€";
+   const unsigned char TestFailed2[] MEM_TEXT = "damaged "; //€€€€";
+   const unsigned char Bauteil[] MEM_TEXT = "part"; //€€€€€€";
+//   const unsigned char Diode[] MEM_TEXT = "Diode: ";
+   const unsigned char Triac[] MEM_TEXT = "Triac";
+   const unsigned char Thyristor[] MEM_TEXT = "Thyrist.";
+   const unsigned char Unknown[] MEM_TEXT = " unknown"; //€";
+   const unsigned char TestFailed1[] MEM_TEXT = "No, unknown, or"; //€";
+   const unsigned char OrBroken[] MEM_TEXT = "or damaged "; //€€";
+   const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+   #define Cathode_char 'C'
+ #ifdef WITH_SELFTEST
+   const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
+   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!"; // or "separate pins!";
+   const unsigned char ATE[] MEM_TEXT = "Test End";
+ #endif
 #endif
 
 // Strings, which are not dependent of any language
@@ -306,10 +319,12 @@ End of configuration
  const unsigned char OK_str[] MEM_TEXT = "OK";
  const unsigned char mosfet_str[] MEM_TEXT = "-MOS";
  const unsigned char jfet_str[] MEM_TEXT = "JFET";
+ const unsigned char igbt_str[] MEM_TEXT = "-IGBT";
  const unsigned char GateCap_str[] MEM_TEXT = "C=";
  const unsigned char hfe_str[] MEM_TEXT ="B=";
  const unsigned char NPN_str[] MEM_TEXT = "NPN";
  const unsigned char PNP_str[] MEM_TEXT = "PNP";
+
 #ifndef EBC_STYLE
  // default is the 123= style
  const unsigned char N123_str[] MEM_TEXT = " 123=";
@@ -322,12 +337,14 @@ End of configuration
   const unsigned char N123_str[] MEM_TEXT = " 123=";
  #endif
 #endif
+
  const unsigned char Uf_str[] MEM_TEXT = "Uf=";
  const unsigned char vt_str[] MEM_TEXT = " Vt=";
  const unsigned char Vgs_str[] MEM_TEXT = "@Vg=";
  const unsigned char CapZeich[] MEM_TEXT = {'-',LCD_CHAR_CAP,'-',0};
  const unsigned char Cell_str[] MEM_TEXT = "Cell!";
  const unsigned char VCC_str[] MEM_TEXT = "VCC=";
+
 #if FLASHEND > 0x1fff
  const unsigned char ESR_str[] MEM_TEXT = " ESR=";
  const unsigned char VLOSS_str[] MEM_TEXT = " Vloss=";
@@ -343,12 +360,19 @@ End of configuration
   #endif
  #endif
 #endif
+
 #ifdef WITH_VEXT
  const unsigned char Vext_str[] MEM_TEXT = "Vext=";
- #define LCD_CLEAR
+ #define LCD_CLEAR 
+ /* LCD_CLEAR  generates code for lcd_clear_line() */
 #endif
 
 #if FLASHEND > 0x3fff
+// Define a help text for calibration for ATmega328
+// Complete words are output to the LCD rows.
+// Words are separated by ' '. If you don't allow to separate two words
+// to different rows, you can hide the ' ' with ' '+0x80 .
+// Notice, that the LCD has only 16 character in each line!
  #if defined(LANG_GERMAN)		//deutsch
  const unsigned char HelpCalibration_str[] PROGMEM = {'U','n','k','a','l','i','b','r','i','e','r','t','!',' ',
 'Z','u','m',' '+0x80,
@@ -489,6 +513,7 @@ End of configuration
 't','e','s','t','e','r',' ',0};
  #endif
 #endif
+
  const unsigned char AnKat[] MEM_TEXT = {'-', LCD_CHAR_DIODE1, '-',0};
  const unsigned char KatAn[] MEM_TEXT = {'-', LCD_CHAR_DIODE2, '-',0};
  const unsigned char Dioden[] MEM_TEXT = {'*',LCD_CHAR_DIODE1, ' ', ' ',0};
@@ -497,6 +522,8 @@ End of configuration
 #ifdef SHOW_ICE
  const unsigned char ICE0_str[] MEM2_TEXT = "ICE0=";
  const unsigned char ICEs_str[] MEM2_TEXT = "ICEs=";
+ #define LCD_CLEAR
+ /* LCD_CLEAR  generates code for lcd_clear_line() */
 #endif
 
 
@@ -512,6 +539,7 @@ End of configuration
  #endif
  const unsigned char R0_str[] MEM2_TEXT = "R0=";
  #define LCD_CLEAR
+ /* LCD_CLEAR  generates code for lcd_clear_line() */
 #endif
  
 #ifdef CHECK_CALL
@@ -520,13 +548,10 @@ End of configuration
  const unsigned char C0_str[] MEM_TEXT = "C0 ";
  const unsigned char T50HZ[] MEM_TEXT = " 50Hz";
 #endif
-#ifdef AUTO_CAL
- const unsigned char MinCap_str[] MEM2_TEXT = " >100nF";
- const unsigned char REF_C_str[] MEM2_TEXT = "REF_C=";
- const unsigned char REF_R_str[] MEM2_TEXT = "REF_R=";
-#endif
+
 #ifdef DebugOut
  #define LCD_CLEAR
+ /* LCD_CLEAR  generates code for lcd_clear_line() */
 #endif
 
  const unsigned char DiodeIcon1[] MEM_TEXT = { 0x11,
@@ -578,6 +603,7 @@ End of configuration
  const unsigned char PinADCtab[] PROGMEM = { (1<<TP1),
 				     (1<<TP2),
 				     (1<<TP3)};	// Table of commands to switch the ADC-Pins 0,1,2
+ const uint8_t PrefixTab[] MEM_TEXT = { 'p','n',LCD_CHAR_U,'m',0,'k','M'}; // p,n,u,m,-,k,M
 
 //generate Omega- and µ-character as Custom-character, if these characters has a number of loadable type
 #if LCD_CHAR_OMEGA < 8
@@ -588,12 +614,13 @@ End of configuration
 #endif
 
 #ifdef AUTO_CAL
+  const unsigned char MinCap_str[] MEM2_TEXT = " >100nF";
+  const unsigned char REF_C_str[] MEM2_TEXT = "REF_C=";
+  const unsigned char REF_R_str[] MEM2_TEXT = "REF_R=";
 //   const uint16_t R680pl EEMEM = R_L_VAL+PIN_RP;	// total resistor to VCC
 //   const uint16_t R680mi EEMEM = R_L_VAL+PIN_RM;	// total resistor to GND
-   const int8_t RefDiff EEMEM = REF_R_KORR;	// correction of internal Reference Voltage
-#endif
-  const uint8_t PrefixTab[] MEM_TEXT = { 'p','n',LCD_CHAR_U,'m',0,'k','M'}; // p,n,u,m,-,k,M
-#ifdef AUTO_CAL
+  const int8_t RefDiff EEMEM = REF_R_KORR;	// correction of internal Reference Voltage
+
 //  const uint16_t cap_null EEMEM = C_NULL;	// Zero offset of capacity measurement 
    const int16_t ref_offset EEMEM = REF_C_KORR;	// default correction of internal reference voltage for capacity measurement
    // the zero offset for capacity measurement for all pin combinations
@@ -601,6 +628,7 @@ End of configuration
    const uint8_t c_zero_tab[] EEMEM = { C_NULL,C_NULL,C_NULL+TP2_CAP_OFFSET,C_NULL+1,C_NULL+TP2_CAP_OFFSET,C_NULL,C_NULL }; //table of zero offsets
    // if the marker position of c_zero_tab is not equal the first position, the calibration has not run before
 #endif
+
   const uint8_t EE_ESR_ZEROtab[] EEMEM = {ESR_ZERO, ESR_ZERO, ESR_ZERO, ESR_ZERO};	// zero offset of ESR measurement
 //End of EEPROM-Strings
 // Multiplier for capacity measurement with R_H (470KOhm)

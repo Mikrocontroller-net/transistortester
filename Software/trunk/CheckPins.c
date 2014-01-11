@@ -98,18 +98,6 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   adc.vCEs = W5msReadADC(LowPin);	// lp1 is the voltage at 680 Ohm with - Gate
   R_DDR = LoPinRL;	
   adc.lp_otr = W5msReadADC(LowPin);	//read voltage of Low-Pin  , without Gate current (-)
-#if 0
-  if (((LowPin == TP1) && (HighPin == TP3)) || ((LowPin == TP3) && (HighPin == TP1))) {
-     lcd_line2();
-     lcd_testpin(LowPin);
-     lcd_data('p');
-     lcd_testpin(HighPin);
-     lcd_space();
-     DisplayValue(adc.vCEs,-3,' ',4);
-     DisplayValue(adc.lp_otr,-3,' ',4);
-     wait_for_key_5s_line2();
-  }
-#endif
   R_DDR = 0;
   wait5ms();				// release all current (clear TRIAC and Thyristor)
   R_PORT = TriPinRL;
@@ -124,18 +112,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   } else {
      if ((adc.vCEs+288) > adc.lp2) goto checkDiode;	// no significant change
   }
-#if 0
-  if (((LowPin == TP1) && (HighPin == TP3)) || ((LowPin == TP3) && (HighPin == TP1))) {
-     lcd_line2();
-     lcd_testpin(LowPin);
-     lcd_data('P');
-     lcd_testpin(HighPin);
-     lcd_space();
-     DisplayValue(adc.lp2,-3,' ',4);
-     DisplayValue(adc.lp_otr,-3,' ',4);
-     wait_for_key_5s_line2();
-  }
-#endif
+
 //  ChargePin10ms(TriPinRL,0);		//discharge for N-Kanal
 //  adc.lp_otr = W5msReadADC(LowPin);	//read voltage of Low-Pin 
 //  if(adc.lp_otr >= 977) {		//no current now? 
@@ -668,6 +645,49 @@ checkDiode:
   /* check first with low current (R_H=470k) */
   /* With this method the diode can be better differed from a capacitor, */
   /* but a parallel to a capacitor mounted diode can not be found. */
+ #if FLASHEND > 0x1fff
+  /* It is difficult to detect the protection diode of D-mode MOSFET . */
+  /* We have to generate a negative gate voltage to isolate the diode. */
+  /* For P-mode the resistors must reside on the VCC side. */
+  /* For N-mode the resistors must be moved to the GND side. */
+  R_DDR = HiPinRH;		//switch R_H port for High-Pin output (VCC)
+  R_PORT = HiPinRH;
+  ChargePin10ms(TriPinRL,1);	//discharge of P-Kanal-MOSFET gate
+  adc.hp2 = W5msReadADC(HighPin); 		// GND--|<--HP--R_H--VCC
+  // now the resistor is moved to the Low side
+  R_DDR = LoPinRH;
+  R_PORT = 0;
+  ADC_DDR = HiADCm;		// switch High-Pin fix to VCC
+  ADC_PORT = HiADCp;
+  ChargePin10ms(TriPinRL,0);	//discharge for N-Kanal-MOSFET gate
+  adc.hp3 = ADCconfig.U_AVCC - W5msReadADC(LowPin); // GND--R_H--LP--|<--VCC
+  /* check with higher current (R_L=680) */
+  R_DDR = LoPinRL;
+  adc.hp1 = W5msReadADC(HighPin) - ReadADC(LowPin); // GND--R_L--LP--|<--VCC
+  //  the resistor is moved back to the High side
+  ADC_PORT = TXD_VAL;
+  ADC_DDR = LoADCm;		// switch only Low-Pin fix to GND
+  R_DDR = HiPinRL;		//switch R_L port for High-Pin output (VCC)
+  R_PORT = HiPinRL;
+  ChargePin10ms(TriPinRL,1);	//discharge for P-Kanal-MOSFET gate
+  adc.lp_otr = W5msReadADC(HighPin) - ReadADC(LowPin); // GND--|<--HP--R_L--VCC
+  if(adc.lp_otr > adc.hp1) {
+      adc.hp1 = adc.lp_otr;	//the higher value wins
+      adc.hp3 = adc.hp2;
+      R_DDR = HiPinRH;		//switch R_H port for High-Pin output (VCC)
+      R_PORT = HiPinRH;
+      adc.hp2 = W5msReadADC(HighPin); 		// GND--|<--HP--R_H--VCC
+  } else {
+      R_DDR = LoPinRH;
+      R_PORT = 0;
+      ADC_DDR = HiADCm;		// switch High-Pin fix to VCC
+      ADC_PORT = HiADCp;
+      ChargePin10ms(TriPinRL,0);	//discharge for N-Kanal-MOSFET gate
+      adc.hp2 = ADCconfig.U_AVCC - W5msReadADC(LowPin); // GND--R_H--LP--|<--VCC
+  }
+  // move the resistor to the Low side again
+ #else
+  /* There is not enough space to detect the protection diode for N-D-MOS correctly. */
   R_DDR = HiPinRH;		//switch R_H port for High-Pin output (VCC)
   R_PORT = HiPinRH;
   ChargePin10ms(TriPinRL,1);	//discharge of P-Kanal-MOSFET gate
@@ -679,7 +699,7 @@ checkDiode:
   R_DDR = HiPinRL;		//switch R_L port for High-Pin to output (VCC)
   R_PORT = HiPinRL;
   adc.hp1 = W5msReadADC(HighPin) - ReadADC(LowPin);
-  ChargePin10ms(TriPinRL,1);	//discharge for N-Kanal-MOSFET gate
+  ChargePin10ms(TriPinRL,1);	//discharge for P-Kanal-MOSFET gate
   adc.lp_otr = W5msReadADC(HighPin) - ReadADC(LowPin);
 
   R_DDR = HiPinRH;		//switch R_H port for High-Pin output (VCC)
@@ -691,6 +711,7 @@ checkDiode:
       ChargePin10ms(TriPinRL,0);	//discharge for N-Kanal-MOSFET gate
   }
   adc.hp2 = W5msReadADC(HighPin); 		// M--|<--HP--R_H--VCC
+ #endif
 #endif
 #if DebugOut == 4
   lcd_line3();

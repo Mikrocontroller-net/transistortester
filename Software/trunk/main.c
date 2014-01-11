@@ -598,7 +598,8 @@ start:
     } else {
        PinLayout('S','G','D'); 		//  SGD= or 123=...
     }
-    if((NumOfDiodes == 1) && ((PartMode&D_MODE) != D_MODE)) {
+//    if((NumOfDiodes == 1) && ((PartMode&D_MODE) != D_MODE)) {
+    if(NumOfDiodes == 1) {
        //MOSFET with protection diode; only with enhancement-FETs
 #ifdef EBC_STYLE
  #if EBC_STYLE == 321
@@ -615,11 +616,13 @@ start:
 #if FLASHEND > 0x1fff
        // there is enough space for long form of showing protection diode
        {
+          lcd_data(LCD_CHAR_DIODE1);	//show Diode symbol >|
           lcd_line2();			//2. Row
           lcd_testpin(diodes[0].Anode);
           lcd_fix_string(AnKat);	//"->|-"
           lcd_testpin(diodes[0].Cathode);
        } else {
+          lcd_data(LCD_CHAR_DIODE2);	//show Diode symbol |<
           lcd_line2();			//2. Row
           lcd_testpin(diodes[0].Cathode);
           lcd_fix_string(KatAn);	//"-|<-"

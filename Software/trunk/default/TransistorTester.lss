@@ -3131,13 +3131,17 @@ checkDiode:
   ADC_DDR = TXD_MSK;		// switch ADC ports to input
     110a:	88 e0       	ldi	r24, 0x08	; 8
     110c:	87 b9       	out	0x07, r24	; 7
-  if (adc.lp_otr < 977) { goto widmes; }
-    110e:	a1 ed       	ldi	r26, 0xD1	; 209
+//  if (adc.lp_otr < 977) 
+  if (adc.lp_otr < 455) {
+    110e:	a7 ec       	ldi	r26, 0xC7	; 199
     1110:	8a 16       	cp	r8, r26
-    1112:	a3 e0       	ldi	r26, 0x03	; 3
+    1112:	a1 e0       	ldi	r26, 0x01	; 1
     1114:	9a 06       	cpc	r9, r26
     1116:	08 f4       	brcc	.+2      	; 0x111a <CheckPins+0x8cc>
     1118:	ae c0       	rjmp	.+348    	; 0x1276 <CheckPins+0xa28>
+#endif
+     goto widmes;
+  }
   // component has current
   //Test if Diode
   ADC_PORT = TXD_VAL;
@@ -3163,8 +3167,8 @@ checkDiode:
     1138:	91 05       	cpc	r25, r1
     113a:	10 f0       	brcs	.+4      	; 0x1140 <CheckPins+0x8f2>
     113c:	ca 94       	dec	r12
-  ADC_DDR = TXD_MSK;		// switch ADC ports to input
-  if (adc.lp_otr < 977) { goto widmes; }
+     goto widmes;
+  }
   // component has current
   //Test if Diode
   ADC_PORT = TXD_VAL;
@@ -7953,7 +7957,7 @@ messe_mit_rh:
   //measure with the R_H (470kOhm) resistor 
   R_PORT = 0;		// R_DDR ist HiPinR_L
     2cfe:	15 b8       	out	0x05, r1	; 5
-  ADC_DDR = (1<<TP1) | (1<<TP2) | (1<<TP3) | (1<<TxD);	//switch all Pins to output
+  ADC_DDR = (1<<TP1) | (1<<TP2) | (1<<TP3) | TXD_MSK;	//switch all Pins to output
     2d00:	8f e0       	ldi	r24, 0x0F	; 15
     2d02:	87 b9       	out	0x07, r24	; 7
   ADC_PORT = TXD_VAL;		//switch all ADC Pins to GND

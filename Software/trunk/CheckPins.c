@@ -599,7 +599,21 @@ checkDiode:
   R_DDR = 0;			//switch off resistor current
   R_PORT = 0;
   ADC_DDR = TXD_MSK;		// switch ADC ports to input
-  if (adc.lp_otr < 977) { goto widmes; }
+//  if (adc.lp_otr < 977) 
+  if (adc.lp_otr < 455) {
+#if DebugOut == 4
+  lcd_line3();
+  lcd_clear_line();
+  lcd_line3();
+  lcd_testpin(HighPin);
+  lcd_data('D');
+  lcd_testpin(LowPin);
+  lcd_space();
+  DisplayValue(adc.lp_otr,-3,' ',3);
+  lcd_data('<');
+#endif
+     goto widmes;
+  }
   // component has current
   //Test if Diode
   ADC_PORT = TXD_VAL;

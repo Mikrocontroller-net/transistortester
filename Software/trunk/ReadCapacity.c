@@ -239,7 +239,7 @@ messe_mit_rh:
   EntladePins();			// discharge capacitor
   //measure with the R_H (470kOhm) resistor 
   R_PORT = 0;		// R_DDR ist HiPinR_L
-  ADC_DDR = (1<<TP1) | (1<<TP2) | (1<<TP3) | (1<<TxD);	//switch all Pins to output
+  ADC_DDR = (1<<TP1) | (1<<TP2) | (1<<TP3) | TXD_MSK;	//switch all Pins to output
   ADC_PORT = TXD_VAL;		//switch all ADC Pins to GND
   R_DDR = HiPinR_H;   		// switch R_H resistor port for HighPin to output (GND)
 // setup Analog Comparator

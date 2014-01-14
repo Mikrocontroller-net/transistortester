@@ -1,12 +1,12 @@
 
 //definitions of parts
 #define PART_NONE 0
-#define PART_DIODE 1
-#define PART_TRANSISTOR 2
-#define PART_FET 3
-#define PART_TRIAC 4
+#define PART_RESISTOR 1
+#define PART_DIODE 2
+#define PART_TRANSISTOR 3
+#define PART_FET 4
 #define PART_THYRISTOR 5
-#define PART_RESISTOR 6
+#define PART_TRIAC 6
 #define PART_CAPACITOR 7
 #define PART_CELL 8
 

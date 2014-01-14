@@ -128,8 +128,10 @@ int main(void) {
   #define display_time OFF_WAIT_TIME
 #endif
 
+#if POWER_OFF+0 > 1
   empty_count = 0;
   mess_count = 0;
+#endif
 
 //*****************************************************************
 //Entry: if start key is pressed before shut down
@@ -145,6 +147,9 @@ start:
   ResistorsFound = 0;		// no resistors found
   cap.ca = 0;
   cap.cb = 0;
+#if FLASHEND > 0x1fff
+  inductor_lpre = 0;		// mark as zero
+#endif
 #ifdef WITH_UART
   uart_newline();		// start of new measurement
 #endif
@@ -226,7 +231,10 @@ start:
 #if FLASHEND > 0x1fff
   if (WithReference) {
      /* 2.5V precision reference is checked OK */
-     if ((mess_count == 0) && (empty_count == 0)) {
+ #if POWER_OFF+0 > 1
+     if ((mess_count == 0) && (empty_count == 0))
+ #endif
+     {
          /* display VCC= only first time */
          lcd_line2();
          lcd_fix_string(VCC_str);		// VCC=
@@ -300,6 +308,12 @@ start:
 
   CheckPins(TP2, TP3, TP1);
   CheckPins(TP3, TP2, TP1);
+
+  if (ResistorsFound != 0) {
+     if (resis[ResistorsFound-1].checked  == 0) {
+        ResistorsFound--;	// last resistor is not checked in both directions
+     }
+  }
   
   // Capacity measurement is only possible correctly with two Pins connected.
   // A third connected pin will increase the capacity value!
@@ -335,6 +349,40 @@ start:
 #endif
 
   _trans = &ntrans;			// default transistor structure to show
+  if (PartFound == PART_THYRISTOR) {
+    lcd_fix_string(Thyristor);		//"Thyristor"
+    goto gakAusgabe;
+  }
+
+  if (PartFound == PART_TRIAC) {
+    lcd_fix_string(Triac);		//"Triac"
+    goto gakAusgabe;
+  }
+
+  if (PartFound == PART_CAPACITOR) {
+//     lcd_fix_string(Capacitor);
+     lcd_testpin(cap.ca);		//Pin number 1
+     lcd_fix_string(CapZeich);		// capacitor sign
+     lcd_testpin(cap.cb);		//Pin number 2
+#if FLASHEND > 0x1fff
+     GetVloss();			// get Voltage loss of capacitor
+     if (cap.v_loss != 0) {
+        lcd_fix_string(VLOSS_str);	// "  Vloss="
+        DisplayValue(cap.v_loss,-1,'%',2);
+     }
+#endif
+     lcd_line2(); 			//2. row 
+     DisplayValue(cap.cval_max,cap.cpre_max,'F',4);
+#if FLASHEND > 0x1fff
+     cap.esr = GetESR(cap.cb, cap.ca);		// get ESR of capacitor
+     if ( cap.esr < 65530) {
+        lcd_fix_string(ESR_str);
+        DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
+     }
+#endif
+     goto end;
+  }
+
   if(PartFound == PART_DIODE) {
      if(NumOfDiodes == 1) {		//single Diode
 //        lcd_fix_string(Diode);		//"Diode: "
@@ -377,7 +425,7 @@ start:
         lcd_fix_string(GateCap_str);	//"C="
         ReadCapacity(diodes[0].Cathode,diodes[0].Anode);	// Capacity opposite flow direction
         DisplayValue(cap.cval,cap.cpre,'F',3);
-        goto end;
+        goto end3;
      } else if(NumOfDiodes == 2) { // double diode
         lcd_data('2');
         lcd_fix_string(Dioden);		//"diodes "
@@ -388,7 +436,7 @@ start:
            lcd_fix_string(AnKat);	//"->|-"
            lcd_testpin(diodes[1].Cathode);
            UfAusgabe(0x01);
-           goto end;
+           goto end3;
         } 
         if(diodes[0].Cathode == diodes[1].Cathode) { //Common Cathode
            lcd_testpin(diodes[0].Anode);
@@ -397,7 +445,7 @@ start:
            lcd_fix_string(KatAn);	//"-|<-"
            lcd_testpin(diodes[1].Anode);
            UfAusgabe(0x01);
-           goto end;
+           goto end3;
 //        else if ((diodes[0].Cathode == diodes[1].Anode) && (diodes[1].Cathode == diodes[0].Anode)) 
         } 
         if (diodes[0].Cathode == diodes[1].Anode) {
@@ -406,12 +454,12 @@ start:
            // can also be Antiparallel
            diode_sequence = 0x01;	// 0 1
            SerienDiodenAusgabe();
-           goto end;
+           goto end3;
         } 
         if (diodes[1].Cathode == diodes[0].Anode) {
            diode_sequence = 0x10;	// 1 0
            SerienDiodenAusgabe();
-           goto end;
+           goto end3;
         }
      } else if(NumOfDiodes == 3) {
         //Serial of 2 Diodes; was detected as 3 Diodes 
@@ -470,15 +518,16 @@ start:
            lcd_data('3');
            lcd_fix_string(Dioden);	//"Diodes "
            SerienDiodenAusgabe();
-//           lcd_testpin(diodes[diode_sequence >> 4].Anode);
-//           lcd_fix_string(AnKat);	//"->|-"
-//           lcd_testpin(diodes[diode_sequence >> 4].Cathode);
-//           lcd_fix_string(AnKat);	//"->|-"
-//           lcd_testpin(diodes[diode_sequence & 3].Cathode);
-//           UfAusgabe( (diode_sequence);
-           goto end;
+           goto end3;
         }
      }  // end (NumOfDiodes == 3)
+     lcd_fix_string(Bauteil);		//"Bauteil"
+     lcd_fix_string(Unknown); 		//" unbek."
+     lcd_line2(); //2. row 
+     lcd_fix_string(OrBroken); 		//"oder defekt "
+     lcd_data(NumOfDiodes + '0');
+     lcd_fix_string(AnKat);		//"->|-"
+     goto not_known;
      // end (PartFound == PART_DIODE)
   } else if (PartFound == PART_TRANSISTOR) {
 #ifdef SEARCH_PARASITIC
@@ -598,7 +647,7 @@ start:
     } else {
        PinLayout('S','G','D'); 		//  SGD= or 123=...
     }
-//    if((NumOfDiodes == 1) && ((PartMode&D_MODE) != D_MODE)) {
+//    if((NumOfDiodes == 1) && ((PartMode&D_MODE) != D_MODE)) 
     if(NumOfDiodes == 1) {
        //MOSFET with protection diode; only with enhancement-FETs
 #ifdef EBC_STYLE
@@ -652,20 +701,16 @@ start:
        lcd_data('I');
        lcd_data('=');
        DisplayValue(_trans->current,-5,'A',2);
-       lcd_fix_string(Vgs_str);		// " Vgs="
+       lcd_fix_string(Vgs_str);		// " Vg="
     }
     //Gate-threshold voltage
     DisplayValue(_trans->gthvoltage,-3,'V',2);
     goto end;
     // end (PartFound == PART_FET)
-  } else if (PartFound == PART_THYRISTOR) {
-    lcd_fix_string(Thyristor);		//"Thyristor"
-    goto gakAusgabe;
-  } else if (PartFound == PART_TRIAC) {
-    lcd_fix_string(Triac);		//"Triac"
-    goto gakAusgabe;
   }
-  else if(PartFound == PART_RESISTOR) {
+//   if(PartFound == PART_RESISTOR) 
+resistor_out:
+   if(ResistorsFound != 0) {
     ii = 0;
     if (ResistorsFound == 1) { // single resistor
        lcd_testpin(resis[0].rb);  	//Pin-number 1
@@ -706,10 +751,10 @@ start:
        RvalOut(0);
 #if FLASHEND > 0x1fff
        ReadInductance();		// measure inductance, possible only with single R<2.1k
-       if (resis[0].lx != 0) {
+       if (inductor_lpre != 0) {
 	  // resistor have also Inductance
           lcd_fix_string(Lis_str);	// "L="
-          DisplayValue(resis[0].lx,resis[0].lpre,'H',3);	// output inductance
+          DisplayValue(inductor_lx,inductor_lpre,'H',3);	// output inductance
        }
 #endif
     } else {
@@ -731,45 +776,15 @@ start:
 
   } // end (PartFound == PART_RESISTOR)
 
-//capacity measurement is wanted
-  else if(PartFound == PART_CAPACITOR) {
-//     lcd_fix_string(Capacitor);
-     lcd_testpin(cap.ca);		//Pin number 1
-     lcd_fix_string(CapZeich);		// capacitor sign
-     lcd_testpin(cap.cb);		//Pin number 2
-#if FLASHEND > 0x1fff
-     GetVloss();			// get Voltage loss of capacitor
-     if (cap.v_loss != 0) {
-        lcd_fix_string(VLOSS_str);	// "  Vloss="
-        DisplayValue(cap.v_loss,-1,'%',2);
-     }
-#endif
-     lcd_line2(); 			//2. row 
-     DisplayValue(cap.cval_max,cap.cpre_max,'F',4);
-#if FLASHEND > 0x1fff
-     cap.esr = GetESR(cap.cb, cap.ca);		// get ESR of capacitor
-     if ( cap.esr < 65530) {
-        lcd_fix_string(ESR_str);
-        DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
-     }
-#endif
-     goto end;
-  }
-  if(NumOfDiodes == 0) { //no diodes are found
-     lcd_fix_string(TestFailed1); 	//"Kein,unbek. oder"
-     lcd_line2(); //2. row 
-     lcd_fix_string(TestFailed2); 	//"defektes "
-     lcd_fix_string(Bauteil);		//"Bauteil"
-  } else {
-     lcd_fix_string(Bauteil);		//"Bauteil"
-     lcd_fix_string(Unknown); 		//" unbek."
-     lcd_line2(); //2. row 
-     lcd_fix_string(OrBroken); 		//"oder defekt "
-     lcd_data(NumOfDiodes + '0');
-     lcd_fix_string(AnKat);		//"->|-"
-  }
+  lcd_fix_string(TestFailed1); 	//"Kein,unbek. oder"
+  lcd_line2(); //2. row 
+  lcd_fix_string(TestFailed2); 	//"defektes "
+  lcd_fix_string(Bauteil);		//"Bauteil"
+not_known:
+#if POWER_OFF+0 > 1
   empty_count++;
   mess_count = 0;
+#endif
   max_time = SHORT_WAIT_TIME;		// use allways the short wait time
   goto end2;
 
@@ -783,8 +798,10 @@ gakAusgabe:
 #endif
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - 
  end:
+#if POWER_OFF+0 > 1
   empty_count = 0;		// reset counter, if part is found
   mess_count++;			// count measurements
+#endif
   max_time = display_time;	// full specified wait time
 
  end2:
@@ -814,6 +831,21 @@ gakAusgabe:
   goto start;	// POWER_OFF not selected, repeat measurement
 #endif
   return 0;
+
+end3:
+  // the diode  is already shown on the LCD
+  if (ResistorsFound == 0) goto end;
+  ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
+  // there is one resistor or more detected
+  wait_for_key_ms(display_time);
+  ADC_DDR =  TXD_MSK; 	// switch pin with reference to input, activate relay
+  lcd_clear();
+#if FLASHEND > 0x1fff
+  lcd_data('0'+NumOfDiodes);
+  lcd_fix_string(Dioden);	//"Diodes "
+#endif
+  goto resistor_out;
+
 }   // end main
 
 void SerienDiodenAusgabe() {
@@ -837,7 +869,10 @@ void SerienDiodenAusgabe() {
 // lower 4 Bit  number of second Diode (Structure diodes[nn])
 // if number >= 3  no output is done
 void UfAusgabe(uint8_t bcdnum) {
-
+   if (ResistorsFound > 0) { //also Resistor(s) found
+      lcd_space();
+      lcd_data('R');
+   }
    lcd_line2(); 				//2. row
    lcd_fix_string(Uf_str);			//"Uf="
    mVAusgabe(bcdnum >> 4);
@@ -855,7 +890,7 @@ void RvalOut(uint8_t nrr) {
    // output of resistor value
 #if FLASHEND > 0x1fff
    uint16_t rr;
-   if ((resis[nrr].rx < 100) && (resis[0].lx == 0)) {
+   if ((resis[nrr].rx < 100) && (inductor_lpre == 0)) {
       rr = GetESR(resis[nrr].ra,resis[nrr].rb);
       DisplayValue(rr,-2,LCD_CHAR_OMEGA,3);
    } else {

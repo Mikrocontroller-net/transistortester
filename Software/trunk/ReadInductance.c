@@ -26,8 +26,6 @@ void ReadInductance(void) {
   uint8_t HiADC;	// Mask for switching the high pin direct to VCC
   uint8_t ii;
   uint8_t count;	// counter for the different measurements
-//  uint8_t found;	// variable used for searching resistors 
-  #define found 0
   uint8_t cnt_diff;     // resistance dependent offset
   uint8_t LowPin;	// number of pin with low voltage
   uint8_t HighPin;	// number of pin with high voltage 
@@ -36,27 +34,26 @@ void ReadInductance(void) {
   uint8_t nr_pol2;	// number of successfull inductance measurement with polarity 2
 
 
+  inductor_lpre = 0;	// H units, mark inductor as 0
   if(PartFound != PART_RESISTOR) {
      return;	//We have found no resistor  
   }
   if (ResistorsFound != 1) {
      return;	// do not search for inductance, more than 1 resistor
   }
-//  for (found=0;found<ResistorsFound;found++) {
-//     if (resis[found].rx > 21000) continue;
-     if (resis[found].rx > 21000) return;
+     if (resis[0].rx > 21000) return;
 
      // we can check for Inductance, if resistance is below 2100 Ohm
      for (count=0;count<4;count++) {
         // Try four times (different direction and with delayed counter start)
         if (count < 2) {
            // first and second pass, direction 1
-           LowPin = resis[found].ra;
-           HighPin = resis[found].rb;
+           LowPin = resis[0].ra;
+           HighPin = resis[0].rb;
         } else {
            // third and fourth pass, direction 2
-           LowPin = resis[found].rb;
-           HighPin = resis[found].ra;
+           LowPin = resis[0].rb;
+           HighPin = resis[0].ra;
         }
         HiADC = pgm_read_byte(&PinADCtab[HighPin]);
         LoPinR_L = pgm_read_byte(&PinRLtab[LowPin]);	//R_L mask for HighPin R_L load
@@ -64,7 +61,7 @@ void ReadInductance(void) {
         // Measurement of Inductance values
         R_PORT = 0;		// switch R port to GND
         ADC_PORT =   TXD_VAL;		// switch ADC-Port to GND
-        if ((resis[found].rx < 240) && ((count & 0x01) == 0)) {
+        if ((resis[0].rx < 240) && ((count & 0x01) == 0)) {
            // we can use PinR_L for measurement
            mess_r = RR680MI - R_L_VAL;			// use only pin output resistance
            ADC_DDR = HiADC | (1<<LowPin) | TXD_MSK;	// switch HiADC and Low Pin to GND, 
@@ -153,7 +150,7 @@ void ReadInductance(void) {
 //  #define CNT_ZERO_42 7
 //  #define CNT_ZERO_720 10
 //#endif
-        total_r = (mess_r + resis[found].rx + RRpinMI);
+        total_r = (mess_r + resis[0].rx + RRpinMI);
 //        cnt_diff = 0;
 //        if (total_r > 7000) cnt_diff = 1;
 //        if (total_r > 14000) cnt_diff = 2;
@@ -216,7 +213,7 @@ void ReadInductance(void) {
           }
 #endif
 /* ********************************************************* */
-        // lx in 0.01mH units,  L = Tau * R
+        // inductor_lx in 0.01mH units,  L = Tau * R
         per_ref1 = ((per_ref2 * (F_CPU/1000000UL)) + 5) / 10;
         inductance[count] = (timeconstant.dw * total_r ) / per_ref1;
         if (((count&0x01) == 0) && (timeconstant.dw > ((F_CPU/1000000UL)+3))) {
@@ -230,27 +227,27 @@ void ReadInductance(void) {
      wait_about20ms();
 #if 0
      if (inductance[1] > inductance[0]) {
-        resis[found].lx = inductance[1];	// use value found with delayed counter start
+        inductor_lx = inductance[1];	// use value found with delayed counter start
      } else {
-        resis[found].lx = inductance[0];
+        inductor_.lx = inductance[0];
      }
      if (inductance[3] > inductance[2]) inductance[2] = inductance[3];		// other polarity, delayed start
-     if (inductance[2] < resis[found].lx) resis[found].lx = inductance[2];	// use the other polarity
+     if (inductance[2] < inductor_lx) inductor_lx = inductance[2];	// use the other polarity
 #else
      nr_pol1 = 0;
      if (inductance[1] > inductance[0]) { nr_pol1 = 1; } 
      nr_pol2 = 2;
      if (inductance[3] > inductance[2]) { nr_pol2 = 3; } 
      if (inductance[nr_pol2] < inductance[nr_pol1]) nr_pol1 = nr_pol2;
-     resis[found].lx = inductance[nr_pol1];
-     resis[found].lpre = -5;	// 10 uH units
-     if (((nr_pol1 & 1) == 1) || (resis[found].rx >= 240)) {
+     inductor_lx = inductance[nr_pol1];
+     inductor_lpre = -5;	// 10 uH units
+     if (((nr_pol1 & 1) == 1) || (resis[0].rx >= 240)) {
         // with 680 Ohm resistor total_r is more than 7460
-        resis[found].lpre = -4;	// 100 uH units
-        resis[found].lx = (resis[found].lx + 5) / 10;
+        inductor_lpre = -4;	// 100 uH units
+        inductor_lx = (inductor_lx + 5) / 10;
      } 
+     if (inductor_lx == 0) inductor_lpre = 0;	//mark as zero
 #endif
-//  } // end loop for all resistors
 
   // switch all ports to input
   ADC_DDR =  TXD_MSK;		// switch all ADC ports to input

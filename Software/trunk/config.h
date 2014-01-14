@@ -629,7 +629,7 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 // Otherwise the shown type (NPNp or PNPn) depends on the selected pin sequence of the tester!
 #define SEARCH_PARASITIC
 
-#if FLASHEND > 0x1fff
+#if FLASHEND > 0x3fff
 // you can save about 14 bytes of Flash, if you deselect Thyristor gate voltage
  #define WITH_THYRISTOR_GATE_V
 #endif

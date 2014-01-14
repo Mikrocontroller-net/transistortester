@@ -699,15 +699,16 @@ COMMON unsigned int ref_mv;            //Reference-voltage  in mV units
 
 COMMON struct resis_t{
    unsigned long rx;		// value of resistor RX  
-#if FLASHEND > 0x1fff
-   unsigned long lx;		// inductance 10uH or 100uH
-   int8_t lpre;			// prefix for inductance
-#endif
    uint8_t ra,rb;		// Pins of RX
    uint8_t rt;			// Tristate-Pin (inactive)
+   uint8_t checked;		// marked as 1, if same value in both directions
 } resis[3];
 COMMON  uint8_t ResistorsFound;	//Number of found resistors
 
+#if FLASHEND > 0x1fff
+   unsigned long inductor_lx;	// inductance 10uH or 100uH
+   int8_t inductor_lpre;	// prefix for inductance
+#endif
 
 COMMON struct cap_t {
   unsigned long cval;		// capacitor value 
@@ -716,10 +717,12 @@ COMMON struct cap_t {
   unsigned long dw;	// capacity value without corrections
   uint16_t w[2];
   } cval_uncorrected;
+
 #if FLASHEND > 0x1fff
   unsigned int esr;		// serial resistance of C in 0.01 Ohm
   unsigned int v_loss;		// voltage loss 0.1%
 #endif
+
   uint8_t ca, cb;		//pins of capacitor
   int8_t cpre;			//Prefix for capacitor value  -12=p, -9=n, -6=µ, -3=m
   int8_t cpre_max;		//Prefix of the biggest capacitor

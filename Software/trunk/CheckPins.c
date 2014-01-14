@@ -749,7 +749,8 @@ checkDiode:
   if((adc.hp1 > 150) && (adc.hp1 < 4640) && (adc.hp2 < adc.hp1) && (adc.hp1 > (adc.hp3+volt_dif)) && (adc.hp3 > adc.hp1/16)) {
      //voltage is above 0,15V and below 4,64V => Ok
      // hp2 >= hp1 is only possible with capacitor, not with a diode, hp2 is measured with 470k
-     if((PartFound == PART_NONE) || (PartFound == PART_RESISTOR)) {
+//     if((PartFound == PART_NONE) || (PartFound == PART_RESISTOR)) {
+     if(PartFound < PART_DIODE) {
         PartFound = PART_DIODE;	//mark for diode only, if no other component is found
 				//since there is a problem with Transistors with a protection diode
 #if DebugOut == 4
@@ -769,8 +770,10 @@ checkDiode:
 // Search for resistors
 //##########################################################################################
 widmes:
-  if ((NumOfDiodes + ptrans.count  + ntrans.count) > 0) {
-     goto clean_ports;	// no resistors are searched, if diodes are detected
+//  if ((NumOfDiodes + ptrans.count  + ntrans.count) > 0) {
+//     goto clean_ports;	// no resistors are searched, if diodes are detected
+  if ((ptrans.count  + ntrans.count) > 0) {
+     goto clean_ports;	// no resistors are searched, if transistors are detected
   }
   // resistor measurement
   wdt_reset();
@@ -964,40 +967,53 @@ widmes:
   lcd_space();
   lcd_line2();
 #endif
-     if((PartFound == PART_DIODE) || (PartFound == PART_NONE) || (PartFound == PART_RESISTOR)) {
-        for (ii=0; ii<ResistorsFound; ii++) {
-           // search measurements with inverse polarity 
-           thisR = &resis[ii];
-           if (thisR->rt != TristatePin) {
-              continue;
-           }
-           // must be measurement with inverse polarity 
-           // resolution is 0.1 Ohm, 1 Ohm = 10 !
-           lirx1 = (labs((long)lrx1 - (long)thisR->rx) * 10) / (lrx1 + thisR->rx + 100);
-           if (lirx1  > 0) {
+//     if((PartFound == PART_DIODE) || (PartFound == PART_NONE) || (PartFound == PART_RESISTOR)) {
+     if(PartFound < PART_TRANSISTOR) {
+//        for (ii=0; ii<ResistorsFound; ii++) 
+        if (ResistorsFound != 0) {
+           // probably measurement with inverse polarity 
+           thisR = &resis[ResistorsFound-1];
+           if (thisR->rt == TristatePin) { 
+              // must be measurement with inverse polarity 
+              // resolution is 0.1 Ohm, 1 Ohm = 10 !
+              lirx1 = (labs((long)lrx1 - (long)thisR->rx) * 10) / (lrx1 + thisR->rx + 100);
+              if (lirx1  > 0) {
 #if DebugOut == 3
-              lcd_data('R');
-              lcd_data('!');
-              lcd_data('=');
-              DisplayValue(thisR->rx,-1,LCD_CHAR_OMEGA,3);
-              lcd_space();
-              DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,3);
-              lcd_space();
+                 lcd_data('R');
+                 lcd_data('!');
+                 lcd_data('=');
+                 DisplayValue(thisR->rx,-1,LCD_CHAR_OMEGA,3);
+                 lcd_space();
+                 DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,3);
+                 lcd_space();
 #endif
-              goto testend; // <10% mismatch
+//                 ResistorsFound--;		// this one isn't a resistor
+//                 goto testend; // <10% mismatch
+              } else {
+                 // resistor has the same value in both directions
+                 if (PartFound < PART_DIODE) {
+                    PartFound = PART_RESISTOR;	// only mark as resistor, if no other part found
+                 }
+                 thisR->checked = 1;		// mark as checked in both direction
+              }
+              goto testend;
+           } // end  thisR->rt == TristatePin
+           // must be a new one with other pins
+           if (thisR->checked == 0) {
+              // the last resistor has not the same value in both directions
+              ResistorsFound--;	//overwrite with new one
            }
-           PartFound = PART_RESISTOR;
-           goto testend;
-        } // end for
+        }
         // no same resistor with the same Tristate-Pin found, new one
         thisR = &resis[ResistorsFound];		// pointer to a free resistor structure
         thisR->rx = lrx1;		// save resistor value
 #if FLASHEND > 0x1fff
-        thisR->lx = 0;			// no inductance
+//        thisR->lx = 0;			// no inductance
 #endif
         thisR->ra = LowPin;		// save Pin numbers
         thisR->rb = HighPin;
         thisR->rt = TristatePin;	// Tristate is saved for easier search of inverse measurement
+        thisR->checked = 0;		// only one direction 
         ResistorsFound++;			// 1 more resistor found
 #if DebugOut == 3
         lcd_data(ResistorsFound+'0');

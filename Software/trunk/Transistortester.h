@@ -601,9 +601,9 @@ End of configuration
 				     0x11,
 				     0x11,
 				     0x11,
+				     0x11,
 				     0x1f,
-				     0x04,
-				     0x00};	// Resistor Icon2
+				     0x04};	// Resistor Icon2
 #endif
 
  const unsigned char PinRLtab[] PROGMEM = { (1<<(TP1*2)),

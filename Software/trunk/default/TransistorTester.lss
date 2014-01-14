@@ -1390,7 +1390,7 @@ void UfAusgabe(uint8_t bcdnum) {
      720:	29 f0       	breq	.+10     	; 0x72c <UfAusgabe+0x16>
       lcd_space();
      722:	0e 94 d7 00 	call	0x1ae	; 0x1ae <lcd_space>
-      lcd_data('R');
+      lcd_data(LCD_CHAR_RESIS3);	// special symbol or R
      726:	82 e5       	ldi	r24, 0x52	; 82
      728:	0e 94 a2 00 	call	0x144	; 0x144 <lcd_data>
    }

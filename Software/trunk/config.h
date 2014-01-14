@@ -612,6 +612,11 @@ Is SWUART_INVERT defined, the UART works is inverse mode
         #define LCD_CHAR_OMEGA  244     //Omega-character
         #define LCD_CHAR_U  228         //µ-character
 #endif
+#if FLASHEND > 0x3fff
+ #define LCD_CHAR_RESIS3 0
+#else
+ #define LCD_CHAR_RESIS3 'R'
+#endif
 #ifdef LCD_DOGM
 	#undef LCD_CHAR_OMEGA
 	#define LCD_CHAR_OMEGA 0x1e	//Omega-character for DOGM module

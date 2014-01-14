@@ -595,6 +595,16 @@ End of configuration
 				     0x1e,
 				     0x00,
 				     0x00};	// Resistor Icon2
+#if FLASHEND > 0x3fff
+ const unsigned char ResIcon3[] MEM_TEXT = { 0x04,
+				     0x1f,
+				     0x11,
+				     0x11,
+				     0x11,
+				     0x1f,
+				     0x04,
+				     0x00};	// Resistor Icon2
+#endif
 
  const unsigned char PinRLtab[] PROGMEM = { (1<<(TP1*2)),
 				     (1<<(TP2*2)),

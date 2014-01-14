@@ -103,6 +103,10 @@ int main(void) {
   LCDLoadCustomChar(LCD_CHAR_U);	//load mu as Custom-Character
   lcd_fix_customchar(CyrillicMuIcon);
 #endif
+#if FLASHEND > 0x3fff
+  LCDLoadCustomChar(LCD_CHAR_RESIS3);	//load Resistor symbol as Custom-Character
+  lcd_fix_customchar(ResIcon3);		// load character ||
+#endif
 #ifdef PULLUP_DISABLE
  #ifdef __AVR_ATmega8__
   SFIOR = (1<<PUD);		// disable Pull-Up Resistors mega8
@@ -871,7 +875,7 @@ void SerienDiodenAusgabe() {
 void UfAusgabe(uint8_t bcdnum) {
    if (ResistorsFound > 0) { //also Resistor(s) found
       lcd_space();
-      lcd_data('R');
+      lcd_data(LCD_CHAR_RESIS3);	// special symbol or R
    }
    lcd_line2(); 				//2. row
    lcd_fix_string(Uf_str);			//"Uf="

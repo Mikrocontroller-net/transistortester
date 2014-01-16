@@ -942,8 +942,8 @@ void EntladePins() {
      ADC_DDR = adc_gnd;
      ADC_PORT = TXD_VAL;		// ADC-outputs auf 0
      R_PORT = 0;			// R-outputs auf 0
-//     R_DDR = (2<<(PC2*2)) | (2<<(PC1*2)) | (2<<(PC0*2)); // R_H for all Pins to GND
-     R_DDR = (3<<(PC2*2)) | (3<<(PC1*2)) | (3<<(PC0*2)); // R_H and R_L for all Pins to GND
+//     R_DDR = (1<<PIN_RH3) | (1<<PIN_RH2) | (1<<PIN_RH1); // R_H for all Pins to GND
+     R_DDR = (1<<PIN_RH3) | (1<<PIN_RL3) | (1<<PIN_RH2) | (1<<PIN_RL2) | (1<<PIN_RH1) | (1<<PIN_RL1); // R_H and R_L for all Pins to GND
      adcmv[0] = W5msReadADC(PC0);	// which voltage has Pin 1?
      adcmv[1] = ReadADC(PC1);	// which voltage has Pin 2?
      adcmv[2] = ReadADC(PC2);	// which voltage has Pin 3?
@@ -972,7 +972,7 @@ void EntladePins() {
      // additionally switch the leaving Ports with R_L to GND.
      // since there is no disadvantage for the already directly switched pins, we can
      // simply switch all  R_L resistors to GND
-//     R_DDR = (1<<(PC2*2)) | (1<<(PC1*2)) | (1<<(PC0*2));	// Pins across R_L resistors to GND
+//     R_DDR = (1<<PIN_RL3) | (1<<PIN_RL2) | (1<<PIN_RL1);	// Pins across R_L resistors to GND
      for(clr_cnt=0;clr_cnt<MAX_ENTLADE_ZEIT;clr_cnt++) {
         wdt_reset();
         adcmv[0] = W20msReadADC(PC0);	// which voltage has Pin 1?

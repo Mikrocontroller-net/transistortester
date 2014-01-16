@@ -52,7 +52,11 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 
   LoADC = pgm_read_byte(&PinADCtab[LowPin]) | TXD_MSK;
   HiPinR_L = pgm_read_byte(&PinRLtab[HighPin]);	//R_L mask for HighPin R_L load
+#if FLASEND > 0x3fff
+  HiPinR_H = pgm_read_byte(&PinRHtab[HighPin]);	//R_H mask for HighPin R_H load
+#else
   HiPinR_H = HiPinR_L + HiPinR_L;	//double for HighPin R_H load
+#endif
 
 #if DebugOut == 10
   lcd_line3();

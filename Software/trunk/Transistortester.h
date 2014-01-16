@@ -606,9 +606,15 @@ End of configuration
 				     0x04};	// Resistor Icon2
 #endif
 
- const unsigned char PinRLtab[] PROGMEM = { (1<<(TP1*2)),
-				     (1<<(TP2*2)),
-				     (1<<(TP3*2))};	// Table of commands to switch the  R-L resistors Pin 0,1,2
+ const unsigned char PinRLtab[] PROGMEM = { (1<<PIN_RL1),
+				     (1<<PIN_RL2),
+				     (1<<PIN_RL3)};	// Table of commands to switch the  R-L resistors Pin 0,1,2
+#if FLASHEND > 0x3fff
+ // Processors with little memory must use one Pin number higher than correspondig Low Resistor
+ const unsigned char PinRHtab[] PROGMEM = { (1<<PIN_RH1),
+				     (1<<PIN_RH2),
+				     (1<<PIN_RH3)};	// Table of commands to switch the  R-L resistors Pin 0,1,2
+#endif
 
  const unsigned char PinADCtab[] PROGMEM = { (1<<TP1),
 				     (1<<TP2),
@@ -672,6 +678,9 @@ End of configuration
   extern const uint16_t RHtab[];
  #endif
   extern const unsigned char PinRLtab[];
+ #if FLASHEND > 0x3fff
+  extern const unsigned char PinRHtab[];
+ #endif
   extern const unsigned char PinADCtab[];
   extern unsigned int RHmultip;
 #endif

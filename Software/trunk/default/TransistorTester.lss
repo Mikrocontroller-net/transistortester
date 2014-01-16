@@ -610,8 +610,8 @@ void EntladePins() {
      372:	d9 2e       	mov	r13, r25
      ADC_PORT = TXD_VAL;		// ADC-outputs auf 0
      R_PORT = 0;			// R-outputs auf 0
-//     R_DDR = (2<<(PC2*2)) | (2<<(PC1*2)) | (2<<(PC0*2)); // R_H for all Pins to GND
-     R_DDR = (3<<(PC2*2)) | (3<<(PC1*2)) | (3<<(PC0*2)); // R_H and R_L for all Pins to GND
+//     R_DDR = (1<<PIN_RH3) | (1<<PIN_RH2) | (1<<PIN_RH1); // R_H for all Pins to GND
+     R_DDR = (1<<PIN_RH3) | (1<<PIN_RL3) | (1<<PIN_RH2) | (1<<PIN_RL2) | (1<<PIN_RH1) | (1<<PIN_RL1); // R_H and R_L for all Pins to GND
      374:	8f e3       	ldi	r24, 0x3F	; 63
      376:	b8 2e       	mov	r11, r24
 // max. time of discharge in ms  (10000/20) == 10s
@@ -625,8 +625,8 @@ void EntladePins() {
      37a:	d8 b8       	out	0x08, r13	; 8
      R_PORT = 0;			// R-outputs auf 0
      37c:	15 b8       	out	0x05, r1	; 5
-//     R_DDR = (2<<(PC2*2)) | (2<<(PC1*2)) | (2<<(PC0*2)); // R_H for all Pins to GND
-     R_DDR = (3<<(PC2*2)) | (3<<(PC1*2)) | (3<<(PC0*2)); // R_H and R_L for all Pins to GND
+//     R_DDR = (1<<PIN_RH3) | (1<<PIN_RH2) | (1<<PIN_RH1); // R_H for all Pins to GND
+     R_DDR = (1<<PIN_RH3) | (1<<PIN_RL3) | (1<<PIN_RH2) | (1<<PIN_RL2) | (1<<PIN_RH1) | (1<<PIN_RL1); // R_H and R_L for all Pins to GND
      37e:	b4 b8       	out	0x04, r11	; 4
      adcmv[0] = W5msReadADC(PC0);	// which voltage has Pin 1?
      380:	80 e0       	ldi	r24, 0x00	; 0
@@ -724,7 +724,7 @@ void EntladePins() {
      // additionally switch the leaving Ports with R_L to GND.
      // since there is no disadvantage for the already directly switched pins, we can
      // simply switch all  R_L resistors to GND
-//     R_DDR = (1<<(PC2*2)) | (1<<(PC1*2)) | (1<<(PC0*2));	// Pins across R_L resistors to GND
+//     R_DDR = (1<<PIN_RL3) | (1<<PIN_RL2) | (1<<PIN_RL1);	// Pins across R_L resistors to GND
      for(clr_cnt=0;clr_cnt<MAX_ENTLADE_ZEIT;clr_cnt++) {
      3fa:	c0 e0       	ldi	r28, 0x00	; 0
      3fc:	d0 e0       	ldi	r29, 0x00	; 0
@@ -781,7 +781,7 @@ void EntladePins() {
      // additionally switch the leaving Ports with R_L to GND.
      // since there is no disadvantage for the already directly switched pins, we can
      // simply switch all  R_L resistors to GND
-//     R_DDR = (1<<(PC2*2)) | (1<<(PC1*2)) | (1<<(PC0*2));	// Pins across R_L resistors to GND
+//     R_DDR = (1<<PIN_RL3) | (1<<PIN_RL2) | (1<<PIN_RL1);	// Pins across R_L resistors to GND
      for(clr_cnt=0;clr_cnt<MAX_ENTLADE_ZEIT;clr_cnt++) {
      44a:	21 96       	adiw	r28, 0x01	; 1
      44c:	81 e0       	ldi	r24, 0x01	; 1
@@ -799,7 +799,7 @@ void EntladePins() {
      // additionally switch the leaving Ports with R_L to GND.
      // since there is no disadvantage for the already directly switched pins, we can
      // simply switch all  R_L resistors to GND
-//     R_DDR = (1<<(PC2*2)) | (1<<(PC1*2)) | (1<<(PC0*2));	// Pins across R_L resistors to GND
+//     R_DDR = (1<<PIN_RL3) | (1<<PIN_RL2) | (1<<PIN_RL1);	// Pins across R_L resistors to GND
      for(clr_cnt=0;clr_cnt<MAX_ENTLADE_ZEIT;clr_cnt++) {
      458:	00 e0       	ldi	r16, 0x00	; 0
      45a:	10 e0       	ldi	r17, 0x00	; 0
@@ -1687,14 +1687,22 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      88a:	e6 51       	subi	r30, 0x16	; 22
      88c:	ff 4f       	sbci	r31, 0xFF	; 255
      88e:	44 90       	lpm	r4, Z+
+#if FLASHEND > 0x3fff
+  LoPinRH = pgm_read_byte(&PinRHtab[LowPin]);		// instruction for LowPin R_H
+#else
   LoPinRH = LoPinRL + LoPinRL;				// instruction for LowPin R_H
+#endif
   TriPinRL = pgm_read_byte(&PinRLtab[TristatePin]);	// instruction for TristatePin R_L
      890:	e4 2f       	mov	r30, r20
      892:	f0 e0       	ldi	r31, 0x00	; 0
      894:	e6 51       	subi	r30, 0x16	; 22
      896:	ff 4f       	sbci	r31, 0xFF	; 255
      898:	54 90       	lpm	r5, Z+
+#if FLASHEND > 0x3fff
+  TriPinRH = pgm_read_byte(&PinRHtab[TristatePin]);	// instruction for TristatePin R_H
+#else
   TriPinRH = TriPinRL + TriPinRL;			// instruction for TristatePin R_H
+#endif
   HiPinRL = pgm_read_byte(&PinRLtab[HighPin]);		// instruction for HighPin R_L
      89a:	21 2f       	mov	r18, r17
      89c:	30 e0       	ldi	r19, 0x00	; 0
@@ -1702,7 +1710,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      8a0:	e6 51       	subi	r30, 0x16	; 22
      8a2:	ff 4f       	sbci	r31, 0xFF	; 255
      8a4:	f4 90       	lpm	r15, Z+
+  HiPinRH = pgm_read_byte(&PinRHtab[HighPin]);		// instruction for HighPin R_H
+#else
   HiPinRH = HiPinRL + HiPinRL;				// instruction for HighPin R_H
+#endif
 
   HiADCp = pgm_read_byte(&PinADCtab[HighPin]);		// instruction for ADC High-Pin 
      8a6:	23 51       	subi	r18, 0x13	; 19
@@ -1805,11 +1816,11 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      930:	91 05       	cpc	r25, r1
      932:	0c f0       	brlt	.+2      	; 0x936 <CheckPins+0xee>
      934:	c2 c3       	rjmp	.+1924   	; 0x10ba <CheckPins+0x872>
-//  #define RR680MI (R_L_VAL + PIN_RM)
-//#endif
-  LoPinRL = pgm_read_byte(&PinRLtab[LowPin]);		// instruction for LowPin R_L
-  LoPinRH = LoPinRL + LoPinRL;				// instruction for LowPin R_H
+#endif
   TriPinRL = pgm_read_byte(&PinRLtab[TristatePin]);	// instruction for TristatePin R_L
+#if FLASHEND > 0x3fff
+  TriPinRH = pgm_read_byte(&PinRHtab[TristatePin]);	// instruction for TristatePin R_H
+#else
   TriPinRH = TriPinRL + TriPinRL;			// instruction for TristatePin R_H
      936:	95 2c       	mov	r9, r5
      938:	99 0c       	add	r9, r9
@@ -3080,17 +3091,19 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     10b6:	87 b9       	out	0x07, r24	; 7
    ADC_PORT = TXD_VAL;		// switch all ADC-Ports to 0 (no Pull up)
     10b8:	88 b9       	out	0x08, r24	; 8
-//#else
-//  #define RR680PL (R_L_VAL + PIN_RP)
-//  #define RR680MI (R_L_VAL + PIN_RM)
 //#endif
   LoPinRL = pgm_read_byte(&PinRLtab[LowPin]);		// instruction for LowPin R_L
+#if FLASHEND > 0x3fff
+  LoPinRH = pgm_read_byte(&PinRHtab[LowPin]);		// instruction for LowPin R_H
+#else
   LoPinRH = LoPinRL + LoPinRL;				// instruction for LowPin R_H
     10ba:	34 2c       	mov	r3, r4
     10bc:	33 0c       	add	r3, r3
-  TriPinRL = pgm_read_byte(&PinRLtab[TristatePin]);	// instruction for TristatePin R_L
-  TriPinRH = TriPinRL + TriPinRL;			// instruction for TristatePin R_H
+#endif
   HiPinRL = pgm_read_byte(&PinRLtab[HighPin]);		// instruction for HighPin R_L
+#if FLASHEND > 0x3fff
+  HiPinRH = pgm_read_byte(&PinRHtab[HighPin]);		// instruction for HighPin R_H
+#else
   HiPinRH = HiPinRL + HiPinRL;				// instruction for HighPin R_H
     10be:	9f 2c       	mov	r9, r15
     10c0:	99 0c       	add	r9, r9
@@ -5081,7 +5094,7 @@ no_c0save:
         ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
     1c12:	89 e0       	ldi	r24, 0x09	; 9
     1c14:	87 b9       	out	0x07, r24	; 7
-        R_DDR = 2<<(TP3*2);		//Pin 3 over R_H to GND
+        R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to GND
     1c16:	80 e2       	ldi	r24, 0x20	; 32
     1c18:	84 b9       	out	0x04, r24	; 4
         do {
@@ -5363,9 +5376,14 @@ void GetIr(uint8_t hipin, uint8_t lopin) {
     1de0:	e4 91       	lpm	r30, Z+
   R_PORT = 0;				// switch R-Port to GND
     1de2:	15 b8       	out	0x05, r1	; 5
+#if FLASHEND > 0x3fff
+  R_DDR = pgm_read_byte(&PinRHtab[lopin]);  //R_H mask for LowPin R_H load
+#else
+  // R_H Pin must always be one pin number higher
   R_DDR = LoPinR_L + LoPinR_L;		// switch R_H port for LowPin to output (GND)
     1de4:	ee 0f       	add	r30, r30
     1de6:	e4 b9       	out	0x04, r30	; 4
+#endif
   u_res = W5msReadADC(lopin);		// read voltage
     1de8:	86 2f       	mov	r24, r22
     1dea:	0e 94 f9 1a 	call	0x35f2	; 0x35f2 <W5msReadADC>
@@ -7926,11 +7944,11 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   vloss = 0;				// set lost voltage to zero
     2cac:	88 24       	eor	r8, r8
     2cae:	99 24       	eor	r9, r9
-  pin_combination = (HighPin * 3) + LowPin - 1;	// coded Pin combination for capacity zero offset
-#endif
-
   LoADC = pgm_read_byte(&PinADCtab[LowPin]) | TXD_MSK;
   HiPinR_L = pgm_read_byte(&PinRLtab[HighPin]);	//R_L mask for HighPin R_L load
+#if FLASEND > 0x3fff
+  HiPinR_H = pgm_read_byte(&PinRHtab[HighPin]);	//R_H mask for HighPin R_H load
+#else
   HiPinR_H = HiPinR_L + HiPinR_L;	//double for HighPin R_H load
     2cb0:	ea 2c       	mov	r14, r10
     2cb2:	ee 0c       	add	r14, r14
@@ -10338,11 +10356,11 @@ void Calibrate_UR(void) {
     3c94:	79 e0       	ldi	r23, 0x09	; 9
     3c96:	d7 2e       	mov	r13, r23
     3c98:	d7 b8       	out	0x07, r13	; 7
-  R_PORT = 1<<(TP1*2);		//R_L-PORT 1 to VCC
+  R_PORT = 1<<PIN_RL1;		//R_L-PORT 1 to VCC
     3c9a:	aa 24       	eor	r10, r10
     3c9c:	a3 94       	inc	r10
     3c9e:	a5 b8       	out	0x05, r10	; 5
-  R_DDR = 1<<(TP1*2);		//Pin 1 to output and over R_L to VCC
+  R_DDR = 1<<PIN_RL1;		//Pin 1 to output and over R_L to VCC
     3ca0:	a4 b8       	out	0x04, r10	; 4
   sum_rm = W5msReadADC(TP1);
     3ca2:	80 e0       	ldi	r24, 0x00	; 0
@@ -10353,11 +10371,11 @@ void Calibrate_UR(void) {
     3caa:	6a e0       	ldi	r22, 0x0A	; 10
     3cac:	86 2e       	mov	r8, r22
     3cae:	87 b8       	out	0x07, r8	; 7
-  R_PORT =  1<<(TP2*2);		//R_L-PORT 2 to VCC
+  R_PORT =  1<<PIN_RL2;		//R_L-PORT 2 to VCC
     3cb0:	54 e0       	ldi	r21, 0x04	; 4
     3cb2:	c5 2e       	mov	r12, r21
     3cb4:	c5 b8       	out	0x05, r12	; 5
-  R_DDR = 1<<(TP2*2);		//Pin 2 to output and over R_L to VCC
+  R_DDR = 1<<PIN_RL2;		//Pin 2 to output and over R_L to VCC
     3cb6:	c4 b8       	out	0x04, r12	; 4
   sum_rm += W5msReadADC(TP2);
     3cb8:	81 e0       	ldi	r24, 0x01	; 1
@@ -10369,11 +10387,11 @@ void Calibrate_UR(void) {
     3cc2:	4c e0       	ldi	r20, 0x0C	; 12
     3cc4:	f4 2e       	mov	r15, r20
     3cc6:	f7 b8       	out	0x07, r15	; 7
-  R_PORT =  1<<(TP3*2);		//R_L-PORT 3 to VCC
+  R_PORT =  1<<PIN_RL3;		//R_L-PORT 3 to VCC
     3cc8:	30 e1       	ldi	r19, 0x10	; 16
     3cca:	e3 2e       	mov	r14, r19
     3ccc:	e5 b8       	out	0x05, r14	; 5
-  R_DDR = 1<<(TP3*2);		//Pin 3 to output and over R_L to VCC
+  R_DDR = 1<<PIN_RL3;		//Pin 3 to output and over R_L to VCC
     3cce:	e4 b8       	out	0x04, r14	; 4
   sum_rm += W5msReadADC(TP3);	//add all three values
     3cd0:	82 e0       	ldi	r24, 0x02	; 2
@@ -10388,7 +10406,7 @@ void Calibrate_UR(void) {
     3cdc:	d8 b8       	out	0x08, r13	; 8
   ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
     3cde:	d7 b8       	out	0x07, r13	; 7
-  R_DDR = 1<<(TP1*2);		//Pin 1 to output and over R_L to GND
+  R_DDR = 1<<PIN_RL1;		//Pin 1 to output and over R_L to GND
     3ce0:	a4 b8       	out	0x04, r10	; 4
   sum_rp = ADCconfig.U_AVCC - W5msReadADC(TP1);
     3ce2:	c0 91 35 01 	lds	r28, 0x0135
@@ -10401,7 +10419,7 @@ void Calibrate_UR(void) {
     3cf2:	88 b8       	out	0x08, r8	; 8
   ADC_DDR = 1<<TP2 | TXD_MSK;	//ADC-Pin  2 to output 0V
     3cf4:	87 b8       	out	0x07, r8	; 7
-  R_DDR = 1<<(TP2*2);		//Pin 2 to output and over R_L to GND
+  R_DDR = 1<<PIN_RL2;		//Pin 2 to output and over R_L to GND
     3cf6:	c4 b8       	out	0x04, r12	; 4
   sum_rp += ADCconfig.U_AVCC - W5msReadADC(TP2);
     3cf8:	c0 90 35 01 	lds	r12, 0x0135
@@ -10414,7 +10432,7 @@ void Calibrate_UR(void) {
     3d08:	f8 b8       	out	0x08, r15	; 8
   ADC_DDR = 1<<TP3 | TXD_MSK;	//ADC-Pin  3 to output 0V
     3d0a:	f7 b8       	out	0x07, r15	; 7
-  R_DDR = 1<<(TP3*2);		//Pin 3 to output and over R_L to GND
+  R_DDR = 1<<PIN_RL3;		//Pin 3 to output and over R_L to GND
     3d0c:	e4 b8       	out	0x04, r14	; 4
   sum_rp += ADCconfig.U_AVCC - W5msReadADC(TP3);
     3d0e:	e0 90 35 01 	lds	r14, 0x0135
@@ -10425,14 +10443,14 @@ void Calibrate_UR(void) {
   R_PORT = 0;			// R-Ports to GND
   ADC_PORT = 1<<TP1 | TXD_VAL;	//ADC-Port 1 to VCC
   ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
-  R_DDR = 1<<(TP1*2);		//Pin 1 to output and over R_L to GND
+  R_DDR = 1<<PIN_RL1;		//Pin 1 to output and over R_L to GND
   sum_rp = ADCconfig.U_AVCC - W5msReadADC(TP1);
     3d1c:	cc 0d       	add	r28, r12
     3d1e:	dd 1d       	adc	r29, r13
       
   ADC_PORT = 1<<TP2 | TXD_VAL;	//ADC-Port 2 to VCC
   ADC_DDR = 1<<TP2 | TXD_MSK;	//ADC-Pin  2 to output 0V
-  R_DDR = 1<<(TP2*2);		//Pin 2 to output and over R_L to GND
+  R_DDR = 1<<PIN_RL2;		//Pin 2 to output and over R_L to GND
   sum_rp += ADCconfig.U_AVCC - W5msReadADC(TP2);
     3d20:	ce 0d       	add	r28, r14
     3d22:	df 1d       	adc	r29, r15
@@ -10441,7 +10459,7 @@ void Calibrate_UR(void) {
 
   ADC_PORT = 1<<TP3 | TXD_VAL;	//ADC-Port 3 to VCC
   ADC_DDR = 1<<TP3 | TXD_MSK;	//ADC-Pin  3 to output 0V
-  R_DDR = 1<<(TP3*2);		//Pin 3 to output and over R_L to GND
+  R_DDR = 1<<PIN_RL3;		//Pin 3 to output and over R_L to GND
   sum_rp += ADCconfig.U_AVCC - W5msReadADC(TP3);
     3d28:	c8 19       	sub	r28, r8
     3d2a:	d9 09       	sbc	r29, r9

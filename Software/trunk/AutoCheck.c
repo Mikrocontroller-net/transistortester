@@ -95,31 +95,31 @@ begin_selftest:
                                         //############################################
         if (tt == 2) { // how equal are the RL resistors? 
            u680 = ((long)ADCconfig.U_AVCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + R_L_VAL + PIN_RP));
-           R_PORT = 1<<(TP1*2);		//RL1 to VCC
-           R_DDR = (1<<(TP1*2)) | (1<<(TP2*2));	//RL2 to -
+           R_PORT = 1<<PIN_RL1;		//RL1 to VCC
+           R_DDR = (1<<PIN_RL1) | (1<<PIN_RL2);	//RL2 to -
            adcmv[0] = W20msReadADC(TP1);
            adcmv[0] -= u680;
-           R_DDR = (1<<(TP1*2)) | (1<<(TP3*2));	//RL3 to -
+           R_DDR = (1<<PIN_RL1) | (1<<PIN_RL3);	//RL3 to -
            adcmv[1] = W20msReadADC(TP1);
            adcmv[1] -= u680;
-           R_PORT = 1<<(TP2*2);		//RL2 to VCC
-           R_DDR = (1<<(TP2*2)) | (1<<(TP3*2));	//RL3 to -
+           R_PORT = 1<<PIN_RL2;		//RL2 to VCC
+           R_DDR = (1<<PIN_RL2) | (1<<PIN_RL3);	//RL3 to -
            adcmv[2] = W20msReadADC(TP2);
            adcmv[2] -= u680;
            lcd_fix_string(RLRL);	// "RLRL"
         }
                                         //############################################
         if (tt == 3) { // how equal are the RH resistors
-           R_PORT = 2<<(TP1*2);		//RH1 to VCC
-           R_DDR = (2<<(TP1*2)) | (2<<(TP2*2));	//RH2 to -
+           R_PORT = 1<<PIN_RH1;		//RH1 to VCC
+           R_DDR = (1<<PIN_RH1) | (1<<PIN_RH2);	//RH2 to -
            adcmv[0] = W20msReadADC(TP1);
            adcmv[3] = ADCconfig.U_AVCC / 2;
            adcmv[0] -= adcmv[3];
-           R_DDR = (2<<(TP1*2)) | (2<<(TP3*2));	//RH3 to -
+           R_DDR = (1<<PIN_RH1) | (1<<PIN_RH3);	//RH3 to -
            adcmv[1] = W20msReadADC(TP1);
            adcmv[1] -= adcmv[3];
-           R_PORT = 2<<(TP2*2);		//RH2 to VCC
-           R_DDR = (2<<(TP2*2)) | (2<<(TP3*2));	//RH3 to -
+           R_PORT = 1<<PIN_RH2;		//RH2 to VCC
+           R_DDR = (1<<PIN_RH2) | (1<<PIN_RH3);	//RH3 to -
            adcmv[2] = W20msReadADC(TP2);
            adcmv[2] -= adcmv[3];
            lcd_fix_string(RHRH);	// "RHRH"
@@ -132,41 +132,41 @@ begin_selftest:
                                         //############################################
         if (tt == 5) { // can we switch the ADC pins to GND across R_H resistor?
            R_PORT = 0;
-           R_DDR = 2<<(TP1*2);		//Pin 1 over R_H to GND
+           R_DDR = 1<<PIN_RH1;		//Pin 1 over R_H to GND
            adcmv[0] = W20msReadADC(TP1);
 
-           R_DDR = 2<<(TP2*2);		//Pin 2 over R_H to GND
+           R_DDR = 1<<PIN_RH2;		//Pin 2 over R_H to GND
            adcmv[1] = W20msReadADC(TP2);
 
-           R_DDR = 2<<(TP3*2);		//Pin 3 over R_H to GND
+           R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to GND
            adcmv[2] = W20msReadADC(TP3);
            lcd_fix_string(RH1L);	// "RH_Lo="
         }
                                         //############################################
         if (tt == 6) { // can we switch the ADC pins to VCC across the R_H resistor?
-           R_DDR = 2<<(TP1*2);		//Pin 1 over R_H to VCC
-           R_PORT = 2<<(TP1*2);
+           R_DDR = 1<<PIN_RH1;		//Pin 1 over R_H to VCC
+           R_PORT = 1<<PIN_RH1;
            adcmv[0] = W20msReadADC(TP1) - ADCconfig.U_AVCC;
-           R_DDR = 2<<(TP2*2);		//Pin 2 over R_H to VCC
-           R_PORT = 2<<(TP2*2);
+           R_DDR = 1<<PIN_RH2;		//Pin 2 over R_H to VCC
+           R_PORT = 1<<PIN_RH2;
            adcmv[1] = W20msReadADC(TP2) - ADCconfig.U_AVCC;
-           R_DDR = 2<<(TP3*2);		//Pin 3 over R_H to VCC
-           R_PORT = 2<<(TP3*2);
+           R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to VCC
+           R_PORT = 1<<PIN_RH3;
            adcmv[2] = W20msReadADC(TP3) - ADCconfig.U_AVCC;
            lcd_fix_string(RH1H);	// "RH_Hi="
         }
         if (tt == 7) { // is the voltage of all R_H / R_L dividers correct?
            u680 = ((long)ADCconfig.U_AVCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + (unsigned long)R_H_VAL*100));
-           R_PORT = 2<<(TP1*2);		//RH1 to VCC
-           R_DDR = (2<<(TP1*2)) | (1<<(TP1*2));	//RH1 to +, RL1 to -
+           R_PORT = 1<<PIN_RH1;		//RH1 to VCC
+           R_DDR = (1<<PIN_RH1) | (1<<PIN_RL1);	//RH1 to +, RL1 to -
            adcmv[0] = W20msReadADC(TP1);
            adcmv[0] -= u680;
-           R_PORT = 2<<(TP2*2);		//RH2 to VCC
-           R_DDR = (2<<(TP2*2)) | (1<<(TP2*2));	//RH2 to +, RL2 to -
+           R_PORT = 1<<PIN_RH2;		//RH2 to VCC
+           R_DDR = (1<<PIN_RH2) | (1<<PIN_RL2);	//RH2 to +, RL2 to -
            adcmv[1] = W20msReadADC(TP2);
            adcmv[1] -= u680;
-           R_PORT = 2<<(TP3*2);		//RH3 to VCC
-           R_DDR = (2<<(TP3*2)) | (1<<(TP3*2));	//RH3 to +, RL3 to -
+           R_PORT = 1<<PIN_RH3;		//RH3 to VCC
+           R_DDR = (1<<PIN_RH3) | (1<<PIN_RL3);	//RH3 to +, RL3 to -
            adcmv[2] = W20msReadADC(TP3);
            adcmv[2] -= u680;
            lcd_fix_string(RHRL);	// "RH/RL"
@@ -286,8 +286,8 @@ no_c0save:
         for (tt=0;tt<8;tt++) {
         ADC_PORT =  TXD_VAL;	//ADC-Port 1 to GND
         ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
-        R_PORT = 2<<(TP3*2);		//Pin 3 over R_H to VCC
-        R_DDR = 2<<(TP3*2);		//Pin 3 over R_H to VCC
+        R_PORT = 1<<PIN_RH3;		//Pin 3 over R_H to VCC
+        R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to VCC
         while (1) {
            wdt_reset();
            if ((ADC_PIN&(1<<TP3)) == (1<<TP3)) break;
@@ -297,7 +297,7 @@ no_c0save:
         adcmv[0] = ReadADC(TP3);
         lcd_line3();
         DisplayValue(adcmv[0],-3,'V',4);
-        R_DDR = 2<<(TP3*2);		//Pin 3 over R_H to GND
+        R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to GND
         while (1) {
            wdt_reset();
            if ((ADC_PIN&(1<<TP3)) != (1<<TP3)) break;
@@ -313,7 +313,7 @@ no_c0save:
   #ifdef AUTOSCALE_ADC
         ADC_PORT =  TXD_VAL;	//ADC-Port 1 to GND
         ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
-        R_DDR = 2<<(TP3*2);		//Pin 3 over R_H to GND
+        R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to GND
         do {
            adcmv[0] = ReadADC(TP3);
         } while (adcmv[0] > 980);
@@ -354,16 +354,16 @@ no_c0save:
   lcd_fix_string(T50HZ);	//" 50Hz"
   ADC_PORT = TXD_VAL;
   ADC_DDR = 1<<TP1 | TXD_MSK;	// Pin 1 to GND
-  R_DDR = (1<<(TP3*2)) | (1<<(TP2*2));
+  R_DDR = (1<<PIN_RL3) | (1<<PIN_RL2);
   for(ww=0;ww<30;ww++) {	// repeat the signal up to 30 times (1 minute)
      for (tt=0;tt<100;tt++) {	// for 2 s generate 50 Hz
-         R_PORT = (1<<(TP2*2));	// Pin 2 over R_L to VCC, Pin 3 over R_L to GND
+         R_PORT = (1<<PIN_RL2);	// Pin 2 over R_L to VCC, Pin 3 over R_L to GND
   #ifdef TEST_SLEEP_MODE
          sleep_5ms(2); 		// test of timing of sleep mode call 
   #else
          wait10ms();		// normal delay
   #endif
-         R_PORT = (1<<(TP3*2));	// Pin 3 over R_L to VCC, Pin 2 over R_L to GND
+         R_PORT = (1<<PIN_RL3);	// Pin 3 over R_L to VCC, Pin 2 over R_L to GND
   #ifdef TEST_SLEEP_MODE
          sleep_5ms(2); 		// test of timing of sleep mode call 
   #else

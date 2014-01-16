@@ -75,11 +75,23 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 //  #define RR680MI (R_L_VAL + PIN_RM)
 //#endif
   LoPinRL = pgm_read_byte(&PinRLtab[LowPin]);		// instruction for LowPin R_L
+#if FLASHEND > 0x3fff
+  LoPinRH = pgm_read_byte(&PinRHtab[LowPin]);		// instruction for LowPin R_H
+#else
   LoPinRH = LoPinRL + LoPinRL;				// instruction for LowPin R_H
+#endif
   TriPinRL = pgm_read_byte(&PinRLtab[TristatePin]);	// instruction for TristatePin R_L
+#if FLASHEND > 0x3fff
+  TriPinRH = pgm_read_byte(&PinRHtab[TristatePin]);	// instruction for TristatePin R_H
+#else
   TriPinRH = TriPinRL + TriPinRL;			// instruction for TristatePin R_H
+#endif
   HiPinRL = pgm_read_byte(&PinRLtab[HighPin]);		// instruction for HighPin R_L
+#if FLASHEND > 0x3fff
+  HiPinRH = pgm_read_byte(&PinRHtab[HighPin]);		// instruction for HighPin R_H
+#else
   HiPinRH = HiPinRL + HiPinRL;				// instruction for HighPin R_H
+#endif
 
   HiADCp = pgm_read_byte(&PinADCtab[HighPin]);		// instruction for ADC High-Pin 
   LoADCp = pgm_read_byte(&PinADCtab[LowPin]);		// instruction for ADC Low-Pin

@@ -83,6 +83,9 @@
   The Resistors must be connected to the lower 6 Pins of the Port in following sequence:
   RLx = 680R-resistor for Test-Pin x
   RHx = 470k-resistor for Test-Pin x
+  For ATmega328 you can define any pin number for every resistor in any order.
+  For other processors the RHx pin must one number higher than the RLx.
+  The default layout is:
 
   RL1 an Pin 0
   RH1 an Pin 1
@@ -91,6 +94,12 @@
   RL3 an Pin 4
   RH3 an Pin 5
 */
+#define PIN_RL1 PB0
+#define PIN_RL2 PB2
+#define PIN_RL3 PB4
+#define PIN_RH1 PB1
+#define PIN_RH2 PB3
+#define PIN_RH3 PB5
 
 #define ON_DDR DDRD
 #define ON_PORT PORTD

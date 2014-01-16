@@ -39,35 +39,35 @@ void Calibrate_UR(void) {
 #ifdef AUTO_CAL
   // measurement of internal resistance of the ADC port outputs switched to GND
   ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
-  R_PORT = 1<<(TP1*2);		//R_L-PORT 1 to VCC
-  R_DDR = 1<<(TP1*2);		//Pin 1 to output and over R_L to VCC
+  R_PORT = 1<<PIN_RL1;		//R_L-PORT 1 to VCC
+  R_DDR = 1<<PIN_RL1;		//Pin 1 to output and over R_L to VCC
   sum_rm = W5msReadADC(TP1);
 
   ADC_DDR = 1<<TP2 | TXD_MSK;	//ADC-Pin 2 to output 0V
-  R_PORT =  1<<(TP2*2);		//R_L-PORT 2 to VCC
-  R_DDR = 1<<(TP2*2);		//Pin 2 to output and over R_L to VCC
+  R_PORT =  1<<PIN_RL2;		//R_L-PORT 2 to VCC
+  R_DDR = 1<<PIN_RL2;		//Pin 2 to output and over R_L to VCC
   sum_rm += W5msReadADC(TP2);
 
   ADC_DDR = 1<<TP3 | TXD_MSK;	//ADC-Pin 3 to output 0V
-  R_PORT =  1<<(TP3*2);		//R_L-PORT 3 to VCC
-  R_DDR = 1<<(TP3*2);		//Pin 3 to output and over R_L to VCC
+  R_PORT =  1<<PIN_RL3;		//R_L-PORT 3 to VCC
+  R_DDR = 1<<PIN_RL3;		//Pin 3 to output and over R_L to VCC
   sum_rm += W5msReadADC(TP3);	//add all three values
 
   // measurement of internal resistance of the ADC port output switched to VCC
   R_PORT = 0;			// R-Ports to GND
   ADC_PORT = 1<<TP1 | TXD_VAL;	//ADC-Port 1 to VCC
   ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
-  R_DDR = 1<<(TP1*2);		//Pin 1 to output and over R_L to GND
+  R_DDR = 1<<PIN_RL1;		//Pin 1 to output and over R_L to GND
   sum_rp = ADCconfig.U_AVCC - W5msReadADC(TP1);
       
   ADC_PORT = 1<<TP2 | TXD_VAL;	//ADC-Port 2 to VCC
   ADC_DDR = 1<<TP2 | TXD_MSK;	//ADC-Pin  2 to output 0V
-  R_DDR = 1<<(TP2*2);		//Pin 2 to output and over R_L to GND
+  R_DDR = 1<<PIN_RL2;		//Pin 2 to output and over R_L to GND
   sum_rp += ADCconfig.U_AVCC - W5msReadADC(TP2);
 
   ADC_PORT = 1<<TP3 | TXD_VAL;	//ADC-Port 3 to VCC
   ADC_DDR = 1<<TP3 | TXD_MSK;	//ADC-Pin  3 to output 0V
-  R_DDR = 1<<(TP3*2);		//Pin 3 to output and over R_L to GND
+  R_DDR = 1<<PIN_RL3;		//Pin 3 to output and over R_L to GND
   sum_rp += ADCconfig.U_AVCC - W5msReadADC(TP3);
 
   u680 = ((ADCconfig.U_AVCC * 3) - sum_rm - sum_rp);	//three times the voltage at the 680 Ohm

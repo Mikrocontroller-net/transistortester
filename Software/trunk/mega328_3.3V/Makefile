@@ -375,8 +375,11 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 
+
 ## Objects that must be built in order to link
-OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o swuart.o wait1000ms.o ReadCapacity.o ReadInductance.o ReadADC.o GetESR.o GetVloss.o Calibrate_UR.o
+OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o UfAusgabe.o RvalOut.o ChargePin10ms.o EntladePins.o \
+ DisplayValue.o PinLayout.o RefVoltage.o wait_for_key_ms.o swuart.o wait1000ms.o \
+ ReadCapacity.o ReadInductance.o ReadADC.o CheckPins.o GetESR.o GetVloss.o Calibrate_UR.o
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -404,6 +407,9 @@ Calibrate_UR.o: ../Calibrate_UR.c Makefile
 ReadADC.o: ../ReadADC.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
+CheckPins.o: ../CheckPins.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 GetESR.o: ../GetESR.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
@@ -412,6 +418,30 @@ GetVloss.o: ../GetVloss.c Makefile
 
 main.o: ../main.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -D$(UI_LANGUAGE) -c  $<
+
+UfAusgabe.o: ../UfAusgabe.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+RvalOut.o: ../RvalOut.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+ChargePin10ms.o: ../ChargePin10ms.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+EntladePins.o: ../EntladePins.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+DisplayValue.o: ../DisplayValue.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+PinLayout.o: ../PinLayout.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+RefVoltage.o: ../RefVoltage.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+wait_for_key_ms.o: ../wait_for_key_ms.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 swuart.o: ../swuart.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<

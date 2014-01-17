@@ -1,3 +1,7 @@
+#include <avr/io.h>
+#include <stdlib.h>
+#include "Transistortester.h"
+
 //******************************************************************
 void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   {

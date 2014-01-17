@@ -664,6 +664,19 @@ End of configuration
   extern uint16_t ref_offset;
   extern uint8_t c_zero_tab[];
  #endif
+#ifndef EBC_STYLE
+ // default is the 123= style
+ extern const unsigned char N123_str[] MEM_TEXT;
+// const unsigned char N123_str[] MEM_TEXT = " Pin=";
+#else
+ #if EBC_STYLE == 321
+  extern const unsigned char N321_str[] MEM_TEXT;
+ #endif
+ #if EBC_STYLE == 123
+  extern const unsigned char N123_str[] MEM_TEXT;
+ #endif
+#endif
+  extern const unsigned char Uf_str[] MEM_TEXT;
   extern const uint8_t EE_ESR_ZEROtab[] EEMEM;	// zero offset of ESR measurement
   extern  const uint16_t RLtab[];
 
@@ -672,12 +685,14 @@ End of configuration
   extern const unsigned char ESR_str[];
  #endif
 
+ extern const unsigned char AnKat[] MEM_TEXT ;
 
 
  #ifdef AUTO_RH
   extern const uint16_t RHtab[];
  #endif
   extern const unsigned char PinRLtab[];
+  extern const uint8_t PrefixTab[] MEM_TEXT; // p,n,u,m,-,k,M
  #if FLASHEND > 0x3fff
   extern const unsigned char PinRHtab[];
  #endif

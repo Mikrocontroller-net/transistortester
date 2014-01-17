@@ -3,9 +3,9 @@ Archive member included because of file (symbol)
 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_mulsi3.o)
                               main.o (__mulsi3)
 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_udivmodqi4.o)
-                              main.o (__udivmodqi4)
+                              DisplayValue.o (__udivmodqi4)
 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_udivmodhi4.o)
-                              main.o (__udivmodhi4)
+                              RefVoltage.o (__udivmodhi4)
 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_udivmodsi4.o)
                               main.o (__udivmodsi4)
 /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a(_divmodsi4.o)
@@ -19,11 +19,11 @@ Archive member included because of file (symbol)
 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(itoa.o)
                               main.o (itoa)
 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(utoa.o)
-                              main.o (utoa)
+                              DisplayValue.o (utoa)
 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_byte_atmega168.o)
                               lcd-routines.o (__eerd_byte_m168)
 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eerd_word_atmega168.o)
-                              main.o (__eerd_word_m168)
+                              RefVoltage.o (__eerd_word_m168)
 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_byte_atmega168.o)
                               main.o (__eewr_byte_m168)
 /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/libc.a(eewr_word_atmega168.o)
@@ -86,11 +86,20 @@ LOAD /usr/lib/gcc/avr/4.5.3/../../../avr/lib/avr5/crtm168.o
 LOAD lcd-routines.o
 LOAD lcd_hw_4_bit.o
 LOAD main.o
+LOAD UfAusgabe.o
+LOAD RvalOut.o
+LOAD ChargePin10ms.o
+LOAD EntladePins.o
+LOAD DisplayValue.o
+LOAD PinLayout.o
+LOAD RefVoltage.o
+LOAD wait_for_key_ms.o
 LOAD swuart.o
 LOAD wait1000ms.o
 LOAD ReadCapacity.o
 LOAD ReadInductance.o
 LOAD ReadADC.o
+LOAD CheckPins.o
 LOAD GetESR.o
 LOAD GetVloss.o
 LOAD Calibrate_UR.o
@@ -290,82 +299,91 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
                 0x00000000000002c8                lcd_fix_customchar
  .text          0x00000000000002f6       0x60 lcd_hw_4_bit.o
                 0x00000000000002f6                _lcd_hw_write
- .text          0x0000000000000356     0x253e main.o
+ .text          0x0000000000000356     0x114c main.o
                 0x0000000000000356                __vector_7
                 0x0000000000000358                __vector_21
-                0x000000000000035a                EntladePins
-                0x0000000000000486                RefVoltage
-                0x000000000000050a                lcd_clear_line
-                0x000000000000051a                DisplayValue
-                0x0000000000000690                RvalOut
-                0x00000000000006e6                mVAusgabe
-                0x0000000000000716                UfAusgabe
-                0x0000000000000750                SerienDiodenAusgabe
-                0x00000000000007cc                sleep_5ms
-                0x0000000000000812                ChargePin10ms
-                0x0000000000000848                CheckPins
-                0x00000000000016e8                PinLayout
-                0x000000000000174e                wait_for_key_ms
-                0x0000000000001788                wait_for_key_5s_line2
-                0x00000000000017a2                ShortedProbes
-                0x0000000000001820                AllProbesShorted
-                0x0000000000001844                AutoCheck
-                0x0000000000001d9e                mark_as_uncalibrated
-                0x0000000000001dc2                GetIr
-                0x0000000000001e3a                main
- .text          0x0000000000002894       0x2a swuart.o
-                0x0000000000002894                uart_putc
- .text          0x00000000000028be       0x4a wait1000ms.o
-                0x00000000000028be                wait5s
-                0x00000000000028c0                wait4s
-                0x00000000000028c2                wait3s
-                0x00000000000028c4                wait2s
-                0x00000000000028c6                wait1000ms
-                0x00000000000028c6                wait1s
-                0x00000000000028c8                wait500ms
-                0x00000000000028ca                wait400ms
-                0x00000000000028cc                wait300ms
-                0x00000000000028ce                wait200ms
-                0x00000000000028d0                wait100ms
-                0x00000000000028d4                wait50ms
-                0x00000000000028d6                wait40ms
-                0x00000000000028d8                wait30ms
-                0x00000000000028da                wait20ms
-                0x00000000000028dc                wait10ms
-                0x00000000000028de                wait5ms
-                0x00000000000028e0                wait4ms
-                0x00000000000028e2                wait3ms
-                0x00000000000028e4                wait2ms
-                0x00000000000028e6                wait1ms
-                0x00000000000028e8                wait500us
-                0x00000000000028ea                wait400us
-                0x00000000000028ec                wait300us
-                0x00000000000028ee                wait200us
-                0x00000000000028f0                wait100us
-                0x00000000000028f2                wait50us
-                0x00000000000028f4                wait40us
-                0x00000000000028f6                wait30us
-                0x00000000000028f8                wait20us
-                0x00000000000028fa                wait10us
-                0x00000000000028fc                wait5us
-                0x00000000000028fe                wait4us
-                0x0000000000002900                wait3us
-                0x0000000000002902                wait2us
-                0x0000000000002904                wait1us
- .text          0x0000000000002908      0x75a ReadCapacity.o
-                0x0000000000002908                getRLmultip
-                0x000000000000299e                Scale_C_with_vcc
-                0x0000000000002a3e                ReadCapacity
-                0x0000000000002fd2                __vector_13
-                0x000000000000301e                __vector_10
- .text          0x0000000000003062      0x578 ReadInductance.o
-                0x0000000000003062                get_log
-                0x00000000000030b4                ReadInductance
- .text          0x00000000000035da       0xe4 ReadADC.o
-                0x00000000000035da                W20msReadADC
-                0x00000000000035e6                W10msReadADC
-                0x00000000000035f2                W5msReadADC
-                0x00000000000035fe                ReadADC
+                0x000000000000035a                lcd_clear_line
+                0x000000000000036a                sleep_5ms
+                0x00000000000003b0                ShortedProbes
+                0x000000000000042e                AllProbesShorted
+                0x0000000000000452                AutoCheck
+                0x00000000000009ac                mark_as_uncalibrated
+                0x00000000000009d0                GetIr
+                0x0000000000000a48                main
+ .text          0x00000000000014a2       0xe6 UfAusgabe.o
+                0x00000000000014a2                mVAusgabe
+                0x00000000000014d2                UfAusgabe
+                0x000000000000150c                SerienDiodenAusgabe
+ .text          0x0000000000001588       0x56 RvalOut.o
+                0x0000000000001588                RvalOut
+ .text          0x00000000000015de       0x36 ChargePin10ms.o
+                0x00000000000015de                ChargePin10ms
+ .text          0x0000000000001614      0x12c EntladePins.o
+                0x0000000000001614                EntladePins
+ .text          0x0000000000001740      0x176 DisplayValue.o
+                0x0000000000001740                DisplayValue
+ .text          0x00000000000018b6       0x66 PinLayout.o
+                0x00000000000018b6                PinLayout
+ .text          0x000000000000191c       0x84 RefVoltage.o
+                0x000000000000191c                RefVoltage
+ .text          0x00000000000019a0       0x54 wait_for_key_ms.o
+                0x00000000000019a0                wait_for_key_ms
+                0x00000000000019da                wait_for_key_5s_line2
+ .text          0x00000000000019f4       0x2a swuart.o
+                0x00000000000019f4                uart_putc
+ .text          0x0000000000001a1e       0x4a wait1000ms.o
+                0x0000000000001a1e                wait5s
+                0x0000000000001a20                wait4s
+                0x0000000000001a22                wait3s
+                0x0000000000001a24                wait2s
+                0x0000000000001a26                wait1000ms
+                0x0000000000001a26                wait1s
+                0x0000000000001a28                wait500ms
+                0x0000000000001a2a                wait400ms
+                0x0000000000001a2c                wait300ms
+                0x0000000000001a2e                wait200ms
+                0x0000000000001a30                wait100ms
+                0x0000000000001a34                wait50ms
+                0x0000000000001a36                wait40ms
+                0x0000000000001a38                wait30ms
+                0x0000000000001a3a                wait20ms
+                0x0000000000001a3c                wait10ms
+                0x0000000000001a3e                wait5ms
+                0x0000000000001a40                wait4ms
+                0x0000000000001a42                wait3ms
+                0x0000000000001a44                wait2ms
+                0x0000000000001a46                wait1ms
+                0x0000000000001a48                wait500us
+                0x0000000000001a4a                wait400us
+                0x0000000000001a4c                wait300us
+                0x0000000000001a4e                wait200us
+                0x0000000000001a50                wait100us
+                0x0000000000001a52                wait50us
+                0x0000000000001a54                wait40us
+                0x0000000000001a56                wait30us
+                0x0000000000001a58                wait20us
+                0x0000000000001a5a                wait10us
+                0x0000000000001a5c                wait5us
+                0x0000000000001a5e                wait4us
+                0x0000000000001a60                wait3us
+                0x0000000000001a62                wait2us
+                0x0000000000001a64                wait1us
+ .text          0x0000000000001a68      0x75a ReadCapacity.o
+                0x0000000000001a68                getRLmultip
+                0x0000000000001afe                Scale_C_with_vcc
+                0x0000000000001b9e                ReadCapacity
+                0x0000000000002132                __vector_13
+                0x000000000000217e                __vector_10
+ .text          0x00000000000021c2      0x578 ReadInductance.o
+                0x00000000000021c2                get_log
+                0x0000000000002214                ReadInductance
+ .text          0x000000000000273a       0xe4 ReadADC.o
+                0x000000000000273a                W20msReadADC
+                0x0000000000002746                W10msReadADC
+                0x0000000000002752                W5msReadADC
+                0x000000000000275e                ReadADC
+ .text          0x000000000000281e      0xea0 CheckPins.o
+                0x000000000000281e                CheckPins
  .text          0x00000000000036be      0x3ac GetESR.o
                 0x00000000000036be                GetESR
  .text          0x0000000000003a6a      0x174 GetVloss.o
@@ -464,11 +482,20 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
  .data          0x0000000000800100        0x0 lcd_hw_4_bit.o
  .data          0x0000000000800100        0x2 main.o
                 0x0000000000800100                RHmultip
+ .data          0x0000000000800102        0x0 UfAusgabe.o
+ .data          0x0000000000800102        0x0 RvalOut.o
+ .data          0x0000000000800102        0x0 ChargePin10ms.o
+ .data          0x0000000000800102        0x0 EntladePins.o
+ .data          0x0000000000800102        0x0 DisplayValue.o
+ .data          0x0000000000800102        0x0 PinLayout.o
+ .data          0x0000000000800102        0x0 RefVoltage.o
+ .data          0x0000000000800102        0x0 wait_for_key_ms.o
  .data          0x0000000000800102        0x0 swuart.o
  .data          0x0000000000800102        0x0 wait1000ms.o
  .data          0x0000000000800102        0x0 ReadCapacity.o
  .data          0x0000000000800102        0x0 ReadInductance.o
  .data          0x0000000000800102        0x0 ReadADC.o
+ .data          0x0000000000800102        0x0 CheckPins.o
  .data          0x0000000000800102        0x0 GetESR.o
  .data          0x0000000000800102        0x0 GetVloss.o
  .data          0x0000000000800102        0x0 Calibrate_UR.o
@@ -503,11 +530,20 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
  .bss           0x0000000000800102        0x0 lcd-routines.o
  .bss           0x0000000000800102        0x0 lcd_hw_4_bit.o
  .bss           0x0000000000800102        0x0 main.o
+ .bss           0x0000000000800102        0x0 UfAusgabe.o
+ .bss           0x0000000000800102        0x0 RvalOut.o
+ .bss           0x0000000000800102        0x0 ChargePin10ms.o
+ .bss           0x0000000000800102        0x0 EntladePins.o
+ .bss           0x0000000000800102        0x0 DisplayValue.o
+ .bss           0x0000000000800102        0x0 PinLayout.o
+ .bss           0x0000000000800102        0x0 RefVoltage.o
+ .bss           0x0000000000800102        0x0 wait_for_key_ms.o
  .bss           0x0000000000800102        0x0 swuart.o
  .bss           0x0000000000800102        0x0 wait1000ms.o
  .bss           0x0000000000800102        0x0 ReadCapacity.o
  .bss           0x0000000000800102        0x0 ReadInductance.o
  .bss           0x0000000000800102        0x0 ReadADC.o
+ .bss           0x0000000000800102        0x0 CheckPins.o
  .bss           0x0000000000800102        0x0 GetESR.o
  .bss           0x0000000000800102        0x0 GetVloss.o
  .bss           0x0000000000800102        0x0 Calibrate_UR.o
@@ -693,97 +729,196 @@ LOAD /usr/lib/gcc/avr/4.5.3/avr5/libgcc.a
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x0000000000000000       0xc0
+.debug_aranges  0x0000000000000000      0x1e0
  *(.debug_aranges)
  .debug_aranges
                 0x0000000000000000       0x20 lcd-routines.o
  .debug_aranges
                 0x0000000000000020       0x20 main.o
  .debug_aranges
-                0x0000000000000040       0x20 ReadCapacity.o
+                0x0000000000000040       0x20 UfAusgabe.o
  .debug_aranges
-                0x0000000000000060       0x20 ReadInductance.o
+                0x0000000000000060       0x20 RvalOut.o
  .debug_aranges
-                0x0000000000000080       0x20 GetVloss.o
+                0x0000000000000080       0x20 ChargePin10ms.o
  .debug_aranges
-                0x00000000000000a0       0x20 Calibrate_UR.o
+                0x00000000000000a0       0x20 EntladePins.o
+ .debug_aranges
+                0x00000000000000c0       0x20 DisplayValue.o
+ .debug_aranges
+                0x00000000000000e0       0x20 PinLayout.o
+ .debug_aranges
+                0x0000000000000100       0x20 RefVoltage.o
+ .debug_aranges
+                0x0000000000000120       0x20 wait_for_key_ms.o
+ .debug_aranges
+                0x0000000000000140       0x20 ReadCapacity.o
+ .debug_aranges
+                0x0000000000000160       0x20 ReadInductance.o
+ .debug_aranges
+                0x0000000000000180       0x20 CheckPins.o
+ .debug_aranges
+                0x00000000000001a0       0x20 GetVloss.o
+ .debug_aranges
+                0x00000000000001c0       0x20 Calibrate_UR.o
 
 .debug_pubnames
-                0x0000000000000000      0x8aa
+                0x0000000000000000      0xaea
  *(.debug_pubnames)
  .debug_pubnames
                 0x0000000000000000       0xc5 lcd-routines.o
  .debug_pubnames
-                0x00000000000000c5      0x652 main.o
+                0x00000000000000c5      0x586 main.o
  .debug_pubnames
-                0x0000000000000717       0x96 ReadCapacity.o
+                0x000000000000064b       0x74 UfAusgabe.o
  .debug_pubnames
-                0x00000000000007ad       0x5f ReadInductance.o
+                0x00000000000006bf       0x4c RvalOut.o
  .debug_pubnames
-                0x000000000000080c       0x4d GetVloss.o
+                0x000000000000070b       0x52 ChargePin10ms.o
  .debug_pubnames
-                0x0000000000000859       0x51 Calibrate_UR.o
+                0x000000000000075d       0x50 EntladePins.o
+ .debug_pubnames
+                0x00000000000007ad       0x51 DisplayValue.o
+ .debug_pubnames
+                0x00000000000007fe       0x4e PinLayout.o
+ .debug_pubnames
+                0x000000000000084c       0x4f RefVoltage.o
+ .debug_pubnames
+                0x000000000000089b       0x6e wait_for_key_ms.o
+ .debug_pubnames
+                0x0000000000000909       0x96 ReadCapacity.o
+ .debug_pubnames
+                0x000000000000099f       0x5f ReadInductance.o
+ .debug_pubnames
+                0x00000000000009fe       0x4e CheckPins.o
+ .debug_pubnames
+                0x0000000000000a4c       0x4d GetVloss.o
+ .debug_pubnames
+                0x0000000000000a99       0x51 Calibrate_UR.o
 
-.debug_info     0x0000000000000000     0x3080
+.debug_info     0x0000000000000000     0x3d8b
  *(.debug_info)
  .debug_info    0x0000000000000000      0x264 lcd-routines.o
- .debug_info    0x0000000000000264     0x1ce2 main.o
- .debug_info    0x0000000000001f46      0x60b ReadCapacity.o
- .debug_info    0x0000000000002551      0x581 ReadInductance.o
- .debug_info    0x0000000000002ad2      0x35c GetVloss.o
- .debug_info    0x0000000000002e2e      0x252 Calibrate_UR.o
+ .debug_info    0x0000000000000264     0x159c main.o
+ .debug_info    0x0000000000001800      0x249 UfAusgabe.o
+ .debug_info    0x0000000000001a49      0x19c RvalOut.o
+ .debug_info    0x0000000000001be5      0x103 ChargePin10ms.o
+ .debug_info    0x0000000000001ce8      0x139 EntladePins.o
+ .debug_info    0x0000000000001e21      0x1c2 DisplayValue.o
+ .debug_info    0x0000000000001fe3      0x203 PinLayout.o
+ .debug_info    0x00000000000021e6      0x21f RefVoltage.o
+ .debug_info    0x0000000000002405      0x10d wait_for_key_ms.o
+ .debug_info    0x0000000000002512      0x60b ReadCapacity.o
+ .debug_info    0x0000000000002b1d      0x581 ReadInductance.o
+ .debug_info    0x000000000000309e      0x73f CheckPins.o
+ .debug_info    0x00000000000037dd      0x35c GetVloss.o
+ .debug_info    0x0000000000003b39      0x252 Calibrate_UR.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x0000000000000000      0x8db
+.debug_abbrev   0x0000000000000000      0xfa2
  *(.debug_abbrev)
  .debug_abbrev  0x0000000000000000       0xbe lcd-routines.o
- .debug_abbrev  0x00000000000000be      0x2f4 main.o
- .debug_abbrev  0x00000000000003b2      0x1b2 ReadCapacity.o
- .debug_abbrev  0x0000000000000564      0x178 ReadInductance.o
- .debug_abbrev  0x00000000000006dc      0x143 GetVloss.o
- .debug_abbrev  0x000000000000081f       0xbc Calibrate_UR.o
+ .debug_abbrev  0x00000000000000be      0x247 main.o
+ .debug_abbrev  0x0000000000000305       0xee UfAusgabe.o
+ .debug_abbrev  0x00000000000003f3       0xcd RvalOut.o
+ .debug_abbrev  0x00000000000004c0       0x80 ChargePin10ms.o
+ .debug_abbrev  0x0000000000000540       0x9e EntladePins.o
+ .debug_abbrev  0x00000000000005de       0xbb DisplayValue.o
+ .debug_abbrev  0x0000000000000699       0xed PinLayout.o
+ .debug_abbrev  0x0000000000000786       0xeb RefVoltage.o
+ .debug_abbrev  0x0000000000000871       0x97 wait_for_key_ms.o
+ .debug_abbrev  0x0000000000000908      0x1b2 ReadCapacity.o
+ .debug_abbrev  0x0000000000000aba      0x178 ReadInductance.o
+ .debug_abbrev  0x0000000000000c32      0x171 CheckPins.o
+ .debug_abbrev  0x0000000000000da3      0x143 GetVloss.o
+ .debug_abbrev  0x0000000000000ee6       0xbc Calibrate_UR.o
 
-.debug_line     0x0000000000000000     0x35d5
+.debug_line     0x0000000000000000     0x3b50
  *(.debug_line)
  .debug_line    0x0000000000000000      0x309 lcd-routines.o
- .debug_line    0x0000000000000309     0x2356 main.o
- .debug_line    0x000000000000265f      0x67c ReadCapacity.o
- .debug_line    0x0000000000002cdb      0x47c ReadInductance.o
- .debug_line    0x0000000000003157      0x24d GetVloss.o
- .debug_line    0x00000000000033a4      0x231 Calibrate_UR.o
+ .debug_line    0x0000000000000309     0x116c main.o
+ .debug_line    0x0000000000001475      0x162 UfAusgabe.o
+ .debug_line    0x00000000000015d7       0xdc RvalOut.o
+ .debug_line    0x00000000000016b3       0xea ChargePin10ms.o
+ .debug_line    0x000000000000179d      0x211 EntladePins.o
+ .debug_line    0x00000000000019ae      0x1f9 DisplayValue.o
+ .debug_line    0x0000000000001ba7       0xf6 PinLayout.o
+ .debug_line    0x0000000000001c9d       0xf7 RefVoltage.o
+ .debug_line    0x0000000000001d94      0x13c wait_for_key_ms.o
+ .debug_line    0x0000000000001ed0      0x67c ReadCapacity.o
+ .debug_line    0x000000000000254c      0x47c ReadInductance.o
+ .debug_line    0x00000000000029c8      0xd0a CheckPins.o
+ .debug_line    0x00000000000036d2      0x24d GetVloss.o
+ .debug_line    0x000000000000391f      0x231 Calibrate_UR.o
 
-.debug_frame    0x0000000000000000      0x300
+.debug_frame    0x0000000000000000      0x390
  *(.debug_frame)
  .debug_frame   0x0000000000000000       0xc0 lcd-routines.o
- .debug_frame   0x00000000000000c0      0x170 main.o
- .debug_frame   0x0000000000000230       0x60 ReadCapacity.o
- .debug_frame   0x0000000000000290       0x30 ReadInductance.o
- .debug_frame   0x00000000000002c0       0x20 GetVloss.o
- .debug_frame   0x00000000000002e0       0x20 Calibrate_UR.o
+ .debug_frame   0x00000000000000c0       0xb0 main.o
+ .debug_frame   0x0000000000000170       0x40 UfAusgabe.o
+ .debug_frame   0x00000000000001b0       0x20 RvalOut.o
+ .debug_frame   0x00000000000001d0       0x20 ChargePin10ms.o
+ .debug_frame   0x00000000000001f0       0x20 EntladePins.o
+ .debug_frame   0x0000000000000210       0x20 DisplayValue.o
+ .debug_frame   0x0000000000000230       0x20 PinLayout.o
+ .debug_frame   0x0000000000000250       0x20 RefVoltage.o
+ .debug_frame   0x0000000000000270       0x30 wait_for_key_ms.o
+ .debug_frame   0x00000000000002a0       0x60 ReadCapacity.o
+ .debug_frame   0x0000000000000300       0x30 ReadInductance.o
+ .debug_frame   0x0000000000000330       0x20 CheckPins.o
+ .debug_frame   0x0000000000000350       0x20 GetVloss.o
+ .debug_frame   0x0000000000000370       0x20 Calibrate_UR.o
 
-.debug_str      0x0000000000000000      0xa81
+.debug_str      0x0000000000000000      0xb16
  *(.debug_str)
  .debug_str     0x0000000000000000      0x15e lcd-routines.o
                                         0x19c (size before relaxing)
- .debug_str     0x000000000000015e      0x796 main.o
-                                        0x8b3 (size before relaxing)
- .debug_str     0x00000000000008f4       0xa9 ReadCapacity.o
+ .debug_str     0x000000000000015e      0x554 main.o
+                                        0x66b (size before relaxing)
+ .debug_str     0x00000000000006b2       0x4b UfAusgabe.o
+                                        0x18e (size before relaxing)
+ .debug_str     0x00000000000006fd       0x15 RvalOut.o
+                                        0x127 (size before relaxing)
+ .debug_str     0x0000000000000712       0x3d ChargePin10ms.o
+                                        0x130 (size before relaxing)
+ .debug_str     0x000000000000074f       0x35 EntladePins.o
+                                        0x138 (size before relaxing)
+ .debug_str     0x0000000000000784       0x5f DisplayValue.o
+                                        0x167 (size before relaxing)
+ .debug_str     0x00000000000007e3       0x28 PinLayout.o
+                                        0x151 (size before relaxing)
+ .debug_str     0x000000000000080b       0x32 RefVoltage.o
+                                        0x169 (size before relaxing)
+ .debug_str     0x000000000000083d       0x3b wait_for_key_ms.o
+                                        0x137 (size before relaxing)
+ .debug_str     0x0000000000000878       0xb8 ReadCapacity.o
                                         0x2f1 (size before relaxing)
- .debug_str     0x000000000000099d       0x8f ReadInductance.o
+ .debug_str     0x0000000000000930       0x8f ReadInductance.o
                                         0x292 (size before relaxing)
- .debug_str     0x0000000000000a2c       0x1c GetVloss.o
+ .debug_str     0x00000000000009bf      0x102 CheckPins.o
+                                        0x31d (size before relaxing)
+ .debug_str     0x0000000000000ac1       0x1c GetVloss.o
                                         0x1d1 (size before relaxing)
- .debug_str     0x0000000000000a48       0x39 Calibrate_UR.o
+ .debug_str     0x0000000000000add       0x39 Calibrate_UR.o
                                         0x1af (size before relaxing)
 
-.debug_loc      0x0000000000000000     0x1c88
+.debug_loc      0x0000000000000000     0x1bdb
  *(.debug_loc)
  .debug_loc     0x0000000000000000      0x1e1 lcd-routines.o
- .debug_loc     0x00000000000001e1     0x120e main.o
- .debug_loc     0x00000000000013ef      0x2e8 ReadCapacity.o
- .debug_loc     0x00000000000016d7      0x403 ReadInductance.o
- .debug_loc     0x0000000000001ada       0xda GetVloss.o
- .debug_loc     0x0000000000001bb4       0xd4 Calibrate_UR.o
+ .debug_loc     0x00000000000001e1      0x48b main.o
+ .debug_loc     0x000000000000066c       0x6a UfAusgabe.o
+ .debug_loc     0x00000000000006d6       0x46 RvalOut.o
+ .debug_loc     0x000000000000071c       0x3f ChargePin10ms.o
+ .debug_loc     0x000000000000075b       0x6d EntladePins.o
+ .debug_loc     0x00000000000007c8      0x1b8 DisplayValue.o
+ .debug_loc     0x0000000000000980       0x84 PinLayout.o
+ .debug_loc     0x0000000000000a04       0xc0 RefVoltage.o
+ .debug_loc     0x0000000000000ac4       0x48 wait_for_key_ms.o
+ .debug_loc     0x0000000000000b0c      0x2e8 ReadCapacity.o
+ .debug_loc     0x0000000000000df4      0x3f3 ReadInductance.o
+ .debug_loc     0x00000000000011e7      0x846 CheckPins.o
+ .debug_loc     0x0000000000001a2d       0xda GetVloss.o
+ .debug_loc     0x0000000000001b07       0xd4 Calibrate_UR.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -791,16 +926,34 @@ OUTPUT(TransistorTester.elf elf32-avr)
 LOAD linker stubs
 
 .debug_pubtypes
-                0x0000000000000000      0x22b
+                0x0000000000000000      0x427
  .debug_pubtypes
                 0x0000000000000000       0x2b lcd-routines.o
  .debug_pubtypes
                 0x000000000000002b       0x8c main.o
  .debug_pubtypes
-                0x00000000000000b7       0x74 ReadCapacity.o
+                0x00000000000000b7       0x35 UfAusgabe.o
  .debug_pubtypes
-                0x000000000000012b       0x5e ReadInductance.o
+                0x00000000000000ec       0x42 RvalOut.o
  .debug_pubtypes
-                0x0000000000000189       0x5c GetVloss.o
+                0x000000000000012e       0x29 ChargePin10ms.o
  .debug_pubtypes
-                0x00000000000001e5       0x46 Calibrate_UR.o
+                0x0000000000000157       0x29 EntladePins.o
+ .debug_pubtypes
+                0x0000000000000180       0x29 DisplayValue.o
+ .debug_pubtypes
+                0x00000000000001a9       0x35 PinLayout.o
+ .debug_pubtypes
+                0x00000000000001de       0x42 RefVoltage.o
+ .debug_pubtypes
+                0x0000000000000220       0x29 wait_for_key_ms.o
+ .debug_pubtypes
+                0x0000000000000249       0x74 ReadCapacity.o
+ .debug_pubtypes
+                0x00000000000002bd       0x5e ReadInductance.o
+ .debug_pubtypes
+                0x000000000000031b       0x6a CheckPins.o
+ .debug_pubtypes
+                0x0000000000000385       0x5c GetVloss.o
+ .debug_pubtypes
+                0x00000000000003e1       0x46 Calibrate_UR.o

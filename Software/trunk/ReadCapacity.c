@@ -171,7 +171,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      goto keinC; //implausible, not yet the half voltage
   }
   cap.cval_uncorrected.dw = ovcnt16 + 1;
-  cap.cval_uncorrected.dw *= getRLmultip(adcv[2]);		// get factor to convert time to capacity from table
+  cap.cval_uncorrected.dw *= GetRLmultip(adcv[2]);		// get factor to convert time to capacity from table
 #else
   // wait the half the time which was required for loading
   adcv[3] = adcv[2];			// preset to prevent compiler warning
@@ -213,7 +213,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   }
   cap.cval_uncorrected.dw = ovcnt16 + 1;
   // compute factor with load voltage + lost voltage during the voltage load time
-  cap.cval_uncorrected.dw *= getRLmultip(adcv[2]+adcv[3]);	// get factor to convert time to capacity from table
+  cap.cval_uncorrected.dw *= GetRLmultip(adcv[2]+adcv[3]);	// get factor to convert time to capacity from table
 #endif
    cap.cval = cap.cval_uncorrected.dw;	// set result to uncorrected
    cap.cpre = -9;		// switch units to nF 

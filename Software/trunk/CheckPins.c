@@ -463,6 +463,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
           //if the holding current was switched off the thyristor must be switched off too. 
           //if Thyristor was still swiched on, if gate was switched off => Thyristor
           PartFound = PART_THYRISTOR;
+          ntrans.count++;		// mark as two N-type transistors
 #ifdef WITH_THYRISTOR_GATE_V
           ntrans.uBE = adc.tp2 - adc.lp2;	// Gate - Cathode Voltage 
           ntrans.gthvoltage = adc.hp1 - adc.lp2;	// Anode-Cathode Voltage
@@ -495,10 +496,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
           if(W5msReadADC(HighPin) > 244) {
              goto saveNresult;		//measure voltage at the High-Pin (probably A2) ;
                                 	//if to high, component is not switched off => no Triac, abort
-         }
-         PartFound = PART_TRIAC;
-         ntrans.count++;		// mark as two N-type transistors
-         goto saveNresult;
+          }
+          PartFound = PART_TRIAC;
+          goto saveNresult;
         }
       //Test if NPN Transistor or MOSFET
       // ADC_DDR = LoADCm;	//Low-Pin to output 0V

@@ -10,7 +10,7 @@
 
 #define zero_reg r1
 
-/* unsigned int getRLmultip(unsigned int cvolt) {  */
+/* unsigned int GetRLmultip(unsigned int cvolt) {  */
 
 // interpolate table RLtab corresponding to voltage cvolt
 
@@ -39,9 +39,9 @@
 /*  return ( ((y1 - y2) * tabres + (RL_Tab_Abstand/2)) / RL_Tab_Abstand + y2); // interpolate table */
 /*} */
 
-.GLOBAL getRLmultip
+.GLOBAL GetRLmultip
 
-getRLmultip:
+GetRLmultip:
  	ldi	r18, hi8(RL_Tab_Beginn) 	; 1
  	cpi	r24, lo8(RL_Tab_Beginn)		; 44
  	cpc	r25, r18

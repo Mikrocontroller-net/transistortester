@@ -131,7 +131,7 @@ End of configuration
    #define Cathode_char 'K'
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM_TEXT = "Samotestovani..";
-   const unsigned char RELPROBE[] MEM_TEXT = "izoluj sondy!";
+   const unsigned char RELPROBE[] MEM_TEXT = "Izoluj sondy!";
    const unsigned char ATE[] MEM_TEXT = "Konec testu";
  #endif
  #define LANG_SELECTED
@@ -153,7 +153,7 @@ End of configuration
    #define Cathode_char 'K'
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM_TEXT = "Samotestovanie..";
-   const unsigned char RELPROBE[] MEM_TEXT = "izoluj sondy!";
+   const unsigned char RELPROBE[] MEM_TEXT = "Izoluj sondy!";
    const unsigned char ATE[] MEM_TEXT = "Koniec testu";
  #endif
  #define LANG_SELECTED
@@ -463,6 +463,82 @@ End of configuration
 'n','e','t','/','t','r','a','n','s','i','s','t','o','r',' ',
 't','e','s','t','e','r',' ',0};
  #define HelpTXT
+ #endif
+
+#if defined(LANG_SLOVAK)	//Slowakisch
+
+ const unsigned char HelpCalibration_str[] PROGMEM = {'>','N','e','k','a','l','i','b','r','o','v','a','n','y','!','<',' ',
+
+'P','r','e',' ','k','a','l','i','b','r','o','v','a','n','i','e',' ',
+
+
+
+'s','p','o','j',' ','v','s','e','t','k','y',' ','3',' ',
+
+'m','e','r','a','c','i','e',' ','s','o','n','d','y',' ','a',' ',
+
+
+
+'s','t','l','a','c',' ','t','l','a','c','i','t','k','o',' ',
+
+'t','e','s','t','.',' ','K','a','l','i','b','r','a','c','i','u',' ',
+
+
+
+'p','o','t','v','r','d',' ','s','t','l','a','c','e','n','i','m',' ',
+
+'t','l','a','c','i','t','k','a',' ','t','e','s','t',' ',
+
+
+
+'n','a',' '+0x80,'2','s','.',' ','P','o',' ','v','y','z','v','e',' ',
+
+'"','I','z','o','l','u','j',' ','s','o','n','d','y','!','"',' ',
+
+
+
+'z','r','u','s',' ','p','r','e','p','o','j','e','n','i','e',' ',
+
+'m','e','r','a','c','i','c','h',' ','s','o','n','d','.',' ',
+
+
+
+'N','a',' ','d','a','l','s','i','u',' ','v','y','z','v','u',' ',
+
+'"','1','-',LCD_CHAR_CAP,'-','3',' ','>','1','0','0','n','F','"',' ',
+
+
+
+'p','r','i','p','o','j',' ','m','e','d','z','i',' ',
+
+'s','o','n','d','y',' ','1',',','3',' ','d','o','b','r','y',' ',
+
+
+
+'k','o','n','d','e','n','z','a','t','o','r',' ',
+
+'v','a','c','s','i',' ','a','k','o',' ','1','0','0','n','F','.',' ',
+
+
+
+'S','o','f','t','w','a','r','e',' ','a',' ',
+
+'d','o','k','u','m','e','n','t','a','c','i','a',' ',
+
+
+
+'j','e',' '+0x80,'n','a',' ','s','v','n',':','/','/',' ',
+
+'m','i','k','r','o','c','o','n','t','r','o','l','l','e','r','.',' ',
+
+
+
+'n','e','t','/','t','r','a','n','s','i','s','t','o','r',' ',
+
+'t','e','s','t','e','r',' ',0};
+
+ #define HelpTXT
+
  #endif
 
  #ifndef HelpTXT

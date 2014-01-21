@@ -4,7 +4,7 @@
 #include "Transistortester.h"
 
 
-unsigned int getRLmultip(unsigned int cvolt) {
+unsigned int GetRLmultip(unsigned int cvolt) {
 
 // interpolate table RLtab corresponding to voltage cvolt
 // Widerstand 680 Ohm          300   325   350   375   400   425   450   475   500   525   550   575   600   625   650   675   700   725   750   775   800   825   850   875   900   925   950   975  1000  1025  1050  1075  1100  1125  1150  1175  1200  1225  1250  1275  1300  1325  1350  1375  1400  mV

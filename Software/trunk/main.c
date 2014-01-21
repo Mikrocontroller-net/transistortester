@@ -289,14 +289,15 @@ start:
   }
 
 #ifdef CHECK_CALL
-  AutoCheck();			//check, if selftest should be done
-  lcd_line2();			//LCD position row2, column 1
   UnCalibrated = 0;
   if (eeprom_read_byte(&c_zero_tab[0]) != eeprom_read_byte(&c_zero_tab[3])) {
      // if calibrated, both c_zero_tab values are identical! c_zero_tab[3] is not used otherwise
      UnCalibrated = 1;
-     lcd_data('!');
+     lcdSetCursor(1,15);
+     lcd_data('?');
   }
+  AutoCheck();			//check, if selftest should be done
+  lcd_line2();			//LCD position row2, column 1
 #else
   lcd_line2();			//LCD position row2, column 1
 #endif

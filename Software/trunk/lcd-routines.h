@@ -51,7 +51,7 @@ void uart_newline(void);
 #define lcd_shift_right() lcd_command(0x1c)
 #define lcd_shift_left() lcd_command(0x18)
 
-#define SetCursor(y, x) lcd_command((uint8_t)(CMD_SetDDRAMAddress + (0x40*(y-1)) + x)) //move to the specified position 
+#define lcdSetCursor(y, x) lcd_command((uint8_t)(CMD_SetDDRAMAddress + (0x40*(y-1)) + x)) //move to the specified position 
 
 #define LCDLoadCustomChar(addr) lcd_command(CMD_SetCGRAMAddress | (addr<<3))	//load Custom-character
 

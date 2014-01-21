@@ -379,7 +379,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 ## Objects that must be built in order to link
 OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o UfAusgabe.o RvalOut.o ChargePin10ms.o EntladePins.o \
  DisplayValue.o PinLayout.o RefVoltage.o wait_for_key_ms.o swuart.o wait1000ms.o \
- ReadCapacity.o GetRlmultip.o ReadInductance.o ReadADC.o CheckPins.o GetESR.o GetVloss.o Calibrate_UR.o
+ ReadCapacity.o GetRLmultip.o ReadInductance.o ReadADC.o CheckPins.o GetESR.o GetVloss.o Calibrate_UR.o
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 

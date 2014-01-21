@@ -773,9 +773,9 @@ checkDiode:
         lcd_data('D');
 #endif
      }
-     diodes[NumOfDiodes].Anode = HighPin;
-     diodes[NumOfDiodes].Cathode = LowPin;
-     diodes[NumOfDiodes].Voltage = adc.hp1;	// voltage in Millivolt 
+     diodes.Anode[NumOfDiodes] = HighPin;
+     diodes.Cathode[NumOfDiodes] = LowPin;
+     diodes.Voltage[NumOfDiodes] = adc.hp1;	// voltage in Millivolt 
      NumOfDiodes++;
   } //end voltage is above 0,15V and below 4,64V 
 #if DebugOut == 4

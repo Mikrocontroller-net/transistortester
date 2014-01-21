@@ -375,7 +375,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 ## Objects that must be built in order to link
 OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o UfAusgabe.o RvalOut.o ChargePin10ms.o EntladePins.o \
  DisplayValue.o PinLayout.o RefVoltage.o wait_for_key_ms.o swuart.o wait1000ms.o \
- ReadCapacity.o ReadInductance.o ReadADC.o CheckPins.o Calibrate_UR.o
+ ReadCapacity.o GetRLmultip.o ReadInductance.o ReadADC.o CheckPins.o Calibrate_UR.o
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -394,6 +394,9 @@ lcd_hw_4_bit.o: ../lcd_hw_4_bit.S Makefile
 ReadCapacity.o: ../ReadCapacity.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
+GetRLmultip.o: ../GetRLmultip.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 ReadInductance.o: ../ReadInductance.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
@@ -409,10 +412,10 @@ CheckPins.o: ../CheckPins.c Makefile
 main.o: ../main.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -D$(UI_LANGUAGE) -c  $<
 
-UfAusgabe.o: ../UfAusgabe.c Makefile
+UfAusgabe.o: ../UfAusgabe.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-RvalOut.o: ../RvalOut.c Makefile
+RvalOut.o: ../RvalOut.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ChargePin10ms.o: ../ChargePin10ms.c Makefile
@@ -427,7 +430,7 @@ DisplayValue.o: ../DisplayValue.c Makefile
 PinLayout.o: ../PinLayout.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-RefVoltage.o: ../RefVoltage.c Makefile
+RefVoltage.o: ../RefVoltage.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 wait_for_key_ms.o: ../wait_for_key_ms.c Makefile

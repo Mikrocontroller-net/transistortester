@@ -9,11 +9,11 @@ void SerienDiodenAusgabe() {
    uint8_t second;
    first = diode_sequence >> 4;
    second = diode_sequence & 3;
-   lcd_testpin(diodes[first].Anode);
+   lcd_testpin(diodes.Anode[first]);
    lcd_fix_string(AnKat);	//"->|-"
-   lcd_testpin(diodes[first].Cathode);
+   lcd_testpin(diodes.Cathode[first]);
    lcd_fix_string(AnKat);	//"->|-"
-   lcd_testpin(diodes[second].Cathode);
+   lcd_testpin(diodes.Cathode[second]);
    UfAusgabe(diode_sequence);
 }
 
@@ -37,7 +37,7 @@ void UfAusgabe(uint8_t bcdnum) {
 void mVAusgabe(uint8_t nn) {
    if (nn < 3) {
       // Output in mV units
-      DisplayValue(diodes[nn].Voltage,-3,'V',3);
+      DisplayValue(diodes.Voltage[nn],-3,'V',3);
       lcd_space();
    }
 }

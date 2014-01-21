@@ -130,15 +130,15 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'K'
  #ifdef WITH_SELFTEST
-   const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!";
-   const unsigned char ATE[] MEM_TEXT = "Test End";
+   const unsigned char SELFTEST[] MEM_TEXT = "Samotestovani..";
+   const unsigned char RELPROBE[] MEM_TEXT = "izoluj sondy!";
+   const unsigned char ATE[] MEM_TEXT = "Konec testu";
  #endif
  #define LANG_SELECTED
 #endif
 
 #if defined(LANG_SLOVAK)		//slowakisch
-   const unsigned char TestRunning[] MEM_TEXT = "PREBIEHA TEST"; //€€€";
+   const unsigned char TestRunning[] MEM_TEXT = "Prebieha meranie";
    const unsigned char BatWeak[] MEM_TEXT = "slaba"; //€€";
    const unsigned char BatEmpty[] MEM_TEXT = "prazdna!";
    const unsigned char TestFailed2[] MEM_TEXT = "vadna "; //€€€€€€";
@@ -152,9 +152,9 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'K'
  #ifdef WITH_SELFTEST
-   const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!";
-   const unsigned char ATE[] MEM_TEXT = "Test End";
+   const unsigned char SELFTEST[] MEM_TEXT = "Samotestovanie..";
+   const unsigned char RELPROBE[] MEM_TEXT = "izoluj sondy!";
+   const unsigned char ATE[] MEM_TEXT = "Koniec testu";
  #endif
  #define LANG_SELECTED
 #endif
@@ -701,6 +701,7 @@ End of configuration
 #endif
 
 
+#if 0
 struct Diode_t {
   uint8_t Anode;
   uint8_t Cathode;
@@ -708,6 +709,14 @@ struct Diode_t {
 };
 
 COMMON struct Diode_t diodes[6];
+#else
+struct Diode_t {
+  uint8_t Anode[6];
+  uint8_t Cathode[6];
+  unsigned int Voltage[6];
+};
+COMMON struct Diode_t diodes;
+#endif
 COMMON uint8_t NumOfDiodes;
 COMMON uint8_t diode_sequence;
 

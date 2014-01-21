@@ -509,15 +509,19 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 #define TxD PC3	//TxD-Pin of Software-UART; must be at Port C !
 #ifdef WITH_UART
  #define TXD_MSK (1<<TxD)
+ #ifdef SWUART_INVERT
+  #define TXD_VAL 0
+ #else
+  #define TXD_VAL TXD_MSK
+ #endif
 #else
+ // without UART
+ // If you use any pin of port C for output, you should define all used pins in TXD_MSK.
+ // With TXD_VAL you can specify the default level of output pins for all port C output pins.
  #define TXD_MSK 0
+ #define TXD_VAL 0
 #endif
 
-#ifdef SWUART_INVERT
-  #define TXD_VAL 0
-#else
-  #define TXD_VAL TXD_MSK
-#endif
 
 #ifdef INHIBIT_SLEEP_MODE
  // save memory, do not use the sleep mode

@@ -394,65 +394,65 @@ start:
         // enough memory to sort the pins
  #if EBC_STYLE == 321
         // the higher test pin number is left side
-        if (diodes[0].Anode > diodes[0].Cathode) {
-           lcd_testpin(diodes[0].Anode);
+        if (diodes.Anode[0] > diodes.Cathode[0]) {
+           lcd_testpin(diodes.Anode[0]);
            lcd_fix_string(AnKat);	//"->|-"
-           lcd_testpin(diodes[0].Cathode);
+           lcd_testpin(diodes.Cathode[0]);
         } else {
-           lcd_testpin(diodes[0].Cathode);
+           lcd_testpin(diodes.Cathode[0]);
            lcd_fix_string(KatAn);	//"-|<-"
-           lcd_testpin(diodes[0].Anode);
+           lcd_testpin(diodes.Anode[0]);
         }
  #else
         // the higher test pin number is right side
-        if (diodes[0].Anode < diodes[0].Cathode) {
-           lcd_testpin(diodes[0].Anode);
+        if (diodes.Anode[0] < diodes.Cathode[0]) {
+           lcd_testpin(diodes.Anode[0]);
            lcd_fix_string(AnKat);	//"->|-"
-           lcd_testpin(diodes[0].Cathode);
+           lcd_testpin(diodes.Cathode[0]);
         } else {
-           lcd_testpin(diodes[0].Cathode);
+           lcd_testpin(diodes.Cathode[0]);
            lcd_fix_string(KatAn);	//"-|<-"
-           lcd_testpin(diodes[0].Anode);
+           lcd_testpin(diodes.Anode[0]);
         }
  #endif
 #else
         // too less memory to sort the pins
-        lcd_testpin(diodes[0].Anode);
+        lcd_testpin(diodes.Anode[0]);
         lcd_fix_string(AnKat);		//"->|-"
-        lcd_testpin(diodes[0].Cathode);
+        lcd_testpin(diodes.Cathode[0]);
 #endif
 #if FLASHEND > 0x1fff
-	GetIr(diodes[0].Cathode,diodes[0].Anode);
+	GetIr(diodes.Cathode[0],diodes.Anode[0]);
 #endif
         UfAusgabe(0x70);
         /* load current of capacity is (5V-1.1V)/(470000 Ohm) = 8298nA */
         lcd_fix_string(GateCap_str);	//"C="
-        ReadCapacity(diodes[0].Cathode,diodes[0].Anode);	// Capacity opposite flow direction
+        ReadCapacity(diodes.Cathode[0],diodes.Anode[0]);	// Capacity opposite flow direction
         DisplayValue(cap.cval,cap.cpre,'F',3);
         goto end3;
      } else if(NumOfDiodes == 2) { // double diode
         lcd_data('2');
         lcd_fix_string(Dioden);		//"diodes "
-        if(diodes[0].Anode == diodes[1].Anode) { //Common Anode
-           lcd_testpin(diodes[0].Cathode);
+        if(diodes.Anode[0] == diodes.Anode[1]) { //Common Anode
+           lcd_testpin(diodes.Cathode[0]);
            lcd_fix_string(KatAn);	//"-|<-"
-           lcd_testpin(diodes[0].Anode);
+           lcd_testpin(diodes.Anode[0]);
            lcd_fix_string(AnKat);	//"->|-"
-           lcd_testpin(diodes[1].Cathode);
+           lcd_testpin(diodes.Cathode[1]);
            UfAusgabe(0x01);
            goto end3;
         } 
-        if(diodes[0].Cathode == diodes[1].Cathode) { //Common Cathode
-           lcd_testpin(diodes[0].Anode);
+        if(diodes.Cathode[0] == diodes.Cathode[1]) { //Common Cathode
+           lcd_testpin(diodes.Anode[0]);
            lcd_fix_string(AnKat);	//"->|-"
-	   lcd_testpin(diodes[0].Cathode);
+	   lcd_testpin(diodes.Cathode[0]);
            lcd_fix_string(KatAn);	//"-|<-"
-           lcd_testpin(diodes[1].Anode);
+           lcd_testpin(diodes.Anode[1]);
            UfAusgabe(0x01);
            goto end3;
-//        else if ((diodes[0].Cathode == diodes[1].Anode) && (diodes[1].Cathode == diodes[0].Anode)) 
+//        else if ((diodes.Cathode[0] == diodes.Anode[1]) && (diodes.Cathode[1] == diodes.Anode[0])) 
         } 
-        if (diodes[0].Cathode == diodes[1].Anode) {
+        if (diodes.Cathode[0] == diodes.Anode[1]) {
            // normaly two serial diodes are detected as three diodes, but if the threshold is high
            // for both diodes, the third diode is not detected.
            // can also be Antiparallel
@@ -460,7 +460,7 @@ start:
            SerienDiodenAusgabe();
            goto end3;
         } 
-        if (diodes[1].Cathode == diodes[0].Anode) {
+        if (diodes.Cathode[1] == diodes.Anode[0]) {
            diode_sequence = 0x10;	// 1 0
            SerienDiodenAusgabe();
            goto end3;
@@ -472,49 +472,49 @@ start:
           Only once the pin No of anyone Cathode is identical of another anode.
           two diodes in series is additionally detected as third big diode.
         */
-        if(diodes[0].Cathode == diodes[1].Anode)
+        if(diodes.Cathode[0] == diodes.Anode[1])
           {
            diode_sequence = 0x01;	// 0 1
           }
-        if(diodes[0].Anode == diodes[1].Cathode)
+        if(diodes.Anode[0] == diodes.Cathode[1])
           {
            diode_sequence = 0x10;	// 1 0
           }
-        if(diodes[0].Cathode == diodes[2].Anode)
+        if(diodes.Cathode[0] == diodes.Anode[2])
           {
            diode_sequence = 0x02;	// 0 2
           }
-        if(diodes[0].Anode == diodes[2].Cathode)
+        if(diodes.Anode[0] == diodes.Cathode[2])
           {
            diode_sequence = 0x20;	// 2 0
           }
-        if(diodes[1].Cathode == diodes[2].Anode)
+        if(diodes.Cathode[1] == diodes.Anode[2])
           {
            diode_sequence = 0x12;	// 1 2
           }
-        if(diodes[1].Anode == diodes[2].Cathode)
+        if(diodes.Anode[1] == diodes.Cathode[2])
           {
            diode_sequence = 0x21;	// 2 1
           }
 #if DebugOut == 4
 	lcd_line3();
-        lcd_testpin(diodes[0].Anode);
+        lcd_testpin(diodes.Anode[0]);
         lcd_data(':');
-        lcd_testpin(diodes[0].Cathode);
+        lcd_testpin(diodes.Cathode[0]);
         lcd_space();
-        lcd_string(utoa(diodes[0].Voltage, outval, 10));
+        lcd_string(utoa(diodes.Voltage[0], outval, 10));
         lcd_space();
-        lcd_testpin(diodes[1].Anode);
+        lcd_testpin(diodes.Anode[1]);
         lcd_data(':');
-        lcd_testpin(diodes[1].Cathode);
+        lcd_testpin(diodes.Cathode[1]);
         lcd_space();
-        lcd_string(utoa(diodes[1].Voltage, outval, 10));
+        lcd_string(utoa(diodes.Voltage[1], outval, 10));
 	lcd_line4();
-        lcd_testpin(diodes[2].Anode);
+        lcd_testpin(diodes.Anode[2]);
         lcd_data(':');
-        lcd_testpin(diodes[2].Cathode);
+        lcd_testpin(diodes.Cathode[2]);
         lcd_space();
-        lcd_string(utoa(diodes[2].Voltage, outval, 10));
+        lcd_string(utoa(diodes.Voltage[2], outval, 10));
         lcd_line1();
 #endif
 //        if((ptrans.b<3) && (ptrans.c<3)) 
@@ -580,7 +580,9 @@ start:
        _trans = &ptrans;		// change transistor structure
     }
     lcd_space();
-    if( NumOfDiodes > 2) {	//Transistor with protection diode
+//    if( NumOfDiodes > 2) 	//Transistor with protection diode
+    for (ii=0; ii<NumOfDiodes; ii++) {
+       if ((diodes.Anode[ii] == _trans->b) || (diodes.Cathode[ii] == _trans->b)) continue;
 #ifdef EBC_STYLE
  #if EBC_STYLE == 321
        // Layout with 321= style
@@ -671,15 +673,15 @@ start:
        {
           lcd_data(LCD_CHAR_DIODE1);	//show Diode symbol >|
           lcd_line2();			//2. Row
-          lcd_testpin(diodes[0].Anode);
+          lcd_testpin(diodes.Anode[0]);
           lcd_fix_string(AnKat);	//"->|-"
-          lcd_testpin(diodes[0].Cathode);
+          lcd_testpin(diodes.Cathode[0]);
        } else {
           lcd_data(LCD_CHAR_DIODE2);	//show Diode symbol |<
           lcd_line2();			//2. Row
-          lcd_testpin(diodes[0].Cathode);
+          lcd_testpin(diodes.Cathode[0]);
           lcd_fix_string(KatAn);	//"-|<-"
-          lcd_testpin(diodes[0].Anode);
+          lcd_testpin(diodes.Anode[0]);
        }
        lcd_space();
        lcd_fix_string(Uf_str);			//"Uf="

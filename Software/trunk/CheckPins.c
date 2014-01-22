@@ -307,13 +307,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         adc.lp1 = W5msReadADC(LowPin);	//measure voltage at LowPin (assumed Collector)
         adc.tp2 = ReadADC(TristatePin);	//measure voltage at TristatePin (Base) 
         adc.hp2 = ReadADC(HighPin);	//measure voltage at HighPin (assumed Emitter)
-        //check, if Test is done before 
-//        if((PartFound == PART_TRANSISTOR) || (PartFound == PART_FET)) {
-//           PartReady = 1;
-//        }
 
- 
-/*        if(adc.tp2 > 977)  */
         if(adc.tp2 > 2000) {
            //PNP-Transistor is found (Base voltage moves with Emitter to VCC)
            PartFound = PART_TRANSISTOR;
@@ -463,6 +457,14 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
           //if the holding current was switched off the thyristor must be switched off too. 
           //if Thyristor was still swiched on, if gate was switched off => Thyristor
           PartFound = PART_THYRISTOR;
+#if DebugOut == 15
+     lcd_line3();
+     lcd_testpin(LowPin);
+     lcd_data('Y');
+     lcd_testpin(HighPin);
+     lcd_space();
+#endif
+ 
           ntrans.count++;		// mark as two N-type transistors
 #ifdef WITH_THYRISTOR_GATE_V
           ntrans.uBE = adc.tp2 - adc.lp2;	// Gate - Cathode Voltage 
@@ -475,25 +477,50 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
           wait_about5ms();
           R_DDR = HiPinRL;		//switch R_L port HighPin to output (GND)
           if(W5msReadADC(HighPin) > 244) {
+#if DebugOut == 15
+     lcd_data('H');
+     lcd_data('2');
+     lcd_space();
+#endif
              goto saveNresult;		//measure voltage at the  High-Pin (probably A2); if too high:
                                 	//component has current => kein Triac
           }
           R_DDR = HiPinRL | TriPinRL;	//switch R_L port for TristatePin (Gate) to output (GND) => Triac should be triggered 
           if(W5msReadADC(TristatePin) < 977) {
+#if DebugOut == 15
+     lcd_data('T');
+     lcd_data('9');
+     lcd_space();
+#endif
              goto saveNresult; 		//measure voltage at the Tristate-Pin (probably Gate) ;
                               		// if to low, abort 
           }
           if(ReadADC(HighPin) < 733) {
+#if DebugOut == 15
+     lcd_data('H');
+     lcd_data('7');
+     lcd_space();
+#endif
              goto saveNresult; 		//component has no current => no Triac => abort
           }
           R_DDR = HiPinRL;		//TristatePin (Gate) to input 
           if(W5msReadADC(HighPin) < 733) {
+#if DebugOut == 15
+     lcd_data('H');
+     lcd_data('3');
+     lcd_space();
+#endif
              goto saveNresult; 		//component has no current without base current => no Triac => abort
           }
           R_PORT = HiPinRL;		//switch R_L port for HighPin to VCC => switch off holding current 
           wait_about5ms();
           R_PORT = 0;			//switch R_L port for HighPin again to GND; Triac should now switched off
           if(W5msReadADC(HighPin) > 244) {
+#if DebugOut == 15
+     lcd_data('H');
+     lcd_data('4');
+     lcd_space();
+#endif
              goto saveNresult;		//measure voltage at the High-Pin (probably A2) ;
                                 	//if to high, component is not switched off => no Triac, abort
           }

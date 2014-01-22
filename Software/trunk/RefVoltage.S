@@ -35,6 +35,7 @@
 /*   #else */
 /*   referenz = ref_mv + REF_C_KORR; */
 /*   #endif */
+/*   ref_mv_offs = referenz; */
 /*   if (referenz >= Ref_Tab_Beginn) { */
 /*      referenz -= Ref_Tab_Beginn; */
 /*   } else  { */
@@ -67,17 +68,28 @@ RefVoltage:
 #ifdef AUTO_CAL
  	ldi	r24, lo8(ref_offset)	; 1
  	ldi	r25, hi8(ref_offset)	; 0
- 	ACALL	eeprom_read_word	; eeprom_read_word((uint16_t *)(&ref_offset));
+;; 	ACALL	eeprom_read_word	; eeprom_read_word((uint16_t *)(&ref_offset));
+;; 	lds	r18, ref_mv
+;; 	lds	r19, ref_mv+1
+;; 	add	r18, r24		; referenz =  ref_mv +
+;; 	adc	r19, r25
+	ACALL	eeprom_read_byte
+	mov	r19, r24
+	ldi	r24, lo8(ref_offset+1)
+	ldi	r25, hi8(ref_offset+1)
+	ACALL	eeprom_read_byte
  	lds	r18, ref_mv
+	add	r18, r19
  	lds	r19, ref_mv+1
- 	add	r18, r24		; referenz =  ref_mv +
- 	adc	r19, r25
+	adc	r19, r24
 #else
 	lds	r18, ref_mv
 	lds	r19, ref_mv+1
 	subi	r18, -REF_C_KORR		; referenz = ref_mv + REF_C_KORR;
 	adc	r19, zero_reg
 #endif
+        sts	ref_mv_offs, r18
+        sts	ref_mv_offs+1, r19
 
  	ldi	r24, hi8(Ref_Tab_Beginn)	; 3
  	cpi	r18, lo8(Ref_Tab_Beginn)	; 232

@@ -43,8 +43,8 @@ CFLAGS += -DLCD_DOGM
 # The WITH_SELFTEST option enables selftest function (only for mega168 or mega328) including the calibration.
 # Normally the mega168 uses selftest without T1 to T7 to enable both hFE measurements.
 CFLAGS += -DWITH_SELFTEST
-# You can enable the extended tests T1 to T7 for the atmega168 by selecting one of the
-# NO_COMMON_COLLECTOR_HFE or NO_COMMON_EMITTER_HFE option.
+# You can enable the extended tests T1 to T7 for the atmega168 by selecting the  NO_COMMON_COLLECTOR_HFE  option
+# and by deselecting the WITH_UART option.
 # The T1 to T7 tests are usefull to find problems with your tester.
 #CFLAGS += -DNO_COMMON_COLLECTOR_HFE
 #CFLAGS += -DNO_COMMON_EMITTER_HFE

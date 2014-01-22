@@ -25,6 +25,7 @@ void RefVoltage(void) {
   #else
   referenz = ref_mv + REF_C_KORR;
   #endif
+  ref_mv_offs = referenz;
   if (referenz >= Ref_Tab_Beginn) {
      referenz -= Ref_Tab_Beginn;
   } else  {

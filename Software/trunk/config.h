@@ -705,10 +705,8 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 #ifdef EXTENDED_TESTS
  #if FLASHEND <= 0x3fff
   // we have to save some memory to enable the extended tests!
-  #ifdef WITH_UART
-   #undef SEARCH_PARASITIC
-   #warning "Search of parasitic transistor not possible. NPNp or PNPn result depends on the selected pin sequence!"
-  #endif
+  #undef SEARCH_PARASITIC
+  #warning "Search of parasitic transistor not possible. NPNp or PNPn result depends on the selected pin sequence!"
  #endif
 #endif
 

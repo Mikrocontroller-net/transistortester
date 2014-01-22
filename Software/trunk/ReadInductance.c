@@ -155,12 +155,15 @@ void ReadInductance(void) {
 //        if (total_r > 7000) cnt_diff = 1;
 //        if (total_r > 14000) cnt_diff = 2;
         cnt_diff = total_r / ((14000UL * 8) / (F_CPU/1000000UL));
+#if 0
         // Voltage of comparator in % of umax
      #ifdef AUTO_CAL
         tmpint = (ref_mv + (int16_t)eeprom_read_word((uint16_t *)(&ref_offset))) ;
      #else
         tmpint = (ref_mv + REF_C_KORR);
      #endif
+#endif
+        tmpint = ref_mv_offs;
         if (mess_r < R_L_VAL) {
            // measurement without 680 Ohm
            cnt_diff = CNT_ZERO_42;

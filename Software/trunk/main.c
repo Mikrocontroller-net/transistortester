@@ -290,11 +290,11 @@ start:
 
 #ifdef CHECK_CALL
   UnCalibrated = 0;
+  lcd_command(CMD_SetDisplayAndCursor | 0x04); // Display on / Cursor off / no Blinking
   if (eeprom_read_byte(&c_zero_tab[0]) != eeprom_read_byte(&c_zero_tab[3])) {
      // if calibrated, both c_zero_tab values are identical! c_zero_tab[3] is not used otherwise
      UnCalibrated = 1;
-     lcdSetCursor(1,15);
-     lcd_data('?');
+     lcd_command(CMD_SetDisplayAndCursor | 0x06); // Display on / Cursor on / no Blinking
   }
   AutoCheck();			//check, if selftest should be done
   lcd_line2();			//LCD position row2, column 1
@@ -829,6 +829,7 @@ gakAusgabe:
   // only one Measurement requested, shut off
  #if FLASHEND > 0x3fff
   // look, if the tester is uncalibrated (C-source will be included directly)
+  lcd_command(CMD_SetDisplayAndCursor | 0x04); // Display on / Cursor off / no Blinking
   #include "HelpCalibration.c"
  #endif
 //  MCUSR = 0;

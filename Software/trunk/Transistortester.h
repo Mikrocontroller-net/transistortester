@@ -815,6 +815,7 @@ COMMON trans_t *_trans;		// pointer to trans_t structure
 
 COMMON uint8_t tmpval, tmpval2;
 COMMON unsigned int ref_mv;            //Reference-voltage  in mV units
+COMMON unsigned int ref_mv_offs;       //Reference-voltage  in mV units with eeprom offset
 
 COMMON struct resis_t{
    unsigned long rx;		// value of resistor RX  

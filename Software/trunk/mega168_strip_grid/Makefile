@@ -398,7 +398,7 @@ lcd_hw_4_bit.o: ../lcd_hw_4_bit.S Makefile
 ReadCapacity.o: ../ReadCapacity.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-GetRLmultip.o: ../GetRLmultip.c Makefile
+GetRLmultip.o: ../GetRLmultip.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ReadInductance.o: ../ReadInductance.c Makefile

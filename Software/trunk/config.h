@@ -218,6 +218,7 @@ End of configuration
   #define lcd_fix2_string(a)  lcd_pgm_string(a)
   #define use_lcd_pgm
  #endif
+ #define MEM_EEPROM
  #define MEM_read_word(a)  eeprom_read_word(a)
  #define MEM_read_byte(a)  eeprom_read_byte(a)
 #else

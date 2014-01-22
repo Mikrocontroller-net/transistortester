@@ -3,6 +3,7 @@
 #endif
 
 #include <avr/io.h>
+#include <avr/eeprom.h>
 #include <stdlib.h>
 #include "config.h"
 
@@ -14,9 +15,9 @@
 
 // interpolate table RLtab corresponding to voltage cvolt
 
-#define RL_Tab_Abstand 25       // displacement of table 25mV
-#define RL_Tab_Beginn 300       // begin of table ist 300mV
-#define RL_Tab_Length 1100      // length of table is 1400-300
+#define RL_Tab_Abstand 25	// displacement of table 25mV
+#define RL_Tab_Beginn 300	// begin of table ist 300mV
+#define RL_Tab_Length 1100	// length of table is 1400-300
 
 /*  unsigned int uvolt; */
 /*  unsigned int y1, y2; */
@@ -40,8 +41,8 @@
 /*} */
 
 .GLOBAL GetRLmultip
-
 GetRLmultip:
+	push    r0
  	ldi	r18, hi8(RL_Tab_Beginn) 	; 1
  	cpi	r24, lo8(RL_Tab_Beginn)		; 44
  	cpc	r25, r18
@@ -67,38 +68,49 @@ ad2232:
  	ldi	r25, 0x00	; tabres = 0;
  	ldi	r22, (RL_Tab_Length/RL_Tab_Abstand)-1; tabind = (RL_Tab_Length/RL_Tab_Abstand)-1;// limit to end of table
 ad2236:
-        ; r22 = tabind , r25 = tabres
+	; r22 = tabind , r25 = tabres
 
-;; 	ldi	r23, 0x00	; 0
-;; 	movw	r30, r22
-;; 	add	r30, r30
-;; 	adc	r31, r31
-;; 	subi	r30, 0x98	; 152
-;; 	sbci	r31, 0xFF	; 255
-        ldi	r30, lo8(RLtab)
-        ldi	r31, hi8(RLtab)
-        add	r30, r22
+	ldi	r30, lo8(RLtab)
+	ldi	r31, hi8(RLtab)
+	add	r30, r22
 	adc	r31, zero_reg
-        add	r30, r22
+	add	r30, r22
 	adc	r31, zero_reg
 
+#ifdef MEM_EEPROM
+	movw	r24,r30
+	ACALL	eeprom_read_byte	; y1 = MEM_read_word(&RLtab[tabind]);
+	mov	r20, r24
+	adiw	r30, 1
+	movw	r24,r30
+	ACALL	eeprom_read_byte	; y1 = MEM_read_word(&RLtab[tabind]);
+	mov	r21, r24
+	adiw	r30, 1
+	movw	r24,r30
+	ACALL	eeprom_read_byte	; y2 = MEM_read_word(&RLtab[tabind+1]);
+	mov	r18, r24
+	adiw	r30, 1
+	movw	r24,r30
+	ACALL	eeprom_read_byte	; y2 = MEM_read_word(&RLtab[tabind+1]);
+	mov	r19, r24
+#else
  	lpm	r20, Z+		; y1 = MEM_read_word(&RLtab[tabind]);
  	lpm	r21, Z+
-;; 	movw	r30, r22
-;; 	add	r30, r30
-;; 	adc	r31, r31
-;; 	subi	r30, 0x96	; 150
-;; 	sbci	r31, 0xFF	; 255
  	lpm	r18, Z+		; y2 = MEM_read_word(&RLtab[tabind+1]);
  	lpm	r19, Z+
+#endif
 ;  return ( ((y1 - y2) * tabres + (RL_Tab_Abstand/2)) / RL_Tab_Abstand + y2); // interpolate table
+;##	sts	yy1, r20
+;##	sts	yy1+1, r21
+;##	sts	yy2, r18
+;##	sts	yy2+1, r19
  	mov	r22, r25
 ;; 	ldi	r23, 0x00	; tabres.L
  	sub	r20, r18	; y1 - y2
  	sbc	r21, r19
 
  	mul	r22, r20	;lo8(tabres) * lo8(y1-y2)
- 	movw	r24, r0		; r24:25 =
+ 	movw	r24, r0		; r24:25 = *
  	mul	r22, r21	;lo8(tabres) * hi8(y1-y2)
  	add	r25, r0		; r25 + lo8(*)
 ;; 	mul	r23, r20	;hi8(tabres) * lo8(y1-y2)
@@ -111,4 +123,5 @@ ad2236:
  	add	r22, r18			; + y2
  	adc	r23, r19
  	movw	r24, r22
+	pop	r0
  	ret

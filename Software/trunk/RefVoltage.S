@@ -67,7 +67,7 @@ RefVoltage:
 #ifdef AUTO_CAL
  	ldi	r24, lo8(ref_offset)	; 1
  	ldi	r25, hi8(ref_offset)	; 0
- 	ACALL	__eerd_word_m328p	; eeprom_read_word((uint16_t *)(&ref_offset));
+ 	ACALL	eeprom_read_word	; eeprom_read_word((uint16_t *)(&ref_offset));
  	lds	r18, ref_mv
  	lds	r19, ref_mv+1
  	add	r18, r24		; referenz =  ref_mv +

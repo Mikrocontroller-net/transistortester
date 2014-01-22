@@ -80,7 +80,7 @@ begin_selftest:
         lcd_clear_line();		// clear total line
         lcd_line1();			//Cursor to column 1, row 1
         lcd_data('T');			//output the Testmode "T"
-        lcd_string(utoa(tt, outval, 10));	//output Test number
+        u2lcd(tt);		//lcd_string(utoa(tt, outval, 10));	//output Test number
         lcd_space();
                                         //############################################
         if (tt == 1) {   // output of reference voltage and factors for capacity measurement
@@ -89,7 +89,7 @@ begin_selftest:
            DisplayValue(ref_mv,-3,'V',4);
            lcd_line2();			//Cursor to column 1, row 2
            lcd_fix2_string(RHfakt);	//"RHf="
-           lcd_string(utoa(RHmultip, outval, 10));
+           u2lcd(RHmultip);	//lcd_string(utoa(RHmultip, outval, 10));
            ADCconfig.Samples = 190;	// set number of ADC reads near to maximum
         }
                                         //############################################
@@ -174,11 +174,14 @@ begin_selftest:
                                         //############################################
         if (tt > 1) {	// output 3 voltages 
            lcd_line2();			//Cursor to column 1, row 2
-           lcd_string(itoa(adcmv[0], outval, 10));	//output voltage 1
+//           lcd_string(itoa(adcmv[0], outval, 10));	//output voltage 1
+           i2lcd(adcmv[0]);
            lcd_space();
-           lcd_string(itoa(adcmv[1], outval, 10));	//output voltage 2
+//           lcd_string(itoa(adcmv[1], outval, 10));	//output voltage 2
+           i2lcd(adcmv[1]);
            lcd_space();
-           lcd_string(itoa(adcmv[2], outval, 10));	//output voltage 3
+//           lcd_string(itoa(adcmv[2], outval, 10));	//output voltage 3
+           i2lcd(adcmv[2]);
         }
         ADC_DDR =  TXD_MSK;		// all-Pins to Input
         ADC_PORT = TXD_VAL;		// all ADC-Ports to GND
@@ -279,7 +282,8 @@ no_c0save:
         (void) eeprom_write_word((uint16_t *)(&ref_offset), load_diff);	// hold zero offset + slew rate dependend offset
         lcd_clear();
         lcd_fix2_string(REF_C_str);	// "REF_C="
-        lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
+//        lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
+        i2lcd(load_diff);
 #if 0
 //#######################################
         // Test for switching level of the digital input of port TP3
@@ -331,7 +335,8 @@ no_c0save:
         lcd_fix2_string(REF_R_str);	// "REF_R="
         udiff2 = udiff + (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
         (void) eeprom_write_byte((uint8_t *)(&RefDiff), (uint8_t)udiff2);	// hold offset for true reference Voltage
-        lcd_string(itoa(udiff2, outval, 10));	//output correction voltage
+//        lcd_string(itoa(udiff2, outval, 10));	//output correction voltage
+        i2lcd(udiff2);
   #endif
         wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
         break;
@@ -380,6 +385,7 @@ no_c0save:
  PartFound = PART_NONE;
  wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
  } 
+
  
 #ifdef RequireShortedProbes
 /*

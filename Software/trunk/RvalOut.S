@@ -50,10 +50,10 @@ RvalOut:		; void RvalOut(uint8_t nrr)
 ; 	sbci	r31, 0xFE	; 254
 
 	ldi	r30, lo8(resis)
-	ldi	r31, lo8(resis)
+	ldi	r31, hi8(resis)
 	add	r24, r24	; nrr*2
 	add	r24, r24	; nrr*4
-	add	r24, r24	; nrr*8
+	add	r24, r24	; nrr*8	 5*8 must fit uint8_t
 	add	r30, r24
 	adc	r31, zero_reg
 
@@ -74,8 +74,8 @@ RvalOut:		; void RvalOut(uint8_t nrr)
  	ldd	r22, Z+5	; rb
  	ACALL	GetESR		; rr = GetESR(resis[nrr].ra,resis[nrr].rb);
  	movw	r22, r24
-        mov	r24, zero_reg
-        mov	r25, zero_reg
+        ldi	r24, 0
+        ldi	r25, 0
  	ldi	r20, -2		; 254
  	ldi	r16, 0x03	; 3
  	rjmp	ad1d94		; DisplayValue(rr,-2,LCD_CHAR_OMEGA,3);

@@ -33,3 +33,5 @@ uint8_t AllProbesShorted();		// check if all probes are shorted, return 3 if tru
 void mark_as_uncalibrated();		// mark in EEprom as uncalibrated device
 uint8_t wait_for_key_ms(int max_time); // wait max_time ms units for key is pressed
 void wait_for_key_5s_line2(void);	// wait 5 seconds and clear line 2
+void i2lcd(int iw);			// output integer value to LCD
+void u2lcd(uint16_t iw);		// output unsigned integer value to LCD

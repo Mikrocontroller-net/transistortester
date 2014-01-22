@@ -503,19 +503,19 @@ start:
         lcd_data(':');
         lcd_testpin(diodes.Cathode[0]);
         lcd_space();
-        lcd_string(utoa(diodes.Voltage[0], outval, 10));
+        u2lcd(diodes.Voltage[0]);
         lcd_space();
         lcd_testpin(diodes.Anode[1]);
         lcd_data(':');
         lcd_testpin(diodes.Cathode[1]);
         lcd_space();
-        lcd_string(utoa(diodes.Voltage[1], outval, 10));
+        u2lcd(diodes.Voltage[1]);
 	lcd_line4();
         lcd_testpin(diodes.Anode[2]);
         lcd_data(':');
         lcd_testpin(diodes.Cathode[2]);
         lcd_space();
-        lcd_string(utoa(diodes.Voltage[2], outval, 10));
+        u2lcd(diodes.Voltage[2]);
         lcd_line1();
 #endif
 //        if((ptrans.b<3) && (ptrans.c<3)) 

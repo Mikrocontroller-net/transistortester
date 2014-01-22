@@ -155,7 +155,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   lcd_data('U');
   lcd_data('3');
   lcd_data(':');
-  lcd_string(utoa(adcv[3],outval,10));
+  u2lcd(adcv[3]);
   lcd_space();
   wait_about2s();
  #endif
@@ -231,7 +231,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
    lcd_space();
    DisplayValue(cap.cval,cap.cpre,'F',4);
    lcd_space();
-   lcd_string(utoa(ovcnt16,outval,10));
+   u2lcd(ovcnt16);
    wait_about3s();
 #endif
    goto checkDiodes;
@@ -327,7 +327,7 @@ messe_mit_rh:
     if (ovcnt16 != 0) {
       DisplayValue(ovcnt16,0,',',4);
     }
-    lcd_string(utoa(tmpint,outval,10));
+    u2lcd(tmpint);
   }
 #endif
 

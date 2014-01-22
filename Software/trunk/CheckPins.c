@@ -839,9 +839,9 @@ widmes:
      lcd_data('U');
      lcd_testpin(HighPin);
      lcd_data('A');
-     lcd_string(utoa(adc.hp1, outval, 10));
+     u2lcd(adc.hp1);
      lcd_data('B');
-     lcd_string(utoa(adc.hp2, outval, 10));
+     u2lcd(adc.hp2);
      lcd_space();
 #endif
      goto testend;

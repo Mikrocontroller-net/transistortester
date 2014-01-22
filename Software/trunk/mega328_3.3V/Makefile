@@ -43,8 +43,7 @@ UI_LANGUAGE = LANG_GERMAN
 # The WITH_SELFTEST option enables selftest function (only for mega168 or mega328) including the calibration.
 # Normally the mega168 uses selftest without T1 to T7 to enable both hFE measurements.
 CFLAGS += -DWITH_SELFTEST
-# You can enable the extended tests T1 to T7 for the atmega168 by selecting the  NO_COMMON_COLLECTOR_HFE  option
-# and by deselecting the WITH_UART option.
+# You can enable the extended tests T1 to T7 for the atmega168 by selecting the  NO_COMMON_COLLECTOR_HFE  option.
 # The T1 to T7 tests are usefull to find problems with your tester.
 #CFLAGS += -DNO_COMMON_COLLECTOR_HFE
 #CFLAGS += -DNO_COMMON_EMITTER_HFE
@@ -378,7 +377,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 ## Objects that must be built in order to link
 OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o UfAusgabe.o RvalOut.o ChargePin10ms.o EntladePins.o \
- DisplayValue.o PinLayout.o RefVoltage.o wait_for_key_ms.o swuart.o wait1000ms.o \
+ DisplayValue.o PinLayout.o RefVoltage.o wait_for_key_ms.o swuart.o wait1000ms.o i2lcd.o \
  ReadCapacity.o GetRLmultip.o ReadInductance.o ReadADC.o CheckPins.o GetESR.o GetVloss.o Calibrate_UR.o
 
 ## Objects explicitly added by the user
@@ -450,6 +449,9 @@ swuart.o: ../swuart.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 wait1000ms.o: ../wait1000ms.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+i2lcd.o: ../i2lcd.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link

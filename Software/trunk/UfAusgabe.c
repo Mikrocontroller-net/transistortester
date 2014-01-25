@@ -10,9 +10,9 @@ void SerienDiodenAusgabe() {
    first = diode_sequence >> 4;
    second = diode_sequence & 3;
    lcd_testpin(diodes.Anode[first]);
-   lcd_fix_string(AnKat);	//"->|-"
+   lcd_MEM_string(AnKat);	//"->|-"
    lcd_testpin(diodes.Cathode[first]);
-   lcd_fix_string(AnKat);	//"->|-"
+   lcd_MEM_string(AnKat);	//"->|-"
    lcd_testpin(diodes.Cathode[second]);
    UfAusgabe(diode_sequence);
 }
@@ -30,7 +30,7 @@ void UfAusgabe(uint8_t bcdnum) {
       lcd_data(LCD_CHAR_RESIS3);	// special symbol or R
    }
    lcd_line2(); 				//2. row
-   lcd_fix_string(Uf_str);			//"Uf="
+   lcd_MEM_string(Uf_str);			//"Uf="
    mVAusgabe(bcdnum >> 4);
    mVAusgabe(bcdnum & 0x0f);
 }

@@ -21,7 +21,7 @@ void AutoCheck(void) {
   #define RequireShortedProbes
   if (AllProbesShorted() != 3) return;
   lcd_clear();
-  lcd_fix_string(SELFTEST);		// "Selftest mode.."
+  lcd_MEM_string(SELFTEST);		// "Selftest mode.."
   lcd_line2();
   lcd_data('?');			// wait for key pressed
   for (tt=0;tt<50;tt++) {
@@ -106,7 +106,7 @@ begin_selftest:
            R_DDR = (1<<PIN_RL2) | (1<<PIN_RL3);	//RL3 to -
            adcmv[2] = W20msReadADC(TP2);
            adcmv[2] -= u680;
-           lcd_fix_string(RLRL);	// "RLRL"
+           lcd_MEM_string(RLRL);	// "RLRL"
         }
                                         //############################################
         if (tt == 3) { // how equal are the RH resistors
@@ -122,11 +122,11 @@ begin_selftest:
            R_DDR = (1<<PIN_RH2) | (1<<PIN_RH3);	//RH3 to -
            adcmv[2] = W20msReadADC(TP2);
            adcmv[2] -= adcmv[3];
-           lcd_fix_string(RHRH);	// "RHRH"
+           lcd_MEM_string(RHRH);	// "RHRH"
         }
                                         //############################################
         if (tt == 4) { // Text release probes
-           lcd_fix_string(RELPROBE);	// "Release Probes"
+           lcd_MEM_string(RELPROBE);	// "Release Probes"
            if (AllProbesShorted() != 0) ww = MAX_REP-2;
         }
                                         //############################################
@@ -140,7 +140,7 @@ begin_selftest:
 
            R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to GND
            adcmv[2] = W20msReadADC(TP3);
-           lcd_fix_string(RH1L);	// "RH_Lo="
+           lcd_MEM_string(RH1L);	// "RH_Lo="
         }
                                         //############################################
         if (tt == 6) { // can we switch the ADC pins to VCC across the R_H resistor?
@@ -153,7 +153,7 @@ begin_selftest:
            R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to VCC
            R_PORT = 1<<PIN_RH3;
            adcmv[2] = W20msReadADC(TP3) - ADCconfig.U_AVCC;
-           lcd_fix_string(RH1H);	// "RH_Hi="
+           lcd_MEM_string(RH1H);	// "RH_Hi="
         }
         if (tt == 7) { // is the voltage of all R_H / R_L dividers correct?
            u680 = ((long)ADCconfig.U_AVCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + (unsigned long)R_H_VAL*100));
@@ -169,19 +169,16 @@ begin_selftest:
            R_DDR = (1<<PIN_RH3) | (1<<PIN_RL3);	//RH3 to +, RL3 to -
            adcmv[2] = W20msReadADC(TP3);
            adcmv[2] -= u680;
-           lcd_fix_string(RHRL);	// "RH/RL"
+           lcd_MEM_string(RHRL);	// "RH/RL"
         }
                                         //############################################
         if (tt > 1) {	// output 3 voltages 
            lcd_line2();			//Cursor to column 1, row 2
-//           lcd_string(itoa(adcmv[0], outval, 10));	//output voltage 1
-           i2lcd(adcmv[0]);
+           i2lcd(adcmv[0]);		// lcd_string(itoa(adcmv[0], outval, 10));	//output voltage 1
            lcd_space();
-//           lcd_string(itoa(adcmv[1], outval, 10));	//output voltage 2
-           i2lcd(adcmv[1]);
+           i2lcd(adcmv[1]);		// lcd_string(itoa(adcmv[1], outval, 10));	//output voltage 2
            lcd_space();
-//           lcd_string(itoa(adcmv[2], outval, 10));	//output voltage 3
-           i2lcd(adcmv[2]);
+           i2lcd(adcmv[2]);		// lcd_string(itoa(adcmv[2], outval, 10));	//output voltage 3
         }
         ADC_DDR =  TXD_MSK;		// all-Pins to Input
         ADC_PORT = TXD_VAL;		// all ADC-Ports to GND
@@ -207,24 +204,24 @@ begin_selftest:
      lcd_line2();		//Cursor to column 1, row 2
      lcd_clear_line();		// clear total line
      lcd_line2();		//Cursor to column 1, row 2
-     lcd_fix_string(RELPROBE);	// "Release Probes"
+     lcd_MEM_string(RELPROBE);	// "Release Probes"
      wait_about500ms();
      if (AllProbesShorted() == 0) break;
   }
 #endif
 
   lcd_clear();
-  lcd_fix_string(RIHI);	// "RiHi="
+  lcd_MEM_string(RIHI);	// "RiHi="
   DisplayValue(RRpinPL,-1,LCD_CHAR_OMEGA,3);
   lcd_line2();
-  lcd_fix_string(RILO);	// "RiLo="
+  lcd_MEM_string(RILO);	// "RiLo="
   DisplayValue(RRpinMI,-1,LCD_CHAR_OMEGA,3);
   wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 
   //measure Zero offset for Capacity measurement
   PartFound = PART_NONE;
   lcd_clear();
-  lcd_fix_string(C0_str);			//output "C0 "
+  lcd_MEM_string(C0_str);			//output "C0 "
   ReadCapacity(TP3, TP1);
   adcmv[5] = (unsigned int) cap.cval_uncorrected.dw;	//save capacity value of empty Pin 1:3
   ReadCapacity(TP3, TP2);
@@ -250,7 +247,7 @@ begin_selftest:
       (void) eeprom_write_byte((uint8_t *)(&c_zero_tab[ww]),adcmv[ww]+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)));
   }
   lcd_line2();
-  lcd_fix_string(OK_str);		// output "OK"
+  lcd_MEM_string(OK_str);		// output "OK"
 no_c0save:
  #endif
  wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
@@ -261,7 +258,7 @@ no_c0save:
  for (ww=0;ww<64;ww++) {
      lcd_clear();
      lcd_data('1');
-     lcd_fix_string(CapZeich);	// "-||-"
+     lcd_MEM_string(CapZeich);	// "-||-"
      lcd_data('3');
      lcd_fix2_string(MinCap_str); // " >100nF!"
      PartFound = PART_NONE;
@@ -352,11 +349,11 @@ no_c0save:
   lcd_clear();
   lcd_fix2_string(VERSION_str);	//"Version ..."
   lcd_line2();
-  lcd_fix_string(ATE);		//"Selftest End"
+  lcd_MEM_string(ATE);		//"Selftest End"
 
  #ifdef FREQUENCY_50HZ
 //#define TEST_SLEEP_MODE	/* only select for checking the sleep delay */
-  lcd_fix_string(T50HZ);	//" 50Hz"
+  lcd_MEM_string(T50HZ);	//" 50Hz"
   ADC_PORT = TXD_VAL;
   ADC_DDR = 1<<TP1 | TXD_MSK;	// Pin 1 to GND
   R_DDR = (1<<PIN_RL3) | (1<<PIN_RL2);

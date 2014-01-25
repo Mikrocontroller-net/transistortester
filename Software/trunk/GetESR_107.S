@@ -315,7 +315,11 @@ ad_35fe:
 ad_3604:
        	ldi	r24, lo8(ESR_str);
        	ldi	r25, hi8(ESR_str);
- 	call	lcd_fix_string;		/* lcd_fix_string(ESR_str);	// " ESR=" */
+#ifdef USE_EEPROM
+ 	call	lcd_fix_string;		/* lcd_MEM_string(ESR_str);	// " ESR=" */
+#else
+ 	call	lcd_mem_string;		/* lcd_MEM_string(ESR_str);	// " ESR=" */
+#endif
  	lds	r14, cap+ca;		/* LoADC = pgm_read_byte(&PinADCtab[cap.ca]) | TXD_MSK; */
         mov	SelectLowPin,r14
         ldi	r30, lo8(PinADCtab);

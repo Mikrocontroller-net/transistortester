@@ -32,6 +32,7 @@
 /*  } */
 
 #define zero_reg r1
+#define RCALL rcall
 
 .GLOBAL RvalOut
 
@@ -86,7 +87,7 @@ ad1d8e:		; } else {
  	ldi	r16, 0x04	; DisplayValue(resis[nrr].rx,-1,LCD_CHAR_OMEGA,4);
 ad1d94:
  	ldi	r18, LCD_CHAR_OMEGA	; 244
- 	ACALL	DisplayValue
- 	ACALL	lcd_space	; lcd_space();
+ 	RCALL	DisplayValue
+ 	RCALL	lcd_space	; lcd_space();
  	pop	r16
  	ret

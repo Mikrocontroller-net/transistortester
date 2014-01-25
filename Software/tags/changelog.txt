@@ -1,3 +1,8 @@
+TRIAC Erkennung erweitert, falsche Erkennung mit vertauschtem GC Anschluss als Thyristor wird vermieden.
+Alle Makefiles auf geänderte Binde-Reihenfolge und Assembler Versionen umgestellt.
+config.h in config.h und autoconf.h geteilt, config.h enthält die änderbaren Parameter.
+Funktionen  lcd-routines und PinLayout als opimierte Assembler Versionen.
+Reihenfolge der Objekt-Dateien beim Binden optimiert wegen rcall statt call.
 Funktion i2lcd und u2lcd eingebaut, Assembler und C-Version
 Fehler aus RvalOut.S beseitigt.
 Der unkalibrierte Tester wird durch einen aktivierten Cursor angezeigt, ? character entfällt.

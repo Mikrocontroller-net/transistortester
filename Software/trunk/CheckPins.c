@@ -19,6 +19,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      unsigned int hp1;
      unsigned int hp2;
      unsigned int hp3;
+     unsigned int hp4;
      unsigned int rhp;
      unsigned int lp1;
      unsigned int lp2;
@@ -97,12 +98,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   HiPinRH = HiPinRL + HiPinRL;				// instruction for HighPin R_H
 #endif
 
-  HiADCp = pgm_read_byte(&PinADCtab[HighPin]);		// instruction for ADC High-Pin 
-  LoADCp = pgm_read_byte(&PinADCtab[LowPin]);		// instruction for ADC Low-Pin
+  HiADCp = pgm_read_byte(&PinADCtab[HighPin]);		// instruction for ADC High-Pin, including | TXD_VAL 
+  LoADCp = pgm_read_byte(&PinADCtab[LowPin]);		// instruction for ADC Low-Pin, including | TXD_VAL
   HiADCm = HiADCp | TXD_MSK;
-  HiADCp |= TXD_VAL;
   LoADCm = LoADCp | TXD_MSK;
-  LoADCp |= TXD_VAL;
 
   //setting of Pins 
   R_PORT = 0;				//resistor-Port outputs to 0
@@ -444,7 +443,13 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 
        //Test auf Thyristor:
        //Gate discharge
-       ChargePin10ms(TriPinRL,0);	//Tristate-Pin (Gate) across R_L 10ms to GND
+//      ChargePin10ms(TriPinRL,0);	//Tristate-Pin (Gate) across R_L 10ms to GND
+       // TRIAC's can be triggered with gate and A1 (C) swapped. The current remains after triggering 
+       // from gate to A2 (A) instead of A1 to A2. I have found that in this state the current will be lower,
+       // if the Tristatepin (A1) is switched to GND.
+       R_PORT = HiPinRL;
+       adc.hp4 = W5msReadADC(HighPin);  //read voltage with switched back base
+       R_DDR = HiPinRL;			// base to input
        adc.hp3 = W5msReadADC(HighPin);	//read voltage at High-Pin (probably Anode) again
 					//current should still flow, if not,
 					// no Thyristor or holding current to low 
@@ -453,7 +458,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        wait_about5ms();
        R_PORT = HiPinRL;		//switch R_L for High-Pin (probably Anode) again to VCC
        adc.hp2 = W5msReadADC(HighPin);	//measure voltage at the High-Pin (probably Anode) again
-       if((adc.hp3 < 1600) && (adc.hp2 > 4400)) {
+       if((adc.hp3 < 1600) && (adc.hp2 > 4400)
+           // additional check the voltage hp4 at A with gate hold at GND level
+           && ((adc.hp1+150) > adc.hp4)
+                                              ) {
           //if the holding current was switched off the thyristor must be switched off too. 
           //if Thyristor was still swiched on, if gate was switched off => Thyristor
           PartFound = PART_THYRISTOR;

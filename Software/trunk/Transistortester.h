@@ -363,8 +363,6 @@ End of configuration
 
 #ifdef WITH_VEXT
  const unsigned char Vext_str[] MEM_TEXT = "Vext=";
- #define LCD_CLEAR 
- /* LCD_CLEAR  generates code for lcd_clear_line() */
 #endif
 
 #if FLASHEND > 0x3fff
@@ -598,8 +596,6 @@ End of configuration
 #ifdef SHOW_ICE
  const unsigned char ICE0_str[] MEM2_TEXT = "ICE0=";
  const unsigned char ICEs_str[] MEM2_TEXT = "ICEs=";
- #define LCD_CLEAR
- /* LCD_CLEAR  generates code for lcd_clear_line() */
 #endif
 
 
@@ -614,8 +610,6 @@ End of configuration
  const unsigned char RHRL[] MEM_TEXT = "RH/RL";
  #endif
  const unsigned char R0_str[] MEM2_TEXT = "R0=";
- #define LCD_CLEAR
- /* LCD_CLEAR  generates code for lcd_clear_line() */
 #endif
  
 #ifdef CHECK_CALL
@@ -625,10 +619,6 @@ End of configuration
  const unsigned char T50HZ[] MEM_TEXT = " 50Hz";
 #endif
 
-#ifdef DebugOut
- #define LCD_CLEAR
- /* LCD_CLEAR  generates code for lcd_clear_line() */
-#endif
 
  const unsigned char DiodeIcon1[] MEM_TEXT = { 0x11,
 				     0x19,
@@ -692,9 +682,13 @@ End of configuration
 				     (1<<PIN_RH3)};	// Table of commands to switch the  R-L resistors Pin 0,1,2
 #endif
 
- const unsigned char PinADCtab[] PROGMEM = { (1<<TP1),
-				     (1<<TP2),
-				     (1<<TP3)};	// Table of commands to switch the ADC-Pins 0,1,2
+		// Table include the predefined value TXD_VAL of other output port(s) of port C.
+		// Every pin, that should be switched permanent to VCC level, should be set to 1 in every tab position.
+		// The predefined value TXD_MSK defines the pin (all pins), that must be switched permanent to output.
+ const unsigned char PinADCtab[] PROGMEM = { (1<<TP1)|TXD_VAL,
+				     (1<<TP2)|TXD_VAL,
+				     (1<<TP3)|TXD_VAL};	// Table of commands to switch the ADC-Pins 0,1,2 to output
+
  const uint8_t PrefixTab[] MEM_TEXT = { 'p','n',LCD_CHAR_U,'m',0,'k','M'}; // p,n,u,m,-,k,M
 
 //generate Omega- and µ-character as Custom-character, if these characters has a number of loadable type

@@ -157,6 +157,7 @@ void lcd_pgm_string(const unsigned char *data) {
 }
 #endif
 
+#ifdef USE_EEPROM
 //Load string from PGM or EEprom and send to LCD 
 void lcd_fix_string(const unsigned char *data) {
    unsigned char cc;
@@ -169,6 +170,7 @@ void lcd_fix_string(const unsigned char *data) {
       data++;
    }
 }
+#endif
 
 // load custom character from PGM or EEprom and send to LCD
 void lcd_fix_customchar(const unsigned char *chardata) {	
@@ -177,3 +179,13 @@ void lcd_fix_customchar(const unsigned char *chardata) {
         chardata++;
     }
 }
+
+#ifdef LCD_CLEAR
+void lcd_clear_line(void) {
+ // writes 20 spaces to LCD-Display, Cursor must be positioned to first column
+ unsigned char ll;
+ for (ll=0;ll<20;ll++) {
+    lcd_space();
+ }
+}
+#endif

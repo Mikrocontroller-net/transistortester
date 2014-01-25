@@ -55,7 +55,7 @@ void ReadInductance(void) {
            LowPin = resis[0].rb;
            HighPin = resis[0].ra;
         }
-        HiADC = pgm_read_byte(&PinADCtab[HighPin]);
+        HiADC = pgm_read_byte(&PinADCtab[HighPin]);	// Table of ADC Pins including | TXD_VAL
         LoPinR_L = pgm_read_byte(&PinRLtab[LowPin]);	//R_L mask for HighPin R_L load
         //==================================================================================
         // Measurement of Inductance values
@@ -88,7 +88,7 @@ void ReadInductance(void) {
         TCCR1A = 0;			// set Counter1 to normal Mode
         TCNT1 = 0;			//set Counter to 0
         TI1_INT_FLAGS = (1<<ICF1) | (1<<OCF1B) | (1<<OCF1A) | (1<<TOV1);	// reset TIFR or TIFR1
-        HiADC |= TXD_VAL;
+//        HiADC |= TXD_VAL;
         wait200us();			// wait for bandgap to start up
         if ((count & 0x01) == 0 ) {
            //first start counter, then start current

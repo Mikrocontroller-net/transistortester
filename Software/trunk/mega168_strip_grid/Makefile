@@ -45,7 +45,7 @@ CFLAGS += -DSTRIP_GRID_BOARD
 CFLAGS += -DWITH_SELFTEST
 # You can enable the extended tests T1 to T7 for the atmega168 by selecting the  NO_COMMON_COLLECTOR_HFE  option.
 # The T1 to T7 tests are usefull to find problems with your tester.
-#CFLAGS += -DNO_COMMON_COLLECTOR_HFE
+CFLAGS += -DNO_COMMON_COLLECTOR_HFE
 #CFLAGS += -DNO_COMMON_EMITTER_HFE
 # You can also disable the extended tests T1 to T7 with the option NO_TEST_T1_T7 to accelerate the calibration
 # for the atmega328 and atmega168.
@@ -376,9 +376,13 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Objects that must be built in order to link
-OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o UfAusgabe.o RvalOut.o ChargePin10ms.o EntladePins.o \
- DisplayValue.o PinLayout.o RefVoltage.o wait_for_key_ms.o swuart.o wait1000ms.o i2lcd.o \
- ReadCapacity.o GetRLmultip.o ReadInductance.o ReadADC.o CheckPins.o GetESR.o GetVloss.o Calibrate_UR.o
+OBJECTS = lcd_hw_4_bit.o lcd-routines.o i2lcd.o PinLayout.o RvalOut.o UfAusgabe.o DisplayValue.o
+OBJECTS += swuart.o
+OBJECTS += wait1000ms.o main.o CheckPins.o ChargePin10ms.o EntladePins.o RefVoltage.o wait_for_key_ms.o
+OBJECTS +=  ReadCapacity.o GetRLmultip.o ReadADC.o Calibrate_UR.o
+ifneq ($(PARTNO),m8)
+OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o
+endif
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -387,17 +391,44 @@ LINKONLYOBJECTS =
 ## Build
 all: $(TARGET) TransistorTester.hex TransistorTester.eep TransistorTester.lss size
 
-## Compile
-lcd-routines.o: ../lcd-routines.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
+########### Compile only Assembler source available 
 lcd_hw_4_bit.o: ../lcd_hw_4_bit.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-ReadCapacity.o: ../ReadCapacity.c Makefile
+wait1000ms.o: ../wait1000ms.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+swuart.o: ../swuart.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+########### Compile  Assembler source only, is time critical 
+GetESR.o: ../GetESR.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+########### Compile C or Assembler , Assembler saves flash
+lcd-routines.o: ../lcd-routines.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 GetRLmultip.o: ../GetRLmultip.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+UfAusgabe.o: ../UfAusgabe.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+RvalOut.o: ../RvalOut.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+PinLayout.o: ../PinLayout.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+RefVoltage.o: ../RefVoltage.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+i2lcd.o: ../i2lcd.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+########### Compile C source only 
+ReadCapacity.o: ../ReadCapacity.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ReadInductance.o: ../ReadInductance.c Makefile
@@ -412,20 +443,11 @@ ReadADC.o: ../ReadADC.S Makefile
 CheckPins.o: ../CheckPins.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-GetESR.o: ../GetESR.S Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
 GetVloss.o: ../GetVloss.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 main.o: ../main.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -D$(UI_LANGUAGE) -c  $<
-
-UfAusgabe.o: ../UfAusgabe.S Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-RvalOut.o: ../RvalOut.S Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ChargePin10ms.o: ../ChargePin10ms.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
@@ -436,22 +458,7 @@ EntladePins.o: ../EntladePins.c Makefile
 DisplayValue.o: ../DisplayValue.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-PinLayout.o: ../PinLayout.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-RefVoltage.o: ../RefVoltage.S Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
 wait_for_key_ms.o: ../wait_for_key_ms.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-swuart.o: ../swuart.S Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-wait1000ms.o: ../wait1000ms.S Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-i2lcd.o: ../i2lcd.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link

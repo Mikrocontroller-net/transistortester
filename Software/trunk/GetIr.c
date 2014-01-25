@@ -9,8 +9,8 @@ void GetIr(uint8_t hipin, uint8_t lopin) {
   unsigned int ir_nano;
   uint8_t HiADC;
 
-  HiADC = pgm_read_byte(&PinADCtab[hipin]);
-  ADC_PORT = HiADC | TXD_VAL;		// switch ADC port to high level
+  HiADC = pgm_read_byte(&PinADCtab[hipin]);	// Table of ADC pins including | TXD_VAL
+  ADC_PORT = HiADC;		 	// switch ADC port to high level
   ADC_DDR = HiADC | TXD_MSK;		// switch High Pin direct to VCC
   R_PORT = 0;				// switch R-Port to GND
 #if FLASHEND > 0x3fff
@@ -23,7 +23,7 @@ void GetIr(uint8_t hipin, uint8_t lopin) {
 #endif
   u_res = W5msReadADC(lopin);		// read voltage
   if (u_res == 0) return;		// no Output, if no current in reverse direction
-  lcd_fix_string(Ir_str);		// output text "  Ir="
+  lcd_MEM_string(Ir_str);		// output text "  Ir="
 #ifdef WITH_IRMICRO
   unsigned int ir_micro;
   if (u_res < 2500) {

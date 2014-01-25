@@ -13,6 +13,7 @@
 
 
 #define zero_reg r1
+#define RCALL rcall
 
 /* #include <avr/io.h> */
 /* #include "Transistortester.h" */
@@ -50,8 +51,8 @@ mVAusgabe:
  	ldi	r20, -3;	0xFD
  	ldi	r18, 'V';	0x56
  	ldi	r16, 0x03	; 3
- 	ACALL	DisplayValue	; DisplayValue(diodes.Voltage[nn],-3,'V',3);
- 	ACALL	lcd_space;	; lcd_space();
+ 	RCALL	DisplayValue	; DisplayValue(diodes.Voltage[nn],-3,'V',3);
+ 	RCALL	lcd_space;	; lcd_space();
 ad1ca4:
  	pop	r16
  	ret
@@ -68,7 +69,7 @@ ad1ca4:
 /*       lcd_data(LCD_CHAR_RESIS3);	// special symbol or R */
 /*    } */
 /*    lcd_line2(); 				//2. row */
-/*    lcd_fix_string(Uf_str);			//"Uf=" */
+/*    lcd_PGM_string(Uf_str);			//"Uf=" */
 /*    mVAusgabe(bcdnum >> 4); */
 /*    mVAusgabe(bcdnum & 0x0f); */
 /* } */
@@ -79,15 +80,19 @@ UfAusgabe:
  	lds	r24, ResistorsFound;	0x0168
  	and	r24, r24
  	breq	ad1cbe; 	   if (ResistorsFound > 0) { 
- 	ACALL	lcd_space;	lcd_space();
+ 	RCALL	lcd_space;	lcd_space();
  	ldi	r24, LCD_CHAR_RESIS3;	0
- 	ACALL	lcd_data;      lcd_data(LCD_CHAR_RESIS3);	// special symbol or R
+ 	RCALL	lcd_data;      lcd_data(LCD_CHAR_RESIS3);	// special symbol or R
 ad1cbe:
  	ldi	r24, 0xC0	; 192
- 	ACALL	lcd_command	;lcd_line2(); 				//2. row
+ 	RCALL	lcd_command	;lcd_line2(); 				//2. row
  	ldi	r24, lo8(Uf_str);	0xE9
  	ldi	r25, hi8(Uf_str);	0x01
- 	ACALL	lcd_fix_string	; lcd_fix_string(Uf_str);	//"Uf="
+#ifdef USE_EEPROM
+ 	RCALL	lcd_fix_string	; lcd_PGM_string(Uf_str);	//"Uf="
+#else
+ 	RCALL	lcd_pgm_string	; lcd_PGM_string(Uf_str);	//"Uf="
+#endif
  	mov	r24, r17
  	swap	r24
  	andi	r24, 0x0F
@@ -105,9 +110,9 @@ ad1cbe:
 /*    first = diode_sequence >> 4; */
 /*    second = diode_sequence & 3; */
 /*    lcd_testpin(diodes.Anode[first]); */
-/*    lcd_fix_string(AnKat);	//"->|-" */
+/*    lcd_PGM_string(AnKat);	//"->|-" */
 /*    lcd_testpin(diodes.Cathode[first]); */
-/*    lcd_fix_string(AnKat);	//"->|-" */
+/*    lcd_PGM_string(AnKat);	//"->|-" */
 /*    lcd_testpin(diodes.Cathode[second]); */
 /*    UfAusgabe(diode_sequence); */
 /* } */
@@ -130,23 +135,31 @@ SerienDiodenAusgabe:
  	adc	r15, zero_reg
  	movw	r30, r14
  	ld	r24, Z		;Anode
- 	ACALL	lcd_testpin	; lcd_testpin(diodes.Anode[first]);
+ 	RCALL	lcd_testpin	; lcd_testpin(diodes.Anode[first]);
  	ldi	r16, lo8(AnKat)	;0xA3
  	ldi	r17, hi8(AnKat)	;0x03
  	movw	r24, r16
- 	ACALL	lcd_fix_string	; lcd_fix_string(AnKat);	//"->|-"
+#ifdef USE_EEPROM
+ 	RCALL	lcd_fix_string	; lcd_PGM_string(AnKat);	//"->|-"
+#else
+ 	RCALL	lcd_pgm_string	; lcd_PGM_string(AnKat);	//"->|-"
+#endif
  	movw	r30, r14
  	ldd	r24, Z+6	; Cathode
- 	ACALL	lcd_testpin	; lcd_testpin(diodes.Cathode[first]);
+ 	RCALL	lcd_testpin	; lcd_testpin(diodes.Cathode[first]);
  	movw	r24, r16
- 	ACALL	lcd_fix_string	; lcd_fix_string(AnKat);	//"->|-"
+#ifdef USE_EEPROM
+ 	RCALL	lcd_fix_string	; lcd_PGM_string(AnKat);	//"->|-"
+#else
+ 	RCALL	lcd_pgm_string	; lcd_PGM_string(AnKat);	//"->|-"
+#endif
 
  	mov	r24, r13
  	andi	r24, 0x03	; second = diode_sequence & 3;
  	add	r28, r24
  	adc	r29, zero_reg
  	ldd	r24, Y+6	; Cathode
- 	ACALL	lcd_testpin	; lcd_testpin(diodes.Cathode[second]);
+ 	RCALL	lcd_testpin	; lcd_testpin(diodes.Cathode[second]);
  	lds	r24, diode_sequence;	x0102
  	rcall	UfAusgabe	; UfAusgabe(diode_sequence);
     	pop	r29

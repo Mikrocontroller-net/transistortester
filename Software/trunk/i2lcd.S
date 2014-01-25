@@ -8,6 +8,8 @@
 .GLOBAL u2lcd
 .GLOBAL i2lcd
 
+#define RCALL rcall
+
 
 i2lcd:			;	void i2lcd(int iw)
 
@@ -18,7 +20,7 @@ i2lcd:			;	void i2lcd(int iw)
         push	r24
         push	r25
  	ldi	r24,'-'		; 45
- 	ACALL	lcd_data	; lcd_data('-'); uses r22
+ 	RCALL	lcd_data	; lcd_data('-'); uses r22
         pop	r25		; old r25
         pop	r24		; old r24
         com	r25
@@ -32,6 +34,6 @@ to_lcd:			;	void i2lcd(uint16_t iw)
  	ldi	r20, 10
  	ldi	r21, 0x00	; 0
  	ACALL	utoa		; utoa(iw, outval, 10);	//output voltage to string
- 	ACALL	lcd_string	;lcd_string(utoa(iw, outval, 10));	//output correction voltage
+ 	RCALL	lcd_string	;lcd_string(utoa(iw, outval, 10));	//output correction voltage
 
  	ret

@@ -101,6 +101,11 @@ CFLAGS += -DNO_AREF_CAP
 OP_MHZ = 8
 #OP_MHZ = 1
 
+# Restart from sleep mode will be delayed for 16384 clock tics with crystal mode.
+# Operation with the internal RC-Generator or external clock will delay the restart by only 6 clock tics.
+# You must specify this with "CFLAGS += -DRESTART_DELAY_TICS=6", if you don't use the crystal mode.
+#CFLAGS += -DRESTART_DELAY_TICS=6
+
 # The USE_EEPROM option specify where you wish to locate fix text and tables.
 # If USE_EEPROM is unset, program memory (flash) is taken for fix text and tables.
 CFLAGS += -DUSE_EEPROM
@@ -109,7 +114,8 @@ CFLAGS += -DUSE_EEPROM
 # Omitting the option will select the 123=... style.  Every point is replaced by a character identifying 
 # type of connected transistor pin (B=Base, E=Emitter, C=Collector, G=Gate, S=Source, D=Drain).
 # If you select EBC_STYLE=321 , the style will be 321=... , the inverted order to the 123=... style.
-CFLAGS += -DEBC_STYLE
+#CFLAGS += -DEBC_STYLE
+#CFLAGS += -DEBC_STYLE=321
 
 # Setting of NO_NANO avoids the use of n as prefix for Farad (nF), the mikro prefix is used insted (uF).
 # CFLAGS += -DNO_NANO
@@ -154,7 +160,7 @@ CFLAGS += -DBAT_OUT=150
 # The warning level is 0.8V higher than the specified poor level (>5.3V).
 # The warning level is 0.4V higher than the specified poor level (>2.9V, <=5.3V).
 # The warning level is 0.2V higher than the specified poor level (>1.3V, <=2.9V).
-# The warning level is 0.1V higher than the specified poor level (<=1.3V ).
+# The warning level is 0.1V higher than the specified poor level (<=1.3V).
 # Setting the poor level to low values is not recommended for rechargeable Batteries,
 # because this increase the danger for deep discharge!!
 CFLAGS += -DBAT_POOR=6400
@@ -171,7 +177,7 @@ CFLAGS += -DBAT_POOR=6400
 CFLAGS += -DINHIBIT_SLEEP_MODE
 
 
-# Select your programmer type and port, if you wish to use avrdude.
+# Select your programmer type, speed and port, if you wish to use avrdude.
 PROGRAMMER=avrisp2
 BitClock=5.0
 #PROGRAMMER=avrasp
@@ -372,9 +378,14 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Objects that must be built in order to link
-OBJECTS = lcd-routines.o lcd_hw_4_bit.o main.o UfAusgabe.o RvalOut.o ChargePin10ms.o EntladePins.o \
- DisplayValue.o PinLayout.o RefVoltage.o wait_for_key_ms.o swuart.o wait1000ms.o i2lcd.o \
- ReadCapacity.o GetRLmultip.o ReadInductance.o ReadADC.o CheckPins.o Calibrate_UR.o
+OBJECTS = lcd_hw_4_bit.o lcd-routines.o i2lcd.o PinLayout.o RvalOut.o UfAusgabe.o DisplayValue.o
+OBJECTS += swuart.o
+OBJECTS += wait1000ms.o main.o CheckPins.o ChargePin10ms.o EntladePins.o RefVoltage.o wait_for_key_ms.o
+OBJECTS +=  ReadCapacity.o GetRLmultip.o ReadADC.o Calibrate_UR.o
+ifneq ($(PARTNO),m8)
+OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o
+endif
+
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -383,17 +394,44 @@ LINKONLYOBJECTS =
 ## Build
 all: $(TARGET) TransistorTester.hex TransistorTester.eep TransistorTester.lss size
 
-## Compile
-lcd-routines.o: ../lcd-routines.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
+########### Compile only Assembler source available 
 lcd_hw_4_bit.o: ../lcd_hw_4_bit.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-ReadCapacity.o: ../ReadCapacity.c Makefile
+wait1000ms.o: ../wait1000ms.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+swuart.o: ../swuart.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+########### Compile  Assembler source only, is time critical 
+GetESR.o: ../GetESR.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+########### Compile C or Assembler , Assembler saves flash
+lcd-routines.o: ../lcd-routines.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 GetRLmultip.o: ../GetRLmultip.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+UfAusgabe.o: ../UfAusgabe.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+RvalOut.o: ../RvalOut.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+PinLayout.o: ../PinLayout.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+RefVoltage.o: ../RefVoltage.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+i2lcd.o: ../i2lcd.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+########### Compile C source only 
+ReadCapacity.o: ../ReadCapacity.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ReadInductance.o: ../ReadInductance.c Makefile
@@ -408,14 +446,11 @@ ReadADC.o: ../ReadADC.S Makefile
 CheckPins.o: ../CheckPins.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
+GetVloss.o: ../GetVloss.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 main.o: ../main.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -D$(UI_LANGUAGE) -c  $<
-
-UfAusgabe.o: ../UfAusgabe.S Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-RvalOut.o: ../RvalOut.S Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ChargePin10ms.o: ../ChargePin10ms.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
@@ -426,22 +461,7 @@ EntladePins.o: ../EntladePins.c Makefile
 DisplayValue.o: ../DisplayValue.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-PinLayout.o: ../PinLayout.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-RefVoltage.o: ../RefVoltage.S Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
 wait_for_key_ms.o: ../wait_for_key_ms.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-swuart.o: ../swuart.S Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-wait1000ms.o: ../wait1000ms.S Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-i2lcd.o: ../i2lcd.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link

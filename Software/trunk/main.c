@@ -77,7 +77,7 @@ int main(void) {
      // this happens, if the Watchdog is not reset for 2s
      // can happen, if any loop in the Program doen't finish.
      lcd_line1();
-     lcd_fix_string(TestTimedOut);	//Output Timeout
+     lcd_MEM_string(TestTimedOut);	//Output Timeout
      wait_about3s();				//wait for 3 s
      ON_PORT = 0;			//shut off!
 //     ON_DDR = (1<<ON_PIN);		//switch to GND
@@ -167,7 +167,7 @@ start:
   // Battery check is selected
   ReadADC(TPBAT);	//Dummy-Readout
   ptrans.uBE = W5msReadADC(TPBAT); 	//with 5V reference
-  lcd_fix_string(Bat_str);		//output: "Bat. "
+  lcd_MEM_string(Bat_str);		//output: "Bat. "
  #ifdef BAT_OUT
   // display Battery voltage
   // The divisor to get the voltage in 0.01V units is ((10*33)/133) witch is about 2.4812
@@ -211,14 +211,14 @@ start:
      //Vcc < 7,3V; show Warning 
      if(ptrans.uBE < POOR_LEVEL) {	
         //Vcc <6,3V; no proper operation is possible
-        lcd_fix_string(BatEmpty);	//Battery empty!
+        lcd_MEM_string(BatEmpty);	//Battery empty!
         wait_about2s();
         PORTD = 0;			//switch power off
         return 0;
      }
-     lcd_fix_string(BatWeak);		//Battery weak
+     lcd_MEM_string(BatWeak);		//Battery weak
   } else { // Battery-voltage OK
-     lcd_fix_string(OK_str); 		// "OK"
+     lcd_MEM_string(OK_str); 		// "OK"
   }
 #else
   lcd_fix2_string(VERSION_str);		// if no Battery check, Version .. in row 1
@@ -241,7 +241,7 @@ start:
      {
          /* display VCC= only first time */
          lcd_line2();
-         lcd_fix_string(VCC_str);		// VCC=
+         lcd_MEM_string(VCC_str);		// VCC=
          DisplayValue(ADCconfig.U_AVCC,-3,'V',3);	// Display 3 Digits of this mV units
          wait_about1s();
      }
@@ -254,7 +254,7 @@ start:
      lcd_line2();
      lcd_clear_line();
      lcd_line2();
-     lcd_fix_string(Vext_str);		// Vext=
+     lcd_MEM_string(Vext_str);		// Vext=
      ADC_DDR = 0;		//deactivate Software-UART
      Vext = W5msReadADC(TPext);	// read external voltage 
 //     ADC_DDR = TXD_MSK;		//activate Software-UART 
@@ -276,7 +276,7 @@ start:
   EntladePins();		// discharge all capacitors!
   if(PartFound == PART_CELL) {
     lcd_clear();
-    lcd_fix_string(Cell_str);	// display "Cell!"
+    lcd_MEM_string(Cell_str);	// display "Cell!"
 #if FLASHEND > 0x3fff
     lcd_line2();		// use LCD line 2
     DisplayValue(cell_mv[0],-3,'V',3);
@@ -301,7 +301,7 @@ start:
 #else
   lcd_line2();			//LCD position row2, column 1
 #endif
-  lcd_fix_string(TestRunning);		//String: testing...
+  lcd_MEM_string(TestRunning);		//String: testing...
      
   // check all 6 combinations for the 3 pins 
 //         High  Low  Tri
@@ -355,24 +355,24 @@ start:
 
   _trans = &ntrans;			// default transistor structure to show
   if (PartFound == PART_THYRISTOR) {
-    lcd_fix_string(Thyristor);		//"Thyristor"
+    lcd_MEM_string(Thyristor);		//"Thyristor"
     goto gakAusgabe;
   }
 
   if (PartFound == PART_TRIAC) {
-    lcd_fix_string(Triac);		//"Triac"
+    lcd_MEM_string(Triac);		//"Triac"
     goto gakAusgabe;
   }
 
   if (PartFound == PART_CAPACITOR) {
-//     lcd_fix_string(Capacitor);
+//     lcd_MEM_string(Capacitor);
      lcd_testpin(cap.ca);		//Pin number 1
-     lcd_fix_string(CapZeich);		// capacitor sign
+     lcd_MEM_string(CapZeich);		// capacitor sign
      lcd_testpin(cap.cb);		//Pin number 2
 #if FLASHEND > 0x1fff
      GetVloss();			// get Voltage loss of capacitor
      if (cap.v_loss != 0) {
-        lcd_fix_string(VLOSS_str);	// "  Vloss="
+        lcd_MEM_string(VLOSS_str);	// "  Vloss="
         DisplayValue(cap.v_loss,-1,'%',2);
      }
 #endif
@@ -381,7 +381,7 @@ start:
 #if FLASHEND > 0x1fff
      cap.esr = GetESR(cap.cb, cap.ca);		// get ESR of capacitor
      if ( cap.esr < 65530) {
-        lcd_fix_string(ESR_str);
+        lcd_MEM_string(ESR_str);
         DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
      }
 #endif
@@ -390,36 +390,36 @@ start:
 
   if(PartFound == PART_DIODE) {
      if(NumOfDiodes == 1) {		//single Diode
-//        lcd_fix_string(Diode);		//"Diode: "
+//        lcd_MEM_string(Diode);		//"Diode: "
 #if FLASHEND > 0x1fff
         // enough memory to sort the pins
  #if EBC_STYLE == 321
         // the higher test pin number is left side
         if (diodes.Anode[0] > diodes.Cathode[0]) {
            lcd_testpin(diodes.Anode[0]);
-           lcd_fix_string(AnKat);	//"->|-"
+           lcd_MEM_string(AnKat);	//"->|-"
            lcd_testpin(diodes.Cathode[0]);
         } else {
            lcd_testpin(diodes.Cathode[0]);
-           lcd_fix_string(KatAn);	//"-|<-"
+           lcd_MEM_string(KatAn);	//"-|<-"
            lcd_testpin(diodes.Anode[0]);
         }
  #else
         // the higher test pin number is right side
         if (diodes.Anode[0] < diodes.Cathode[0]) {
            lcd_testpin(diodes.Anode[0]);
-           lcd_fix_string(AnKat);	//"->|-"
+           lcd_MEM_string(AnKat);	//"->|-"
            lcd_testpin(diodes.Cathode[0]);
         } else {
            lcd_testpin(diodes.Cathode[0]);
-           lcd_fix_string(KatAn);	//"-|<-"
+           lcd_MEM_string(KatAn);	//"-|<-"
            lcd_testpin(diodes.Anode[0]);
         }
  #endif
 #else
         // too less memory to sort the pins
         lcd_testpin(diodes.Anode[0]);
-        lcd_fix_string(AnKat);		//"->|-"
+        lcd_MEM_string(AnKat);		//"->|-"
         lcd_testpin(diodes.Cathode[0]);
 #endif
 #if FLASHEND > 0x1fff
@@ -427,27 +427,27 @@ start:
 #endif
         UfAusgabe(0x70);
         /* load current of capacity is (5V-1.1V)/(470000 Ohm) = 8298nA */
-        lcd_fix_string(GateCap_str);	//"C="
+        lcd_MEM_string(GateCap_str);	//"C="
         ReadCapacity(diodes.Cathode[0],diodes.Anode[0]);	// Capacity opposite flow direction
         DisplayValue(cap.cval,cap.cpre,'F',3);
         goto end3;
      } else if(NumOfDiodes == 2) { // double diode
         lcd_data('2');
-        lcd_fix_string(Dioden);		//"diodes "
+        lcd_MEM_string(Dioden);		//"diodes "
         if(diodes.Anode[0] == diodes.Anode[1]) { //Common Anode
            lcd_testpin(diodes.Cathode[0]);
-           lcd_fix_string(KatAn);	//"-|<-"
+           lcd_MEM_string(KatAn);	//"-|<-"
            lcd_testpin(diodes.Anode[0]);
-           lcd_fix_string(AnKat);	//"->|-"
+           lcd_MEM_string(AnKat);	//"->|-"
            lcd_testpin(diodes.Cathode[1]);
            UfAusgabe(0x01);
            goto end3;
         } 
         if(diodes.Cathode[0] == diodes.Cathode[1]) { //Common Cathode
            lcd_testpin(diodes.Anode[0]);
-           lcd_fix_string(AnKat);	//"->|-"
+           lcd_MEM_string(AnKat);	//"->|-"
 	   lcd_testpin(diodes.Cathode[0]);
-           lcd_fix_string(KatAn);	//"-|<-"
+           lcd_MEM_string(KatAn);	//"-|<-"
            lcd_testpin(diodes.Anode[1]);
            UfAusgabe(0x01);
            goto end3;
@@ -521,17 +521,17 @@ start:
 //        if((ptrans.b<3) && (ptrans.c<3)) 
         if(diode_sequence < 0x22) {
            lcd_data('3');
-           lcd_fix_string(Dioden);	//"Diodes "
+           lcd_MEM_string(Dioden);	//"Diodes "
            SerienDiodenAusgabe();
            goto end3;
         }
      }  // end (NumOfDiodes == 3)
-     lcd_fix_string(Bauteil);		//"Bauteil"
-     lcd_fix_string(Unknown); 		//" unbek."
+     lcd_MEM_string(Bauteil);		//"Bauteil"
+     lcd_MEM_string(Unknown); 		//" unbek."
      lcd_line2(); //2. row 
-     lcd_fix_string(OrBroken); 		//"oder defekt "
+     lcd_MEM_string(OrBroken); 		//"oder defekt "
      lcd_data(NumOfDiodes + '0');
-     lcd_fix_string(AnKat);		//"->|-"
+     lcd_MEM_string(AnKat);		//"->|-"
      goto not_known;
      // end (PartFound == PART_DIODE)
   } else if (PartFound == PART_TRANSISTOR) {
@@ -553,6 +553,7 @@ start:
     }
 #endif
 #if FLASHEND > 0x1fff
+    // not possible for mega8, change Pin sequence instead.
     if ((ptrans.count != 0) && (ntrans.count !=0) && (!(ON_PIN_REG & (1<<RST_PIN)))) {
        // if the Start key is still pressed, use the other Transistor
        if (PartMode == PART_MODE_NPN) {
@@ -564,20 +565,16 @@ start:
 #endif
 
     if(PartMode == PART_MODE_NPN) {
-       lcd_fix_string(NPN_str);		//"NPN "
-#if FLASHEND > 0x1fff
+       lcd_MEM_string(NPN_str);		//"NPN "
        if (ptrans.count != 0) {
           lcd_data('p');		// mark for parasitic PNp
        }
-#endif
 //       _trans = &ntrans;  is allready selected a default
     } else {
-       lcd_fix_string(PNP_str);		//"PNP "
-#if FLASHEND > 0x1fff
+       lcd_MEM_string(PNP_str);		//"PNP "
        if (ntrans.count != 0) {
           lcd_data('n');		// mark for parasitic NPn
        }
-#endif
        _trans = &ptrans;		// change transistor structure
     }
     lcd_space();
@@ -597,9 +594,9 @@ start:
        if (((PartMode == PART_MODE_NPN) && (ntrans.c > ntrans.e)) || ((PartMode != PART_MODE_NPN) && (ptrans.c < ptrans.e)))
 #endif
        {
-          lcd_fix_string(AnKat);	//"->|-"
+          lcd_MEM_string(AnKat);	//"->|-"
        } else {
-          lcd_fix_string(KatAn);	//"-|<-"
+          lcd_MEM_string(KatAn);	//"-|<-"
        }
     }
     PinLayout('E','B','C'); 		//  EBC= or 123=...
@@ -616,11 +613,11 @@ start:
        wait_for_key_5s_line2();		// wait 5s and clear line 2
     }
 #endif
-    lcd_fix_string(hfe_str);		//"B="  (hFE)
+    lcd_MEM_string(hfe_str);		//"B="  (hFE)
     DisplayValue(_trans->hfe,0,0,3);
     lcd_space();
 
-    lcd_fix_string(Uf_str);		//"Uf="
+    lcd_MEM_string(Uf_str);		//"Uf="
     DisplayValue(_trans->uBE,-3,'V',3);
     goto end;
     // end (PartFound == PART_TRANSISTOR)
@@ -636,7 +633,7 @@ start:
 
     tmp = PartMode&0x0f;
     if (tmp == PART_MODE_JFET) {
-       lcd_fix_string(jfet_str);	//"JFET"
+       lcd_MEM_string(jfet_str);	//"JFET"
     } else {
        if ((PartMode&D_MODE) == D_MODE) {
           lcd_data('D');			// N-D or P-D
@@ -644,9 +641,9 @@ start:
           lcd_data('E');			// N-E or P-E
        }
        if (tmp == (PART_MODE_IGBT)) {
-          lcd_fix_string(igbt_str);	//"-IGBT"
+          lcd_MEM_string(igbt_str);	//"-IGBT"
        } else {
-          lcd_fix_string(mosfet_str);	//"-MOS "
+          lcd_MEM_string(mosfet_str);	//"-MOS "
        }
     }
     if (tmp == PART_MODE_IGBT) {
@@ -675,17 +672,17 @@ start:
           lcd_data(LCD_CHAR_DIODE1);	//show Diode symbol >|
           lcd_line2();			//2. Row
           lcd_testpin(diodes.Anode[0]);
-          lcd_fix_string(AnKat);	//"->|-"
+          lcd_MEM_string(AnKat);	//"->|-"
           lcd_testpin(diodes.Cathode[0]);
        } else {
           lcd_data(LCD_CHAR_DIODE2);	//show Diode symbol |<
           lcd_line2();			//2. Row
           lcd_testpin(diodes.Cathode[0]);
-          lcd_fix_string(KatAn);	//"-|<-"
+          lcd_MEM_string(KatAn);	//"-|<-"
           lcd_testpin(diodes.Anode[0]);
        }
        lcd_space();
-       lcd_fix_string(Uf_str);			//"Uf="
+       lcd_MEM_string(Uf_str);			//"Uf="
        mVAusgabe(0);
        wait_for_key_5s_line2();		// wait 5s and clear line 2
 #else
@@ -700,15 +697,15 @@ start:
     lcd_line2();			//2. Row
     if((PartMode&D_MODE) != D_MODE) {	//enhancement-MOSFET
 	//Gate capacity
-       lcd_fix_string(GateCap_str);		//"C="
+       lcd_MEM_string(GateCap_str);		//"C="
        ReadCapacity(_trans->b,_trans->e);	//measure capacity
        DisplayValue(cap.cval,cap.cpre,'F',3);
-       lcd_fix_string(vt_str);		// "Vt="
+       lcd_MEM_string(vt_str);		// "Vt="
     } else {
        lcd_data('I');
        lcd_data('=');
        DisplayValue(_trans->current,-5,'A',2);
-       lcd_fix_string(Vgs_str);		// " Vg="
+       lcd_MEM_string(Vgs_str);		// " Vg="
     }
     //Gate-threshold voltage
     DisplayValue(_trans->gthvoltage,-3,'V',2);
@@ -721,7 +718,7 @@ resistor_out:
     ii = 0;
     if (ResistorsFound == 1) { // single resistor
        lcd_testpin(resis[0].rb);  	//Pin-number 1
-       lcd_fix_string(Resistor_str);
+       lcd_MEM_string(Resistor_str);
        lcd_testpin(resis[0].ra);		//Pin-number 2
     } else { // R-Max suchen
        if (resis[1].rx > resis[0].rx)
@@ -748,9 +745,9 @@ resistor_out:
           z = '3';
        }
        lcd_data(x);
-       lcd_fix_string(Resistor_str);    // -[=]-
+       lcd_MEM_string(Resistor_str);    // -[=]-
        lcd_data(y);
-       lcd_fix_string(Resistor_str);    // -[=]-
+       lcd_MEM_string(Resistor_str);    // -[=]-
        lcd_data(z);
     }
     lcd_line2(); //2. row 
@@ -760,7 +757,7 @@ resistor_out:
        ReadInductance();		// measure inductance, possible only with single R<2.1k
        if (inductor_lpre != 0) {
 	  // resistor have also Inductance
-          lcd_fix_string(Lis_str);	// "L="
+          lcd_MEM_string(Lis_str);	// "L="
           DisplayValue(inductor_lx,inductor_lpre,'H',3);	// output inductance
        }
 #endif
@@ -783,10 +780,10 @@ resistor_out:
 
   } // end (PartFound == PART_RESISTOR)
 
-  lcd_fix_string(TestFailed1); 	//"Kein,unbek. oder"
+  lcd_MEM_string(TestFailed1); 	//"Kein,unbek. oder"
   lcd_line2(); //2. row 
-  lcd_fix_string(TestFailed2); 	//"defektes "
-  lcd_fix_string(Bauteil);		//"Bauteil"
+  lcd_MEM_string(TestFailed2); 	//"defektes "
+  lcd_MEM_string(Bauteil);		//"Bauteil"
 not_known:
 #if POWER_OFF+0 > 1
   empty_count++;
@@ -800,7 +797,7 @@ gakAusgabe:
   PinLayout(Cathode_char,'G','A'); 	// CGA= or 123=...
 #ifdef WITH_THYRISTOR_GATE_V
   lcd_line2(); //2. row 
-  lcd_fix_string(Uf_str);		// "Uf="
+  lcd_MEM_string(Uf_str);		// "Uf="
   DisplayValue(ntrans.uBE,-3,'V',2);
 #endif
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -850,22 +847,12 @@ end3:
   lcd_clear();
 #if FLASHEND > 0x1fff
   lcd_data('0'+NumOfDiodes);
-  lcd_fix_string(Dioden);	//"Diodes "
+  lcd_MEM_string(Dioden);	//"Diodes "
 #endif
   goto resistor_out;
 
 }   // end main
 
-
-#ifdef LCD_CLEAR
-void lcd_clear_line(void) {
- // writes 20 spaces to LCD-Display, Cursor must be positioned to first column
- unsigned char ll;
- for (ll=0;ll<20;ll++) {
-    lcd_space();
- }
-}
-#endif
 
 #ifndef INHIBIT_SLEEP_MODE
 /* set the processor to sleep state */

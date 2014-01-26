@@ -11,6 +11,8 @@ extern struct ADCconfig_t{
   uint16_t U_AVCC;		// Voltage of AVCC
 } ADCconfig;
 */
+
+
 #ifdef INHIBIT_SLEEP_MODE
 //  #define StartADCwait() ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; /* enable ADC and start */
     #define StartADCwait() ADCSRA = StartADCmsk; /* Start conversion */\

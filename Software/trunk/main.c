@@ -50,22 +50,7 @@ int main(void) {
   PRR = (1<<PRTWI) | (1<<PRTIM0) | (1<<PRSPI) | (1<<PRUSART0);
   DIDR0 = (1<<ADC5D) | (1<<ADC4D) | (1<<ADC3D);	
   TCCR2A = (0<<WGM21) | (0<<WGM20);		// Counter 2 normal mode
- #if F_CPU <= 1000000UL
-  TCCR2B = (1<<CS22) | (0<<CS21) | (1<<CS20);	//prescaler 128, 128us @ 1MHz
-  #define T2_PERIOD 128
- #endif 
- #if F_CPU == 2000000UL
-  TCCR2B = (1<<CS22) | (1<<CS21) | (0<<CS20);	//prescaler 256, 128us @ 2MHz
-  #define T2_PERIOD 128
- #endif 
- #if F_CPU == 4000000UL
-  TCCR2B = (1<<CS22) | (1<<CS21) | (0<<CS20);	//prescaler 256, 64us @ 2MHz
-  #define T2_PERIOD 64
- #endif 
- #if F_CPU >= 8000000UL
-  TCCR2B = (1<<CS22) | (1<<CS21) | (1<<CS20);	//prescaler 1024, 128us @ 8MHz, 64us @ 16MHz
-  #define T2_PERIOD (1024 / (F_CPU / 1000000UL));	/* set to 128 or 64 us */
- #endif 
+  TCCR2B = CNTR2_PRESCALER;	//prescaler set in autoconf
   sei();				// enable interrupts
 #endif
   lcd_init();				//initialize LCD
@@ -854,6 +839,7 @@ end3:
 }   // end main
 
 
+#if 0
 #ifndef INHIBIT_SLEEP_MODE
 /* set the processor to sleep state */
 /* wake up will be done with compare match interrupt of counter 2 */
@@ -890,6 +876,7 @@ while (pause > 0)
   }
 TIMSK2 = (0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2); /* disable output compare match A interrupt */ 
 }
+#endif
 #endif
 
 #ifdef CHECK_CALL

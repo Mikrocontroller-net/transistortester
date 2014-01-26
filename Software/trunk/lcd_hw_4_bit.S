@@ -87,7 +87,7 @@ _lcd_hw_write:
 
                nop			; wait for data setup time
                set_en_low		; force data read from LCD controller
-               ACALL    wait1us
+               RCALL    wait1us
 
                ; skip sending low nibble for init commands
                sbrc    preg_1, 7

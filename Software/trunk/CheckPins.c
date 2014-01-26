@@ -157,7 +157,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   // But this current is lower, if the base is hold at emitter level (adc.hp1).
   // Additional checking of adc.lp1 will prevent to detect a PNP as P-JFET.
 //  if((PartMode <= PART_MODE_P_JFET) && (adc.lp_otr > 455)  && (adc.vCEs > 455))
-  if((adc.lp_otr > 455)  && (adc.vCEs > 455))
+  
+//  if((adc.lp_otr > 455)  && (adc.vCEs > 455))
+  if((adc.vCEs > 115)  && ((adc.vCEs+100) > adc.lp_otr))
      {  //there is more than 650uA current without TristatePin current 
      // can be JFET or D-FET
      //Test if N-JFET or if self-conducting N-MOSFET

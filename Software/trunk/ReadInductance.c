@@ -260,6 +260,7 @@ void ReadInductance(void) {
  } // end ReadInductance()
 
 
+#if 0
 #if FLASHEND > 0x1fff
 // get_log interpolate a table with the function -log(1 - (permil/1000))
 uint16_t get_log(uint16_t permil) {
@@ -282,4 +283,5 @@ uint16_t get_log(uint16_t permil) {
   result = ((y2 - y1) * tabres ) / Log_Tab_Distance + y1; // interpolate
   return(result);
  }
+#endif
 #endif

@@ -13,6 +13,8 @@
 ;// assembler version of ReadADC.c
 ;// ACALL is defined in config.h as rcall for ATmega8 and as call for ATmega168
 
+#define RCALL rcall
+
 #ifdef INHIBIT_SLEEP_MODE
 	.macro	StartADCwait
  #if ADCSRA < 32
@@ -33,7 +35,7 @@
 	out	_SFR_IO_ADDR(SMCR), r24;	/*  SMCR = (1 << SM0) | (1 << SE); */
 	sleep;                  /* wait for ADC */
 	ldi	r24, (1 << SM0) | (0 << SE);
-	out	_SFR_IO_ADDR(SMCR), r24;	/*  SMCR = (1 << SM0) | (1 << SE); */
+	out	_SFR_IO_ADDR(SMCR), r24;	/*  SMCR = (1 << SM0) | (0 << SE); */
 	.endm
 #endif
 
@@ -54,20 +56,17 @@ W5msReadADC:
 W20msReadADC:
 	push	r24;
 	ldi	r24, 4;		/* 4 * 5ms */
-	ldi	r25, 0;
-	ACALL	sleep_5ms;
+	RCALL	sleep_5ms;
 	rjmp   to_read;
 W10msReadADC:
 	push	r24;
 	ldi	r24, 2;		/* 2 * 5ms */
-	ldi	r25, 0;
-	ACALL	sleep_5ms;
+	RCALL	sleep_5ms;
 	rjmp   to_read;
 W5msReadADC:
 	push	r24;
 	ldi	r24, 1;		/* 1 * 5ms */
-	ldi	r25, 0;
-	ACALL	sleep_5ms;
+	RCALL	sleep_5ms;
 
 to_read:
 	pop	r24;
@@ -103,9 +102,9 @@ get_sample:
        	breq	r2aa2 ;
 #ifdef NO_AREF_CAP
 ;    wait100us(); /* time for voltage stabilization */
-	ACALL	wait100us;
+	RCALL	wait100us;
 #else
-	ACALL	wait10ms;
+	RCALL	wait10ms;
 #endif
 	StartADCwait                    /* start ADC and wait */
 	sts	ADCconfig+1, r30;	 ADCconfig.RefFlag = Samples; /* update flag */

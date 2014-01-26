@@ -24,7 +24,7 @@ void scale_intref_adc(void);		// get scale factors for ReadADC with internal ref
 //uint8_t value_out(unsigned long vval,uint8_t pp);    // output 4 digits with (pp-1) digits after point
 void DisplayValue(unsigned long vval,int8_t Expo,unsigned char Unit, unsigned char Digits); //output Digits characters with exponent and unit
 unsigned int compute_hfe(unsigned int lpx, unsigned int tpy);
-void sleep_5ms(uint16_t xxx);		// set processor to sleep state for xxx times 5ms
+void sleep_5ms(uint8_t xxx);		// set processor to sleep state for xxx times 5ms, xxx>200  (xxx-200)*100  
 void PinLayout(char pin1, char pin2, char pin3); // show pin layout with EBC= or 123=
 void Calibrate_UR(void);		// get reference voltages and port resistance
 uint16_t get_log(uint16_t permil);	// get -log(1-(permil/1000))

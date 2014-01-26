@@ -351,10 +351,10 @@
  #define wait_about400ms() sleep_5ms(80)
  #define wait_about500ms() sleep_5ms(100)
  #define wait_about1s() sleep_5ms(200)
- #define wait_about2s() sleep_5ms(400)
- #define wait_about3s() sleep_5ms(600)
- #define wait_about4s() sleep_5ms(800)
- #define wait_about5s() sleep_5ms(1000)
+ #define wait_about2s() sleep_5ms(202)
+ #define wait_about3s() sleep_5ms(203)
+ #define wait_about4s() sleep_5ms(204)
+ #define wait_about5s() sleep_5ms(205)
 #endif
 
 #undef AUTO_RH
@@ -446,7 +446,7 @@
 // Otherwise the shown type (NPNp or PNPn) depends on the selected pin sequence of the tester!
 #define SEARCH_PARASITIC
 
-#if FLASHEND > 0x3fff
+#if FLASHEND > 0x1fff
 // you can save about 14 bytes of Flash, if you deselect Thyristor gate voltage
  #define WITH_THYRISTOR_GATE_V
 #endif
@@ -464,7 +464,7 @@
  #define COMMON_COLLECTOR
 #endif
 
-/* the hFE (B) can also be determined with  common emitter circuit (not for atmega8) */
+/* the hFE (B) can also be determined with  common emitter circuit (not for atmega8 ) */
 #if FLASHEND > 0x1fff
  #ifndef NO_COMMON_EMITTER_HFE
    // only define the common emitter, if the extended tests are not explicitly requested
@@ -481,9 +481,12 @@
     #define EXTENDED_TESTS
   #endif
  #else
-    // by only selecting one hFE measurement methode, the extended tests are always possible!
+    // no COMMON_COLLECTOR hFE measurement methode, the extended tests are always possible!
     #define EXTENDED_TESTS
  #endif
+#else
+ // no COMMON_EMITTER  hFE measurement methode, the extended tests are always possible!
+ #define EXTENDED_TESTS
 #endif
 
 #ifdef COMMON_COLLECTOR
@@ -528,5 +531,24 @@
 #endif
 #ifdef DEBUG_OUT
  #define LCD_CLEAR
+#endif
+
+#if F_CPU <= 1000000UL
+  #define CNTR2_PRESCALER (1<<CS22) | (0<<CS21) | (1<<CS20)   /* prescaler 128, 128us @ 1MHz */
+  #define T2_PERIOD 128
+#endif
+#if F_CPU == 2000000UL
+  #define CNTR2_PRESCALER (1<<CS22) | (1<<CS21) | (0<<CS20)   /* prescaler 256, 128us @ 2MHz */
+  #define T2_PERIOD 128
+#endif
+#if F_CPU == 4000000UL
+  #define CNTR2_PRESCALER (1<<CS22) | (1<<CS21) | (0<<CS20)   /* prescaler 256, 64us @ 2MHz */
+  #define T2_PERIOD 64
+#endif
+#if F_CPU >= 8000000UL
+  #define CNTR2_PRESCALER (1<<CS22) | (1<<CS21) | (1<<CS20)   /* prescaler 1024, 128us @ 8MHz, 64us @ 16MHz */
+// #define T2_PERIOD (1024/(F_CPU/1000000UL))
+  #define T2_PERIOD (1024 / MHZ_CPU)
+       /* set to 128 or 64 us */
 #endif
 

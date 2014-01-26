@@ -345,6 +345,7 @@ endif
 endif
 
 CFLAGS += -DF_CPU=$(OP_MHZ)000000UL
+CFLAGS += -DMHZ_CPU=$(OP_MHZ)
 
 ## Options common to compile, link and assembly rules
 COMMON = -mmcu=$(MCU)
@@ -377,16 +378,19 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 ## Objects that must be built in order to link
 OBJECTS = lcd_hw_4_bit.o lcd-routines.o i2lcd.o PinLayout.o RvalOut.o UfAusgabe.o DisplayValue.o
-OBJECTS += swuart.o
-OBJECTS += wait1000ms.o main.o CheckPins.o ChargePin10ms.o EntladePins.o RefVoltage.o wait_for_key_ms.o
-OBJECTS +=  ReadCapacity.o GetRLmultip.o ReadADC.o Calibrate_UR.o
+OBJECTS += swuart.o wait1000ms.o 
+ifndef INHIBIT_SLEEP_MODE
+OBJECTS += sleep_5ms.o
+endif
+OBJECTS += ReadADC.o wait_for_key_ms.o 
+ifneq ($(PARTNO),m8)
+OBJECTS += get_log.o
+endif
+OBJECTS += main.o CheckPins.o ChargePin10ms.o EntladePins.o RefVoltage.o
+OBJECTS +=  ReadCapacity.o GetRLmultip.o Calibrate_UR.o
 ifneq ($(PARTNO),m8)
 OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o
 endif
-
-## Objects explicitly added by the user
-LINKONLYOBJECTS = 
-
 
 ## Build
 all: $(TARGET) TransistorTester.hex TransistorTester.eep TransistorTester.lss size
@@ -427,7 +431,22 @@ RefVoltage.o: ../RefVoltage.S Makefile
 i2lcd.o: ../i2lcd.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
+ReadADC.o: ../ReadADC.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+sleep_5ms.o: ../sleep_5ms.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+wait_for_key_ms.o: ../wait_for_key_ms.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+get_log.o: ../get_log.S Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 ########### Compile C source only 
+DisplayValue.o: ../DisplayValue.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 ReadCapacity.o: ../ReadCapacity.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
@@ -435,9 +454,6 @@ ReadInductance.o: ../ReadInductance.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 Calibrate_UR.o: ../Calibrate_UR.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-ReadADC.o: ../ReadADC.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 CheckPins.o: ../CheckPins.c Makefile
@@ -453,12 +469,6 @@ ChargePin10ms.o: ../ChargePin10ms.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 EntladePins.o: ../EntladePins.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-DisplayValue.o: ../DisplayValue.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-wait_for_key_ms.o: ../wait_for_key_ms.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link

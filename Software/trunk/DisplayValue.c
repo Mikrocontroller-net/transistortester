@@ -22,7 +22,7 @@
  */
 void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsigned char digits)
 {
-  char OutBuffer[15];
+//  char OutBuffer[15];
   unsigned int      Limit;
   unsigned char     Prefix;		/* prefix character */
   uint8_t           Offset;		/* exponent of offset to next 10^3 step */

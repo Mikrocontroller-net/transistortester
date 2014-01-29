@@ -2,10 +2,10 @@
 #include <avr/eeprom.h>
 #include "Transistortester.h"
 
+// computes RHmultip, adc_internal_reference (ADCconfig.U_Bandgap) and ref_mv_offs
 
-#ifdef AUTO_RH
 void RefVoltage(void) {
-// RefVoltage interpolates table RHtab corresponding to voltage ref_mv .
+// RefVoltage interpolates table RHtab corresponding to voltage ref_mv_offs .
 // RHtab contain the factors to get capacity from load time with 470k for
 // different Band gab reference voltages.
 // for remember:
@@ -20,12 +20,13 @@ void RefVoltage(void) {
   uint8_t tabind;
   uint8_t tabres;
 
-  #ifdef AUTO_CAL
+#ifdef AUTO_CAL
   referenz = ref_mv + (int16_t)eeprom_read_word((uint16_t *)(&ref_offset));
-  #else
+#else
   referenz = ref_mv + REF_C_KORR;
-  #endif
+#endif
   ref_mv_offs = referenz;
+#ifdef AUTO_RH
   if (referenz >= Ref_Tab_Beginn) {
      referenz -= Ref_Tab_Beginn;
   } else  {
@@ -42,6 +43,21 @@ void RefVoltage(void) {
   y2 = pgm_read_word(&RHtab[tabind+1]);
   // RHmultip is the interpolated factor to compute capacity from load time with 470k
   RHmultip = ((y1 - y2) * tabres + (Ref_Tab_Abstand/2)) / Ref_Tab_Abstand + y2;
- }
+//########################################
+#else
+  RHmultip = DEFAULT_RH_FAKT;	// default Multiplier for capacity measurement with R_H (470KOhm)
 #endif
+
+#if PROCESSOR_TYP == 8
+  referenz = 2560;		// use defined internal ADC Voltage
+#else
+  referenz = ref_mv;		// use the read out internal Reference voltage
+#endif
+#ifdef AUTO_CAL
+  ADCconfig.U_Bandgap = (ref_mv + (int8_t)eeprom_read_byte((uint8_t *)&RefDiff));
+#else
+  ADCconfig.U_Bandgap = (ref_mv + REF_R_KORR);
+#endif
+  adc_internal_reference = ADCconfig.U_Bandgap;
+ }
 

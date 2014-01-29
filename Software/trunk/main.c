@@ -146,8 +146,6 @@ start:
   Calibrate_UR();		// get Ref Voltages and Pin resistance
   lcd_line1();			// Cursor to 1. row, column 1
   
-  ADCconfig.U_Bandgap = ADC_internal_reference;	// set internal reference voltage for ADC
-
 #ifdef BAT_CHECK
   // Battery check is selected
   ReadADC(TPBAT);	//Dummy-Readout
@@ -214,9 +212,6 @@ start:
 
 //  wait_about1s();			// add more time for reading batterie voltage
   // begin tests
-#ifdef AUTO_RH
-  RefVoltage();			//compute RHmultip = f(reference voltage)
-#endif
 #if FLASHEND > 0x1fff
   if (WithReference) {
      /* 2.5V precision reference is checked OK */
@@ -537,7 +532,7 @@ start:
        }
     }
 #endif
-#if FLASHEND > 0x1fff
+//#if FLASHEND > 0x1fff
     // not possible for mega8, change Pin sequence instead.
     if ((ptrans.count != 0) && (ntrans.count !=0) && (!(ON_PIN_REG & (1<<RST_PIN)))) {
        // if the Start key is still pressed, use the other Transistor
@@ -547,7 +542,7 @@ start:
           PartMode = PART_MODE_NPN;	// switch to parasitic transistor
        }
     }
-#endif
+//#endif
 
     if(PartMode == PART_MODE_NPN) {
        lcd_MEM_string(NPN_str);		//"NPN "
@@ -830,54 +825,14 @@ end3:
   wait_for_key_ms(display_time);
   ADC_DDR =  TXD_MSK; 	// switch pin with reference to input, activate relay
   lcd_clear();
-#if FLASHEND > 0x1fff
+//#if FLASHEND > 0x1fff
   lcd_data('0'+NumOfDiodes);
   lcd_MEM_string(Dioden);	//"Diodes "
-#endif
+//#endif
   goto resistor_out;
 
 }   // end main
 
-
-#if 0
-#ifndef INHIBIT_SLEEP_MODE
-/* set the processor to sleep state */
-/* wake up will be done with compare match interrupt of counter 2 */
-void sleep_5ms(uint16_t pause){
-// pause is the delay in 5ms units
-uint8_t t2_offset;
-#define RESTART_DELAY_US (RESTART_DELAY_TICS/(F_CPU/1000000UL))
-// for 8 MHz crystal the Restart delay is 16384/8 = 2048us
-
-while (pause > 0)
-  {
- #if 3000 > RESTART_DELAY_US
-   if (pause > 1)
-     {
-      // Startup time is too long with 1MHz Clock!!!!
-      t2_offset =  (10000 - RESTART_DELAY_US) / T2_PERIOD;	/* set to 10ms above the actual counter */
-      pause -= 2;
-     } else {
-      t2_offset =  (5000 - RESTART_DELAY_US) / T2_PERIOD;	/* set to 5ms above the actual counter */
-      pause = 0;
-     }
-   
-   OCR2A = TCNT2 + t2_offset;	/* set the compare value */
-   TIMSK2 = (0<<OCIE2B) | (1<<OCIE2A) | (0<<TOIE2); /* enable output compare match A interrupt */ 
-   set_sleep_mode(SLEEP_MODE_PWR_SAVE);
-//   set_sleep_mode(SLEEP_MODE_IDLE);
-   sleep_mode();
-// wake up after output compare match interrupt
- #else
-   // restart delay ist too long, use normal delay of 5ms
-   wait5ms();
- #endif
-   wdt_reset();
-  }
-TIMSK2 = (0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2); /* disable output compare match A interrupt */ 
-}
-#endif
-#endif
 
 #ifdef CHECK_CALL
  #include "AutoCheck.c"

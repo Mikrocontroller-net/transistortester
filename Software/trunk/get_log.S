@@ -9,6 +9,11 @@
 #define Log_Tab_Distance 20
 
  .GLOBAL get_log
+ .func  get_log
+
+ .extern LogTab
+
+ .section .text
 
 ; // get_log interpolate a table with the function -log(1 - (permil/1000))
 ; uint16_t get_log(uint16_t permil) {
@@ -24,7 +29,6 @@ get_log:
 ;  r26:27 = tabres = permil % Log_Tab_Distance;	// fraction of table distance
 ;  // interpolate the table of factors
 ;  y1 = pgm_read_word(&LogTab[tabind]);	// get the lower table value
-#if 1
 	ldi	r30, lo8(LogTab);
 	ldi	r31, hi8(LogTab);
         add	r30, r22
@@ -35,24 +39,6 @@ get_log:
  	lpm	r29, Z+
  	lpm	r20, Z+		; y2 = pgm_read_word(&LogTab[tabind+1]); // get the higher table value
  	lpm	r21, Z+
-#else
- 	ldi	r23, 0x00	; 0
- 	movw	r30, r22	; r22:23 = tabind
- 	add	r30, r30
- 	adc	r31, r31
- 	subi	r30, 0x98	; 152
- 	sbci	r31, 0xFF	; 255
- 	lpm	r28, Z+		; y1 = pgm_read_word(&LogTab[tabind]);	// get the lower table value
- 	lpm	r29, Z+
-;  y2 = pgm_read_word(&LogTab[tabind+1]); // get the higher table value
- 	movw	r30, r22
- 	add	r30, r30
- 	adc	r31, r31
- 	subi	r30, 0x96	; 150
- 	sbci	r31, 0xFF	; 255
- 	lpm	r20, Z+		; y2 = pgm_read_word(&LogTab[tabind+1]); // get the higher table value
- 	lpm	r21, Z+
-#endif
 ;  result = ((y2 - y1) * tabres ) / Log_Tab_Distance + y1; // interpolate
  	sub	r20, r28	;  (y2 - y1) 
 ;;	sbc	r21, r29	;  hi8(y2 - y1) is allways zero
@@ -71,3 +57,4 @@ get_log:
  	pop	r29
  	pop	r28
  	ret
+ .endfunc

@@ -5,8 +5,10 @@
 #include "config.h"
 #include <stdlib.h>
 
-.global CombineBI2Long
-.global CombineII2Long
+	.section .text
+	.func	CombineII2Long
+	.global CombineBI2Long
+	.global CombineII2Long
 
 // This tricky function replaces the long-winded way of gcc compiler
 // to build  = high*65536 + low
@@ -32,3 +34,4 @@ CombineII2Long:
 // CombineToLong return value = r22-r25
 // 				in case of high is unsigned int, nothing to do
   ret
+	.endfunc

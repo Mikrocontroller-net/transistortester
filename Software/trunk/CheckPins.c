@@ -1077,7 +1077,7 @@ widmes:
   testend:			// end of resistor measurement
 #if U_SCALE != 1
   ADCconfig.U_AVCC /= U_SCALE;		// scale back to mV resolution
-  ADCconfig.U_Bandgap /= U_SCALE;
+  ADCconfig.U_Bandgap = adc_internal_reference;	// set back to normal resolution
 #endif
 #if R_ANZ_MESS != ANZ_MESS
   ADCconfig.Samples = ANZ_MESS;		// switch back to standard number of repetition

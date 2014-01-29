@@ -717,8 +717,6 @@ End of configuration
 
   const uint8_t EE_ESR_ZEROtab[] EEMEM = {ESR_ZERO, ESR_ZERO, ESR_ZERO, ESR_ZERO};	// zero offset of ESR measurement
 //End of EEPROM-Strings
-// Multiplier for capacity measurement with R_H (470KOhm)
-  unsigned int RHmultip=DEFAULT_RH_FAKT;
 #else
  // no MAIN_C
  #define COMMON extern
@@ -767,7 +765,6 @@ End of configuration
   extern const unsigned char PinRHtab[];
  #endif
   extern const unsigned char PinADCtab[];
-  extern unsigned int RHmultip;
 #endif
 
 
@@ -808,8 +805,10 @@ COMMON trans_t ntrans;		// parameters of N type transistor
 COMMON trans_t *_trans;		// pointer to trans_t structure
 
 COMMON uint8_t tmpval, tmpval2;
-COMMON unsigned int ref_mv;            //Reference-voltage  in mV units
-COMMON unsigned int ref_mv_offs;       //Reference-voltage  in mV units with eeprom offset
+COMMON unsigned int ref_mv;            //Reference-voltage  in mV units (as read with ADC)
+COMMON unsigned int ref_mv_offs;       //Reference-voltage  in mV units with eeprom offset for C
+COMMON unsigned int adc_internal_reference;  //internal reference voltage of ADC in mV units
+COMMON  unsigned int RHmultip;	// Multiplier for capacity measurement with R_H (470KOhm)
 
 COMMON struct resis_t{
    unsigned long rx;		// value of resistor RX  

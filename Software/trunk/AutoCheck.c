@@ -90,7 +90,7 @@ begin_selftest:
            lcd_line2();			//Cursor to column 1, row 2
            lcd_fix2_string(RHfakt);	//"RHf="
            u2lcd(RHmultip);	//lcd_string(utoa(RHmultip, outval, 10));
-           ADCconfig.Samples = 190;	// set number of ADC reads near to maximum
+           ADCconfig.Samples = R_ANZ_MESS;	// set number of ADC reads near to maximum
         }
                                         //############################################
         if (tt == 2) { // how equal are the RL resistors? 
@@ -279,8 +279,8 @@ no_c0save:
         (void) eeprom_write_word((uint16_t *)(&ref_offset), load_diff);	// hold zero offset + slew rate dependend offset
         lcd_clear();
         lcd_fix2_string(REF_C_str);	// "REF_C="
-//        lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
-        i2lcd(load_diff);
+        i2lcd(load_diff);		// lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
+        RefVoltage();			// new ref_mv_offs and RHmultip
 #if 0
 //#######################################
         // Test for switching level of the digital input of port TP3
@@ -321,19 +321,21 @@ no_c0save:
         R_DDR = 0;		//all Pins to input 
         ADCconfig.U_Bandgap = 0;	// do not use internal Ref
         adcmv[0] = ReadADC(TP3);  // get cap voltage with VCC reference
-        ADCconfig.U_Bandgap = ADC_internal_reference;
+        ADCconfig.U_Bandgap = adc_internal_reference;
         adcmv[1] = ReadADC(TP3);	// get cap voltage with internal reference
         adcmv[1] += adcmv[1];		// double the value
         ADCconfig.U_Bandgap = 0;	// do not use internal Ref
         adcmv[2] = ReadADC(TP3);  // get cap voltage with VCC reference
-        ADCconfig.U_Bandgap = ADC_internal_reference;
-        udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1])) * ADC_internal_reference / adcmv[1])+REF_R_KORR;
+        ADCconfig.U_Bandgap = adc_internal_reference;
+//        udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1])) * ADC_internal_reference / adcmv[1])+REF_R_KORR;
+        udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1])) * adc_internal_reference / adcmv[1])+REF_R_KORR;
         lcd_line2();
         lcd_fix2_string(REF_R_str);	// "REF_R="
         udiff2 = udiff + (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
         (void) eeprom_write_byte((uint8_t *)(&RefDiff), (uint8_t)udiff2);	// hold offset for true reference Voltage
 //        lcd_string(itoa(udiff2, outval, 10));	//output correction voltage
         i2lcd(udiff2);
+        RefVoltage();			// set new ADCconfig.U_Bandgap
   #endif
         wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
         break;

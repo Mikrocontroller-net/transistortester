@@ -22,12 +22,19 @@
 ;   uint8_t count;		//13
 ; }trans_t;
 
+#define RCALL rcall
+
+ .GLOBAL PinLayout
+ .func PinLayout
+ .extern lcd_data
+ .extern lcd_space
+ .extern lcd_testpin
+ .extern _trans
 #define OFFS_b 10
 #define OFFS_c 11
 #define OFFS_e 12
-#define RCALL rcall
-
-.GLOBAL PinLayout
+ .extern N123_str
+ .extern N321_str
 
 PinLayout:
 
@@ -38,9 +45,9 @@ PinLayout:
  	push	r16
  	push	r17
 
- 	mov	r17, r24
- 	mov	r16, r22
- 	mov	r15, r20
+ 	mov	r17, r24		; Pin1
+ 	mov	r16, r22		; Pin2
+ 	mov	r15, r20		; Pin3
  	ldi	r24, lo8(N123_str)	; 0x0B
  	ldi	r25, hi8(N123_str)	; 0x01	
 #ifdef USE_EEPROM
@@ -88,9 +95,9 @@ next_ipp:
  	push	r15
  	push	r16
  	push	r17
- 	mov	r17, r24
- 	mov	r16, r22
- 	mov	r15, r20
+ 	mov	r17, r24		; Pin1
+ 	mov	r16, r22		; Pin2
+ 	mov	r15, r20		; Pin3
    
  	ldi	r24, lo8(N321_str)	; 0x0B
  	ldi	r25, hi8(N321_str)	; 0x01	
@@ -137,24 +144,18 @@ next_ipp2:
 
  #else 
 ; // Layout with EBC= style 
- 	push	r29
- 	push	r28
- 	rcall	.+0      	; SP += 2
- 	push	r0		; SP++
- 	in	r28,  _SFR_IO_ADDR(SPL)	; 0x3d
- 	in	r29,  _SFR_IO_ADDR(SPH)	; 0x3e
-
- 	std	Y+3, r20	; 0x03
- 	std	Y+2, r22	; 0x02
- 	std	Y+1, r24	; 0x01
+ 	push	r15
+ 	push	r16
+ 	push	r17
+ 	mov	r17, r24		; Pin1
+ 	mov	r16, r22		; Pin2
+ 	mov	r15, r20		; Pin3
  	RCALL	lcd_space	; lcd_space();
- 	ldd	r24, Y+1	; 0x01
+	mov	r24, r17	; Pin1
  	RCALL	lcd_data	; lcd_data(pin1);
- 	ldd	r22, Y+2	; 0x02
- 	mov	r24, r22
+	mov	r24, r16	; Pin2
  	RCALL	lcd_data	; lcd_data(pin2);
- 	ldd	r20, Y+3	; 0x03
- 	mov	r24, r20
+	mov	r24, r15	; Pin3
  	RCALL	lcd_data	; lcd_data(pin3);
  	ldi	r24, '='	; 0x3D
  	RCALL	lcd_data	; lcd_data('=');
@@ -171,12 +172,11 @@ next_ipp2:
  	ldd	r24, Z+OFFS_c	; _trans->c
  	RCALL	lcd_testpin	; lcd_testpin(_trans->c);
 
- 	pop	r0		; SP--
- 	pop	r0		; SP--
- 	pop	r0		; SP--
- 	pop	r28
- 	pop	r29
+ 	pop	r17
+ 	pop	r16
+ 	pop	r15
  	ret
  #endif
 #endif
 
+ .endfunc

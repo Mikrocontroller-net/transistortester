@@ -52,6 +52,8 @@
 ;----------------------------------------------------------------------
        .global _lcd_hw_write
        .func _lcd_hw_write
+       .extern wait1us
+
 _lcd_hw_write:
                
 

@@ -11,7 +11,7 @@ void Calibrate_UR(void) {
 
 
   ADCconfig.U_AVCC = U_VCC;     // set initial VCC Voltage
-  ADCconfig.Samples = 190;	// set number of ADC reads near to maximum
+  ADCconfig.Samples = R_ANZ_MESS;	// set number of ADC reads near to maximum
                                         //############################################
 #if FLASHEND > 0x1fff
   uint16_t mv2500;
@@ -29,11 +29,10 @@ void Calibrate_UR(void) {
 #ifdef WITH_AUTO_REF
   (void) ReadADC(MUX_INT_REF);	// read reference voltage 
   ref_mv = W5msReadADC(MUX_INT_REF);	// read reference voltage 
-  RefVoltage();			//compute RHmultip = f(reference voltage)
 #else
   ref_mv = DEFAULT_BAND_GAP;    // set to default Reference Voltage
 #endif
-  ADCconfig.U_Bandgap = ADC_internal_reference; // set internal reference voltage for ADC
+  RefVoltage();			//compute RHmultip = f(reference voltage)
                                         //############################################
 
 #ifdef AUTO_CAL

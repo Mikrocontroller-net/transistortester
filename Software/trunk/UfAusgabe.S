@@ -1,78 +1,85 @@
-#ifndef __ASSEMBLER__
- #define __ASSEMBLER__
-#endif
-#include <avr/io.h>
-#include <avr/common.h>
-#include <avr/eeprom.h>
-#include "config.h"
-#include "part_defs.h"
-
-.GLOBAL mVAusgabe
-.GLOBAL UfAusgabe
-.GLOBAL SerienDiodenAusgabe
+	#ifndef __ASSEMBLER__
+	 #define __ASSEMBLER__
+	#endif
+	#include <avr/io.h>
+	#include <avr/common.h>
+	#include <avr/eeprom.h>
+	#include "config.h"
+	#include "part_defs.h"
 
 
-#define zero_reg r1
-#define RCALL rcall
+	 .section .text
 
-/* #include <avr/io.h> */
-/* #include "Transistortester.h" */
 
-/* void mVAusgabe(uint8_t nn) {  */
-/*    if (nn < 3) {  */
-/*       // Output in mV units  */
-/*       DisplayValue(diodes.Voltage[nn],-3,'V',3);  */
-/*       lcd_space();  */
-/*    }  */
-/* }  */
+	#define zero_reg r1
+	#define RCALL rcall
 
-mVAusgabe:
- 	push	r16
-;   if (nn < 3) {
- 	cpi	r24, 0x03	; 3
- 	brcc	ad1ca4;
-      // Output in mV units
-	ldi	r30,lo8(diodes+12);
-	ldi	r31,hi8(diodes+12);
-	add	r30,r24
-	adc	r31,zero_reg
-	add	r30,r24
-	adc	r31,zero_reg
-;; 	mov	r30, r24
-;;        mov	r31, zero_reg
-;; 	add	r30, r30
-;; 	adc	r31, r31
-;; 	subi	r30, 0x74	; 116
-;; 	sbci	r31, 0xFE	; 254
- 	ld	r22, Z
- 	ldd	r23, Z+1	; 0x01
-        mov	r24, zero_reg
-        mov	r25, zero_reg
- 	ldi	r20, -3;	0xFD
- 	ldi	r18, 'V';	0x56
- 	ldi	r16, 0x03	; 3
- 	RCALL	DisplayValue	; DisplayValue(diodes.Voltage[nn],-3,'V',3);
- 	RCALL	lcd_space;	; lcd_space();
-ad1ca4:
- 	pop	r16
- 	ret
+	/* #include <avr/io.h> */
+	/* #include "Transistortester.h" */
 
-/* // ****************************************************************** */
-/* // output of flux voltage for 1-2 diodes in row 2 */
-/* // bcdnum = Numbers of both Diodes: */
-/* // higher 4 Bit  number of first Diode */
-/* // lower 4 Bit  number of second Diode (Structure diodes[nn]) */
-/* // if number >= 3  no output is done */
-/* void UfAusgabe(uint8_t bcdnum) { */
-/*    if (ResistorsFound > 0) { //also Resistor(s) found */
-/*       lcd_space(); */
-/*       lcd_data(LCD_CHAR_RESIS3);	// special symbol or R */
-/*    } */
-/*    lcd_line2(); 				//2. row */
+	/* void mVAusgabe(uint8_t nn) {  */
+	/*    if (nn < 3) {  */
+	/*       // Output in mV units  */
+	/*       DisplayValue(diodes.Voltage[nn],-3,'V',3);  */
+	/*       lcd_space();  */
+	/*    }  */
+	/* }  */
+
+	.GLOBAL mVAusgabe
+        .extern DisplayValue
+        .extern lcd_space
+
+	 .func mVAusgabe
+	mVAusgabe:
+		push	r16
+	;   if (nn < 3) {
+		cpi	r24, 0x03	; 3
+		brcc	ad1ca4;
+	      // Output in mV units
+		ldi	r30,lo8(diodes+12);
+		ldi	r31,hi8(diodes+12);
+		add	r30,r24
+		adc	r31,zero_reg
+		add	r30,r24
+		adc	r31,zero_reg
+		ld	r22, Z		; diodes.Voltage[nn]
+		ldd	r23, Z+1	; 0x01
+		mov	r24, zero_reg
+		mov	r25, zero_reg
+		ldi	r20, -3;	0xFD
+		ldi	r18, 'V';	0x56
+		ldi	r16, 0x03	; 3
+		RCALL	DisplayValue	; DisplayValue(diodes.Voltage[nn],-3,'V',3);
+		RCALL	lcd_space;	; lcd_space();
+	ad1ca4:
+		pop	r16
+		ret
+	 .endfunc
+
+	/* // ****************************************************************** */
+	/* // output of flux voltage for 1-2 diodes in row 2 */
+	/* // bcdnum = Numbers of both Diodes: */
+	/* // higher 4 Bit  number of first Diode */
+	/* // lower 4 Bit  number of second Diode (Structure diodes[nn]) */
+	/* // if number >= 3  no output is done */
+	/* void UfAusgabe(uint8_t bcdnum) { */
+	/*    if (ResistorsFound > 0) { //also Resistor(s) found */
+	/*       lcd_space(); */
+	/*       lcd_data(LCD_CHAR_RESIS3);	// special symbol or R */
+	/*    } */
+	/*    lcd_line2(); 				//2. row */
 /*    lcd_PGM_string(Uf_str);			//"Uf=" */
 /*    mVAusgabe(bcdnum >> 4); */
 /*    mVAusgabe(bcdnum & 0x0f); */
 /* } */
+
+	.GLOBAL UfAusgabe
+ 	.extern lcd_space
+	.extern lcd_data
+	.extern lcd_command
+	.extern mVAusgabe
+
+	.func UfAusgabe
 
 UfAusgabe:
  	push	r17
@@ -102,6 +109,7 @@ ad1cbe:
  	rcall	mVAusgabe	; mVAusgabe(bcdnum & 0x0f);
  	pop	r17
  	ret
+ .endfunc
 
 
 /* void SerienDiodenAusgabe() { */
@@ -116,6 +124,14 @@ ad1cbe:
 /*    lcd_testpin(diodes.Cathode[second]); */
 /*    UfAusgabe(diode_sequence); */
 /* } */
+	.GLOBAL SerienDiodenAusgabe
+	.extern lcd_testpin
+	.extern UfAusgabe
+
+	.extern AnKat
+
+	.func  SerienDiodenAusgabe
+
 SerienDiodenAusgabe:
  	push	r13
  	push	r14
@@ -140,8 +156,10 @@ SerienDiodenAusgabe:
  	ldi	r17, hi8(AnKat)	;0x03
  	movw	r24, r16
 #ifdef USE_EEPROM
+	.extern lcd_fix_string
  	RCALL	lcd_fix_string	; lcd_PGM_string(AnKat);	//"->|-"
 #else
+	.extern lcd_pgm_string
  	RCALL	lcd_pgm_string	; lcd_PGM_string(AnKat);	//"->|-"
 #endif
  	movw	r30, r14
@@ -170,3 +188,4 @@ SerienDiodenAusgabe:
     	pop	r14
     	pop	r13
     	ret
+ .endfunc

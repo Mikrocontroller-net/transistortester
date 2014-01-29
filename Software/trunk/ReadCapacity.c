@@ -42,9 +42,6 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   uint8_t HiPinR_L, HiPinR_H;
   uint8_t LoADC;
   uint8_t ii;
-#if FLASHEND > 0x1fff
-  unsigned int vloss;	// lost voltage after load pulse in 0.1% 
-#endif
 
 #ifdef AUTO_CAL
   pin_combination = (HighPin * 3) + LowPin - 1;	// coded Pin combination for capacity zero offset
@@ -85,6 +82,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   }
   
 #if FLASHEND > 0x1fff
+  unsigned int vloss;	// lost voltage after load pulse in 0.1% 
   cap.esr = 0;				// set ESR of capacitor to zero
   vloss = 0;				// set lost voltage to zero
 #endif

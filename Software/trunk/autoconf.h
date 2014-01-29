@@ -221,6 +221,7 @@
  #endif
 #endif
 
+#if 0
 #if PROCESSOR_TYP == 8
  // 2.54V reference voltage + correction (fix for ATmega8)
  #ifdef AUTO_CAL
@@ -235,6 +236,7 @@
  #else
   #define ADC_internal_reference (ref_mv + REF_R_KORR)
  #endif
+#endif
 #endif
 
 #ifndef REF_R_KORR
@@ -511,8 +513,8 @@
 #ifdef EXTENDED_TESTS
  #if FLASHEND <= 0x1fff
   // we have to save some memory to enable the extended tests!
-  #undef SEARCH_PARASITIC
-  #warning "Search of parasitic transistor not possible. NPNp or PNPn result depends on the selected pin sequence!"
+//  #undef SEARCH_PARASITIC
+//  #warning "Search of parasitic transistor not possible. NPNp or PNPn result depends on the selected pin sequence!"
  #endif
 #endif
 

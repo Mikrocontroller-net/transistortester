@@ -34,7 +34,14 @@
 #define zero_reg r1
 #define RCALL rcall
 
-.GLOBAL RvalOut
+ .GLOBAL RvalOut
+ .func RvalOut
+ .extern DisplayValue
+ .extern GetESR
+ .extern lcd_space
+ .extern resis
+
+ .section .text
 
 RvalOut:		; void RvalOut(uint8_t nrr) 	
  	push	r16
@@ -91,3 +98,4 @@ ad1d94:
  	RCALL	lcd_space	; lcd_space();
  	pop	r16
  	ret
+ .endfunc

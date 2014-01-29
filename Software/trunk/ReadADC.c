@@ -36,17 +36,19 @@ sample:
  ADMUX = Probe; /* set input channel and U reference */
 #ifdef AUTOSCALE_ADC
  /* if voltage reference changes, wait for voltage stabilization */
- if ((Probe & (1 << REFS1)) != 0) {
+ samples = (Probe & (1 << REFS1));		// get REFS1 bit flag 
+ if (samples != ADCconfig.RefFlag) {
     // switch to 1.1V Reference
  #ifdef NO_AREF_CAP
     wait100us(); /* time for voltage stabilization */
  #else
     wait_about10ms(); /* time for voltage stabilization */
  #endif
- }
-#endif
+    ADCconfig.RefFlag = samples;		// update flag
 // allways do one dummy read of ADC, 112us
     StartADCwait();		/* start ADC and wait */
+ }
+#endif
  /* * sample ADC readings */
  Value = 0UL; /* reset sampling variable */
  Samples = 0; /* number of samples to take */

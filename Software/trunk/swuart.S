@@ -28,6 +28,10 @@
 
 .global uart_putc
 .func uart_putc
+.extern wait100us
+.extern wait3us
+
+ .section .text
 uart_putc:	
 #ifdef WITH_UART
 		push bitcnt
@@ -54,11 +58,6 @@ putchar1:
 		nop
 
 putchar2:
-//		rcall UART_delay	;One bit delay
-//		rcall UART_delay
-//		the software loop takes 8 clock tics without delay
-//		8 tics are 8us at 1 MHz and 1us at 8 MHz
-//		9600 Baud is 104.167 us for one step
                 rcall   wait100us	; about 9600 Baud
        	#if  F_CPU >= 8000000UL
                 rcall	wait3us
@@ -70,27 +69,9 @@ putchar2:
 		pop bitcnt
     	out _SFR_IO_ADDR(SREG),temp
     	pop bitcnt
+#endif
 		ret			;   return
 
 .endfunc
 
-
-//UART_delay:	
-//	push temp	//2
-//	in temp,_SFR_IO_ADDR(SREG)	//1
-//	push temp	//2
-//	nop
-
-//	ldi temp,62	//2,4kBaud at 1MHz
-UART_delay1:	
-//	dec	temp
-//	brne	UART_delay1
-
-//	nop
-//	pop temp	//2
-//	out _SFR_IO_ADDR(SREG),temp	//1
-//	pop temp	//2
-
-#endif
-ret
 

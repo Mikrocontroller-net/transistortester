@@ -8,6 +8,7 @@
 #include <stdlib.h>
 
  .GLOBAL GetESR
+ .func GetESR
 
 /* MAX_CNT is the maximum loop counter for repetition of mesurement */
 #define MAX_CNT 128
@@ -202,7 +203,7 @@
 
 //=================================================================
 //void GetESR() {
-.text
+ .section .text
 GetESR:
        	push	r2
        	push	r3
@@ -852,3 +853,4 @@ ad_exit:
        	pop	r3
        	pop	r2
        	ret
+ .endfunc

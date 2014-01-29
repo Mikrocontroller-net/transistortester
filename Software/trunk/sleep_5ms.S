@@ -9,6 +9,10 @@
 #define RCALL rcall
 
  .GLOBAL sleep_5ms
+ .func sleep_5ms
+ .extern wait5ms
+
+ .section .text
 
 ;// for 8 MHz crystal the Restart delay is 16384/8 = 2048us
 #define RESTART_DELAY_US (RESTART_DELAY_TICS / MHZ_CPU )
@@ -82,3 +86,4 @@ set_cntr:
 #endif
  	wdr			; wdt_reset();
  	rjmp	wloop 
+ .endfunc

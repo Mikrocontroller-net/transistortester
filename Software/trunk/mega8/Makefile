@@ -63,7 +63,7 @@ UI_LANGUAGE = LANG_ENGLISH
 
 
 # The WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring.
-CFLAGS += -DWITH_AUTO_REF
+#CFLAGS += -DWITH_AUTO_REF
 
 # REF_C_KORR corrects the reference Voltage for capacity measurement (<40uF) and has mV units.
 # Greater values gives lower capacity results.
@@ -142,7 +142,7 @@ CFLAGS += -DANZ_MESS=44
 # but successfull measurements are allowed double of the specified number.
 #  You can specify up to 255 empty measurements (CFLAGS += -DPOWER_OFF=255).
 #CFLAGS += -DPOWER_OFF=5
-CFLAGS += -DPOWER_OFF
+#CFLAGS += -DPOWER_OFF
 
 # Option BAT_CHECK enables the Battery Voltage Check, otherwise the SW Version is displayed instead of Bat.
 # BAT_CHECK should be set for battery powered tester version.

@@ -41,6 +41,10 @@ int main(void) {
  #define WDRF_HOME MCUCSR
 #else
  #define WDRF_HOME MCUSR
+ #if FLASHEND > 0x3fff
+  // probably was a bootloader active, disable the UART
+  UCSR0B = 0;		// disable UART, if started with bootloader
+ #endif
 #endif
   tmp = (WDRF_HOME & (1<<WDRF));	// save Watch Dog Flag
   WDRF_HOME &= ~(1<<WDRF);	 	//reset Watch Dog flag
@@ -88,7 +92,7 @@ int main(void) {
   LCDLoadCustomChar(LCD_CHAR_U);	//load mu as Custom-Character
   lcd_fix_customchar(CyrillicMuIcon);
 #endif
-#if FLASHEND > 0x3fff
+#if LCD_CHAR_RESIS3 != 'R'
   LCDLoadCustomChar(LCD_CHAR_RESIS3);	//load Resistor symbol as Custom-Character
   lcd_fix_customchar(ResIcon3);		// load character ||
 #endif
@@ -204,7 +208,7 @@ start:
      lcd_MEM_string(OK_str); 		// "OK"
   }
 #else
-  lcd_fix2_string(VERSION_str);		// if no Battery check, Version .. in row 1
+  lcd_MEM2_string(VERSION_str);		// if no Battery check, Version .. in row 1
 #endif
 #ifdef WDT_enabled
   wdt_enable(WDTO_2S);		//Watchdog on
@@ -583,12 +587,12 @@ start:
     lcd_line2(); //2. row 
 #ifdef SHOW_ICE
     if (_trans->ice0 > 0) {
-       lcd_fix2_string(ICE0_str);		// "ICE0="
+       lcd_MEM2_string(ICE0_str);		// "ICE0="
        DisplayValue(_trans->ice0,-5,'A',3);
        wait_for_key_5s_line2();		// wait 5s and clear line 2
     }
     if (_trans->ices > 0) {
-       lcd_fix2_string(ICEs_str);		// "ICEs="
+       lcd_MEM2_string(ICEs_str);		// "ICEs="
        DisplayValue(_trans->ices,-5,'A',3);
        wait_for_key_5s_line2();		// wait 5s and clear line 2
     }

@@ -27,7 +27,7 @@ extern struct ADCconfig_t{
 
 unsigned int ReadADC (uint8_t Probe) {
  unsigned int U; /* return value (mV) */
- uint8_t Samples; /* loop counter */
+ uint8_t samples; /* loop counter */
  unsigned long Value; /* ADC value */
  Probe |= (1 << REFS0); /* use internal reference anyway */
 #ifdef AUTOSCALE_ADC
@@ -51,13 +51,13 @@ sample:
 #endif
  /* * sample ADC readings */
  Value = 0UL; /* reset sampling variable */
- Samples = 0; /* number of samples to take */
- while (Samples < ADCconfig.Samples) /* take samples */ {
+ samples = 0; /* number of samples to take */
+ while (samples < ADCconfig.Samples) /* take samples */ {
     StartADCwait();		/* start ADC and wait */
     Value += ADCW; /* add ADC reading */
 #ifdef AUTOSCALE_ADC
     /* auto-switch voltage reference for low readings */
-    if ((Samples == 4) && (ADCconfig.U_Bandgap > 255) && ((uint16_t)Value < 1024) && !(Probe & (1 << REFS1))) {
+    if ((samples == 4) && (ADCconfig.U_Bandgap > 255) && ((uint16_t)Value < 1024) && !(Probe & (1 << REFS1))) {
        Probe |= (1 << REFS1); /* select internal bandgap reference */
  #if PROCESSOR_TYP == 1280
        Probe &= ~(1 << REFS0);	/* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
@@ -65,7 +65,7 @@ sample:
        goto sample; /* re-run sampling */
     }
 #endif
-    Samples++; /* one more done */
+    samples++; /* one more done */
  }
 #ifdef AUTOSCALE_ADC
  /* * convert ADC reading to voltage * - single sample: U = ADC reading * U_ref / 1024 */

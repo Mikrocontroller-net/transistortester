@@ -30,7 +30,7 @@ UI_LANGUAGE = LANG_ENGLISH
 # The LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset.
 # This lcd-display don't have a character for Ohm and for µ (micro).
 # Russian language requires a LCD controller with russian characterset and option LCD_CYRILLIC!
-#CFLAGS += -DLCD_CYRILLIC
+CFLAGS += -DLCD_CYRILLIC
 
 # The LCD_DOGM option must be set for support of the DOG-M type of LCD modules with ST7036 controller.
 # For this LCD type the contrast must be set with software command.
@@ -414,7 +414,7 @@ swuart.o: ../swuart.S Makefile
 GetESR.o: ../GetESR.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-########### Compile C or Assembler , Assembler saves flash
+########### Compile C or Assembler , Assembler saves more than 400 bytes flash
 lcd-routines.o: ../lcd-routines.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 

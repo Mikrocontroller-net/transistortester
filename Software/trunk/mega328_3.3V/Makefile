@@ -413,7 +413,7 @@ swuart.o: ../swuart.S Makefile
 GetESR.o: ../GetESR.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-########### Compile C or Assembler , Assembler saves flash
+########### Compile C or Assembler , Assembler saves more than 400 bytes flash
 lcd-routines.o: ../lcd-routines.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 

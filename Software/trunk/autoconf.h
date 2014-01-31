@@ -1,6 +1,6 @@
 
 /*########################################################################################
-       Auto Configuration
+       Automatic Configuration
 */
 #if BAT_NUMERATOR < BAT_DENOMINATOR
  #warning "Wrong BAT_NUMERATOR / BAT_DENOMINATOR setting!"
@@ -53,12 +53,12 @@
   #define MEM2_TEXT EEMEM
   #define MEM2_read_byte(a)  eeprom_read_byte(a)
   #define MEM2_read_word(a)  eeprom_read_word(a)
-  #define lcd_fix2_string(a)  lcd_fix_string(a)
+  #define lcd_MEM2_string(a)  lcd_fix_string(a)
  #else
   #define MEM2_TEXT PROGMEM
   #define MEM2_read_byte(a)  pgm_read_byte(a)
   #define MEM2_read_word(a)  pgm_read_word(a)
-  #define lcd_fix2_string(a)  lcd_pgm_string(a)
+  #define lcd_MEM2_string(a)  lcd_pgm_string(a)
   #define use_lcd_pgm
  #endif
  #define MEM_EEPROM
@@ -72,7 +72,7 @@
  #define MEM_read_byte(a)  pgm_read_byte(a)
  #define MEM2_read_byte(a)  pgm_read_byte(a)
  #define MEM2_read_word(a)  pgm_read_word(a)
- #define lcd_fix2_string(a)  lcd_pgm_string(a)
+ #define lcd_MEM2_string(a)  lcd_pgm_string(a)
  #define use_lcd_pgm
 #endif
 
@@ -128,8 +128,8 @@
   #define LONG_HFE
 
 // Pin resistor values of ATmega168
-  #define PIN_RM 190
-  #define PIN_RP 220
+  #define PIN_RM 196
+  #define PIN_RP 221
 // CC0 defines the capacity of empty terminal pins 1 & 3 without cable
   #define CC0 36
 // Slew rate correction  val += COMP_SLEW1 / (val + COMP_SLEW2)
@@ -372,13 +372,11 @@
 #ifdef WITH_SELFTEST
  // AutoCheck Function is needed
  #define CHECK_CALL
- #define WAIT_LINE2_CLEAR
 #endif
 
 #ifdef AUTO_CAL
   // AutoCheck Function is needed
   #define CHECK_CALL
-  #define WAIT_LINE2_CLEAR
   #define RR680PL resis680pl
   #define RR680MI resis680mi
   #define RRpinPL pin_rpl
@@ -426,12 +424,6 @@
         #define LCD_CHAR_U  228         //µ-character
 #endif
 
-#if FLASHEND > 0x3fff
- #define LCD_CHAR_RESIS3 0
-#else
- #define LCD_CHAR_RESIS3 'R'
-#endif
-
 #ifdef LCD_DOGM
 	#undef LCD_CHAR_OMEGA
 	#define LCD_CHAR_OMEGA 0x1e	//Omega-character for DOGM module
@@ -440,6 +432,12 @@
 #endif
 
 #define LCD_CHAR_DEGREE 0xdf            // Character for degree
+
+#if FLASHEND > 0x3fff
+ #define LCD_CHAR_RESIS3 0
+#else
+ #define LCD_CHAR_RESIS3 'R'
+#endif
 
 
 // SEARCH_PARASITIC let the Tester search for greater Base-Emitter capacity, if two transistors are detected.
@@ -453,12 +451,11 @@
  #define WITH_THYRISTOR_GATE_V
 #endif
 
-#if FLASHEND > 0x3fff
+#if FLASHEND > 0x1fff
  // You can save about 328 bytes of Flash, if you don't show the ICE0 and ICEs Collector cutoff current.
  // Only enabled for mega328, but you can also enable it for mega168, if you deselect other functions.
  // You can save about 250 bytes flash, if you deselect the WITH_UART option.
  #define SHOW_ICE
- #define WAIT_LINE2_CLEAR
 #endif
 
 // COMMON_COLLECTOR activates measurement of current amplification factor in common collector circuit  (Emitter follower)
@@ -511,11 +508,27 @@
 #endif
 
 #ifdef EXTENDED_TESTS
- #if FLASHEND <= 0x1fff
-  // we have to save some memory to enable the extended tests!
-//  #undef SEARCH_PARASITIC
-//  #warning "Search of parasitic transistor not possible. NPNp or PNPn result depends on the selected pin sequence!"
+ #if FLASHEND <= 0x3fff
+  // we have to save some memory for the mega168 to enable the extended tests!
+  #ifdef WITH_UART
+   #warning "Serial Output is deselected to save memory!"
+   #undef WITH_UART
+  #endif
+  #undef SEARCH_PARASITIC
+  #warning "Search of parasitic transistor not possible. NPNp or PNPn result depends on the selected pin sequence!"
+  #ifdef SHOW_ICE
+   #undef SHOW_ICE
+   #warning "Display of ICE is disabled to save memory!"
+  #endif
  #endif
+#endif
+
+// the following Options needs WAIT_LINE2_CLEAR
+#ifdef CHECK_CALL
+ #define WAIT_LINE2_CLEAR
+#endif
+#ifdef SHOW_ICE
+ #define WAIT_LINE2_CLEAR
 #endif
 
 // the following Options need LCD_CLEAR   ( lcd_clear_line() )

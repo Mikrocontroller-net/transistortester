@@ -661,7 +661,7 @@ End of configuration
 				     0x1e,
 				     0x00,
 				     0x00};	// Resistor Icon2
-#if FLASHEND > 0x3fff
+#if LCD_CHAR_RESIS3 !=  'R'
  const unsigned char ResIcon3[] MEM_TEXT = { 0x04,
 				     0x1f,
 				     0x11,
@@ -703,8 +703,6 @@ End of configuration
   const unsigned char MinCap_str[] MEM2_TEXT = " >100nF";
   const unsigned char REF_C_str[] MEM2_TEXT = "REF_C=";
   const unsigned char REF_R_str[] MEM2_TEXT = "REF_R=";
-//   const uint16_t R680pl EEMEM = R_L_VAL+PIN_RP;	// total resistor to VCC
-//   const uint16_t R680mi EEMEM = R_L_VAL+PIN_RM;	// total resistor to GND
   const int8_t RefDiff EEMEM = REF_R_KORR;	// correction of internal Reference Voltage
 
 //  const uint16_t cap_null EEMEM = C_NULL;	// Zero offset of capacity measurement 

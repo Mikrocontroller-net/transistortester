@@ -36,11 +36,11 @@ void AutoCheck(void) {
   // no key pressed for 2s
 no_selftest:
   lcd_clear();
-  lcd_fix2_string(VERSION_str);	//"Version ..."
+  lcd_MEM2_string(VERSION_str);	//"Version ..."
   return;
 begin_selftest:
   lcd_line2();
-  lcd_fix2_string(R0_str);		// "R0="
+  lcd_MEM2_string(R0_str);		// "R0="
   eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (int8_t)0);	// clear zero offset
   eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[3]), (int8_t)0);	// clear zero offset
   eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (int8_t)0);	// clear zero offset
@@ -85,10 +85,10 @@ begin_selftest:
                                         //############################################
         if (tt == 1) {   // output of reference voltage and factors for capacity measurement
            Calibrate_UR();		// get Reference voltage, Pin resistance
-           lcd_fix2_string(URefT);	//"URef="
+           lcd_MEM2_string(URefT);	//"URef="
            DisplayValue(ref_mv,-3,'V',4);
            lcd_line2();			//Cursor to column 1, row 2
-           lcd_fix2_string(RHfakt);	//"RHf="
+           lcd_MEM2_string(RHfakt);	//"RHf="
            u2lcd(RHmultip);	//lcd_string(utoa(RHmultip, outval, 10));
            ADCconfig.Samples = R_ANZ_MESS;	// set number of ADC reads near to maximum
         }
@@ -260,7 +260,7 @@ no_c0save:
      lcd_data('1');
      lcd_MEM_string(CapZeich);	// "-||-"
      lcd_data('3');
-     lcd_fix2_string(MinCap_str); // " >100nF!"
+     lcd_MEM2_string(MinCap_str); // " >100nF!"
      PartFound = PART_NONE;
      //measure  offset Voltage of analog Comparator for Capacity measurement
      ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
@@ -278,7 +278,7 @@ no_c0save:
         // value of capacitor is correct
         (void) eeprom_write_word((uint16_t *)(&ref_offset), load_diff);	// hold zero offset + slew rate dependend offset
         lcd_clear();
-        lcd_fix2_string(REF_C_str);	// "REF_C="
+        lcd_MEM2_string(REF_C_str);	// "REF_C="
         i2lcd(load_diff);		// lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
         RefVoltage();			// new ref_mv_offs and RHmultip
 #if 0
@@ -330,7 +330,7 @@ no_c0save:
 //        udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1])) * ADC_internal_reference / adcmv[1])+REF_R_KORR;
         udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1])) * adc_internal_reference / adcmv[1])+REF_R_KORR;
         lcd_line2();
-        lcd_fix2_string(REF_R_str);	// "REF_R="
+        lcd_MEM2_string(REF_R_str);	// "REF_R="
         udiff2 = udiff + (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
         (void) eeprom_write_byte((uint8_t *)(&RefDiff), (uint8_t)udiff2);	// hold offset for true reference Voltage
 //        lcd_string(itoa(udiff2, outval, 10));	//output correction voltage
@@ -349,7 +349,7 @@ no_c0save:
 
   ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples
   lcd_clear();
-  lcd_fix2_string(VERSION_str);	//"Version ..."
+  lcd_MEM2_string(VERSION_str);	//"Version ..."
   lcd_line2();
   lcd_MEM_string(ATE);		//"Selftest End"
 
@@ -428,6 +428,7 @@ uint8_t ShortedProbes(uint8_t Probe1, uint8_t Probe2)
   #define MAX_UH_DIFF 20
 
   URH = ADCconfig.U_AVCC / 2;
+  URH -= ((long)U_VCC * (long)(PIN_RP-PIN_RM)) / (4*(unsigned long)(R_L_VAL+PIN_RM));			// differenz of Pin resistance high (22) and low (20)
   if ((U1 > (URH - MAX_UH_DIFF)) && (U1 < (URH + MAX_UH_DIFF)))
   {
     if ((U2 > (URH - MAX_UH_DIFF)) && (U2 < (URH + MAX_UH_DIFF)))

@@ -45,7 +45,7 @@ CFLAGS += -DSTRIP_GRID_BOARD
 CFLAGS += -DWITH_SELFTEST
 # You can enable the extended tests T1 to T7 for the atmega168 by selecting the  NO_COMMON_COLLECTOR_HFE  option.
 # The T1 to T7 tests are usefull to find problems with your tester.
-CFLAGS += -DNO_COMMON_COLLECTOR_HFE
+#CFLAGS += -DNO_COMMON_COLLECTOR_HFE
 #CFLAGS += -DNO_COMMON_EMITTER_HFE
 # You can also disable the extended tests T1 to T7 with the option NO_TEST_T1_T7 to accelerate the calibration
 # for the atmega328 and atmega168.
@@ -413,7 +413,7 @@ swuart.o: ../swuart.S Makefile
 GetESR.o: ../GetESR.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-########### Compile C or Assembler , Assembler saves flash
+########### Compile C or Assembler , Assembler saves more than 400 bytes flash
 lcd-routines.o: ../lcd-routines.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 

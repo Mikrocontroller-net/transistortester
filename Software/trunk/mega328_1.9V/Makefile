@@ -105,7 +105,7 @@ OP_MHZ = 8
 
 # The USE_EEPROM option specify where you wish to locate fix text and tables.
 # If USE_EEPROM is unset, program memory (flash) is taken for fix text and tables.
-CFLAGS += -DUSE_EEPROM
+#CFLAGS += -DUSE_EEPROM
 
 # Setting EBC_STYPE will select the old style to present the order of Transistor connection (EBC=...).
 # Omitting the option will select the 123=... style.  Every point is replaced by a character identifying 
@@ -391,6 +391,9 @@ OBJECTS +=  ReadCapacity.o GetRLmultip.o Calibrate_UR.o
 ifneq ($(PARTNO),m8)
 OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o
 endif
+ifndef USE_EEPROM
+OBJECTS +=  EE_check_init.o
+endif
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
@@ -473,6 +476,9 @@ ChargePin10ms.o: ../ChargePin10ms.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 EntladePins.o: ../EntladePins.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+EE_check_init.o: ../EE_check_init.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link

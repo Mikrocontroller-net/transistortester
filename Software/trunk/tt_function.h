@@ -35,3 +35,4 @@ uint8_t wait_for_key_ms(int max_time); // wait max_time ms units for key is pres
 void wait_for_key_5s_line2(void);	// wait 5 seconds and clear line 2
 void i2lcd(int iw);			// output integer value to LCD
 void u2lcd(uint16_t iw);		// output unsigned integer value to LCD
+void EE_check_init(void);		// check calibration values and init the values if unset

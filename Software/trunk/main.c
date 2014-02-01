@@ -125,6 +125,9 @@ int main(void) {
   empty_count = 0;
   mess_count = 0;
 #endif
+#ifndef USE_EEPROM
+  EE_check_init();		// init EEprom, if unset
+#endif
 
 //*****************************************************************
 //Entry: if start key is pressed before shut down

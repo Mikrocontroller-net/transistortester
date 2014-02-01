@@ -395,6 +395,9 @@ OBJECTS +=  ReadCapacity.o GetRLmultip.o Calibrate_UR.o
 ifneq ($(PARTNO),m8)
 OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o
 endif
+ifndef USE_EEPROM
+OBJECTS +=  EE_check_init.o
+endif
 
 
 ## Objects explicitly added by the user
@@ -478,6 +481,9 @@ ChargePin10ms.o: ../ChargePin10ms.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 EntladePins.o: ../EntladePins.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+EE_check_init.o: ../EE_check_init.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link

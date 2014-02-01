@@ -476,6 +476,9 @@ ChargePin10ms.o: ../ChargePin10ms.c Makefile
 EntladePins.o: ../EntladePins.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
+EE_check_init.o: ../EE_check_init.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 ##Link
 $(TARGET): $(OBJECTS)
 	 $(CC) $(LDFLAGS) $(OBJECTS) $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $(TARGET)

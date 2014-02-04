@@ -51,7 +51,12 @@ int main(void) {
   wdt_disable();			// disable Watch Dog
 #ifndef INHIBIT_SLEEP_MODE
   // switch off unused Parts
+ #if PROCESSOR_TYP == 1280
+  PRR0 = (1<<PRTWI) | (1<<PRTIM0) | (1<<PRSPI) | (1<<PRUSART0);
+  PRR1 = (1<<PRTIM5) | (1<<PRTIM4) | (1<<PRTIM3) | (1<<PRUSART3) | (1<<PRUSART2) | (1<<PRUSART3);
+ #else
   PRR = (1<<PRTWI) | (1<<PRTIM0) | (1<<PRSPI) | (1<<PRUSART0);
+ #endif
   DIDR0 = (1<<ADC5D) | (1<<ADC4D) | (1<<ADC3D);	
   TCCR2A = (0<<WGM21) | (0<<WGM20);		// Counter 2 normal mode
   TCCR2B = CNTR2_PRESCALER;	//prescaler set in autoconf
@@ -739,14 +744,16 @@ resistor_out:
     }
     lcd_line2(); //2. row 
     if (ResistorsFound == 1) {
-       RvalOut(0);
 #if FLASHEND > 0x1fff
        ReadInductance();		// measure inductance, possible only with single R<2.1k
+       RvalOut(0);
        if (inductor_lpre != 0) {
 	  // resistor have also Inductance
           lcd_MEM_string(Lis_str);	// "L="
           DisplayValue(inductor_lx,inductor_lpre,'H',3);	// output inductance
        }
+#else
+       RvalOut(0);
 #endif
     } else {
        // output resistor values in right order

@@ -17,19 +17,35 @@
   The TPREF pin can be connected with a 2.5V precision voltage reference
   The TPext can be used with a 10:1 resistor divider as external voltage probe up to 50V
 */
-
-#define ADC_PORT PORTC
-#define ADC_DDR DDRC
-#define ADC_PIN PINC
-#define TP1 PC0
-#define TP2 PC1
-#define TP3 PC2
-// Port pin for external Voltage measurement (zener voltage extension)
-#define TPext PC3
-// Port pin for 2.5V precision reference used for VCC check (optional)
-#define TPREF PC4
-// Port pin for Battery voltage measuring
-#define TPBAT PC5
+#if PROCESSOR_TYP == 1280
+//################# for mega1280, mega2560 port F is the Analog input
+ #define ADC_PORT PORTF
+ #define ADC_DDR DDRF
+ #define ADC_PIN PINF
+ #define TP1 PF0
+ #define TP2 PF1
+ #define TP3 PF2
+ // Port pin for external Voltage measurement (zener voltage extension)
+ #define TPext PF3
+ // Port pin for 2.5V precision reference used for VCC check (optional)
+ #define TPREF PF4
+ // Port pin for Battery voltage measuring
+ #define TPBAT PF5
+#else
+//############### default for mega8, mega168 and mega328
+ #define ADC_PORT PORTC
+ #define ADC_DDR DDRC
+ #define ADC_PIN PINC
+ #define TP1 PC0
+ #define TP2 PC1
+ #define TP3 PC2
+ // Port pin for external Voltage measurement (zener voltage extension)
+ #define TPext PC3
+ // Port pin for 2.5V precision reference used for VCC check (optional)
+ #define TPREF PC4
+ // Port pin for Battery voltage measuring
+ #define TPBAT PC5
+#endif
 
 // setting for voltage devider of Batterie voltage measurement 10K and 3.3k
 #ifndef BAT_NUMERATOR

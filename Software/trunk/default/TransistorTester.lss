@@ -10305,11 +10305,15 @@ int main(void) {
     3246:	80 93 60 00 	sts	0x0060, r24
     324a:	10 92 60 00 	sts	0x0060, r1
     324e:	0f be       	out	0x3f, r0	; 63
-#ifndef INHIBIT_SLEEP_MODE
   // switch off unused Parts
+ #if PROCESSOR_TYP == 1280
+  PRR0 = (1<<PRTWI) | (1<<PRTIM0) | (1<<PRSPI) | (1<<PRUSART0);
+  PRR1 = (1<<PRTIM5) | (1<<PRTIM4) | (1<<PRTIM3) | (1<<PRUSART3) | (1<<PRUSART2) | (1<<PRUSART3);
+ #else
   PRR = (1<<PRTWI) | (1<<PRTIM0) | (1<<PRSPI) | (1<<PRUSART0);
     3250:	86 ea       	ldi	r24, 0xA6	; 166
     3252:	80 93 64 00 	sts	0x0064, r24
+ #endif
   DIDR0 = (1<<ADC5D) | (1<<ADC4D) | (1<<ADC3D);	
     3256:	88 e3       	ldi	r24, 0x38	; 56
     3258:	80 93 7e 00 	sts	0x007E, r24
@@ -11872,12 +11876,12 @@ resistor_out:
     3bf8:	80 91 76 01 	lds	r24, 0x0176
     3bfc:	81 30       	cpi	r24, 0x01	; 1
     3bfe:	d9 f4       	brne	.+54     	; 0x3c36 <main+0xa34>
-       RvalOut(0);
-    3c00:	80 e0       	ldi	r24, 0x00	; 0
-    3c02:	0e 94 ba 01 	call	0x374	; 0x374 <RvalOut>
 #if FLASHEND > 0x1fff
        ReadInductance();		// measure inductance, possible only with single R<2.1k
-    3c06:	0e 94 10 14 	call	0x2820	; 0x2820 <ReadInductance>
+    3c00:	0e 94 10 14 	call	0x2820	; 0x2820 <ReadInductance>
+       RvalOut(0);
+    3c04:	80 e0       	ldi	r24, 0x00	; 0
+    3c06:	0e 94 ba 01 	call	0x374	; 0x374 <RvalOut>
        if (inductor_lpre != 0) {
     3c0a:	80 91 00 01 	lds	r24, 0x0100
     3c0e:	88 23       	and	r24, r24
@@ -11897,7 +11901,8 @@ resistor_out:
     3c2e:	28 e4       	ldi	r18, 0x48	; 72
     3c30:	40 91 00 01 	lds	r20, 0x0100
     3c34:	38 c0       	rjmp	.+112    	; 0x3ca6 <main+0xaa4>
-       }
+#else
+       RvalOut(0);
 #endif
     } else {
        // output resistor values in right order

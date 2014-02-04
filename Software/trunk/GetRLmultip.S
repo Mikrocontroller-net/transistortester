@@ -82,6 +82,7 @@ is_lower:
 	adc	r31, zero_reg
 
 #ifdef MEM_EEPROM
+        push	r25			; save tabres
 	movw	r24,r30
 	ACALL	eeprom_read_byte	; y1 = MEM_read_word(&RLtab[tabind]);
 	mov	r20, r24
@@ -97,14 +98,15 @@ is_lower:
 	movw	r24,r30
 	ACALL	eeprom_read_byte	; y2 = MEM_read_word(&RLtab[tabind+1]);
 	mov	r19, r24
+        pop	r22			; restore tabres in r22
 #else
  	lpm	r20, Z+		; y1 = MEM_read_word(&RLtab[tabind]);
  	lpm	r21, Z+
  	lpm	r18, Z+		; y2 = MEM_read_word(&RLtab[tabind+1]);
  	lpm	r19, Z+
+ 	mov	r22, r25
 #endif
 ;  return ( ((y1 - y2) * tabres + (RL_Tab_Abstand/2)) / RL_Tab_Abstand + y2); // interpolate table
- 	mov	r22, r25
 ;; 	ldi	r23, 0x00	; hi8(tabres) allways zero
  	sub	r20, r18	; y1 - y2
  	sbc	r21, r19 	; maximum of 3466 need two registers

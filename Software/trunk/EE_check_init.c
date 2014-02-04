@@ -13,7 +13,7 @@ void EE_check_init(void) {
   tt = (uint8_t)eeprom_read_byte(&EE_ESR_ZEROtab[0]);
   // this value will never be changed by calibration
   if (tt != ESR_ZERO) goto init_ee;
-  tt = tt0;			// init tt0 value
+  tt0 = tt;			// init tt0 value
   for (ww=0;ww<7;ww++) {		//checking loop
       tt = (uint8_t)eeprom_read_byte(&c_zero_tab[ww]);
       if (ww == 0) tt0 = tt;		// save first value

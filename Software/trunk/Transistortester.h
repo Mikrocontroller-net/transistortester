@@ -269,6 +269,29 @@ End of configuration
  #define LANG_SELECTED
 #endif
 
+#if defined(LANG_HUNGARIAN)     //HUNGARIAN
+   const unsigned char TestRunning[] MEM_TEXT = "Meres..."; 
+   const unsigned char BatWeak[] MEM_TEXT = "gyenge"; 
+   const unsigned char BatEmpty[] MEM_TEXT = "ures!"; 
+   const unsigned char TestFailed2[] MEM_TEXT = "hibas "; 
+   const unsigned char Bauteil[] MEM_TEXT = "alkatresz"; 
+//   const unsigned char Diode[] MEM_TEXT = "Diode: ";
+   const unsigned char Triac[] MEM_TEXT = "Triak";
+   const unsigned char Thyristor[] MEM_TEXT = "Tiriszt.";
+   const unsigned char TestFailed1[] MEM_TEXT = "hibas vagy"; 
+   const unsigned char OrBroken[] MEM_TEXT = "nincs alkatresz ";
+   const unsigned char TestTimedOut[] MEM_TEXT = "Idotullepes!";
+
+   const unsigned char TestTimedOut[] MEM_TEXT = "Idotullepes!";
+   #define Cathode_char 'C'
+ #ifdef WITH_SELFTEST
+   const unsigned char SELFTEST[] MEM_TEXT = "On-teszt mod..";
+   const unsigned char RELPROBE[] MEM_TEXT = "Rovidzar ki!"; // or "separate pins!";
+   const unsigned char ATE[] MEM_TEXT = "Teszt vege";
+ #endif
+ #define LANG_SELECTED
+#endif
+
 #if defined(LANG_LITHUANIAN) //Lithuanian
    const unsigned char TestRunning[] MEM_TEXT = "Tikrinu..."; //"Testing...";
    const unsigned char BatWeak[] MEM_TEXT = "silpna"; //"weak";
@@ -537,6 +560,54 @@ End of configuration
 
  #define HelpTXT
 
+ #endif
+
+#if defined(LANG_HUNGARIAN)      //Hungarian
+ const unsigned char HelpCalibration_str[] PROGMEM = {'N','o','t',' ','c','a','l','i','b','r','a','t','e','d','!',' ',
+'F','o','r',' '+0x80,
+'c','a','l','i','b','r','a','t','i','o','n',' ',
+
+'c','l','a','m','b',' ','t','h','e',' ','3',' '+0x80,'p','i','n','s',' ',
+'t','o','g','e','t','h','e','r',' ','a','n','d',' ',
+
+'s','t','a','r','t',' ','w','i','t','h',' ',
+'t','h','e',' '+0x80 ,'k','e','y','.',' ',
+
+'A','c','k','n','o','w','l','e','d','g','e',' ','t','h','e',' ',
+'s','e','l','f','-','t','e','s','t',' ','w','i','t','h',' ',
+
+'t','h','e',' ','k','e','y',' ',
+'w','i','t','h','i','n',' '+0x80,'2','s','.', ' ',
+
+'D','i','s','c','o','n','n','e','c','t',' ',
+'p','i','n','s',' ','a','f','t','e','r',' ',
+
+'t','h','e',' '+0x80,'m','e','s','s','a','g','e',' ',
+'"','i','s','o','l','a','t','e',' '+0x80,'P','r','o','b','e','!','"',' ',
+
+'i','s',' ','s','h','o','w','n',' ','a','n','d',' ',
+'c','o','n','n','e','c','t',' ','a',' ','g','o','o','d',' ',
+
+'c','a','p','a','c','i','t','o','r',' ','w','i','t','h',' ',
+'a','t',' ','l','e','a','s','t',' ','1','0','0','n','F',' ',
+
+'t','o',' ','p','i','n',' '+0x80,'1',' '+0x80,'a','n','d',' '+0x80,'3',' ',
+'o','n','l','y',' ','a','f','t','e','r',' ',
+
+'t','h','e',' ','m','e','s','s','a','g','e',' ',
+'"','1','-',LCD_CHAR_CAP,'-','3',' '+0x80,'>','1','0','0','n','F','"',' ',
+
+'i','s',' '+0x80,'s','h','o','w','n','.',' ',
+'S','o','f','t','w','a','r','e',' ','a','n','d',' ',
+
+'d','o','c','u','m','e','n','t','a','t','i','o','n',' ',
+'i','s',' ','a','t',' ','s','v','n',':','/','/',' ',
+
+'m','i','k','r','o','c','o','n','t','r','o','l','l','e','r','.',' ',
+
+'n','e','t','/','t','r','a','n','s','i','s','t','o','r',' ',
+'t','e','s','t','e','r',' ',0};
+ #define HelpTXT
  #endif
 
  #ifndef HelpTXT

@@ -4,7 +4,7 @@
 
 ## General Flags
 PROJECT = TransistorTester
-TARGET = TransistorTester.elf
+TARGET = $(PROJECT).elf
 CC = avr-gcc
 
 CPP = avr-g++
@@ -24,7 +24,7 @@ PARTNO = m168
 
 # Select your language:
 # Available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
-#                          LANG_DUTCH, LANG_BRASIL, LANG_RUSSIAN, LANG_UKRAINIAN, LANG_LITHUANIAN
+#                          LANG_DUTCH, LANG_BRASIL, LANG_RUSSIAN, LANG_UKRAINIAN, LANG_LITHUANIAN, LANG_HUNGARIAN
 UI_LANGUAGE = LANG_GERMAN
 
 # The LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset.
@@ -362,7 +362,7 @@ ASMFLAGS += -x assembler-with-cpp -Wa,-gdwarf2
 
 ## Linker flags
 LDFLAGS = $(COMMON)
-LDFLAGS +=  -Wl,-Map=TransistorTester.map
+LDFLAGS +=  -Wl,-Map=$(PROJECT).map
 
 
 ## Intel Hex file production flags
@@ -397,7 +397,7 @@ LINKONLYOBJECTS =
 
 
 ## Build
-all: $(TARGET) TransistorTester.hex TransistorTester.eep TransistorTester.lss size
+all: $(TARGET) $(PROJECT).hex $(PROJECT).eep $(PROJECT).lss size
 
 ########### Compile only Assembler source available 
 lcd_hw_4_bit.o: ../lcd_hw_4_bit.S Makefile
@@ -499,10 +499,10 @@ size: ${TARGET}
 ## Clean target
 .PHONY: clean
 clean:
-	-rm -rf $(OBJECTS) TransistorTester.elf dep/* TransistorTester.hex TransistorTester.eep TransistorTester.lss TransistorTester.map
+	-rm -rf $(OBJECTS) $(PROJECT).elf dep/* $(PROJECT).hex $(PROJECT).eep $(PROJECT).lss $(PROJECT).map
 steril:
 	$(MAKE)
-	-rm -rf $(OBJECTS) TransistorTester.elf dep/* TransistorTester.lss TransistorTester.map
+	-rm -rf $(OBJECTS) $(PROJECT).elf dep/* $(PROJECT).lss $(PROJECT).map
 
 
 ## Other dependencies
@@ -523,18 +523,18 @@ fuses-crystal-lp:
 # make upload  additionally calls make to compile the software for selected target
 upload:
 	$(MAKE)
-	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTester.hex:a \
-	-U eeprom:w:./TransistorTester.eep:a
+	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:w:./$(PROJECT).hex:a \
+	-U eeprom:w:./$(PROJECT).eep:a
 program:
 	$(MAKE)
-	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTester.hex:a \
-	-U eeprom:w:./TransistorTester.eep:a
+	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:w:./$(PROJECT).hex:a \
+	-U eeprom:w:./$(PROJECT).eep:a
 eeprom:
 	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) \
-	-U eeprom:w:./TransistorTester.eep:a
+	-U eeprom:w:./$(PROJECT).eep:a
 verify:
-	avrdude -D -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:v:./TransistorTester.hex:a \
-	-U eeprom:v:./TransistorTester.eep:a -v
+	avrdude -D -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:v:./$(PROJECT).hex:a \
+	-U eeprom:v:./$(PROJECT).eep:a -v
 upload_orig:
 	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTestorig.hex:a \
 	-U eeprom:w:./TransistorTestorig.eep:a

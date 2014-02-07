@@ -1,5 +1,5 @@
 #ifndef __ASSEMBLER__
- #define __ASSEMBLER__
+#define __ASSEMBLER__
 #endif
 
 #include <avr/io.h>
@@ -74,8 +74,7 @@ is_lower:
 
 	; r22 = tabind , r25 = tabres
 
-	ldi	r30, lo8(RLtab)
-	ldi	r31, hi8(RLtab)
+	LDIZ	RLtab
 	add	r30, r22		; + tabind
 	adc	r31, zero_reg
 	add	r30, r22		; + tabind (word access)

@@ -36,8 +36,11 @@
        for (ii=0;ii<space_pos;ii++) {
          zeich = pgm_read_byte(&HelpCalibration_str[ii+jj]);
          if (zeich == (char)0) break;	// end of text found
-         // the character can have a offset of 0x80 to hide the space character
-         lcd_data(zeich&0x7f);		// display the character without offset
+         if (zeich == LCD_CHAR_INSEP) {
+            lcd_space();	// replace with space
+         } else {
+            lcd_data(zeich);		// display the character without offset
+         }
        }
        if (zeich == (char)0) break;	// end of text found
        jj += space_pos;		// start position of line 2

@@ -73,8 +73,7 @@ ad2112:
 ad2120:
 ; // interpolate the table of factors
 
-	ldi	r30, lo8(RHtab)
-	ldi	r31, hi8(RHtab)
+	LDIZ	RHtab
 	add	r30, r22
 	adc	r31, zero_reg
 	add	r30, r22

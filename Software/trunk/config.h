@@ -9,6 +9,33 @@
 //#define DebugOut 10		// if set, output of capacity measurements (ReadCapacity) in row 3+4 
 //#define DebugOut 11		// if set, output of load time (ReadCapacity) in row 3 for C at pins 1+3
 
+// select the right Processor Typ
+#if defined(__AVR_ATmega48__)
+ #define PROCESSOR_TYP 168
+#elif defined(__AVR_ATmega48P__)
+ #define PROCESSOR_TYP 168
+#elif defined(__AVR_ATmega88__)
+ #define PROCESSOR_TYP 168
+#elif defined(__AVR_ATmega88P__)
+ #define PROCESSOR_TYP 168
+#elif defined(__AVR_ATmega168__)
+ #define PROCESSOR_TYP 168
+#elif defined(__AVR_ATmega168P__)
+ #define PROCESSOR_TYP 168
+#elif defined(__AVR_ATmega328__)
+ #define PROCESSOR_TYP 328
+#elif defined(__AVR_ATmega328P__)
+ #define PROCESSOR_TYP 328
+#elif defined(__AVR_ATmega640__)
+ #define PROCESSOR_TYP 1280
+#elif defined(__AVR_ATmega1280__)
+ #define PROCESSOR_TYP 1280
+#elif defined(__AVR_ATmega2560__)
+ #define PROCESSOR_TYP 1280
+#else
+ #define PROCESSOR_TYP 8
+#endif
+
 
 /* Port , that is directly connected to the probes.
   This Port must have an ADC-Input  (ATmega8:  PORTC).
@@ -78,8 +105,6 @@
   #define R_H_VAL 47000         // standard value 470000 Ohm, multiplied by 10, divided by 100 
 //  #define R_H_VAL 47900               // this will be define a 479000 Ohm, divided by 100 
 
-#define R_DDR DDRB
-#define R_PORT PORTB
 
 /* Port for the Test resistors
   The Resistors must be connected to the lower 6 Pins of the Port in following sequence:
@@ -96,24 +121,44 @@
   RL3 an Pin 4
   RH3 an Pin 5
 */
-#define PIN_RL1 PB0
-#define PIN_RL2 PB2
-#define PIN_RL3 PB4
-#define PIN_RH1 PB1
-#define PIN_RH2 PB3
-#define PIN_RH3 PB5
+#if PROCESSOR_TYP == 1280
+//################# for mega1280, mega2560 use port K 
+ #define R_DDR DDRK
+ #define R_PORT PORTK
+
+ #define PIN_RL1 PK0
+ #define PIN_RL2 PK2
+ #define PIN_RL3 PK4
+ #define PIN_RH1 PK1
+ #define PIN_RH2 PK3
+ #define PIN_RH3 PK5
+#else
+//############### default for mega8, mega168 and mega328
+ #define R_DDR DDRB
+ #define R_PORT PORTB
+
+ #define PIN_RL1 PB0
+ #define PIN_RL2 PB2
+ #define PIN_RL3 PB4
+ #define PIN_RH1 PB1
+ #define PIN_RH2 PB3
+ #define PIN_RH3 PB5
+#endif
 
 #define ON_DDR DDRD
 #define ON_PORT PORTD
-#define ON_PIN_REG PIND
-#define ON_PIN PD6      //Pin, must be switched to high to switch power on
+#define ON_PIN PD6      // This Pin is switched to high to switch power on
 
 #ifdef STRIP_GRID_BOARD
-// Strip Grid board version
-#define RST_PIN PD0     //Pin, is switched to low, if push button is pressed
+ // Strip Grid board version
+ #define RST_PORT PORTD
+ #define RST_PIN_REG PIND
+ #define RST_PIN PD0     //Pin, is switched to low, if push button is pressed
 #else
-// normal layout version
-#define RST_PIN PD7     //Pin, is switched to low, if push button is pressed
+ // normal layout version
+ #define RST_PORT PORTD
+ #define RST_PIN_REG PIND
+ #define RST_PIN PD7     //Pin, is switched to low, if push button is pressed
 #endif
 
 

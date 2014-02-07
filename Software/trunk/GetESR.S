@@ -274,27 +274,23 @@ ad_35fe:
 					/*  }  */
 
 ad_3604:
-	ldi	r30, lo8(PinADCtab); 	/* LoADC = pgm_read_byte(&PinADCtab[cap.ca]) | TXD_MSK; */
-	ldi	r31, hi8(PinADCtab);
+	LDIZ	PinADCtab; 	/* LoADC = pgm_read_byte(&PinADCtab[cap.ca]) | TXD_MSK; */
 	add	r30, SelectLowPin;
 	adc	r31, zero_reg;
 	lpm	r24, Z+;
 	ori	r24, TXD_MSK;
 	std	Y+LoADC, r24;
-	ldi	r30, lo8(PinADCtab); 	/* HiADC = pgm_read_byte(&PinADCtab[cap.cb]) | TXD_MSK; */
-	ldi	r31, hi8(PinADCtab);
+	LDIZ	PinADCtab; 	/* HiADC = pgm_read_byte(&PinADCtab[cap.cb]) | TXD_MSK; */
 	add	r30, SelectHighPin;
 	adc	r31, zero_reg;
 	lpm	r24, Z+;
 	ori	r24, TXD_MSK;
 	std	Y+HiADC, r24;
-	ldi	r30, lo8(PinRLtab);	/* LoPinR_L = pgm_read_byte(&PinRLtab[cap.ca]);  //R_L mask for LowPin R_L load */
-	ldi	r31, hi8(PinRLtab);
+	LDIZ	PinRLtab;	/* LoPinR_L = pgm_read_byte(&PinRLtab[cap.ca]);  //R_L mask for LowPin R_L load */
 	add	r30, SelectLowPin;
 	adc	r31, zero_reg;
 	lpm	LoPinR_L, Z+;
-	ldi	r30, lo8(PinRLtab);	/* HiPinR_L = pgm_read_byte(&PinRLtab[cap.cb]);	//R_L mask for HighPin R_L load */
-	ldi	r31, hi8(PinRLtab);
+	LDIZ	PinRLtab;	/* HiPinR_L = pgm_read_byte(&PinRLtab[cap.cb]);	//R_L mask for HighPin R_L load */
 	add	r30, SelectHighPin;
 	adc	r31, zero_reg;
 	lpm	HiPinR_L, Z+;
@@ -335,7 +331,7 @@ ad_3604:
 	std	Y+HighUpCount, zero_reg;
 	call	EntladePins;	/* EntladePins();	// discharge capacitor */
 	ldi	r24, TXD_VAL;
-	out	_SFR_IO_ADDR(ADC_PORT), r24; /* ADC_PORT = TXD_VAL;	// switch ADC-Port to GND */
+	AOUT	ADC_PORT, r24; /* ADC_PORT = TXD_VAL;	// switch ADC-Port to GND */
 	sts	ADMUX, SelectLowPin;	/* ADMUX = SelectLowPin;	// set Mux input and Voltage Reference to internal 1.1V */
 #ifdef NO_AREF_CAP
 	call	wait100us;			/* time for voltage stabilization */
@@ -344,9 +340,9 @@ ad_3604:
 #endif
 	/* start voltage should be negativ */
 	ldd	r19, Y+HiADC;		/* ADC_DDR = HiADC;	// switch High Pin to GND */
-	out	_SFR_IO_ADDR(ADC_DDR), r19; 
-	out	_SFR_IO_ADDR(R_PORT), LoPinR_L;	/* R_PORT = LoPinR_L */
-	out	_SFR_IO_ADDR(R_DDR), LoPinR_L;	/* R_DDR = LoPinR_L */
+	AOUT	ADC_DDR, r19;		/* switch High Pin to GND */
+	AOUT	R_PORT, LoPinR_L
+	AOUT	R_DDR, LoPinR_L
 	call	wait10us;	/* Delay about half the current puls-length of measurement loop */
 #ifdef ADC_Sleep_Mode
  #if F_CPU == 8000000UL
@@ -357,8 +353,8 @@ ad_3604:
 #else
 	call	wait2us;
 #endif
-	out	_SFR_IO_ADDR(R_PORT), zero_reg;	/* R_PORT = 0 */
-	out	_SFR_IO_ADDR(R_DDR), zero_reg;	/* R_DDR = 0 */
+	AOUT	R_PORT, zero_reg;	/* R_PORT = 0 */
+	AOUT	R_DDR, zero_reg;	/* R_DDR = 0 */
 
 	   // Measurement frequency is given by sum of ADC-Reads < 1116 Hz for normal ADC speed.
 	   // ADC Sample and Hold (SH) is done 1.5 ADC clock number after real start of conversion.
@@ -376,9 +372,9 @@ ad_3604:
 	      /* ********* Forward direction, connect Low side with GND *********** */
 ad_3692:
 	ldd	r19, Y+LoADC;
-	out	_SFR_IO_ADDR(ADC_DDR), r19;	/* ADC_DDR = LoADC;	// switch Low-Pin to output (GND) */
-	out	_SFR_IO_ADDR(R_PORT), LoPinR_L;	/* R_PORT = LoPinR_L */
-	out	_SFR_IO_ADDR(R_DDR), LoPinR_L;	/* R_DDR = LoPinR_L */
+	AOUT	ADC_DDR, r19;		/* ADC_DDR = LoADC;	// switch Low-Pin to output (GND) */
+	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L */
+	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L */
 	sts	ADMUX, SelectLowPin;		/* ADMUX = SelectLowPin; */
 
 	wdr	;				/* wdt_reset(); */
@@ -392,11 +388,11 @@ ad_3692:
 			// Start Conversion, real start is next rising edge of ADC clock
 	sts	ADCSRA, r8;		/* ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; // enable ADC and start */
 	call	wait5us;
-	out	_SFR_IO_ADDR(R_PORT), HiPinR_L;	/* R_PORT = HiPinR_L;	// switch R-Port to VCC */
-	out	_SFR_IO_ADDR(R_DDR), HiPinR_L;	/* R_DDR = HiPinR_L;	// switch R_L port for HighPin to output (VCC) */
+	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L;	// switch R-Port to VCC */
+	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L;	// switch R_L port for HighPin to output (VCC) */
 	DelayBigCap;			/* wait the time defined by macro */
-	out	_SFR_IO_ADDR(R_DDR), zero_reg;	/* R_DDR = 0; // switch current off,  SH is 1.5 ADC clock behind real start */
-	out	_SFR_IO_ADDR(R_PORT), zero_reg;	/* R_PORT = 0; */
+	AOUT	R_DDR, zero_reg;	/* R_DDR = 0; // switch current off,  SH is 1.5 ADC clock behind real start */
+	AOUT	R_PORT, zero_reg;	/* R_PORT = 0; */
 ad_370c:
 	lds	r24, ADCSRA;		/* while (ADCSRA&(1<<ADSC));	// wait for conversion finished */
 	sbrc	r24, ADSC;
@@ -420,9 +416,9 @@ ad_370c:
 
 	      /* ********* Reverse direction, connect High side with GND *********** */
 	ldd	r19, Y+HiADC;		/* ADC_DDR = HiADC;	// switch High Pin to GND */
-	out	_SFR_IO_ADDR(ADC_DDR), r19; 
-	out	_SFR_IO_ADDR(R_PORT), HiPinR_L;	/* R_PORT = HiPinR_L;	// switch R-Port to VCC */
-	out	_SFR_IO_ADDR(R_DDR), HiPinR_L;	/* R_DDR = HiPinR_L;	// switch R_L port for HighPin to output (VCC) */
+	AOUT	ADC_DDR, r19;		/* ADC_DDR = HiADC;	// switch High-Pin to output (GND) */
+	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L;	// switch R-Port to VCC */
+	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L;	// switch R_L port for HighPin to output (VCC) */
 
 	wdr	;			/* wdt_reset(); */
 	sts	ADMUX, SelectHighPin;	/* ADMUX = SelectHighPin; */
@@ -437,13 +433,13 @@ ad_370c:
 	StartADCwait		/* start ADC and wait */
 	sts	ADCSRA, r8;	/* ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; // enable ADC and start with ADSC */
 	call	wait5us;
-	out	_SFR_IO_ADDR(R_PORT), LoPinR_L;	/* R_PORT = LoPinR_L; */
-	out	_SFR_IO_ADDR(R_DDR), LoPinR_L;	/* R_DDR = LoPinR_L;	// switch LowPin with 680 Ohm to VCC */
+	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L; */
+	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L;	// switch LowPin with 680 Ohm to VCC */
 
 	DelayBigCap;			/* wait the time defined by macro */
 					/*  }  */
-	out	_SFR_IO_ADDR(R_DDR), zero_reg; 	// switch current off, SH is 1.5 ADC clock ticks behind real start
-	out	_SFR_IO_ADDR(R_PORT), zero_reg; 
+	AOUT	R_DDR, zero_reg; 	// switch current off, SH is 1.5 ADC clock ticks behind real start
+	AOUT	R_PORT, zero_reg; 
 ad_37f4:
 	lds	r24, ADCSRA;		/* while (ADCSRA&(1<<ADSC));	// wait for conversion finished */
 	sbrc	r24, ADSC;
@@ -455,7 +451,7 @@ ad_37f4:
 	sts	ADCSRA, StartADCmsk; 	/*  ADCSRA = StartADCmsk;	// enable ADC and Interrupt */
 #endif
 
-	out	_SFR_IO_ADDR(R_DDR), zero_reg; 	/* R_DDR = 0; // switch current off */
+	AOUT	R_DDR, zero_reg; 	/* R_DDR = 0; // switch current off */
 
 	movw	r24, r22;		/*  adcv[2] */
 	add	r24, adcv0L;		/* adcv[0] + adcv[2] // add sum of both LowPin voltages with current */
@@ -491,11 +487,11 @@ ad_37f4:
 	cp	r18, r20;
 	cpc	zero_reg, r21;
 	brcs	is_ok1;		/* r20:21 >= 100 */
-	out	_SFR_IO_ADDR(R_PORT), LoPinR_L;	/* R_PORT = LoPinR_L; */
-	out	_SFR_IO_ADDR(R_DDR), LoPinR_L;	/* R_DDR = LoPinR_L;	// switch LowPin with 680 Ohm to VCC */
+	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L; */
+	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L;	// switch LowPin with 680 Ohm to VCC */
 	call	wait2us;			/* additional charge the capacitor */
-	out	_SFR_IO_ADDR(R_DDR), zero_reg; 	// switch current off
-	out	_SFR_IO_ADDR(R_PORT), zero_reg; 
+	AOUT	R_DDR, zero_reg; 	// switch current off
+	AOUT	R_PORT, zero_reg; 
 	ldd	r24, Y+LowUpCount; 	/* count additional load pulses at Low side */
 	inc	r24;
 	std	Y+LowUpCount, r24;
@@ -515,13 +511,13 @@ is_ok1b:
 	cpc	zero_reg, r25;	/* adcvv1 >= 100 */
 	brcs	is_ok2;
 	ldd	r19, Y+LoADC;
-	out	_SFR_IO_ADDR(ADC_DDR), r19;	/* ADC_DDR = LoADC;	// switch Low-Pin to output (GND) */
-	out	_SFR_IO_ADDR(R_PORT), HiPinR_L;	/* R_PORT = HiPinR_L;	// switch R-Port to VCC */
-	out	_SFR_IO_ADDR(R_DDR), HiPinR_L;	/* R_DDR = HiPinR_L;	// switch R_L port for HighPin to output (VCC) */
+	AOUT	ADC_DDR, r19;		/* ADC_DDR = LoADC;	// switch Low-Pin to output (GND) */
+	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L;	// switch R-Port to VCC */
+	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L;	// switch R_L port for HighPin to output (VCC) */
 	call	wait2us;			/* additional charge the capacitor */
 	DelayBigCap;			/* wait the time defined by macro */
-	out	_SFR_IO_ADDR(R_DDR), zero_reg;	/* R_DDR = 0; // switch current off,  SH is 1.5 ADC clock behind real start */
-	out	_SFR_IO_ADDR(R_PORT), zero_reg;	/* R_PORT = 0; */
+	AOUT	R_DDR, zero_reg;	/* R_DDR = 0; // switch current off,  SH is 1.5 ADC clock behind real start */
+	AOUT	R_PORT, zero_reg;	/* R_PORT = 0; */
 	ldd	r24, Y+HighUpCount;	/* count additional load pulses at High side */
 	inc	r24;
 	std	Y+HighUpCount, r24;

@@ -11,7 +11,7 @@ uint8_t wait_for_key_ms(int max_time) {
 // wait 28 seconds or 5 seconds (if repeat function)
   while (max_time >= 0) {
      wait_about10ms();
-     if(!(ON_PIN_REG & (1<<RST_PIN))) {
+     if(!(RST_PIN_REG & (1<<RST_PIN))) {
         // If the key is pressed again... 
         // goto start of measurement 
         return(1);    // key is pressed

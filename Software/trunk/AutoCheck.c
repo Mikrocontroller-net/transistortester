@@ -25,12 +25,12 @@ void AutoCheck(void) {
   lcd_line2();
   lcd_data('?');			// wait for key pressed
   for (tt=0;tt<50;tt++) {
-     if ((ON_PIN_REG & (1<<RST_PIN)) != 0) break;	// key is unpressed
+     if ((RST_PIN_REG & (1<<RST_PIN)) != 0) break;	// key is unpressed
      wait_about10ms();			// key is still pressed, wait for release
     }
   if (tt == 50) goto no_selftest;		// key is more than 500ms pressed
   for (tt=0;tt<200;tt++) {
-     if(!(ON_PIN_REG & (1<<RST_PIN))) goto begin_selftest;	// key is pressed again
+     if(!(RST_PIN_REG & (1<<RST_PIN))) goto begin_selftest;	// key is pressed again
      wait_about10ms();
     }
   // no key pressed for 2s
@@ -63,7 +63,7 @@ begin_selftest:
   wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 //  for(tt=0;tt<12;tt++) {
 //     wait_about500ms();
-//     if(!(ON_PIN_REG & (1<<RST_PIN))) {
+//     if(!(RST_PIN_REG & (1<<RST_PIN))) {
 //        // if key is pressed, don't repeat
 //        break;
 //     }
@@ -184,12 +184,12 @@ begin_selftest:
         ADC_PORT = TXD_VAL;		// all ADC-Ports to GND
         R_DDR = 0;			// all R-Ports to Input
         R_PORT = 0;
-        if(!(ON_PIN_REG & (1<<RST_PIN))) {
+        if(!(RST_PIN_REG & (1<<RST_PIN))) {
 	   // if key is pressed, don't repeat
            break;
         }
         wait_about500ms();
-        if(!(ON_PIN_REG & (1<<RST_PIN))) {
+        if(!(RST_PIN_REG & (1<<RST_PIN))) {
 	   // if key is pressed, don't repeat
            break;
         }
@@ -375,7 +375,7 @@ no_c0save:
   #endif
          wdt_reset();
      }
-     if (!(ON_PIN_REG & (1<<RST_PIN))) {
+     if (!(RST_PIN_REG & (1<<RST_PIN))) {
         // if key is pressed, don't repeat
         break;
      }

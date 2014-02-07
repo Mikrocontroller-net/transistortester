@@ -29,8 +29,7 @@ get_log:
 ;  r26:27 = tabres = permil % Log_Tab_Distance;	// fraction of table distance
 ;  // interpolate the table of factors
 ;  y1 = pgm_read_word(&LogTab[tabind]);	// get the lower table value
-	ldi	r30, lo8(LogTab);
-	ldi	r31, hi8(LogTab);
+	LDIZ	LogTab;
         add	r30, r22
         adc	r31, r23
         add	r30, r22

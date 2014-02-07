@@ -28,10 +28,9 @@ int main(void) {
 #endif
   //switch on
   ON_DDR = (1<<ON_PIN);			// switch to output
-#ifdef PULLUP_DISABLE
   ON_PORT = (1<<ON_PIN); 		// switch power on 
-#else
-  ON_PORT = (1<<ON_PIN)|(1<<RST_PIN); 	// switch power on , enable internal Pullup for Start-Pin
+#ifndef PULLUP_DISABLE
+  RST_PORT = (1<<RST_PIN); 	// enable internal Pullup for Start-Pin
 #endif
   uint8_t tmp;
   //ADC-Init
@@ -73,7 +72,7 @@ int main(void) {
      lcd_line1();
      lcd_MEM_string(TestTimedOut);	//Output Timeout
      wait_about3s();				//wait for 3 s
-     ON_PORT = 0;			//shut off!
+     ON_PORT &= ~(1<<ON_PIN);			//shut off!
 //     ON_DDR = (1<<ON_PIN);		//switch to GND
      return 0;
   }
@@ -114,10 +113,10 @@ int main(void) {
 #if POWER_OFF+0 > 1
   // tester display time selection
   display_time = OFF_WAIT_TIME;		// LONG_WAIT_TIME for single mode, else SHORT_WAIT_TIME
-  if (!(ON_PIN_REG & (1<<RST_PIN))) {
+  if (!(RST_PIN_REG & (1<<RST_PIN))) {
      // if power button is pressed ...
      wait_about300ms();			// wait to catch a long key press
-     if (!(ON_PIN_REG & (1<<RST_PIN))) {
+     if (!(RST_PIN_REG & (1<<RST_PIN))) {
         // check if power button is still pressed
         display_time = LONG_WAIT_TIME;	// ... set long time display anyway
      }
@@ -242,7 +241,7 @@ start:
 #ifdef WITH_VEXT
   unsigned int Vext;
   // show the external voltage
-  while (!(ON_PIN_REG & (1<<RST_PIN))) {
+  while (!(RST_PIN_REG & (1<<RST_PIN))) {
      lcd_line2();
      lcd_clear_line();
      lcd_line2();
@@ -546,7 +545,7 @@ start:
 #endif
 //#if FLASHEND > 0x1fff
     // not possible for mega8, change Pin sequence instead.
-    if ((ptrans.count != 0) && (ntrans.count !=0) && (!(ON_PIN_REG & (1<<RST_PIN)))) {
+    if ((ptrans.count != 0) && (ntrans.count !=0) && (!(RST_PIN_REG & (1<<RST_PIN)))) {
        // if the Start key is still pressed, use the other Transistor
        if (PartMode == PART_MODE_NPN) {
           PartMode = PART_MODE_PNP;	// switch to parasitic transistor
@@ -804,7 +803,7 @@ gakAusgabe:
 
  end2:
   ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
-  while(!(ON_PIN_REG & (1<<RST_PIN)));	//wait ,until button is released
+  while(!(RST_PIN_REG & (1<<RST_PIN)));	//wait ,until button is released
   if ((wait_for_key_ms(max_time)) != 0 ) goto start;
 #ifdef POWER_OFF
  #if POWER_OFF > 127

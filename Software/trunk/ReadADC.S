@@ -95,11 +95,7 @@ ReadADC:
 	mov	r17, r24;	Probe
 	ori	r17, (1 << REFS0)	; Probe |= (1 << REFS0); /* use internal reference anyway */
 get_sample:
-#if ADMUX < 32
-        out	ADMUX, r17		; ADMUX = Probe; /* set input channel and U reference */
-#else
-        sts	ADMUX, r17		; ADMUX = Probe; /* set input channel and U reference */
-#endif
+        AOUT	ADMUX, r17		; ADMUX = Probe; /* set input channel and U reference */
 #ifdef AUTOSCALE_ADC
  /* if voltage reference changed run a dummy conversion */
 	mov	r30, r17;

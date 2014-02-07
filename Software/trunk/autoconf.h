@@ -76,33 +76,6 @@
  #define use_lcd_pgm
 #endif
 
-// select the right Processor Typ
-#if defined(__AVR_ATmega48__)
- #define PROCESSOR_TYP 168
-#elif defined(__AVR_ATmega48P__)
- #define PROCESSOR_TYP 168
-#elif defined(__AVR_ATmega88__)
- #define PROCESSOR_TYP 168
-#elif defined(__AVR_ATmega88P__)
- #define PROCESSOR_TYP 168
-#elif defined(__AVR_ATmega168__)
- #define PROCESSOR_TYP 168
-#elif defined(__AVR_ATmega168P__)
- #define PROCESSOR_TYP 168
-#elif defined(__AVR_ATmega328__)
- #define PROCESSOR_TYP 328
-#elif defined(__AVR_ATmega328P__)
- #define PROCESSOR_TYP 328
-#elif defined(__AVR_ATmega640__)
- #define PROCESSOR_TYP 1280
-#elif defined(__AVR_ATmega1280__)
- #define PROCESSOR_TYP 1280
-#elif defined(__AVR_ATmega2560__)
- #define PROCESSOR_TYP 1280
-#else
- #define PROCESSOR_TYP 8
-#endif
-
 // automatic selection of right assembler call type
 #if FLASHEND > 0X1FFF
  #define ACALL call
@@ -432,6 +405,7 @@
 #endif
 
 #define LCD_CHAR_DEGREE 0xdf            // Character for degree
+#define LCD_CHAR_INSEP 0xff		// used as space character without separating text
 
 #if FLASHEND > 0x3fff
  #define LCD_CHAR_RESIS3 0
@@ -565,5 +539,22 @@
 // #define T2_PERIOD (1024/(F_CPU/1000000UL))
   #define T2_PERIOD (1024 / MHZ_CPU)
        /* set to 128 or 64 us */
+#endif
+#ifdef __ASSEMBLER__
+/* AOUT output the content of reg to the specified IO-adr */
+     .macro  AOUT adr, reg
+     .if  _SFR_IO_REG_P(\adr)
+        out     _SFR_IO_ADDR(\adr), \reg
+     .else
+        sts     \adr, \reg
+     .endif
+     .endm
+ 
+/* LDIZ load the address adr to the Z register R30:R31 */
+     .macro LDIZ adr
+	ldi	ZL, lo8(\adr)
+	ldi	ZH, hi8(\adr)
+     .endm
+
 #endif
 

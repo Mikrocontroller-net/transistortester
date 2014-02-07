@@ -43,7 +43,7 @@ wloop:
  	RCALL	sleep_5ms	; wait_about10ms();
 #endif
  	ldi	r24, 0x01	;  return(1);    // key is pressed
- 	sbis	_SFR_IO_ADDR(ON_PIN_REG), RST_PIN		; if(!(ON_PIN_REG & (1<<RST_PIN))) {
+ 	sbis	_SFR_IO_ADDR(RST_PIN_REG), RST_PIN		; if(!(RST_PIN_REG & (1<<RST_PIN))) {
  	rjmp	to_ret ;       // If the key is pressed again... return(1)
  	wdr			; wdt_reset();
  	sbiw	r28, 0x00	; if (max_time > 0) 	// count only, if counter > 0

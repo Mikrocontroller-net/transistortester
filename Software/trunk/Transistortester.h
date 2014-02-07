@@ -392,14 +392,14 @@ End of configuration
 // Define a help text for calibration for ATmega328
 // Complete words are output to the LCD rows.
 // Words are separated by ' '. If you don't allow to separate two words
-// to different rows, you can hide the ' ' with ' '+0x80 .
+// to different rows, you can hide the ' ' with LCD_CHAR_INSEP.
 // Notice, that the LCD has only 16 character in each line!
  #if defined(LANG_GERMAN)		//deutsch
  const unsigned char HelpCalibration_str[] PROGMEM = {'U','n','k','a','l','i','b','r','i','e','r','t','!',' ',
-'Z','u','m',' '+0x80,
+'Z','u','m',LCD_CHAR_INSEP,
 'K','a','l','i','b','r','i','e','r','e','n',' ',
 
-'k','l','e','m','m','e',' ','3',' '+0x80,'P','i','n','n','e',' ',
+'k','l','e','m','m','e',' ','3',LCD_CHAR_INSEP,'P','i','n','n','e',' ',
 'z','u','s','a','m','m','e','n',' ','u','n','d',' ',
 
 's','t','a','r','t','e',' ','m','i','t',' ','d','e','r',' ',
@@ -414,19 +414,19 @@ End of configuration
 'e','r','s','t',' ','n','a','c','h',' ','d','e','r',' ',
 'M','e','l','d','u','n','g',' ',
 
-'"','T','r','e','n','n','e',' '+0x80,'P','i','n','s','!','"',' ',
+'"','T','r','e','n','n','e',LCD_CHAR_INSEP,'P','i','n','s','!','"',' ',
 'u','n','d',' ','s','c','h','l','i','e','s','s','e',' ',
 
 'e','r','s','t',' ', 'n','a','c','h',' ','d','e','r',' ',
 'M','e','l','d','u','n','g',' ',
 
-'"','1','-',LCD_CHAR_CAP,'-','3',' '+0x80,'>','1','0','0','n','F','"',' ',
+'"','1','-',LCD_CHAR_CAP,'-','3',LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
 'e','i','n','e','n',' ','g','u','t','e','n',' ',
 
 'K','o','n','d','e','n','s','a','t','o','r',' ',
 'm','i','t',' ','m','e','h','r',' ','a','l','s',' ','1','0','0','n','F',' ',
 
-'a','n',' ','P','i','n',' '+0x80,'1',' '+0x80,'+',' '+0x80,'3',' ','a','n','.',' ',
+'a','n',' ','P','i','n',LCD_CHAR_INSEP,'1',LCD_CHAR_INSEP,'+',LCD_CHAR_INSEP,'3',' ','a','n','.',' ',
 'S','o','f','t','w','a','r','e',' ','u','n','d',' ',
 
 'D','o','k','u','m','e','n','t','a','t','i','o','n',' ',
@@ -441,30 +441,30 @@ End of configuration
 
  #if defined(LANG_CZECH)	//Tschechisch
  const unsigned char HelpCalibration_str[] PROGMEM = {'N','e','z','k','a','l','i','b','r','o','v','a','n','o','!',' ',
-'P','r','o',' '+0x80, 'K','a','l','i','b','r','a','c','i',' ',
+'P','r','o',LCD_CHAR_INSEP, 'K','a','l','i','b','r','a','c','i',' ',
 
 'z','k','r','a','t','u','j',' ','v','s','e','c','h','n','y',' ',
 '3',' ','m','e','r','i','c','i',' ','b','o','d','y',' ','a',' ',
 
 's','p','u','s','t',' ','s','t','i','s','k','e','m',' ',
-'T','E','S','T',' '+0x80,'t','l','a','c','i','t','k','a',' ',
+'T','E','S','T',LCD_CHAR_INSEP,'t','l','a','c','i','t','k','a',' ',
 
 'K','a','l','i','b','r','a','c','i',' ','p','o','t','v','r','d',' ',
 'd','a','l','s','i','m',' ','s','t','i','s','k','e','m',' ',
 
 't','l','a','c','i','t','k','a',' ','v',' ','d','o','b','e',' ',
-'k','r','a','t','s','i',' ','2',' '+0x80,'s','e','k','u','n','d',' ',
+'k','r','a','t','s','i',' ','2',LCD_CHAR_INSEP,'s','e','k','u','n','d',' ',
 
-'p','r','i',' '+0x80,'h','l','a','s','c','e',' ',' ',
-'"','i','s','o','l','a','t','e',' '+0x80,'P','r','o','b','e','!','"',' ',
+'p','r','i',LCD_CHAR_INSEP,'h','l','a','s','c','e',' ',' ',
+'"','i','s','o','l','a','t','e',LCD_CHAR_INSEP,'P','r','o','b','e','!','"',' ',
 
 'O','d','s','t','r','a','n',' ','z','k','r','a','t',' ',
 'm','e','r','i','c','i','c','h',' ','b','o','d','u',' ',
 
 'P','r','i',' ','z','o','b','r','a','z','e','n','i',' ',
-'"','1','-',LCD_CHAR_CAP,'-','3',' '+0x80,'>','1','0','0','n','F','"',' ',
+'"','1','-',LCD_CHAR_CAP,'-','3',LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
 
-'v',' '+0x80,'p','o','s','l','e','d','n','i','m',' ',
+'v',LCD_CHAR_INSEP,'p','o','s','l','e','d','n','i','m',' ',
 'k','r','o','k','u',' ', 'k','a','l','i','b','r','a','c','e',' ',
 
 'p','r','i','p','o','j',' ','k','v','a','l','i','t','n','i',' ',
@@ -512,7 +512,7 @@ End of configuration
 
 
 
-'n','a',' '+0x80,'2','s','.',' ','P','o',' ','v','y','z','v','e',' ',
+'n','a',LCD_CHAR_INSEP,'2','s','.',' ','P','o',' ','v','y','z','v','e',' ',
 
 '"','I','z','o','l','u','j',' ','s','o','n','d','y','!','"',' ',
 
@@ -548,7 +548,7 @@ End of configuration
 
 
 
-'j','e',' '+0x80,'n','a',' ','s','v','n',':','/','/',' ',
+'j','e',LCD_CHAR_INSEP,'n','a',' ','s','v','n',':','/','/',' ',
 
 'm','i','k','r','o','c','o','n','t','r','o','l','l','e','r','.',' ',
 
@@ -562,28 +562,28 @@ End of configuration
 
  #endif
 
-#if defined(LANG_HUNGARIAN)      //Hungarian
+ #if defined(LANG_HUNGARIAN)      //Hungarian
  const unsigned char HelpCalibration_str[] PROGMEM = {'N','o','t',' ','c','a','l','i','b','r','a','t','e','d','!',' ',
-'F','o','r',' '+0x80,
+'F','o','r',LCD_CHAR_INSEP,
 'c','a','l','i','b','r','a','t','i','o','n',' ',
 
-'c','l','a','m','b',' ','t','h','e',' ','3',' '+0x80,'p','i','n','s',' ',
+'c','l','a','m','b',' ','t','h','e',' ','3',LCD_CHAR_INSEP,'p','i','n','s',' ',
 't','o','g','e','t','h','e','r',' ','a','n','d',' ',
 
 's','t','a','r','t',' ','w','i','t','h',' ',
-'t','h','e',' '+0x80 ,'k','e','y','.',' ',
+'t','h','e',LCD_CHAR_INSEP ,'k','e','y','.',' ',
 
 'A','c','k','n','o','w','l','e','d','g','e',' ','t','h','e',' ',
 's','e','l','f','-','t','e','s','t',' ','w','i','t','h',' ',
 
 't','h','e',' ','k','e','y',' ',
-'w','i','t','h','i','n',' '+0x80,'2','s','.', ' ',
+'w','i','t','h','i','n',LCD_CHAR_INSEP,'2','s','.', ' ',
 
 'D','i','s','c','o','n','n','e','c','t',' ',
 'p','i','n','s',' ','a','f','t','e','r',' ',
 
-'t','h','e',' '+0x80,'m','e','s','s','a','g','e',' ',
-'"','i','s','o','l','a','t','e',' '+0x80,'P','r','o','b','e','!','"',' ',
+'t','h','e',LCD_CHAR_INSEP,'m','e','s','s','a','g','e',' ',
+'"','i','s','o','l','a','t','e',LCD_CHAR_INSEP,'P','r','o','b','e','!','"',' ',
 
 'i','s',' ','s','h','o','w','n',' ','a','n','d',' ',
 'c','o','n','n','e','c','t',' ','a',' ','g','o','o','d',' ',
@@ -591,13 +591,13 @@ End of configuration
 'c','a','p','a','c','i','t','o','r',' ','w','i','t','h',' ',
 'a','t',' ','l','e','a','s','t',' ','1','0','0','n','F',' ',
 
-'t','o',' ','p','i','n',' '+0x80,'1',' '+0x80,'a','n','d',' '+0x80,'3',' ',
+'t','o',' ','p','i','n',LCD_CHAR_INSEP,'1',LCD_CHAR_INSEP,'a','n','d',LCD_CHAR_INSEP,'3',' ',
 'o','n','l','y',' ','a','f','t','e','r',' ',
 
 't','h','e',' ','m','e','s','s','a','g','e',' ',
-'"','1','-',LCD_CHAR_CAP,'-','3',' '+0x80,'>','1','0','0','n','F','"',' ',
+'"','1','-',LCD_CHAR_CAP,'-','3',LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
 
-'i','s',' '+0x80,'s','h','o','w','n','.',' ',
+'i','s',LCD_CHAR_INSEP,'s','h','o','w','n','.',' ',
 'S','o','f','t','w','a','r','e',' ','a','n','d',' ',
 
 'd','o','c','u','m','e','n','t','a','t','i','o','n',' ',
@@ -610,29 +610,205 @@ End of configuration
  #define HelpTXT
  #endif
 
+ #if defined(LANG_RUSSIAN)		//russian
+
+ const unsigned char HelpCalibration_str[] PROGMEM = {'H','e',LCD_CHAR_INSEP,'o',Cyr_t,Cyr_k,'a',Cyr_l,Cyr_i,Cyr_b,'p','o',Cyr_v,'a',Cyr_n,'!',
+
+Cyr_D,Cyr_l,Cyr_ja,LCD_CHAR_INSEP,Cyr_z,'a',Cyr_p,'y','c',Cyr_k,'a',' ',
+
+Cyr_k,'a',Cyr_l,Cyr_i,Cyr_b,'p','o',Cyr_v,Cyr_k,Cyr_i,' ',
+
+
+
+Cyr_z,'a',Cyr_k,'o','p','o',Cyr_t,Cyr_i,Cyr_t,'e',LCD_CHAR_INSEP,Cyr_t,'p',Cyr_i,' ',
+
+Cyr_k,'o',Cyr_n,Cyr_t,'a',Cyr_k,Cyr_t,'a',LCD_CHAR_INSEP,Cyr_i,' ',
+
+
+
+Cyr_n,'a',Cyr_zsch,Cyr_m,Cyr_i,Cyr_t,'e',LCD_CHAR_INSEP,Cyr_k,Cyr_n,'o',Cyr_p,Cyr_k,'y',' ',
+
+'"','T','E','S','T','"','.',' ',
+
+
+
+Cyr_P,'o',Cyr_d,Cyr_t,Cyr_v,'e','p',Cyr_d,Cyr_i,Cyr_t,'e',' ',
+
+'P','e',Cyr_zsch,Cyr_i,Cyr_m,LCD_CHAR_INSEP,'c','a',Cyr_m,'o',Cyr_t,'e','c',Cyr_t,'a',' ',
+
+
+
+Cyr_P,'o',Cyr_v,Cyr_t,'o','p',Cyr_n,'o',LCD_CHAR_INSEP,Cyr_n,'a',Cyr_zsch,'a',Cyr_v,' ',
+
+'T','E','S','T',LCD_CHAR_INSEP,Cyr_v,LCD_CHAR_INSEP,Cyr_t,'e',Cyr_tsch,'e',Cyr_n,Cyr_i,Cyr_i,' ',
+
+
+
+'2','c','.',LCD_CHAR_INSEP,'P','o',Cyr_z,Cyr_k,'o','p','o',Cyr_t,Cyr_i,Cyr_t,'e',' ',
+
+Cyr_k,'o',Cyr_n,Cyr_t,'a',Cyr_k,Cyr_t,Cyr_y,LCD_CHAR_INSEP,Cyr_k,'o',Cyr_g,Cyr_d,'a',' ',
+
+
+
+'o',Cyr_t,'o',Cyr_b,'p','a',Cyr_zsch,'a','e',Cyr_t,'c',Cyr_ja,' ',
+
+'"',Cyr_I,Cyr_z,'o',Cyr_l,Cyr_ja,Cyr_c,Cyr_i,Cyr_ja,'!','"',' ', 
+
+
+
+Cyr_P,'o',Cyr_d,Cyr_k,Cyr_l,Cyr_ju,Cyr_tsch,Cyr_i,Cyr_t,'e',' ',
+
+Cyr_k,'o',Cyr_n,Cyr_d,'e',Cyr_n,'c','a',Cyr_t,'o','p',' ',
+
+
+
+'1','0','0','n','F',LCD_CHAR_INSEP,Cyr_i,Cyr_l,Cyr_i,LCD_CHAR_INSEP,Cyr_b,'o',Cyr_l,'e','e',' ',
+
+Cyr_k,LCD_CHAR_INSEP,'"','T','P','1','"',LCD_CHAR_INSEP,Cyr_i,LCD_CHAR_INSEP,'"','T','P','3','"',' ',
+
+
+
+Cyr_k,'o',Cyr_g,Cyr_d,'a',LCD_CHAR_INSEP,'c','o','o',Cyr_b,Cyr_schtsch,'e',Cyr_n,Cyr_i,'e',' ',
+
+'"','1','-',LCD_CHAR_CAP,'-','3',LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
+
+
+
+'o',Cyr_t,'o',Cyr_b,'p','a',Cyr_zsch,'a','e',Cyr_t,'c',Cyr_ja,'.',' ',
+
+Cyr_P,'p','o',Cyr_g,'p','a',Cyr_m,Cyr_m,'y',LCD_CHAR_INSEP,Cyr_i,' ',
+
+
+
+Cyr_d,'o',Cyr_k,'y',Cyr_m,'e',Cyr_n,Cyr_t,'a',Cyr_c,Cyr_i,Cyr_ju,' ',
+
+'c',Cyr_m,'.',LCD_CHAR_INSEP,Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
+
+
+
+'m','i','k','r','o','c','o','n','t','r','o','l','l','e','r','.',' ',
+
+'n','e','t','/','t','r','a','n','s','i','s','t','o','r',' ',
+
+
+
+'t','e','s','t','e','r',' ',0};
+
+ #define HelpTXT
+
+ #endif
+
+
+ #if defined(LANG_UKRAINIAN)		//ukrainian
+
+ const unsigned char HelpCalibration_str[] PROGMEM = {'B','i',Cyr_d,Cyr_k,'a',Cyr_l,'i',Cyr_b,'p','y',Cyr_j,Cyr_t,'e','!',' ',
+
+Cyr_Schtsch,'o',Cyr_b,Cyr_i,LCD_CHAR_INSEP,Cyr_z,'a',Cyr_p,'y','c',Cyr_t,Cyr_i,Cyr_t,Cyr_i,' ', 
+
+
+
+Cyr_k,'a',Cyr_l,'i',Cyr_b,'p','y',Cyr_v,'a',Cyr_n,Cyr_n,Cyr_ja,' ',
+
+Cyr_z,'a',Cyr_m,Cyr_k,Cyr_n,'i',Cyr_t,Cyr_ww,LCD_CHAR_INSEP,Cyr_t,'p',Cyr_i,' ', 
+
+
+
+Cyr_k,'o',Cyr_n,Cyr_t,'a',Cyr_k,Cyr_t,Cyr_i,LCD_CHAR_INSEP,'T','P','-','1','2','3',' ',
+
+Cyr_t,'a',LCD_CHAR_INSEP,Cyr_n,'a',Cyr_t,Cyr_i,'c',Cyr_n,'i',Cyr_t,Cyr_ww,' ',
+
+
+
+Cyr_k,Cyr_n,'o',Cyr_p,Cyr_k,'y',LCD_CHAR_INSEP,'"','T','E','S','T','"','.',' ',
+
+Cyr_P,'i',Cyr_d,Cyr_t,Cyr_v,'e','p',Cyr_d,'i',Cyr_t,Cyr_ww,' ',
+
+
+
+'P','e',Cyr_zsch,Cyr_i,Cyr_m,LCD_CHAR_INSEP,'c','a',Cyr_m,'o',Cyr_t,'e','c',Cyr_t,'y',' ',
+
+Cyr_schtsch,'e',LCD_CHAR_INSEP,'p','a',Cyr_z,LCD_CHAR_INSEP,Cyr_n,'a',Cyr_zsch,Cyr_m,'i',Cyr_t,Cyr_ww,' ',
+
+
+
+'"','T','E','S','T','"',LCD_CHAR_INSEP,Cyr_v,Cyr_p,'p','o',Cyr_d,'o',Cyr_v,Cyr_zsch,' ',
+
+'2','c','.',LCD_CHAR_INSEP,'P','o',Cyr_z,'i',Cyr_m,Cyr_k,Cyr_n,'i',Cyr_t,Cyr_ww,' ',
+
+
+
+Cyr_k,'o',Cyr_n,Cyr_t,'a',Cyr_k,Cyr_t,Cyr_i,LCD_CHAR_INSEP,Cyr_p,'i','c',Cyr_l,Cyr_ja,' ',
+
+Cyr_p,'o',Cyr_v,'i',Cyr_d,'o',Cyr_m,Cyr_l,'e',Cyr_n,Cyr_n,Cyr_ja,' ', 
+
+
+
+'"','I',Cyr_z,'o',Cyr_l,Cyr_ja,Cyr_c,'i',Cyr_ja,'!','"',' ',
+
+Cyr_P,'i',Cyr_d,Cyr_k,Cyr_l,Cyr_ju,Cyr_tsch,'i',Cyr_t,Cyr_ww,LCD_CHAR_INSEP,Cyr_ja,Cyr_k,'i','c','-',
+
+
+
+Cyr_n,Cyr_i,Cyr_j,LCD_CHAR_INSEP,Cyr_k,'o',Cyr_n,Cyr_d,'e',Cyr_n,'c','a',Cyr_t,'o','p',' ',
+
+Cyr_b,'i',Cyr_l,Cyr_ww,Cyr_sch,'e',' ','1','0','0','n','F',' ',Cyr_d,'o',' ',
+
+
+
+'T','P','1',' ',Cyr_t,'a',' ','T','P','3',' ',Cyr_k,'o',Cyr_l,Cyr_i,' ',
+
+Cyr_p,'o',Cyr_v,'i',Cyr_d,'o',Cyr_m,Cyr_l,'e',Cyr_n,Cyr_n,Cyr_ja,':',' ',
+
+
+
+'"','1','-',LCD_CHAR_CAP,'-','3',LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
+
+Cyr_v,'i',Cyr_d,'o',Cyr_b,'p','a',Cyr_zsch,'a','e',Cyr_t,Cyr_ww,'c',Cyr_ja,'.',' ',
+
+
+
+Cyr_P,'p','o',Cyr_g,'p','a',Cyr_m,'y',' ',Cyr_t,'a',' ',
+
+Cyr_d,'o',Cyr_k,'y',Cyr_m,'e',Cyr_n,Cyr_t,'a',Cyr_c,'i',Cyr_ju,' ',
+
+
+
+Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
+
+'m','i','k','r','o','c','o','n','t','r','o','l','l','e','r','.',' ',
+
+
+
+'n','e','t','/','t','r','a','n','s','i','s','t','o','r',' ',
+
+'t','e','s','t','e','r',' ',0};
+
+ #define HelpTXT
+ #endif
+
  #ifndef HelpTXT
  //default language english
  const unsigned char HelpCalibration_str[] PROGMEM = {'N','o','t',' ','c','a','l','i','b','r','a','t','e','d','!',' ',
-'F','o','r',' '+0x80,
+'F','o','r',LCD_CHAR_INSEP,
 'c','a','l','i','b','r','a','t','i','o','n',' ',
 
-'c','l','a','m','b',' ','t','h','e',' ','3',' '+0x80,'p','i','n','s',' ',
+'c','l','a','m','b',' ','t','h','e',' ','3',LCD_CHAR_INSEP,'p','i','n','s',' ',
 't','o','g','e','t','h','e','r',' ','a','n','d',' ',
 
 's','t','a','r','t',' ','w','i','t','h',' ',
-'t','h','e',' '+0x80 ,'k','e','y','.',' ',
+'t','h','e',LCD_CHAR_INSEP ,'k','e','y','.',' ',
 
 'A','c','k','n','o','w','l','e','d','g','e',' ','t','h','e',' ',
 's','e','l','f','-','t','e','s','t',' ','w','i','t','h',' ',
 
 't','h','e',' ','k','e','y',' ',
-'w','i','t','h','i','n',' '+0x80,'2','s','.', ' ',
+'w','i','t','h','i','n',LCD_CHAR_INSEP,'2','s','.', ' ',
 
 'D','i','s','c','o','n','n','e','c','t',' ',
 'p','i','n','s',' ','a','f','t','e','r',' ',
 
-'t','h','e',' '+0x80,'m','e','s','s','a','g','e',' ',
-'"','i','s','o','l','a','t','e',' '+0x80,'P','r','o','b','e','!','"',' ',
+'t','h','e',LCD_CHAR_INSEP,'m','e','s','s','a','g','e',' ',
+'"','i','s','o','l','a','t','e',LCD_CHAR_INSEP,'P','r','o','b','e','!','"',' ',
 
 'i','s',' ','s','h','o','w','n',' ','a','n','d',' ',
 'c','o','n','n','e','c','t',' ','a',' ','g','o','o','d',' ',
@@ -640,13 +816,13 @@ End of configuration
 'c','a','p','a','c','i','t','o','r',' ','w','i','t','h',' ',
 'a','t',' ','l','e','a','s','t',' ','1','0','0','n','F',' ',
 
-'t','o',' ','p','i','n',' '+0x80,'1',' '+0x80,'a','n','d',' '+0x80,'3',' ',
+'t','o',' ','p','i','n',LCD_CHAR_INSEP,'1',LCD_CHAR_INSEP,'a','n','d',LCD_CHAR_INSEP,'3',' ',
 'o','n','l','y',' ','a','f','t','e','r',' ',
 
 't','h','e',' ','m','e','s','s','a','g','e',' ',
-'"','1','-',LCD_CHAR_CAP,'-','3',' '+0x80,'>','1','0','0','n','F','"',' ',
+'"','1','-',LCD_CHAR_CAP,'-','3',LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
 
-'i','s',' '+0x80,'s','h','o','w','n','.',' ',
+'i','s',LCD_CHAR_INSEP,'s','h','o','w','n','.',' ',
 'S','o','f','t','w','a','r','e',' ','a','n','d',' ',
 
 'd','o','c','u','m','e','n','t','a','t','i','o','n',' ',

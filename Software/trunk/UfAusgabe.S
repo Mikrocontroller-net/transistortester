@@ -36,8 +36,7 @@
 		cpi	r24, 0x03	; 3
 		brcc	ad1ca4;
 	      // Output in mV units
-		ldi	r30,lo8(diodes+12);
-		ldi	r31,hi8(diodes+12);
+		LDIZ	diodes+12;
 		add	r30,r24
 		adc	r31,zero_reg
 		add	r30,r24

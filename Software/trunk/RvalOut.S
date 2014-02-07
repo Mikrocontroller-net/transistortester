@@ -57,8 +57,7 @@ RvalOut:		; void RvalOut(uint8_t nrr)
 ; 	subi	r30, 0xE7	; 231
 ; 	sbci	r31, 0xFE	; 254
 
-	ldi	r30, lo8(resis)
-	ldi	r31, hi8(resis)
+	LDIZ	resis
 	add	r24, r24	; nrr*2
 	add	r24, r24	; nrr*4
 	add	r24, r24	; nrr*8	 5*8 must fit uint8_t

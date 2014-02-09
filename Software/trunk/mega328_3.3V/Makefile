@@ -20,6 +20,8 @@ CFLAGS = -Wall
 # atmega8  : m8
 # atmega168: m168 or m168p
 # atmega328: m328 or m328p
+# atmega1280: m1280	// see config.h for different port setting
+# atmega2560: m2560	// see config.h for different port setting
 PARTNO = m328
 
 # Select your language:
@@ -177,9 +179,20 @@ CFLAGS += -DBAT_POOR=3300
 # Select your programmer type, speed and port, if you wish to use avrdude.
 PROGRAMMER=ft232r
 BitClock=5.0
+PORT=ft0
+# setting for DIAMEX ALL_AVR, Atmel AVRISP-mkII
+#PROGRAMMER=avrisp2
+#BitClock=5.0
+#PORT=usb
+# setting for USBasp
 #PROGRAMMER=usbasp
 #BitClock=20
-PORT=ft0
+#PORT=usb
+# setting for ARDUINO MEGA, requires bootloader
+#PROGRAMMER=wiring
+#PORT = /dev/ttyACM0
+#BitClock=5.0
+#AVRDUDE_BAUD = -b 115200 -D
 # ********************** end of selectable options
 
 ifeq ($(PARTNO),m8)

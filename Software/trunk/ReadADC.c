@@ -38,13 +38,13 @@ sample:
  /* if voltage reference changes, wait for voltage stabilization */
  samples = (Probe & (1 << REFS1));		// get REFS1 bit flag 
  if (samples != ADCconfig.RefFlag) {
+    ADCconfig.RefFlag = samples;		// update flag
     // switch to 1.1V Reference
  #ifdef NO_AREF_CAP
     wait100us(); /* time for voltage stabilization */
  #else
     wait_about10ms(); /* time for voltage stabilization */
  #endif
-    ADCconfig.RefFlag = samples;		// update flag
 // allways do one dummy read of ADC, 112us
     StartADCwait();		/* start ADC and wait */
  }

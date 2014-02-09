@@ -1,0 +1,18 @@
+Testaufbau auf einer ARDUINO MEGA 2560  Platine
+===============================================
+
+Als Testversion diente ein ARDUINO Mega 2560 mit einem Lochrasteraufsatz.
+Der Lochrasteraufbau (Shield) wurde in Fädeltechnik mit Kupferlack-Draht verdrahtet.
+Der ATmega2560 hat mehr Ausgabe- und Eingangs-Ports als ein ATmega328.
+Als Analog-Eingang für die Testpins dient hier der Port F,
+für die 680 Ohm und 470 kOhm Widerstände wurde hier der Port K (Analog Pin 8-13)
+benutzt.
+Für die LCD-Anbindung wurde Port A (Digital Pin 22-27) benutzt.
+Die Batteriespannungsüberwachung wurde abgeschaltet und die Wartezeiten
+für die Referenzumschaltung des ADC aktiviert (keine NO_AREF_CAP Option).
+Die 2.5V Präzisionsreferenz wurde nicht bestückt, der Eingang PF4 (Analog pin 4) 
+wurde aber mit einem PullUp Widerstand versehen.
+Die Belegung der Ports ist in config.h änderbar (PROCESSOR_TYP 1280).
+
+Der Upload ist über den USB-Port des ARDUINO und dem Bootloader des ATmega2560
+möglich und bei 115200 Baud mit wenigen Sekunden sehr schnell. 

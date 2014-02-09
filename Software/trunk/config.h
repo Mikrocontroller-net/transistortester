@@ -145,20 +145,38 @@
  #define PIN_RH3 PB5
 #endif
 
-#define ON_DDR DDRD
-#define ON_PORT PORTD
-#define ON_PIN PD6      // This Pin is switched to high to switch power on
+#if PROCESSOR_TYP == 1280
+ #define ON_DDR DDRA
+ #define ON_PORT PORTA
+ #define ON_PIN PA6      // This Pin is switched to high to switch power on
+#else
+ #define ON_DDR DDRD
+ #define ON_PORT PORTD
+ #define ON_PIN PD6      // This Pin is switched to high to switch power on
+#endif
 
 #ifdef STRIP_GRID_BOARD
  // Strip Grid board version
- #define RST_PORT PORTD
- #define RST_PIN_REG PIND
- #define RST_PIN PD0     //Pin, is switched to low, if push button is pressed
+ #if PROCESSOR_TYP == 1280
+  #define RST_PORT PORTA
+  #define RST_PIN_REG PINA
+  #define RST_PIN PA0     //Pin, is switched to low, if push button is pressed
+ #else
+  #define RST_PORT PORTD
+  #define RST_PIN_REG PIND
+  #define RST_PIN PD0     //Pin, is switched to low, if push button is pressed
+ #endif
 #else
  // normal layout version
- #define RST_PORT PORTD
- #define RST_PIN_REG PIND
- #define RST_PIN PD7     //Pin, is switched to low, if push button is pressed
+ #if PROCESSOR_TYP == 1280
+  #define RST_PORT PORTA
+  #define RST_PIN_REG PINA
+  #define RST_PIN PA7     //Pin, is switched to low, if push button is pressed
+ #else
+  #define RST_PORT PORTD
+  #define RST_PIN_REG PIND
+  #define RST_PIN PD7     //Pin, is switched to low, if push button is pressed
+ #endif
 #endif
 
 
@@ -167,36 +185,70 @@
 */
 #ifdef STRIP_GRID_BOARD
  // special Layout for strip grid board
- #define HW_LCD_EN_PORT         PORTD
- #define HW_LCD_EN_PIN          5
+ #if PROCESSOR_TYP == 1280
+  #define HW_LCD_EN_PORT         PORTA
+  #define HW_LCD_EN_PIN          5
+ 
+  #define HW_LCD_RS_PORT         PORTA
+  #define HW_LCD_RS_PIN          7
 
- #define HW_LCD_RS_PORT         PORTD
- #define HW_LCD_RS_PIN          7
+  #define HW_LCD_B4_PORT         PORTA
+  #define HW_LCD_B4_PIN          4
+  #define HW_LCD_B5_PORT         PORTA
+  #define HW_LCD_B5_PIN          3
+  #define HW_LCD_B6_PORT         PORTA
+  #define HW_LCD_B6_PIN          2
+  #define HW_LCD_B7_PORT         PORTA
+  #define HW_LCD_B7_PIN          1
+ #else
+  #define HW_LCD_EN_PORT         PORTD
+  #define HW_LCD_EN_PIN          5
+ 
+  #define HW_LCD_RS_PORT         PORTD
+  #define HW_LCD_RS_PIN          7
 
- #define HW_LCD_B4_PORT         PORTD
- #define HW_LCD_B4_PIN          4
- #define HW_LCD_B5_PORT         PORTD
- #define HW_LCD_B5_PIN          3
- #define HW_LCD_B6_PORT         PORTD
- #define HW_LCD_B6_PIN          2
- #define HW_LCD_B7_PORT         PORTD
- #define HW_LCD_B7_PIN          1
+  #define HW_LCD_B4_PORT         PORTD
+  #define HW_LCD_B4_PIN          4
+  #define HW_LCD_B5_PORT         PORTD
+  #define HW_LCD_B5_PIN          3
+  #define HW_LCD_B6_PORT         PORTD
+  #define HW_LCD_B6_PIN          2
+  #define HW_LCD_B7_PORT         PORTD
+  #define HW_LCD_B7_PIN          1
+ #endif
 #else
  // normal Layout
- #define HW_LCD_EN_PORT         PORTD
- #define HW_LCD_EN_PIN          5
+ #if PROCESSOR_TYP == 1280
+  #define HW_LCD_EN_PORT         PORTA
+  #define HW_LCD_EN_PIN          5
 
- #define HW_LCD_RS_PORT         PORTD
- #define HW_LCD_RS_PIN          4
+  #define HW_LCD_RS_PORT         PORTA
+  #define HW_LCD_RS_PIN          4
 
- #define HW_LCD_B4_PORT         PORTD
- #define HW_LCD_B4_PIN          0
- #define HW_LCD_B5_PORT         PORTD
- #define HW_LCD_B5_PIN          1
- #define HW_LCD_B6_PORT         PORTD
- #define HW_LCD_B6_PIN          2
- #define HW_LCD_B7_PORT         PORTD
- #define HW_LCD_B7_PIN          3
+  #define HW_LCD_B4_PORT         PORTA
+  #define HW_LCD_B4_PIN          0
+  #define HW_LCD_B5_PORT         PORTA
+  #define HW_LCD_B5_PIN          1
+  #define HW_LCD_B6_PORT         PORTA
+  #define HW_LCD_B6_PIN          2
+  #define HW_LCD_B7_PORT         PORTA
+  #define HW_LCD_B7_PIN          3
+ #else
+  #define HW_LCD_EN_PORT         PORTD
+  #define HW_LCD_EN_PIN          5
+
+  #define HW_LCD_RS_PORT         PORTD
+  #define HW_LCD_RS_PIN          4
+
+  #define HW_LCD_B4_PORT         PORTD
+  #define HW_LCD_B4_PIN          0
+  #define HW_LCD_B5_PORT         PORTD
+  #define HW_LCD_B5_PIN          1
+  #define HW_LCD_B6_PORT         PORTD
+  #define HW_LCD_B6_PIN          2
+  #define HW_LCD_B7_PORT         PORTD
+  #define HW_LCD_B7_PIN          3
+ #endif
 #endif
 
 

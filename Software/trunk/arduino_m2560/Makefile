@@ -22,12 +22,17 @@ CFLAGS = -Wall
 # atmega328: m328 or m328p
 # atmega1280: m1280	// see config.h for different port setting
 # atmega2560: m2560	// see config.h for different port setting
-PARTNO = m328
+PARTNO = m2560
 
 # Select your language:
 # Available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
 #                          LANG_DUTCH, LANG_BRASIL, LANG_RUSSIAN, LANG_UKRAINIAN, LANG_LITHUANIAN, LANG_HUNGARIAN
-UI_LANGUAGE = LANG_GERMAN
+UI_LANGUAGE = LANG_ENGLISH
+#UI_LANGUAGE = LANG_CZECH
+#UI_LANGUAGE = LANG_GERMAN
+
+#CFLAGS += -DFOUR_LINE_LCD
+#CFLAGS += -DDebugOut=3
 
 # The LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset.
 # This lcd-display don't have a character for Ohm and for µ (micro).
@@ -95,10 +100,10 @@ CFLAGS += -DESR_ZERO=20
 # NO_AREF_CAP tells your Software, that you have no Capacitor installed at pin AREF (21).
 # This enables a shorter wait-time for AUTOSCALE_ADC function.
 # A capacitor with 1nF can be used with the option NO_AREF_CAP set.
-CFLAGS += -DNO_AREF_CAP
+#CFLAGS += -DNO_AREF_CAP
 
 # The OP_MHZ option tells the software the Operating Frequency of your ATmega.
-OP_MHZ = 8
+OP_MHZ = 16
 
 # Restart from sleep mode will be delayed for 16384 clock tics with crystal mode.
 # Operation with the internal RC-Generator or external clock will delay the restart by only 6 clock tics.
@@ -145,13 +150,13 @@ CFLAGS += -DPOWER_OFF
 
 # Option BAT_CHECK enables the Battery Voltage Check, otherwise the SW Version is displayed instead of Bat.
 # BAT_CHECK should be set for battery powered tester version.
-CFLAGS += -DBAT_CHECK
+#CFLAGS += -DBAT_CHECK
 
 # The BAT_OUT option enables Battery Voltage Output on LCD (if BAT_CHECK is selected).
 # If your 9V supply has a diode installed, use the BAT_OUT=600 form to specify the
 # threshold voltage of your diode to adjust the output value.
 # This threshold level is added to LCD-output and does not affect the voltage checking levels.
-CFLAGS += -DBAT_OUT=0
+CFLAGS += -DBAT_OUT=150
 
 # To adjust the warning-level and poor-level of battery check to the capability of a
 # low drop voltage regulator, you can specify the Option BAT_POOR=5400 .
@@ -162,7 +167,7 @@ CFLAGS += -DBAT_OUT=0
 # The warning level is 0.1V higher than the specified poor level (<=1.3V).
 # Setting the poor level to low values is not recommended for rechargeable Batteries,
 # because this increase the danger for deep discharge!!
-CFLAGS += -DBAT_POOR=1900
+CFLAGS += -DBAT_POOR=6400
 
 # Voltage divider for battery voltage measurement  10k / 3.3k = 133/33
 #CFLAGS += -DBAT_NUMERATOR=133
@@ -176,10 +181,8 @@ CFLAGS += -DBAT_POOR=1900
 #CFLAGS += -DINHIBIT_SLEEP_MODE
 
 
+
 # Select your programmer type, speed and port, if you wish to use avrdude.
-PROGRAMMER=ft232r
-BitClock=5.0
-PORT=ft0
 # setting for DIAMEX ALL_AVR, Atmel AVRISP-mkII
 #PROGRAMMER=avrisp2
 #BitClock=5.0
@@ -191,8 +194,12 @@ PORT=ft0
 # setting for ARDUINO MEGA, requires bootloader
 #PROGRAMMER=wiring
 #PORT = /dev/ttyACM0
-#BitClock=5.0
 #AVRDUDE_BAUD = -b 115200 -D
+# setting for ARDUINO MEGA, requires bootloader
+PROGRAMMER=wiring
+PORT = /dev/ttyACM0
+BitClock=5.0
+AVRDUDE_BAUD = -b 115200 -D
 # ********************** end of selectable options
 
 ifeq ($(PARTNO),m8)
@@ -356,6 +363,9 @@ FUSES_CRY = -U lfuse:w:0xf7:m -U hfuse:w:0xd9:m -U efuse:w:0xfc:m
 FUSES_CRY_L = -U lfuse:w:0xff:m -U hfuse:w:0xd9:m -U efuse:w:0xfc:m
 endif
 endif
+ifeq ($(PARTNO),m2560)
+MCU = atmega2560
+endif
 
 CFLAGS += -DF_CPU=$(OP_MHZ)000000UL
 CFLAGS += -DMHZ_CPU=$(OP_MHZ)
@@ -385,8 +395,6 @@ HEX_FLASH_FLAGS = -R .eeprom -R .fuse -R .lock -R .signature
 HEX_EEPROM_FLAGS = -j .eeprom
 HEX_EEPROM_FLAGS += --set-section-flags=.eeprom="alloc,load"
 HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
-
-
 
 
 ## Objects that must be built in order to link
@@ -539,15 +547,18 @@ fuses-crystal-lp:
 # make upload  additionally calls make to compile the software for selected target
 upload:
 	$(MAKE)
-	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:w:./$(PROJECT).hex:a \
+	avrdude -c $(PROGRAMMER) -B $(BitClock) $(AVRDUDE_BAUD) -p $(PARTNO) -P $(PORT) -U flash:w:./$(PROJECT).hex:a \
 	-U eeprom:w:./$(PROJECT).eep:a
 program:
 	$(MAKE)
-	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:w:./$(PROJECT).hex:a \
+	avrdude -c $(PROGRAMMER) -B $(BitClock) $(AVRDUDE_BAUD) -p $(PARTNO) -P $(PORT) -U flash:w:./$(PROJECT).hex:a \
 	-U eeprom:w:./$(PROJECT).eep:a
 eeprom:
 	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) \
 	-U eeprom:w:./$(PROJECT).eep:a
+eeread:
+	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) \
+	-U eeprom:r:./TTactual.eep:i
 verify:
 	avrdude -D -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:v:./$(PROJECT).hex:a \
 	-U eeprom:v:./$(PROJECT).eep:a -v

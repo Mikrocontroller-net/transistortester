@@ -103,6 +103,7 @@ get_sample:
 	lds	r24, ADCconfig+RefFlag	;
        	cp	r30, r24;
        	breq	no_ref_change			; if (Samples != ADCconfig.RefFlag) 
+	sts	ADCconfig+RefFlag, r30	; ADCconfig.RefFlag = Samples; /* update flag */
  #ifdef NO_AREF_CAP
 	RCALL	wait100us		; wait100us(); /* time for voltage stabilization */
  #else
@@ -113,7 +114,6 @@ get_sample:
 	RCALL	sleep_5ms		; wait_about10ms()
   #endif
  #endif		/* end NO_AREF_CAP */
-	sts	ADCconfig+RefFlag, r30	; ADCconfig.RefFlag = Samples; /* update flag */
 	StartADCwait                    ; // allways do one dummy read of ADC, 112us
 #endif		/* end AUTOSCALE_ADC */
 
@@ -151,7 +151,7 @@ Loop:
 	rjmp	cnt_next		; if ( &&  &&  && !(Probe & (1 << REFS1))) 
 	ori	r17, (1 << REFS1);   Probe |= (1 << REFS1); /* select internal bandgap reference */
  #if PROCESSOR_TYP == 1280
-	cbr	r17, REFS0; Probe &= ~(1 << REFS0);  /* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
+	cbr	r17, (1<<REFS0); Probe &= ~(1 << REFS0);  /* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
  #endif
 	rjmp	get_sample ;       goto get_sample; /* re-run sampling */
 #endif		/* end AUTOSCALE_ADC */
@@ -161,18 +161,16 @@ r2ae8:
 	lds	r24, ADCconfig+Samples;
 	cp	r30, r24		; while (Samples < ADCconfig.Samples) /* take samples */ 
 	brcs	Loop ;
+	lds	r22, ADCconfig+U_AVCC		; U = ADCconfig.U_AVCC; /* Vcc reference */
+       	lds	r23, ADCconfig+U_AVCC+1;
 #ifdef AUTOSCALE_ADC
 ; /* * convert ADC reading to voltage * - single sample: U = ADC reading * U_ref / 1024 */
 ; /* get voltage of reference used */
 	sbrs	r17, REFS1			; if (Probe & (1 << REFS1))
-	rjmp	r2afe ;
+	rjmp	r2b02 ;
 	lds	r22, ADCconfig+U_Bandgap	; U = ADCconfig.U_Bandgap; /* bandgap reference */
 	lds	r23, ADCconfig+U_Bandgap+1;
-       	rjmp	r2b02 ;
 #endif		/* end AUTOSCALE_ADC */
-r2afe:
-	lds	r22, ADCconfig+U_AVCC		; U = ADCconfig.U_AVCC; /* Vcc reference */
-       	lds	r23, ADCconfig+U_AVCC+1;
 ; /* convert to voltage; */
 r2b02:
 	ldi	r24, 0x00			; Value *= U; /* ADC readings * U_ref */

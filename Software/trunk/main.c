@@ -279,7 +279,8 @@ start:
     goto end;
   }
 
-#ifdef CHECK_CALL
+#ifdef WITH_SELFTEST
+ #ifdef AUTO_CAL
   UnCalibrated = 0;
   lcd_command(CMD_SetDisplayAndCursor | 0x04); // Display on / Cursor off / no Blinking
   if (eeprom_read_byte(&c_zero_tab[0]) != eeprom_read_byte(&c_zero_tab[3])) {
@@ -287,11 +288,10 @@ start:
      UnCalibrated = 1;
      lcd_command(CMD_SetDisplayAndCursor | 0x06); // Display on / Cursor on / no Blinking
   }
+ #endif
   AutoCheck();			//check, if selftest should be done
-  lcd_line2();			//LCD position row2, column 1
-#else
-  lcd_line2();			//LCD position row2, column 1
 #endif
+  lcd_line2();			//LCD position row2, column 1
   lcd_MEM_string(TestRunning);		//String: testing...
      
   // check all 6 combinations for the 3 pins 
@@ -847,8 +847,10 @@ end3:
 }   // end main
 
 
-#ifdef CHECK_CALL
+#ifdef WITH_SELFTEST
  #include "AutoCheck.c"
+#endif
+#ifdef AUTO_CAL
  #include "mark_as_uncalibrated.c"
 #endif
 #if FLASHEND > 0x1fff

@@ -62,13 +62,6 @@ begin_selftest:
      eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (int8_t)adcmv[2]);	// fix zero offset
   }
   wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
-//  for(tt=0;tt<12;tt++) {
-//     wait_about500ms();
-//     if(!(RST_PIN_REG & (1<<RST_PIN))) {
-//        // if key is pressed, don't repeat
-//        break;
-//     }
-//  } /* end for tt */
 
  #ifdef EXTENDED_TESTS
   #define TEST_COUNT 8
@@ -209,7 +202,7 @@ begin_selftest:
      wait_about500ms();
      if (AllProbesShorted() == 0) break;
   }
- #endif
+ #endif		/* end EXTENDED_TESTS */
 
   lcd_clear();
   lcd_MEM_string(RIHI);	// "RiHi="
@@ -337,7 +330,7 @@ no_c0save:
 //        lcd_string(itoa(udiff2, outval, 10));	//output correction voltage
         i2lcd(udiff2);
         RefVoltage();			// set new ADCconfig.U_Bandgap
-  #endif
+  #endif	/* end AUTOSCALE_ADC */
         wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
         break;
      }
@@ -345,7 +338,7 @@ no_c0save:
      DisplayValue(cap.cval,cap.cpre,'F',4);
      wait_about200ms();			// wait additional time
   } // end for ww
- #endif
+ #endif  /* end AUTO_CAL */
 
 
   ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples
@@ -381,7 +374,7 @@ no_c0save:
         break;
      }
   }
- #endif
+ #endif		/* end FREQUENCY_50HZ */
  PartFound = PART_NONE;
  wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 #endif

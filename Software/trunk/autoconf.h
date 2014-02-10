@@ -196,24 +196,6 @@
  #endif
 #endif
 
-#if 0
-#if PROCESSOR_TYP == 8
- // 2.54V reference voltage + correction (fix for ATmega8)
- #ifdef AUTO_CAL
-  #define ADC_internal_reference (2560 + (int8_t)eeprom_read_byte((uint8_t *)&RefDiff))
- #else
-  #define ADC_internal_reference (2560 + REF_R_KORR)
- #endif
-#else
- // all other processors use a 1.1V reference
- #ifdef AUTO_CAL
-  #define ADC_internal_reference (ref_mv + (int8_t)eeprom_read_byte((uint8_t *)&RefDiff))
- #else
-  #define ADC_internal_reference (ref_mv + REF_R_KORR)
- #endif
-#endif
-#endif
-
 #ifndef REF_R_KORR
  #define REF_R_KORR 0
 #endif
@@ -334,24 +316,27 @@
  #define wait_about5s() sleep_5ms(205)
 #endif
 
+#ifndef WITH_SELFTEST
+ // no calibration without selftest
+ #ifdef AUTO_CAL
+  #undef AUTO_CAL
+  #warning "No AUTO_CAL without WITH_SELFTEST!"
+ #endif
+#endif
+
 #undef AUTO_RH
 #ifdef WITH_AUTO_REF
+ // variable reference voltage needs table RHtab
  #define AUTO_RH
 #else
  #ifdef AUTO_CAL
+  // calibration needs table RHtab
   #define AUTO_RH
  #endif
 #endif
 
-#undef CHECK_CALL
-#ifdef WITH_SELFTEST
- // AutoCheck Function is needed
- #define CHECK_CALL
-#endif
-
 #ifdef AUTO_CAL
   // AutoCheck Function is needed
-  #define CHECK_CALL
   #define RR680PL resis680pl
   #define RR680MI resis680mi
   #define RRpinPL pin_rpl
@@ -500,7 +485,7 @@
 #endif
 
 // the following Options needs WAIT_LINE2_CLEAR
-#ifdef CHECK_CALL
+#ifdef WITH_SELFTEST
  #define WAIT_LINE2_CLEAR
 #endif
 #ifdef SHOW_ICE
@@ -509,15 +494,10 @@
 
 // the following Options need LCD_CLEAR   ( lcd_clear_line() )
 #ifdef WAIT_LINE2_CLEAR
+ // include SHOW_ICE and WITH_SELFTEST
  #define LCD_CLEAR
 #endif
 #ifdef WITH_VEXT
- #define LCD_CLEAR
-#endif
-#ifdef SHOW_ICE
- #define LCD_CLEAR
-#endif
-#ifdef WITH_SELFTEST
  #define LCD_CLEAR
 #endif
 #ifdef DEBUG_OUT

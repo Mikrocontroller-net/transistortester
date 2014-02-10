@@ -56,7 +56,7 @@ CFLAGS += -DWITH_SELFTEST
 #CFLAGS += -DNO_COMMON_EMITTER_HFE
 # You can also disable the extended tests T1 to T7 with the option NO_TEST_T1_T7 to accelerate the calibration
 # for the atmega328 and atmega168.
-#CFLAGS += -DNO_TEST_T1_T7
+CFLAGS += -DNO_TEST_T1_T7
 
 # AUTO_CAL will enable the autocalibration of zero offset of capacity measurement and
 # also the port output resistance values will be find out in SELFTEST section.

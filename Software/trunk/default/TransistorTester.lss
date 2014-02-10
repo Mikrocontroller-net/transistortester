@@ -3075,7 +3075,7 @@ begin_selftest:
      wait_about500ms();
      if (AllProbesShorted() == 0) break;
   }
- #endif
+ #endif		/* end EXTENDED_TESTS */
 
   lcd_clear();
      ace:	0e 94 0d 01 	call	0x21a	; 0x21a <lcd_clear>
@@ -3521,7 +3521,7 @@ no_c0save:
      dbe:	0e 94 80 01 	call	0x300	; 0x300 <i2lcd>
         RefVoltage();			// set new ADCconfig.U_Bandgap
      dc2:	0e 94 df 03 	call	0x7be	; 0x7be <RefVoltage>
-  #endif
+  #endif	/* end AUTOSCALE_ADC */
         wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
      dc6:	0e 94 d6 03 	call	0x7ac	; 0x7ac <wait_for_key_5s_line2>
         break;
@@ -3541,7 +3541,7 @@ no_c0save:
      if (cap_found > 1) {
      dd0:	11 e0       	ldi	r17, 0x01	; 1
         RefVoltage();			// set new ADCconfig.U_Bandgap
-  #endif
+  #endif	/* end AUTOSCALE_ADC */
         wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
         break;
      }
@@ -3571,7 +3571,7 @@ no_c0save:
      dfe:	22 cf       	rjmp	.-444    	; 0xc44 <AutoCheck+0x2f0>
      wait_about200ms();			// wait additional time
   } // end for ww
- #endif
+ #endif  /* end AUTO_CAL */
 
 
   ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples
@@ -3594,7 +3594,7 @@ no_c0save:
         break;
      }
   }
- #endif
+ #endif		/* end FREQUENCY_50HZ */
  PartFound = PART_NONE;
      e20:	10 92 12 01 	sts	0x0112, r1
  wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
@@ -10640,11 +10640,11 @@ start:
     341c:	90 e0       	ldi	r25, 0x00	; 0
     341e:	0e 94 53 01 	call	0x2a6	; 0x2a6 <lcd_fix_string>
     3422:	37 c4       	rjmp	.+2158   	; 0x3c92 <main+0xa92>
-#endif
     goto end;
   }
 
-#ifdef CHECK_CALL
+#ifdef WITH_SELFTEST
+ #ifdef AUTO_CAL
   UnCalibrated = 0;
     3424:	10 92 4e 01 	sts	0x014E, r1
   lcd_command(CMD_SetDisplayAndCursor | 0x04); // Display on / Cursor off / no Blinking
@@ -10668,14 +10668,13 @@ start:
     344a:	8e e0       	ldi	r24, 0x0E	; 14
     344c:	0e 94 00 01 	call	0x200	; 0x200 <lcd_command>
   }
+ #endif
   AutoCheck();			//check, if selftest should be done
     3450:	0e 94 aa 04 	call	0x954	; 0x954 <AutoCheck>
+#endif
   lcd_line2();			//LCD position row2, column 1
     3454:	80 ec       	ldi	r24, 0xC0	; 192
     3456:	0e 94 00 01 	call	0x200	; 0x200 <lcd_command>
-#else
-  lcd_line2();			//LCD position row2, column 1
-#endif
   lcd_MEM_string(TestRunning);		//String: testing...
     345a:	87 e4       	ldi	r24, 0x47	; 71
     345c:	91 e0       	ldi	r25, 0x01	; 1

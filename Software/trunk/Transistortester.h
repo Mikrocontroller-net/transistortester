@@ -857,15 +857,12 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  const unsigned char RHRL[] MEM_TEXT = "RH/RL";
  #endif
  const unsigned char R0_str[] MEM2_TEXT = "R0=";
-#endif
- 
-#ifdef CHECK_CALL
  const unsigned char RIHI[] MEM_TEXT = "Ri_Hi=";
  const unsigned char RILO[] MEM_TEXT = "Ri_Lo=";
  const unsigned char C0_str[] MEM_TEXT = "C0 ";
  const unsigned char T50HZ[] MEM_TEXT = " 50Hz";
 #endif
-
+ 
 
  const unsigned char DiodeIcon1[] MEM_TEXT = { 0x11,
 				     0x19,

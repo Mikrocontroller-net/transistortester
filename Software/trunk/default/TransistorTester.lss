@@ -3041,7 +3041,7 @@ begin_selftest:
      a9e:	0e 94 d6 03 	call	0x7ac	; 0x7ac <wait_for_key_5s_line2>
      aa2:	18 e7       	ldi	r17, 0x78	; 120
   } //end for tt
-#else
+ #else
   // without extended tests
   for (ww=0;ww<120;ww++) {
      // wait 1 minute for releasing the probes
@@ -3068,14 +3068,14 @@ begin_selftest:
      } //end for ww
      wait_about1s();
   } //end for tt
-#else
+ #else
   // without extended tests
   for (ww=0;ww<120;ww++) {
      acc:	59 f7       	brne	.-42     	; 0xaa4 <AutoCheck+0x150>
      wait_about500ms();
      if (AllProbesShorted() == 0) break;
   }
-#endif
+ #endif
 
   lcd_clear();
      ace:	0e 94 0d 01 	call	0x21a	; 0x21a <lcd_clear>
@@ -3418,7 +3418,7 @@ no_c0save:
         wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
         }
 //#######################################
-#endif
+ #endif
   #ifdef AUTOSCALE_ADC
         ADC_PORT =  TXD_VAL;	//ADC-Port 1 to GND
      d0e:	88 e0       	ldi	r24, 0x08	; 8
@@ -3599,6 +3599,7 @@ no_c0save:
      e20:	10 92 12 01 	sts	0x0112, r1
  wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
      e24:	0e 94 d6 03 	call	0x7ac	; 0x7ac <wait_for_key_5s_line2>
+#endif
  } 
      e28:	2e 96       	adiw	r28, 0x0e	; 14
      e2a:	0f b6       	in	r0, 0x3f	; 63

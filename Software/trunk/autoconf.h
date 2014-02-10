@@ -14,6 +14,7 @@
   #define R_L_VAL 6800          // standard value 680 Ohm, multiplied by 10 for 0.1 Ohm resolution
 #else
  #if R_L_VAL != 6800
+  // please check the table RLtab in Transistortester.h for non standard RL value
   #warning "no standard RL !=680"
  #endif
 #endif
@@ -21,6 +22,7 @@
   #define R_H_VAL 47000         // standard value 470000 Ohm, multiplied by 10, divided by 100 
 #else
  #if R_H_VAL != 47000
+  // please check the table RHtab in Transistortester.h for non standard RH value
   #warning "no standard RH !=470k"
  #endif
 #endif

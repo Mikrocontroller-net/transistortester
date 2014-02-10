@@ -1,13 +1,14 @@
 // Selftest of the device and calibration 
 void AutoCheck(void) {
+#ifdef WITH_SELFTEST
   uint8_t tt;		// number of running test
   uint8_t ww;		// counter for repeating the tests
   int  adcmv[7];
-#ifdef EXTENDED_TESTS
+ #ifdef EXTENDED_TESTS
   uint16_t u680;	// 3 * (Voltage at 680 Ohm)
-#else
- #warning "Selftest without extended tests T1 to T7!"
-#endif
+ #else
+  #warning "Selftest without extended tests T1 to T7!"
+ #endif
 // define the maximum count of repetitions MAX_REP
 #define MAX_REP 4
 
@@ -69,8 +70,8 @@ begin_selftest:
 //     }
 //  } /* end for tt */
 
-#ifdef EXTENDED_TESTS
- #define TEST_COUNT 8
+ #ifdef EXTENDED_TESTS
+  #define TEST_COUNT 8
  
   for(tt=1;tt<TEST_COUNT;tt++) {		// loop for all Tests
      for(ww=0;ww<MAX_REP;ww++) {	// repeat the test MAX_REP times
@@ -197,7 +198,7 @@ begin_selftest:
      } //end for ww
      wait_about1s();
   } //end for tt
-#else
+ #else
   // without extended tests
   for (ww=0;ww<120;ww++) {
      // wait 1 minute for releasing the probes
@@ -208,7 +209,7 @@ begin_selftest:
      wait_about500ms();
      if (AllProbesShorted() == 0) break;
   }
-#endif
+ #endif
 
   lcd_clear();
   lcd_MEM_string(RIHI);	// "RiHi="
@@ -281,7 +282,7 @@ no_c0save:
         lcd_MEM2_string(REF_C_str);	// "REF_C="
         i2lcd(load_diff);		// lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
         RefVoltage();			// new ref_mv_offs and RHmultip
-#if 0
+ #if 0
 //#######################################
         // Test for switching level of the digital input of port TP3
         for (tt=0;tt<8;tt++) {
@@ -310,7 +311,7 @@ no_c0save:
         wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
         }
 //#######################################
-#endif
+ #endif
   #ifdef AUTOSCALE_ADC
         ADC_PORT =  TXD_VAL;	//ADC-Port 1 to GND
         ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
@@ -383,6 +384,7 @@ no_c0save:
  #endif
  PartFound = PART_NONE;
  wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
+#endif
  } 
 
  

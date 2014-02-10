@@ -94,17 +94,6 @@
  #define EXT_DENOMINATOR 1
 #endif
 
-/*
-  exact values of used resistors (Ohm).
-  The standard value for R_L is 680 Ohm, for R_H 470kOhm.
-  
-  To calibrate your tester the resistor-values can be adjusted:
-*/
- #define R_L_VAL 6800          // standard value 680 Ohm, multiplied by 10 for 0.1 Ohm resolution
-//  #define R_L_VAL 6690          // this will be define a 669 Ohm
-  #define R_H_VAL 47000         // standard value 470000 Ohm, multiplied by 10, divided by 100 
-//  #define R_H_VAL 47900               // this will be define a 479000 Ohm, divided by 100 
-
 
 /* Port for the Test resistors
   The Resistors must be connected to the lower 6 Pins of the Port in following sequence:

@@ -45,16 +45,26 @@ int main(void) {
   UCSR0B = 0;		// disable UART, if started with bootloader
  #endif
 #endif
+#if PROCESSOR_TYP == 1280
+ #define BAUD_RATE 9600
+  UBRR0H = (F_CPU / 16 / BAUD_RATE - 1) >> 8;
+  UBRR0L = (F_CPU / 16 / BAUD_RATE - 1) & 0xff;
+  UCSR0B = (1<<TXEN0);
+  UCSR0C = (1<<USBS0) | (3<<UCSZ00);	// 2 stop bits, 8-bit
+  while (!(UCSR0A & (1<<UDRE0))) { };	// wait for send data port ready 
+#endif
   tmp = (WDRF_HOME & (1<<WDRF));	// save Watch Dog Flag
   WDRF_HOME &= ~(1<<WDRF);	 	//reset Watch Dog flag
   wdt_disable();			// disable Watch Dog
 #ifndef INHIBIT_SLEEP_MODE
   // switch off unused Parts
  #if PROCESSOR_TYP == 1280
-  PRR0 = (1<<PRTWI) | (1<<PRTIM0) | (1<<PRSPI) | (1<<PRUSART0);
+//  PRR0 = (1<<PRTWI) | (1<<PRTIM0) | (1<<PRSPI) | (1<<PRUSART0);
+  PRR0 = (1<<PRTWI) |  (1<<PRSPI) | (1<<PRUSART0);
   PRR1 = (1<<PRTIM5) | (1<<PRTIM4) | (1<<PRTIM3) | (1<<PRUSART3) | (1<<PRUSART2) | (1<<PRUSART3);
  #else
-  PRR = (1<<PRTWI) | (1<<PRTIM0) | (1<<PRSPI) | (1<<PRUSART0);
+//  PRR = (1<<PRTWI) | (1<<PRTIM0) | (1<<PRSPI) | (1<<PRUSART0);
+  PRR = (1<<PRTWI) | (1<<PRSPI) | (1<<PRUSART0);
  #endif
   DIDR0 = (1<<ADC5D) | (1<<ADC4D) | (1<<ADC3D);	
   TCCR2A = (0<<WGM21) | (0<<WGM20);		// Counter 2 normal mode
@@ -110,7 +120,7 @@ int main(void) {
 
 //  DIDR0 = 0x3f;			//disable all Input register of ADC
 
-#if POWER_OFF+0 > 1
+//#if POWER_OFF+0 > 1
   // tester display time selection
   display_time = OFF_WAIT_TIME;		// LONG_WAIT_TIME for single mode, else SHORT_WAIT_TIME
   if (!(RST_PIN_REG & (1<<RST_PIN))) {
@@ -121,9 +131,9 @@ int main(void) {
         display_time = LONG_WAIT_TIME;	// ... set long time display anyway
      }
   }
-#else
-  #define display_time OFF_WAIT_TIME
-#endif
+//#else
+//  #define display_time OFF_WAIT_TIME
+//#endif
 
 #if POWER_OFF+0 > 1
   empty_count = 0;
@@ -131,6 +141,13 @@ int main(void) {
 #endif
 #ifndef USE_EEPROM
   EE_check_init();		// init EEprom, if unset
+#endif
+  ADCconfig.RefFlag = 0;
+  Calibrate_UR();		// get Ref Voltages and Pin resistance
+#ifdef WITH_MENU
+  if (display_time == LONG_WAIT_TIME) {
+     function_menu();		// selection of function
+  }
 #endif
 
 //*****************************************************************
@@ -153,7 +170,6 @@ start:
 #ifdef WITH_UART
   uart_newline();		// start of new measurement
 #endif
-  ADCconfig.RefFlag = 0;
   Calibrate_UR();		// get Ref Voltages and Pin resistance
   lcd_line1();			// Cursor to 1. row, column 1
   
@@ -259,7 +275,7 @@ start:
  #endif
      wait_about300ms();
   }
-#endif
+#endif /* WITH_VEXT */
 
 #ifndef DebugOut
   lcd_line2();			//LCD position row 2, column 1
@@ -804,7 +820,17 @@ gakAusgabe:
  end2:
   ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
   while(!(RST_PIN_REG & (1<<RST_PIN)));	//wait ,until button is released
-  if ((wait_for_key_ms(max_time)) != 0 ) goto start;
+  ii = wait_for_key_ms(max_time);
+#ifdef WITH_MENU
+  if (ii > 0) {
+     if (ii < 30) goto start;
+     // menu selected
+     empty_count = 0;
+     mess_count = 0;
+     function_menu();
+  }
+#endif
+  if (ii != 0 ) goto start;
 #ifdef POWER_OFF
  #if POWER_OFF > 127
   #define POWER2_OFF 255

@@ -398,7 +398,7 @@ endif
 OBJECTS += main.o CheckPins.o ChargePin10ms.o EntladePins.o
 OBJECTS +=  ReadCapacity.o GetRLmultip.o Calibrate_UR.o
 ifneq ($(PARTNO),m8)
-OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o
+OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o GetFrequency.o function_menu.o message_key_released.o
 endif
 
 
@@ -462,6 +462,12 @@ get_log.o: ../get_log.S Makefile
 DisplayValue.o: ../DisplayValue.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
+function_menu.o: ../function_menu.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+message_key_released.o: ../message_key_released.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 ReadCapacity.o: ../ReadCapacity.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
@@ -475,6 +481,9 @@ CheckPins.o: ../CheckPins.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 GetVloss.o: ../GetVloss.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+GetFrequency.o: ../GetFrequency.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 main.o: ../main.c Makefile

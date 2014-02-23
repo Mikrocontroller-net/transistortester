@@ -23,6 +23,7 @@
 ;/* return value: 1 == key is pressed, 0 == time expired */
 ;uint8_t wait_for_key_ms(int max_time) 
 wait_for_key_ms:
+        push	r17
  	push	r28		; save registers r28:29
  	push	r29
  	movw	r28, r24	; r28:29 = max_time
@@ -34,6 +35,7 @@ wait_for_key_ms:
  	ldi	r24,  40
  	RCALL	sleep_5ms	; wait_about200ms();
 #endif
+	ldi	r17, 0		; key_cs = 0
  	rjmp	no_cnt 		; wait max_time milliseconds or endless, if zero
 wloop:
 #if INHIBIT_SLEEP_MODE
@@ -42,9 +44,17 @@ wloop:
  	ldi	r24, 0x02	; 2
  	RCALL	sleep_5ms	; wait_about10ms();
 #endif
- 	ldi	r24, 0x01	;  return(1);    // key is pressed
- 	sbis	_SFR_IO_ADDR(RST_PIN_REG), RST_PIN		; if(!(RST_PIN_REG & (1<<RST_PIN))) {
- 	rjmp	to_ret ;       // If the key is pressed again... return(1)
+ 	sbic	_SFR_IO_ADDR(RST_PIN_REG), RST_PIN		; if(!(RST_PIN_REG & (1<<RST_PIN))) {
+ 	rjmp	not_pressed	; // If the key is pressed again... return(1)
+	subi	r17, 0xff	; key_cs++;
+        cpi	r17, 35		; if (key_cs >= MAX_CS)
+	brcs	cnt_loop	;
+        rjmp	to_ret		;  break;
+not_pressed:
+	cpse	r17, r1		; if ( key_cs != 0)
+        rjmp	to_ret		; break;
+
+cnt_loop:
  	wdr			; wdt_reset();
  	sbiw	r28, 0x00	; if (max_time > 0) 	// count only, if counter > 0
  	breq	no_cnt 		; special case zero, don't count
@@ -55,10 +65,11 @@ wloop:
 no_cnt:
  	sbrs	r29, 7		; while (max_time >= 0) 
  	rjmp	wloop 
- 	ldi	r24, 0x00	; return(0);	// no key pressed within the specified time
 to_ret:
+        mov	r24, r17	; return(key_cs)
  	pop	r29		; restore registers r29:28
  	pop	r28
+	pop	r17
  	ret
 .endfunc
 

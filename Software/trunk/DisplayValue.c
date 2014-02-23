@@ -24,7 +24,7 @@
 
  *  display value and unit
 
- *  - max. 4 digits excluding "." and unit
+ *  - max. 4 (6) digits excluding "." and unit
 
  *
 
@@ -39,6 +39,7 @@
  *  - unit character (0 = none)
 
  *  digits = 2, 3 or 4
+ *  for FLASHEND > 16k digits can also be 5 or 6
 
  */
 
@@ -48,7 +49,11 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
 
 //  char OutBuffer[15];
 
+#ifdef WITH_MENU
+  unsigned long     Limit;
+#else
   unsigned int      Limit;
+#endif
 
   unsigned char     Prefix;		/* prefix character */
 
@@ -67,6 +72,10 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
   if (digits == 3) Limit = 1000;	/* scale value down to 3 digits */
 
   if (digits == 4) Limit = 10000;	/* scale value down to 4 digits */
+#ifdef WITH_MENU
+  if (digits == 5) Limit = 100000;	/* scale value down to 5 digits */
+  if (digits == 6) Limit = 1000000;	/* scale value down to 6 digits */
+#endif
 
   while (Value >= Limit)
 
@@ -110,6 +119,28 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
 
     }
 
+  /* convert value into string */
+
+#ifdef WITH_MENU
+  ultoa(Value, OutBuffer, 10);
+#else
+  utoa((unsigned int)Value, OutBuffer, 10);
+#endif
+
+  Length = strlen(OutBuffer);
+
+#ifdef WITH_MENU
+ #ifdef NO_NANO
+  if ((Length > (4+Offset))  && (Index != 0))
+ #else
+  if (Length > (4+Offset)) 
+ #endif
+    {
+      Index++;			/* take next prefix for better readable string */
+      Offset += 3;		/* decimal point 3 to the left */
+    }
+#endif
+
 #ifdef NO_NANO
 
   if (Index == 1)
@@ -132,13 +163,6 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
 
    */
 
-
-
-  /* convert value into string */
-
-  utoa((unsigned int)Value, OutBuffer, 10);
-
-  Length = strlen(OutBuffer);
 
 
 

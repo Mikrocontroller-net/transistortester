@@ -2,6 +2,18 @@
 /*########################################################################################
        Automatic Configuration
 */
+#if FLASHEND > 0x1fff
+ #ifndef WITH_UART
+  #define WITH_VEXT
+ #endif
+#else
+ #ifndef BAT_CHECK
+  #ifndef WITH_UART
+   #define WITH_VEXT
+  #endif
+ #endif
+#endif
+
 #if BAT_NUMERATOR < BAT_DENOMINATOR
  #warning "Wrong BAT_NUMERATOR / BAT_DENOMINATOR setting!"
 #endif
@@ -210,11 +222,11 @@
  #if (POWER_OFF+0) > 2
   #define OFF_WAIT_TIME SHORT_WAIT_TIME
  #else
-  #define OFF_WAIT_TIME LONG_WAIT_TIME
+  #define OFF_WAIT_TIME (LONG_WAIT_TIME - 1)
  #endif
 #else
 // if POWER OFF function is not selected, wait 28s before repeat measurement
- #define OFF_WAIT_TIME  LONG_WAIT_TIME
+ #define OFF_WAIT_TIME  (LONG_WAIT_TIME - 1)
 #endif
 
 //**********************************************************
@@ -521,6 +533,12 @@
 // #define T2_PERIOD (1024/(F_CPU/1000000UL))
   #define T2_PERIOD (1024 / MHZ_CPU)
        /* set to 128 or 64 us */
+#endif
+#if FLASHEND <= 0x3fff
+ #ifdef WITH_MENU
+  #undef WITH_MENU
+  #warning "no WITH_MENU possible with ATmega8 or ATmega168"
+ #endif
 #endif
 #ifdef __ASSEMBLER__
 /* AOUT output the content of reg to the specified IO-adr */

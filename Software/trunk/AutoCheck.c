@@ -202,7 +202,127 @@ begin_selftest:
      wait_about500ms();
      if (AllProbesShorted() == 0) break;
   }
+  #if PROCESSOR_TYP == 1280
+  lcd_clear();
+  lcd_data('1'+TP1);
+  lcd_data('L');
+  lcd_data('=');
+  ADC_PORT = TXD_VAL;
+  ADC_DDR = (1<<TP1) | TXD_MSK;
+  R_PORT = (1<<PIN_RL1);
+  R_DDR = (1<<PIN_RL1);
+  adcmv[0] = W5msReadADC(TP1);
+  ADCSRB = (1<<MUX5);		// switch to upper 8 MUX inputs
+  adcmv[1] = ReadADC(PIN_RL1);
+  ADCSRB = 0;			// switch back to lower 8 MUX inputs
+  resis[0].rx = (adcmv[0] * (unsigned long)R_L_VAL) / (adcmv[1] - adcmv[0]);
+  DisplayValue(resis[0].rx,-1,LCD_CHAR_OMEGA,3);
+  lcd_space();
+  lcd_data('H');
+  lcd_data('=');
+  resis[1].rx = ((ADCconfig.U_AVCC - adcmv[1]) * (unsigned long)R_L_VAL) / (adcmv[1] - adcmv[0]);
+  DisplayValue(resis[1].rx,-1,LCD_CHAR_OMEGA,3);
+  lcd_line2();
+  lcd_data('1'+TP1);
+  lcd_space();
+  lcd_data('H');
+  lcd_data('=');
+  ADC_PORT = (1<<TP1) | TXD_VAL;
+  R_PORT = 0;
+  adcmv[0] = W5msReadADC(TP1);
+  ADCSRB = (1<<MUX5);		// switch to upper 8 MUX inputs
+  adcmv[1] = ReadADC(PIN_RL1);
+  ADCSRB = 0;			// switch back to lower 8 MUX inputs
+  resis[1].rx = ((ADCconfig.U_AVCC - adcmv[0]) * (unsigned long)R_L_VAL) / (adcmv[0] - adcmv[1]);
+  DisplayValue(resis[1].rx,-1,LCD_CHAR_OMEGA,3);
+  lcd_space();
+  lcd_data('L');
+  lcd_data('=');
+  resis[0].rx = (adcmv[1] * (unsigned long)R_L_VAL) / (adcmv[0] - adcmv[1]);
+  DisplayValue(resis[0].rx,-1,LCD_CHAR_OMEGA,3);
+  sleep_5ms(210);
+  wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
+// 
+  lcd_clear();
+  lcd_data('1'+TP2);
+  lcd_data('L');
+  lcd_data('=');
+  ADC_PORT = TXD_VAL;
+  ADC_DDR = (1<<TP2) | TXD_MSK;
+  R_PORT = (1<<PIN_RL2);
+  R_DDR = (1<<PIN_RL2);
+  adcmv[0] = W5msReadADC(TP2);
+  ADCSRB = (1<<MUX5);		// switch to upper 8 MUX inputs
+  adcmv[1] = ReadADC(PIN_RL2);
+  ADCSRB = 0;			// switch back to lower 8 MUX inputs
+  resis[0].rx = (adcmv[0] * (unsigned long)R_L_VAL) / (adcmv[1] - adcmv[0]);
+  DisplayValue(resis[0].rx,-1,LCD_CHAR_OMEGA,3);
+  lcd_space();
+  lcd_data('H');
+  lcd_data('=');
+  resis[1].rx = ((ADCconfig.U_AVCC - adcmv[1]) * (unsigned long)R_L_VAL) / (adcmv[1] - adcmv[0]);
+  DisplayValue(resis[1].rx,-1,LCD_CHAR_OMEGA,3);
+  lcd_line2();
+  lcd_data('1'+TP2);
+  lcd_data('H');
+  lcd_data('=');
+  ADC_PORT = (1<<TP2) | TXD_VAL;
+  R_PORT = 0;
+  adcmv[0] = W5msReadADC(TP2);
+  ADCSRB = (1<<MUX5);		// switch to upper 8 MUX inputs
+  adcmv[1] = ReadADC(PIN_RL2);
+  ADCSRB = 0;			// switch back to lower 8 MUX inputs
+  resis[1].rx = ((ADCconfig.U_AVCC - adcmv[0]) * (unsigned long)R_L_VAL) / (adcmv[0] - adcmv[1]);
+  DisplayValue(resis[1].rx,-1,LCD_CHAR_OMEGA,3);
+  lcd_space();
+  lcd_data('L');
+  lcd_data('=');
+  resis[0].rx = (adcmv[1] * (unsigned long)R_L_VAL) / (adcmv[0] - adcmv[1]);
+  DisplayValue(resis[0].rx,-1,LCD_CHAR_OMEGA,3);
+  sleep_5ms(210);
+  wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
+//
+  lcd_clear();
+  lcd_data('1'+TP3);
+  lcd_data('L');
+  lcd_data('=');
+  ADC_DDR = (1<<TP3) | TXD_MSK;
+  R_PORT = (1<<PIN_RL3);
+  R_DDR = (1<<PIN_RL3);
+  adcmv[0] = W5msReadADC(TP3);
+  ADCSRB = (1<<MUX5);		// switch to upper 8 MUX inputs
+  adcmv[1] = ReadADC(PIN_RL3);
+  ADCSRB = 0;
+  resis[0].rx = (adcmv[0] * (unsigned long)R_L_VAL) / (adcmv[1] - adcmv[0]);
+  DisplayValue(resis[0].rx,-1,LCD_CHAR_OMEGA,3);
+  lcd_space();
+  lcd_data('H');
+  lcd_data('=');
+  resis[1].rx = ((ADCconfig.U_AVCC - adcmv[1]) * (unsigned long)R_L_VAL) / (adcmv[1] - adcmv[0]);
+  DisplayValue(resis[1].rx,-1,LCD_CHAR_OMEGA,3);
+  lcd_line2();
+  lcd_data('1'+TP3);
+  lcd_data('H');
+  lcd_data('=');
+  ADC_PORT = (1<<TP3) | TXD_VAL;
+  R_PORT = 0;
+  adcmv[0] = W5msReadADC(TP3);
+  ADCSRB = (1<<MUX5);		// switch to upper 8 MUX inputs
+  adcmv[1] = ReadADC(PIN_RL3);
+  ADCSRB = 0;			// switch back to lower 8 MUX inputs
+  resis[1].rx = ((ADCconfig.U_AVCC - adcmv[0]) * (unsigned long)R_L_VAL) / (adcmv[0] - adcmv[1]);
+  DisplayValue(resis[1].rx,-1,LCD_CHAR_OMEGA,3);
+  lcd_space();
+  lcd_data('L');
+  lcd_data('=');
+  resis[0].rx = (adcmv[1] * (unsigned long)R_L_VAL) / (adcmv[0] - adcmv[1]);
+  DisplayValue(resis[0].rx,-1,LCD_CHAR_OMEGA,3);
+  sleep_5ms(210);
+  wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
+  #endif
+
  #endif		/* end EXTENDED_TESTS */
+ 
 
   lcd_clear();
   lcd_MEM_string(RIHI);	// "RiHi="

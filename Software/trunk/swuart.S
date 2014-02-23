@@ -34,9 +34,10 @@
  .section .text
 uart_putc:	
 #ifdef WITH_UART
-		push bitcnt
-		in temp,_SFR_IO_ADDR(SREG)
-    	push bitcnt
+;	push bitcnt
+;	in temp,_SFR_IO_ADDR(SREG)
+		push	Txbyte		; save character 
+	    	push bitcnt		; save register used for bit count
 		ldi	bitcnt,10	;1+8+sb (sb is # of stop bits)
 		com	Txbyte		;Inverte everything
 		sec			;Start bit
@@ -66,9 +67,10 @@ putchar2:
 		dec	bitcnt		;If not all bit sent
 		brne	putchar0	;   send next
 					;else
-		pop bitcnt
-    	out _SFR_IO_ADDR(SREG),temp
-    	pop bitcnt
+		pop	bitcnt 		; restore register used for bit count
+		pop	Txbyte		; restore character send
+;   	out _SFR_IO_ADDR(SREG),temp
+;   	pop bitcnt
 #endif
 		ret			;   return
 

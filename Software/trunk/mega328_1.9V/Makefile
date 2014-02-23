@@ -395,14 +395,14 @@ OBJECTS += swuart.o wait1000ms.o
 ifndef INHIBIT_SLEEP_MODE
 OBJECTS += sleep_5ms.o
 endif
-OBJECTS += ReadADC.o wait_for_key_ms.o 
+OBJECTS += ReadADC.o wait_for_key_ms.o RefVoltage.o
 ifneq ($(PARTNO),m8)
 OBJECTS += get_log.o
 endif
-OBJECTS += main.o CheckPins.o ChargePin10ms.o EntladePins.o RefVoltage.o
+OBJECTS += main.o CheckPins.o ChargePin10ms.o EntladePins.o
 OBJECTS +=  ReadCapacity.o GetRLmultip.o Calibrate_UR.o
 ifneq ($(PARTNO),m8)
-OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o
+OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o GetFrequency.o function_menu.o message_key_released.o
 endif
 ifndef USE_EEPROM
 OBJECTS +=  EE_check_init.o
@@ -467,6 +467,12 @@ get_log.o: ../get_log.S Makefile
 DisplayValue.o: ../DisplayValue.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
+function_menu.o: ../function_menu.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+message_key_released.o: ../message_key_released.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 ReadCapacity.o: ../ReadCapacity.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
@@ -480,6 +486,9 @@ CheckPins.o: ../CheckPins.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 GetVloss.o: ../GetVloss.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+GetFrequency.o: ../GetFrequency.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 main.o: ../main.c Makefile

@@ -90,6 +90,13 @@ End of configuration
    const unsigned char RELPROBE[] MEM_TEXT = "Trenne Pins!";
    const unsigned char ATE[] MEM_TEXT = "Test Ende";
  #endif
+ #ifdef WITH_MENU
+   const unsigned char SELECTION_str[] MEM2_TEXT = "Auswahl:";
+   const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
+   const unsigned char FREQ_str[] MEM2_TEXT = "Frequenz";
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Spannung";
+   const unsigned char OFF_str[] MEM2_TEXT = "Schalte aus";
+ #endif
  #define LANG_SELECTED
 #endif
 
@@ -111,6 +118,13 @@ End of configuration
    const unsigned char SELFTEST[] MEM_TEXT = "Tryb auto-test..";
    const unsigned char RELPROBE[] MEM_TEXT = "osobne pins!";
    const unsigned char ATE[] MEM_TEXT = "Testu End";
+ #endif
+ #ifdef WITH_MENU
+   const unsigned char SELECTION_str[] MEM2_TEXT = "Selekcia:";
+   const unsigned char TESTER_str[] MEM2_TEXT = "Tranzystor";
+   const unsigned char FREQ_str[] MEM2_TEXT = "Czestosc";
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
+   const unsigned char OFF_str[] MEM2_TEXT = "wylaczyc";
  #endif
  #define LANG_SELECTED
 #endif
@@ -134,6 +148,13 @@ End of configuration
    const unsigned char RELPROBE[] MEM_TEXT = "Izoluj sondy!";
    const unsigned char ATE[] MEM_TEXT = "Konec testu";
  #endif
+ #ifdef WITH_MENU
+   const unsigned char SELECTION_str[] MEM2_TEXT = "Selekce:";
+   const unsigned char TESTER_str[] MEM2_TEXT = "Tranzistor";
+   const unsigned char FREQ_str[] MEM2_TEXT = "Frekvence";
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
+   const unsigned char OFF_str[] MEM2_TEXT = "vypnout";
+ #endif
  #define LANG_SELECTED
 #endif
 
@@ -156,6 +177,13 @@ End of configuration
    const unsigned char RELPROBE[] MEM_TEXT = "Izoluj sondy!";
    const unsigned char ATE[] MEM_TEXT = "Koniec testu";
  #endif
+ #ifdef WITH_MENU
+   const unsigned char SELECTION_str[] MEM2_TEXT = "Vyber:";
+   const unsigned char TESTER_str[] MEM2_TEXT = "Tranzistor";
+   const unsigned char FREQ_str[] MEM2_TEXT = "Frekvencie";
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Napeti";
+   const unsigned char OFF_str[] MEM2_TEXT = "vypnite";
+ #endif
  #define LANG_SELECTED
 #endif
 
@@ -177,6 +205,13 @@ End of configuration
    const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
    const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!";
    const unsigned char ATE[] MEM_TEXT = "Test End";
+ #ifdef WITH_MENU
+   const unsigned char SELECTION_str[] MEM2_TEXT = "Izbor:";
+   const unsigned char TESTER_str[] MEM2_TEXT = "Tranzistor";
+   const unsigned char FREQ_str[] MEM2_TEXT = "Frekvenca";
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
+   const unsigned char OFF_str[] MEM2_TEXT = "izklopi";
+ #endif
  #endif
  #define LANG_SELECTED
 #endif
@@ -200,6 +235,13 @@ End of configuration
    const unsigned char RELPROBE[] MEM_TEXT = "aparte Pinnen!";
    const unsigned char ATE[] MEM_TEXT = "Test Einde";
  #endif
+ #ifdef WITH_MENU
+   const unsigned char SELECTION_str[] MEM2_TEXT = "Selectie:";
+   const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
+   const unsigned char FREQ_str[] MEM2_TEXT = "Frequentie";
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Spanning";
+   const unsigned char OFF_str[] MEM2_TEXT = "uitschakelen";
+ #endif
  #define LANG_SELECTED
 #endif
 
@@ -221,6 +263,13 @@ End of configuration
    const unsigned char SELFTEST[] MEM_TEXT = "Autoteste...";
    const unsigned char RELPROBE[] MEM_TEXT = "Isole Pontas!";
    const unsigned char ATE[] MEM_TEXT = "Fim do Teste";
+ #endif
+ #ifdef WITH_MENU
+   const unsigned char SELECTION_str[] MEM2_TEXT = "Seleccion:";
+   const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
+   const unsigned char FREQ_str[] MEM2_TEXT = "Frecuencia";
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltaje";
+   const unsigned char OFF_str[] MEM2_TEXT = "desconectar";
  #endif
  #define LANG_SELECTED
 #endif
@@ -244,6 +293,13 @@ End of configuration
    const unsigned char RELPROBE[] MEM_TEXT = {Cyr_I,Cyr_z,'o',Cyr_l,Cyr_ja,Cyr_c,Cyr_i,Cyr_ja,'!',0}; //Изоляция! 
    const unsigned char ATE[] MEM_TEXT = {'T','e','c',Cyr_t,' ',Cyr_z,'a',Cyr_k,'o',Cyr_n,Cyr_tsch,'e',Cyr_n,0}; //Тест закончен
  #endif
+ #ifdef WITH_MENU
+   const unsigned char SELECTION_str[] MEM2_TEXT = "Selection:";
+   const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
+   const unsigned char FREQ_str[] MEM2_TEXT = Cyr_Tsch,'a','c','T','o','T','a',0;
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
+   const unsigned char OFF_str[] MEM2_TEXT = "Switch off";
+ #endif
  #define LANG_SELECTED
 #endif
 
@@ -265,6 +321,13 @@ End of configuration
    const unsigned char SELFTEST[] MEM_TEXT = {'P','e',Cyr_zsch,Cyr_i,Cyr_m,' ','c','a',Cyr_m,'o',Cyr_t,'e','c',Cyr_t,'y',0}; //Режим самотесту
    const unsigned char RELPROBE[] MEM_TEXT = {'I',Cyr_z,'o',Cyr_l,Cyr_ja,Cyr_c,'i',Cyr_ja,'!',0}; //Iзоляцiя! 
    const unsigned char ATE[] MEM_TEXT = {'T','e','c',Cyr_t,' ',Cyr_z,'a',Cyr_k,'i',Cyr_n,Cyr_tsch,'e',Cyr_n,'o',0}; //Тест закiнчено
+ #endif
+ #ifdef WITH_MENU
+   const unsigned char SELECTION_str[] MEM2_TEXT = "Selection:";
+   const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
+   const unsigned char FREQ_str[] MEM2_TEXT = Cyr_Tsch,'a','c','T','o','T','a',0;
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
+   const unsigned char OFF_str[] MEM2_TEXT = "Switch off";
  #endif
  #define LANG_SELECTED
 #endif
@@ -289,6 +352,13 @@ End of configuration
    const unsigned char RELPROBE[] MEM_TEXT = "Rovidzar ki!"; // or "separate pins!";
    const unsigned char ATE[] MEM_TEXT = "Teszt vege";
  #endif
+ #ifdef WITH_MENU
+   const unsigned char SELECTION_str[] MEM2_TEXT = "Valasztas:";
+   const unsigned char TESTER_str[] MEM2_TEXT = "Tranzisztor";
+   const unsigned char FREQ_str[] MEM2_TEXT = "Frekvencia";
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
+   const unsigned char OFF_str[] MEM2_TEXT = "kikapcsol";
+ #endif
  #define LANG_SELECTED
 #endif
 
@@ -310,6 +380,13 @@ End of configuration
    const unsigned char SELFTEST[] MEM_TEXT = "Testuoju.."; //"Selftest mode..";
    const unsigned char RELPROBE[] MEM_TEXT = "Atjung laidus!"; //"isolate Probe!";
    const unsigned char ATE[] MEM_TEXT = "Testas baigtas"; //"Test End";
+ #ifdef WITH_MENU
+   const unsigned char SELECTION_str[] MEM2_TEXT = "Pasirinkimas:";
+   const unsigned char TESTER_str[] MEM2_TEXT = "Tranzistorius";
+   const unsigned char FREQ_str[] MEM2_TEXT = "Daznis";
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
+   const unsigned char OFF_str[] MEM2_TEXT = "isjungti";
+ #endif
  #endif
  #define LANG_SELECTED
 #endif
@@ -334,6 +411,13 @@ End of configuration
    const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
    const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!"; // or "separate pins!";
    const unsigned char ATE[] MEM_TEXT = "Test End";
+ #endif
+ #ifdef WITH_MENU
+   const unsigned char SELECTION_str[] MEM2_TEXT = "Selection:";
+   const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
+   const unsigned char FREQ_str[] MEM2_TEXT = "Frequency";
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
+   const unsigned char OFF_str[] MEM2_TEXT = "Switch off";
  #endif
 #endif
 
@@ -967,6 +1051,16 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   extern const unsigned char RELPROBE[] MEM_TEXT;
   extern const unsigned char ATE[] MEM_TEXT;
  #endif
+ #ifdef WITH_MENU
+  extern const unsigned char SELECTION_str[] MEM2_TEXT ;
+  extern const unsigned char TESTER_str[] MEM2_TEXT ;
+  extern const unsigned char FREQ_str[] MEM2_TEXT;
+  extern const unsigned char VOLTAGE_str[] MEM2_TEXT ;
+  extern const unsigned char OFF_str[] MEM2_TEXT ;
+ #endif
+#ifdef WITH_VEXT
+ extern const unsigned char Vext_str[] MEM_TEXT ;
+#endif
  #ifdef AUTO_CAL
 //  extern uint16_t R680pl;
 //  extern uint16_t R680mi;
@@ -1064,6 +1158,15 @@ COMMON  uint8_t ResistorsFound;	//Number of found resistors
    unsigned long inductor_lx;	// inductance 10uH or 100uH
    int8_t inductor_lpre;	// prefix for inductance
 #endif
+#ifdef WITH_MENU
+COMMON union t_frq{
+  unsigned long dw;
+  uint8_t b[4];
+} ext_freq;	// external frequency
+COMMON unsigned long ext_period; 
+COMMON uint8_t pinchange_count;
+COMMON uint8_t pinchange_max;
+#endif
 
 COMMON struct cap_t {
   unsigned long cval;		// capacitor value 
@@ -1117,6 +1220,6 @@ COMMON uint8_t UnCalibrated;	// 0, if the tester is calibrated
 #endif
 
 
-#if POWER_OFF+0 > 1
+//#if POWER_OFF+0 > 1
 COMMON unsigned int display_time;	// display time of measurement in ms units
-#endif
+//#endif

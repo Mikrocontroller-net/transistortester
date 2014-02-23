@@ -1,20 +1,26 @@
 #include <avr/io.h>
 #include "Transistortester.h"
 
+#define MAX_CS 35	/* maximum key hold time in 10ms units  */
 
 /* wait max_time or previous key press */
 /* return value: 1 == key is pressed, 0 == time expired */
 uint8_t wait_for_key_ms(int max_time) {
+  uint8_t key_cs;			// period of key hold down in 10ms units
   // if key is pressed, return 1
   // if max_time == 0 , do not count, wait endless
   wait_about200ms();
 // wait 28 seconds or 5 seconds (if repeat function)
+  key_cs = 0;
   while (max_time >= 0) {
      wait_about10ms();
      if(!(RST_PIN_REG & (1<<RST_PIN))) {
         // If the key is pressed again... 
         // goto start of measurement 
-        return(1);    // key is pressed
+        key_cs++;
+        if (key_cs >= MAX_CS) break;
+     } else {
+        if (key_cs != 0) break;		//return, if key is released again
      }
      wdt_reset();
      if (max_time > 0) {		// count only, if counter > 0
@@ -22,7 +28,7 @@ uint8_t wait_for_key_ms(int max_time) {
         if (max_time == 0) max_time = -1;	// never count to zero, zero is endless!
      }
   }
- return(0);		// no key pressed within the specified time
+ return(key_cs);		// return period key is pressed within the specified time
 }
 
 #ifdef WAIT_LINE2_CLEAR

@@ -2,8 +2,8 @@
  #define __ASSEMBLER__
 #endif
 #include <avr/io.h>
-#include "config.h"
 #include <stdlib.h>
+#include "config.h"
 #include "lcd_defines.h"
 
 #define RCALL rcall

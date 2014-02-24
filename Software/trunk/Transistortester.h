@@ -96,6 +96,7 @@ End of configuration
    const unsigned char FREQ_str[] MEM2_TEXT = "Frequenz";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Spannung";
    const unsigned char OFF_str[] MEM2_TEXT = "Schalte aus";
+   const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
  #endif
  #define LANG_SELECTED
 #endif
@@ -125,6 +126,7 @@ End of configuration
    const unsigned char FREQ_str[] MEM2_TEXT = "Czestosc";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
    const unsigned char OFF_str[] MEM2_TEXT = "wylaczyc";
+   const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
  #endif
  #define LANG_SELECTED
 #endif
@@ -149,11 +151,12 @@ End of configuration
    const unsigned char ATE[] MEM_TEXT = "Konec testu";
  #endif
  #ifdef WITH_MENU
-   const unsigned char SELECTION_str[] MEM2_TEXT = "Selekce:";
+   const unsigned char SELECTION_str[] MEM2_TEXT = "Vyber:";
    const unsigned char TESTER_str[] MEM2_TEXT = "Tranzistor";
    const unsigned char FREQ_str[] MEM2_TEXT = "Frekvence";
-   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
-   const unsigned char OFF_str[] MEM2_TEXT = "vypnout";
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Napeti";
+   const unsigned char OFF_str[] MEM2_TEXT = "Vypnout";
+   const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
  #endif
  #define LANG_SELECTED
 #endif
@@ -180,9 +183,10 @@ End of configuration
  #ifdef WITH_MENU
    const unsigned char SELECTION_str[] MEM2_TEXT = "Vyber:";
    const unsigned char TESTER_str[] MEM2_TEXT = "Tranzistor";
-   const unsigned char FREQ_str[] MEM2_TEXT = "Frekvencie";
-   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Napeti";
-   const unsigned char OFF_str[] MEM2_TEXT = "vypnite";
+   const unsigned char FREQ_str[] MEM2_TEXT = "Frekvencia";
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Napetie";
+   const unsigned char OFF_str[] MEM2_TEXT = "Vypnut";
+   const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
  #endif
  #define LANG_SELECTED
 #endif
@@ -211,6 +215,7 @@ End of configuration
    const unsigned char FREQ_str[] MEM2_TEXT = "Frekvenca";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
    const unsigned char OFF_str[] MEM2_TEXT = "izklopi";
+   const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
  #endif
  #endif
  #define LANG_SELECTED
@@ -241,6 +246,7 @@ End of configuration
    const unsigned char FREQ_str[] MEM2_TEXT = "Frequentie";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Spanning";
    const unsigned char OFF_str[] MEM2_TEXT = "uitschakelen";
+   const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
  #endif
  #define LANG_SELECTED
 #endif
@@ -270,6 +276,7 @@ End of configuration
    const unsigned char FREQ_str[] MEM2_TEXT = "Frecuencia";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltaje";
    const unsigned char OFF_str[] MEM2_TEXT = "desconectar";
+   const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
  #endif
  #define LANG_SELECTED
 #endif
@@ -299,6 +306,7 @@ End of configuration
    const unsigned char FREQ_str[] MEM2_TEXT = Cyr_Tsch,'a','c','T','o','T','a',0;
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
    const unsigned char OFF_str[] MEM2_TEXT = "Switch off";
+   const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
  #endif
  #define LANG_SELECTED
 #endif
@@ -328,6 +336,7 @@ End of configuration
    const unsigned char FREQ_str[] MEM2_TEXT = Cyr_Tsch,'a','c','T','o','T','a',0;
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
    const unsigned char OFF_str[] MEM2_TEXT = "Switch off";
+   const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
  #endif
  #define LANG_SELECTED
 #endif
@@ -358,6 +367,7 @@ End of configuration
    const unsigned char FREQ_str[] MEM2_TEXT = "Frekvencia";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
    const unsigned char OFF_str[] MEM2_TEXT = "kikapcsol";
+   const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
  #endif
  #define LANG_SELECTED
 #endif
@@ -386,6 +396,7 @@ End of configuration
    const unsigned char FREQ_str[] MEM2_TEXT = "Daznis";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
    const unsigned char OFF_str[] MEM2_TEXT = "isjungti";
+   const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
  #endif
  #endif
  #define LANG_SELECTED
@@ -418,6 +429,7 @@ End of configuration
    const unsigned char FREQ_str[] MEM2_TEXT = "Frequency";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
    const unsigned char OFF_str[] MEM2_TEXT = "Switch off";
+   const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
  #endif
 #endif
 
@@ -946,6 +958,9 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  const unsigned char C0_str[] MEM_TEXT = "C0 ";
  const unsigned char T50HZ[] MEM_TEXT = " 50Hz";
 #endif
+#ifdef WITH_MENU
+ const unsigned char FatTP2_str[] MEM2_TEXT = "f@TP2";
+#endif
  
 
  const unsigned char DiodeIcon1[] MEM_TEXT = { 0x11,
@@ -1057,6 +1072,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   extern const unsigned char FREQ_str[] MEM2_TEXT;
   extern const unsigned char VOLTAGE_str[] MEM2_TEXT ;
   extern const unsigned char OFF_str[] MEM2_TEXT ;
+  extern const unsigned char F_GEN_str[] MEM2_TEXT ;
  #endif
 #ifdef WITH_VEXT
  extern const unsigned char Vext_str[] MEM_TEXT ;

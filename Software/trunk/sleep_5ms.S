@@ -50,6 +50,14 @@ wloop:
 
 check_remain:
 #if 3000 > RESTART_DELAY_US
+        lds	r18, TCCR1B	; if (TCCR1B & ((1<<CS12)|(1<<CS11)|(1<<CS10)) != 0) 
+	andi	r18, ((1<<CS12)|(1<<CS11)|(1<<CS10))	;
+	breq	do_sleep
+;  timer 1 is running, don't use sleep
+	RCALL	wait5ms		; wait5ms();
+	sbiw	r24, 1		; pause -= 1;
+	rjmp	next_loop
+do_sleep:
  	cpi	r24, 0x01	; 1
  	cpc	r25, r1
  	breq	only_one 		; if (pause > 1)
@@ -84,6 +92,7 @@ set_cntr:
 	RCALL	wait5ms		; wait5ms();
 	sbiw	r24, 1		; pause -= 1;
 #endif
+next_loop:
  	wdr			; wdt_reset();
  	rjmp	wloop 
  .endfunc

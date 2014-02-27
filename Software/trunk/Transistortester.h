@@ -301,12 +301,17 @@ End of configuration
    const unsigned char ATE[] MEM_TEXT = {'T','e','c',Cyr_t,' ',Cyr_z,'a',Cyr_k,'o',Cyr_n,Cyr_tsch,'e',Cyr_n,0}; //Тест закончен
  #endif
  #ifdef WITH_MENU
-   const unsigned char SELECTION_str[] MEM2_TEXT = "Selection:";
-   const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
-   const unsigned char FREQ_str[] MEM2_TEXT = Cyr_Tsch,'a','c','T','o','T','a',0;
-   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
-   const unsigned char OFF_str[] MEM2_TEXT = "Switch off";
-   const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+   const unsigned char SELECTION_str[] MEM2_TEXT = {'B',Cyr_y,Cyr_b,'e','p',Cyr_i,Cyr_t,'e',':',0}; //"Selection:"
+
+   const unsigned char TESTER_str[] MEM2_TEXT = {'T','p','a',Cyr_n,Cyr_z,Cyr_i,'c',Cyr_t,'o','p',' ','T','e','c',Cyr_t,0}; //"TransistorT"
+
+   const unsigned char FREQ_str[] MEM2_TEXT = {Cyr_Tsch,'a','c',Cyr_t,'o',Cyr_t,'o',Cyr_m,'e','p',0};
+
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = {'B','o',Cyr_l,Cyr_ww,Cyr_t,Cyr_m,'e',Cyr_t,'p',0}; //"Voltage"
+
+   const unsigned char OFF_str[] MEM2_TEXT = {'B',Cyr_y,Cyr_k,Cyr_l,Cyr_ju,Cyr_tsch,Cyr_i,Cyr_t,Cyr_ww,0}; //"Switch off"
+
+   const unsigned char F_GEN_str[] MEM2_TEXT = {'f','-',Cyr_G,'e',Cyr_n,'e','p','a',Cyr_t,'o','p',0}; //"f
  #endif
  #define LANG_SELECTED
 #endif
@@ -331,12 +336,17 @@ End of configuration
    const unsigned char ATE[] MEM_TEXT = {'T','e','c',Cyr_t,' ',Cyr_z,'a',Cyr_k,'i',Cyr_n,Cyr_tsch,'e',Cyr_n,'o',0}; //Тест закiнчено
  #endif
  #ifdef WITH_MENU
-   const unsigned char SELECTION_str[] MEM2_TEXT = "Selection:";
-   const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
-   const unsigned char FREQ_str[] MEM2_TEXT = Cyr_Tsch,'a','c','T','o','T','a',0;
-   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
-   const unsigned char OFF_str[] MEM2_TEXT = "Switch off";
-   const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+   const unsigned char SELECTION_str[] MEM2_TEXT = {'B',Cyr_i,Cyr_b,'e','p','i',Cyr_t,Cyr_ww,':',0}; //"Selection:"
+
+   const unsigned char TESTER_str[] MEM2_TEXT = {'T','p','a',Cyr_n,Cyr_z,Cyr_i,'c',Cyr_t,'o','p',' ','T','e','c',Cyr_t,0}; //"TransistorT"
+
+   const unsigned char FREQ_str[] MEM2_TEXT = {Cyr_Tsch,'a','c',Cyr_t,'o',Cyr_t,'o',Cyr_m,'i','p',0};
+
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = {'B','o',Cyr_l,Cyr_ww,Cyr_t,Cyr_m,'e',Cyr_t,'p',0}; //"Voltage"
+
+   const unsigned char OFF_str[] MEM2_TEXT = {'B',Cyr_y,Cyr_m,Cyr_k,Cyr_n,'y',Cyr_t,Cyr_i,0}; //"Switch off"
+
+   const unsigned char F_GEN_str[] MEM2_TEXT = {'f','-',Cyr_G,'e',Cyr_n,'e','p','a',Cyr_t,'o','p',0}; //"f-Generator"
  #endif
  #define LANG_SELECTED
 #endif

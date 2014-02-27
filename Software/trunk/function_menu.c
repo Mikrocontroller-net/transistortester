@@ -86,13 +86,19 @@ void show_vext() {
   }  /* end for times */
  #endif  /* WITH_VEXT */
 } /* end show_vext() */
+
+/* *************************************************** */
+/* make frequency starts a frequency generator at TP2 with 680 Ohm resistor */
+/* some predefined frequencies can be switched with the key */
+/* a long key press returns to the selection menu */
+/* *************************************************** */
 void make_frequency() {
-#define MAX_FREQ_NR 14
+#define MAX_FREQ_NR 18
   uint8_t times;
   uint8_t key_pressed;
   uint8_t freq_nr;
 
-  message_key_released(F_GEN_str);
+  message_key_released(F_GEN_str);	// display f-Generator and wait for key released
   // OC1B is connected with 680 Ohm resistor to TP2 (middle test pin) 
   TCCR1A = (0<<COM1B1) | (1<<COM1B0) | (0<<WGM11) | (0<<WGM10); // CTC mode, count to OCR1A
   TIMSK1 = 0;		// no interrupt used
@@ -103,90 +109,137 @@ void make_frequency() {
   TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (0<<CS11) | (0<<CS10); // set counter mode to 9 PWM
   R_PORT = 0;		// set all resistor port outputs to GND
   R_DDR = (1<<PIN_RL1) | (1<<PIN_RL3);		// set TP1 and TP3 to output
+  ADC_PORT = TXD_VAL;
+  ADC_DDR = (1<<TP1) | TXD_MSK;			//connect TP1 to GND
   DDRB  |= (1<<DDB2);	// set output enable
   TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (0<<CS11) | (1<<CS10); // no clock divide
   key_pressed = 1;
   freq_nr = MAX_FREQ_NR;
-  for (times=0; times<60; times++) {
+  for (times=0; times<240; times++) {
      if(key_pressed >= 30) break;
      if (key_pressed != 0) {
        times = 0;	// reset counter
        freq_nr++;
        if (freq_nr > MAX_FREQ_NR) freq_nr = 0;
        lcd_line2();
-       lcd_clear_line();
+       lcd_clear_line();	// clear line 2 for next frequency
        lcd_line2();
        if (freq_nr == 0) {
+ #define F_TIM1 (F_CPU)
+          TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (0<<CS11) | (1<<CS10); // no clock divide
           DisplayValue(2000000UL,0,'H',6);
-          OCR1A = ((F_CPU+2000000) / (2*2000000UL)) - 1;
+          OCR1A = ((F_TIM1+2000000) / (2*2000000UL)) - 1;
        }
+       // 1333.333kHz
        if (freq_nr == 1) {
           DisplayValue(1000000UL,0,'H',6);
-          OCR1A = ((F_CPU+1000000) / (2*1000000UL)) - 1;
+          OCR1A = ((F_TIM1+1000000) / (2*1000000UL)) - 1;
        }
+       // 800kHz, 666.666kHz
        if (freq_nr == 2) {
           DisplayValue(500000UL,0,'H',6);
-          OCR1A = ((F_CPU+500000) / (2*500000UL)) - 1;
+          OCR1A = ((F_TIM1+500000) / (2*500000UL)) - 1;
        }
+       // 444.444kHz, 400kHz, 362.636kHz, 333.333kHz, 307.692kHz 285.714kHz
        if (freq_nr == 3) {
           DisplayValue(250000UL,0,'H',6);
-          OCR1A = ((F_CPU+250000) / (2*250000UL)) - 1;
+          OCR1A = ((F_TIM1+250000) / (2*250000UL)) - 1;
        }
+       // 235.294kHz, 222.222kHz, 210.526kHz, 200kHz, 190.476kHz, 181.818kHz, 173.913kHz, 166.666kHz
+       // 160kHz, 153.846kHz, 148.148kHz, 142.857kHz, 137.931kHz, 133.333kHz, 129.032kHz, 125kHz,
+       // (33) 121.212kHz, 117.647kHz, 114.285kHz, 111.111kHz, 108.108kHz, 105.263kHz , 102.564kHz 
        if (freq_nr == 4) {
-          DisplayValue(100000UL,0,'H',6);
-          OCR1A = ((F_CPU+100000) / (2*100000UL)) - 1;
+#undef F_TIM1
+#define F_TIM1 (F_CPU)
+#undef DIVIDER
+#define DIVIDER ((F_TIM1+153600) / (2*153600UL))
+          OCR1A = DIVIDER - 1;
+          DisplayValue(((F_TIM1 * 50UL) + (DIVIDER / 2)) / DIVIDER,-2,'H',6);
        }
        if (freq_nr == 5) {
-          DisplayValue(50000UL,0,'H',6);
-          OCR1A = ((F_CPU+50000) / (2*50000UL)) - 1;
+          DisplayValue(100000UL,0,'H',6);
+          OCR1A = ((F_TIM1+100000) / (2*100000UL)) - 1;
        }
        if (freq_nr == 6) {
-          DisplayValue(25000UL,0,'H',6);
-          OCR1A = ((F_CPU+25000) / (2*25000UL)) - 1;
+          DisplayValue(50000UL,0,'H',6);
+          OCR1A = ((F_TIM1+50000) / (2*50000UL)) - 1;
        }
        if (freq_nr == 7) {
-          DisplayValue(10000UL,0,'H',6);
-          OCR1A = ((F_CPU+10000) / (2*10000UL)) - 1;
+          DisplayValue(25000UL,0,'H',6);
+          OCR1A = ((F_TIM1+25000) / (2*25000UL)) - 1;
        }
        if (freq_nr == 8) {
-          DisplayValue(5000UL,0,'H',6);
-          OCR1A = ((F_CPU+5000) / (2*5000UL)) - 1;
+          DisplayValue(10000UL,0,'H',6);
+          OCR1A = ((F_TIM1+10000) / (2*10000UL)) - 1;
        }
        if (freq_nr == 9) {
-          DisplayValue(2500UL,0,'H',6);
-          OCR1A = ((F_CPU+2500) / (2*2500UL)) - 1;
+          DisplayValue(5000UL,0,'H',6);
+          OCR1A = ((F_TIM1+5000) / (2*5000UL)) - 1;
        }
        if (freq_nr == 10) {
-          DisplayValue(1000UL,0,'H',6);
-          OCR1A = ((F_CPU+1000) / (2*1000UL)) - 1;
+          DisplayValue(2500UL,0,'H',6);
+          OCR1A = ((F_TIM1+2500) / (2*2500UL)) - 1;
        }
        if (freq_nr == 11) {
-#define DIVIDER  ((F_CPU+443) / (2*443UL))
-          OCR1A = (DIVIDER - 1);
-          DisplayValue(((F_CPU * 50UL) + (DIVIDER / 2)) / DIVIDER,-2,'H',6);
+          DisplayValue(1000UL,0,'H',6);
+          OCR1A = ((F_TIM1+1000) / (2*1000UL)) - 1;
        }
        if (freq_nr == 12) {
 #undef DIVIDER
-#define DIVIDER  ((F_CPU+442) / (2*442UL))
-          OCR1A = DIVIDER - 1;
-          DisplayValue(((F_CPU * 50UL) + (DIVIDER / 2)) / DIVIDER,-2,'H',6);
+#define DIVIDER  ((F_TIM1+443) / (2*443UL))
+          OCR1A = (DIVIDER - 1);
+          DisplayValue(((F_TIM1 * 50UL) + (DIVIDER / 2)) / DIVIDER,-2,'H',6);
        }
        if (freq_nr == 13) {
 #undef DIVIDER
-#define DIVIDER  ((F_CPU+440) / (2*440UL))
+#define DIVIDER  ((F_TIM1+442) / (2*442UL))
           OCR1A = DIVIDER - 1;
-          DisplayValue(((F_CPU * 50UL) + (DIVIDER / 2)) / DIVIDER,-2,'H',6);
+          DisplayValue(((F_TIM1 * 50UL) + (DIVIDER / 2)) / DIVIDER,-2,'H',6);
        }
        if (freq_nr == 14) {
 #undef DIVIDER
-#define DIVIDER ((F_CPU+250) / (2*250UL))
+#define DIVIDER  ((F_TIM1+440) / (2*440UL))
           OCR1A = DIVIDER - 1;
-          DisplayValue(((F_CPU * 50UL) + (DIVIDER / 2)) / DIVIDER,-2,'H',6);
+          DisplayValue(((F_TIM1 * 50UL) + (DIVIDER / 2)) / DIVIDER,-2,'H',6);
+       }
+       if (freq_nr == 15) {
+#undef F_TIM1
+#define F_TIM1 (F_CPU)
+#undef DIVIDER
+#define DIVIDER ((F_TIM1+250) / (2*250UL))
+          OCR1A = DIVIDER - 1;
+          DisplayValue(((F_TIM1 * 50UL) + (DIVIDER / 2)) / DIVIDER,-2,'H',6);
+       }
+// please use clock divider to build frequencies lower than 250 Hz (DIVIDER=64000 with 16MHz clock)
+       if (freq_nr == 16) {
+#undef F_TIM1
+#define F_TIM1 (F_CPU/64)
+#undef DIVIDER
+#define DIVIDER ((F_TIM1+100) / (2*100UL))
+          TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (1<<CS11) | (1<<CS10); // divide clock by 64
+          OCR1A = DIVIDER - 1;
+          DisplayValue(((F_TIM1 * 500UL) + (DIVIDER / 2)) / DIVIDER,-3,'H',6);
+       }
+       if (freq_nr == 17) {
+#undef DIVIDER
+#define DIVIDER ((F_TIM1+50) / (2*50UL))
+//          TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (1<<CS11) | (1<<CS10); // divide clock by 64
+          OCR1A = DIVIDER - 1;
+          DisplayValue(((F_TIM1 * 500UL) + (DIVIDER / 2)) / DIVIDER,-3,'H',6);
+       }
+       if (freq_nr == 18) {
+#undef F_TIM1
+#define F_TIM1 (F_CPU/64)
+#undef DIVIDER
+#define DIVIDER ((F_TIM1+10) / (2*10UL))
+//          TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (1<<CS11) | (1<<CS10); // divide clock by 64
+          OCR1A = DIVIDER - 1;
+          DisplayValue(((F_TIM1 * 500UL) + (DIVIDER / 2)) / DIVIDER,-3,'H',6);
        }
        lcd_data('z');		// append the z to get Hz unit
-     }
+     } /* end if key_pressed != 0 */
      key_pressed = wait_for_key_ms(1000);
-  }
+  } /* end for times */
   TCCR1B = 0;		// stop counter
   R_DDR = 0;		// switch resistor ports to Input
   DDRB  &= ~(1<<DDB2);	// disable output 

@@ -24,6 +24,12 @@ CFLAGS = -Wall
 # atmega2560: m2560	// see config.h for different port setting
 PARTNO = m328
 
+# The WITH_MENU option enables a dialog to choose some additional functions.
+# Currently a frequency measurement at ATmega Pin PD4, a frequency generator at TP2 ,
+# tan the external voltage measurement can be selected. Of course you can also return to
+# the normal transistor tester function and switch off the tester.
+CFLAGS += -DWITH_MENU
+
 # Select your language:
 # Available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
 #                          LANG_DUTCH, LANG_BRASIL, LANG_RUSSIAN, LANG_UKRAINIAN, LANG_LITHUANIAN, LANG_HUNGARIAN

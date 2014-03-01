@@ -1189,9 +1189,9 @@ COMMON union t_frq{
   unsigned long dw;
   uint8_t b[4];
 } ext_freq;	// external frequency
-COMMON unsigned long ext_period; 
-COMMON uint8_t pinchange_count;
-COMMON uint8_t pinchange_max;
+//COMMON unsigned long ext_period; 
+COMMON unsigned int pinchange_count;
+COMMON unsigned int pinchange_max;
 #endif
 
 COMMON struct cap_t {

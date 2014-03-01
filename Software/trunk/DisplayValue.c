@@ -75,6 +75,7 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
 #ifdef WITH_MENU
   if (digits == 5) Limit = 100000;	/* scale value down to 5 digits */
   if (digits == 6) Limit = 1000000;	/* scale value down to 6 digits */
+  if (digits == 7) Limit = 10000000;	/* scale value down to 7 digits */
 #endif
 
   while (Value >= Limit)

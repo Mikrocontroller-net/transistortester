@@ -1351,9 +1351,9 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
     Exponent++;				/* increase exponent by 1 */
      4cc:	cf 5f       	subi	r28, 0xFF	; 255
      4ce:	08 c0       	rjmp	.+16     	; 0x4e0 <DisplayValue+0x6e>
-#ifdef WITH_MENU
   if (digits == 5) Limit = 100000;	/* scale value down to 5 digits */
   if (digits == 6) Limit = 1000000;	/* scale value down to 6 digits */
+  if (digits == 7) Limit = 10000000;	/* scale value down to 7 digits */
 #endif
 
   while (Value >= Limit)
@@ -1371,9 +1371,9 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
      4da:	51 2c       	mov	r5, r1
      4dc:	61 2c       	mov	r6, r1
      4de:	71 2c       	mov	r7, r1
-#ifdef WITH_MENU
   if (digits == 5) Limit = 100000;	/* scale value down to 5 digits */
   if (digits == 6) Limit = 1000000;	/* scale value down to 6 digits */
+  if (digits == 7) Limit = 10000000;	/* scale value down to 7 digits */
 #endif
 
   while (Value >= Limit)

@@ -8,6 +8,8 @@
 //=================================================================
 // measure frequency at external pin T0 (PD4)
 
+// #define OLD_SOLUTION
+
 #ifdef WITH_MENU
 void GetFrequency() {
   unsigned char taste;			// set if key is pressed during measurement
@@ -65,7 +67,8 @@ void GetFrequency() {
      }
      TCCR1B = 0;		// stop timer 1
      TIMSK1 = 0;		// disable all timer 1 interrupts
-     if ((ext_freq.dw < 10050) && (ext_freq.dw > 4)) {
+     if ((ext_freq.dw < 10050) && (ext_freq.dw > 0)) {
+#ifdef OLD_SOLUTION
         // also measure period
         if (ext_freq.dw < 100) {
            // 10 Hz is 100ms period, 25 periodes are 2.5 s
@@ -92,6 +95,10 @@ void GetFrequency() {
            pinchange_max = 1250;		// 625 half periodes for 16 MHz
 #endif
         }
+#else
+        pinchange_max = ((10 * ext_freq.dw) + MHZ_CPU) / MHZ_CPU;	// about 10000000 clock tics
+        pinchange_max += pinchange_max;	// * 2 for up and down change
+#endif
         DDRD &= ~(1<<PD4);		// switch PD4 back to input
         wait1ms();			// let capacitor time to load to 2.4V input
         TCNT0 = 0;			// set counter to zero
@@ -105,7 +112,7 @@ void GetFrequency() {
         sei();
         PCMSK2 = (1<<PCINT20);		// monitor PD4 PCINT20 pin change
         for (ii=0;ii<250;ii++) {
-           wait40ms();
+           wait20ms();
            wdt_reset();
            if (!(RST_PIN_REG & (1<<RST_PIN))) taste = 1;	// user request stop of operation
            if ((PCMSK2 & (1<<PCINT20)) == 0) break;		// monitoring is disabled by interrupt
@@ -119,6 +126,7 @@ void GetFrequency() {
         lcd_line2();
         lcd_data('T');
         lcd_data('=');
+#ifdef OLD_SOLUTION
         // resolution is ns for 125 periodes of 8 MHz
         if (pinchange_max < 100) {
            //  100Hz = .01s , 25 periodes for 8MHz = 0.25s = 2000000 clock tics,
@@ -129,6 +137,9 @@ void GetFrequency() {
         } else {
            ext_period = ext_freq.dw;		//has already  100ps resolution
         }
+#else
+        ext_period = ((long long)ext_freq.dw * (125*20)) / pinchange_max;
+#endif
         DisplayValue(ext_period,-10,'s',7);	// show period converted to 1ns units
         if (ii == 250) {
            lcd_data('?');		// wait loop has regular finished

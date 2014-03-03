@@ -2,18 +2,46 @@
 /*########################################################################################
        Automatic Configuration
 */
-#if FLASHEND > 0x1fff
- #ifndef WITH_UART
-  #define WITH_VEXT
- #endif
-#else
- #ifndef BAT_CHECK
-  #ifndef WITH_UART
-   #define WITH_VEXT
-  #endif
- #endif
-#endif
 
+/* configure WITH_VEXT, TPext and TPex2  */
+#if FLASHEND > 0x1fff	/* at least ATmega16 */
+  #ifndef WITH_UART
+    #define WITH_VEXT
+  #endif
+  #ifdef TQFP_ADC6
+    #define WITH_VEXT	/* define WITH_VEXT even if WITH_UART defined */
+    #undef TPext
+    #define TPext ((1<<MUX2) | (1<<MUX1))
+    #ifdef TQFP_ADC7	/* both TQFP_ADC options defined */
+      #define TPex2 ((1<<MUX2) | (1<<MUX1) | (1<<MUX0))
+    #endif
+  #else  /* TQFP_ADC6 */
+    /* TQFP_ADC6 is undefined */
+    #ifdef TQFP_ADC7
+      #define WITH_VEXT	/* define WITH_VEXT even if WITH_UART defined */
+      #undef TPext
+      #define TPext ((1<<MUX2) | (1<<MUX1) | (1<<MUX0))
+    #endif  /* TQFP_ADC7 */
+  #endif  /* TQFP_ADC6 */
+#else   /* FLASHEND <= 0x1fff */
+  #ifndef BAT_CHECK
+    #ifndef WITH_UART	/* no BAT_CHECK and no UART */
+      #define WITH_VEXT
+    #endif
+    #ifdef TQFP_ADC6
+      #define WITH_VEXT	/* define WITH_VEXT even if WITH_UART defined */
+      #undef TPext
+      #define TPext ((1<<MUX2) | (1<<MUX1))
+    #endif		/* TQFP_ADC6 */
+    #ifdef TQFP_ADC7
+      #define WITH_VEXT	/* define WITH_VEXT even if WITH_UART defined */
+      #undef TPext
+      #define TPext ((1<<MUX2) | (1<<MUX1) | (1<<MUX0))
+    #endif		/* TQFP_ADC7 */
+  #endif   /* BAT_CHECK */
+#endif  /* FLASHEND > 0x1fff */
+
+/* check the BAT_NUMERATOR and BAT_DENOMINATOR setting */
 #if BAT_NUMERATOR < BAT_DENOMINATOR
  #warning "Wrong BAT_NUMERATOR / BAT_DENOMINATOR setting!"
 #endif
@@ -22,6 +50,7 @@
  #warning "Wrong EXT_NUMERATOR / EXT_DENOMINATOR setting!"
 #endif
 
+/* check the R_L_VAL and R_H_VAL setting */
 #ifndef R_L_VAL
   #define R_L_VAL 6800          // standard value 680 Ohm, multiplied by 10 for 0.1 Ohm resolution
 #else
@@ -39,11 +68,13 @@
  #endif
 #endif
 
+/* check the R_ANZ_MESS setting */
 #if R_ANZ_MESS < ANZ_MESS
  #undef R_ANZ_MESS
  #define R_ANZ_MESS ANZ_MESS
 #endif
 
+/* check the U_SCALE setting, U_SCALE is temporary used to increase resolution of ReadADC */
 #if U_SCALE < 1
  // limit U_SCALE
  #undef U_SCALE

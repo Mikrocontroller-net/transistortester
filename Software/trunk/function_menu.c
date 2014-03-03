@@ -57,6 +57,11 @@ void function_menu() {
   return;
  } // end function_menu()
 
+/* *************************************************** */
+/* show_vext() read one or two input voltages from     */
+/* ADC input channel(s) TPext or (TPext and TPex2).    */
+/* For both inputs a 10:1 voltage divider is required. */
+/* *************************************************** */
 void show_vext() {
  #ifdef WITH_VEXT
  
@@ -66,21 +71,44 @@ void show_vext() {
   // show the external voltage
   message_key_released(VOLTAGE_str);
   for (times=0;times<250;times++) {
-     lcd_line2();
+#ifdef TPex2
+     lcd_line1();		// 2 Vext measurements 
+     lcd_clear_line();
+     lcd_line1();
+#else
+     lcd_line2();		// only one measurement use line 2
      lcd_clear_line();
      lcd_line2();
+#endif	/* TPex2 */
+#ifdef WITH_UART
+     uart_newline();          // start of new measurement
+     uart_newline();          // start of new measurement
+#endif
      lcd_MEM_string(Vext_str);          // Vext=
-     ADC_DDR = 0;               //deactivate Software-UART
      Vext = W5msReadADC(TPext); // read external voltage 
 //     ADC_DDR = TXD_MSK;               //activate Software-UART 
-//#ifdef WITH_UART
-//     uart_newline();          // start of new measurement
-//#endif
   #if EXT_NUMERATOR <= (0xffff/U_VCC)
      DisplayValue(Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3); // Display 3 Digits of this mV units
   #else
      DisplayValue((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);  // Display 3 Digits of this mV units
   #endif
+
+#ifdef TPex2
+     lcd_line2();
+     lcd_clear_line();
+     lcd_line2();
+#ifdef WITH_UART
+     uart_newline();          // start of new measurement
+#endif
+     lcd_MEM_string(Vext_str);          // Vext=
+     Vext = W5msReadADC(TPext); // read external voltage 
+  #if EXT_NUMERATOR <= (0xffff/U_VCC)
+     DisplayValue(Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3); // Display 3 Digits of this mV units
+  #else
+     DisplayValue((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);  // Display 3 Digits of this mV units
+  #endif
+#endif	/* TPex2 */
+
      key_pressed = wait_for_key_ms(800);
      if (key_pressed != 0) break;
   }  /* end for times */
@@ -93,7 +121,7 @@ void show_vext() {
 /* a long key press returns to the selection menu */
 /* *************************************************** */
 void make_frequency() {
-#define MAX_FREQ_NR 18
+#define MAX_FREQ_NR 19
   uint8_t times;
   uint8_t key_pressed;
   uint8_t freq_nr;
@@ -116,7 +144,15 @@ void make_frequency() {
   key_pressed = 1;
   freq_nr = MAX_FREQ_NR;
   for (times=0; times<240; times++) {
-     if(key_pressed >= 30) break;
+//     if(key_pressed >= 80) break;
+//     if(key_pressed >= 30) {
+//       if (freq_nr >= 2) {
+//         freq_nr -= 2;		// two back and one foreward
+//       } else {
+//         freq_nr += (MAX_FREQ_NR - 2);
+//       }
+//     }
+     if(key_pressed >= 50) break;	// more than 0.5 seconds
      if (key_pressed != 0) {
        times = 0;	// reset counter
        freq_nr++;
@@ -125,116 +161,174 @@ void make_frequency() {
        lcd_clear_line();	// clear line 2 for next frequency
        lcd_line2();
        if (freq_nr == 0) {
+         // 2 MHz
+ #undef F_TIM1
  #define F_TIM1 (F_CPU)
+ #define DIVIDER  ((F_TIM1+2000000) / (2*2000000UL))
           TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (0<<CS11) | (1<<CS10); // no clock divide
-          DisplayValue(2000000UL,0,'H',6);
-          OCR1A = ((F_TIM1+2000000) / (2*2000000UL)) - 1;
+          OCR1A = DIVIDER - 1;
+          DisplayValue((((unsigned long long)F_TIM1 * 500UL) + (DIVIDER / 2)) / DIVIDER,-3,'H',7);
        }
        // 1333.333kHz
        if (freq_nr == 1) {
-          DisplayValue(1000000UL,0,'H',6);
-          OCR1A = ((F_TIM1+1000000) / (2*1000000UL)) - 1;
+         // 1 MHz
+ #undef F_TIM1
+ #define F_TIM1 (F_CPU)
+ #undef DIVIDER
+ #define DIVIDER  ((F_TIM1+1000000) / (2*1000000UL))
+          OCR1A = DIVIDER - 1;
+          DisplayValue((((unsigned long long)F_TIM1 * 500UL) + (DIVIDER / 2)) / DIVIDER,-3,'H',7);
        }
        // 800kHz, 666.666kHz
        if (freq_nr == 2) {
-          DisplayValue(500000UL,0,'H',6);
-          OCR1A = ((F_TIM1+500000) / (2*500000UL)) - 1;
+          // 500 kHz
+ #undef F_TIM1
+ #define F_TIM1 (F_CPU)
+ #undef DIVIDER
+ #define DIVIDER  ((F_TIM1+500000) / (2*500000UL))
+          OCR1A = DIVIDER - 1;
+          DisplayValue((((unsigned long long)F_TIM1 * 500UL) + (DIVIDER / 2)) / DIVIDER,-3,'H',7);
        }
        // 444.444kHz, 400kHz, 362.636kHz, 333.333kHz, 307.692kHz 285.714kHz
        if (freq_nr == 3) {
-          DisplayValue(250000UL,0,'H',6);
-          OCR1A = ((F_TIM1+250000) / (2*250000UL)) - 1;
+         // 250 kHz
+ #undef F_TIM1
+ #define F_TIM1 (F_CPU)
+ #undef DIVIDER
+ #define DIVIDER  ((F_TIM1+250000) / (2*250000UL))
+          OCR1A = DIVIDER - 1;
+          DisplayValue((((unsigned long long)F_TIM1 * 500UL) + (DIVIDER / 2)) / DIVIDER,-3,'H',7);
        }
        // 235.294kHz, 222.222kHz, 210.526kHz, 200kHz, 190.476kHz, 181.818kHz, 173.913kHz, 166.666kHz
        // 160kHz, 153.846kHz, 148.148kHz, 142.857kHz, 137.931kHz, 133.333kHz, 129.032kHz, 125kHz,
        // (33) 121.212kHz, 117.647kHz, 114.285kHz, 111.111kHz, 108.108kHz, 105.263kHz , 102.564kHz 
        if (freq_nr == 4) {
-#undef F_TIM1
-#define F_TIM1 (F_CPU)
-#undef DIVIDER
-#define DIVIDER ((F_TIM1+153600) / (2*153600UL))
+         // 153.6 kHz  (Baud rate clock for 9600 baud)
+ #undef F_TIM1
+ #define F_TIM1 (F_CPU)
+ #undef DIVIDER
+ #define DIVIDER ((F_TIM1+153600) / (2*153600UL))
           OCR1A = DIVIDER - 1;
-          DisplayValue(((F_TIM1 * 50UL) + (DIVIDER / 2)) / DIVIDER,-2,'H',6);
+          DisplayValue((((unsigned long long)F_TIM1 * 500UL) + (DIVIDER / 2)) / DIVIDER,-3,'H',7);
        }
        if (freq_nr == 5) {
-          DisplayValue(100000UL,0,'H',6);
-          OCR1A = ((F_TIM1+100000) / (2*100000UL)) - 1;
+          // 100 kHz
+ #undef DIVIDER
+ #define DIVIDER  ((F_TIM1+100000) / (2*100000UL))
+          OCR1A = DIVIDER - 1;
+          DisplayValue((((unsigned long long)F_TIM1 * 500UL) + (DIVIDER / 2)) / DIVIDER,-3,'H',7);
        }
        if (freq_nr == 6) {
-          DisplayValue(50000UL,0,'H',6);
-          OCR1A = ((F_TIM1+50000) / (2*50000UL)) - 1;
+          // 50 kHz
+ #undef DIVIDER
+ #define DIVIDER  ((F_TIM1+50000) / (2*50000UL))
+          OCR1A = DIVIDER - 1;
+          DisplayValue((((unsigned long long)F_TIM1 * 5000UL) + (DIVIDER / 2)) / DIVIDER,-4,'H',7);
        }
        if (freq_nr == 7) {
-          DisplayValue(25000UL,0,'H',6);
-          OCR1A = ((F_TIM1+25000) / (2*25000UL)) - 1;
+          // 25 kHz
+ #undef DIVIDER
+ #define DIVIDER  ((F_TIM1+25000) / (2*25000UL))
+          OCR1A = DIVIDER - 1;
+          DisplayValue((((unsigned long long)F_TIM1 * 5000UL) + (DIVIDER / 2)) / DIVIDER,-4,'H',7);
        }
        if (freq_nr == 8) {
-          DisplayValue(10000UL,0,'H',6);
-          OCR1A = ((F_TIM1+10000) / (2*10000UL)) - 1;
+          // 10 kHz
+ #undef DIVIDER
+ #define DIVIDER  ((F_TIM1+10000) / (2*10000UL))
+          OCR1A = DIVIDER - 1;
+          DisplayValue((((unsigned long long)F_TIM1 * 5000UL) + (DIVIDER / 2)) / DIVIDER,-4,'H',7);
        }
        if (freq_nr == 9) {
-          DisplayValue(5000UL,0,'H',6);
-          OCR1A = ((F_TIM1+5000) / (2*5000UL)) - 1;
+          // 5 kHz
+ #undef DIVIDER
+ #define DIVIDER  ((F_TIM1+5000) / (2*5000UL))
+          OCR1A = DIVIDER - 1;
+          DisplayValue((((unsigned long long)F_TIM1 * 50000UL) + (DIVIDER / 2)) / DIVIDER,-5,'H',7);
        }
        if (freq_nr == 10) {
-          DisplayValue(2500UL,0,'H',6);
-          OCR1A = ((F_TIM1+2500) / (2*2500UL)) - 1;
+          // 2500 Hz
+ #undef DIVIDER
+ #define DIVIDER  ((F_TIM1+2500) / (2*2500UL))
+          OCR1A = DIVIDER - 1;
+          DisplayValue((((unsigned long long)F_TIM1 * 50000UL) + (DIVIDER / 2)) / DIVIDER,-5,'H',7);
        }
        if (freq_nr == 11) {
-          DisplayValue(1000UL,0,'H',6);
-          OCR1A = ((F_TIM1+1000) / (2*1000UL)) - 1;
+          // 1000 Hz
+ #undef DIVIDER
+ #define DIVIDER  ((F_TIM1+1000) / (2*1000UL))
+          OCR1A = DIVIDER - 1;
+          DisplayValue((((unsigned long long)F_TIM1 * 50000UL) + (DIVIDER / 2)) / DIVIDER,-5,'H',7);
        }
        if (freq_nr == 12) {
-#undef DIVIDER
-#define DIVIDER  ((F_TIM1+443) / (2*443UL))
+          // 443 Hz
+ #undef DIVIDER
+ #define DIVIDER  ((F_TIM1+443) / (2*443UL))
           OCR1A = (DIVIDER - 1);
-          DisplayValue(((F_TIM1 * 50UL) + (DIVIDER / 2)) / DIVIDER,-2,'H',6);
+          DisplayValue((((unsigned long long)F_TIM1 * 50000UL) + (DIVIDER / 2)) / DIVIDER,-5,'H',7);
        }
        if (freq_nr == 13) {
-#undef DIVIDER
-#define DIVIDER  ((F_TIM1+442) / (2*442UL))
+          // 442 Hz
+ #undef DIVIDER
+ #define DIVIDER  ((F_TIM1+442) / (2*442UL))
           OCR1A = DIVIDER - 1;
-          DisplayValue(((F_TIM1 * 50UL) + (DIVIDER / 2)) / DIVIDER,-2,'H',6);
+          DisplayValue((((unsigned long long)F_TIM1 * 50000UL) + (DIVIDER / 2)) / DIVIDER,-5,'H',7);
        }
        if (freq_nr == 14) {
-#undef DIVIDER
-#define DIVIDER  ((F_TIM1+440) / (2*440UL))
+          // 440 Hz
+ #undef DIVIDER
+ #define DIVIDER  ((F_TIM1+440) / (2*440UL))
           OCR1A = DIVIDER - 1;
-          DisplayValue(((F_TIM1 * 50UL) + (DIVIDER / 2)) / DIVIDER,-2,'H',6);
+          DisplayValue((((unsigned long long)F_TIM1 * 50000UL) + (DIVIDER / 2)) / DIVIDER,-5,'H',7);
        }
        if (freq_nr == 15) {
-#undef F_TIM1
-#define F_TIM1 (F_CPU)
-#undef DIVIDER
-#define DIVIDER ((F_TIM1+250) / (2*250UL))
+          // 250 Hz
+ #undef F_TIM1
+ #define F_TIM1 (F_CPU)
+ #undef DIVIDER
+ #define DIVIDER ((F_TIM1+250) / (2*250UL))
+          TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (0<<CS11) | (1<<CS10); // no clock divide
           OCR1A = DIVIDER - 1;
-          DisplayValue(((F_TIM1 * 50UL) + (DIVIDER / 2)) / DIVIDER,-2,'H',6);
+          DisplayValue((((unsigned long long)F_TIM1 * 50000UL) + (DIVIDER / 2)) / DIVIDER,-5,'H',7);
        }
 // please use clock divider to build frequencies lower than 250 Hz (DIVIDER=64000 with 16MHz clock)
        if (freq_nr == 16) {
-#undef F_TIM1
-#define F_TIM1 (F_CPU/64)
-#undef DIVIDER
-#define DIVIDER ((F_TIM1+100) / (2*100UL))
+          // 100 Hz
+ #undef F_TIM1
+ #define F_TIM1 (F_CPU/64)
+ #undef DIVIDER
+ #define DIVIDER ((F_TIM1+100) / (2*100UL))
           TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (1<<CS11) | (1<<CS10); // divide clock by 64
           OCR1A = DIVIDER - 1;
-          DisplayValue(((F_TIM1 * 500UL) + (DIVIDER / 2)) / DIVIDER,-3,'H',6);
+          DisplayValue((((unsigned long long)F_TIM1 * 500000UL) + (DIVIDER / 2)) / DIVIDER,-6,'H',7);
        }
        if (freq_nr == 17) {
-#undef DIVIDER
-#define DIVIDER ((F_TIM1+50) / (2*50UL))
+          // 50 Hz
+ #undef DIVIDER
+ #define DIVIDER ((F_TIM1+50) / (2*50UL))
 //          TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (1<<CS11) | (1<<CS10); // divide clock by 64
           OCR1A = DIVIDER - 1;
-          DisplayValue(((F_TIM1 * 500UL) + (DIVIDER / 2)) / DIVIDER,-3,'H',6);
+          DisplayValue((((unsigned long long)F_TIM1 * 500000UL) + (DIVIDER / 2)) / DIVIDER,-6,'H',7);
        }
        if (freq_nr == 18) {
-#undef F_TIM1
-#define F_TIM1 (F_CPU/64)
-#undef DIVIDER
-#define DIVIDER ((F_TIM1+10) / (2*10UL))
-//          TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (1<<CS11) | (1<<CS10); // divide clock by 64
+          // 10 Hz
+ #undef F_TIM1
+ #define F_TIM1 (F_CPU/64)
+ #undef DIVIDER
+ #define DIVIDER ((F_TIM1+10) / (2*10UL))
+          TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (1<<CS11) | (1<<CS10); // divide clock by 64
           OCR1A = DIVIDER - 1;
-          DisplayValue(((F_TIM1 * 500UL) + (DIVIDER / 2)) / DIVIDER,-3,'H',6);
+          DisplayValue((((unsigned long long)F_TIM1 * 500000UL) + (DIVIDER / 2)) / DIVIDER,-6,'H',7);
+       }
+       if (freq_nr == 19) {
+          // 1 Hz
+ #undef F_TIM1
+ #define F_TIM1 (F_CPU/256)
+ #undef DIVIDER
+ #define DIVIDER (F_TIM1 / (2*1UL))
+          TCCR1B = (0<<WGM13) | (1<<WGM12) | (1<<CS12) | (0<<CS11) | (0<<CS10); // divide clock by 256
+          OCR1A = DIVIDER - 1;
+          DisplayValue((((unsigned long long)F_TIM1 * 500000UL) + (DIVIDER / 2)) / DIVIDER,-6,'H',7);
        }
        lcd_data('z');		// append the z to get Hz unit
      } /* end if key_pressed != 0 */

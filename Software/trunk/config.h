@@ -66,12 +66,12 @@
  #define TP1 PC0
  #define TP2 PC1
  #define TP3 PC2
- // Port pin for external Voltage measurement (zener voltage extension)
- #define TPext PC3
- // Port pin for 2.5V precision reference used for VCC check (optional)
- #define TPREF PC4
- // Port pin for Battery voltage measuring
- #define TPBAT PC5
+ // Port pin for external Voltage measurement (zener voltage extension) PC3
+ #define TPext ((1<<MUX1) | (1<<MUX0))
+ // Port pin for 2.5V precision reference used for VCC check (optional) PC4
+ #define TPREF (1<<MUX2) 
+ // Port pin for Battery voltage measuring PC5
+ #define TPBAT ((1<<MUX2) | (1<<MUX0))
 #endif
 
 // setting for voltage devider of Batterie voltage measurement 10K and 3.3k

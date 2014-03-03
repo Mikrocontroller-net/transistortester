@@ -479,15 +479,17 @@ End of configuration
  const unsigned char VLOSS_str[] MEM_TEXT = " Vloss=";
  const unsigned char Lis_str[] MEM_TEXT = "L=";
  const unsigned char Ir_str[] MEM_TEXT = "  Ir=";
- #ifndef WITH_UART
-  #define WITH_VEXT
- #endif
-#else
- #ifndef BAT_CHECK
-  #ifndef WITH_UART
-   #define WITH_VEXT
-  #endif
- #endif
+#if 0
+// #ifndef WITH_UART
+//  #define WITH_VEXT
+// #endif
+//#else
+// #ifndef BAT_CHECK
+//  #ifndef WITH_UART
+//   #define WITH_VEXT
+//  #endif
+// #endif
+#endif
 #endif
 
 #ifdef WITH_VEXT

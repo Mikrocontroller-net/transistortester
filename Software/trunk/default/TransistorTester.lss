@@ -2323,7 +2323,7 @@ r2b02:
 00000788 <wait_for_key_ms>:
 ;/* wait max_time or previous key press */
 ;/* max_time zero wait without time limit */
-;/* return value: 1 == key is pressed, 0 == time expired */
+;/* return value: !=0 == key is pressed for xx*10ms, 0 == key is not pressed, time expired */
 ;uint8_t wait_for_key_ms(int max_time) 
 wait_for_key_ms:
         push	r17
@@ -2365,8 +2365,8 @@ wloop:
      79e:	04 c0       	rjmp	.+8      	; 0x7a8 <not_pressed>
 	subi	r17, 0xff	; key_cs++;
      7a0:	1f 5f       	subi	r17, 0xFF	; 255
-        cpi	r17, 35		; if (key_cs >= MAX_CS)
-     7a2:	13 32       	cpi	r17, 0x23	; 35
+        cpi	r17, MAX_CS	; if (key_cs >= MAX_CS)
+     7a2:	11 34       	cpi	r17, 0x41	; 65
 	brcs	cnt_loop	;
      7a4:	18 f0       	brcs	.+6      	; 0x7ac <cnt_loop>
         rjmp	to_ret		;  break;

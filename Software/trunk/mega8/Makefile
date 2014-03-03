@@ -83,6 +83,13 @@ CFLAGS += -DC_H_KORR=5
 # 10:1 resistor divider (only without the BAT_CHECK option for ATmega8).
 #CFLAGS += -DWITH_UART
 
+# With option TQFP_ADC6 or/and TQFP_ADC7 you can use the additional pins of the TQFP or
+# the QFN package for external analog input. You should install a 10:1 voltage dividers
+# on the selected pin(s).
+# If both pins are defined, both voltages are measured with the voltage measure function.
+# But for zener diode measurement the ADC6 pin is used, if both pins are defined.
+#CFLAGS += -DTQFP_ADC6
+
 # The CAP_EMPTY_LEVEL  defines the empty voltage level for capacitors in mV.
 # Choose a higher value, if your Tester reports "Cell!" by unloading capacitors.
 CFLAGS += -DCAP_EMPTY_LEVEL=4

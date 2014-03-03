@@ -8,6 +8,8 @@
 
 #define RCALL rcall
 
+#define MAX_CS 65
+
 .GLOBAL wait_for_key_ms
 #if INHIBIT_SLEEP_MODE
  .extern wait200ms
@@ -20,7 +22,7 @@
 .section .text
 ;/* wait max_time or previous key press */
 ;/* max_time zero wait without time limit */
-;/* return value: 1 == key is pressed, 0 == time expired */
+;/* return value: !=0 == key is pressed for xx*10ms, 0 == key is not pressed, time expired */
 ;uint8_t wait_for_key_ms(int max_time) 
 wait_for_key_ms:
         push	r17
@@ -47,7 +49,7 @@ wloop:
  	sbic	_SFR_IO_ADDR(RST_PIN_REG), RST_PIN		; if(!(RST_PIN_REG & (1<<RST_PIN))) {
  	rjmp	not_pressed	; // If the key is pressed again... return(1)
 	subi	r17, 0xff	; key_cs++;
-        cpi	r17, 35		; if (key_cs >= MAX_CS)
+        cpi	r17, MAX_CS	; if (key_cs >= MAX_CS)
 	brcs	cnt_loop	;
         rjmp	to_ret		;  break;
 not_pressed:

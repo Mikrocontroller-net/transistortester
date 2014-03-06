@@ -41,3 +41,4 @@ void function_menu();			// menu for selecting extra function
 void show_vext();			// show external voltage (zener) 
 void message_key_released(const unsigned char XX_str[]); // clear display, show message XX_str and wait for released key
 void make_frequency(void);		// start counter 1 to make frequency at middle pin
+void do_10bit_PWM(void);		// start counter 1 to make fixed frequency with PWM

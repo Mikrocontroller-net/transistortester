@@ -8,7 +8,7 @@
 //=================================================================
 // selection of different functions
 
-#define MAX_FUNC 4
+#define MAX_FUNC 5
 #ifdef WITH_MENU
 void function_menu() {
   uint8_t ii;
@@ -38,13 +38,17 @@ void function_menu() {
      if (func_number == 0) lcd_MEM2_string(TESTER_str);
      if (func_number == 1) lcd_MEM2_string(FREQ_str);
      if (func_number == 3) lcd_MEM2_string(F_GEN_str);
+     if (func_number == 4) lcd_MEM2_string(PWM_10bit_str);
      ii = wait_for_key_ms(SHORT_WAIT_TIME);
      if (ii >= 30) {
         if (func_number == 0) break;		// return to TransistorTester
         if (func_number == 1) GetFrequency();
         if (func_number == 2) show_vext();
         if (func_number == 3) {
-           make_frequency();
+           make_frequency();		// make some sample frequencies
+        }
+        if (func_number == 4) {
+           do_10bit_PWM();		// generate 10bit PWM
         }
         if (func_number == MAX_FUNC) {
            ON_PORT &= ~(1<<ON_PIN);              //switch off power
@@ -109,7 +113,7 @@ void show_vext() {
   #endif
 #endif	/* TPex2 */
 
-     key_pressed = wait_for_key_ms(800);
+     key_pressed = wait_for_key_ms(1000);
      if (key_pressed != 0) break;
   }  /* end for times */
  #endif  /* WITH_VEXT */
@@ -335,9 +339,65 @@ void make_frequency() {
      key_pressed = wait_for_key_ms(1000);
   } /* end for times */
   TCCR1B = 0;		// stop counter
+  ADC_DDR =  TXD_MSK;	// disconnect TP1 
   R_DDR = 0;		// switch resistor ports to Input
   DDRB  &= ~(1<<DDB2);	// disable output 
 
 } /* end make frequency */
 
+/* *************************************************** */
+/* do_10bit PWM                                        */
+/* a short key press increase the duty cycle with 1%   */
+/* a longer key press incrrase with 10%                */
+/* a very long key press returns to menue              */
+/* *************************************************** */
+void do_10bit_PWM() {
+  uint8_t key_pressed;
+  uint8_t times;		// time limit
+  uint8_t percent;		// requestet duty-cycle in %
+  unsigned int pwm_flip;	// value for counter to flip the state
+  message_key_released(PWM_10bit_str);	// display PWM-Generator and wait for key released
+  // OC1B is connected with 680 Ohm resistor to TP2 (middle test pin) 
+  TCCR1A = (1<<COM1B1) | (0<<COM1B0) | (1<<WGM11) | (1<<WGM10); // fast PWM mode, count to 10 bit
+  TIMSK1 = 0;		// no interrupt used
+  OCR1A = 1;		// highest frequency
+  OCR1B	= 0xff;		// toggle OC1B at this count
+  TIFR1 = (1<<OCF1A) | (1<<OCF1A) | (1<<TOV1);	// reset interrupt flags
+  TCCR1C = 0;
+
+  R_PORT = 0;		// set all resistor port outputs to GND
+  R_DDR = (1<<PIN_RL1) | (1<<PIN_RL3);		// set TP1 and TP3 to output
+  ADC_PORT = TXD_VAL;
+  ADC_DDR = (1<<TP1) | TXD_MSK;			//connect TP1 to GND
+  DDRB  |= (1<<DDB2);	// set output enable
+  TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (0<<CS11) | (1<<CS10); // no clock divide
+  key_pressed = 1;
+  percent = 9;
+  for (times=0; times<240; times++) {
+     if(key_pressed >= 80) break;	// more than 0.8 seconds
+     if (key_pressed > 35) percent += 9; // will be increased to 10
+     if (key_pressed != 0) {
+        times = 0;	// Reset the time limit to zero, user is present
+        percent++;	// use next percent value, if long key press use 10% more
+        if (percent >= 100) {
+           percent -= 100;		//reset to 0 percent
+        }
+        pwm_flip = (((unsigned long)0x3ff * percent) + 50) / 100;
+        OCR1B = pwm_flip;		// new percentage
+        lcd_line2();		// only one value use line 2
+        lcd_clear_line();
+        lcd_line2();
+        DisplayValue((((unsigned long)pwm_flip * 1000) + 0x1ff) / 0x3ff,-1,'%',5);
+        if (key_pressed > 35) {
+           wait_about300ms();	// wait some time to release the button
+        }
+     } /* end if key_pressed != 0 */
+     key_pressed = wait_for_key_ms(1000);
+  } /* end for times */
+
+  ADC_DDR =  TXD_MSK;	// disconnect TP1 
+  TCCR1B = 0;		// stop counter
+  R_DDR = 0;		// switch resistor ports to Input
+  DDRB  &= ~(1<<DDB2);	// disable output 
+} /* end do_10bit_PWM */
 #endif  /* WITH_MENU */

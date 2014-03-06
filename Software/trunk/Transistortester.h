@@ -97,6 +97,7 @@ End of configuration
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Spannung";
    const unsigned char OFF_str[] MEM2_TEXT = "Schalte aus";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
  #define LANG_SELECTED
 #endif
@@ -127,6 +128,7 @@ End of configuration
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
    const unsigned char OFF_str[] MEM2_TEXT = "wylaczyc";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
  #define LANG_SELECTED
 #endif
@@ -157,6 +159,7 @@ End of configuration
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Napeti";
    const unsigned char OFF_str[] MEM2_TEXT = "Vypnout";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
  #define LANG_SELECTED
 #endif
@@ -187,6 +190,7 @@ End of configuration
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Napetie";
    const unsigned char OFF_str[] MEM2_TEXT = "Vypnut";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
  #define LANG_SELECTED
 #endif
@@ -216,6 +220,7 @@ End of configuration
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
    const unsigned char OFF_str[] MEM2_TEXT = "izklopi";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
  #endif
  #define LANG_SELECTED
@@ -247,6 +252,7 @@ End of configuration
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Spanning";
    const unsigned char OFF_str[] MEM2_TEXT = "uitschakelen";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
  #define LANG_SELECTED
 #endif
@@ -277,6 +283,7 @@ End of configuration
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltaje";
    const unsigned char OFF_str[] MEM2_TEXT = "desconectar";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
  #define LANG_SELECTED
 #endif
@@ -312,6 +319,7 @@ End of configuration
    const unsigned char OFF_str[] MEM2_TEXT = {'B',Cyr_y,Cyr_k,Cyr_l,Cyr_ju,Cyr_tsch,Cyr_i,Cyr_t,Cyr_ww,0}; //"Switch off"
 
    const unsigned char F_GEN_str[] MEM2_TEXT = {'f','-',Cyr_G,'e',Cyr_n,'e','p','a',Cyr_t,'o','p',0}; //"f
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
  #define LANG_SELECTED
 #endif
@@ -347,6 +355,7 @@ End of configuration
    const unsigned char OFF_str[] MEM2_TEXT = {'B',Cyr_y,Cyr_m,Cyr_k,Cyr_n,'y',Cyr_t,Cyr_i,0}; //"Switch off"
 
    const unsigned char F_GEN_str[] MEM2_TEXT = {'f','-',Cyr_G,'e',Cyr_n,'e','p','a',Cyr_t,'o','p',0}; //"f-Generator"
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
  #define LANG_SELECTED
 #endif
@@ -378,6 +387,7 @@ End of configuration
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
    const unsigned char OFF_str[] MEM2_TEXT = "kikapcsol";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
  #define LANG_SELECTED
 #endif
@@ -407,6 +417,7 @@ End of configuration
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
    const unsigned char OFF_str[] MEM2_TEXT = "isjungti";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
  #endif
  #define LANG_SELECTED
@@ -440,6 +451,7 @@ End of configuration
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
    const unsigned char OFF_str[] MEM2_TEXT = "Switch off";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
 #endif
 
@@ -1085,6 +1097,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   extern const unsigned char VOLTAGE_str[] MEM2_TEXT ;
   extern const unsigned char OFF_str[] MEM2_TEXT ;
   extern const unsigned char F_GEN_str[] MEM2_TEXT ;
+  extern const unsigned char PWM_10bit_str[] MEM2_TEXT ;
  #endif
 #ifdef WITH_VEXT
  extern const unsigned char Vext_str[] MEM_TEXT ;

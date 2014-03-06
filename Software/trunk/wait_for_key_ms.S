@@ -8,7 +8,7 @@
 
 #define RCALL rcall
 
-#define MAX_CS 65
+#define MAX_CS 95
 
 .GLOBAL wait_for_key_ms
 #if INHIBIT_SLEEP_MODE
@@ -25,6 +25,7 @@
 ;/* return value: !=0 == key is pressed for xx*10ms, 0 == key is not pressed, time expired */
 ;uint8_t wait_for_key_ms(int max_time) 
 wait_for_key_ms:
+	push	r16
         push	r17
  	push	r28		; save registers r28:29
  	push	r29
@@ -37,8 +38,12 @@ wait_for_key_ms:
  	ldi	r24,  40
  	RCALL	sleep_5ms	; wait_about200ms();
 #endif
+	ldi	r16, 0x55	; key_pressed = 0x55;
 	ldi	r17, 0		; key_cs = 0
- 	rjmp	no_cnt 		; wait max_time milliseconds or endless, if zero
+ 	; wait max_time milliseconds or endless, if zero
+no_cnt:
+ 	sbrc	r29, 7		; while (max_time >= 0) 
+        rjmp	to_ret
 wloop:
 #if INHIBIT_SLEEP_MODE
 	RCALL	wait10ms	; wait10ms();
@@ -46,14 +51,24 @@ wloop:
  	ldi	r24, 0x02	; 2
  	RCALL	sleep_5ms	; wait_about10ms();
 #endif
- 	sbic	_SFR_IO_ADDR(RST_PIN_REG), RST_PIN		; if(!(RST_PIN_REG & (1<<RST_PIN))) {
- 	rjmp	not_pressed	; // If the key is pressed again... return(1)
+        add	r16, r16	; key_pressed += key_pressed; // multiply with 2 is shift to left
+ 	sbis	_SFR_IO_ADDR(RST_PIN_REG), RST_PIN		; if((RST_PIN_REG & (1<<RST_PIN))) {
+        subi	r16, 0xff	; key_pressed++; //append a 1
+        andi	r16, 0x3f	; key_pressed &= 0x3f;
+	cpi	r16, 0x3f	; if (key_pressed == 0x3f) //63 all bits set
+        brne	not_pressed
+	cpse	r17, r1		; if (key_cs == 0)
+        rjmp	no_first
+	ldi	r17, 4		; key_cs = 4;
+no_first:
 	subi	r17, 0xff	; key_cs++;
         cpi	r17, MAX_CS	; if (key_cs >= MAX_CS)
 	brcs	cnt_loop	;
         rjmp	to_ret		;  break;
 not_pressed:
-	cpse	r17, r1		; if ( key_cs != 0)
+	cpse	r16, r1		; if (( key_pressed == 0) &&
+        rjmp	cnt_loop
+	cpse	r17, r1		;  ( key_cs != 0))
         rjmp	to_ret		; break;
 
 cnt_loop:
@@ -64,14 +79,13 @@ cnt_loop:
  	brne	no_cnt		; if (max_time == 0) max_time = -1;	// never count to zero, zero is endless!
  	ldi	r28, 0xFF	; max_time = -1
  	ldi	r29, 0xFF	; 
-no_cnt:
- 	sbrs	r29, 7		; while (max_time >= 0) 
- 	rjmp	wloop 
+	rjmp	no_cnt
 to_ret:
         mov	r24, r17	; return(key_cs)
  	pop	r29		; restore registers r29:28
  	pop	r28
 	pop	r17
+	pop	r16
  	ret
 .endfunc
 

@@ -18,13 +18,11 @@
 
 
 
-
-
 /*
 
  *  display value and unit
 
- *  - max. 4 (6) digits excluding "." and unit
+ *  - max. 4 (7) digits excluding "." and unit
 
  *
 
@@ -38,8 +36,8 @@
 
  *  - unit character (0 = none)
 
- *  digits = 2, 3 or 4
- *  for FLASHEND > 16k digits can also be 5 or 6
+ *  digits = 2 to 4 
+ *  for option WITH_MENU digits can also be 5, 6 and 7
 
  */
 

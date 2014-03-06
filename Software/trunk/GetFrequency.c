@@ -8,12 +8,10 @@
 //=================================================================
 // measure frequency at external pin T0 (PD4)
 
-// #define OLD_SOLUTION
-
 #ifdef WITH_MENU
 void GetFrequency() {
   unsigned char taste;			// set if key is pressed during measurement
-  unsigned long ext_period;
+  unsigned long long ext_period;
   unsigned long freq_from_per;
   uint8_t ii;
   uint8_t mm;
@@ -67,38 +65,9 @@ void GetFrequency() {
      }
      TCCR1B = 0;		// stop timer 1
      TIMSK1 = 0;		// disable all timer 1 interrupts
-     if ((ext_freq.dw < 10050) && (ext_freq.dw > 0)) {
-#ifdef OLD_SOLUTION
-        // also measure period
-        if (ext_freq.dw < 100) {
-           // 10 Hz is 100ms period, 25 periodes are 2.5 s
-#if F_CPU == 8000000
-           pinchange_max = 50;		// 25 periodes
-#else
-           pinchange_max = 25;		// 25 half periodes for 16 MHz
-#endif
-        } else if (ext_freq.dw < 1000) {
-	   // 125 periods is 250 pin changes for 8 MHz, which give a period resolution of ns.
-           // But for 16 MHz the ns resolution can be get with 125 pin changes, which are 62.5 periods.
-	   // Therefore only 200 pinchanges (100 periods) are used. 
-           // 100 Hz is 10ms period, 100 periodes is 1 s
-#if F_CPU == 8000000
-           pinchange_max = 250;		// 125 periodes
-#else
-           pinchange_max = 125;		// 125 half periodes for 16 MHz
-#endif
-        } else {
-           // more than 1000 Hz
-#if F_CPU == 8000000
-           pinchange_max = 2500;		// 1250 periodes
-#else
-           pinchange_max = 1250;		// 625 half periodes for 16 MHz
-#endif
-        }
-#else
-        pinchange_max = ((10 * ext_freq.dw) + MHZ_CPU) / MHZ_CPU;	// about 10000000 clock tics
+     if ((ext_freq.dw < 25050) && (ext_freq.dw > 0)) {
+        pinchange_max = ((10 * (unsigned long)ext_freq.dw) + MHZ_CPU) / MHZ_CPU;	// about 10000000 clock tics
         pinchange_max += pinchange_max;	// * 2 for up and down change
-#endif
         DDRD &= ~(1<<PD4);		// switch PD4 back to input
         wait1ms();			// let capacitor time to load to 2.4V input
         TCNT0 = 0;			// set counter to zero
@@ -126,37 +95,37 @@ void GetFrequency() {
         lcd_line2();
         lcd_data('T');
         lcd_data('=');
-#ifdef OLD_SOLUTION
-        // resolution is ns for 125 periodes of 8 MHz
-        if (pinchange_max < 100) {
-           //  100Hz = .01s , 25 periodes for 8MHz = 0.25s = 2000000 clock tics,
-	   //         one period has 10000000 ns
-           ext_period = ext_freq.dw * 50;		// counted clocks gives already 5ns resolution
-        } else if (pinchange_max < 1000) {
-           ext_period = ext_freq.dw * 10;	//has already  1ns resolution
+        ext_period = ((unsigned long long)ext_freq.dw * (125*200)) / pinchange_max;
+        if (pinchange_max > 127) {
+           DisplayValue(ext_period,-11,'s',7);	// show period converted to 0.01ns units
         } else {
-           ext_period = ext_freq.dw;		//has already  100ps resolution
+           //prevent overflow of 32-Bit
+           DisplayValue((unsigned long)(ext_period/100),-9,'s',7);	// show period converted to 1ns units
         }
-#else
-        ext_period = ((long long)ext_freq.dw * (125*20)) / pinchange_max;
-#endif
-        DisplayValue(ext_period,-10,'s',7);	// show period converted to 1ns units
         if (ii == 250) {
            lcd_data('?');		// wait loop has regular finished
         } else {
            if (ext_period > 50000) {
-              freq_from_per = (long long)(100000000000000) / ext_period; // frequency in 0.0001Hz (1e9*10000)/ns
               lcd_line1();
               lcd_data('f');
               lcd_data('=');
-              DisplayValue(freq_from_per,-4,'H',7);  // display with  0.0001 Hz resolution
+              if (ext_period > 1000000000) {
+                 // frequency in 0.000001Hz (1e11*1e6)/(0.01ns count)
+                 freq_from_per = (unsigned long long)(100000000000000000) / ext_period;
+                 DisplayValue(freq_from_per,-6,'H',7);  // display with  0.000001 Hz resolution
+              } else {
+                 // prevent unsigned long overflow, scale to 0.0001 Hz
+                 // frequency in 0.0001Hz (1e11*1e4)/(0.01ns count)
+                 freq_from_per = (unsigned long long)(1000000000000000) / ext_period;
+                 DisplayValue(freq_from_per,-4,'H',7);  // display with  0.0001 Hz resolution
+              }
               lcd_data('z');
               DDRD &= ~(1<<PD4);			// switch PD4 to input
            }
         }
      taste += wait_for_key_ms(SHORT_WAIT_TIME/2);
      if (taste != 0) break;
-     }  /* end if 10 < ext_freq < 10050 */
+     }  /* end if 1 < ext_freq < 10050 */
      TIMSK0 = 0;		// disable all timer 0 interrupts
      if (taste != 0) break;
   }  /* end for mm  */
@@ -166,7 +135,9 @@ void GetFrequency() {
 
 /* ************************************************************ */
 /* timer 0 Overflow interrupt                                   */
-/* timer 1 count up to 0xff, then OV occur                      */
+/* timer 0 count up to 0xff, then OV occur. update upper part   */
+/* to build the total counts within one second or               */
+/* to build the total counts within the specified pin changes.  */
 /* ************************************************************ */
 ISR(TIMER0_OVF_vect, ISR_BLOCK) {
   sei();		// set interrupt enable
@@ -175,6 +146,7 @@ ISR(TIMER0_OVF_vect, ISR_BLOCK) {
 
 /* ************************************************************ */
 /* Timer 1 Compare B interrupts with count 1 to start counter 0 */
+/* This is defined as start of the measurement second.          */
 /* ************************************************************ */
 ISR(TIMER1_COMPB_vect, ISR_BLOCK) {
   TCCR0B = (1<<CS02) | (1<<CS01);	// now start the counter 0 with external input T0

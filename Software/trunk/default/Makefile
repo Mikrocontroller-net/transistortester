@@ -412,7 +412,7 @@ endif
 OBJECTS += main.o CheckPins.o ChargePin10ms.o EntladePins.o
 OBJECTS +=  ReadCapacity.o GetRLmultip.o Calibrate_UR.o
 ifneq ($(PARTNO),m8)
-OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o GetFrequency.o function_menu.o message_key_released.o
+OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o GetFrequency.o function_menu.o message_key_released.o ReadBigCap.o
 endif
 
 
@@ -483,6 +483,9 @@ message_key_released.o: ../message_key_released.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ReadCapacity.o: ../ReadCapacity.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+ReadBigCap.o: ../ReadBigCap.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ReadInductance.o: ../ReadInductance.c Makefile

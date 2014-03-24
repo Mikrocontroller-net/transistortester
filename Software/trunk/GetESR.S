@@ -53,7 +53,7 @@
 #define LowUpCount 24   /* SP + 24 */
 #define HighUpCount 25  /* SP + 25 */
 #define LowTooHigh 26  /* SP + 26 */
-#define HighTooHigh 26  /* SP + 27 */
+#define HighTooHigh 27  /* SP + 27 */
 
 #define adcv0L r2
 #define adcv0H r3
@@ -296,7 +296,7 @@ ad_3604:
 	lpm	HiPinR_L, Z+;
 
 
-#if PROCESSOR_TYP == 1280
+#if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
 	    /* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
 	//  SelectLowPin = (cap.ca | (1<<REFS1) | (0<<REFS0));	// switch ADC to LowPin, Internal Ref. 
 	ldi	r25, (1<<REFS1)|(0<<REFS0);	0xC0

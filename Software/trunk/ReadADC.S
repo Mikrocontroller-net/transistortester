@@ -150,7 +150,7 @@ Loop:
 	sbrc	r17, REFS1;
 	rjmp	cnt_next		; if ( &&  &&  && !(Probe & (1 << REFS1))) 
 	ori	r17, (1 << REFS1);   Probe |= (1 << REFS1); /* select internal bandgap reference */
- #if PROCESSOR_TYP == 1280
+ #if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
 	cbr	r17, (1<<REFS0); Probe &= ~(1 << REFS0);  /* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
  #endif
 	rjmp	get_sample ;       goto get_sample; /* re-run sampling */

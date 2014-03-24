@@ -491,17 +491,6 @@ End of configuration
  const unsigned char VLOSS_str[] MEM_TEXT = " Vloss=";
  const unsigned char Lis_str[] MEM_TEXT = "L=";
  const unsigned char Ir_str[] MEM_TEXT = "  Ir=";
-#if 0
-// #ifndef WITH_UART
-//  #define WITH_VEXT
-// #endif
-//#else
-// #ifndef BAT_CHECK
-//  #ifndef WITH_UART
-//   #define WITH_VEXT
-//  #endif
-// #endif
-#endif
 #endif
 
 #ifdef WITH_VEXT
@@ -984,6 +973,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 #endif
 #ifdef WITH_MENU
  const unsigned char FatTP2_str[] MEM2_TEXT = "f@TP2";
+ const unsigned char C_ESR_str[] MEM2_TEXT = "C+ESR@TP1:3";
 #endif
  
 
@@ -1143,24 +1133,19 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  #endif
   extern const unsigned char PinADCtab[];
 #endif
+#ifdef WITH_MENU
+COMMON const unsigned char FatTP2_str[] MEM2_TEXT;
+COMMON const unsigned char C_ESR_str[] MEM2_TEXT;
+#endif
 
 
-#if 0
-struct Diode_t {
-  uint8_t Anode;
-  uint8_t Cathode;
-  unsigned int Voltage;
-};
-
-COMMON struct Diode_t diodes[6];
-#else
 struct Diode_t {
   uint8_t Anode[6];
   uint8_t Cathode[6];
   unsigned int Voltage[6];
 };
 COMMON struct Diode_t diodes;
-#endif
+
 COMMON uint8_t NumOfDiodes;
 COMMON uint8_t diode_sequence;
 

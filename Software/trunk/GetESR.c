@@ -170,7 +170,7 @@ uint16_t GetESR(uint8_t hipin, uint8_t lopin) {
   LoPinR_L = pgm_read_byte(&PinRLtab[lopin]);  //R_L mask for LowPin R_L load
   HiPinR_L = pgm_read_byte(&PinRLtab[hipin]);	//R_L mask for HighPin R_L load
 
-#if PROCESSOR_TYP == 1280
+#if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
     /* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
   SelectLowPin = (lopin | (1<<REFS1) | (0<<REFS0));	// switch ADC to LowPin, Internal Ref. 
   SelectHighPin = (hipin | (1<<REFS1) | (0<<REFS0));	// switch ADC to HighPin, Internal Ref. 

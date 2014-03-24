@@ -59,7 +59,7 @@ sample:
     /* auto-switch voltage reference for low readings */
     if ((samples == 4) && (ADCconfig.U_Bandgap > 255) && ((uint16_t)Value < 1024) && !(Probe & (1 << REFS1))) {
        Probe |= (1 << REFS1); /* select internal bandgap reference */
- #if PROCESSOR_TYP == 1280
+ #if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
        Probe &= ~(1 << REFS0);	/* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
  #endif
        goto sample; /* re-run sampling */

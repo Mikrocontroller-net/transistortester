@@ -45,7 +45,7 @@ int main(void) {
   UCSR0B = 0;		// disable UART, if started with bootloader
  #endif
 #endif
-#if PROCESSOR_TYP == 1280
+#if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
  #define BAUD_RATE 9600
   UBRR0H = (F_CPU / 16 / BAUD_RATE - 1) >> 8;
   UBRR0L = (F_CPU / 16 / BAUD_RATE - 1) & 0xff;
@@ -58,12 +58,13 @@ int main(void) {
   wdt_disable();			// disable Watch Dog
 #ifndef INHIBIT_SLEEP_MODE
   // switch off unused Parts
- #if PROCESSOR_TYP == 1280
-//  PRR0 = (1<<PRTWI) | (1<<PRTIM0) | (1<<PRSPI) | (1<<PRUSART0);
-  PRR0 = (1<<PRTWI) |  (1<<PRSPI) | (1<<PRUSART0);
+ #if PROCESSOR_TYP == 644
+  PRR0 = (1<<PRTWI) |  (1<<PRSPI) | (1<<PRUSART1);
+//  PRR1 =  (1<<PRTIM3) ;
+ #elif PROCESSOR_TYP == 1280
+  PRR0 = (1<<PRTWI) |  (1<<PRSPI) | (1<<PRUSART1);
   PRR1 = (1<<PRTIM5) | (1<<PRTIM4) | (1<<PRTIM3) | (1<<PRUSART3) | (1<<PRUSART2) | (1<<PRUSART3);
  #else
-//  PRR = (1<<PRTWI) | (1<<PRTIM0) | (1<<PRSPI) | (1<<PRUSART0);
   PRR = (1<<PRTWI) | (1<<PRSPI) | (1<<PRUSART0);
  #endif
   DIDR0 = (1<<ADC5D) | (1<<ADC4D) | (1<<ADC3D);	

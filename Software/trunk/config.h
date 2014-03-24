@@ -26,6 +26,18 @@
  #define PROCESSOR_TYP 328
 #elif defined(__AVR_ATmega328P__)
  #define PROCESSOR_TYP 328
+#elif defined(__AVR_ATmega324__)
+ #define PROCESSOR_TYP 644
+#elif defined(__AVR_ATmega324P__)
+ #define PROCESSOR_TYP 644
+#elif defined(__AVR_ATmega644__)
+ #define PROCESSOR_TYP 644
+#elif defined(__AVR_ATmega644P__)
+ #define PROCESSOR_TYP 644
+#elif defined(__AVR_ATmega1284__)
+ #define PROCESSOR_TYP 644
+#elif defined(__AVR_ATmega1284P__)
+ #define PROCESSOR_TYP 644
 #elif defined(__AVR_ATmega640__)
  #define PROCESSOR_TYP 1280
 #elif defined(__AVR_ATmega1280__)
@@ -44,7 +56,22 @@
   The TPREF pin can be connected with a 2.5V precision voltage reference
   The TPext can be used with a 10:1 resistor divider as external voltage probe up to 50V
 */
-#if PROCESSOR_TYP == 1280
+#if PROCESSOR_TYP == 644
+//################# for m324, m644, m1284 port A is the Analog input
+ #define ADC_PORT PORTA
+ #define ADC_DDR DDRA
+ #define ADC_PIN PINA
+ #define TP1 PA0
+ #define TP2 PA1
+ #define TP3 PA2
+ // Port pin for external Voltage measurement (zener voltage extension)
+ // The pin number gives the right MUX2:0 setting
+ #define TPext PA3
+ // Port pin for 2.5V precision reference used for VCC check (optional)
+ #define TPREF PA4
+ // Port pin for Battery voltage measuring
+ #define TPBAT PA5
+#elif PROCESSOR_TYP == 1280
 //################# for mega1280, mega2560 port F is the Analog input
  #define ADC_PORT PORTF
  #define ADC_DDR DDRF
@@ -110,7 +137,18 @@
   RL3 an Pin 4
   RH3 an Pin 5
 */
-#if PROCESSOR_TYP == 1280
+#if PROCESSOR_TYP == 644
+//################# for m324, m664, m1284 use port D 
+ #define R_DDR DDRD
+ #define R_PORT PORTD
+
+ #define PIN_RL1 PD2
+ #define PIN_RL2 PD4
+ #define PIN_RL3 PD6
+ #define PIN_RH1 PD3
+ #define PIN_RH2 PD5
+ #define PIN_RH3 PD7
+#elif PROCESSOR_TYP == 1280
 //################# for mega1280, mega2560 use port K 
  #define R_DDR DDRK
  #define R_PORT PORTK
@@ -134,7 +172,11 @@
  #define PIN_RH3 PB5
 #endif
 
-#if PROCESSOR_TYP == 1280
+#if PROCESSOR_TYP == 644
+ #define ON_DDR DDRB
+ #define ON_PORT PORTB
+ #define ON_PIN PD1      // This Pin is switched to high to switch power on
+#elif PROCESSOR_TYP == 1280
  #define ON_DDR DDRA
  #define ON_PORT PORTA
  #define ON_PIN PA6      // This Pin is switched to high to switch power on
@@ -146,7 +188,11 @@
 
 #ifdef STRIP_GRID_BOARD
  // Strip Grid board version
- #if PROCESSOR_TYP == 1280
+ #if PROCESSOR_TYP == 644
+  #define RST_PORT PORTC
+  #define RST_PIN_REG PINC
+  #define RST_PIN PC7     //Pin, is switched to low, if push button is pressed
+ #elif PROCESSOR_TYP == 1280
   #define RST_PORT PORTA
   #define RST_PIN_REG PINA
   #define RST_PIN PA0     //Pin, is switched to low, if push button is pressed
@@ -157,7 +203,11 @@
  #endif
 #else
  // normal layout version
- #if PROCESSOR_TYP == 1280
+ #if PROCESSOR_TYP == 644
+  #define RST_PORT PORTC
+  #define RST_PIN_REG PINC
+  #define RST_PIN PC7     //Pin, is switched to low, if push button is pressed
+ #elif PROCESSOR_TYP == 1280
   #define RST_PORT PORTA
   #define RST_PIN_REG PINA
   #define RST_PIN PA7     //Pin, is switched to low, if push button is pressed
@@ -174,7 +224,22 @@
 */
 #ifdef STRIP_GRID_BOARD
  // special Layout for strip grid board
- #if PROCESSOR_TYP == 1280
+ #if PROCESSOR_TYP == 644
+  #define HW_LCD_EN_PORT         PORTB
+  #define HW_LCD_EN_PIN          2
+ 
+  #define HW_LCD_RS_PORT         PORTB
+  #define HW_LCD_RS_PIN          3
+
+  #define HW_LCD_B4_PORT         PORTB
+  #define HW_LCD_B4_PIN          4
+  #define HW_LCD_B5_PORT         PORTB
+  #define HW_LCD_B5_PIN          5
+  #define HW_LCD_B6_PORT         PORTB
+  #define HW_LCD_B6_PIN          6
+  #define HW_LCD_B7_PORT         PORTB
+  #define HW_LCD_B7_PIN          7
+ #elif PROCESSOR_TYP == 1280
   #define HW_LCD_EN_PORT         PORTA
   #define HW_LCD_EN_PIN          5
  
@@ -207,7 +272,22 @@
  #endif
 #else
  // normal Layout
- #if PROCESSOR_TYP == 1280
+ #if PROCESSOR_TYP == 644
+  #define HW_LCD_EN_PORT         PORTB
+  #define HW_LCD_EN_PIN          2
+ 
+  #define HW_LCD_RS_PORT         PORTB
+  #define HW_LCD_RS_PIN          3
+
+  #define HW_LCD_B4_PORT         PORTB
+  #define HW_LCD_B4_PIN          4
+  #define HW_LCD_B5_PORT         PORTB
+  #define HW_LCD_B5_PIN          5
+  #define HW_LCD_B6_PORT         PORTB
+  #define HW_LCD_B6_PIN          6
+  #define HW_LCD_B7_PORT         PORTB
+  #define HW_LCD_B7_PIN          7
+ #elif PROCESSOR_TYP == 1280
   #define HW_LCD_EN_PORT         PORTA
   #define HW_LCD_EN_PIN          5
 

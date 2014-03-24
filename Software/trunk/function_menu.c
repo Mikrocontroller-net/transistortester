@@ -8,7 +8,7 @@
 //=================================================================
 // selection of different functions
 
-#define MAX_FUNC 5
+#define MAX_FUNC 6
 #ifdef WITH_MENU
 void function_menu() {
   uint8_t ii;
@@ -39,6 +39,7 @@ void function_menu() {
      if (func_number == 1) lcd_MEM2_string(FREQ_str);
      if (func_number == 3) lcd_MEM2_string(F_GEN_str);
      if (func_number == 4) lcd_MEM2_string(PWM_10bit_str);
+     if (func_number == 5) lcd_MEM2_string(C_ESR_str);
      ii = wait_for_key_ms(SHORT_WAIT_TIME);
      if (ii >= 30) {
         if (func_number == 0) break;		// return to TransistorTester
@@ -50,6 +51,23 @@ void function_menu() {
         if (func_number == 4) {
            do_10bit_PWM();		// generate 10bit PWM
         }
+        if (func_number == 5) {
+           show_C_ESR();
+           PartFound = PART_NONE;
+           ReadBigCap(TP3,TP2);
+           if (PartFound == PART_CAPACITOR) {
+              lcd_clear();
+              lcd_data('C');
+              lcd_data('=');
+              DisplayValue(cap.cval_max,cap.cpre_max,'F',3);
+              cap.esr = GetESR(cap.cb,cap.ca);
+              if (cap.esr < 65530) {
+                 lcd_line2();
+                 lcd_MEM_string(ESR_str);
+                 DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
+              }
+           }
+        }
         if (func_number == MAX_FUNC) {
            ON_PORT &= ~(1<<ON_PIN);              //switch off power
            wait_for_key_ms(0); //never ending loop 
@@ -60,6 +78,37 @@ void function_menu() {
   } /* end for ll */
   return;
  } // end function_menu()
+void show_C_ESR() {
+  uint8_t key_pressed;
+  uint8_t times;
+  message_key_released(C_ESR_str);
+//  lcd_clear();
+  for (times=0;times<250;times++) {
+        PartFound = PART_NONE;
+        ReadBigCap(TP3,TP1);
+        if (PartFound == PART_CAPACITOR) {
+           lcd_line1();		// clear old capacity value 
+           lcd_clear_line();
+           lcd_line1();
+           lcd_data('C');
+           lcd_data('=');
+           DisplayValue(cap.cval_max,cap.cpre_max,'F',3);
+           cap.esr = GetESR(cap.cb,cap.ca);
+           lcd_line2();		// clear old ESR value 
+           lcd_clear_line();
+           lcd_line2();
+           if (cap.esr < 65530) {
+              lcd_MEM_string(ESR_str);
+              DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
+           }
+        } else {
+           lcd_clear();
+           lcd_MEM2_string(C_ESR_str);
+        }
+     key_pressed = wait_for_key_ms(1000);
+     if (key_pressed != 0) break;
+  }  /* end for times */
+} /* end show_C_ESR() */
 
 /* *************************************************** */
 /* show_vext() read one or two input voltages from     */

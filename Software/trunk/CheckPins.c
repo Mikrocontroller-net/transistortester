@@ -149,7 +149,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   // if ntrans.count == 1 and ptrans.count == 1
   if ((ntrans.count + ptrans.count) > 1) {
      // all transistors found, no more search is needed
-     goto checkDiode;
+     // but TRIAC can be detected as NPNp with same pins as PNPn
+     if (!((ntrans.count == 1) && (ntrans.b == ptrans.b))) {
+       goto checkDiode;
+     }
   }
 //  if(adc.lp_otr > 92) {  //there is some current without TristatePin current 
   // Look for Source/Drain current without gate current.
@@ -1088,9 +1091,9 @@ widmes:
 //---------------------------------------------------------------------------
  clean_ports:
 #ifdef DebugOut
-#if DebugOut < 10
+ #if DebugOut < 10
   wait_for_key_5s_line2();
-#endif
+ #endif
 #endif
   ADC_DDR = TXD_MSK;		// all ADC-Pins Input
   ADC_PORT = TXD_VAL;		// all ADC outputs to Ground, keine Pull up

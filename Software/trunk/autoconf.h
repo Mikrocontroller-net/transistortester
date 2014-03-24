@@ -182,6 +182,32 @@
   #define MUX_INT_REF 0x0e	/* channel number of internal 1.1 V */
 
 //------------------=========----------
+#elif PROCESSOR_TYP == 644
+//------------------=========----------
+  #define MCU_STATUS_REG MCUCR
+  #define ADC_COMP_CONTROL ADCSRB
+  #define TI1_INT_FLAGS TIFR1
+  #define DEFAULT_BAND_GAP 1070
+ #if R_H_VAL == 10000
+  #define DEFAULT_RH_FAKT 4022      // mega1280 1101 mV, 100.0 kOhm
+ #else
+  #define DEFAULT_RH_FAKT  856      // mega1280 1101 mV, 470.0 kOhm
+ #endif
+// LONG_HFE  activates computation of current amplification factor with long variables
+  #define LONG_HFE
+
+  #define PIN_RM 200
+  #define PIN_RP 220
+// CC0 defines the capacity of empty terminal pins 1 & 3 without cable
+  #define CC0 36
+// Slew rate correction  val += COMP_SLEW1 / (val + COMP_SLEW2)
+  #define COMP_SLEW1 4000
+  #define COMP_SLEW2 180
+  #define C_NULL CC0+CABLE_CAP+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2))
+  #define MUX_INT_REF 0x1e	/* channel number of internal 1.1 V */
+
+
+//------------------=========----------
 #elif PROCESSOR_TYP == 1280
 //------------------=========----------
   #define MCU_STATUS_REG MCUCR

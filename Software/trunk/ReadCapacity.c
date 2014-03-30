@@ -97,7 +97,9 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   adcv[0] = ReadADC(HighPin);		// voltage before any load 
 // ******** should adcv[0] be measured without current???
   adcv[2] = adcv[0];			// preset to prevent compiler warning
-  for (ovcnt16=0;ovcnt16<500;ovcnt16++) {
+#define MAX_LOAD_TIME 500
+#define MIN_VOLTAGE 300
+  for (ovcnt16=0;ovcnt16<MAX_LOAD_TIME;ovcnt16++) {
      R_PORT = HiPinR_L;			//R_L to 1 (VCC) 
      R_DDR = HiPinR_L;			//switch Pin to output, across R to GND or VCC
      wait10ms();			// wait exactly 10ms, do not sleep
@@ -112,12 +114,13 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      } else {
         adcv[2] = 0;			// voltage is lower or same as beginning voltage
      }
-     if ((ovcnt16 == 126) && (adcv[2] < 75)) {
+     if ((ovcnt16 > (MAX_LOAD_TIME/4)) && (adcv[2] < (MIN_VOLTAGE/4))) {
         // 300mV can not be reached well-timed 
         break;		// don't try to load any more
      }
-     if (adcv[2] > 300) {
-        break;		// probably 100mF can be charged well-timed 
+     // probably 100mF can be charged well-timed 
+     if (adcv[2] > MIN_VOLTAGE) {
+        break;		// lowest voltage to get capacity from load time is reached
      }
   }
   // wait 5ms and read voltage again, does the capacitor keep the voltage?
@@ -127,7 +130,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   DisplayValue(ovcnt16,0,' ',4);
   DisplayValue(adcv[2],-3,'V',4);
 #endif
-  if (adcv[2] < 301) {
+  if (adcv[2] <= MIN_VOLTAGE) {
 #if DebugOut == 10
      lcd_data('K');
      lcd_space();

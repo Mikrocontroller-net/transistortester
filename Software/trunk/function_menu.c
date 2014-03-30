@@ -53,20 +53,6 @@ void function_menu() {
         }
         if (func_number == 5) {
            show_C_ESR();
-           PartFound = PART_NONE;
-           ReadBigCap(TP3,TP2);
-           if (PartFound == PART_CAPACITOR) {
-              lcd_clear();
-              lcd_data('C');
-              lcd_data('=');
-              DisplayValue(cap.cval_max,cap.cpre_max,'F',3);
-              cap.esr = GetESR(cap.cb,cap.ca);
-              if (cap.esr < 65530) {
-                 lcd_line2();
-                 lcd_MEM_string(ESR_str);
-                 DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
-              }
-           }
         }
         if (func_number == MAX_FUNC) {
            ON_PORT &= ~(1<<ON_PIN);              //switch off power
@@ -97,9 +83,11 @@ void show_C_ESR() {
            lcd_line2();		// clear old ESR value 
            lcd_clear_line();
            lcd_line2();
+           lcd_MEM_string(&ESR_str[1]);
            if (cap.esr < 65530) {
-              lcd_MEM_string(ESR_str);
               DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
+           } else {
+              lcd_data('?');		// too big
            }
         } else {
            lcd_clear();

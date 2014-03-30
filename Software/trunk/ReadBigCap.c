@@ -62,14 +62,19 @@ void ReadBigCap(uint8_t HighPin, uint8_t LowPin) {
   adcv[2] = adcv[0];			// preset to prevent compiler warning
   
   ovcnt16 = 0;
-  while (ovcnt16 < 2000) {
+#define MAX_LOAD_TIME 12500
+#define MIN_VOLTAGE 300
+  while (ovcnt16 < MAX_LOAD_TIME) {
      R_PORT = HiPinR_L;			//R_L to 1 (VCC) 
      R_DDR = HiPinR_L;			//switch Pin to output, across R to GND or VCC
-     if ((ovcnt16 == 0) || ((300-adcv[2]) < (adcv[2]*10/ovcnt16))) {
-        wait500us();			// wait exactly 0.5ms, do not sleep
+     if ((ovcnt16 == 0) || ((MIN_VOLTAGE-adcv[2]) < (adcv[2]*10/ovcnt16))) {
+        wait200us();			// wait exactly 0.2ms, do not sleep
         ovcnt16++;
+     } else if ((ovcnt16 > 10) && ((MIN_VOLTAGE-adcv[2]) > ((adcv[2]*100)/ovcnt16))){
+        wait20ms();			// wait exactly 20ms, do not sleep
+        ovcnt16 += 100;
      } else {
-        wait5ms();			// wait exactly 5ms, do not sleep
+        wait2ms();			// wait exactly 2ms, do not sleep
         ovcnt16 += 10;
      }
      R_DDR = 0;				// switch back to input
@@ -83,12 +88,13 @@ void ReadBigCap(uint8_t HighPin, uint8_t LowPin) {
      } else {
         adcv[2] = 0;			// voltage is lower or same as beginning voltage
      }
-     if ((ovcnt16 > 251) && (adcv[2] < 75)) {
+     if ((ovcnt16 > (MAX_LOAD_TIME/8)) && (adcv[2] < (MIN_VOLTAGE/8))) {
         // 300mV can not be reached well-timed 
         break;		// don't try to load any more
      }
-     if (adcv[2] > 300) {
-        break;		// probably 100mF can be charged well-timed 
+     // probably 50mF can be charged well-timed 
+     if (adcv[2] > MIN_VOLTAGE) {
+        break;		// lowest voltage to get capacity from load time is reached
      }
   }
   // wait 5ms and read voltage again, does the capacitor keep the voltage?
@@ -100,7 +106,7 @@ void ReadBigCap(uint8_t HighPin, uint8_t LowPin) {
   DisplayValue(adcv[2],-3,'V',4);
   wait_about1s();
 #endif
-  if (adcv[2] < 301) {
+  if (adcv[2] <= MIN_VOLTAGE) {
 #if DebugOut == 10
      lcd_data('K');
      lcd_space();
@@ -118,14 +124,14 @@ void ReadBigCap(uint8_t HighPin, uint8_t LowPin) {
      goto keinC;		// Voltage of more than 1300mV is reached in one pulse, too fast loaded
   }
   // Capacity is more than about 50µF
-  cap.cval_uncorrected.dw = ovcnt16;
+  cap.cval_uncorrected.dw = ovcnt16*2;
   // compute factor with load voltage + lost voltage during the voltage load time
   cap.cval_uncorrected.dw *= GetRLmultip(adcv[2]);	// get factor to convert time to capacity from table
    cap.cval = cap.cval_uncorrected.dw;	// set result to uncorrected
    Scale_C_with_vcc();
    // cap.cval for this type is at least 40000nF, so the last digit will be never shown
-   cap.cval *= (1000 - C_H_KORR);	// correct with C_H_KORR with 0.1% resolution, but prevent overflow
-   cap.cval /= 2000;
+   cap.cval -= ((cap.cval * C_H_KORR) / 1000);	// correct with C_H_KORR with 0.1% resolution, but prevent overflow
+   cap.cval /= 10;
 #if DebugOut == 10
    lcd_line3();
    lcd_clear_line();

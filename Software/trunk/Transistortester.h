@@ -1127,15 +1127,15 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   extern const uint16_t RHtab[];
  #endif
   extern const unsigned char PinRLtab[];
-  extern const uint8_t PrefixTab[] MEM_TEXT; // p,n,u,m,-,k,M
+  extern const uint8_t PrefixTab[]; // p,n,u,m,-,k,M
  #if FLASHEND > 0x3fff
   extern const unsigned char PinRHtab[];
  #endif
   extern const unsigned char PinADCtab[];
 #endif
 #ifdef WITH_MENU
-COMMON const unsigned char FatTP2_str[] MEM2_TEXT;
-COMMON const unsigned char C_ESR_str[] MEM2_TEXT;
+COMMON const unsigned char FatTP2_str[];
+COMMON const unsigned char C_ESR_str[];
 #endif
 
 

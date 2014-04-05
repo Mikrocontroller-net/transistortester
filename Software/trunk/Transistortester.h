@@ -369,6 +369,7 @@ End of configuration
 //   const unsigned char Diode[] MEM_TEXT = "Diode: ";
    const unsigned char Triac[] MEM_TEXT = "Triak";
    const unsigned char Thyristor[] MEM_TEXT = "Tiriszt.";
+   const unsigned char Unknown[] MEM_TEXT = " unknown"; // " ismeretlen"
    const unsigned char TestFailed1[] MEM_TEXT = "hibas vagy"; 
    const unsigned char OrBroken[] MEM_TEXT = "nincs alkatresz ";
    const unsigned char TestTimedOut[] MEM_TEXT = "Idotullepes!";

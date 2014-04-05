@@ -373,7 +373,6 @@ End of configuration
    const unsigned char OrBroken[] MEM_TEXT = "nincs alkatresz ";
    const unsigned char TestTimedOut[] MEM_TEXT = "Idotullepes!";
 
-   const unsigned char TestTimedOut[] MEM_TEXT = "Idotullepes!";
    #define Cathode_char 'C'
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM_TEXT = "On-teszt mod..";

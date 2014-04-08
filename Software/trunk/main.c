@@ -123,6 +123,7 @@ int main(void) {
 
 //#if POWER_OFF+0 > 1
   // tester display time selection
+#if 0
   display_time = OFF_WAIT_TIME;		// LONG_WAIT_TIME for single mode, else SHORT_WAIT_TIME
   if (!(RST_PIN_REG & (1<<RST_PIN))) {
      // if power button is pressed ...
@@ -132,6 +133,17 @@ int main(void) {
         display_time = LONG_WAIT_TIME;	// ... set long time display anyway
      }
   }
+#else
+  ii = 0;
+  if (!(RST_PIN_REG & (1<<RST_PIN))) {
+     // key is still pressed
+     ii = wait_for_key_ms(700);	
+  }
+  display_time = OFF_WAIT_TIME;		// LONG_WAIT_TIME for single mode, else SHORT_WAIT_TIME
+  if (ii > 30) {
+     display_time = LONG_WAIT_TIME;	// ... set long time display anyway
+  }
+#endif
 //#else
 //  #define display_time OFF_WAIT_TIME
 //#endif
@@ -146,7 +158,7 @@ int main(void) {
   ADCconfig.RefFlag = 0;
   Calibrate_UR();		// get Ref Voltages and Pin resistance
 #ifdef WITH_MENU
-  if (display_time == LONG_WAIT_TIME) {
+  if (ii > 60) {
      function_menu();		// selection of function
   }
 #endif
@@ -824,7 +836,7 @@ gakAusgabe:
   ii = wait_for_key_ms(max_time);
 #ifdef WITH_MENU
   if (ii > 0) {
-     if (ii < 30) goto start;
+     if (ii < 50) goto start;
      // menu selected
      empty_count = 0;
      mess_count = 0;

@@ -123,7 +123,8 @@ void GetFrequency() {
               DDRD &= ~(1<<PD4);			// switch PD4 to input
            }
         }
-     taste += wait_for_key_ms(SHORT_WAIT_TIME/2);
+//     taste += wait_for_key_ms(SHORT_WAIT_TIME/2);
+     taste += wait_for_key_ms(2000);
      if (taste != 0) break;
      }  /* end if 1 < ext_freq < 10050 */
      TIMSK0 = 0;		// disable all timer 0 interrupts

@@ -30,7 +30,7 @@ void ReadBigCap(uint8_t HighPin, uint8_t LowPin) {
 #ifdef INHIBIT_SLEEP_MODE
   unsigned int ovcnt16;
 #endif
-  uint8_t HiPinR_L, HiPinR_H;
+  uint8_t HiPinR_L;
   uint8_t LoADC;
 
 #ifdef AUTO_CAL
@@ -39,11 +39,6 @@ void ReadBigCap(uint8_t HighPin, uint8_t LowPin) {
 
   LoADC = pgm_read_byte(&PinADCtab[LowPin]) | TXD_MSK;
   HiPinR_L = pgm_read_byte(&PinRLtab[HighPin]);	//R_L mask for HighPin R_L load
-#if FLASEND > 0x3fff
-  HiPinR_H = pgm_read_byte(&PinRHtab[HighPin]);	//R_H mask for HighPin R_H load
-#else
-  HiPinR_H = HiPinR_L + HiPinR_L;	//double for HighPin R_H load
-#endif
 
 #if FLASHEND > 0x1fff
   unsigned int vloss;	// lost voltage after load pulse in 0.1% 
@@ -66,18 +61,22 @@ void ReadBigCap(uint8_t HighPin, uint8_t LowPin) {
 #define MIN_VOLTAGE 300
   while (ovcnt16 < MAX_LOAD_TIME) {
      R_PORT = HiPinR_L;			//R_L to 1 (VCC) 
-     R_DDR = HiPinR_L;			//switch Pin to output, across R to GND or VCC
      if ((ovcnt16 == 0) || ((MIN_VOLTAGE-adcv[2]) < (adcv[2]*10/ovcnt16))) {
+        R_DDR = HiPinR_L;		//switch Pin to output, across R to VCC
         wait200us();			// wait exactly 0.2ms, do not sleep
+        R_DDR = 0;			// switch back to input
         ovcnt16++;
      } else if ((ovcnt16 > 10) && ((MIN_VOLTAGE-adcv[2]) > ((adcv[2]*100)/ovcnt16))){
+        R_DDR = HiPinR_L;		//switch Pin to output, across R to VCC
         wait20ms();			// wait exactly 20ms, do not sleep
+        R_DDR = 0;			// switch back to input
         ovcnt16 += 100;
      } else {
+        R_DDR = HiPinR_L;		//switch Pin to output, across R to VCC
         wait2ms();			// wait exactly 2ms, do not sleep
+        R_DDR = 0;			// switch back to input
         ovcnt16 += 10;
      }
-     R_DDR = 0;				// switch back to input
      R_PORT = 0;			// no Pull up
      wait50us();			//wait a little time
      wdt_reset();

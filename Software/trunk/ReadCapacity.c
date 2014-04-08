@@ -166,9 +166,9 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      lcd_space();
      wait_about1s();
  #endif
-     if (ovcnt16 == 0 )  {
-        goto messe_mit_rh;		// Voltage of more than 1300mV is reached in one pulse, but not hold
-     }
+//     if (ovcnt16 == 0 )  {
+//        goto messe_mit_rh;		// Voltage of more than 300mV is reached in one pulse, but not hold
+//     }
      goto keinC; //implausible, not yet the half voltage
   }
   cap.cval_uncorrected.dw = ovcnt16 + 1;
@@ -200,16 +200,16 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      vloss = (unsigned long)(adcv[3] * 1000UL) / adcv[2];
   }
 #endif
-  if (adcv[3] > 100) {
-     // more than 100mV is lost during load time
+  if (adcv[3] > 200) {
+     // more than 200mV is lost during load time
  #if DebugOut == 10
      lcd_data('L');
      lcd_space();
      wait_about1s();
  #endif
-     if (ovcnt16 == 0 )  {
-        goto messe_mit_rh;		// Voltage of more than 1300mV is reached in one pulse, but not hold
-     }
+//     if (ovcnt16 == 0 )  {
+//        goto messe_mit_rh;		// Voltage of more than 300mV is reached in one pulse, but not hold
+//     }
      goto keinC;			// capacitor does not keep the voltage about 5ms
   }
   cap.cval_uncorrected.dw = ovcnt16 + 1;

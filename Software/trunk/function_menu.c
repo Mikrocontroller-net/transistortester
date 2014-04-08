@@ -12,11 +12,16 @@
 #ifdef WITH_MENU
 void function_menu() {
   uint8_t ii;
-  uint8_t ll;
   uint8_t func_number;
 
   func_number = 0xff;
-  for (ll=0;ll<((MAX_FUNC+1)*20);ll++) {
+ #ifdef POWER_OFF
+  uint8_t ll;
+  for (ll=0;ll<((MAX_FUNC+1)*10);ll++) 
+ #else
+  while (1)		/* without end, if no power off specified */
+ #endif
+  {
      func_number++;
      if (func_number > MAX_FUNC) func_number = 0;
      message_key_released(SELECTION_str);
@@ -29,19 +34,24 @@ void function_menu() {
  #endif
      }
      if (func_number == MAX_FUNC) {
- #ifdef POWER_OFF
+// #ifdef POWER_OFF
         lcd_MEM_string(OFF_str);
- #else
-        continue;
- #endif
+// #else
+//        continue;
+// #endif
      }
      if (func_number == 0) lcd_MEM2_string(TESTER_str);
      if (func_number == 1) lcd_MEM2_string(FREQ_str);
      if (func_number == 3) lcd_MEM2_string(F_GEN_str);
      if (func_number == 4) lcd_MEM2_string(PWM_10bit_str);
      if (func_number == 5) lcd_MEM2_string(C_ESR_str);
-     ii = wait_for_key_ms(SHORT_WAIT_TIME);
-     if (ii >= 30) {
+ #ifdef POWER_OFF
+     ii = wait_for_key_ms(SHORT_WAIT_TIME);	// wait about 5 seconds
+     if (ii > 0) ll = 0;			// reset timer, operator present
+ #else
+     ii = wait_for_key_ms(0);			// wait endless
+ #endif
+     if (ii >= 50) {
         if (func_number == 0) break;		// return to TransistorTester
         if (func_number == 1) GetFrequency();
         if (func_number == 2) show_vext();
@@ -64,12 +74,17 @@ void function_menu() {
   } /* end for ll */
   return;
  } // end function_menu()
+/* show_C_ESR measures the capacity and ESR of a capacitor connected to TP1 and TP3 */
 void show_C_ESR() {
   uint8_t key_pressed;
-  uint8_t times;
   message_key_released(C_ESR_str);
-//  lcd_clear();
-  for (times=0;times<250;times++) {
+#ifdef POWER_OFF
+  uint8_t times;
+  for (times=0;times<250;times++) 
+#else
+  while (1)		/* wait endless without the POWER_OFF option */
+#endif
+  {
         PartFound = PART_NONE;
         ReadBigCap(TP3,TP1);
         if (PartFound == PART_CAPACITOR) {
@@ -107,11 +122,18 @@ void show_vext() {
  #ifdef WITH_VEXT
  
   uint8_t key_pressed;
-  uint8_t times;
+  uint8_t key_long_pressed;
   unsigned int Vext;
   // show the external voltage
   message_key_released(VOLTAGE_str);
-  for (times=0;times<250;times++) {
+  key_long_pressed = 0;
+#ifdef POWER_OFF
+  uint8_t times;
+  for (times=0;times<240;times++) 
+#else
+  while (1)			/* wait endless without option POWER_OFF */
+#endif
+  {
 #ifdef TPex2
      lcd_line1();		// 2 Vext measurements 
      lcd_clear_line();
@@ -151,7 +173,14 @@ void show_vext() {
 #endif	/* TPex2 */
 
      key_pressed = wait_for_key_ms(1000);
-     if (key_pressed != 0) break;
+     if (key_pressed > ((1000/10)-6)) {
+        key_long_pressed++;	// count the long key press
+#ifdef POWER_OFF
+        times = 0;		//reset the loop counter, operator is active
+#endif
+     }
+     if (key_pressed == 0) key_long_pressed = 0; //reset the key long pressed counter
+     if (key_long_pressed > 4) break;	// five seconds end the loop
   }  /* end for times */
  #endif  /* WITH_VEXT */
 } /* end show_vext() */
@@ -163,7 +192,6 @@ void show_vext() {
 /* *************************************************** */
 void make_frequency() {
 #define MAX_FREQ_NR 19
-  uint8_t times;
   uint8_t key_pressed;
   uint8_t freq_nr;
 
@@ -175,16 +203,22 @@ void make_frequency() {
   OCR1B	= 0;		// toggle OC1B at this count
   TIFR1 = (1<<OCF1A) | (1<<OCF1A) | (1<<TOV1);	// reset interrupt flags
   TCCR1C = 0;
-  TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (0<<CS11) | (0<<CS10); // set counter mode to 9 PWM
+  TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (0<<CS11) | (0<<CS10); // set counter mode 
   R_PORT = 0;		// set all resistor port outputs to GND
   R_DDR = (1<<PIN_RL1) | (1<<PIN_RL3);		// set TP1 and TP3 to output
   ADC_PORT = TXD_VAL;
   ADC_DDR = (1<<TP1) | TXD_MSK;			//connect TP1 to GND
   DDRB  |= (1<<DDB2);	// set output enable
   TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (0<<CS11) | (1<<CS10); // no clock divide
-  key_pressed = 1;
+  key_pressed = 21;
   freq_nr = MAX_FREQ_NR;
-  for (times=0; times<240; times++) {
+#ifdef POWER_OFF
+  uint8_t times;
+  for (times=0; times<240; times++) 
+#else
+  while (1)			/* wait endless without option POWER_OFF */
+#endif
+  {
 //     if(key_pressed >= 80) break;
 //     if(key_pressed >= 30) {
 //       if (freq_nr >= 2) {
@@ -193,9 +227,14 @@ void make_frequency() {
 //         freq_nr += (MAX_FREQ_NR - 2);
 //       }
 //     }
-     if(key_pressed >= 50) break;	// more than 0.5 seconds
-     if (key_pressed != 0) {
-       times = 0;	// reset counter
+     if(key_pressed >= 80) break;	// more than 0.8 seconds
+#define KEYPRESS_LENGTH_10ms 0
+#ifdef POWER_OFF
+     if (key_pressed != 0)  times = 0;	// reset counter, operator is active
+#undef KEYPRESS_LENGTH_10ms 
+#define KEYPRESS_LENGTH_10ms 20		/* change frequency only with >200ms key press */
+#endif
+     if (key_pressed > KEYPRESS_LENGTH_10ms) {
        freq_nr++;
        if (freq_nr > MAX_FREQ_NR) freq_nr = 0;
        lcd_line2();
@@ -376,6 +415,7 @@ void make_frequency() {
      key_pressed = wait_for_key_ms(1000);
   } /* end for times */
   TCCR1B = 0;		// stop counter
+  TCCR1A = 0;		// stop counter
   ADC_DDR =  TXD_MSK;	// disconnect TP1 
   R_DDR = 0;		// switch resistor ports to Input
   DDRB  &= ~(1<<DDB2);	// disable output 
@@ -390,7 +430,6 @@ void make_frequency() {
 /* *************************************************** */
 void do_10bit_PWM() {
   uint8_t key_pressed;
-  uint8_t times;		// time limit
   uint8_t percent;		// requestet duty-cycle in %
   unsigned int pwm_flip;	// value for counter to flip the state
   message_key_released(PWM_10bit_str);	// display PWM-Generator and wait for key released
@@ -410,11 +449,19 @@ void do_10bit_PWM() {
   TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (0<<CS11) | (1<<CS10); // no clock divide
   key_pressed = 1;
   percent = 9;
-  for (times=0; times<240; times++) {
-     if(key_pressed >= 80) break;	// more than 0.8 seconds
-     if (key_pressed > 35) percent += 9; // will be increased to 10
+#ifdef POWER_OFF
+  uint8_t times;		// time limit
+  for (times=0; times<240; times++) 
+#else
+  while (1)			/* wait endless without option POWER_OFF */
+#endif
+  {
+     if(key_pressed > 130) break;	// more than 1.3 seconds
+     if (key_pressed > 50) percent += 9; // will be increased to 10
      if (key_pressed != 0) {
+#ifdef POWER_OFF
         times = 0;	// Reset the time limit to zero, user is present
+#endif
         percent++;	// use next percent value, if long key press use 10% more
         if (percent >= 100) {
            percent -= 100;		//reset to 0 percent
@@ -425,15 +472,16 @@ void do_10bit_PWM() {
         lcd_clear_line();
         lcd_line2();
         DisplayValue((((unsigned long)pwm_flip * 1000) + 0x1ff) / 0x3ff,-1,'%',5);
-        if (key_pressed > 35) {
+        if (key_pressed > 40) {
            wait_about300ms();	// wait some time to release the button
         }
      } /* end if key_pressed != 0 */
-     key_pressed = wait_for_key_ms(1000);
+     key_pressed = wait_for_key_ms(2000);
   } /* end for times */
 
   ADC_DDR =  TXD_MSK;	// disconnect TP1 
   TCCR1B = 0;		// stop counter
+  TCCR1A = 0;		// stop counter
   R_DDR = 0;		// switch resistor ports to Input
   DDRB  &= ~(1<<DDB2);	// disable output 
 } /* end do_10bit_PWM */

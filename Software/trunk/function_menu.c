@@ -231,6 +231,14 @@ void make_frequency() {
 #define KEYPRESS_LENGTH_10ms 0
 #ifdef POWER_OFF
      if (key_pressed != 0)  times = 0;	// reset counter, operator is active
+     lcd_line1();
+     lcd_clear_line();	// clear line 1 for next frequency
+     lcd_line1();
+     lcd_MEM2_string(F_GEN_str);	// display f-Generator
+     uint8_t del8;
+     for (del8=0; (del8+20)<times; del8+=30) {
+        lcd_data('.');		// show elapsed time, one point is 30 seconds
+     }
 #undef KEYPRESS_LENGTH_10ms 
 #define KEYPRESS_LENGTH_10ms 20		/* change frequency only with >200ms key press */
 #endif

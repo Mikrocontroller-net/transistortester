@@ -376,12 +376,14 @@ start:
   _trans = &ntrans;			// default transistor structure to show
   if (PartFound == PART_THYRISTOR) {
     lcd_MEM_string(Thyristor);		//"Thyristor"
-    goto gakAusgabe;
+    PinLayout(Cathode_char,'G','A'); 	// CGA= or 123=...
+    goto TyUfAusgabe;
   }
 
   if (PartFound == PART_TRIAC) {
     lcd_MEM_string(Triac);		//"Triac"
-    goto gakAusgabe;
+    PinLayout('1','G','2'); 	// CGA= or 123=...
+    goto TyUfAusgabe;
   }
 
   if (PartFound == PART_CAPACITOR) {
@@ -815,8 +817,9 @@ not_known:
   goto end2;
 
 
-gakAusgabe:
-  PinLayout(Cathode_char,'G','A'); 	// CGA= or 123=...
+//gakAusgabe:
+//  PinLayout(Cathode_char,'G','A'); 	// CGA= or 123=...
+TyUfAusgabe:
 #ifdef WITH_THYRISTOR_GATE_V
   lcd_line2(); //2. row 
   lcd_MEM_string(Uf_str);		// "Uf="

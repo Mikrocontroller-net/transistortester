@@ -136,7 +136,7 @@ End of configuration
 #if defined(LANG_CZECH)		//Tschechisch
    const unsigned char TestRunning[] MEM_TEXT = "Probiha mereni..";
    const unsigned char BatWeak[] MEM_TEXT = "slaba"; //€€";
-   const unsigned char BatEmpty[] MEM_TEXT = "prazdna!";
+   const unsigned char BatEmpty[] MEM_TEXT = "vybita";
    const unsigned char TestFailed2[] MEM_TEXT = "vadna "; //€€€€€€";
    const unsigned char Bauteil[] MEM_TEXT = "soucastka"; //€";
 //   const unsigned char Diode[] MEM_TEXT = "Dioda: ";
@@ -148,7 +148,7 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'K'
  #ifdef WITH_SELFTEST
-   const unsigned char SELFTEST[] MEM_TEXT = "Samotestovani..";
+   const unsigned char SELFTEST[] MEM_TEXT = "Autotest..";	//"Samotestovani..";
    const unsigned char RELPROBE[] MEM_TEXT = "Izoluj sondy!";
    const unsigned char ATE[] MEM_TEXT = "Konec testu";
  #endif

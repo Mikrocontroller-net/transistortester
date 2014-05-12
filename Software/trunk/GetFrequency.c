@@ -6,7 +6,10 @@
 
 
 //=================================================================
-// measure frequency at external pin T0 (PD4)
+// measure frequency at external pin T0 (PD4 or PB0)
+#define FMAX_PERIOD 25050
+#define FMAX_INPUT 2000100
+#define FREQ_DIV 16
 
 #ifdef WITH_MENU
 void GetFrequency() {
@@ -20,8 +23,8 @@ void GetFrequency() {
   taste = 0;				// reset flag for key pressed
   for (mm=0;mm<240;mm++) {
      //set up Counter 0
-     // Counter 0 is used to count the external signal connected to T0 (PD4)
-     DDRD &= ~(1<<PD4);			// switch PD4 to input
+     // Counter 0 is used to count the external signal connected to T0 (PD4 or PB0)
+     FREQINP_DDR &= ~(1<<FREQINP_PIN);	// switch frequency pin to input
      wait1ms();				// let capacitor time to load to 2.4V input
      TCCR0A = 0; 			// normal operation, no output
      TCNT0 = 0;				// set counter to zero
@@ -53,9 +56,18 @@ void GetFrequency() {
      lcd_clear();		// clear total display
      lcd_data('f');
      lcd_data('=');
+#if PROCESSOR_TYP == 644
+     if ((FDIV_PORT&(1<<FDIV_PIN)) == 0) {
+        DisplayValue(ext_freq.dw,0,'H',7);
+     } else {
+        // frequency divider is activ
+        DisplayValue(ext_freq.dw*FREQ_DIV,0,'H',7);
+     }
+#else
      DisplayValue(ext_freq.dw,0,'H',7);
+#endif
      lcd_data('z');
-     DDRD &= ~(1<<PD4);			// switch PD4 to input
+     FREQINP_DDR &= ~(1<<FREQINP_PIN);	// switch frequency pin to input
      if (TCCR1B != 0) {
        // Exact 1000ms period is only with "end of period" from timer1 interrupt.
        // When stopped with the for loop, the time is too long because wait call does not
@@ -65,10 +77,10 @@ void GetFrequency() {
      }
      TCCR1B = 0;		// stop timer 1
      TIMSK1 = 0;		// disable all timer 1 interrupts
-     if ((ext_freq.dw < 25050) && (ext_freq.dw > 0)) {
+     if ((ext_freq.dw < FMAX_PERIOD) && (ext_freq.dw > 0)) {
         pinchange_max = ((10 * (unsigned long)ext_freq.dw) + MHZ_CPU) / MHZ_CPU;	// about 10000000 clock tics
         pinchange_max += pinchange_max;	// * 2 for up and down change
-        DDRD &= ~(1<<PD4);		// switch PD4 back to input
+        FREQINP_DDR &= ~(1<<FREQINP_PIN);	// switch frequency pin to input
         wait1ms();			// let capacitor time to load to 2.4V input
         TCNT0 = 0;			// set counter to zero
         ext_freq.dw = 0;		// reset counter to zero
@@ -79,15 +91,15 @@ void GetFrequency() {
         PCIFR  = (1<<PCIF2);		// clear Pin Change Status
         PCICR  = (1<<PCIE2);		// enable pin change interrupt
         sei();
-        PCMSK2 = (1<<PCINT20);		// monitor PD4 PCINT20 pin change
+        PCMSK_FREQ = (1<<PCINT_FREQ);	// monitor PD4 PCINT20 or PB0 PCINT8 pin change
         for (ii=0;ii<250;ii++) {
            wait20ms();
            wdt_reset();
            if (!(RST_PIN_REG & (1<<RST_PIN))) taste = 1;	// user request stop of operation
-           if ((PCMSK2 & (1<<PCINT20)) == 0) break;		// monitoring is disabled by interrupt
+           if ((PCMSK_FREQ & (1<<PCINT_FREQ)) == 0) break;		// monitoring is disabled by interrupt
         }
         TCCR0B = 0;		// stop counter
-        PCMSK2 = 0;		// stop monitor PD4 PCINT20 pin change
+        PCMSK_FREQ = 0;		// stop monitor PD4 PCINT20 or PB0 PCINT8 pin change
         ext_freq.b[0] = TCNT0;		// add lower 8 bit to get total counts
 //        lcd_line2();
 //        lcd_clear_line();
@@ -96,6 +108,12 @@ void GetFrequency() {
         lcd_data('T');
         lcd_data('=');
         ext_period = ((unsigned long long)ext_freq.dw * (125*200)) / pinchange_max;
+ #if PROCESSOR_TYP == 644
+        if ((FDIV_PORT&(1<<FDIV_PIN)) != 0) {
+           // frequency divider is activ, period is measured too long
+           ext_period = ext_period / FREQ_DIV;
+        }
+ #endif
         if (pinchange_max > 127) {
            DisplayValue(ext_period,-11,'s',7);	// show period converted to 0.01ns units
         } else {
@@ -105,7 +123,7 @@ void GetFrequency() {
         if (ii == 250) {
            lcd_data('?');		// wait loop has regular finished
         } else {
-           if (ext_period > 50000) {
+           if (ext_period > 249500) {
               lcd_line1();
               lcd_data('f');
               lcd_data('=');
@@ -120,9 +138,23 @@ void GetFrequency() {
                  DisplayValue(freq_from_per,-4,'H',7);  // display with  0.0001 Hz resolution
               }
               lcd_data('z');
-              DDRD &= ~(1<<PD4);			// switch PD4 to input
+              FREQINP_DDR &= ~(1<<FREQINP_PIN);	// switch frequency pin to input
            }
         }
+ #if PROCESSOR_TYP == 644
+     if ((FDIV_PORT&(1<<FDIV_PIN)) == 0) {
+        // frequency divider is not activ
+        if ( ((ext_freq.dw >= FMAX_PERIOD) && (ext_freq.dw < ((long)FMAX_PERIOD*FREQ_DIV))) ||
+            (ext_freq.dw > FMAX_INPUT) ){
+           FDIV_PORT |= (1<<FDIV_PIN);			// use frequency divider for next measurement
+        }
+     } else {
+        // frequency divider is activ
+        if (ext_freq.dw < (FMAX_PERIOD/FREQ_DIV)) {
+           FDIV_PORT &= ~(1<<FDIV_PIN);			// switch off the 16:1 divider
+        }
+     }
+ #endif
 //     taste += wait_for_key_ms(SHORT_WAIT_TIME/2);
      taste += wait_for_key_ms(2000);
      if (taste != 0) break;
@@ -172,7 +204,14 @@ ISR(TIMER1_COMPA_vect, ISR_BLOCK) {
 /* The pin_changed_max value should be equal to measure         */
 /* full periods  (no half period)				*/
 /* ************************************************************ */
-ISR(PCINT2_vect, ISR_BLOCK) {
+
+
+ #if PROCESSOR_TYP == 644
+ISR(PCINT1_vect, ISR_BLOCK)
+ #else
+ISR(PCINT2_vect, ISR_BLOCK)
+ #endif
+{
   if (pinchange_count == 0) {
      // start the counter 0
      TCCR0B = (1<<CS00);	// start the counter with full CPU clock
@@ -180,7 +219,7 @@ ISR(PCINT2_vect, ISR_BLOCK) {
   if (pinchange_count >= pinchange_max) {
      // stop the counter 0, when maximum value has reached.
      TCCR0B = 0;		// stop counter
-     PCMSK2 &= ~(1<<PCINT20);	// disable monitoring of PD4 PCINT20 pin change
+     PCMSK_FREQ &= ~(1<<PCINT_FREQ);	// disable monitoring of PD4 PCINT20 pin change
 //     PCICR &= ~(1<<PCIE2);	// disable the interrupt
   }
   pinchange_count++;

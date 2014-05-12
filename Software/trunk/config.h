@@ -71,6 +71,8 @@
  #define TPREF PA4
  // Port pin for Battery voltage measuring
  #define TPBAT PA5
+ // Port pin with >100nF capacitor for calibration 
+ #define TPCAP PA7
 #elif PROCESSOR_TYP == 1280
 //################# for mega1280, mega2560 port F is the Analog input
  #define ADC_PORT PORTF
@@ -148,6 +150,26 @@
  #define PIN_RH1 PD3
  #define PIN_RH2 PD5
  #define PIN_RH3 PD7
+/* The calibration capacitor is connected to a 470k resistor to port TCAP */
+ #define TCAP_DDR DDRC
+ #define TCAP_PORT PORTC
+ #define TCAP_RH PC6
+/* FDIV_PIN specifies the pin, which switch on a 16:1 frequency divider */
+ #define FDIV_DDR DDRC
+ #define FDIV_PORT PORTC
+ #define FDIV_PIN PC0
+/* the two bits P0 and P1 at FINP port control the input of frequency measurement */
+/* P1:P0 = 00 external input, P1:P0 = 10 high frequency crystal, P1:P0 = 11 low frequency crystal */
+ #define FINP_DDR DDRC
+ #define FINP_PORT PORTC
+ #define FINP_P0 PC1
+ #define FINP_P1 PC2
+
+/* define the input pin for frequency measuring and also the pin change monitoring port for measuring the periode */
+ #define FREQINP_DDR DDRB
+ #define FREQINP_PIN PB0
+ #define PCMSK_FREQ PCMSK1
+ #define PCINT_FREQ PCINT8
 #elif PROCESSOR_TYP == 1280
 //################# for mega1280, mega2560 use port K 
  #define R_DDR DDRK
@@ -170,6 +192,12 @@
  #define PIN_RH1 PB1
  #define PIN_RH2 PB3
  #define PIN_RH3 PB5
+
+/* define the input pin for frequency measuring and also the pin change monitoring port for measuring the periode */
+ #define FREQINP_DDR DDRD
+ #define FREQINP_PIN PD4
+ #define PCMSK_FREQ PCMSK2
+ #define PCINT_FREQ PCINT20
 #endif
 
 #if PROCESSOR_TYP == 644

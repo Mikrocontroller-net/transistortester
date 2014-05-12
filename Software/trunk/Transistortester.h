@@ -101,6 +101,36 @@ End of configuration
  #endif
  #define LANG_SELECTED
 #endif
+#if defined(LANG_ITALIAN)		//italiano
+   const unsigned char TestRunning[] MEM_TEXT = "Analizzo..."; 
+   const unsigned char BatWeak[] MEM_TEXT = "debole";
+   const unsigned char BatEmpty[] MEM_TEXT = "esaurita!"; 
+   const unsigned char TestFailed2[] MEM_TEXT = "guasto ";	//"danneggiato "; 
+   const unsigned char Bauteil[] MEM_TEXT = "campione";		//"componente"; 
+//   const unsigned char Diode[] MEM_TEXT = "Diode: ";
+   const unsigned char Triac[] MEM_TEXT = "Triac";
+   const unsigned char Thyristor[] MEM_TEXT = "SCR";
+   const unsigned char Unknown[] MEM_TEXT = " ignoto";		//" sconosciuto.";
+   const unsigned char TestFailed1[] MEM_TEXT = "Test fallito, o";
+   const unsigned char OrBroken[] MEM_TEXT = "o guasto ";	//"o danneggiato "; 
+   const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+   #define Cathode_char 'C'	/* defines the character used for cathode */
+ #ifdef WITH_SELFTEST
+   const unsigned char SELFTEST[] MEM_TEXT = "Autotest ..";
+   const unsigned char RELPROBE[] MEM_TEXT = "Pin separati!";
+   const unsigned char ATE[] MEM_TEXT = "Fine del test";
+ #endif
+ #ifdef WITH_MENU
+   const unsigned char SELECTION_str[] MEM2_TEXT = "Selezione:";
+   const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
+   const unsigned char FREQ_str[] MEM2_TEXT = "Frequenza";
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltaggio";
+   const unsigned char OFF_str[] MEM2_TEXT = "Spegnere";
+   const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generatore";
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+ #endif
+ #define LANG_SELECTED
+#endif
 
 #if defined(LANG_POLISH)		//polnisch
    const unsigned char TestRunning[] MEM_TEXT = "Testowanie..."; //€€€";
@@ -277,10 +307,10 @@ End of configuration
    const unsigned char ATE[] MEM_TEXT = "Fim do Teste";
  #endif
  #ifdef WITH_MENU
-   const unsigned char SELECTION_str[] MEM2_TEXT = "Seleccion:";
+   const unsigned char SELECTION_str[] MEM2_TEXT = "Selecao:";
    const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
-   const unsigned char FREQ_str[] MEM2_TEXT = "Frecuencia";
-   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltaje";
+   const unsigned char FREQ_str[] MEM2_TEXT = "Frequencia";
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltagem";
    const unsigned char OFF_str[] MEM2_TEXT = "desconectar";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
@@ -462,7 +492,11 @@ End of configuration
  const unsigned char jfet_str[] MEM_TEXT = "JFET";
  const unsigned char igbt_str[] MEM_TEXT = "-IGBT";
  const unsigned char GateCap_str[] MEM_TEXT = "C=";
+#ifdef FOUR_LINE_LCD
+ const unsigned char hfe_str[] MEM_TEXT ="hFE=";
+#else
  const unsigned char hfe_str[] MEM_TEXT ="B=";
+#endif
  const unsigned char NPN_str[] MEM_TEXT = "NPN";
  const unsigned char PNP_str[] MEM_TEXT = "PNP";
 
@@ -948,7 +982,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  const unsigned char KatAn[] MEM_TEXT = {'-', LCD_CHAR_DIODE2, '-',0};
  const unsigned char Dioden[] MEM_TEXT = {'*',LCD_CHAR_DIODE1, ' ', ' ',0};
  const unsigned char Resistor_str[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
- const unsigned char VERSION_str[] MEM2_TEXT = "Version 1.10k";
+ const unsigned char VERSION_str[] MEM2_TEXT = "Version 1.11k";
 #ifdef SHOW_ICE
  const unsigned char ICE0_str[] MEM2_TEXT = "ICE0=";
  const unsigned char ICEs_str[] MEM2_TEXT = "ICEs=";

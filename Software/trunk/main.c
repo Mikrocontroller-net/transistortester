@@ -25,6 +25,7 @@ int main(void) {
 #ifdef SEARCH_PARASITIC
   unsigned long n_cval;		// capacitor value of NPN B-E diode, for deselecting the parasitic Transistor
   int8_t n_cpre;		// capacitor prefix of NPN B-E diode
+  char an_cat;			// diode is anode-cathode type
 #endif
   //switch on
   ON_DDR = (1<<ON_PIN);			// switch to output
@@ -623,7 +624,8 @@ start:
     }
     PinLayout('E','B','C'); 		//  EBC= or 123=...
     lcd_line2(); //2. row 
-#ifdef SHOW_ICE
+#ifndef FOUR_LINE_LCD
+ #ifdef SHOW_ICE
     if (_trans->ice0 > 0) {
        lcd_MEM2_string(ICE0_str);		// "ICE0="
        DisplayValue(_trans->ice0,-5,'A',3);
@@ -634,6 +636,7 @@ start:
        DisplayValue(_trans->ices,-5,'A',3);
        wait_for_key_5s_line2();		// wait 5s and clear line 2
     }
+ #endif
 #endif
     lcd_MEM_string(hfe_str);		//"B="  (hFE)
     DisplayValue(_trans->hfe,0,0,3);
@@ -641,6 +644,20 @@ start:
 
     lcd_MEM_string(Uf_str);		//"Uf="
     DisplayValue(_trans->uBE,-3,'V',3);
+#ifdef FOUR_LINE_LCD
+ #ifdef SHOW_ICE
+    if (_trans->ice0 > 0) {
+       lcd_line3(); //3. row 
+       lcd_MEM2_string(ICE0_str);		// "ICE0="
+       DisplayValue(_trans->ice0,-5,'A',3);
+    }
+    if (_trans->ices > 0) {
+       lcd_line4(); //4. row 
+       lcd_MEM2_string(ICEs_str);		// "ICEs="
+       DisplayValue(_trans->ices,-5,'A',3);
+    }
+ #endif
+#endif
     goto end;
     // end (PartFound == PART_TRANSISTOR)
   } else if (PartFound == PART_FET) {	//JFET or MOSFET
@@ -674,31 +691,36 @@ start:
        PinLayout('S','G','D'); 		//  SGD= or 123=...
     }
 //    if((NumOfDiodes == 1) && ((PartMode&D_MODE) != D_MODE)) 
+    an_cat = 0;
     if(NumOfDiodes == 1) {
        //MOSFET with protection diode; only with enhancement-FETs
 #ifdef EBC_STYLE
  #if EBC_STYLE == 321
        // layout with 321= style
-       if (((PartMode&P_CHANNEL) && (ptrans.c > ptrans.e)) || ((!(PartMode&P_CHANNEL)) && (ntrans.c < ntrans.e)))
+       an_cat = (((PartMode&P_CHANNEL) && (ptrans.c > ptrans.e)) || ((!(PartMode&P_CHANNEL)) && (ntrans.c < ntrans.e)));
  #else
        // Layout with SGD= style
-       if (PartMode&P_CHANNEL) /* N or P MOS */
+       an_cat = (PartMode&P_CHANNEL);	/* N or P MOS */
  #endif
 #else
        // layout with 123= style
-       if (((PartMode&P_CHANNEL) && (ptrans.c < ptrans.e)) || ((!(PartMode&P_CHANNEL)) && (ntrans.c > ntrans.e)))
+       an_cat = (((PartMode&P_CHANNEL) && (ptrans.c < ptrans.e)) || ((!(PartMode&P_CHANNEL)) && (ntrans.c > ntrans.e)));
 #endif
-#if FLASHEND > 0x1fff
-       // there is enough space for long form of showing protection diode
-       {
+       //  show diode symbol in right direction 
+       if (an_cat) {
           lcd_data(LCD_CHAR_DIODE1);	//show Diode symbol >|
-          lcd_line2();			//2. Row
+       } else {
+          lcd_data(LCD_CHAR_DIODE2);	//show Diode symbol |<
+       }
+#ifndef FOUR_LINE_LCD
+ #if FLASHEND > 0x1fff
+       // there is enough space for long form of showing protection diode
+       lcd_line2();			//2. Row
+       if (an_cat) {
           lcd_testpin(diodes.Anode[0]);
           lcd_MEM_string(AnKat);	//"->|-"
           lcd_testpin(diodes.Cathode[0]);
        } else {
-          lcd_data(LCD_CHAR_DIODE2);	//show Diode symbol |<
-          lcd_line2();			//2. Row
           lcd_testpin(diodes.Cathode[0]);
           lcd_MEM_string(KatAn);	//"-|<-"
           lcd_testpin(diodes.Anode[0]);
@@ -707,15 +729,9 @@ start:
        lcd_MEM_string(Uf_str);			//"Uf="
        mVAusgabe(0);
        wait_for_key_5s_line2();		// wait 5s and clear line 2
-#else
-       // only little space in the flash memory show only diode symbol in right direction
-       {
-          lcd_data(LCD_CHAR_DIODE1);	//show Diode symbol >|
-       } else {
-          lcd_data(LCD_CHAR_DIODE2);	//show Diode symbol |<
-       }
+ #endif
 #endif
-    }
+    } /* end if NumOfDiodes == 1 */
     lcd_line2();			//2. Row
     if((PartMode&D_MODE) != D_MODE) {	//enhancement-MOSFET
 	//Gate capacity
@@ -731,6 +747,26 @@ start:
     }
     //Gate-threshold voltage
     DisplayValue(_trans->gthvoltage,-3,'V',2);
+#ifdef FOUR_LINE_LCD
+ #if FLASHEND > 0x1fff
+       // there is enough space for long form of showing protection diode
+    if(NumOfDiodes == 1) {
+       lcd_line3();			//3. Row
+       if (an_cat) {
+          lcd_testpin(diodes.Anode[0]);
+          lcd_MEM_string(AnKat);	//"->|-"
+          lcd_testpin(diodes.Cathode[0]);
+       } else {
+          lcd_testpin(diodes.Cathode[0]);
+          lcd_MEM_string(KatAn);	//"-|<-"
+          lcd_testpin(diodes.Anode[0]);
+       }
+       lcd_space();
+       lcd_MEM_string(Uf_str);			//"Uf="
+       mVAusgabe(0);
+    }
+ #endif
+#endif
     goto end;
     // end (PartFound == PART_FET)
   }
@@ -772,7 +808,15 @@ resistor_out:
        lcd_MEM_string(Resistor_str);    // -[=]-
        lcd_data(z);
     }
+#ifdef FOUR_LINE_LCD
+    if(PartFound == PART_DIODE) {
+       lcd_line4(); //4. row 
+    } else {
+       lcd_line2(); //2. row 
+    }
+#else
     lcd_line2(); //2. row 
+#endif
     if (ResistorsFound == 1) {
 #if FLASHEND > 0x1fff
        ReadInductance();		// measure inductance, possible only with single R<2.1k
@@ -806,8 +850,14 @@ resistor_out:
 
   lcd_MEM_string(TestFailed1); 	//"Kein,unbek. oder"
   lcd_line2(); //2. row 
-  lcd_MEM_string(TestFailed2); 	//"defektes "
+#if defined(LANG_ITALIAN)               //italiano
+  lcd_MEM_string(Bauteil);		//"campione"
+  lcd_space();
+  lcd_MEM_string(TestFailed2); 		//"guasto "
+#else
+  lcd_MEM_string(TestFailed2); 		//"defektes "
   lcd_MEM_string(Bauteil);		//"Bauteil"
+#endif
 not_known:
 #if POWER_OFF+0 > 1
   empty_count++;
@@ -879,11 +929,15 @@ end3:
   // there is one resistor or more detected
   wait_for_key_ms(display_time);
   ADC_DDR =  TXD_MSK; 	// switch pin with reference to input, activate relay
+#ifdef FOUR_LINE_LCD
+  lcd_line3();
+#else
   lcd_clear();
 //#if FLASHEND > 0x1fff
   lcd_data('0'+NumOfDiodes);
   lcd_MEM_string(Dioden);	//"Diodes "
 //#endif
+#endif
   goto resistor_out;
 
 }   // end main

@@ -26,7 +26,7 @@ PARTNO = m328
 
 # The WITH_MENU option enables a dialog to choose some additional functions.
 # Currently a frequency measurement at ATmega Pin PD4, a frequency generator at TP2 ,
-# tan the external voltage measurement can be selected. Of course you can also return to
+# the external voltage measurement and C+ESR measurement can be selected. Of course you can also return to
 # the normal transistor tester function and switch off the tester.
 CFLAGS += -DWITH_MENU
 

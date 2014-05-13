@@ -36,7 +36,7 @@ void wait_for_key_5s_line2(void);	// wait 5 seconds and clear line 2
 void i2lcd(int iw);			// output integer value to LCD
 void u2lcd(uint16_t iw);		// output unsigned integer value to LCD
 void EE_check_init(void);		// check calibration values and init the values if unset
-void GetFrequency(void);		// measure Frequency and display
+void GetFrequency(uint8_t range);	// measure Frequency and display 
 void function_menu();			// menu for selecting extra function
 void show_vext();			// show external voltage (zener) 
 void message_key_released(const unsigned char XX_str[]); // clear display, show message XX_str and wait for released key

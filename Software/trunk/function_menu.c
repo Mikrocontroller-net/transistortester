@@ -8,7 +8,37 @@
 //=================================================================
 // selection of different functions
 
-#define MAX_FUNC 6
+#if PROCESSOR_TYPE == 644
+ #define MODE_TRANS 0
+ #define MODE_FREQ 1
+ #define MODE_HFREQ 2
+ #define MODE_FGEN 3
+ #define MODE_PWM 4
+ #define MODE_ESR 5
+ #define MODE_H_CRYSTAL 6
+ #define MODE_L_CRYSTAL 7
+ #ifdef WITH_VEXT
+  #define MODE_VEXT 8
+  #define MODE_OFF 9
+ #else
+  #define MODE_OFF 8
+  #define MODE_VEXT 66
+ #endif
+#else
+ #define MODE_TRANS 0
+ #define MODE_FREQ 1
+ #define MODE_FGEN 2
+ #define MODE_PWM 3
+ #define MODE_ESR 4
+ #ifdef WITH_VEXT
+  #define MODE_VEXT 5
+  #define MODE_OFF 6
+ #else
+  #define MODE_OFF 5
+  #define MODE_VEXT 66
+ #endif
+ #define MODE_HFREQ 66
+#endif
 #ifdef WITH_MENU
 void function_menu() {
   uint8_t ii;
@@ -17,34 +47,35 @@ void function_menu() {
   func_number = 0xff;
  #ifdef POWER_OFF
   uint8_t ll;
-  for (ll=0;ll<((MAX_FUNC+1)*10);ll++) 
+  for (ll=0;ll<((MODE_OFF+1)*10);ll++) 
  #else
   while (1)		/* without end, if no power off specified */
  #endif
   {
      func_number++;
-     if (func_number > MAX_FUNC) func_number = 0;
+     if (func_number > MODE_OFF) func_number = 0;
      message_key_released(SELECTION_str);
      lcd_line2();
-     if (func_number == 2) {
- #ifdef WITH_VEXT
-        lcd_MEM_string(VOLTAGE_str);
- #else
-        continue;
+     if (func_number == MODE_TRANS) lcd_MEM2_string(TESTER_str);
+     if (func_number == MODE_FREQ) lcd_MEM2_string(FREQ_str);
+ #if PROCESSOR_TYPE == 644
+     if (func_number == MODE_HFREQ) lcd_MEM2_string(HFREQ_str);
+     if (func_number == MODE_H_CRYSTAL) lcd_MEM2_string(H_CRYSTAL_str);
+     if (func_number == MODE_L_CRYSTAL) lcd_MEM2_string(L_CRYSTAL_str);
  #endif
-     }
-     if (func_number == MAX_FUNC) {
+     if (func_number == MODE_FGEN) lcd_MEM2_string(F_GEN_str);
+     if (func_number == MODE_PWM) lcd_MEM2_string(PWM_10bit_str);
+     if (func_number == MODE_ESR) lcd_MEM2_string(C_ESR_str);
+ #ifdef WITH_VEXT
+     if (func_number == MODE_VEXT) lcd_MEM_string(VOLTAGE_str); 
+ #endif
+     if (func_number == MODE_OFF) {
 // #ifdef POWER_OFF
         lcd_MEM_string(OFF_str);
 // #else
 //        continue;
 // #endif
      }
-     if (func_number == 0) lcd_MEM2_string(TESTER_str);
-     if (func_number == 1) lcd_MEM2_string(FREQ_str);
-     if (func_number == 3) lcd_MEM2_string(F_GEN_str);
-     if (func_number == 4) lcd_MEM2_string(PWM_10bit_str);
-     if (func_number == 5) lcd_MEM2_string(C_ESR_str);
  #ifdef POWER_OFF
      ii = wait_for_key_ms(SHORT_WAIT_TIME);	// wait about 5 seconds
      if (ii > 0) ll = 0;			// reset timer, operator present
@@ -52,19 +83,24 @@ void function_menu() {
      ii = wait_for_key_ms(0);			// wait endless
  #endif
      if (ii >= 50) {
-        if (func_number == 0) break;		// return to TransistorTester
-        if (func_number == 1) GetFrequency();
-        if (func_number == 2) show_vext();
-        if (func_number == 3) {
+        if (func_number == MODE_TRANS) break;		// return to TransistorTester
+        if (func_number == MODE_FREQ) GetFrequency(0);
+ #if PROCESSOR_TYPE == 644
+        if (func_number == MODE_HFREQ) GetFrequency(1);	// measure high frequency with 16:1 divider
+        if (func_number == MODE_H_CRYSTAL) GetFrequency(3); // HF crystal input + 16:1 divider
+        if (func_number == MODE_L_CRYSTAL) GetFrequency(6); // LF crystal input, 1:1 divider
+ #endif
+        if (func_number == MODE_FGEN) {
            make_frequency();		// make some sample frequencies
         }
-        if (func_number == 4) {
+        if (func_number == MODE_PWM) {
            do_10bit_PWM();		// generate 10bit PWM
         }
-        if (func_number == 5) {
+        if (func_number == MODE_ESR) {
            show_C_ESR();
         }
-        if (func_number == MAX_FUNC) {
+        if (func_number == MODE_VEXT) show_vext();
+        if (func_number == MODE_OFF) {
            ON_PORT &= ~(1<<ON_PIN);              //switch off power
            wait_for_key_ms(0); //never ending loop 
         }

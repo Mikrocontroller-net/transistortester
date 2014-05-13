@@ -24,13 +24,36 @@
 #endif
 
 #ifdef WITH_MENU
-void GetFrequency() {
+void GetFrequency(uint8_t range) {
   unsigned char taste;			// set if key is pressed during measurement
   unsigned long long ext_period;
   unsigned long freq_from_per;
   uint8_t ii;
   uint8_t mm;
+  /* range has set the lowest bit to use the 16:1 frequency divider permanently. */
+  /* The upper bits of range specifies the input selection. */
+  /* 0 = external input, 2 = HF Quarz, 4 = channel 2, 6 = LF Quartz */
+  
+ #if PROCESSOR_TYP == 644
+  FDIV_DDR |= (1<<FDIV_PIN);		//switch to output
+  if ((range & 0x01) == 0) {
+     FDIV_PORT &= ~(1<<FDIV_PIN);	// switch off the 16:1 divider
+  } else {
+     FDIV_PORT |= (1<<FDIV_PIN);	// use frequency divider for next measurement
+  }
+  FINP_DDR |= (1<<FINP_P0) | (1<<FINP_P1);	// switch both pins to output
+  if ((range & 0x02) == 0x02) {
+     FINP_PORT |= (1<<FINP_P0);		// set lower bit of input selection
+  } else { 
+     FINP_PORT &= ~(1<<FINP_P0);	// clear lower bit of input selection
+  }
+  if ((range & 0x04) == 0x04) {
+     FINP_PORT |= (1<<FINP_P1);		// set higher bit of input selection
+  } else { 
+     FINP_PORT &= ~(1<<FINP_P1);	// clear higher bit of input selection
+  }
 
+ #endif
   message_key_released(FREQ_str);	// Frequency: in line 1
   taste = 0;				// reset flag for key pressed
   for (mm=0;mm<240;mm++) {
@@ -68,16 +91,16 @@ void GetFrequency() {
      lcd_clear();		// clear total display
      lcd_data('f');
      lcd_data('=');
-#if PROCESSOR_TYP == 644
+ #if PROCESSOR_TYP == 644
      if ((FDIV_PORT&(1<<FDIV_PIN)) == 0) {
         DisplayValue(ext_freq.dw,0,'H',7);
      } else {
         // frequency divider is activ
         DisplayValue(ext_freq.dw*FREQ_DIV,0,'H',7);
      }
-#else
+ #else
      DisplayValue(ext_freq.dw,0,'H',7);
-#endif
+ #endif
      lcd_data('z');
      FREQINP_DDR &= ~(1<<FREQINP_PIN);	// switch frequency pin to input
      if (TCCR1B != 0) {
@@ -163,7 +186,7 @@ void GetFrequency() {
         }
      } else {
         // frequency divider is activ
-        if (ext_freq.dw < (FMAX_PERIOD/FREQ_DIV)) {
+        if ((ext_freq.dw < (FMAX_PERIOD/FREQ_DIV)) && (range == 0)) {
            FDIV_PORT &= ~(1<<FDIV_PIN);			// switch off the 16:1 divider
         }
      }

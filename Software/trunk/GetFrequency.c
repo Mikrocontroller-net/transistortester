@@ -11,6 +11,18 @@
 #define FMAX_INPUT 2000100
 #define FREQ_DIV 16
 
+#if PROCESSOR_TYPE == 644
+ /* Pin change interrupt is PCINT8 (PB0) */
+ #define PCI_ENABLE_BIT PCIE1
+ #define PCI_CLEAR_BIT PCIF1
+ #define PCINTx_vect PCINT1_vect
+#else
+ /* Pin change interrupt is PCINT20 (PD4) */
+ #define PCI_ENABLE_BIT PCIE2
+ #define PCI_CLEAR_BIT PCIF2
+ #define PCINTx_vect PCINT2_vect
+#endif
+
 #ifdef WITH_MENU
 void GetFrequency() {
   unsigned char taste;			// set if key is pressed during measurement
@@ -88,10 +100,10 @@ void GetFrequency() {
         TIMSK0 = (1<<TOIE0);		// enable OV interrupt
         // counter 0 ist started with first pin change interrupt
         pinchange_count = 0;
-        PCIFR  = (1<<PCIF2);		// clear Pin Change Status
-        PCICR  = (1<<PCIE2);		// enable pin change interrupt
+        PCIFR  = (1<<PCI_CLEAR_BIT);		// clear Pin Change Status
+        PCICR  |= (1<<PCI_ENABLE_BIT);		// enable pin change interrupt
         sei();
-        PCMSK_FREQ = (1<<PCINT_FREQ);	// monitor PD4 PCINT20 or PB0 PCINT8 pin change
+        PCMSK_FREQ |= (1<<PCINT_FREQ);	// monitor PD4 PCINT20 or PB0 PCINT8 pin change
         for (ii=0;ii<250;ii++) {
            wait20ms();
            wdt_reset();
@@ -99,7 +111,8 @@ void GetFrequency() {
            if ((PCMSK_FREQ & (1<<PCINT_FREQ)) == 0) break;		// monitoring is disabled by interrupt
         }
         TCCR0B = 0;		// stop counter
-        PCMSK_FREQ = 0;		// stop monitor PD4 PCINT20 or PB0 PCINT8 pin change
+        PCMSK_FREQ &= ~(1<<PCINT_FREQ);		// stop monitor PD4 PCINT20 or PB0 PCINT8 pin change
+        PCICR &= ~(1<<PCI_ENABLE_BIT);	// disable the interrupt
         ext_freq.b[0] = TCNT0;		// add lower 8 bit to get total counts
 //        lcd_line2();
 //        lcd_clear_line();
@@ -206,11 +219,7 @@ ISR(TIMER1_COMPA_vect, ISR_BLOCK) {
 /* ************************************************************ */
 
 
- #if PROCESSOR_TYP == 644
-ISR(PCINT1_vect, ISR_BLOCK)
- #else
-ISR(PCINT2_vect, ISR_BLOCK)
- #endif
+ISR(PCINTx_vect, ISR_BLOCK)
 {
   if (pinchange_count == 0) {
      // start the counter 0
@@ -219,8 +228,8 @@ ISR(PCINT2_vect, ISR_BLOCK)
   if (pinchange_count >= pinchange_max) {
      // stop the counter 0, when maximum value has reached.
      TCCR0B = 0;		// stop counter
-     PCMSK_FREQ &= ~(1<<PCINT_FREQ);	// disable monitoring of PD4 PCINT20 pin change
-//     PCICR &= ~(1<<PCIE2);	// disable the interrupt
+     PCMSK_FREQ &= ~(1<<PCINT_FREQ);	// disable monitoring of PD4 PCINT20 or PB0 PCINT8 pin change
+//     PCICR &= ~(1<<PCI_ENABLE_BIT);	// disable the interrupt
   }
   pinchange_count++;
 }

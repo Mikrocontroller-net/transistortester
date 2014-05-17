@@ -100,7 +100,7 @@ to_ret:
 
  .GLOBAL wait_for_key_5s_line2
  .extern wait_for_key_ms
- .extern lcd_command
+ .extern lcd_line2
  .extern lcd_clear_line
 
  .func wait_for_key_5s_line2
@@ -112,11 +112,9 @@ wait_for_key_5s_line2:
  	ldi	r24, lo8(SHORT_WAIT_TIME)	; 0x88
  	ldi	r25, hi8(SHORT_WAIT_TIME)	; 0x13
  	RCALL	wait_for_key_ms		;wait_for_key_ms(SHORT_WAIT_TIME);
- 	ldi	r24, (CMD_SetDDRAMAddress | 0x40) ; 0xC0
- 	RCALL	lcd_command	; lcd_line2(); //2. row 
+ 	RCALL	lcd_line2	;              //2. row 
  	RCALL	lcd_clear_line	; lcd_clear_line();	// clear the whole line
- 	ldi	r24, (CMD_SetDDRAMAddress | 0x40) ; 0xC0
- 	RCALL	lcd_command	; lcd_line2(); //2. row 
+ 	RCALL	lcd_line2	;              //2. row 
  	ret
  .endfunc
 #endif

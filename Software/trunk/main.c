@@ -84,6 +84,7 @@ int main(void) {
      lcd_line1();
      lcd_MEM_string(TestTimedOut);	//Output Timeout
      wait_about3s();				//wait for 3 s
+     lcd_powersave();
      ON_PORT &= ~(1<<ON_PIN);			//shut off!
 //     ON_DDR = (1<<ON_PIN);		//switch to GND
      return 0;
@@ -312,11 +313,11 @@ start:
 #ifdef WITH_SELFTEST
  #ifdef AUTO_CAL
   UnCalibrated = 0;
-  lcd_command(CMD_SetDisplayAndCursor | 0x04); // Display on / Cursor off / no Blinking
+  lcd_cursor_off();
   if (eeprom_read_byte(&c_zero_tab[0]) != eeprom_read_byte(&c_zero_tab[3])) {
      // if calibrated, both c_zero_tab values are identical! c_zero_tab[3] is not used otherwise
      UnCalibrated = 1;
-     lcd_command(CMD_SetDisplayAndCursor | 0x06); // Display on / Cursor on / no Blinking
+     lcd_cursor_on();
   }
  #endif
   AutoCheck();			//check, if selftest should be done
@@ -378,12 +379,20 @@ start:
   if (PartFound == PART_THYRISTOR) {
     lcd_MEM_string(Thyristor);		//"Thyristor"
     PinLayout(Cathode_char,'G','A'); 	// CGA= or 123=...
+#ifdef WITH_GRAPHICS
+    lcd_pgm_bitmap(&g_bmp_thyristor, 102, 32, 0);
+    lcd_draw_trans_pins(121, 56, 94, 48, 121, 32);
+#endif
     goto TyUfAusgabe;
   }
 
   if (PartFound == PART_TRIAC) {
     lcd_MEM_string(Triac);		//"Triac"
     PinLayout('1','G','2'); 	// CGA= or 123=...
+#ifdef WITH_GRAPHICS
+    lcd_pgm_bitmap(&g_bmp_triac, 104, 32, 0);
+    lcd_draw_trans_pins(104, 56, 97, 48, 106, 32);
+#endif
     goto TyUfAusgabe;
   }
 
@@ -593,12 +602,20 @@ start:
           lcd_data('p');		// mark for parasitic PNp
        }
 //       _trans = &ntrans;  is allready selected a default
+#ifdef WITH_GRAPHICS
+       lcd_pgm_bitmap(&g_bmp_npn, 96, 32, 0);
+       lcd_draw_trans_pins(121, 56, 90, 40, 121, 32);
+#endif
     } else {
        lcd_MEM_string(PNP_str);		//"PNP "
        if (ntrans.count != 0) {
           lcd_data('n');		// mark for parasitic NPn
        }
        _trans = &ptrans;		// change transistor structure
+#ifdef WITH_GRAPHICS
+       lcd_pgm_bitmap(&g_bmp_pnp, 96, 32, 0);
+       lcd_draw_trans_pins(121, 32, 90, 40, 121, 56);
+#endif
     }
     lcd_space();
 //    if( NumOfDiodes > 2) 	//Transistor with protection diode
@@ -661,9 +678,11 @@ start:
     goto end;
     // end (PartFound == PART_TRANSISTOR)
   } else if (PartFound == PART_FET) {	//JFET or MOSFET
+    unsigned char fetidx = 0;
     if((PartMode&P_CHANNEL) == P_CHANNEL) {
        lcd_data('P');			//P-channel
        _trans = &ptrans;
+       fetidx += 1;
     } else {
        lcd_data('N');			//N-channel
 //       _trans = &ntrans;	is allready selected as default
@@ -673,16 +692,29 @@ start:
     tmp = PartMode&0x0f;
     if (tmp == PART_MODE_JFET) {
        lcd_MEM_string(jfet_str);	//"JFET"
+#ifdef WITH_GRAPHICS
+       lcd_draw_jfet(fetidx, 96, 32);
+       lcd_draw_trans_pins(121, 56, 90, 48, 121, 32);
+#endif
     } else {
        if ((PartMode&D_MODE) == D_MODE) {
           lcd_data('D');			// N-D or P-D
+          fetidx += 2;
        } else {
           lcd_data('E');			// N-E or P-E
        }
        if (tmp == (PART_MODE_IGBT)) {
           lcd_MEM_string(igbt_str);	//"-IGBT"
+#ifdef WITH_GRAPHICS
+          lcd_draw_igbt(fetidx, 88, 32);
+          lcd_draw_trans_pins(121, 56, 82, 48, 121, 32);
+#endif
        } else {
           lcd_MEM_string(mosfet_str);	//"-MOS "
+#ifdef WITH_GRAPHICS
+          lcd_draw_mosfet(fetidx, 88, 32);
+          lcd_draw_trans_pins(121, 56, 82, 40, 121, 32);
+#endif
        }
     }
     if (tmp == PART_MODE_IGBT) {
@@ -712,8 +744,9 @@ start:
        } else {
           lcd_data(LCD_CHAR_DIODE2);	//show Diode symbol |<
        }
-#ifndef FOUR_LINE_LCD
- #if FLASHEND > 0x1fff
+#ifndef WITH_GRAPHICS
+ #ifndef FOUR_LINE_LCD
+  #if FLASHEND > 0x1fff
        // there is enough space for long form of showing protection diode
        lcd_line2();			//2. Row
        if (an_cat) {
@@ -729,6 +762,7 @@ start:
        lcd_MEM_string(Uf_str);			//"Uf="
        mVAusgabe(0);
        wait_for_key_5s_line2();		// wait 5s and clear line 2
+  #endif
  #endif
 #endif
     } /* end if NumOfDiodes == 1 */
@@ -751,6 +785,14 @@ start:
  #if FLASHEND > 0x1fff
        // there is enough space for long form of showing protection diode
     if(NumOfDiodes == 1) {
+  #ifdef WITH_GRAPHICS
+       unsigned char options = 0;
+
+       if (_trans->c != diodes.Anode[0])
+          options |= OPT_VREVERSE;
+       lcd_pgm_bitmap(&g_bmp_vakdiode, 112, 32, options);
+       lcd_line3();			//3. Row
+  #else
        lcd_line3();			//3. Row
        if (an_cat) {
           lcd_testpin(diodes.Anode[0]);
@@ -762,6 +804,7 @@ start:
           lcd_testpin(diodes.Anode[0]);
        }
        lcd_space();
+  #endif
        lcd_MEM_string(Uf_str);			//"Uf="
        mVAusgabe(0);
     }
@@ -825,6 +868,11 @@ resistor_out:
 	  // resistor have also Inductance
           lcd_MEM_string(Lis_str);	// "L="
           DisplayValue(inductor_lx,inductor_lpre,'H',3);	// output inductance
+#ifdef WITH_GRAPHICS
+          lcd_pgm_bitmap(&g_bmp_inductor, 103, 56, 0);
+          lcd_draw_pin(resis[0].rb, 95, 56);
+          lcd_draw_pin(resis[0].ra, 120, 56);
+#endif
        }
 #else
        RvalOut(0);
@@ -911,10 +959,11 @@ TyUfAusgabe:
   // only one Measurement requested, shut off
  #if FLASHEND > 0x3fff
   // look, if the tester is uncalibrated (C-source will be included directly)
-  lcd_command(CMD_SetDisplayAndCursor | 0x04); // Display on / Cursor off / no Blinking
+  lcd_cursor_off();
   #include "HelpCalibration.c"
  #endif
 //  MCUSR = 0;
+  lcd_powersave();
   ON_PORT &= ~(1<<ON_PIN);		//switch off power
   wait_for_key_ms(0); //never ending loop 
 #else

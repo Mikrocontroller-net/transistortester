@@ -75,7 +75,7 @@
 	.GLOBAL UfAusgabe
  	.extern lcd_space
 	.extern lcd_data
-	.extern lcd_command
+	.extern lcd_line2
 	.extern mVAusgabe
 
 	.func UfAusgabe
@@ -90,8 +90,7 @@ UfAusgabe:
  	ldi	r24, LCD_CHAR_RESIS3;	0
  	RCALL	lcd_data;      lcd_data(LCD_CHAR_RESIS3);	// special symbol or R
 ad1cbe:
- 	ldi	r24, 0xC0	; 192
- 	RCALL	lcd_command	;lcd_line2(); 				//2. row
+ 	RCALL	lcd_line2;					//2. row
  	ldi	r24, lo8(Uf_str);	0xE9
  	ldi	r25, hi8(Uf_str);	0x01
 #ifdef USE_EEPROM

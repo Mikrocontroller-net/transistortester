@@ -620,8 +620,7 @@ ad_3972:
 	ldi	r18, 'd';
 	ldi	r16, 4	;
 	call	DisplayValue;
-	ldi	r24, 0x94;		/* lcd_line3(); */
-	call	lcd_command;
+	call	lcd_line3;
         ldd	r22, Y+LowUpCount;
 	ldi	r23, 0;
 	ldi	r24, 0;

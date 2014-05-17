@@ -638,8 +638,7 @@ ad_38dc:
        	sbc	r12, r20
        	sbc	r13, r21		/* } */
 #ifdef ESR_DEBUG
-	ldi	r24, 0x94;		/* lcd_line3(); */
-	call	lcd_command;
+	call	lcd_line3;
       	ldd	r22, Y+sumvolt1;	/* DisplayValue(sumvolt1,0,'H',4); */
       	ldd	r23, Y+sumvolt1+1; 
       	ldd	r24, Y+sumvolt1+2; 0
@@ -728,8 +727,7 @@ ad_396c:
        	movw	r8, r6
 ad_3972:
 #ifdef ESR_DEBUG
-	ldi	r24, 0xd4;		/* lcd_line4(); */
-	call	lcd_command;
+	call	lcd_line4;
       	movw	r22, r6;		/* DisplayValue(sumvolt1,0,'d',4); */
 	movw	r24, r8
       	ldi	r20, 0;

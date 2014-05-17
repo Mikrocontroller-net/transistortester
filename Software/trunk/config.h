@@ -298,6 +298,57 @@
   #define HW_LCD_B7_PORT         PORTD
   #define HW_LCD_B7_PIN          1
  #endif
+#elif defined(LCD_ST7565)
+ // 128x64 pixel graphics LCD with ST7565 controller and 1-bit interface
+ #if PROCESSOR_TYP == 644
+  #define HW_LCD_RES_DDR         DDRB
+  #define HW_LCD_RES_PORT        PORTB
+  #define HW_LCD_RES_PIN         0
+
+  #define HW_LCD_EN_DDR          DDRB
+  #define HW_LCD_EN_PORT         PORTB
+  #define HW_LCD_EN_PIN          2
+
+  #define HW_LCD_RS_DDR          DDRB
+  #define HW_LCD_RS_PORT         PORTB
+  #define HW_LCD_RS_PIN          1
+
+  #define HW_LCD_B0_DDR          DDRB
+  #define HW_LCD_B0_PORT         PORTB
+  #define HW_LCD_B0_PIN          3
+ #elif PROCESSOR_TYP == 1280
+  #define HW_LCD_RES_DDR         DDRA
+  #define HW_LCD_RES_PORT        PORTA
+  #define HW_LCD_RES_PIN         0
+
+  #define HW_LCD_EN_DDR          DDRA
+  #define HW_LCD_EN_PORT         PORTA
+  #define HW_LCD_EN_PIN          2
+
+  #define HW_LCD_RS_DDR          DDRA
+  #define HW_LCD_RS_PORT         PORTA
+  #define HW_LCD_RS_PIN          1
+
+  #define HW_LCD_B0_DDR          DDRA
+  #define HW_LCD_B0_PORT         PORTA
+  #define HW_LCD_B0_PIN          3
+ #else
+  #define HW_LCD_RES_DDR         DDRD
+  #define HW_LCD_RES_PORT        PORTD
+  #define HW_LCD_RES_PIN         0
+
+  #define HW_LCD_EN_DDR          DDRD
+  #define HW_LCD_EN_PORT         PORTD
+  #define HW_LCD_EN_PIN          2
+
+  #define HW_LCD_RS_DDR          DDRD
+  #define HW_LCD_RS_PORT         PORTD
+  #define HW_LCD_RS_PIN          1
+
+  #define HW_LCD_B0_DDR          DDRD
+  #define HW_LCD_B0_PORT         PORTD
+  #define HW_LCD_B0_PIN          3
+ #endif
 #else
  // normal Layout
  #if PROCESSOR_TYP == 644

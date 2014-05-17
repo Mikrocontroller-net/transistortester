@@ -13,6 +13,7 @@
 #include "lcd-routines.h"
 #include "wait1000ms.h"
 #include "part_defs.h"
+#include "bitmaps.h"
 
 
 #if defined (MAIN_C)

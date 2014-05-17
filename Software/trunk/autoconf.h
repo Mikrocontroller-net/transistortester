@@ -463,6 +463,13 @@
 #define LCD_CHAR_DEGREE 0xdf            // Character for degree
 #define LCD_CHAR_INSEP 0xff		// used as space character without separating text
 
+#ifdef LCD_ST7565
+        #undef LCD_CHAR_DEGREE
+        #define LCD_CHAR_DEGREE 0xf8    // Character for degree
+        #undef LCD_CHAR_U
+        #define LCD_CHAR_U  0xe6        //µ-character
+#endif
+
 #if FLASHEND > 0x3fff
  #define LCD_CHAR_RESIS3 0
 #else

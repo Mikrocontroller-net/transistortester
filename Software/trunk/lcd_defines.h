@@ -1,7 +1,90 @@
 #include "config.h"
 
 
+#ifdef LCD_ST7565
 
+// Options for lcd_pgm_bitmap option parameter:
+#define OPT_HREVERSE    1 // Display bitmap reversed horizontally
+#define OPT_VREVERSE    2 // Display bitmap reversed vertically
+
+#define SCREEN_WIDTH  128
+#define SCREEN_HEIGHT  64
+
+#ifdef FONT_6X8
+#define FONT_WIDTH    6
+#define FONT_HEIGHT   8
+#endif
+#ifdef FONT_8X8
+#define FONT_WIDTH    8
+#define FONT_HEIGHT   8
+#endif
+#ifdef FONT_8X12
+#define FONT_WIDTH    8
+#define FONT_HEIGHT   12
+#endif
+#ifdef FONT_8X14
+#define FONT_WIDTH    8
+#define FONT_HEIGHT   14
+#endif
+#ifdef FONT_10X16
+#define FONT_WIDTH    10
+#define FONT_HEIGHT   16
+#endif
+
+#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
+#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
+
+//LCD-commands
+#define CMD_DISPLAY_OFF         0xAE
+#define CMD_DISPLAY_ON          0xAF
+
+#define CMD_SET_DISP_START_LINE 0x40
+#define CMD_SET_PAGE            0xB0
+
+#define CMD_SET_COLUMN_UPPER    0x10
+#define CMD_SET_COLUMN_LOWER    0x00
+
+#define CMD_SET_ADC_NORMAL      0xA0
+#define CMD_SET_ADC_REVERSE     0xA1
+
+#define CMD_SET_DISP_NORMAL     0xA6
+#define CMD_SET_DISP_REVERSE    0xA7
+
+#define CMD_SET_ALLPTS_NORMAL   0xA4
+#define CMD_SET_ALLPTS_ON       0xA5
+#define CMD_SET_BIAS_9          0xA2 
+#define CMD_SET_BIAS_7          0xA3
+
+#define CMD_RMW                 0xE0
+#define CMD_RMW_CLEAR           0xEE
+#define CMD_INTERNAL_RESET      0xE2
+#define CMD_SET_COM_NORMAL      0xC0
+#define CMD_SET_COM_REVERSE     0xC8
+#define CMD_SET_POWER_CONTROL   0x28
+#define CMD_SET_RESISTOR_RATIO  0x20
+#define CMD_SET_VOLUME_FIRST    0x81
+#define CMD_SET_VOLUME_SECOND   0
+#define CMD_SET_STATIC_OFF      0xAC
+#define CMD_SET_STATIC_ON       0xAD
+#define CMD_SET_STATIC_REG      0x0
+#define CMD_SET_BOOSTER_FIRST   0xF8
+#define CMD_SET_BOOSTER_234     0
+#define CMD_SET_BOOSTER_5       1
+#define CMD_SET_BOOSTER_6       3
+#define CMD_NOP                 0xE3
+#define CMD_TEST                0xF0
+
+//Makros for LCD
+#define lcd_aus()   lcd_command(CMD_DISPLAY_OFF)
+#define lcd_ein()   lcd_command(CMD_DISPLAY_ON)
+#define lcd_shift_right() // ignored
+#define lcd_shift_left()  // ignored
+
+#define LCDLoadCustomChar(addr) //load Custom-character (ignored)
+#define lcd_cursor_on()  // ignored
+#define lcd_cursor_off() // ignored
+
+#else
 #define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd); wait50us();
 #define lcd_write_data(data)                   _lcd_hw_write(0x01, data); wait50us();
 #define lcd_write_init(data_length)            _lcd_hw_write(0x80, CMD_SetIFOptions | (data_length << 4))
@@ -20,22 +103,19 @@
 #define CMD1_SetContrast         0x70	// set Contrast C3:C0 (instruction table 1, DOGM)
 
 //Makros for LCD
-#define lcd_line1() lcd_command((uint8_t)(CMD_SetDDRAMAddress))		//move to the beginning of the 1. row
-#define lcd_line2() lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x40))	//move to the beginning of the 2. row
-#define lcd_line3() lcd_command(((uint8_t)CMD_SetDDRAMAddress + 0x14))	//move to the beginning of the 3. row
-#define lcd_line4() lcd_command(((uint8_t)CMD_SetDDRAMAddress + 0x54))	//move to the beginning of the 4. row
 #define lcd_aus() lcd_command(0x08)
 #define lcd_ein() lcd_command(0x0c)
 #define lcd_shift_right() lcd_command(0x1c)
 #define lcd_shift_left() lcd_command(0x18)
 
-#define lcdSetCursor(y, x) lcd_command((uint8_t)(CMD_SetDDRAMAddress + (0x40*(y-1)) + x)) //move to the specified position 
-
 #define LCDLoadCustomChar(addr) lcd_command(CMD_SetCGRAMAddress | (addr<<3))	//load Custom-character
+#define lcd_cursor_on()  lcd_command(CMD_SetDisplayAndCursor | 0x06)
+#define lcd_cursor_off() lcd_command(CMD_SetDisplayAndCursor | 0x04)
 
 // LCD commands
  
 #define CLEAR_DISPLAY 0x01
+#endif
 
 #define Cyr_B 0xa0
 #define Cyr_b 0xb2
@@ -84,3 +164,4 @@
 #define Cyr_ju 0xc6
 #define Cyr_Ja 0xb1
 #define Cyr_ja 0xc7
+

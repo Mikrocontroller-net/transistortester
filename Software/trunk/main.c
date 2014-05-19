@@ -25,8 +25,8 @@ int main(void) {
 #ifdef SEARCH_PARASITIC
   unsigned long n_cval;		// capacitor value of NPN B-E diode, for deselecting the parasitic Transistor
   int8_t n_cpre;		// capacitor prefix of NPN B-E diode
-  char an_cat;			// diode is anode-cathode type
 #endif
+  char an_cat;			// diode is anode-cathode type
   //switch on
   ON_DDR = (1<<ON_PIN);			// switch to output
   ON_PORT = (1<<ON_PIN); 		// switch power on 

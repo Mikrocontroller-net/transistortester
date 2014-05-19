@@ -11,7 +11,9 @@ uint8_t wait_for_key_ms(int max_time) {
   int count_time;
   // if key is pressed, return 1
   // if max_time == 0 , do not count, wait endless
-  wait_about200ms();
+  if (max_time > 900) {
+     wait_about200ms();
+  }
 // wait 28 seconds or 5 seconds (if repeat function)
   key_cs = 0;				// set key flag to not pressed
   key_pressed = 0x55;
@@ -36,7 +38,7 @@ uint8_t wait_for_key_ms(int max_time) {
      }
      wdt_reset();
      if (count_time > 0) {		// count only, if counter > 0
-        count_time -= 10;			// 10 ms are done, count down
+        count_time -= 10;		// 10 ms are done, count down
         if (count_time == 0) count_time = -1;	// never count to zero, zero is endless!
      }
   }

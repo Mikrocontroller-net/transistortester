@@ -54,3 +54,4 @@ void make_frequency(void);		// start counter 1 to make frequency at middle pin
 void do_10bit_PWM(void);		// start counter 1 to make fixed frequency with PWM
 void show_C_ESR();			// show big capacity values and ESR 
 void ReadBigCap(uint8_t HighPin, uint8_t LowPin);	//capacity measurement only for big capacitors
+void CheckRotaryEncoder(void);				// check rotary puls generator

@@ -15,13 +15,14 @@
  #define MODE_FGEN 3
  #define MODE_PWM 4
  #define MODE_ESR 5
- #define MODE_H_CRYSTAL 6
- #define MODE_L_CRYSTAL 7
+ #define MODE_ROTARY 6
+ #define MODE_H_CRYSTAL 7
+ #define MODE_L_CRYSTAL 8
  #ifdef WITH_VEXT
-  #define MODE_VEXT 8
-  #define MODE_OFF 9
+  #define MODE_VEXT 9
+  #define MODE_OFF 10
  #else
-  #define MODE_OFF 8
+  #define MODE_OFF 9
   #define MODE_VEXT 66
  #endif
 #else
@@ -30,11 +31,12 @@
  #define MODE_FGEN 2
  #define MODE_PWM 3
  #define MODE_ESR 4
+ #define MODE_ROTARY 5
  #ifdef WITH_VEXT
-  #define MODE_VEXT 5
-  #define MODE_OFF 6
+  #define MODE_VEXT 6
+  #define MODE_OFF 7
  #else
-  #define MODE_OFF 5
+  #define MODE_OFF 6
   #define MODE_VEXT 66
  #endif
  #define MODE_HFREQ 66
@@ -66,6 +68,7 @@ void function_menu() {
      if (func_number == MODE_FGEN) lcd_MEM2_string(F_GEN_str);
      if (func_number == MODE_PWM) lcd_MEM2_string(PWM_10bit_str);
      if (func_number == MODE_ESR) lcd_MEM2_string(C_ESR_str);
+     if (func_number == MODE_ROTARY) lcd_MEM2_string(RotaryEncoder_str);
  #ifdef WITH_VEXT
      if (func_number == MODE_VEXT) lcd_MEM_string(VOLTAGE_str); 
  #endif
@@ -87,7 +90,7 @@ void function_menu() {
         if (func_number == MODE_FREQ) GetFrequency(0);
  #if PROCESSOR_TYPE == 644
         if (func_number == MODE_HFREQ) GetFrequency(1);	// measure high frequency with 16:1 divider
-        if (func_number == MODE_H_CRYSTAL) GetFrequency(3); // HF crystal input + 16:1 divider
+        if (func_number == MODE_H_CRYSTAL) GetFrequency(5); // HF crystal input + 16:1 divider
         if (func_number == MODE_L_CRYSTAL) GetFrequency(6); // LF crystal input, 1:1 divider
  #endif
         if (func_number == MODE_FGEN) {
@@ -98,6 +101,9 @@ void function_menu() {
         }
         if (func_number == MODE_ESR) {
            show_C_ESR();
+        }
+        if (func_number == MODE_ROTARY) {
+           CheckRotaryEncoder();		// check rotary encoder
         }
         if (func_number == MODE_VEXT) show_vext();
         if (func_number == MODE_OFF) {

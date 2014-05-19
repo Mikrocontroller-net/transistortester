@@ -353,10 +353,10 @@
  // normal Layout
  #if PROCESSOR_TYP == 644
   #define HW_LCD_EN_PORT         PORTB
-  #define HW_LCD_EN_PIN          2
+  #define HW_LCD_EN_PIN          3
  
   #define HW_LCD_RS_PORT         PORTB
-  #define HW_LCD_RS_PIN          3
+  #define HW_LCD_RS_PIN          2
 
   #define HW_LCD_B4_PORT         PORTB
   #define HW_LCD_B4_PIN          4

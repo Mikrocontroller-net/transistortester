@@ -99,6 +99,8 @@ End of configuration
    const unsigned char OFF_str[] MEM2_TEXT = "Schalte aus";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+   const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Impulsdrehgeber";
+   const unsigned char TURN_str[] MEM2_TEXT = "drehen!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frequenz > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF Quarz";
@@ -134,6 +136,8 @@ End of configuration
    const unsigned char OFF_str[] MEM2_TEXT = "Spegnere";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generatore";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+   const unsigned char RotaryEncoder_str[] MEM2_TEXT = "encoder rotativo";
+   const unsigned char TURN_str[] MEM2_TEXT = "turno!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frequenza > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF quarzo";
@@ -170,6 +174,8 @@ End of configuration
    const unsigned char OFF_str[] MEM2_TEXT = "wylaczyc";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+   const unsigned char RotaryEncoder_str[] MEM2_TEXT = "enkoder obrotowy";
+   const unsigned char TURN_str[] MEM2_TEXT = "kolej!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Czestosc > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kwarc";
@@ -206,6 +212,8 @@ End of configuration
    const unsigned char OFF_str[] MEM2_TEXT = "Vypnout";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+   const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotacni koder";
+   const unsigned char TURN_str[] MEM2_TEXT = "otocte!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frekvence > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF Quarz";
@@ -242,6 +250,8 @@ End of configuration
    const unsigned char OFF_str[] MEM2_TEXT = "Vypnut";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+   const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotacny koder";
+   const unsigned char TURN_str[] MEM2_TEXT = "striedat'!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frekvencia > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF krystal";
@@ -277,6 +287,8 @@ End of configuration
    const unsigned char OFF_str[] MEM2_TEXT = "izklopi";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+   const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotary encoder";
+   const unsigned char TURN_str[] MEM2_TEXT = "turn!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frekvenca > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kristal";
@@ -314,6 +326,8 @@ End of configuration
    const unsigned char OFF_str[] MEM2_TEXT = "uitschakelen";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+   const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Rotary encoder";
+   const unsigned char TURN_str[] MEM2_TEXT = "rotaren!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frequentie > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kristal";
@@ -350,6 +364,8 @@ End of configuration
    const unsigned char OFF_str[] MEM2_TEXT = "desconectar";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+   const unsigned char RotaryEncoder_str[] MEM2_TEXT = "encoder rotativo";
+   const unsigned char TURN_str[] MEM2_TEXT = "rodar!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frequencia > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF cristal";
@@ -391,10 +407,12 @@ End of configuration
 
    const unsigned char F_GEN_str[] MEM2_TEXT = {'f','-',Cyr_G,'e',Cyr_n,'e','p','a',Cyr_t,'o','p',0}; //"f
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+   const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotary encoder";	// ???
+   const unsigned char TURN_str[] MEM2_TEXT = "turn!";			// ???
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = {Cyr_Tsch,'a','c',Cyr_t,'o',Cyr_t,'o',Cyr_m,'e','p',' ','>',' ','2','M','H','z',0};
-   const unsigned char H_CRYSTAL_str[] MEM2_TEXT = {'H','F',' ','K','B','a','p',Cyr_tsch,0}; 
-   const unsigned char L_CRYSTAL_str[] MEM2_TEXT = {'L','F',' ','K','B','a','p',Cyr_tsch,0}; 
+   const unsigned char H_CRYSTAL_str[] MEM2_TEXT = {'H','F',' ',Cyr_k,Cyr_v,'a','p',Cyr_tsch,0}; 
+   const unsigned char L_CRYSTAL_str[] MEM2_TEXT = {'L','F',' ',Cyr_k,Cyr_v,'a','p',Cyr_tsch,0}; 
   #endif
  #endif
  #define LANG_SELECTED
@@ -432,10 +450,12 @@ End of configuration
 
    const unsigned char F_GEN_str[] MEM2_TEXT = {'f','-',Cyr_G,'e',Cyr_n,'e','p','a',Cyr_t,'o','p',0}; //"f-Generator"
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+   const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotary encoder";	// ???
+   const unsigned char TURN_str[] MEM2_TEXT = "turn!";		// ???
   #if PROCESSOR_TYP == 644
-   const unsigned char HFREQ_str[] MEM2_TEXT = {Cyr_Tsch,'a','c',Cyr_t,'o',Cyr_t,'o',Cyr_m,'e','p',' ','>',' ','2','M','H','z',0};
-   const unsigned char H_CRYSTAL_str[] MEM2_TEXT = {'H','F',' ','K','B','a','p',Cyr_tsch,0}; 
-   const unsigned char L_CRYSTAL_str[] MEM2_TEXT = {'L','F',' ','K','B','a','p',Cyr_tsch,0}; 
+   const unsigned char HFREQ_str[] MEM2_TEXT = {Cyr_Tsch,'a','c',Cyr_t,'o',Cyr_t,'o',Cyr_m,'i','p',' ','>',' ','2','M','H','z',0};
+   const unsigned char H_CRYSTAL_str[] MEM2_TEXT = {'H','F',' ',Cyr_k,Cyr_v,'a','p',Cyr_tsch,0}; 
+   const unsigned char L_CRYSTAL_str[] MEM2_TEXT = {'L','F',' ',Cyr_k,Cyr_v,'a','p',Cyr_tsch,0}; 
   #endif
  #endif
  #define LANG_SELECTED
@@ -469,6 +489,8 @@ End of configuration
    const unsigned char OFF_str[] MEM2_TEXT = "kikapcsol";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+   const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Rotary encoder";
+   const unsigned char TURN_str[] MEM2_TEXT = "forgat!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frekvencia > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF Quarz";
@@ -504,6 +526,8 @@ End of configuration
    const unsigned char OFF_str[] MEM2_TEXT = "isjungti";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+   const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotary encoder";
+   const unsigned char TURN_str[] MEM2_TEXT = "turn!";      //???
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Daznis > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kvarcas";
@@ -543,6 +567,8 @@ End of configuration
    const unsigned char OFF_str[] MEM2_TEXT = "Switch off";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+   const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotary encoder";
+   const unsigned char TURN_str[] MEM2_TEXT = "turn!";	
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frequency > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF quartz";
@@ -1188,6 +1214,13 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   extern const unsigned char OFF_str[] MEM2_TEXT ;
   extern const unsigned char F_GEN_str[] MEM2_TEXT ;
   extern const unsigned char PWM_10bit_str[] MEM2_TEXT ;
+  extern const unsigned char RotaryEncoder_str[] MEM2_TEXT ;
+  extern const unsigned char TURN_str[] MEM2_TEXT ;	
+  #if PROCESSOR_TYP == 644
+  extern const unsigned char HFREQ_str[] MEM2_TEXT ;
+  extern const unsigned char H_CRYSTAL_str[] MEM2_TEXT ;
+  extern const unsigned char L_CRYSTAL_str[] MEM2_TEXT ;
+  #endif
  #endif
 #ifdef WITH_VEXT
  extern const unsigned char Vext_str[] MEM_TEXT ;

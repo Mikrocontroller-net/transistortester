@@ -34,12 +34,17 @@ wait_for_key_ms:
  	movw	r14, r24	; r14:15 = max_time
 ;  // if key is pressed, return 1
 ;  // if max_time == 0 , do not count, wait endless
+	cpi	r24, lo8(900)	; if (max_time > 900) 
+	ldi	r24, hi8(900)
+	cpc	r15, r24
+	brlt	no_w200
 #if INHIBIT_SLEEP_MODE
 	RCALL	wait200ms	; wait200ms();
 #else
  	ldi	r24,  40
  	RCALL	sleep_5ms	; wait_about200ms();
 #endif
+no_w200:
 	movw	r28,r14		; count_time = max_time
 	ldi	r16, 0x55	; key_pressed = 0x55;
 	ldi	r17, 0		; key_cs = 0

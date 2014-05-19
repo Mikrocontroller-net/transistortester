@@ -413,6 +413,7 @@ OBJECTS += main.o CheckPins.o ChargePin10ms.o EntladePins.o
 OBJECTS +=  ReadCapacity.o GetRLmultip.o Calibrate_UR.o
 ifneq ($(PARTNO),m8)
 OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o GetFrequency.o function_menu.o message_key_released.o ReadBigCap.o
+OBJECTS += CheckRotaryEncoder.o
 endif
 
 
@@ -501,6 +502,9 @@ GetVloss.o: ../GetVloss.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 GetFrequency.o: ../GetFrequency.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+CheckRotaryEncoder.o: ../CheckRotaryEncoder.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 main.o: ../main.c Makefile

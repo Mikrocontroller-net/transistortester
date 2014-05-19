@@ -32,7 +32,7 @@ void GetFrequency(uint8_t range) {
   uint8_t mm;
   /* range has set the lowest bit to use the 16:1 frequency divider permanently. */
   /* The upper bits of range specifies the input selection. */
-  /* 0 = external input, 2 = HF Quarz, 4 = channel 2, 6 = LF Quartz */
+  /* 0 = external input, 2 = channel 2, 4 = HF Quartz, 6 = LF Quartz */
   
  #if PROCESSOR_TYP == 644
   FDIV_DDR |= (1<<FDIV_PIN);		//switch to output
@@ -42,19 +42,29 @@ void GetFrequency(uint8_t range) {
      FDIV_PORT |= (1<<FDIV_PIN);	// use frequency divider for next measurement
   }
   FINP_DDR |= (1<<FINP_P0) | (1<<FINP_P1);	// switch both pins to output
-  if ((range & 0x02) == 0x02) {
-     FINP_PORT |= (1<<FINP_P0);		// set lower bit of input selection
-  } else { 
-     FINP_PORT &= ~(1<<FINP_P0);	// clear lower bit of input selection
-  }
-  if ((range & 0x04) == 0x04) {
-     FINP_PORT |= (1<<FINP_P1);		// set higher bit of input selection
-  } else { 
-     FINP_PORT &= ~(1<<FINP_P1);	// clear higher bit of input selection
-  }
 
- #endif
+ FINP_PORT &= ~(1<<FINP_P0);		// clear lower bit of input selection
+ FINP_PORT &= ~(1<<FINP_P1);		// clear higher bit of input selection
+ if (range == 0) {  
+    message_key_released(FREQ_str);	// Frequency: in line 1
+ } else if (range == 1) { 
+    message_key_released(HFREQ_str);	// High Frequency: in line 1
+ } else if (range < 4) { /* 2+3 */
+    FINP_PORT |= (1<<FINP_P0);		// set lower bit of input selection
+    FINP_PORT &= ~(1<<FINP_P1);		// clear higher bit of input selection
+ } else if (range < 6) { /* 4+5 */
+    FINP_PORT &= ~(1<<FINP_P0);		// clear lower bit of input selection
+    FINP_PORT |= (1<<FINP_P1);		// set higher bit of input selection
+    message_key_released(H_CRYSTAL_str);	// HF Quarz: in line 1
+ } else {  /* 6+7 */
+    FINP_PORT |= (1<<FINP_P0);		// set lower bit of input selection
+    FINP_PORT |= (1<<FINP_P1);		// set higher bit of input selection
+    message_key_released(L_CRYSTAL_str);	// LF Quarz: in line 1
+ }
+
+ #else
   message_key_released(FREQ_str);	// Frequency: in line 1
+ #endif
   taste = 0;				// reset flag for key pressed
   for (mm=0;mm<240;mm++) {
      //set up Counter 0

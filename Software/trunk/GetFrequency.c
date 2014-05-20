@@ -11,7 +11,7 @@
 #define FMAX_INPUT 2000100
 #define FREQ_DIV 16
 
-#if PROCESSOR_TYPE == 644
+#if PROCESSOR_TYP == 644
  /* Pin change interrupt is PCINT8 (PB0) */
  #define PCI_ENABLE_BIT PCIE1
  #define PCI_CLEAR_BIT PCIF1

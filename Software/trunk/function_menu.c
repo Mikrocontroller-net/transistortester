@@ -8,7 +8,7 @@
 //=================================================================
 // selection of different functions
 
-#if PROCESSOR_TYPE == 644
+#if PROCESSOR_TYP == 644
  #define MODE_TRANS 0
  #define MODE_FREQ 1
  #define MODE_HFREQ 2
@@ -60,7 +60,7 @@ void function_menu() {
      lcd_line2();
      if (func_number == MODE_TRANS) lcd_MEM2_string(TESTER_str);
      if (func_number == MODE_FREQ) lcd_MEM2_string(FREQ_str);
- #if PROCESSOR_TYPE == 644
+ #if PROCESSOR_TYP == 644
      if (func_number == MODE_HFREQ) lcd_MEM2_string(HFREQ_str);
      if (func_number == MODE_H_CRYSTAL) lcd_MEM2_string(H_CRYSTAL_str);
      if (func_number == MODE_L_CRYSTAL) lcd_MEM2_string(L_CRYSTAL_str);
@@ -88,7 +88,7 @@ void function_menu() {
      if (ii >= 50) {
         if (func_number == MODE_TRANS) break;		// return to TransistorTester
         if (func_number == MODE_FREQ) GetFrequency(0);
- #if PROCESSOR_TYPE == 644
+ #if PROCESSOR_TYP == 644
         if (func_number == MODE_HFREQ) GetFrequency(1);	// measure high frequency with 16:1 divider
         if (func_number == MODE_H_CRYSTAL) GetFrequency(5); // HF crystal input + 16:1 divider
         if (func_number == MODE_L_CRYSTAL) GetFrequency(6); // LF crystal input, 1:1 divider

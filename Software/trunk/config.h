@@ -300,6 +300,8 @@
  #endif
 #elif defined(LCD_ST7565)
  // 128x64 pixel graphics LCD with ST7565 controller and 1-bit interface
+ // LCD-P/S = low, LCD-CS1 = low, LCD-CS2 = high
+ // LCD_B0_xxx=SI, LCD_EN_xxx=SCL, LCD_RS_xxx=A0, LCD_RES_xxx=RST, (CS-GND)
  #if PROCESSOR_TYP == 644
   #define HW_LCD_RES_DDR         DDRB
   #define HW_LCD_RES_PORT        PORTB

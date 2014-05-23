@@ -5,6 +5,7 @@
 ## General Flags
 PROJECT = TransistorTester
 TARGET = $(PROJECT).elf
+VPATH = ..:../bitmaps
 CC = avr-gcc
 
 CPP = avr-g++
@@ -43,6 +44,27 @@ UI_LANGUAGE = LANG_ENGLISH
 # The LCD_DOGM option must be set for support of the DOG-M type of LCD modules with ST7036 controller.
 # For this LCD type the contrast must be set with software command.
 CFLAGS += -DLCD_DOGM
+
+# The LCD_ST7565 option must be set to support a 128x64 LCD graphics display
+# with ST7565 controller. It is controlled with a 1-bit interface.
+#WITH_LCD_ST7565 = 1
+
+# If LCD_ST7565 option is used: Set the resitor ratio for the internal
+# voltage regulator. Supported value range: 0..7.
+# Good values are e.g. 4 or 7. If unsure just have a try.
+LCD_ST7565_RESISTOR_RATIO = 4
+
+# If LCD_ST7565 option is used: Flip the display both on horizontal and
+# vertical direction.
+WITH_LCD_ST7565_HV_FLIP = 1
+
+# If option WITH_LCD_ST7565 is present one of the following fonts should be
+# choosen. Currently only FONT_6X8 is completely supported.
+CFLAGS += -DFONT_6X8
+#CFLAGS += -DFONT_8X8
+#CFLAGS += -DFONT_8X12
+#CFLAGS += -DFONT_8X14
+#CFLAGS += -DFONT_10X16
 
 # Option STRIP_GRID_BOARD selects different board-layout, do not set for standard board!
 # The connection of LCD is totally different for both versions.
@@ -204,6 +226,15 @@ PORT=usb
 #BitClock=5.0
 #AVRDUDE_BAUD = -b 115200 -D
 # ********************** end of selectable options
+
+#Add some Defines if 128x64 controller ST7565 is used
+ifeq ($(WITH_LCD_ST7565),1)
+CFLAGS += -DLCD_ST7565
+CFLAGS += -DLCD_ST7565_RESISTOR_RATIO=$(LCD_ST7565_RESISTOR_RATIO)
+ifeq ($(WITH_LCD_ST7565_HV_FLIP),1)
+CFLAGS += -DLCD_ST7565_HV_FLIP
+endif
+endif
 
 ifeq ($(PARTNO),m8)
 MCU = atmega8
@@ -401,6 +432,16 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 ## Objects that must be built in order to link
 OBJECTS = lcd_hw_4_bit.o lcd-routines.o i2lcd.o PinLayout.o RvalOut.o UfAusgabe.o DisplayValue.o
+ifeq ($(WITH_LCD_ST7565),1)
+OBJECTS += font.o lcd-draw.o
+OBJECTS += bmp_one.o bmp_two.o bmp_three.o
+OBJECTS += bmp_npn.o bmp_pnp.o 
+OBJECTS += bmp_n_e_mos.o bmp_n_d_mos.o bmp_p_e_mos.o bmp_p_d_mos.o
+OBJECTS += bmp_n_e_igbt.o bmp_n_d_igbt.o bmp_p_e_igbt.o bmp_p_d_igbt.o
+OBJECTS += bmp_vakdiode.o
+OBJECTS += bmp_n_jfet.o bmp_p_jfet.o bmp_triac.o bmp_thyristor.o
+OBJECTS += bmp_inductor.o
+endif
 OBJECTS += swuart.o wait1000ms.o 
 ifndef INHIBIT_SLEEP_MODE
 OBJECTS += sleep_5ms.o
@@ -441,8 +482,13 @@ GetESR.o: ../GetESR.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ########### Compile C or Assembler , Assembler saves more than 400 bytes flash
+ifeq ($(WITH_LCD_ST7565),1)
+lcd-routines.o: ../lcd-routines.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+else
 lcd-routines.o: ../lcd-routines.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+endif
 
 GetRLmultip.o: ../GetRLmultip.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
@@ -475,6 +521,12 @@ get_log.o: ../get_log.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ########### Compile C source only 
+font.o: ../font.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+lcd-draw.o: ../lcd-draw.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 DisplayValue.o: ../DisplayValue.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
@@ -520,6 +572,63 @@ EntladePins.o: ../EntladePins.c Makefile
 EE_check_init.o: ../EE_check_init.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
+bmp_one.o: bmp_one.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_two.o: bmp_two.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_three.o: bmp_three.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_npn.o: bmp_npn.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_pnp.o: bmp_pnp.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_p_e_mos.o: bmp_p_e_mos.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_p_d_mos.o: bmp_p_d_mos.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_n_e_mos.o: bmp_n_e_mos.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_n_d_mos.o: bmp_n_d_mos.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_p_e_igbt.o: bmp_p_e_igbt.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_p_d_igbt.o: bmp_p_d_igbt.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_n_e_igbt.o: bmp_n_e_igbt.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_n_d_igbt.o: bmp_n_d_igbt.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_vakdiode.o: bmp_vakdiode.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_n_jfet.o: bmp_n_jfet.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_p_jfet.o: bmp_p_jfet.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_triac.o: bmp_triac.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_thyristor.o: bmp_thyristor.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+bmp_inductor.o: bmp_inductor.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 ##Link
 $(TARGET): $(OBJECTS)
 	 $(CC) $(LDFLAGS) $(OBJECTS) $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $(TARGET)
@@ -561,6 +670,10 @@ fuses-crystal:
 	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT)  $(FUSES_CRY)
 fuses-crystal-lp:
 	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT)  $(FUSES_CRY_L)
+
+# erases the FLASH ROM, EEPROM and clears all lock bits 
+erase:
+	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -e
 
 # make upload  additionally calls make to compile the software for selected target
 upload:

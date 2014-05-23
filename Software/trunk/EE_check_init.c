@@ -18,7 +18,7 @@ void EE_check_init(void) {
       tt = (uint8_t)eeprom_read_byte(&c_zero_tab[ww]);
       if (ww == 0) tt0 = tt;		// save first value
       // for forth element, tt must be tt0 or tt0+1
-      if ((ww == 3) && ((tt != tt0) && (tt != (tt0+1)))) goto init_ee;
+      if ((ww == 3) && ((tt != tt0) && (tt != (tt0+1)) && (tt != (tt0+2)) )) goto init_ee;
       if ((tt > 190) || (tt < 10)) goto init_ee;	// value too low or too big
   }
  #endif
@@ -37,7 +37,7 @@ init_ee:
  // write all 7 c_zero_tab values
  (void) eeprom_write_word((uint16_t *)(&c_zero_tab[0]),((C_NULL)*256) + (C_NULL));
  (void) eeprom_write_byte((uint8_t *)(&c_zero_tab[2]),(C_NULL+TP2_CAP_OFFSET));
- (void) eeprom_write_byte((uint8_t *)(&c_zero_tab[3]),(C_NULL+1));
+ (void) eeprom_write_byte((uint8_t *)(&c_zero_tab[3]),(C_NULL+2));
  (void) eeprom_write_byte((uint8_t *)(&c_zero_tab[4]),(C_NULL+TP2_CAP_OFFSET));
  (void) eeprom_write_word((uint16_t *)(&c_zero_tab[5]),((C_NULL)*256) + (C_NULL));
   #endif

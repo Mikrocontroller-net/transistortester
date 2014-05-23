@@ -43,6 +43,17 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   uint8_t LoADC;
   uint8_t ii;
 
+#if PROCESSOR_TYP == 644
+  if (HighPin == TestCapPin) {
+     // special handling for build in calibration capacitor
+     ADC_PORT = TXD_VAL;		// switch ADC-Port to GND
+     ADC_DDR = (1<<TestCapPin) | TXD_MSK;	// switch capacitor-Pin to output (GND)
+     wait_about20ms();
+     ADC_DDR = TXD_MSK;			// switch all ADC to input 
+     adcv[0] = ReadADC(HighPin);		// voltage before any load 
+  }
+#endif
+
 #ifdef AUTO_CAL
   pin_combination = (HighPin * 3) + LowPin - 1;	// coded Pin combination for capacity zero offset
 #endif

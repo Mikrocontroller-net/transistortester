@@ -84,7 +84,9 @@ int main(void) {
      lcd_line1();
      lcd_MEM_string(TestTimedOut);	//Output Timeout
      wait_about3s();				//wait for 3 s
-     lcd_powersave();
+#ifdef ST7565
+     lcd_powersave();			// set graphical display to power save mode
+#endif
      ON_PORT &= ~(1<<ON_PIN);			//shut off!
 //     ON_DDR = (1<<ON_PIN);		//switch to GND
      return 0;
@@ -312,15 +314,18 @@ start:
 
 #ifdef WITH_SELFTEST
  #ifdef AUTO_CAL
-  UnCalibrated = 0;
   lcd_cursor_off();
-  if (eeprom_read_byte(&c_zero_tab[0]) != eeprom_read_byte(&c_zero_tab[3])) {
+  UnCalibrated = (eeprom_read_byte(&c_zero_tab[3]) - eeprom_read_byte(&c_zero_tab[0]));
+  if (UnCalibrated != 0) {
      // if calibrated, both c_zero_tab values are identical! c_zero_tab[3] is not used otherwise
-     UnCalibrated = 1;
      lcd_cursor_on();
   }
  #endif
-  AutoCheck();			//check, if selftest should be done
+ #ifdef WITH_MENU
+  AutoCheck(0x00);			//check, if selftest should be done, only calibration
+ #else
+  AutoCheck(0x01);			//check, if selftest should be done, full selftest without MENU
+ #endif
 #endif
   lcd_line2();			//LCD position row2, column 1
   lcd_MEM_string(TestRunning);		//String: testing...
@@ -868,11 +873,11 @@ resistor_out:
 	  // resistor have also Inductance
           lcd_MEM_string(Lis_str);	// "L="
           DisplayValue(inductor_lx,inductor_lpre,'H',3);	// output inductance
-#ifdef WITH_GRAPHICS
+ #ifdef WITH_GRAPHICS
           lcd_pgm_bitmap(&g_bmp_inductor, 103, 56, 0);
           lcd_draw_pin(resis[0].rb, 95, 56);
           lcd_draw_pin(resis[0].ra, 120, 56);
-#endif
+ #endif
        }
 #else
        RvalOut(0);
@@ -963,7 +968,9 @@ TyUfAusgabe:
   #include "HelpCalibration.c"
  #endif
 //  MCUSR = 0;
-  lcd_powersave();
+ #ifdef ST7565
+  lcd_powersave();			// set graphical display to power save mode
+ #endif
   ON_PORT &= ~(1<<ON_PIN);		//switch off power
   wait_for_key_ms(0); //never ending loop 
 #else

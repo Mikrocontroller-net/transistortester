@@ -7,12 +7,15 @@
 /* return value: !=0 == key is pressed for x*10ms, 0 == no key pressed, time has expired */
 uint8_t wait_for_key_ms(int max_time) {
   uint8_t key_cs;			// period of key hold down in 10ms units
+  int8_t kk;
   uint8_t key_pressed;
   int count_time;
-  // if key is pressed, return 1
-  // if max_time == 0 , do not count, wait endless
-  if (max_time > 900) {
-     wait_about200ms();
+
+  kk = 100;
+  while (kk >= 0)  { /* wait up to 500ms until key is released */
+     if ((RST_PIN_REG & (1<<RST_PIN)) != 0)  break; // key is released
+     wait_about5ms();
+     kk--;
   }
 // wait 28 seconds or 5 seconds (if repeat function)
   key_cs = 0;				// set key flag to not pressed

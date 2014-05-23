@@ -14,7 +14,7 @@ void CheckRotaryEncoder(void) {
   unsigned int TP23tab[4];	//count of state of the bits TP2 and TP3
   unsigned int TP12tab[4];	//count of state of the bits TP1 and TP2
   uint8_t index;	// Table offset, 0=nobit set, 1=lower, 2=upper, 3=both bit set
-  uint8_t start_index23;	// start index of TP2:TP3
+  uint8_t start_index23=0;	// start index of TP2:TP3
   uint8_t ii;
   uint8_t iim;
   uint8_t taste;

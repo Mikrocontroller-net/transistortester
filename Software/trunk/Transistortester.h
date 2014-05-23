@@ -8,8 +8,8 @@
 #include <avr/wdt.h>
 #include <avr/interrupt.h>
 #include <math.h>
-#include "tt_function.h"
 #include "config.h"
+#include "tt_function.h"
 #include "lcd-routines.h"
 #include "wait1000ms.h"
 #include "part_defs.h"
@@ -101,6 +101,8 @@ End of configuration
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Impulsdrehgeber";
    const unsigned char TURN_str[] MEM2_TEXT = "drehen!";
+   const unsigned char FULLCHECK_str[] MEM2_TEXT = "Selbsttest";
+   const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "Verbinde Pins!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frequenz > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF Quarz";
@@ -138,6 +140,8 @@ End of configuration
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "encoder rotativo";
    const unsigned char TURN_str[] MEM2_TEXT = "turno!";
+   const unsigned char FULLCHECK_str[] MEM2_TEXT = "Autotest";
+   const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "Pin collegare!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frequenza > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF quarzo";
@@ -176,6 +180,8 @@ End of configuration
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "enkoder obrotowy";
    const unsigned char TURN_str[] MEM2_TEXT = "kolej!";
+   const unsigned char FULLCHECK_str[] MEM2_TEXT = "auto-test";
+   const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "nawiaz Pins!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Czestosc > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kwarc";
@@ -214,6 +220,8 @@ End of configuration
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotacni koder";
    const unsigned char TURN_str[] MEM2_TEXT = "otocte!";
+   const unsigned char FULLCHECK_str[] MEM2_TEXT = "Autotest";
+   const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "connect sondy!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frekvence > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF Quarz";
@@ -226,7 +234,7 @@ End of configuration
 #if defined(LANG_SLOVAK)		//slowakisch
    const unsigned char TestRunning[] MEM_TEXT = "Prebieha meranie";
    const unsigned char BatWeak[] MEM_TEXT = "slaba"; //€€";
-   const unsigned char BatEmpty[] MEM_TEXT = "prazdna!";
+   const unsigned char BatEmpty[] MEM_TEXT = "vybita!"		//"prazdna!";
    const unsigned char TestFailed2[] MEM_TEXT = "vadna "; //€€€€€€";
    const unsigned char Bauteil[] MEM_TEXT = "suciastka!";
 //   const unsigned char Diode[] MEM_TEXT = "Dioda: ";
@@ -251,7 +259,9 @@ End of configuration
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotacny koder";
-   const unsigned char TURN_str[] MEM2_TEXT = "striedat'!";
+   const unsigned char TURN_str[] MEM2_TEXT = "tocte!";
+   const unsigned char FULLCHECK_str[] MEM2_TEXT = "Samotestovanie";
+   const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "pripojte sondy!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frekvencia > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF krystal";
@@ -277,7 +287,7 @@ End of configuration
    #define Cathode_char 'C'
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!";
+   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probes!";
    const unsigned char ATE[] MEM_TEXT = "Test End";
  #ifdef WITH_MENU
    const unsigned char SELECTION_str[] MEM2_TEXT = "Izbor:";
@@ -289,6 +299,8 @@ End of configuration
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotary encoder";
    const unsigned char TURN_str[] MEM2_TEXT = "turn!";
+   const unsigned char FULLCHECK_str[] MEM2_TEXT = "Selftest";
+   const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "short Probes!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frekvenca > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kristal";
@@ -328,6 +340,8 @@ End of configuration
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Rotary encoder";
    const unsigned char TURN_str[] MEM2_TEXT = "rotaren!";
+   const unsigned char FULLCHECK_str[] MEM2_TEXT = "Zelftest";
+   const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "verbind Pinnen!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frequentie > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kristal";
@@ -366,6 +380,8 @@ End of configuration
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "encoder rotativo";
    const unsigned char TURN_str[] MEM2_TEXT = "rodar!";
+   const unsigned char FULLCHECK_str[] MEM2_TEXT = "Autoteste";
+   const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "conecte Pontas!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frequencia > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF cristal";
@@ -407,6 +423,8 @@ End of configuration
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Rotary encoder";
    const unsigned char TURN_str[] MEM2_TEXT = "forgat!";
+   const unsigned char FULLCHECK_str[] MEM2_TEXT = "On-teszt mod";
+   const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "short Probes!";	// ???
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frekvencia > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF Quarz";
@@ -444,6 +462,9 @@ End of configuration
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotary encoder";
    const unsigned char TURN_str[] MEM2_TEXT = "turn!";      //???
+   const unsigned char FULLCHECK_str[] MEM2_TEXT = "Testuoju";
+   const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "short Probes!";	// ???
+
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Daznis > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kvarcas";
@@ -472,7 +493,7 @@ End of configuration
    #define Cathode_char 'C'
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM_TEXT = "Selftest mode..";
-   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probe!"; // or "separate pins!";
+   const unsigned char RELPROBE[] MEM_TEXT = "isolate Probes!"; // or "separate pins!";
    const unsigned char ATE[] MEM_TEXT = "Test End";
  #endif
  #ifdef WITH_MENU
@@ -485,6 +506,8 @@ End of configuration
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotary encoder";
    const unsigned char TURN_str[] MEM2_TEXT = "turn!";	
+   const unsigned char FULLCHECK_str[] MEM2_TEXT = "Selftest";
+   const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "short Probes!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frequency > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF quartz";
@@ -1108,7 +1131,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
    const int16_t ref_offset EEMEM = REF_C_KORR;	// default correction of internal reference voltage for capacity measurement
    // the zero offset for capacity measurement for all pin combinations
   // LoPin:HiPin                        2:1    3:1    1:2                    marker  3:2                   1:3    2:3
-   const uint8_t c_zero_tab[] EEMEM = { C_NULL,C_NULL,C_NULL+TP2_CAP_OFFSET,C_NULL+1,C_NULL+TP2_CAP_OFFSET,C_NULL,C_NULL }; //table of zero offsets
+   const uint8_t c_zero_tab[] EEMEM = { C_NULL,C_NULL,C_NULL+TP2_CAP_OFFSET,C_NULL+2,C_NULL+TP2_CAP_OFFSET,C_NULL,C_NULL }; //table of zero offsets
    // if the marker position of c_zero_tab is not equal the first position, the calibration has not run before
 #endif
 
@@ -1132,6 +1155,8 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   extern const unsigned char PWM_10bit_str[] MEM2_TEXT ;
   extern const unsigned char RotaryEncoder_str[] MEM2_TEXT ;
   extern const unsigned char TURN_str[] MEM2_TEXT ;	
+  extern const unsigned char FULLCHECK_str[] MEM2_TEXT ;
+  extern const unsigned char SHORT_PROBES_str[] MEM2_TEXT ;
   #if PROCESSOR_TYP == 644
   extern const unsigned char HFREQ_str[] MEM2_TEXT ;
   extern const unsigned char H_CRYSTAL_str[] MEM2_TEXT ;

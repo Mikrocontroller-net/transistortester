@@ -18,11 +18,12 @@
  #define MODE_ROTARY 6
  #define MODE_H_CRYSTAL 7
  #define MODE_L_CRYSTAL 8
+ #define MODE_SELFTEST 9
  #ifdef WITH_VEXT
-  #define MODE_VEXT 9
-  #define MODE_OFF 10
+  #define MODE_VEXT 10
+  #define MODE_OFF 11
  #else
-  #define MODE_OFF 9
+  #define MODE_OFF 10
   #define MODE_VEXT 66
  #endif
 #else
@@ -32,11 +33,12 @@
  #define MODE_PWM 3
  #define MODE_ESR 4
  #define MODE_ROTARY 5
+ #define MODE_SELFTEST 6
  #ifdef WITH_VEXT
-  #define MODE_VEXT 6
-  #define MODE_OFF 7
+  #define MODE_VEXT 7
+  #define MODE_OFF 8
  #else
-  #define MODE_OFF 6
+  #define MODE_OFF 7
   #define MODE_VEXT 66
  #endif
  #define MODE_HFREQ 66
@@ -69,6 +71,7 @@ void function_menu() {
      if (func_number == MODE_PWM) lcd_MEM2_string(PWM_10bit_str);
      if (func_number == MODE_ESR) lcd_MEM2_string(C_ESR_str);
      if (func_number == MODE_ROTARY) lcd_MEM2_string(RotaryEncoder_str);
+     if (func_number == MODE_SELFTEST) lcd_MEM2_string(FULLCHECK_str);
  #ifdef WITH_VEXT
      if (func_number == MODE_VEXT) lcd_MEM_string(VOLTAGE_str); 
  #endif
@@ -105,6 +108,7 @@ void function_menu() {
         if (func_number == MODE_ROTARY) {
            CheckRotaryEncoder();		// check rotary encoder
         }
+        if (func_number == MODE_SELFTEST) AutoCheck(0x11);	// Full selftest with calibration
         if (func_number == MODE_VEXT) show_vext();
         if (func_number == MODE_OFF) {
            ON_PORT &= ~(1<<ON_PIN);              //switch off power

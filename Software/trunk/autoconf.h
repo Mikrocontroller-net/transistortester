@@ -3,6 +3,13 @@
        Automatic Configuration
 */
 
+#ifdef LCD_ST7565
+/* Define under which conditions a graphical display is supported. */
+/* The graphical display should at least support 128x64 pixels. */
+ #define WITH_GRAPHICS
+ #define FOUR_LINE_LCD
+#endif
+
 /* configure WITH_VEXT, TPext and TPex2  */
 #if FLASHEND > 0x1fff	/* at least ATmega16 */
   #ifndef WITH_UART

@@ -17,7 +17,7 @@ void RvalOut(uint8_t nrr);		// Output of the resistor value(s)
 void ShowResistor(void);		// show one or two Resistors
 void EntladePins(void);			// discharge capacitors
 void RefVoltage(void);			// compensate the reference voltage for comparator 
-void AutoCheck(void);			// check if self-test should be done 
+void AutoCheck(uint8_t test_mode);	// check if self-test should be done 
 unsigned int GetRLmultip(unsigned int cvolt);  // get C-Multiplikator for voltage cvolt
 void Scale_C_with_vcc(void);		// scale capacity value for different VCC Voltages
 void scale_intref_adc(void);		// get scale factors for ReadADC with internal reference

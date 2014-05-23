@@ -34,16 +34,19 @@ wait_for_key_ms:
  	movw	r14, r24	; r14:15 = max_time
 ;  // if key is pressed, return 1
 ;  // if max_time == 0 , do not count, wait endless
-	cpi	r24, lo8(900)	; if (max_time > 900) 
-	ldi	r24, hi8(900)
-	cpc	r15, r24
-	brlt	no_w200
+	
+	ldi	r28, 101	; kk = 100
+wrelease:
+        sbic    _SFR_IO_ADDR(RST_PIN_REG), RST_PIN              ; if((RST_PIN_REG & (1<<RST_PIN)))
+        rjmp	no_w200
 #if INHIBIT_SLEEP_MODE
-	RCALL	wait200ms	; wait200ms();
+	RCALL	wait5ms		; wait5ms();
 #else
- 	ldi	r24,  40
- 	RCALL	sleep_5ms	; wait_about200ms();
+ 	ldi	r24,  1
+ 	RCALL	sleep_5ms	; wait_about5ms();
 #endif
+        subi	r28, 1		; kk--;
+        brne	wrelease	; while (kk >= 0)
 no_w200:
 	movw	r28,r14		; count_time = max_time
 	ldi	r16, 0x55	; key_pressed = 0x55;

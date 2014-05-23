@@ -28,7 +28,7 @@ PARTNO = m328p
 
 # The WITH_MENU option enables a dialog to choose some additional functions.
 # Currently a frequency measurement at ATmega Pin PD4, a frequency generator at TP2 ,
-# tan the external voltage measurement can be selected. Of course you can also return to
+# the external voltage measurement and C+ESR measurement can be selected. Of course you can also return to
 # the normal transistor tester function and switch off the tester.
 #CFLAGS += -DWITH_MENU
 
@@ -233,16 +233,10 @@ PORT=usb
 #Add some Defines if 128x64 controller ST7565 is used
 ifeq ($(WITH_LCD_ST7565),1)
 CFLAGS += -DLCD_ST7565
-CFLAGS += -DFOUR_LINE_LCD
 CFLAGS += -DLCD_ST7565_RESISTOR_RATIO=$(LCD_ST7565_RESISTOR_RATIO)
 ifeq ($(WITH_LCD_ST7565_HV_FLIP),1)
 CFLAGS += -DLCD_ST7565_HV_FLIP
 endif
-endif
-# Define under which conditions a graphical display is supported.
-# The graphical display should at least support 128x64 pixels.
-ifeq ($(WITH_LCD_ST7565),1)
-CFLAGS += -DWITH_GRAPHICS
 endif
 
 ifeq ($(PARTNO),m8)
@@ -439,9 +433,9 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Objects that must be built in order to link
-OBJECTS = lcd-routines.o i2lcd.o PinLayout.o RvalOut.o UfAusgabe.o DisplayValue.o
+OBJECTS = lcd_hw_4_bit.o lcd-routines.o i2lcd.o PinLayout.o RvalOut.o UfAusgabe.o DisplayValue.o
 ifeq ($(WITH_LCD_ST7565),1)
-OBJECTS += lcd_hw_1_bit.o font.o lcd-draw.o
+OBJECTS += font.o lcd-draw.o
 OBJECTS += bmp_one.o bmp_two.o bmp_three.o
 OBJECTS += bmp_npn.o bmp_pnp.o 
 OBJECTS += bmp_n_e_mos.o bmp_n_d_mos.o bmp_p_e_mos.o bmp_p_d_mos.o
@@ -449,8 +443,6 @@ OBJECTS += bmp_n_e_igbt.o bmp_n_d_igbt.o bmp_p_e_igbt.o bmp_p_d_igbt.o
 OBJECTS += bmp_vakdiode.o
 OBJECTS += bmp_n_jfet.o bmp_p_jfet.o bmp_triac.o bmp_thyristor.o
 OBJECTS += bmp_inductor.o
-else
-OBJECTS += lcd_hw_4_bit.o
 endif
 OBJECTS += swuart.o wait1000ms.o 
 ifndef INHIBIT_SLEEP_MODE
@@ -463,7 +455,7 @@ endif
 OBJECTS += main.o CheckPins.o ChargePin10ms.o EntladePins.o
 OBJECTS +=  ReadCapacity.o GetRLmultip.o Calibrate_UR.o
 ifneq ($(PARTNO),m8)
-OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o GetFrequency.o function_menu.o message_key_released.o
+OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o GetFrequency.o function_menu.o message_key_released.o ReadBigCap.o
 OBJECTS += CheckRotaryEncoder.o
 endif
 ifndef USE_EEPROM
@@ -478,9 +470,6 @@ LINKONLYOBJECTS =
 all: $(TARGET) $(PROJECT).hex $(PROJECT).eep $(PROJECT).lss size
 
 ########### Compile only Assembler source available 
-lcd_hw_1_bit.o: ../lcd_hw_1_bit.S Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
 lcd_hw_4_bit.o: ../lcd_hw_4_bit.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
@@ -550,6 +539,9 @@ message_key_released.o: ../message_key_released.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ReadCapacity.o: ../ReadCapacity.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+ReadBigCap.o: ../ReadBigCap.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ReadInductance.o: ../ReadInductance.c Makefile

@@ -491,4 +491,5 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 End of configuration 
 */
 #include "autoconf.h"
+// #undef WITH_VEXT   /* disable the external voltage measurement */
 #endif

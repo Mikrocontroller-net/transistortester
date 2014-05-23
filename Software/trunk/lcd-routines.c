@@ -207,13 +207,13 @@ void lcd_init(void) {
    lcd_command(CMD_SET_VOLUME_SECOND | (0x3f & 4));
    lcd_command(CMD_SET_RESISTOR_RATIO | (7 & LCD_ST7565_RESISTOR_RATIO));
    lcd_command(CMD_SET_BIAS_9);
-#ifdef LCD_ST7565_HV_FLIP
+ #ifdef LCD_ST7565_HV_FLIP
    lcd_command(CMD_SET_COM_REVERSE);
    lcd_command(CMD_SET_ADC_REVERSE);
-#else
+ #else
    lcd_command(CMD_SET_COM_NORMAL);
    lcd_command(CMD_SET_ADC_NORMAL);
-#endif
+ #endif
    lcd_command(CMD_SET_ALLPTS_NORMAL);
    lcd_command(CMD_SET_DISP_NORMAL);
    lcd_command(CMD_SET_STATIC_OFF);
@@ -241,13 +241,13 @@ void lcd_init(void) {
 
    lcd_write_init(0);		// switch to 4 Bit mode
    wait_about10ms();
-#ifdef LCD_DOGM
+ #ifdef LCD_DOGM
    lcd_command(CMD_SetIFOptions | 0x09);	// 4Bit / 2 rows / 5x7 / Instr. table 1
    lcd_command(CMD1_SetBias | 0x0c);		// 1/4 bias     (5V)
    lcd_command(CMD1_PowerControl | 0x02);	// booster off / set contrast C5:C4 = 2
    lcd_command(CMD1_FollowerControl | 0x09);	// Follower on / Rab2:0 = 1
    lcd_command(CMD1_SetContrast | 0x04);	// set contrast C3:0 = 4
-#endif
+ #endif
    lcd_command(CMD_SetIFOptions | 0x08);	// 4Bit / 2 rows / 5x7
 
    lcd_command(CMD_SetDisplayAndCursor | 0x04); // Display on / Cursor off / no Blinking
@@ -257,12 +257,12 @@ void lcd_init(void) {
 }
 #endif
  
-void lcd_powersave(void) {
 #ifdef LCD_ST7565
+void lcd_powersave(void) {
      lcd_command(CMD_DISPLAY_OFF);
      lcd_command(CMD_SET_ALLPTS_ON); // Enter power save mode
-#endif
 }
+#endif
 
 // send the command to clear the display 
  

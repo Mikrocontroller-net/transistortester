@@ -122,6 +122,19 @@ _lcd_hw_write:
 
                ; Send bit-1
                set_en_low
+               sbrc    preg_2, 1
+                       set_b0_high
+               sbrs    preg_2, 1
+                       set_b0_low
+               set_en_high              ; force data read from LCD controller
+
+               ; Send bit-0
+               set_en_low
+               sbrc    preg_2, 0
+                       set_b0_high
+               sbrs    preg_2, 0
+                       set_b0_low
+               set_en_high              ; force data read from LCD controller
 
 #else
 ; 4-bit interface for HD44780 compatible controller

@@ -43,7 +43,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   uint8_t LoADC;
   uint8_t ii;
 
-#if PROCESSOR_TYP == 644
+#if PROCESSOR_TYP == 666644  /* ########## not yet finshised ################ */
   if (HighPin == TestCapPin) {
      // special handling for build in calibration capacitor
      ADC_PORT = TXD_VAL;		// switch ADC-Port to GND

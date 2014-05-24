@@ -17,19 +17,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   6 .debug_aranges 00000380  00000000  00000000  00004d30  2**3
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_info   000055ff  00000000  00000000  000050b0  2**0
+  7 .debug_info   0000560a  00000000  00000000  000050b0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 0000102d  00000000  00000000  0000a6af  2**0
+  8 .debug_abbrev 0000103a  00000000  00000000  0000a6ba  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   00001a98  00000000  00000000  0000b6dc  2**0
+  9 .debug_line   00001a99  00000000  00000000  0000b6f4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_frame  000004f8  00000000  00000000  0000d174  2**2
+ 10 .debug_frame  000004f8  00000000  00000000  0000d190  2**2
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_str    00000ba6  00000000  00000000  0000d66c  2**0
+ 11 .debug_str    00000bac  00000000  00000000  0000d688  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_loc    00003c67  00000000  00000000  0000e212  2**0
+ 12 .debug_loc    00003c67  00000000  00000000  0000e234  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_ranges 00000018  00000000  00000000  00011e79  2**0
+ 13 .debug_ranges 00000018  00000000  00000000  00011e9b  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -146,8 +146,8 @@ _lcd_hw_write:
      142:	54 9a       	sbi	0x0a, 4	; 10
                nop	;		//wait for address setup
      144:	00 00       	nop
-               ; Send bit-1
-               set_en_low
+                       set_b0_low
+               set_en_high              ; force data read from LCD controller
 
 #else
 ; 4-bit interface for HD44780 compatible controller

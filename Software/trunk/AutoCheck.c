@@ -8,6 +8,7 @@ void AutoCheck(uint8_t test_mode) {
 
   uint8_t tt;		// number of running test
   uint8_t ww;		// counter for repeating the tests
+  uint8_t taste;	// ist key pressed? 0 = no
   int  adcmv[7];
  #ifdef EXTENDED_TESTS
   uint16_t u680;	// 3 * (Voltage at 680 Ohm)
@@ -194,9 +195,10 @@ begin_selftest:
            ADC_PORT = TXD_VAL;		// all ADC-Ports to GND
            R_DDR = 0;			// all R-Ports to Input
            R_PORT = 0;
-           if (tt != 4) {
+           taste = wait_for_key_ms(1000);	// wait up to 1 second or key is pressed
+           if ((tt != 4) && (taste > 10)) {
               // don't finish repetition  for T4 with pressed key
-              if (wait_for_key_ms(1000) > 10) break; // if key is pressed, don't repeat
+              break; // if key is pressed, don't repeat
            }
         } //end for ww
         wait_about1s();

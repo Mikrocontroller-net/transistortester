@@ -261,7 +261,7 @@ End of configuration
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotacny koder";
    const unsigned char TURN_str[] MEM2_TEXT = "tocte!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Samotestovanie";
-   const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "pripojte sondy!";
+   const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "prepoj sondy!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frekvencia > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF krystal";

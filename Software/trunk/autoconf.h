@@ -472,9 +472,11 @@
 
 #ifdef LCD_ST7565
         #undef LCD_CHAR_DEGREE
-        #define LCD_CHAR_DEGREE 0xf8    // Character for degree
+        #define LCD_CHAR_DEGREE 0xf8	// Character for degree
+        #undef LCD_CHAR_OMEGA
+        #define LCD_CHAR_OMEGA  4       //Omega-character 
         #undef LCD_CHAR_U
-        #define LCD_CHAR_U  0xe6        //µ-character
+        #define LCD_CHAR_U  5		//µ-character
 #endif
 
 #if FLASHEND > 0x3fff

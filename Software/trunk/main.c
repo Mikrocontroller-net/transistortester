@@ -91,6 +91,7 @@ int main(void) {
 //     ON_DDR = (1<<ON_PIN);		//switch to GND
      return 0;
   }
+#ifndef ST7565
   LCDLoadCustomChar(LCD_CHAR_DIODE1);	//Custom-Character Diode symbol
   lcd_fix_customchar(DiodeIcon1);	//load Character  >|
   LCDLoadCustomChar(LCD_CHAR_DIODE2);	//Custom-Character 
@@ -103,18 +104,19 @@ int main(void) {
   lcd_fix_customchar(ResIcon2);		//load Character  ]
   
   //if kyrillish LCD-Characterset is defined, load  Omega- and µ-Character
-#if LCD_CHAR_OMEGA < 8
+ #if LCD_CHAR_OMEGA < 8
   LCDLoadCustomChar(LCD_CHAR_OMEGA);	//load omega as Custom-Character
   lcd_fix_customchar(CyrillicOmegaIcon);
-#endif
-#if LCD_CHAR_U < 8
+ #endif
+ #if LCD_CHAR_U < 8
   LCDLoadCustomChar(LCD_CHAR_U);	//load mu as Custom-Character
   lcd_fix_customchar(CyrillicMuIcon);
-#endif
-#if LCD_CHAR_RESIS3 != 'R'
+ #endif
+ #if LCD_CHAR_RESIS3 != 'R'
   LCDLoadCustomChar(LCD_CHAR_RESIS3);	//load Resistor symbol as Custom-Character
   lcd_fix_customchar(ResIcon3);		// load character ||
-#endif
+ #endif
+#endif /* ST7565 */
 #ifdef PULLUP_DISABLE
  #ifdef __AVR_ATmega8__
   SFIOR = (1<<PUD);		// disable Pull-Up Resistors mega8

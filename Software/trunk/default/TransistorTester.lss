@@ -10476,6 +10476,7 @@ int main(void) {
      return 0;
     32ce:	3e c5       	rjmp	.+2684   	; 0x3d4c <main+0xafe>
   }
+#ifndef ST7565
   LCDLoadCustomChar(LCD_CHAR_DIODE1);	//Custom-Character Diode symbol
     32d0:	88 e4       	ldi	r24, 0x48	; 72
     32d2:	0e 94 00 01 	call	0x200	; 0x200 <lcd_command>
@@ -10511,7 +10512,7 @@ int main(void) {
     330e:	85 e1       	ldi	r24, 0x15	; 21
     3310:	90 e0       	ldi	r25, 0x00	; 0
     3312:	0e 94 63 01 	call	0x2c6	; 0x2c6 <lcd_fix_customchar>
-#endif
+#endif /* ST7565 */
 #ifdef PULLUP_DISABLE
  #ifdef __AVR_ATmega8__
   SFIOR = (1<<PUD);		// disable Pull-Up Resistors mega8

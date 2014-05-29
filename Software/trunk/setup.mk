@@ -1,3 +1,8 @@
+ifeq ($(INHIBIT_SLEEP_MODE),1)
+# set the option for gcc 
+CFLAGS += -DINHIBIT_SLEEP_MODE
+endif
+
 #Add some Defines if 128x64 controller ST7565 is used
 ifeq ($(WITH_LCD_ST7565),1)
 CFLAGS += -DLCD_ST7565
@@ -229,6 +234,10 @@ FUSES_CRY_L = -U lfuse:w:0xf7:m -U hfuse:w:0xd9:m -U efuse:w:0xfc:m
 endif
 endif
 
+ifeq ($(PARTNO),m2560)
+MCU = atmega2560
+endif
+
 CFLAGS += -DF_CPU=$(OP_MHZ)000000UL
 CFLAGS += -DMHZ_CPU=$(OP_MHZ)
 
@@ -272,7 +281,7 @@ OBJECTS += bmp_n_jfet.o bmp_p_jfet.o bmp_triac.o bmp_thyristor.o
 OBJECTS += bmp_inductor.o
 endif
 OBJECTS += swuart.o wait1000ms.o 
-ifdef INHIBIT_SLEEP_MODE
+ifneq ($(INHIBIT_SLEEP_MODE),1)
 OBJECTS += sleep_5ms.o
 endif
 OBJECTS += ReadADC.o wait_for_key_ms.o RefVoltage.o

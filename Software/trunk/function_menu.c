@@ -251,7 +251,11 @@ void make_frequency() {
   TCCR1C = 0;
   TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (0<<CS11) | (0<<CS10); // set counter mode 
   R_PORT = 0;		// set all resistor port outputs to GND
+#if PROCESSOR_TYP == 644
+  R_DDR = (1<<PIN_RL1) | (1<<PIN_RL2) | (1<<PIN_RL3);		// set TP1, DDD4(TP2) and TP3 to output
+#else
   R_DDR = (1<<PIN_RL1) | (1<<PIN_RL3);		// set TP1 and TP3 to output
+#endif
   ADC_PORT = TXD_VAL;
   ADC_DDR = (1<<TP1) | TXD_MSK;			//connect TP1 to GND
   DDRB  |= (1<<DDB2);	// set output enable

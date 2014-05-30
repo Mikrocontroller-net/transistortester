@@ -8,7 +8,7 @@
 //=================================================================
 // measure frequency at external pin T0 (PD4 or PB0)
 #define FMAX_PERIOD 25050
-#define FMAX_INPUT 2000100
+#define FMAX_INPUT 2004000
 #define FREQ_DIV 16
 
 #if PROCESSOR_TYP == 644
@@ -26,6 +26,7 @@
 #ifdef WITH_MENU
 void GetFrequency(uint8_t range) {
   unsigned char taste;			// set if key is pressed during measurement
+  unsigned long freq_count;		// the counted pulses in 1 second
   unsigned long long ext_period;
   unsigned long freq_from_per;
   uint8_t ii;
@@ -67,6 +68,9 @@ void GetFrequency(uint8_t range) {
  #endif
   taste = 0;				// reset flag for key pressed
   for (mm=0;mm<240;mm++) {
+     // *************************************************************************
+     // *********** straight frequency measurement by counting 1 second *********
+     // *************************************************************************
      //set up Counter 0
      // Counter 0 is used to count the external signal connected to T0 (PD4 or PB0)
      FREQINP_DDR &= ~(1<<FREQINP_PIN);	// switch frequency pin to input
@@ -98,6 +102,7 @@ void GetFrequency(uint8_t range) {
      // one second is counted
      TCCR0B = 0;		// stop timer 0, if not stopped by timer 1 compare interrupt
      ext_freq.b[0] = TCNT0;	// add lower 8 bit to get total counts
+     freq_count = ext_freq.dw;	// save the frequency counter
      lcd_clear();		// clear total display
      lcd_data('f');
      lcd_data('=');
@@ -112,6 +117,14 @@ void GetFrequency(uint8_t range) {
      DisplayValue(ext_freq.dw,0,'H',7);
  #endif
      lcd_data('z');
+ #if PROCESSOR_TYP == 644
+     lcd_space();
+     if ((FDIV_PORT&(1<<FDIV_PIN)) != 0) {
+        lcd_data('/');		// Frequency divider is activ
+     } else {
+        lcd_space();		// Frequency divider is not activ
+     }
+ #endif
      FREQINP_DDR &= ~(1<<FREQINP_PIN);	// switch frequency pin to input
      if (TCCR1B != 0) {
        // Exact 1000ms period is only with "end of period" from timer1 interrupt.
@@ -123,6 +136,9 @@ void GetFrequency(uint8_t range) {
      TCCR1B = 0;		// stop timer 1
      TIMSK1 = 0;		// disable all timer 1 interrupts
      if ((ext_freq.dw < FMAX_PERIOD) && (ext_freq.dw > 0)) {
+     // *************************************************************************
+     // ******** Period measurement by counting some periods ******************** 
+     // *************************************************************************
         pinchange_max = ((10 * (unsigned long)ext_freq.dw) + MHZ_CPU) / MHZ_CPU;	// about 10000000 clock tics
         pinchange_max += pinchange_max;	// * 2 for up and down change
         FREQINP_DDR &= ~(1<<FREQINP_PIN);	// switch frequency pin to input
@@ -142,7 +158,7 @@ void GetFrequency(uint8_t range) {
            wdt_reset();
            if (!(RST_PIN_REG & (1<<RST_PIN))) taste = 1;	// user request stop of operation
            if ((PCMSK_FREQ & (1<<PCINT_FREQ)) == 0) break;		// monitoring is disabled by interrupt
-        }
+        } /* end for ii */
         TCCR0B = 0;		// stop counter
         PCMSK_FREQ &= ~(1<<PCINT_FREQ);		// stop monitor PD4 PCINT20 or PB0 PCINT8 pin change
         PCICR &= ~(1<<PCI_ENABLE_BIT);	// disable the interrupt
@@ -187,24 +203,25 @@ void GetFrequency(uint8_t range) {
               FREQINP_DDR &= ~(1<<FREQINP_PIN);	// switch frequency pin to input
            }
         }
+     }  /* end if 1 < ext_freq < FMAX_PERIOD */
  #if PROCESSOR_TYP == 644
-     if ((FDIV_PORT&(1<<FDIV_PIN)) == 0) {
+     if ((FDIV_PORT & (1<<FDIV_PIN)) == 0) {
         // frequency divider is not activ
-        if ( ((ext_freq.dw >= FMAX_PERIOD) && (ext_freq.dw < ((long)FMAX_PERIOD*FREQ_DIV))) ||
-            (ext_freq.dw > FMAX_INPUT) ){
+        if ( ((freq_count >= FMAX_PERIOD) && (freq_count < ((unsigned long)FMAX_PERIOD*FREQ_DIV))) ||
+            (freq_count > FMAX_INPUT) ){
            FDIV_PORT |= (1<<FDIV_PIN);			// use frequency divider for next measurement
         }
      } else {
         // frequency divider is activ
-        if ((ext_freq.dw < (FMAX_PERIOD/FREQ_DIV)) && (range == 0)) {
+        if ((freq_count < (FMAX_PERIOD/FREQ_DIV)) && ((range & 0x01) == 0)) {
            FDIV_PORT &= ~(1<<FDIV_PIN);			// switch off the 16:1 divider
         }
      }
+     wait_about2s();
  #endif
 //     taste += wait_for_key_ms(SHORT_WAIT_TIME/2);
      taste += wait_for_key_ms(2000);
      if (taste != 0) break;
-     }  /* end if 1 < ext_freq < 10050 */
      TIMSK0 = 0;		// disable all timer 0 interrupts
      if (taste != 0) break;
   }  /* end for mm  */

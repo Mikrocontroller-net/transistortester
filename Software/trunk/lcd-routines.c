@@ -207,11 +207,14 @@ void lcd_init(void) {
    lcd_command(CMD_SET_VOLUME_SECOND | (0x3f & 4));
    lcd_command(CMD_SET_RESISTOR_RATIO | (7 & LCD_ST7565_RESISTOR_RATIO));
    lcd_command(CMD_SET_BIAS_9);
- #ifdef LCD_ST7565_HV_FLIP
+ #ifdef LCD_ST7565_V_FLIP
    lcd_command(CMD_SET_COM_REVERSE);
-   lcd_command(CMD_SET_ADC_REVERSE);
  #else
    lcd_command(CMD_SET_COM_NORMAL);
+ #endif
+ #ifdef LCD_ST7565_H_FLIP
+   lcd_command(CMD_SET_ADC_REVERSE);
+ #else
    lcd_command(CMD_SET_ADC_NORMAL);
  #endif
    lcd_command(CMD_SET_ALLPTS_NORMAL);

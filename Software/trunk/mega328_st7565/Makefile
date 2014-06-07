@@ -31,7 +31,6 @@ PARTNO = m328p
 # the external voltage measurement and C+ESR measurement can be selected. Of course you can also return to
 # the normal transistor tester function and switch off the tester.
 CFLAGS += -DWITH_MENU
-CFLAGS += -DWITH_MENU
 
 # Select your language:
 # Available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
@@ -56,9 +55,10 @@ WITH_LCD_ST7565 = 1
 # Good values are e.g. 4 or 7. If unsure just have a try.
 LCD_ST7565_RESISTOR_RATIO = 4
 
-# If LCD_ST7565 option is used: Flip the display both on horizontal and
-# vertical direction.
-WITH_LCD_ST7565_HV_FLIP = 1
+# If LCD_ST7565 option is used: Flip the display on horizontal direction
+WITH_LCD_ST7565_H_FLIP = 1
+# If LCD_ST7565 option is used: Flip the display on vertical direction
+WITH_LCD_ST7565_V_FLIP = 1
 
 # If option WITH_LCD_ST7565 is present one of the following fonts should be
 # choosen. Currently only FONT_6X8 is completely supported.

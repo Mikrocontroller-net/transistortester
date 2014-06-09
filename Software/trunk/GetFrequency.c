@@ -103,7 +103,17 @@ void GetFrequency(uint8_t range) {
      TCCR0B = 0;		// stop timer 0, if not stopped by timer 1 compare interrupt
      ext_freq.b[0] = TCNT0;	// add lower 8 bit to get total counts
      freq_count = ext_freq.dw;	// save the frequency counter
+ #ifdef FOUR_LINE_LCD
+     lcd_line2();
+     lcd_clear_line();
+     lcd_line3();
+     lcd_clear_line();
+     lcd_line4();
+     lcd_clear_line();
+     lcd_line2();
+ #else
      lcd_clear();		// clear total display
+ #endif
      lcd_data('f');
      lcd_data('=');
  #if PROCESSOR_TYP == 644
@@ -166,7 +176,11 @@ void GetFrequency(uint8_t range) {
 //        lcd_line2();
 //        lcd_clear_line();
 //        wait50ms();		// let LCD flicker to 
-        lcd_line2();
+ #ifdef FOUR_LINE_LCD
+        lcd_line3();		// use line3 to report the period with 4-line LCD
+ #else
+        lcd_line2();		// report period on line 2 of 2-line LCD
+ #endif
         lcd_data('T');
         lcd_data('=');
         ext_period = ((unsigned long long)ext_freq.dw * (125*200)) / pinchange_max;
@@ -186,7 +200,11 @@ void GetFrequency(uint8_t range) {
            lcd_data('?');		// wait loop has regular finished
         } else {
            if (ext_period > 249500) {
-              lcd_line1();
+ #ifdef FOUR_LINE_LCD
+              lcd_line4();		// use line 4 of 4-line LCD to report the computed frequency
+ #else
+              lcd_line1();		// overwrite line 1 of 2-line LCD to report the computed frequency
+ #endif
               lcd_data('f');
               lcd_data('=');
               if (ext_period > 1000000000) {

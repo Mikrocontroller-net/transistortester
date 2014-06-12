@@ -26,8 +26,8 @@ CFLAGS = -Wall
 PARTNO = m2560
 
 # Select your language:
-# Available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
-#                          LANG_DUTCH, LANG_BRASIL, LANG_RUSSIAN, LANG_UKRAINIAN, LANG_LITHUANIAN, LANG_HUNGARIAN
+# Available languages are: LANG_BRASIL, LANG_CZECH, LANG_DUTCH, ENGLISH, LANG_GERMAN, LANG_HUNGARIAN, LANG_ITALIAN,
+#                          LANG_LITHUANIAN, LANG_POLISH, LANG_RUSSIAN , LANG_SLOVAK, LANG_SLOVENE, LANG_UKRAINIAN
 UI_LANGUAGE = LANG_ENGLISH
 #UI_LANGUAGE = LANG_CZECH
 #UI_LANGUAGE = LANG_GERMAN
@@ -280,7 +280,7 @@ ReadADC.o: ../ReadADC.S Makefile
 sleep_5ms.o: ../sleep_5ms.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-wait_for_key_ms.o: ../wait_for_key_ms.S Makefile
+wait_for_key_ms.o: ../wait_for_key_ms.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 get_log.o: ../get_log.S Makefile

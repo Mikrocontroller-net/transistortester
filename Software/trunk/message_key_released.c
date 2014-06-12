@@ -10,8 +10,15 @@
 void message_key_released(const unsigned char XX_str[]) {
  
   uint8_t times;
-  // show the external voltage
+//#ifdef WITH_ROTARY_SWITCH
+//  lcd_line1();
+//  lcd_clear_line();
+//  lcd_line2();
+//  lcd_clear_line();
+//  lcd_line1();
+//#else
   lcd_clear();
+//#endif
   lcd_MEM2_string(XX_str);		// display MEM2_str in row 1
   for (times=0;times<100;times++) {
      wait_about10ms();

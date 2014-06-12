@@ -55,3 +55,6 @@ void do_10bit_PWM(void);		// start counter 1 to make fixed frequency with PWM
 void show_C_ESR();			// show big capacity values and ESR 
 void ReadBigCap(uint8_t HighPin, uint8_t LowPin);	//capacity measurement only for big capacitors
 void CheckRotaryEncoder(void);				// check rotary puls generator
+void check_rotary(void);			// check state of rotary switch	for menu function
+void message2line(uint8_t number);	// write menue message number to lcd line
+void switch_frequency(uint8_t freq_num);	// switch frequency and write actual frequency to LCD

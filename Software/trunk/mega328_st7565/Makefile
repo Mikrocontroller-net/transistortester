@@ -11,7 +11,6 @@ CC = avr-gcc
 CPP = avr-g++
 
 CFLAGS = -Wall
-#CFLAGS += -DWITH_MENU
 
 # ********************** Änderbare Flags zur Configuration des Transistortesters
 # ********************** config options for your Semiconductor tester
@@ -32,9 +31,22 @@ PARTNO = m328p
 # the normal transistor tester function and switch off the tester.
 CFLAGS += -DWITH_MENU
 
+# The menu function can be easier controlled with a incremental encoder (rotary switch).
+# Both switches of the rotary switch can be connected with 1 kOhm resistors to PD2 and PD3.
+# The common contact of the two switches must be connected to GND.
+# You must also connect both switch contacts with two 10 kOhm resistors to VCC (pull up).
+# The best choise is a incremental encoder with Push Button. The button can be connected
+# parallel to the start key of the Transistor Tester.
+# A define of the WITH_ROTARY_SWITCH enable the support for this extension.
+# If every step of the switch build the same switch state at the step position, set WITH_ROTARY_SWITCH=2.
+# Otherwise only set the WITH_ROTARY_SWITCH or set to 1.
+#CFLAGS += -DWITH_ROTARY_SWITCH=2
+# the option CHANGE_ROTARY_DIRECTION changes the rotary direction by swap of switches
+#CFLAGS += -DCHANGE_ROTARY_DIRECTION
+
 # Select your language:
-# Available languages are: LANG_ENGLISH, LANG_GERMAN, LANG_POLISH, LANG_CZECH, LANG_SLOVAK, LANG_SLOVENE,
-#                          LANG_DUTCH, LANG_BRASIL, LANG_RUSSIAN, LANG_UKRAINIAN, LANG_LITHUANIAN, LANG_HUNGARIAN
+# Available languages are: LANG_BRASIL, LANG_CZECH, LANG_DUTCH, ENGLISH, LANG_GERMAN, LANG_HUNGARIAN, LANG_ITALIAN,
+#                          LANG_LITHUANIAN, LANG_POLISH, LANG_RUSSIAN , LANG_SLOVAK, LANG_SLOVENE, LANG_UKRAINIAN
 UI_LANGUAGE = LANG_ENGLISH
 
 # The LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset.

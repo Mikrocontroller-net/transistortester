@@ -12211,11 +12211,14 @@ TyUfAusgabe:
   while(!(RST_PIN_REG & (1<<RST_PIN)));	//wait ,until button is released
     3d06:	4f 9b       	sbis	0x09, 7	; 9
     3d08:	fe cf       	rjmp	.-4      	; 0x3d06 <main+0xab6>
+#ifdef WITH_ROTARY_SWITCH
+wait_again:
+#endif
   ii = wait_for_key_ms(max_time);
     3d0a:	0e 94 d0 03 	call	0x7a0	; 0x7a0 <wait_for_key_ms>
-     empty_count = 0;
-     mess_count = 0;
-     function_menu();
+     // menu selected by long keay press or rotary switch
+     function_menu();		// start the function menu
+     goto start;
   }
 #endif
   if (ii != 0 ) goto start;

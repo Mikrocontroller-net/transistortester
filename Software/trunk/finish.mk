@@ -163,6 +163,8 @@ program:
 	$(MAKE)
 	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:w:./$(PROJECT).hex:a \
 	-U eeprom:w:./$(PROJECT).eep:a
+flash:
+	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) -U flash:w:./$(PROJECT).hex:a 
 eeprom:
 	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT) \
 	-U eeprom:w:./$(PROJECT).eep:a

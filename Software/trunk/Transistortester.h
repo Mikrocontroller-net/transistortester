@@ -1319,6 +1319,16 @@ COMMON uint16_t pin_rpl;	// port output resistance to VCC side, 0.1 Ohm units
 COMMON uint8_t UnCalibrated;	// 0, if the tester is calibrated
 #endif
 
+#ifdef WITH_ROTARY_SWITCH
+struct Rotary_t {
+ uint8_t state[4];	// coded state history of the rotatry switch, bit 0 == state of A-switch, bit 1 = state of B-switch
+ uint8_t ind;		// index to the last entry of the state history (rotary switch)
+ int8_t count;		// count of right steps, negative if left steps
+ uint8_t incre;		// absolute value of step count
+};
+COMMON struct Rotary_t rotary;
+#endif
+
 
 //#if POWER_OFF+0 > 1
 COMMON unsigned int display_time;	// display time of measurement in ms units

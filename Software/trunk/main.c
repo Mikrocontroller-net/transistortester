@@ -941,17 +941,37 @@ TyUfAusgabe:
  end2:
   ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
   while(!(RST_PIN_REG & (1<<RST_PIN)));	//wait ,until button is released
+#ifdef WITH_ROTARY_SWITCH
+wait_again:
+#endif
   ii = wait_for_key_ms(max_time);
-#ifdef WITH_MENU
-  if (ii > 0) {
-     if (ii < 50) goto start;
-     // menu selected
-     empty_count = 0;
+#if POWER_OFF+0 > 1
+ #ifdef WITH_ROTARY_SWITCH
+  if ((ii > 0) || (rotary.incre > 0))
+ #else
+  if (ii > 0)
+ #endif
+  {
+     empty_count = 0;		// reset counter, if any switch activity
      mess_count = 0;
-     function_menu();
+  }
+#endif
+#ifdef WITH_MENU
+ #ifdef WITH_ROTARY_SWITCH
+  if ((ii >=50) || (rotary.incre > 2))
+ #else
+  if (ii >= 50) 
+ #endif
+  {
+     // menu selected by long keay press or rotary switch
+     function_menu();		// start the function menu
+     goto start;
   }
 #endif
   if (ii != 0 ) goto start;
+#ifdef WITH_ROTARY_SWITCH
+  if (rotary.incre > 0) goto wait_again;
+#endif
 #ifdef POWER_OFF
  #if POWER_OFF > 127
   #define POWER2_OFF 255

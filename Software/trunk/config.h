@@ -49,13 +49,16 @@
 #endif
 
 
-/* Port , that is directly connected to the probes.
+/* ************************************************************************* */
+/* Definition for the Port , that is directly connected to the probes.	     */
+/*
   This Port must have an ADC-Input  (ATmega8:  PORTC).
   The lower pins of this Port must be used for measurements.
   Please don't change the definitions of TP1, TP2 and TP3!
   The TPREF pin can be connected with a 2.5V precision voltage reference
   The TPext can be used with a 10:1 resistor divider as external voltage probe up to 50V
 */
+/* ************************************************************************* */
 #if PROCESSOR_TYP == 644
 //################# for m324, m644, m1284 port A is the Analog input
  #define ADC_PORT PORTA
@@ -87,7 +90,7 @@
  #define TPREF PF4
  // Port pin for Battery voltage measuring
  #define TPBAT PF5
-#else
+#else	/* PROCESSOR_TYP */
 //############### default for mega8, mega168 and mega328
  #define ADC_PORT PORTC
  #define ADC_DDR DDRC
@@ -101,7 +104,7 @@
  #define TPREF (1<<MUX2) 
  // Port pin for Battery voltage measuring PC5
  #define TPBAT ((1<<MUX2) | (1<<MUX0))
-#endif
+#endif	/* PROCESSOR_TYP */
 
 // setting for voltage devider of Batterie voltage measurement 10K and 3.3k
 #ifndef BAT_NUMERATOR
@@ -123,8 +126,10 @@
  #define EXT_DENOMINATOR 1
 #endif
 
-
-/* Port for the Test resistors
+/* ************************************************************************* */
+/* Port for the Test resistors                                               */
+/* ************************************************************************* */
+/*
   The Resistors must be connected to the lower 6 Pins of the Port in following sequence:
   RLx = 680R-resistor for Test-Pin x
   RHx = 470k-resistor for Test-Pin x
@@ -154,22 +159,7 @@
  #define TCAP_DDR DDRC
  #define TCAP_PORT PORTC
  #define TCAP_RH PC6
-/* FDIV_PIN specifies the pin, which switch on a 16:1 frequency divider */
- #define FDIV_DDR DDRC
- #define FDIV_PORT PORTC
- #define FDIV_PIN PC0
-/* the two bits P0 and P1 at FINP port control the input of frequency measurement */
-/* P1:P0 = 00 external input, P1:P0 = 10 high frequency crystal, P1:P0 = 11 low frequency crystal */
- #define FINP_DDR DDRC
- #define FINP_PORT PORTC
- #define FINP_P0 PC1
- #define FINP_P1 PC2
 
-/* define the input pin for frequency measuring and also the pin change monitoring port for measuring the periode */
- #define FREQINP_DDR DDRB
- #define FREQINP_PIN PB0
- #define PCMSK_FREQ PCMSK1
- #define PCINT_FREQ PCINT8
 #elif PROCESSOR_TYP == 1280
 //################# for mega1280, mega2560 use port K 
  #define R_DDR DDRK
@@ -181,7 +171,7 @@
  #define PIN_RH1 PK1
  #define PIN_RH2 PK3
  #define PIN_RH3 PK5
-#else
+#else		/* PROCESSOR_TYP */
 //############### default for mega8, mega168 and mega328
  #define R_DDR DDRB
  #define R_PORT PORTB
@@ -193,13 +183,69 @@
  #define PIN_RH2 PB3
  #define PIN_RH3 PB5
 
+#endif		/* PROCESSOR_TYP */
+
+
+/* ************************************************************************* */
+/* specify special pins:						     */
+/* - input pin used for frequency measurement and corresponding interrupt    */
+/* - two input pins used for incremental encoder (rotary switch)             */
+/* ************************************************************************* */
+#if PROCESSOR_TYP == 644
+/* define the input pin for frequency measuring and also the pin change monitoring port for measuring the periode */
+ #define FREQINP_DDR DDRB
+ #define FREQINP_PIN PB0
+ #define PCMSK_FREQ PCMSK1
+ #define PCINT_FREQ PCINT8
+/* define both input pins for rotaty encoder */
+ #define ROTARY_A_DDR DDRB
+ #define ROTARY_B_DDR DDRB
+ #if CHANGE_ROTARY_DIRECTION
+  #define ROTARY_B_PIN PB6	/* MISO at ISP connector, LCD-D6 */
+  #define ROTARY_A_PIN PB7	/* SCK at ISP connector, LCD-D7 */
+ #else		/* CHANGE_ROTARY_DIRECTION */
+  #define ROTARY_A_PIN PB6	/* MISO at ISP connector, LCD-D6 */
+  #define ROTARY_B_PIN PB7	/* SCK at ISP connector, LCD-D7 */
+ #endif		/* CHANGE_ROTARY_DIRECTION */
+ #define ROTARY_A_REG PINB
+ #define ROTARY_B_REG PINB
+/* FDIV_PIN specifies the output pin, which switch on a 16:1 frequency divider */
+ #define FDIV_DDR DDRC
+ #define FDIV_PORT PORTC
+ #define FDIV_PIN PC0
+/* the two bits P0 and P1 at FINP port control the input of frequency measurement */
+/* P1:P0 = 00 external input, P1:P0 = 10 high frequency crystal, P1:P0 = 11 low frequency crystal */
+ #define FINP_DDR DDRC
+ #define FINP_PORT PORTC
+ #define FINP_P0 PC1
+ #define FINP_P1 PC2
+#elif PROCESSOR_TYP == 1280
+/* define the input pin for frequency measuring and also the pin change monitoring port for measuring the periode */
+/* define both input pins for rotaty encoder */
+#else		/* PROCESSOR_TYP */
 /* define the input pin for frequency measuring and also the pin change monitoring port for measuring the periode */
  #define FREQINP_DDR DDRD
  #define FREQINP_PIN PD4
  #define PCMSK_FREQ PCMSK2
  #define PCINT_FREQ PCINT20
-#endif
+/* define both input pins for rotaty encoder */
+ #define ROTARY_A_DDR DDRD
+ #define ROTARY_B_DDR DDRD
+ #if CHANGE_ROTARY_DIRECTION
+  #define ROTARY_B_PIN PD3
+  #define ROTARY_A_PIN PD2
+ #else		/* CHANGE_ROTARY_DIRECTION */
+  #define ROTARY_A_PIN PD3
+  #define ROTARY_B_PIN PD2
+ #endif		/* CHANGE_ROTARY_DIRECTION */
+ #define ROTARY_A_REG PIND
+ #define ROTARY_B_REG PIND
+#endif		/* PROCESSOR_TYP */
 
+
+/* ************************************************************************* */
+/* define the output pin for switch the power on/off                         */
+/* ************************************************************************* */
 #if PROCESSOR_TYP == 644
  #define ON_DDR DDRB
  #define ON_PORT PORTB
@@ -208,198 +254,199 @@
  #define ON_DDR DDRA
  #define ON_PORT PORTA
  #define ON_PIN PA6      // This Pin is switched to high to switch power on
-#else
+#else		/* PROCESSOR_TYP */
  #define ON_DDR DDRD
  #define ON_PORT PORTD
  #define ON_PIN PD6      // This Pin is switched to high to switch power on
-#endif
+#endif		/* PROCESSOR_TYP */
 
-#ifdef STRIP_GRID_BOARD
- // Strip Grid board version
- #if PROCESSOR_TYP == 644
+/* ************************************************************************* */
+/* define the pin for push button  (low value, if pressed)                   */
+/* ************************************************************************* */
+#if PROCESSOR_TYP == 644
+  // currently no special strip grid layout defined
   #define RST_PORT PORTC
   #define RST_PIN_REG PINC
   #define RST_PIN PC7     //Pin, is switched to low, if push button is pressed
- #elif PROCESSOR_TYP == 1280
-  #define RST_PORT PORTA
-  #define RST_PIN_REG PINA
-  #define RST_PIN PA0     //Pin, is switched to low, if push button is pressed
- #else
-  #define RST_PORT PORTD
-  #define RST_PIN_REG PIND
-  #define RST_PIN PD0     //Pin, is switched to low, if push button is pressed
- #endif
-#else
- // normal layout version
- #if PROCESSOR_TYP == 644
-  #define RST_PORT PORTC
-  #define RST_PIN_REG PINC
-  #define RST_PIN PC7     //Pin, is switched to low, if push button is pressed
- #elif PROCESSOR_TYP == 1280
+#elif PROCESSOR_TYP == 1280
+  // currently no special strip grid layout defined
   #define RST_PORT PORTA
   #define RST_PIN_REG PINA
   #define RST_PIN PA7     //Pin, is switched to low, if push button is pressed
- #else
+#else		/* PROCESSOR_TYP */
+  /* Processor mega8/168/328 , two board layouts defined */
+ #ifdef STRIP_GRID_BOARD
+ // Strip Grid board version
+  #define RST_PORT PORTD
+  #define RST_PIN_REG PIND
+  #define RST_PIN PD0     //Pin, is switched to low, if push button is pressed
+ #else		/* no STRIP_GRID_BOARD */
+ // normal layout version
   #define RST_PORT PORTD
   #define RST_PIN_REG PIND
   #define RST_PIN PD7     //Pin, is switched to low, if push button is pressed
- #endif
-#endif
+ #endif		/* STRIP_GRID_BOARD */
+#endif		/* PROCESSOR_TYP */
 
 
-/*
-       Port(s) / Pins for LCD
-*/
-#ifdef STRIP_GRID_BOARD
- // special Layout for strip grid board
- #if PROCESSOR_TYP == 644
-  #define HW_LCD_EN_PORT         PORTB
-  #define HW_LCD_EN_PIN          2
- 
-  #define HW_LCD_RS_PORT         PORTB
-  #define HW_LCD_RS_PIN          3
+/* ************************************************************************* */
+/* Port(s) / Pins for LCD						     */
+/* ************************************************************************* */
 
-  #define HW_LCD_B4_PORT         PORTB
-  #define HW_LCD_B4_PIN          4
-  #define HW_LCD_B5_PORT         PORTB
-  #define HW_LCD_B5_PIN          5
-  #define HW_LCD_B6_PORT         PORTB
-  #define HW_LCD_B6_PIN          6
-  #define HW_LCD_B7_PORT         PORTB
-  #define HW_LCD_B7_PIN          7
- #elif PROCESSOR_TYP == 1280
-  #define HW_LCD_EN_PORT         PORTA
-  #define HW_LCD_EN_PIN          5
- 
-  #define HW_LCD_RS_PORT         PORTA
-  #define HW_LCD_RS_PIN          7
-
-  #define HW_LCD_B4_PORT         PORTA
-  #define HW_LCD_B4_PIN          4
-  #define HW_LCD_B5_PORT         PORTA
-  #define HW_LCD_B5_PIN          3
-  #define HW_LCD_B6_PORT         PORTA
-  #define HW_LCD_B6_PIN          2
-  #define HW_LCD_B7_PORT         PORTA
-  #define HW_LCD_B7_PIN          1
- #else
-  #define HW_LCD_EN_PORT         PORTD
-  #define HW_LCD_EN_PIN          5
- 
-  #define HW_LCD_RS_PORT         PORTD
-  #define HW_LCD_RS_PIN          7
-
-  #define HW_LCD_B4_PORT         PORTD
-  #define HW_LCD_B4_PIN          4
-  #define HW_LCD_B5_PORT         PORTD
-  #define HW_LCD_B5_PIN          3
-  #define HW_LCD_B6_PORT         PORTD
-  #define HW_LCD_B6_PIN          2
-  #define HW_LCD_B7_PORT         PORTD
-  #define HW_LCD_B7_PIN          1
- #endif
-#elif defined(LCD_ST7565)
+#if defined(LCD_ST7565)
  // 128x64 pixel graphics LCD with ST7565 controller and 1-bit interface
  // LCD-P/S = low, LCD-CS1 = low, LCD-CS2 = high
  // LCD_B0_xxx=SI, LCD_EN_xxx=SCL, LCD_RS_xxx=A0, LCD_RES_xxx=RST, (CS-GND)
- #if PROCESSOR_TYP == 644
-  #define HW_LCD_RES_DDR         DDRB
-  #define HW_LCD_RES_PORT        PORTB
-  #define HW_LCD_RES_PIN         0
+ #if PROCESSOR_TYP == 644	/* mega324/644/1284 with st7565 */
+  // currently no difference between normal and strip grid board
+   #define HW_LCD_RES_DDR         DDRB
+   #define HW_LCD_RES_PORT        PORTB
+   #define HW_LCD_RES_PIN         2
 
-  #define HW_LCD_EN_DDR          DDRB
-  #define HW_LCD_EN_PORT         PORTB
-  #define HW_LCD_EN_PIN          2
+   #define HW_LCD_EN_DDR          DDRB
+   #define HW_LCD_EN_PORT         PORTB
+   #define HW_LCD_EN_PIN          4
 
-  #define HW_LCD_RS_DDR          DDRB
-  #define HW_LCD_RS_PORT         PORTB
-  #define HW_LCD_RS_PIN          1
+   #define HW_LCD_RS_DDR          DDRB
+   #define HW_LCD_RS_PORT         PORTB
+   #define HW_LCD_RS_PIN          3
 
-  #define HW_LCD_B0_DDR          DDRB
-  #define HW_LCD_B0_PORT         PORTB
-  #define HW_LCD_B0_PIN          3
- #elif PROCESSOR_TYP == 1280
-  #define HW_LCD_RES_DDR         DDRA
-  #define HW_LCD_RES_PORT        PORTA
-  #define HW_LCD_RES_PIN         0
+   #define HW_LCD_B0_DDR          DDRB
+   #define HW_LCD_B0_PORT         PORTB
+   #define HW_LCD_B0_PIN          5
+ #elif PROCESSOR_TYP == 1280	/* mega1280/2560 with st7565 */
+  // currently no difference between normal and strip grid board
+   #define HW_LCD_RES_DDR         DDRA
+   #define HW_LCD_RES_PORT        PORTA
+   #define HW_LCD_RES_PIN         0
 
-  #define HW_LCD_EN_DDR          DDRA
-  #define HW_LCD_EN_PORT         PORTA
-  #define HW_LCD_EN_PIN          2
+   #define HW_LCD_EN_DDR          DDRA
+   #define HW_LCD_EN_PORT         PORTA
+   #define HW_LCD_EN_PIN          2
 
-  #define HW_LCD_RS_DDR          DDRA
-  #define HW_LCD_RS_PORT         PORTA
-  #define HW_LCD_RS_PIN          1
+   #define HW_LCD_RS_DDR          DDRA
+   #define HW_LCD_RS_PORT         PORTA
+   #define HW_LCD_RS_PIN          1
 
-  #define HW_LCD_B0_DDR          DDRA
-  #define HW_LCD_B0_PORT         PORTA
-  #define HW_LCD_B0_PIN          3
- #else
-  #define HW_LCD_RES_DDR         DDRD
-  #define HW_LCD_RES_PORT        PORTD
-  #define HW_LCD_RES_PIN         0
+   #define HW_LCD_B0_DDR          DDRA
+   #define HW_LCD_B0_PORT         PORTA
+   #define HW_LCD_B0_PIN          3
+ #else				/* mega8/168/328 with st7565  */
+  // currently no difference between normal and strip grid board
+   #define HW_LCD_RES_DDR         DDRD
+   #define HW_LCD_RES_PORT        PORTD
+   #define HW_LCD_RES_PIN         0
 
-  #define HW_LCD_EN_DDR          DDRD
-  #define HW_LCD_EN_PORT         PORTD
-  #define HW_LCD_EN_PIN          2
+   #define HW_LCD_EN_DDR          DDRD
+   #define HW_LCD_EN_PORT         PORTD
+   #define HW_LCD_EN_PIN          2
 
-  #define HW_LCD_RS_DDR          DDRD
-  #define HW_LCD_RS_PORT         PORTD
-  #define HW_LCD_RS_PIN          1
+   #define HW_LCD_RS_DDR          DDRD
+   #define HW_LCD_RS_PORT         PORTD
+   #define HW_LCD_RS_PIN          1
 
-  #define HW_LCD_B0_DDR          DDRD
-  #define HW_LCD_B0_PORT         PORTD
-  #define HW_LCD_B0_PIN          3
- #endif
-#else
- // normal Layout
- #if PROCESSOR_TYP == 644
-  #define HW_LCD_EN_PORT         PORTB
-  #define HW_LCD_EN_PIN          3
+   #define HW_LCD_B0_DDR          DDRD
+   #define HW_LCD_B0_PORT         PORTD
+   #define HW_LCD_B0_PIN          3
+ #endif	/* PROCESSOR_TYP */
  
-  #define HW_LCD_RS_PORT         PORTB
-  #define HW_LCD_RS_PIN          2
+#else /* not defined(LCD_ST7565) */
+ //  with character LCD
+ #if PROCESSOR_TYP == 644	/* normal layout with character LCD and mega324/644/1284 */
+  #ifdef STRIP_GRID_BOARD
+ // special Layout for strip grid board
+   #define HW_LCD_EN_PORT         PORTB
+   #define HW_LCD_EN_PIN          2
+ 
+   #define HW_LCD_RS_PORT         PORTB
+   #define HW_LCD_RS_PIN          3
 
-  #define HW_LCD_B4_PORT         PORTB
-  #define HW_LCD_B4_PIN          4
-  #define HW_LCD_B5_PORT         PORTB
-  #define HW_LCD_B5_PIN          5
-  #define HW_LCD_B6_PORT         PORTB
-  #define HW_LCD_B6_PIN          6
-  #define HW_LCD_B7_PORT         PORTB
-  #define HW_LCD_B7_PIN          7
- #elif PROCESSOR_TYP == 1280
-  #define HW_LCD_EN_PORT         PORTA
-  #define HW_LCD_EN_PIN          5
+  #else
+ // normal layout
+   #define HW_LCD_EN_PORT         PORTB
+   #define HW_LCD_EN_PIN          3
+ 
+   #define HW_LCD_RS_PORT         PORTB
+   #define HW_LCD_RS_PIN          2
+  #endif
 
-  #define HW_LCD_RS_PORT         PORTA
-  #define HW_LCD_RS_PIN          4
+   #define HW_LCD_B4_PORT         PORTB
+   #define HW_LCD_B4_PIN          4
+   #define HW_LCD_B5_PORT         PORTB
+   #define HW_LCD_B5_PIN          5
+   #define HW_LCD_B6_PORT         PORTB
+   #define HW_LCD_B6_PIN          6
+   #define HW_LCD_B7_PORT         PORTB
+   #define HW_LCD_B7_PIN          7
+ #elif PROCESSOR_TYP == 1280	/* normal layout with character LCD and mega1280/2560 */
+  #ifdef STRIP_GRID_BOARD
+   // special Layout for strip grid board
+   #define HW_LCD_EN_PORT         PORTA
+   #define HW_LCD_EN_PIN          5
+ 
+   #define HW_LCD_RS_PORT         PORTA
+   #define HW_LCD_RS_PIN          7
 
-  #define HW_LCD_B4_PORT         PORTA
-  #define HW_LCD_B4_PIN          0
-  #define HW_LCD_B5_PORT         PORTA
-  #define HW_LCD_B5_PIN          1
-  #define HW_LCD_B6_PORT         PORTA
-  #define HW_LCD_B6_PIN          2
-  #define HW_LCD_B7_PORT         PORTA
-  #define HW_LCD_B7_PIN          3
- #else
-  #define HW_LCD_EN_PORT         PORTD
-  #define HW_LCD_EN_PIN          5
+   #define HW_LCD_B4_PORT         PORTA
+   #define HW_LCD_B4_PIN          4
+   #define HW_LCD_B5_PORT         PORTA
+   #define HW_LCD_B5_PIN          3
+   #define HW_LCD_B6_PORT         PORTA
+   #define HW_LCD_B6_PIN          2
+   #define HW_LCD_B7_PORT         PORTA
+   #define HW_LCD_B7_PIN          1
+  #else 	/* no STRIP_GRID_BOARD */
+   #define HW_LCD_EN_PORT         PORTA
+   #define HW_LCD_EN_PIN          5
+ 
+   #define HW_LCD_RS_PORT         PORTA
+   #define HW_LCD_RS_PIN          4
 
-  #define HW_LCD_RS_PORT         PORTD
-  #define HW_LCD_RS_PIN          4
+   #define HW_LCD_B4_PORT         PORTA
+   #define HW_LCD_B4_PIN          0
+   #define HW_LCD_B5_PORT         PORTA
+   #define HW_LCD_B5_PIN          1
+   #define HW_LCD_B6_PORT         PORTA
+   #define HW_LCD_B6_PIN          2
+   #define HW_LCD_B7_PORT         PORTA
+   #define HW_LCD_B7_PIN          3
+  #endif	/* STRIP_GRID_BOARD */
+ #else		/* PROCESSOR_TYP */
+  #ifdef STRIP_GRID_BOARD
+  			/* strip grid layout with character LCD and mega8/168/328 */
+   #define HW_LCD_EN_PORT         PORTD
+   #define HW_LCD_EN_PIN          5
+ 
+   #define HW_LCD_RS_PORT         PORTD
+   #define HW_LCD_RS_PIN          7
+ 
+   #define HW_LCD_B4_PORT         PORTD
+   #define HW_LCD_B4_PIN          4
+   #define HW_LCD_B5_PORT         PORTD
+   #define HW_LCD_B5_PIN          3
+   #define HW_LCD_B6_PORT         PORTD
+   #define HW_LCD_B6_PIN          2
+   #define HW_LCD_B7_PORT         PORTD
+   #define HW_LCD_B7_PIN          1
+  #else		/* no STRIP_GRID_BOARD */
+			/* normal layout with character LCD and  mega8/168/328 */
+   #define HW_LCD_EN_PORT         PORTD
+   #define HW_LCD_EN_PIN          5
 
-  #define HW_LCD_B4_PORT         PORTD
-  #define HW_LCD_B4_PIN          0
-  #define HW_LCD_B5_PORT         PORTD
-  #define HW_LCD_B5_PIN          1
-  #define HW_LCD_B6_PORT         PORTD
-  #define HW_LCD_B6_PIN          2
-  #define HW_LCD_B7_PORT         PORTD
-  #define HW_LCD_B7_PIN          3
- #endif
-#endif
+   #define HW_LCD_RS_PORT         PORTD
+   #define HW_LCD_RS_PIN          4
+
+   #define HW_LCD_B4_PORT         PORTD
+   #define HW_LCD_B4_PIN          0
+   #define HW_LCD_B5_PORT         PORTD
+   #define HW_LCD_B5_PIN          1
+   #define HW_LCD_B6_PORT         PORTD
+   #define HW_LCD_B6_PIN          2
+   #define HW_LCD_B7_PORT         PORTD
+   #define HW_LCD_B7_PIN          3
+  #endif 		/* STRIP_GRID_BOARD */
+ #endif		/* PROCESSOR_TYP */
+#endif		/* defined(ST7565) */
 
 
 

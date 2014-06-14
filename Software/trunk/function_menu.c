@@ -49,9 +49,11 @@
 #define MIN_SELECT_TIME 50	/* 50x10ms must be hold down to select function without a rotary switch */
 #endif
 
-#define FAST_ROTATION 10	/* number of rotation steps to identify a fast rotation of rotary switch */
+#define FAST_ROTATION 6		/* number of rotation steps to identify a fast rotation of rotary switch */
 
 #ifdef WITH_MENU
+/* ****************************************************************** */
+/* ****************************************************************** */
 void function_menu() {
   uint8_t ii;
   uint8_t func_number;
@@ -66,7 +68,7 @@ void function_menu() {
  #endif
   {
 #ifndef WITH_ROTARY_SWITCH
-     if (ii > 0) func_number++;
+//     if (ii > 0) func_number++;	// increase the function number after 5 seconds
 #endif
      if (func_number > MODE_OFF) func_number -= (MODE_OFF + 1);
      message_key_released(SELECTION_str);
@@ -74,16 +76,16 @@ void function_menu() {
      lcd_clear_line();
      lcd_line2();
 #ifdef FOUR_LINE_LCD
-     message2line(func_number + MODE_OFF);
+     message2line(func_number + MODE_OFF);	// show lower (previous) function
      lcd_line3();
      lcd_clear_line();
      lcd_line3();
      lcd_data('>');
-     message2line(func_number);
+     message2line(func_number);			// show selectable function
      lcd_line4();
      lcd_clear_line();
      lcd_line4();
-     message2line(func_number + 1);
+     message2line(func_number + 1);		// show higher (next) function
 #else
      message2line(func_number);
 #endif
@@ -139,6 +141,10 @@ void function_menu() {
   } /* end for ll */
   return;
  } // end function_menu()
+
+/* ****************************************************************** */
+/* message2line writes the message corresponding to the number to LCD */
+/* ****************************************************************** */
 void message2line(uint8_t number) {
      if (number > MODE_OFF) number -= (MODE_OFF + 1);
      if (number == MODE_TRANS) lcd_MEM2_string(TESTER_str);
@@ -160,7 +166,10 @@ void message2line(uint8_t number) {
         lcd_MEM_string(OFF_str);
      }
 }
+
+/* ****************************************************************** */
 /* show_C_ESR measures the capacity and ESR of a capacitor connected to TP1 and TP3 */
+/* ****************************************************************** */
 void show_C_ESR() {
   uint8_t key_pressed;
   message_key_released(C_ESR_str);
@@ -313,7 +322,10 @@ void make_frequency() {
   old_freq = 0;
   freq_nr = MAX_FREQ_NR - 1;	// start with 1 MHz
 #ifdef POWER_OFF
-  uint8_t times;
+  uint8_t new_points;		// one point for every 30 seconds wait time
+  uint8_t shown_points;		// one point for every 30 seconds wait time
+  uint8_t times;		// total wait time
+  shown_points = 0;
   for (times=0; times<240; times++) 
 #else
   while (1)			/* wait endless without option POWER_OFF */
@@ -321,13 +333,17 @@ void make_frequency() {
   {
 #define KEYPRESS_LENGTH_10ms 0
 #ifdef POWER_OFF
-     lcd_line1();
-     lcd_clear_line();	// clear line 1 for next frequency
-     lcd_line1();
-     lcd_MEM2_string(F_GEN_str);	// display f-Generator
-     uint8_t del8;
-     for (del8=0; (del8+20)<times; del8+=30) {
-        lcd_data('.');		// show elapsed time, one point is 30 seconds
+     new_points = (times+10) / 30;
+     if (new_points != shown_points) {
+        // count of points has changed, build LCD line1 new
+        lcd_line1();
+        lcd_clear_line();	// clear line 1 
+        lcd_line1();
+        lcd_MEM2_string(F_GEN_str);	// display f-Generator
+        shown_points = new_points;
+        for (new_points=0; new_points<shown_points ;new_points++) {
+           lcd_data('.');		// show elapsed time, one point is 30 seconds
+        }
      }
 #undef KEYPRESS_LENGTH_10ms 
 #define KEYPRESS_LENGTH_10ms 20		/* change frequency only with >200ms key press */
@@ -335,7 +351,7 @@ void make_frequency() {
      if (old_freq != freq_nr) {
        // new frequency is selected
        if (freq_nr > MAX_FREQ_NR) freq_nr -= (MAX_FREQ_NR + 1);
-       old_freq = freq_nr;
+       old_freq = freq_nr;	// update the last active frequency number
 #ifdef FOUR_LINE_LCD
        lcd_line2();
        lcd_clear_line();	// clear line 2 for previous frequency
@@ -368,8 +384,8 @@ void make_frequency() {
      }
 #else
      if (key_pressed != 0)  times = 0;	// reset counter, operator is active
-     if (key_pressed > KEYPRESS_LENGTH_10ms) freq_nr++;
 #endif
+     if (key_pressed > KEYPRESS_LENGTH_10ms) freq_nr++; // longer key press select next frequency
      if(key_pressed >= 80) break;	// more than 0.8 seconds
   } /* end for times */
   TCCR1B = 0;		// stop counter

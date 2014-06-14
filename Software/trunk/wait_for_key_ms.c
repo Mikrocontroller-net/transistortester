@@ -26,14 +26,16 @@ uint8_t wait_for_key_ms(int max_time) {
 
   kk = 100;
   while (kk >= 0)  { /* wait up to 500ms until key is released */
-     if ((RST_PIN_REG & (1<<RST_PIN)) != 0)  break; // key is released
 #ifdef WITH_ROTARY_SWITCH
      uint8_t ww;
-     for (ww=0; ww<10;ww++) {
+     for (ww=0; ww<25;ww++) {
         check_rotary();		// check for change of switch state of the rotary encoder
-        wait1ms();
+        if ((RST_PIN_REG & (1<<RST_PIN)) != 0)  break; // key is released
+        wait200us();
      }
+     if (ww < 25) break;
 #else
+     if ((RST_PIN_REG & (1<<RST_PIN)) != 0)  break; // key is released
      wait_about5ms();		// wait 5 ms (sleep)
 #endif
      kk--;
@@ -47,9 +49,9 @@ uint8_t wait_for_key_ms(int max_time) {
 #ifdef WITH_ROTARY_SWITCH
      // monitor rotary switch during wait
      uint8_t ww;
-     for (ww=0; ww<10;ww++) {
+     for (ww=0; ww<50;ww++) {
         check_rotary();		// check for change of switch state of the rotary encoder
-        wait1ms();
+        wait200us();
      }
 #else
      wait_about10ms();
@@ -78,9 +80,9 @@ uint8_t wait_for_key_ms(int max_time) {
      }
 #ifdef WITH_ROTARY_SWITCH
      if (rotary.count >= 0) {
-         rotary.incre = rotary.count;
+         rotary.incre = rotary.count;	// absolute value of count
      } else {
-         rotary.incre = -rotary.count;
+         rotary.incre = -rotary.count;	// absolute value of count
      }
      if ((wait_time > 30) && (rotary.count != 0)) break;
 #endif
@@ -108,9 +110,13 @@ uint8_t new_state;
   }
   if (rotary.state[rotary.ind] != new_state) {
      // state of rotary encoder has changed
+#if WITH_ROTARY_SWITCH < 3
+     // type 1 und 2
      if ((new_state == 0) && (rotary.state[rotary.ind] == 2) && (rotary.state[(rotary.ind+3)&0x03] == 3)) rotary.count++;
      if ((new_state == 0) && (rotary.state[rotary.ind] == 1) && (rotary.state[(rotary.ind+3)&0x03] == 3)) rotary.count--;
+#endif
 #if WITH_ROTARY_SWITCH != 2
+     // type 1 und 3
      if ((new_state == 3) && (rotary.state[rotary.ind] == 2) && (rotary.state[(rotary.ind+3)&0x03] == 0)) rotary.count--;
      if ((new_state == 3) && (rotary.state[rotary.ind] == 1) && (rotary.state[(rotary.ind+3)&0x03] == 0)) rotary.count++;
 #endif

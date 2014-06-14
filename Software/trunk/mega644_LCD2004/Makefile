@@ -26,7 +26,8 @@ CFLAGS = -Wall
 # atmega1284: m1284p
 # atmega1280: m1280	// see config.h for different port setting
 # atmega2560: m2560	// see config.h for different port setting
-PARTNO = m644p
+#PARTNO = m644p
+PARTNO = m1284p
 
 # The WITH_MENU option enables a dialog to choose some additional functions.
 # Currently a frequency measurement at ATmega Pin PD4, a frequency generator at TP2 ,
@@ -43,12 +44,12 @@ CFLAGS += -DWITH_MENU
 # A define of the WITH_ROTARY_SWITCH enable the support for this extension.
 # If every step of the switch build the same switch state at the step position, set WITH_ROTARY_SWITCH=2.
 # Otherwise only set the WITH_ROTARY_SWITCH or set to 1.
-#CFLAGS += -DWITH_ROTARY_SWITCH=2
+CFLAGS += -DWITH_ROTARY_SWITCH=2
 # the option CHANGE_ROTARY_DIRECTION changes the rotary direction by swap of switches
-#CFLAGS += -DCHANGE_ROTARY_DIRECTION
+CFLAGS += -DCHANGE_ROTARY_DIRECTION
 
 # Select your language:
-# Available languages are: LANG_BRASIL, LANG_CZECH, LANG_DUTCH, ENGLISH, LANG_GERMAN, LANG_HUNGARIAN, LANG_ITALIAN,
+# Available languages are: LANG_BRASIL, LANG_CZECH, LANG_DUTCH, LANG_ENGLISH, LANG_GERMAN, LANG_HUNGARIAN, LANG_ITALIAN,
 #                          LANG_LITHUANIAN, LANG_POLISH, LANG_RUSSIAN , LANG_SLOVAK, LANG_SLOVENE, LANG_UKRAINIAN
 UI_LANGUAGE = LANG_ENGLISH
 

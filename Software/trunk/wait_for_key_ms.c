@@ -73,7 +73,7 @@ uint8_t wait_for_key_ms(int max_time) {
         if ((key_pressed == 0) && (key_cs != 0)) break;	// return, if key is released again
      }
      wdt_reset();
-     wait_time++;
+//     wait_time++;
      if (count_time > 0) {		// count only, if counter > 0
         count_time -= 10;		// 10 ms are done, count down
         if (count_time == 0) count_time = -1;	// never count to zero, zero is endless!
@@ -84,7 +84,8 @@ uint8_t wait_for_key_ms(int max_time) {
      } else {
          rotary.incre = -rotary.count;	// absolute value of count
      }
-     if ((wait_time > 30) && (rotary.count != 0)) break;
+     if (rotary.incre != 0)  wait_time++;	// start time window of 200ms
+     if ((wait_time > 20) && (rotary.count != 0)) break;
 #endif
   } /* end while (count_time >= 0) */
  return(key_cs);		// return period key is pressed within the specified time

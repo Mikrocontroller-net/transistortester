@@ -49,7 +49,7 @@
 #define MIN_SELECT_TIME 50	/* 50x10ms must be hold down to select function without a rotary switch */
 #endif
 
-#define FAST_ROTATION 6		/* number of rotation steps to identify a fast rotation of rotary switch */
+#define FAST_ROTATION 10		/* number of rotation steps to identify a fast rotation of rotary switch */
 
 #ifdef WITH_MENU
 /* ****************************************************************** */

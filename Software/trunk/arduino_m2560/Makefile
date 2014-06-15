@@ -32,8 +32,9 @@ UI_LANGUAGE = LANG_ENGLISH
 #UI_LANGUAGE = LANG_CZECH
 #UI_LANGUAGE = LANG_GERMAN
 
+# Can be used with a 4x20 character display for better using the additional space.
+# Additional parameters, which are shown only short in row 2, will be shown in row 3 and 4 with this option.
 #CFLAGS += -DFOUR_LINE_LCD
-#CFLAGS += -DDebugOut=3
 
 # The LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset.
 # This lcd-display don't have a character for Ohm and for µ (micro).

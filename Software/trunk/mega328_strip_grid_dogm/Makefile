@@ -49,6 +49,10 @@ CFLAGS += -DWITH_MENU
 #                          LANG_LITHUANIAN, LANG_POLISH, LANG_RUSSIAN , LANG_SLOVAK, LANG_SLOVENE, LANG_UKRAINIAN
 UI_LANGUAGE = LANG_ENGLISH
 
+# Can be used with a 4x20 character display for better using the additional space.
+# Additional parameters, which are shown only short in row 2, will be shown in row 3 and 4 with this option.
+#CFLAGS += -DFOUR_LINE_LCD
+
 # The LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset.
 # This lcd-display don't have a character for Ohm and for µ (micro).
 # Russian language requires a LCD controller with russian characterset and option LCD_CYRILLIC!

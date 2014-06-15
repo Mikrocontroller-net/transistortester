@@ -44,7 +44,7 @@
  #define MODE_HFREQ 66
 #endif
 #ifdef WITH_ROTARY_SWITCH
-#define MIN_SELECT_TIME 10	/* 10x10ms must be hold down to select function with a rotary switch */
+#define MIN_SELECT_TIME 30	/* 30x10ms must be hold down to select function with a rotary switch */
 #else
 #define MIN_SELECT_TIME 50	/* 50x10ms must be hold down to select function without a rotary switch */
 #endif
@@ -67,24 +67,26 @@ void function_menu() {
   while (1)		/* without end, if no power off specified */
  #endif
   {
-#ifndef WITH_ROTARY_SWITCH
-//     if (ii > 0) func_number++;	// increase the function number after 5 seconds
-#endif
+//#ifndef WITH_ROTARY_SWITCH
+     if (ii > 0) func_number++;	// increase the function number with key press
+//#endif
      if (func_number > MODE_OFF) func_number -= (MODE_OFF + 1);
      message_key_released(SELECTION_str);
      lcd_line2();
-     lcd_clear_line();
-     lcd_line2();
+     lcd_clear_line();				// clear line 2
+     lcd_line2();				// reset cursor to begin of line 2
 #ifdef FOUR_LINE_LCD
+     lcd_space();				// put a blank to 1. row of line 2
      message2line(func_number + MODE_OFF);	// show lower (previous) function
      lcd_line3();
-     lcd_clear_line();
-     lcd_line3();
-     lcd_data('>');
+     lcd_clear_line();				// clear line 3
+     lcd_line3();				// reset cursor to begin of line 3
+     lcd_data('>');				// put a '>' marker to row 1 of line 3
      message2line(func_number);			// show selectable function
      lcd_line4();
-     lcd_clear_line();
-     lcd_line4();
+     lcd_clear_line();				// clear line 4
+     lcd_line4();				// reset cursor to begin of line 4
+     lcd_space();				// put a blank to 1. row of line 4
      message2line(func_number + 1);		// show higher (next) function
 #else
      message2line(func_number);
@@ -111,7 +113,7 @@ void function_menu() {
            do_10bit_PWM();		// generate 10bit PWM
         }
         if (func_number == MODE_ESR) {
-           show_C_ESR();
+           show_C_ESR();		// measure capacity and ESR at TP1 and TP3
         }
         if (func_number == MODE_ROTARY) {
            CheckRotaryEncoder();		// check rotary encoder
@@ -356,10 +358,12 @@ void make_frequency() {
        lcd_line2();
        lcd_clear_line();	// clear line 2 for previous frequency
        lcd_line2();
+       lcd_space();		// add a space to row 1 of line2
        switch_frequency(freq_nr + MAX_FREQ_NR);
        lcd_line4();
        lcd_clear_line();	// clear line 4 for next frequency
        lcd_line4();
+       lcd_space();		// add a space to row 1 of line4
        switch_frequency(freq_nr + 1);
        lcd_line3();
        lcd_clear_line();	// clear line 3 for new frequency
@@ -635,9 +639,9 @@ void do_10bit_PWM() {
         }
         pwm_flip = (((unsigned long)0x3ff * percent) + 50) / 100;
         OCR1B = pwm_flip;		// new percentage
-        lcd_line2();		// only one value use line 2
-        lcd_clear_line();
-        lcd_line2();
+        lcd_line2();		// set cursor to begin of line 2
+        lcd_clear_line();	// clear line 2
+        lcd_line2();		// set cursor to row 1 of line 2
         DisplayValue((((unsigned long)pwm_flip * 1000) + 0x1ff) / 0x3ff,-1,'%',5);
         old_perc = percent;	// update the old duty cycle
         if (key_pressed > 40) {
@@ -653,13 +657,12 @@ void do_10bit_PWM() {
      } else {
         percent += (100 + rotary.count);	// decrease the duty cycle by rotary.count
      }
-#else
+#endif
      if (key_pressed > 50) {
         percent += 10;		// duty cycle will be increased with 10
      } else {
-        percent += 1;		// duty cycle will be increased with 1
+        if (key_pressed > 0) percent += 1;	// duty cycle will be increased with 1
      }
-#endif
 #ifdef POWER_OFF
  #ifdef WITH_ROTARY_SWITCH
      if ((key_pressed > 0) || (rotary.incre > 0)) times = 0;	// reset the loop counter, operator is active

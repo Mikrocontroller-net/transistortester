@@ -10562,10 +10562,10 @@ int main(void) {
     3334:	9d e6       	ldi	r25, 0x6D	; 109
     3336:	90 93 0d 01 	sts	0x010D, r25
     333a:	80 93 0c 01 	sts	0x010C, r24
+
+#if POWER_OFF+0 > 1
+  empty_count = 0;
   mess_count = 0;
-#endif
-#ifndef USE_EEPROM
-  EE_check_init();		// init EEprom, if unset
 #endif
   ADCconfig.RefFlag = 0;
     333e:	10 92 3c 01 	sts	0x013C, r1

@@ -42,9 +42,13 @@ CFLAGS += -DWITH_MENU
 # The best choise is a incremental encoder with Push Button. The button can be connected
 # parallel to the start key of the Transistor Tester.
 # A define of the WITH_ROTARY_SWITCH enable the support for this extension.
-# If every step of the switch build the same switch state at the step position, set WITH_ROTARY_SWITCH=2.
-# Otherwise only set the WITH_ROTARY_SWITCH or set to 1.
-CFLAGS += -DWITH_ROTARY_SWITCH=2
+# If your encoder has the same count of pulses at any switch as indexed positions (detent) for every turn,
+# you should set the WITH_ROTARY_SWITCH to 2 or 3.
+# If your encoder has twice the count of indexed positions, you should set the WITH_ROTARY_COUNT to 1.
+# You can also use two separate push-buttons for Up and Down instead ot the rotary encoder.
+# You must set the WITH_ROTARY_SWITCH to 4 for the UP/DOWN push-buttons.
+#CFLAGS += -DWITH_ROTARY_SWITCH=2
+CFLAGS += -DWITH_ROTARY_SWITCH=4
 # the option CHANGE_ROTARY_DIRECTION changes the rotary direction by swap of switches
 CFLAGS += -DCHANGE_ROTARY_DIRECTION
 

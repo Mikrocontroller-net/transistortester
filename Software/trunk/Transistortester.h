@@ -1136,6 +1136,9 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 #endif
 
   const uint8_t EE_ESR_ZEROtab[] EEMEM = {ESR_ZERO, ESR_ZERO, ESR_ZERO, ESR_ZERO};	// zero offset of ESR measurement
+#ifdef WITH_ROTARY_SWITCH
+//  const uint8_t EE_RotarySwitch EEMEM = 0;	// rotation switch is not detected
+#endif
 //End of EEPROM-Strings
 #else
  // no MAIN_C
@@ -1325,8 +1328,15 @@ struct Rotary_t {
  uint8_t ind;		// index to the last entry of the state history (rotary switch)
  int8_t count;		// count of right steps, negative if left steps
  uint8_t incre;		// absolute value of step count
+ #if WITH_ROTARY_SWITCH > 3
+ // no rotary switch connected, UP and DOWN  key is present
+ uint8_t a_state;	// history of switch A state for single UP switch
+ uint8_t b_state;	// history of switch B state for single DOWN switch
+ #endif
 };
 COMMON struct Rotary_t rotary;
+COMMON uint8_t rotary_switch_present;	// is set to 1, if rotary switch movement is detected
+// COMMON  const uint8_t EE_RotarySwitch; 	// rotation switch is detected
 #endif
 
 

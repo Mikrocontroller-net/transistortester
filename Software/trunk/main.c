@@ -129,6 +129,12 @@ int main(void) {
 
 //#if POWER_OFF+0 > 1
   // tester display time selection
+#ifndef USE_EEPROM
+  EE_check_init();		// init EEprom, if unset
+#endif
+#ifdef WITH_ROTARY_SWITCH
+//  rotary_switch_present = eeprom_read_byte(&EE_RotarySwitch);
+#endif
 #if 0
   display_time = OFF_WAIT_TIME;		// LONG_WAIT_TIME for single mode, else SHORT_WAIT_TIME
   if (!(RST_PIN_REG & (1<<RST_PIN))) {
@@ -157,9 +163,6 @@ int main(void) {
 #if POWER_OFF+0 > 1
   empty_count = 0;
   mess_count = 0;
-#endif
-#ifndef USE_EEPROM
-  EE_check_init();		// init EEprom, if unset
 #endif
   ADCconfig.RefFlag = 0;
   Calibrate_UR();		// get Ref Voltages and Pin resistance

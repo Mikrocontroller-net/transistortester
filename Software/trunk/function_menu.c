@@ -43,11 +43,7 @@
  #endif
  #define MODE_HFREQ 66
 #endif
-#ifdef WITH_ROTARY_SWITCH
-#define MIN_SELECT_TIME 30	/* 30x10ms must be hold down to select function with a rotary switch */
-#else
 #define MIN_SELECT_TIME 50	/* 50x10ms must be hold down to select function without a rotary switch */
-#endif
 
 #define FAST_ROTATION 10		/* number of rotation steps to identify a fast rotation of rotary switch */
 
@@ -59,7 +55,6 @@ void function_menu() {
   uint8_t func_number;
 
   func_number = 0;
-  ii = 0;
  #ifdef POWER_OFF
   uint8_t ll;
   for (ll=0;ll<((MODE_OFF+1)*10);ll++) 
@@ -67,9 +62,6 @@ void function_menu() {
   while (1)		/* without end, if no power off specified */
  #endif
   {
-//#ifndef WITH_ROTARY_SWITCH
-     if (ii > 0) func_number++;	// increase the function number with key press
-//#endif
      if (func_number > MODE_OFF) func_number -= (MODE_OFF + 1);
      message_key_released(SELECTION_str);
      lcd_line2();
@@ -97,7 +89,12 @@ void function_menu() {
  #else
      ii = wait_for_key_ms(0);			// wait endless
  #endif
-     if (ii >= MIN_SELECT_TIME) {
+#ifdef WITH_ROTARY_SWITCH
+     if ((ii >= MIN_SELECT_TIME) || ((rotary_switch_present != 0) && (ii > 0)))
+#else
+     if (ii >= MIN_SELECT_TIME)
+#endif
+     {
         // selection only with key-press
         if (func_number == MODE_TRANS) break;		// return to TransistorTester
         if (func_number == MODE_FREQ) GetFrequency(0);
@@ -125,7 +122,7 @@ void function_menu() {
            wait_for_key_ms(0); //never ending loop 
         }
         // don't increase function number for easier selection the same function
-        ii = 0;			// function was executed before
+        ii = 0;			// function was executed before, do not increase func_number
 #ifdef WITH_ROTARY_SWITCH
         rotary.incre = 0;	// reset all rotary information
         rotary.count = 0;
@@ -140,6 +137,7 @@ void function_menu() {
         func_number += (MODE_OFF + 1 + rotary.count);	// function is decreased by rotary steps
      }
 #endif
+     if (ii > 0) func_number++;	// increase the function number with key press
   } /* end for ll */
   return;
  } // end function_menu()

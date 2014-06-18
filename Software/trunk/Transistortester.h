@@ -1323,12 +1323,13 @@ COMMON uint8_t UnCalibrated;	// 0, if the tester is calibrated
 #endif
 
 #ifdef WITH_ROTARY_SWITCH
+ #define ROT_MSK 0x03		/* must be power of two - 1: 3,7,15 */
 struct Rotary_t {
- uint8_t state[4];	// coded state history of the rotatry switch, bit 0 == state of A-switch, bit 1 = state of B-switch
+ uint8_t state[(ROT_MSK+1)];	// coded state history of the rotatry switch, bit 0 == state of A-switch, bit 1 = state of B-switch
  uint8_t ind;		// index to the last entry of the state history (rotary switch)
  int8_t count;		// count of right steps, negative if left steps
  uint8_t incre;		// absolute value of step count
- #if WITH_ROTARY_SWITCH > 3
+ #if WITH_ROTARY_SWITCH == 4
  // no rotary switch connected, UP and DOWN  key is present
  uint8_t a_state;	// history of switch A state for single UP switch
  uint8_t b_state;	// history of switch B state for single DOWN switch

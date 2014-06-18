@@ -130,7 +130,9 @@ void function_menu() {
      } /* end if (ii >= MIN_SELECT_TIME) */
 #ifdef WITH_ROTARY_SWITCH
      if (rotary.incre >= FAST_ROTATION) break; // to much rotation
+ #ifdef POWER_OFF
      if (rotary.count != 0) ll = 0; 	// someone is working, reset timer
+ #endif
      if (rotary.count >= 0) {
         func_number += rotary.count;	// function number is increased by rotary steps
      } else {
@@ -376,16 +378,20 @@ void make_frequency() {
 #endif
      } /* end if (old_freq != freq_nr) */
      key_pressed = wait_for_key_ms(1000);
-#ifdef WITH_ROTARY_SWITCH
+#ifdef POWER_OFF
+ #ifdef WITH_ROTARY_SWITCH
      if ((key_pressed != 0) || (rotary.incre > 0)) times = 0;	// reset counter, operator is active
+ #else
+     if (key_pressed != 0)  times = 0;	// reset counter, operator is active
+ #endif
+#endif
+#ifdef WITH_ROTARY_SWITCH
      if (rotary.incre > FAST_ROTATION) break;		// fast rotation ends voltage measurement
      if (rotary.count >= 0) {
         freq_nr += rotary.count;		// increase the frequency number by rotary.count
      } else {
         freq_nr += (MAX_FREQ_NR + 1 + rotary.count);	// decrease the frequency by rotary.count
      }
-#else
-     if (key_pressed != 0)  times = 0;	// reset counter, operator is active
 #endif
      if (key_pressed > KEYPRESS_LENGTH_10ms) freq_nr++; // longer key press select next frequency
      if(key_pressed >= 80) break;	// more than 0.8 seconds
@@ -641,11 +647,28 @@ void do_10bit_PWM() {
         lcd_clear_line();	// clear line 2
         lcd_line2();		// set cursor to row 1 of line 2
         DisplayValue((((unsigned long)pwm_flip * 1000) + 0x1ff) / 0x3ff,-1,'%',5);
+#if 0
+        lcd_space();
+        if (rotary.count >= 0) {	// actual count for debugging
+           lcd_data('+');
+           lcd_data('0'+rotary.count);
+        } else {
+           lcd_data('-');
+           lcd_data('0'-rotary.count);
+        }
+        lcd_line3();
+        uint8_t kk;
+        kk = (rotary.ind + 1) & ROT_MSK;
+        do {
+           lcd_data('0'+rotary.state[kk]);	// debugging output of rotary state
+           kk = (kk + 1) & ROT_MSK;
+        } while (kk != rotary.ind);
+#endif
         old_perc = percent;	// update the old duty cycle
         if (key_pressed > 40) {
            wait_about300ms();	// wait some time to release the button
         }
-     } /* end if key_pressed != 0 */
+     } /* end if percent != old_perc */
      key_pressed = wait_for_key_ms(2000);
      if(key_pressed > 130) break;	// more than 1.3 seconds
 #ifdef WITH_ROTARY_SWITCH

@@ -134,6 +134,7 @@ int main(void) {
 #endif
 #ifdef WITH_ROTARY_SWITCH
 //  rotary_switch_present = eeprom_read_byte(&EE_RotarySwitch);
+  rotary.ind = ROT_MSK+1;		//initilize state history with next call of check_rotary()
 #endif
 #if 0
   display_time = OFF_WAIT_TIME;		// LONG_WAIT_TIME for single mode, else SHORT_WAIT_TIME

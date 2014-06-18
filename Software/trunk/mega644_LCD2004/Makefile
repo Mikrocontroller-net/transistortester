@@ -45,12 +45,14 @@ CFLAGS += -DWITH_MENU
 # If your encoder has the same count of pulses at any switch as indexed positions (detent) for every turn,
 # you should set the WITH_ROTARY_SWITCH to 2 or 3.
 # If your encoder has twice the count of indexed positions, you should set the WITH_ROTARY_COUNT to 1.
+# For rotary encoder without indexed position or with an indexed position at every change of
+# the state of any switches (four times the count of pulses) you can set the
+# WITH_ROTARY_COUNT to 5 for getting the best resolution.
 # You can also use two separate push-buttons for Up and Down instead ot the rotary encoder.
 # You must set the WITH_ROTARY_SWITCH to 4 for the UP/DOWN push-buttons.
-#CFLAGS += -DWITH_ROTARY_SWITCH=2
-CFLAGS += -DWITH_ROTARY_SWITCH=4
+CFLAGS += -DWITH_ROTARY_SWITCH=3
 # the option CHANGE_ROTARY_DIRECTION changes the rotary direction by swap of switches
-CFLAGS += -DCHANGE_ROTARY_DIRECTION
+#CFLAGS += -DCHANGE_ROTARY_DIRECTION
 
 # Select your language:
 # Available languages are: LANG_BRASIL, LANG_CZECH, LANG_DUTCH, LANG_ENGLISH, LANG_GERMAN, LANG_HUNGARIAN, LANG_ITALIAN,

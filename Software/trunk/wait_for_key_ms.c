@@ -16,7 +16,7 @@ uint8_t wait_for_key_ms(int max_time) {
   uint8_t wait_time;
   int count_time;
 
-#if WITH_ROTARY_SWITCH < 4
+#if WITH_ROTARY_SWITCH != 4
  // normal rotary encoder operation, sampling with 200us
  #define WWend 25
  #define WaitRotary wait200us
@@ -31,7 +31,12 @@ uint8_t wait_for_key_ms(int max_time) {
   ROTARY_A_DDR &= ~(1<<ROTARY_A_PIN);	// switch A to input
   ROTARY_B_DDR &= ~(1<<ROTARY_B_PIN);	// switch A to input
   wait1ms();
-  rotary.ind = 4;		//initilize state history with next call of check_rotary()
+ #if WITH_ROTARY_SWITCH == 4
+  rotary.ind = ROT_MSK+1;		//initilize with next call of check_rotary()
+ #else
+  rotary.count = 0;			// clear count, but don't clear the state history
+  rotary.state[(rotary.ind+ROT_MSK-2)&ROT_MSK] = ' ' - '0';  // for debugging
+ #endif
 #endif
 
   kk = 100;
@@ -110,41 +115,88 @@ uint8_t wait_for_key_ms(int max_time) {
 /* The absolute value of rotary steps are hold in rotary.incre . */
 /* *********************************************************** */
 void check_rotary(void) {
-#if WITH_ROTARY_SWITCH < 4
+ #if WITH_ROTARY_SWITCH != 4
   // normal rotary encoder with two switches
   uint8_t new_state;
+  uint8_t old_ind;
   new_state = 0;		// reset to A and B switch at low level
   if ((ROTARY_A_REG & (1<<ROTARY_A_PIN)) != 0)  new_state = 1;	// switch A is high
   if ((ROTARY_B_REG & (1<<ROTARY_B_PIN)) != 0)  new_state |= 2;	// switch B is high
-  if (rotary.ind > 0x03) {	// index is out of range, initialize
-    rotary.state[0] = new_state;
+  if (rotary.ind > ROT_MSK) {	// index is out of range, initialize
+//    rotary.state[0] = new_state;
+    rotary.state[0] = '>' - '0';
     rotary.state[1] = new_state;
+//    for (rotary.ind=2; rotary.ind<16;rotary.ind++) rotary.state[rotary.ind] = ' ' - '0';
     rotary.count = 0;	// reset counter to zero
     rotary.ind = 1;	// set initial index to 1
   }
   if (rotary.state[rotary.ind] != new_state) {
      // state of rotary encoder has changed
- #if WITH_ROTARY_SWITCH < 3
-     // type 1 und 2
-     if ((new_state == 0) && (rotary.state[rotary.ind] == 2) && (rotary.state[(rotary.ind+3)&0x03] == 3)) rotary.count++;
-     if ((new_state == 0) && (rotary.state[rotary.ind] == 1) && (rotary.state[(rotary.ind+3)&0x03] == 3)) rotary.count--;
- #endif
- #if WITH_ROTARY_SWITCH != 2
-     // type 1 und 3
-     if ((new_state == 3) && (rotary.state[rotary.ind] == 2) && (rotary.state[(rotary.ind+3)&0x03] == 0)) rotary.count--;
-     if ((new_state == 3) && (rotary.state[rotary.ind] == 1) && (rotary.state[(rotary.ind+3)&0x03] == 0)) rotary.count++;
- #endif
+     // If the WITH_ROTARY_SWITCH is set to 5, all right state changes cause a count of rotary.count
+     // This setting can be used for rotary switch without indexed positions (intends), to get
+     // the highest resolution. It can also be used for rotary switches, which have four times
+     // more indexed positions than switch cycles per turn (360 degree) for counting  every
+     // indexed position.
+     // If the WITH_ROTARY_SWITCH is set to 1, only 2 of 4 state changes are counted.
+     // If the WITH_ROTARY_SWITCH is set to 2 or 3, only one of 4 state changes are counted.
+     // Use setting of 2 or 3, if you operate a rotary switch type, which has the same count of 
+     // indexed positions as switch cycles per turn to get one count for every indexed position.
+
+     // There are three states to monitor, the new_state, the last rotary.state[rotary.ind] and
+     // the state before rotary.state[old_ind] .
+     old_ind = (rotary.ind + ROT_MSK) & ROT_MSK;	// the index of the state before rotary.ind
+  #if WITH_ROTARY_SWITCH != 3
+     // type 1, 2 and 5
+     if ((new_state == 0) && (rotary.state[rotary.ind] == 2) && (rotary.state[old_ind] == 3)) {
+        // 320 +
+        rotary.count++;
+     }
+     if ((new_state == 0) && (rotary.state[rotary.ind] == 1) && (rotary.state[old_ind] == 3)) {
+        // 310 -
+        rotary.count--;
+     }
+  #endif
+  #if WITH_ROTARY_SWITCH != 2
+     // type 1, 3 and 5
+     if ((new_state == 3) && (rotary.state[rotary.ind] == 2) && (rotary.state[old_ind] == 0)) {
+        // 023 -
+        rotary.count--;
+     }
+     if ((new_state == 3) && (rotary.state[rotary.ind] == 1) && (rotary.state[old_ind] == 0)) {
+        // 013 +
+        rotary.count++;
+     }
+  #endif
+  #if WITH_ROTARY_SWITCH == 5
+     if ((new_state == 1) && (rotary.state[rotary.ind] == 3) && (rotary.state[old_ind] == 2)) {
+        // 231 -
+        rotary.count--;
+     }
+     if ((new_state == 2) && (rotary.state[rotary.ind] == 3) && (rotary.state[old_ind] == 1)) {
+        // 132 +
+        rotary.count++;
+     }
+     if ((new_state == 1) && (rotary.state[rotary.ind] == 0) && (rotary.state[old_ind] == 2)) {
+        // 201 +
+        rotary.count++;
+     }
+     if ((new_state == 2) && (rotary.state[rotary.ind] == 0) && (rotary.state[old_ind] == 1)) {
+        // 102 -
+        rotary.count--;
+     }
+  #endif
     
-     rotary.ind = (rotary.ind + 1) & 0x03;	// update to next entry
+     rotary.ind = (rotary.ind + 1) & ROT_MSK;	// update to next entry
      rotary.state[rotary.ind] = new_state;	// save the new state to the history
   }
-#else
+ #else	/* WITH_ROTARY_SWITCH == 4 */
   // special handling with separate up and down switches instead of rotary switch
-  if (rotary.ind > 0x03) {	// index is out of range, initialize
+  if (rotary.ind > ROT_MSK) {	// index is out of range, initialize
      rotary.a_state = 0x55;
      rotary.b_state = 0x55;
      rotary.count = 0;	// reset counter to zero
      rotary.ind = 0;
+      
   }
   rotary.a_state = (rotary.a_state + rotary.a_state); 	// *2 = shift left
   if ((ROTARY_A_REG & (1<<ROTARY_A_PIN)) != 0)  rotary.a_state += 1;	// switch A is high
@@ -156,14 +208,14 @@ void check_rotary(void) {
   if (rotary.b_state == 0x80) {
      rotary.count = -1;		// set counter to -1
   }
-#endif
+ #endif	/* WITH_ROTARY_SWITCH == 4 */
   if (rotary.count >= 0) {
      rotary.incre = rotary.count;	// absolute value of count
   } else {
      rotary.incre = -rotary.count;	// absolute value of count
   }
 }  /* end check_rotary() */
-#endif
+#endif	/* ifdef WITH_ROTARY_SWITCH */
 
 #ifdef WAIT_LINE2_CLEAR
 /* *********************************************************** */

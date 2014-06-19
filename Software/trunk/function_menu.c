@@ -53,6 +53,15 @@
 void function_menu() {
   uint8_t ii;
   uint8_t func_number;
+#ifdef PAGE_MODE
+  uint8_t page_nr;
+  uint8_t p_nr;
+  uint8_t ff;
+  page_nr = MODE_OFF;
+ #ifdef WITH_ROTARY_SWITCH
+  rotary.count = 0;
+ #endif
+#endif
 
   func_number = 0;
  #ifdef POWER_OFF
@@ -64,10 +73,71 @@ void function_menu() {
   {
      if (func_number > MODE_OFF) func_number -= (MODE_OFF + 1);
      message_key_released(SELECTION_str);
+#ifdef FOUR_LINE_LCD
+#ifdef PAGE_MODE
+     ff = 0;
+     if (func_number == page_nr) ff = 1;	// number is found
+     p_nr = page_nr + 1;
+     if (p_nr > MODE_OFF) p_nr -= (MODE_OFF + 1);
+     if (func_number == p_nr) ff = 1;		// number is found
+     p_nr = page_nr + 2;
+     if (p_nr > MODE_OFF) p_nr -= (MODE_OFF + 1);
+     if (func_number == p_nr) ff = 1;		// number is found
+     if (ff == 0) {
+        // func_number is not in page list
+ #ifdef WITH_ROTARY_SWITCH
+        if (rotary.count >= 0) {
+           page_nr = (func_number + MODE_OFF -1);  // page_nr = func_number - 2
+        } else {
+           page_nr = func_number;	// for backward, set page_nr to func_number
+        }
+       if (page_nr > MODE_OFF) page_nr -= (MODE_OFF + 1);
+ #else
+        page_nr = func_number;
+ #endif
+     }
+     
+     if (ff == 0) {
+        lcd_line2();
+        lcd_clear_line();			// clear line 2
+     }
+     lcd_line2();				// reset cursor to begin of line 2
+     if (func_number == page_nr) {
+        lcd_data('>');
+     } else {
+        lcd_space();				// put a blank to 1. row of line 2
+     }
+     message2line(page_nr);			// show first page function
+     if (ff == 0) {
+        lcd_line3();
+        lcd_clear_line();			// clear line 3
+     }
+     lcd_line3();				// reset cursor to begin of line 3
+     p_nr = page_nr + 1;
+     if (p_nr > MODE_OFF) p_nr -= (MODE_OFF + 1);
+     if (func_number == p_nr) {
+        lcd_data('>');
+     } else {
+        lcd_space();				// put a blank to 1. row of line 3
+     }
+     message2line(p_nr);			// show 2. page function
+     if (ff == 0) {
+        lcd_line4();
+        lcd_clear_line();			// clear line 4
+     }
+     lcd_line4();				// reset cursor to begin of line 4
+     p_nr = page_nr + 2;
+     if (p_nr > MODE_OFF) p_nr -= (MODE_OFF + 1);
+     if (func_number == p_nr) {
+        lcd_data('>');
+     } else {
+        lcd_space();				// put a blank to 1. row of line 4
+     }
+     message2line(p_nr);			// show 3. page function
+#else	/* no PAGE_MODE */
      lcd_line2();
      lcd_clear_line();				// clear line 2
      lcd_line2();				// reset cursor to begin of line 2
-#ifdef FOUR_LINE_LCD
      lcd_space();				// put a blank to 1. row of line 2
      message2line(func_number + MODE_OFF);	// show lower (previous) function
      lcd_line3();
@@ -80,7 +150,11 @@ void function_menu() {
      lcd_line4();				// reset cursor to begin of line 4
      lcd_space();				// put a blank to 1. row of line 4
      message2line(func_number + 1);		// show higher (next) function
+ #endif         /* PAGE_MODE */
 #else
+     lcd_line2();
+     lcd_clear_line();				// clear line 2
+     lcd_line2();				// reset cursor to begin of line 2
      message2line(func_number);
 #endif
  #ifdef POWER_OFF

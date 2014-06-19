@@ -63,6 +63,11 @@ UI_LANGUAGE = LANG_ENGLISH
 # Additional parameters, which are shown only short in row 2, will be shown in row 3 and 4 with this option.
 CFLAGS += -DFOUR_LINE_LCD
 
+# The PAGE_MODE activates a moving line cursor for menu function selection together with FOUR_LINE_LCD
+# and WITH_ROTARY_SWITCH.
+# Without the PAGE_MODE option, the line cursor is fixed to line 3 and the text moves.
+CFLAGS += -DPAGE_MODE
+
 # The LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset.
 # This lcd-display don't have a character for Ohm and for µ (micro).
 # Russian language requires a LCD controller with russian characterset and option LCD_CYRILLIC!

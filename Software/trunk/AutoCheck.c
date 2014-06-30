@@ -205,7 +205,7 @@ begin_selftest:
      } //end for tt
   #if PROCESSOR_TYP == 1280
      lcd_clear();
-     lcd_data('1'+TP1);
+     lcd_testpin(TP1);
      lcd_data('L');
      lcd_data('=');
      ADC_PORT = TXD_VAL;
@@ -224,7 +224,7 @@ begin_selftest:
      resis[1].rx = ((ADCconfig.U_AVCC - adcmv[1]) * (unsigned long)R_L_VAL) / (adcmv[1] - adcmv[0]);
      DisplayValue(resis[1].rx,-1,LCD_CHAR_OMEGA,3);
      lcd_line2();
-     lcd_data('1'+TP1);
+     lcd_testpin(TP1);
      lcd_space();
      lcd_data('H');
      lcd_data('=');
@@ -245,7 +245,7 @@ begin_selftest:
      wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 // 
      lcd_clear();
-     lcd_data('1'+TP2);
+     lcd_testpin(TP2);
      lcd_data('L');
      lcd_data('=');
      ADC_PORT = TXD_VAL;
@@ -264,7 +264,7 @@ begin_selftest:
      resis[1].rx = ((ADCconfig.U_AVCC - adcmv[1]) * (unsigned long)R_L_VAL) / (adcmv[1] - adcmv[0]);
      DisplayValue(resis[1].rx,-1,LCD_CHAR_OMEGA,3);
      lcd_line2();
-     lcd_data('1'+TP2);
+     lcd_testpin(TP2);
      lcd_data('H');
      lcd_data('=');
      ADC_PORT = (1<<TP2) | TXD_VAL;
@@ -284,7 +284,7 @@ begin_selftest:
      wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 //
      lcd_clear();
-     lcd_data('1'+TP3);
+     lcd_testpin(TP3);
      lcd_data('L');
      lcd_data('=');
      ADC_DDR = (1<<TP3) | TXD_MSK;
@@ -302,7 +302,7 @@ begin_selftest:
      resis[1].rx = ((ADCconfig.U_AVCC - adcmv[1]) * (unsigned long)R_L_VAL) / (adcmv[1] - adcmv[0]);
      DisplayValue(resis[1].rx,-1,LCD_CHAR_OMEGA,3);
      lcd_line2();
-     lcd_data('1'+TP3);
+     lcd_testpin(TP3);
      lcd_data('H');
      lcd_data('=');
      ADC_PORT = (1<<TP3) | TXD_VAL;
@@ -393,9 +393,9 @@ no_c0save:
     cap_found = 0;
     for (ww=0;ww<64;ww++) {
         lcd_clear();
-        lcd_data('1');
+        lcd_testpin(TP1);
         lcd_MEM_string(CapZeich);	// "-||-"
-        lcd_data('3');
+        lcd_testpin(TP3);
         lcd_MEM2_string(MinCap_str); // " >100nF!"
         PartFound = PART_NONE;
         //measure  offset Voltage of analog Comparator for Capacity measurement

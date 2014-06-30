@@ -138,6 +138,12 @@ CFLAGS += -DC_H_KORR=0
 # But for zener diode measurement the ADC6 pin is used, if both pins are defined.
 #CFLAGS += -DTQFP_ADC6
 
+# For ATmega8/168/328 processor the option WITH_VEXT can only be set, if the PC3 pin
+# is not used for serial output (WITH_UART option).
+# For ATmega644/1284 processor the UART has a separate pin.  Therefore the external input
+# at pin ADC3 can be enabled separate by setting the WITH_UART option.
+CFLAGS += -DWITH_VEXT
+
 # The CAP_EMPTY_LEVEL  defines the empty voltage level for capacitors in mV.
 # Choose a higher value, if your Tester reports "Cell!" by unloading capacitors.
 CFLAGS += -DCAP_EMPTY_LEVEL=4

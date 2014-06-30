@@ -7,16 +7,14 @@
 /* Define under which conditions a graphical display is supported. */
 /* The graphical display should at least support 128x64 pixels. */
  #define WITH_GRAPHICS
+ #undef FOUR_LINE_LCD
  #define FOUR_LINE_LCD
 #endif
 
 /* configure WITH_VEXT, TPext and TPex2  */
-#if FLASHEND > 0x1fff	/* at least ATmega16 */
-  #ifndef WITH_UART
-    #define WITH_VEXT
-  #endif
+#if (PROCESSOR_TYP == 8) || (PROCESSOR_TYP == 168) || (PROCESSOR_TYP == 328)
+ #if FLASHEND > 0x1fff	/* at least ATmega16 */
   #ifdef TQFP_ADC6
-    #define WITH_VEXT	/* define WITH_VEXT even if WITH_UART defined */
     #undef TPext
     #define TPext ((1<<MUX2) | (1<<MUX1))
     #ifdef TQFP_ADC7	/* both TQFP_ADC options defined */
@@ -25,28 +23,33 @@
   #else  /* TQFP_ADC6 */
     /* TQFP_ADC6 is undefined */
     #ifdef TQFP_ADC7
-      #define WITH_VEXT	/* define WITH_VEXT even if WITH_UART defined */
       #undef TPext
       #define TPext ((1<<MUX2) | (1<<MUX1) | (1<<MUX0))
+    #else   /* no TQFP_ADC6 and no TQFP_ADC7 */
+     #if (WITH_UART != 0) && (WITH_VEXT != 0)
+      #warning "WITH_VEXT deselected, PC3 is used for UART"
+      #undef WITH_VEXT	/* voltage measurement is not possible with UART output */
+     #endif
     #endif  /* TQFP_ADC7 */
   #endif  /* TQFP_ADC6 */
-#else   /* FLASHEND <= 0x1fff */
+ #else   /* FLASHEND <= 0x1fff */
   #ifndef BAT_CHECK
-    #ifndef WITH_UART	/* no BAT_CHECK and no UART */
-      #define WITH_VEXT
-    #endif
     #ifdef TQFP_ADC6
-      #define WITH_VEXT	/* define WITH_VEXT even if WITH_UART defined */
       #undef TPext
       #define TPext ((1<<MUX2) | (1<<MUX1))
     #endif		/* TQFP_ADC6 */
     #ifdef TQFP_ADC7
-      #define WITH_VEXT	/* define WITH_VEXT even if WITH_UART defined */
       #undef TPext
       #define TPext ((1<<MUX2) | (1<<MUX1) | (1<<MUX0))
     #endif		/* TQFP_ADC7 */
+    #if (WITH_UART == 1) && (TQFP_ADC6 == 0) && (TQFP_ADC7 == 0) && (WITH_VEXT != 0)
+      #warning "WITH_VEXT deselected, PC3 is used for UART"
+      #undef WITH_VEXT	/* voltage measurement is not possible with UART output */
+    #endif  /* WITH_UART */
   #endif   /* BAT_CHECK */
-#endif  /* FLASHEND > 0x1fff */
+ #endif  /* FLASHEND > 0x1fff */
+#endif	/* PROCESSOR_TYP == 8|168|328 */
+
 
 /* check the BAT_NUMERATOR and BAT_DENOMINATOR setting */
 #if BAT_NUMERATOR < BAT_DENOMINATOR
@@ -629,5 +632,8 @@
 	ldi	ZH, hi8(\adr)
      .endm
 
+#endif
+#ifndef TP_OFFSET
+ #define TP_OFFSET 0
 #endif
 

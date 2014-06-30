@@ -136,15 +136,10 @@ int main(void) {
 //  rotary_switch_present = eeprom_read_byte(&EE_RotarySwitch);
   rotary.ind = ROT_MSK+1;		//initilize state history with next call of check_rotary()
 #endif
-#if 0
-  display_time = OFF_WAIT_TIME;		// LONG_WAIT_TIME for single mode, else SHORT_WAIT_TIME
-  if (!(RST_PIN_REG & (1<<RST_PIN))) {
-     // if power button is pressed ...
-     wait_about300ms();			// wait to catch a long key press
-     if (!(RST_PIN_REG & (1<<RST_PIN))) {
-        // check if power button is still pressed
-        display_time = LONG_WAIT_TIME;	// ... set long time display anyway
-     }
+#if 1
+  for (ii=0; ii<35; ii++) {
+  if (RST_PIN_REG & (1<<RST_PIN)) break;	// button is released
+     wait_about10ms();
   }
 #else
   ii = 0;
@@ -152,11 +147,11 @@ int main(void) {
      // key is still pressed
      ii = wait_for_key_ms(700);	
   }
+#endif
   display_time = OFF_WAIT_TIME;		// LONG_WAIT_TIME for single mode, else SHORT_WAIT_TIME
   if (ii > 30) {
      display_time = LONG_WAIT_TIME;	// ... set long time display anyway
   }
-#endif
 //#else
 //  #define display_time OFF_WAIT_TIME
 //#endif
@@ -183,7 +178,7 @@ start:
   PartMode = PART_MODE_NONE;
   WithReference = 0;		// no precision reference voltage
   lcd_clear();			// clear the LCD
-  ADC_DDR = TXD_MSK;		//activate Software-UART 
+  ADC_DDR = TXD_MSK;		// activate Software-UART 
   ResistorsFound = 0;		// no resistors found
   cap.ca = 0;
   cap.cb = 0;

@@ -50,7 +50,7 @@ CFLAGS += -DWITH_MENU
 # WITH_ROTARY_COUNT to 5 for getting the best resolution.
 # You can also use two separate push-buttons for Up and Down instead ot the rotary encoder.
 # You must set the WITH_ROTARY_SWITCH to 4 for the UP/DOWN push-buttons.
-CFLAGS += -DWITH_ROTARY_SWITCH=3
+#CFLAGS += -DWITH_ROTARY_SWITCH=3
 # the option CHANGE_ROTARY_DIRECTION changes the rotary direction by swap of switches
 #CFLAGS += -DCHANGE_ROTARY_DIRECTION
 
@@ -66,12 +66,12 @@ CFLAGS += -DFOUR_LINE_LCD
 # The PAGE_MODE activates a moving line cursor for menu function selection together with FOUR_LINE_LCD
 # and WITH_ROTARY_SWITCH.
 # Without the PAGE_MODE option, the line cursor is fixed to line 3 and the text moves.
-CFLAGS += -DPAGE_MODE
+#CFLAGS += -DPAGE_MODE
 
 # The LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset.
 # This lcd-display don't have a character for Ohm and for µ (micro).
 # Russian language requires a LCD controller with russian characterset and option LCD_CYRILLIC!
-CFLAGS += -DLCD_CYRILLIC
+#CFLAGS += -DLCD_CYRILLIC
 
 # The LCD_DOGM option must be set for support of the DOG-M type of LCD modules with ST7036 controller.
 # For this LCD type the contrast must be set with software command.
@@ -146,6 +146,12 @@ CFLAGS += -DWITH_UART
 # If both pins are defined, both voltages are measured with the voltage measure function.
 # But for zener diode measurement the ADC6 pin is used, if both pins are defined.
 #CFLAGS += -DTQFP_ADC6
+
+# For ATmega8/168/328 processor the option WITH_VEXT can only be set, if the PC3 pin
+# is not used for serial output (WITH_UART option).
+# For ATmega644/1284 processor the UART has a separate pin.  Therefore the external input
+# at pin ADC3 can be enabled separate by setting the WITH_UART option.
+CFLAGS += -DWITH_VEXT
 
 # The CAP_EMPTY_LEVEL  defines the empty voltage level for capacitors in mV.
 # Choose a higher value, if your Tester reports "Cell!" by unloading capacitors.

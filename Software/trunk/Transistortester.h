@@ -533,14 +533,14 @@ End of configuration
 
 #ifndef EBC_STYLE
  // default is the 123= style
- const unsigned char N123_str[] MEM_TEXT = " 123=";
+ const unsigned char N123_str[] MEM_TEXT = {' ','1'+TP_OFFSET,'2'+TP_OFFSET,'3'+TP_OFFSET,'=',0};
 // const unsigned char N123_str[] MEM_TEXT = " Pin=";
 #else
  #if EBC_STYLE == 321
-  const unsigned char N321_str[] MEM_TEXT = " 321=";
+  const unsigned char N123_str[] MEM_TEXT = {' ','3'+TP_OFFSET,'2'+TP_OFFSET,'1'+TP_OFFSET,'=',0};
  #endif
  #if EBC_STYLE == 123
-  const unsigned char N123_str[] MEM_TEXT = " 123=";
+  const unsigned char N123_str[] MEM_TEXT = {' ','1'+TP_OFFSET,'2'+TP_OFFSET,'3'+TP_OFFSET,'=',0};
  #endif
 #endif
 
@@ -594,7 +594,7 @@ End of configuration
 'e','r','s','t',' ', 'n','a','c','h',' ','d','e','r',' ',
 'M','e','l','d','u','n','g',' ',
 
-'"','1','-',LCD_CHAR_CAP,'-','3',LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
+'"','1'+TP_OFFSET,'-',LCD_CHAR_CAP,'-','3'+TP_OFFSET,LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
 'e','i','n','e','n',' ','g','u','t','e','n',' ',
 
 'K','o','n','d','e','n','s','a','t','o','r',' ',
@@ -636,7 +636,7 @@ End of configuration
 'm','e','r','i','c','i','c','h',' ','b','o','d','u',' ',
 
 'P','r','i',' ','z','o','b','r','a','z','e','n','i',' ',
-'"','1','-',LCD_CHAR_CAP,'-','3',LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
+'"','1'+TP_OFFSET,'-',LCD_CHAR_CAP,'-','3'+TP_OFFSET,LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
 
 'v',LCD_CHAR_INSEP,'p','o','s','l','e','d','n','i','m',' ',
 'k','r','o','k','u',' ', 'k','a','l','i','b','r','a','c','e',' ',
@@ -700,7 +700,7 @@ End of configuration
 
 'N','a',' ','d','a','l','s','i','u',' ','v','y','z','v','u',' ',
 
-'"','1','-',LCD_CHAR_CAP,'-','3',' ','>','1','0','0','n','F','"',' ',
+'"','1'+TP_OFFSET,'-',LCD_CHAR_CAP,'-','3'+TP_OFFSET,' ','>','1','0','0','n','F','"',' ',
 
 
 
@@ -838,7 +838,7 @@ Cyr_k,'o',Cyr_n,Cyr_d,'e',Cyr_n,'c','a',Cyr_t,'o','p',' ',
 
 '1','0','0','n','F',LCD_CHAR_INSEP,Cyr_i,Cyr_l,Cyr_i,LCD_CHAR_INSEP,Cyr_b,'o',Cyr_l,'e','e',' ',
 
-Cyr_k,LCD_CHAR_INSEP,'"','T','P','1','"',LCD_CHAR_INSEP,Cyr_i,LCD_CHAR_INSEP,'"','T','P','3','"',' ',
+Cyr_k,LCD_CHAR_INSEP,'"','T','P','1'+TP_OFFSET,'"',LCD_CHAR_INSEP,Cyr_i,LCD_CHAR_INSEP,'"','T','P','3'+TP_OFFSET,'"',' ',
 
 
 
@@ -929,7 +929,7 @@ Cyr_b,'i',Cyr_l,Cyr_ww,Cyr_sch,'e',' ','1','0','0','n','F',' ',Cyr_d,'o',' ',
 
 
 
-'T','P','1',' ',Cyr_t,'a',' ','T','P','3',' ',Cyr_k,'o',Cyr_l,Cyr_i,' ',
+'T','P','1'+TP_OFFSET,' ',Cyr_t,'a',' ','T','P','3'+TP_OFFSET,' ',Cyr_k,'o',Cyr_l,Cyr_i,' ',
 
 Cyr_p,'o',Cyr_v,'i',Cyr_d,'o',Cyr_m,Cyr_l,'e',Cyr_n,Cyr_n,Cyr_ja,':',' ',
 
@@ -994,7 +994,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 'o','n','l','y',' ','a','f','t','e','r',' ',
 
 't','h','e',' ','m','e','s','s','a','g','e',' ',
-'"','1','-',LCD_CHAR_CAP,'-','3',LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
+'"','1'+TP_OFFSET,'-',LCD_CHAR_CAP,'-','3'+TP_OFFSET,LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
 
 'i','s',LCD_CHAR_INSEP,'s','h','o','w','n','.',' ',
 'S','o','f','t','w','a','r','e',' ','a','n','d',' ',

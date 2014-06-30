@@ -9,9 +9,8 @@
 
 #define	Txbyte r24
 
-#define S_PORT _SFR_IO_ADDR(PORTC)
-#define S_DDR _SFR_IO_ADDR(DDRC)
-#define S_PIN_REG _SFR_IO_ADDR(PINC)
+#define SER_PORT _SFR_IO_ADDR(SERIAL_PORT)
+#define SER_DDR _SFR_IO_ADDR(SERIAL_DDR)
 
 ;* Software-UART nach Atmel AVR-Application-Note AVR305
 
@@ -40,21 +39,22 @@ uart_putc:
 	    	push bitcnt		; save register used for bit count
 		ldi	bitcnt,10	;1+8+sb (sb is # of stop bits)
 		com	Txbyte		;Inverte everything
+		sbi	SER_DDR,SERIAL_BIT	; enable output of serial bit
 		sec			;Start bit
 
 putchar0:	brcc	putchar1	;If carry set
 	#ifdef SWUART_INVERT
-		sbi	S_PORT,TxD	;    send a '0'
+		sbi	SER_PORT,SERIAL_BIT	;    send a '0'
 	#else
-		cbi	S_PORT,TxD	;    send a '0'
+		cbi	SER_PORT,SERIAL_BIT	;    send a '0'
 	#endif
 		rjmp	putchar2	;else	
 
 putchar1:	
 	#ifdef SWUART_INVERT
-		cbi	S_PORT,TxD	;    send a '1'
+		cbi	SER_PORT,SERIAL_BIT	;    send a '1'
 	#else
-		sbi	S_PORT,TxD	;    send a '1'
+		sbi	SER_PORT,SERIAL_BIT	;    send a '1'
 	#endif
 		nop
 

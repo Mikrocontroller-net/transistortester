@@ -76,6 +76,7 @@
  #define TPBAT PA5
  // Port pin with >100nF capacitor for calibration 
  #define TPCAP PA7
+ // you must set WITH_VEXT, if you wish external voltage reading
 #elif PROCESSOR_TYP == 1280
 //################# for mega1280, mega2560 port F is the Analog input
  #define ADC_PORT PORTF
@@ -104,6 +105,7 @@
  #define TPREF (1<<MUX2) 
  // Port pin for Battery voltage measuring PC5
  #define TPBAT ((1<<MUX2) | (1<<MUX0))
+ // option WITH_VEXT can be set automatically, if WITH_UART is unset
 #endif	/* PROCESSOR_TYP */
 
 // setting for voltage devider of Batterie voltage measurement 10K and 3.3k
@@ -509,21 +511,39 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 */
 //#define SWUART_INVERT
 
-#define TxD PC3	//TxD-Pin of Software-UART; must be at Port C !
-#ifdef WITH_UART
- #define TXD_MSK (1<<TxD)
- #ifdef SWUART_INVERT
-  #define TXD_VAL 0
- #else
-  #define TXD_VAL TXD_MSK
- #endif
+#if PROCESSOR_TYP == 644
+ // ATmega324/644/1284
+ #define SERIAL_PORT PORTD
+ #define SERIAL_DDR DDRD
+ #define SERIAL_BIT PD1		/* ATmega644 use port D bit 1 for serial out */
+ #define TXD_VAL 0	/* no output for ADC port */
+ #define TXD_MSK 0	/* no output for ADC port */
+#elif PROCESSOR_TYP == 1280
+ // ATmega1280/2560
+ #define SERIAL_PORT PORTD
+ #define SERIAL_DDR DDRD
+ #define SERIAL_BIT PD3		/* ATmega1280 use port D bit 3 for serial out */
+ #define TXD_VAL 0	/* no output for ADC port */
+ #define TXD_MSK 0	/* no output for ADC port */
 #else
- // without UART
+ // ATmega8/168/328
+ #define SERIAL_PORT PORTC
+ #define SERIAL_DDR DDRC
+ #define SERIAL_BIT PC3 	//TxD-Pin of Software-UART; must be at Port C !
+ #ifdef WITH_UART
+  #define TXD_MSK (1<<SERIAL_BIT)
+  #ifdef SWUART_INVERT
+   #define TXD_VAL 0
+  #else
+   #define TXD_VAL TXD_MSK
+  #endif
+ #else	/* no WITH_UART */
  // If you use any pin of port C for output, you should define all used pins in TXD_MSK.
  // With TXD_VAL you can specify the default level of output pins for all port C output pins.
- #define TXD_MSK 0
- #define TXD_VAL 0
-#endif
+  #define TXD_MSK 0
+  #define TXD_VAL 0
+ #endif	/* WITH_UART */
+#endif	/* PROCESSOR_TYP */
 
  //define a default zero value for ESR measurement (0.01 Ohm units)
 // #define ESR_ZERO 20

@@ -58,3 +58,4 @@ void CheckRotaryEncoder(void);				// check rotary puls generator
 void check_rotary(void);			// check state of rotary switch	for menu function
 void message2line(uint8_t number);	// write menue message number to lcd line
 void switch_frequency(uint8_t freq_num);	// switch frequency and write actual frequency to LCD
+void CalibrationCap(void);		// read voltage offsets with calibration capacitor

@@ -18,6 +18,9 @@ message_key_released.o: ../message_key_released.c Makefile
 ReadCapacity.o: ../ReadCapacity.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
+CalibrationCap.o: ../CalibrationCap.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 ReadBigCap.o: ../ReadBigCap.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 

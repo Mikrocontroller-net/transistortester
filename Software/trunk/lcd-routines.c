@@ -251,12 +251,25 @@ void lcd_init(void) {
    lcd_command(CMD1_FollowerControl | 0x09);	// Follower on / Rab2:0 = 1
    lcd_command(CMD1_SetContrast | 0x04);	// set contrast C3:0 = 4
  #endif
+ #if 0
+   // old initialize without OLED display
    lcd_command(CMD_SetIFOptions | 0x08);	// 4Bit / 2 rows / 5x7
 
    lcd_command(CMD_SetDisplayAndCursor | 0x04); // Display on / Cursor off / no Blinking
 
    lcd_command(CMD_SetEntryMode | 0x02);	// increment / no Scroll    
    lcd_clear();
+ #else
+   // initialize sequence with OLED display
+   lcd_command(CMD_SetIFOptions);		// Add for OLED
+   lcd_command(CMD_SetIFOptions);		// Add for OLED
+
+   lcd_command(CMD_SetIFOptions| 0x0A);		// 4Bit / 2 rows / 5x7 / table3 / Add for OLED
+   lcd_command(CMD_SetDisplayAndCursor);	// Display off / no Blinking  / Add for OLED
+   lcd_clear();
+   lcd_command(CMD_SetEntryMode | 0x02);	// increment / no Scroll
+   lcd_command(2);				// Home Command  // Add for OLED
+   lcd_command(CMD_SetDisplayAndCursor | 0x04);	// Display on / Cursor off / no Blinking
 }
 #endif
  

@@ -74,7 +74,7 @@
  #define TPREF PA4
  // Port pin for Battery voltage measuring
  #define TPBAT PA5
- // Port pin with >100nF capacitor for calibration 
+ // Port pin with >100nF capacitor for calibration, -1 for none
  #define TPCAP PA7
  // you must set WITH_VEXT, if you wish external voltage reading
 #elif PROCESSOR_TYP == 1280
@@ -91,6 +91,7 @@
  #define TPREF PF4
  // Port pin for Battery voltage measuring
  #define TPBAT PF5
+ #define TPCAP -1
 #else	/* PROCESSOR_TYP */
 //############### default for mega8, mega168 and mega328
  #define ADC_PORT PORTC
@@ -106,6 +107,7 @@
  // Port pin for Battery voltage measuring PC5
  #define TPBAT ((1<<MUX2) | (1<<MUX0))
  // option WITH_VEXT can be set automatically, if WITH_UART is unset
+ #define TPCAP -1
 #endif	/* PROCESSOR_TYP */
 
 // setting for voltage devider of Batterie voltage measurement 10K and 3.3k

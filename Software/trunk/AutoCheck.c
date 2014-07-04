@@ -392,6 +392,10 @@ no_c0save:
     // Message C > 100nF at TP1 and TP3
     cap_found = 0;
     for (ww=0;ww<64;ww++) {
+  #if (TPCAP >= 0)
+        PartFound = PART_NONE;
+        CalibrationCap();	// measure with internal calibration capacitor
+  #else
         lcd_clear();
         lcd_testpin(TP1);
         lcd_MEM_string(CapZeich);	// "-||-"
@@ -400,6 +404,7 @@ no_c0save:
         PartFound = PART_NONE;
         //measure  offset Voltage of analog Comparator for Capacity measurement
         ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
+  #endif
         while (cap.cpre < -9) {
            cap.cpre++;
            cap.cval /= 10;
@@ -448,20 +453,31 @@ no_c0save:
 //#######################################
  #endif
   #ifdef AUTOSCALE_ADC
+   #if (TPCAP >= 0)
+    #define CAP_ADC TPCAP
+           TCAP_PORT &= ~(1<<TCAP_RH);	// 470k resistor to GND
+           TCAP_DDR |= (1<<TCAP_RH);	// enable output
+   #else
+    #define CAP_ADC TP3
            ADC_PORT =  TXD_VAL;	//ADC-Port 1 to GND
            ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
            R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to GND
+   #endif
            do {
-              adcmv[0] = ReadADC(TP3);
+              adcmv[0] = ReadADC(CAP_ADC);
            } while (adcmv[0] > 980);
+   #if (TPCAP >= 0)
+           TCAP_DDR &= ~(1<<TCAP_RH);	// 470k resistor port to input mode
+   #else
            R_DDR = 0;		//all Pins to input 
+   #endif
            ADCconfig.U_Bandgap = 0;	// do not use internal Ref
-           adcmv[0] = ReadADC(TP3);  // get cap voltage with VCC reference
+           adcmv[0] = ReadADC(CAP_ADC);  // get cap voltage with VCC reference
            ADCconfig.U_Bandgap = adc_internal_reference;
-           adcmv[1] = ReadADC(TP3);	// get cap voltage with internal reference
+           adcmv[1] = ReadADC(CAP_ADC);	// get cap voltage with internal reference
            adcmv[1] += adcmv[1];		// double the value
            ADCconfig.U_Bandgap = 0;	// do not use internal Ref
-           adcmv[2] = ReadADC(TP3);  // get cap voltage with VCC reference
+           adcmv[2] = ReadADC(CAP_ADC);  // get cap voltage with VCC reference
            ADCconfig.U_Bandgap = adc_internal_reference;
 //        udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1])) * ADC_internal_reference / adcmv[1])+REF_R_KORR;
            udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1])) * adc_internal_reference / adcmv[1])+REF_R_KORR;

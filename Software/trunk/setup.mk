@@ -295,7 +295,7 @@ OBJECTS += main.o CheckPins.o ChargePin10ms.o EntladePins.o
 OBJECTS +=  ReadCapacity.o GetRLmultip.o Calibrate_UR.o
 ifneq ($(PARTNO),m8)
 OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o GetFrequency.o function_menu.o message_key_released.o ReadBigCap.o
-OBJECTS += CheckRotaryEncoder.o
+OBJECTS += CheckRotaryEncoder.o CalibrationCap.o
 endif
 ifndef USE_EEPROM
 OBJECTS +=  EE_check_init.o

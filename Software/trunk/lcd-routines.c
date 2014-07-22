@@ -269,6 +269,7 @@ void lcd_init(void) {
    lcd_clear();
    lcd_command(CMD_SetEntryMode | 0x02);	// increment / no Scroll
    lcd_command(2);				// Home Command  // Add for OLED
+   wait_about5ms();
    lcd_command(CMD_SetDisplayAndCursor | 0x04);	// Display on / Cursor off / no Blinking
  #endif
 }

@@ -44,6 +44,9 @@ init_ee:
  // write 4 EE_ESR_ZEROtab values
  (void) eeprom_write_word((uint16_t *)(&EE_ESR_ZEROtab[0]),(ESR_ZERO*256)+ESR_ZERO);
  (void) eeprom_write_word((uint16_t *)(&EE_ESR_ZEROtab[2]),(ESR_ZERO*256)+ESR_ZERO);
+ #if (LCD_ST_TYPE == 7565)
+ (void) eeprom_write_byte((uint8_t *)(&EE_Volume_Value), VOLUME_VALUE);
+ #endif
 #ifdef WITH_ROTARY_SWITCH
 // (void) eeprom_write_byte(&EE_RotarySwitch,0); 		// no switch is detected
 #endif

@@ -84,14 +84,14 @@ int main(void) {
      lcd_line1();
      lcd_MEM_string(TestTimedOut);	//Output Timeout
      wait_about3s();				//wait for 3 s
-#ifdef LCD_ST7565
+#if (LCD_ST_TYPE == 7565)
      lcd_powersave();			// set graphical display to power save mode
 #endif
      ON_PORT &= ~(1<<ON_PIN);			//shut off!
 //     ON_DDR = (1<<ON_PIN);		//switch to GND
      return 0;
   }
-#ifndef LCD_ST7565
+#if (LCD_ST_TYPE == 0)
   LCDLoadCustomChar(LCD_CHAR_DIODE1);	//Custom-Character Diode symbol
   lcd_fix_customchar(DiodeIcon1);	//load Character  >|
   LCDLoadCustomChar(LCD_CHAR_DIODE2);	//Custom-Character 
@@ -116,7 +116,7 @@ int main(void) {
   LCDLoadCustomChar(LCD_CHAR_RESIS3);	//load Resistor symbol as Custom-Character
   lcd_fix_customchar(ResIcon3);		// load character ||
  #endif
-#endif /* LCD_ST7565 */
+#endif /* LCD_ST_TYPE == 0 */
 #ifdef PULLUP_DISABLE
  #ifdef __AVR_ATmega8__
   SFIOR = (1<<PUD);		// disable Pull-Up Resistors mega8
@@ -989,7 +989,7 @@ wait_again:
   #include "HelpCalibration.c"
  #endif
 //  MCUSR = 0;
- #ifdef LCD_ST7565
+ #if (LCD_ST_TYPE == 7565)
   lcd_powersave();			// set graphical display to power save mode
  #endif
   ON_PORT &= ~(1<<ON_PIN);		//switch off power

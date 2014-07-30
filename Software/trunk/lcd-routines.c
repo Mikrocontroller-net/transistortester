@@ -7,10 +7,11 @@
 #include <util/delay.h>
 #include <avr/pgmspace.h>
 #include <avr/eeprom.h>
-#include "tt_function.h"
-#include "config.h"
-#include "lcd-routines.h"
-#include "wait1000ms.h"
+//#include "tt_function.h"
+//#include "config.h"
+//#include "lcd-routines.h"
+//#include "wait1000ms.h"
+#include "Transistortester.h"
 
 #ifdef STRIP_GRID_BOARD
  #warning "strip-grid-board layout selectet!"
@@ -18,7 +19,7 @@
 
 
  
-#ifdef LCD_ST7565
+#if (LCD_ST_TYPE == 7565)
 uint8_t _page;
 uint8_t _xpos;
 #if FONT_HEIGHT > 8
@@ -41,7 +42,7 @@ void lcd_space(void) {
 
 //move to the beginning of the 1. row
 void lcd_line1() {
-#ifdef LCD_ST7565
+#if (LCD_ST_TYPE == 7565)
    lcd_set_cursor(0,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress));
@@ -50,7 +51,7 @@ void lcd_line1() {
 
 //move to the beginning of the 2. row
 void lcd_line2() {
-#ifdef LCD_ST7565
+#if (LCD_ST_TYPE == 7565)
    lcd_set_cursor(1,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x40));
@@ -59,7 +60,7 @@ void lcd_line2() {
 
 //move to the beginning of the 3. row
 void lcd_line3() {
-#ifdef LCD_ST7565
+#if (LCD_ST_TYPE == 7565)
    lcd_set_cursor(2,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x14));
@@ -68,7 +69,7 @@ void lcd_line3() {
 
 //move to the beginning of the 4. row
 void lcd_line4() {
-#ifdef LCD_ST7565
+#if (LCD_ST_TYPE == 7565)
    lcd_set_cursor(3,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x54));
@@ -76,13 +77,13 @@ void lcd_line4() {
 }
 
 void lcd_set_cursor(uint8_t y, uint8_t x) {
-#ifdef LCD_ST7565
+#if (LCD_ST_TYPE == 7565)
    //move to the specified position (depends on used font)
    _page = y;
    _xpos = x * FONT_WIDTH;
-#if FONT_HEIGHT > 8
+ #if FONT_HEIGHT > 8
    _page <<= 1;
-#endif
+ #endif
    lcd_command(CMD_SET_PAGE | (0x0f & _page));
    lcd_command(CMD_SET_COLUMN_UPPER | (0x0f & (_xpos >> 4)));
    lcd_command(CMD_SET_COLUMN_LOWER | (0x0f &  _xpos));
@@ -94,11 +95,11 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
 
 // sends a character to the LCD 
 void lcd_data(unsigned char temp1) {
-#ifdef LCD_ST7565
+#if (LCD_ST_TYPE == 7565)
  uint8_t i, data;
  uint8_t *pfont;
 
-#if FONT_HEIGHT > 8
+ #if FONT_HEIGHT > 8
  lcd_command(CMD_RMW);
  pfont = (uint8_t *)font + ((FONT_WIDTH << 1) * temp1);
  for (i = 0; i < FONT_WIDTH; i++) {
@@ -116,14 +117,14 @@ void lcd_data(unsigned char temp1) {
    pfont += 2;
  }
  lcd_command(CMD_SET_PAGE | (0x0f & _page));
-#else
+ #else
  pfont = (uint8_t *)font + (temp1*FONT_WIDTH);
  for (i = 0; i < FONT_WIDTH; i++) {
    data = pgm_read_byte(pfont);
    lcd_write_data(data);
    pfont++;
  }
-#endif
+ #endif
 _xpos += FONT_WIDTH;
 #else
  lcd_write_data(temp1);		// set RS to 1
@@ -180,7 +181,7 @@ void lcd_command(unsigned char temp1) {
 // Initialise: 
 // Must be called first .
  
-#ifdef LCD_ST7565
+#if (LCD_ST_TYPE == 7565)
 void lcd_init(void) {
 
    HW_LCD_RES_PORT &= ~_BV(HW_LCD_RES_PIN); // RESET LCD-Display
@@ -197,37 +198,55 @@ void lcd_init(void) {
    HW_LCD_RES_PORT |= _BV(HW_LCD_RES_PIN);
    wait_about30ms();  // Wait for 30 ms after RESET
 
-   lcd_command(CMD_INTERNAL_RESET);
-   lcd_command(CMD_DISPLAY_ON);
+   lcd_command(CMD_INTERNAL_RESET);		// 0xe2
+   lcd_command(CMD_DISPLAY_ON);			// 0xaf
 
    //Booster on, Voltage regulator/follower circuit on
-   lcd_command(CMD_SET_POWER_CONTROL | (0x07 & 7));
+   lcd_command(CMD_SET_POWER_CONTROL | 7);	// 0x28 BOOSTER ON | V_REGULATOR ON | V_FOLLOWER ON
 
-   lcd_command(CMD_SET_VOLUME_FIRST);
-   lcd_command(CMD_SET_VOLUME_SECOND | (0x3f & 4));
-   lcd_command(CMD_SET_RESISTOR_RATIO | (7 & LCD_ST7565_RESISTOR_RATIO));
-   lcd_command(CMD_SET_BIAS_9);
+   lcd_command(CMD_SET_VOLUME_FIRST);		// 0x81 set  volume command
+   lcd_command(eeprom_read_byte(&EE_Volume_Value) & 0x3f);	//set volume value of EEprom
+   lcd_command(CMD_SET_RESISTOR_RATIO | (7 & LCD_ST7565_RESISTOR_RATIO));	// 0x20
+   lcd_command(CMD_SET_BIAS_9);			// 0xa3
  #ifdef LCD_ST7565_V_FLIP
-   lcd_command(CMD_SET_COM_REVERSE);
+   lcd_command(CMD_SET_COM_REVERSE);		// 0xc8
  #else
-   lcd_command(CMD_SET_COM_NORMAL);
+   lcd_command(CMD_SET_COM_NORMAL);		// 0xc0
  #endif
  #ifdef LCD_ST7565_H_FLIP
-   lcd_command(CMD_SET_ADC_REVERSE);
+   lcd_command(CMD_SET_ADC_REVERSE);		// 0xa1
  #else
-   lcd_command(CMD_SET_ADC_NORMAL);
+   lcd_command(CMD_SET_ADC_NORMAL);		// 0xa0
  #endif
-   lcd_command(CMD_SET_ALLPTS_NORMAL);
-   lcd_command(CMD_SET_DISP_NORMAL);
-   lcd_command(CMD_SET_STATIC_OFF);
-   lcd_command(CMD_SET_STATIC_REG | 0);
-   lcd_command(CMD_SET_DISP_START_LINE | 0);
+   lcd_command(CMD_SET_ALLPTS_NORMAL);		// 0xa4
+   lcd_command(CMD_SET_DISP_NORMAL);		// 0xa6
+   lcd_command(CMD_SET_STATIC_OFF);		// 0xac
+   lcd_command(CMD_SET_STATIC_REG | 0);		// 0x00
+   lcd_command(CMD_SET_DISP_START_LINE | 0);	// 0x40
    //Center the two lines
    //lcd_command(CMD_SET_DISP_START_LINE | (0x3f & 40));
 
    lcd_clear();
 
    lcd_set_cursor(0,0);
+}
+#elif (LCD_ST_TYPE == 7920)
+void lcd_init(void) {
+   // reset the ST7920 controller
+   HW_LCD_B0_PORT  &= ~_BV(HW_LCD_B0_PIN); // LCD B0 = 0
+   HW_LCD_B0_DDR   |= _BV(HW_LCD_B0_PIN);  // LCD SI is Output
+   HW_LCD_EN_PORT  &= ~_BV(HW_LCD_EN_PIN); // LCD EN = 0
+   HW_LCD_EN_DDR   |= _BV(HW_LCD_EN_PIN);  // LCD SCL is Output
+   HW_LCD_RES_PORT &= ~_BV(HW_LCD_RES_PIN); // set reset low
+   HW_LCD_RES_DDR  |= _BV(HW_LCD_RES_PIN); // LCD RESET is Output
+   wait1ms();
+   HW_LCD_RES_PORT |= _BV(HW_LCD_RES_PIN); // set reset high
+   wait10ms();
+   lcd_command(0b00110000); // 8 bit data, basic instructions
+   lcd_command(0b00110000); // 8 bit data, basic instructions
+   lcd_command(0b00001100); // display on
+   lcd_clear();
+   lcd_command(0b00000110); // increment, no shift 
 }
 #else 
 void lcd_init(void) {
@@ -275,7 +294,7 @@ void lcd_init(void) {
 }
 #endif
  
-#ifdef LCD_ST7565
+#if (LCD_ST_TYPE == 7565)
 void lcd_powersave(void) {
      lcd_command(CMD_DISPLAY_OFF);
      lcd_command(CMD_SET_ALLPTS_ON); // Enter power save mode
@@ -285,7 +304,7 @@ void lcd_powersave(void) {
 // send the command to clear the display 
  
 void lcd_clear(void) {
-#ifdef LCD_ST7565 
+#if (LCD_ST_TYPE == 7565)
    unsigned char p;
    unsigned char count;
 
@@ -360,7 +379,7 @@ void lcd_fix_string(const unsigned char *data) {
 
 // load custom character from PGM or EEprom and send to LCD
 void lcd_fix_customchar(const unsigned char *chardata) {	
-#ifndef LCD_ST7565
+#if (LCD_ST_TYPE == 0)
     for(uint8_t i=0;i<8;i++) {
         lcd_data(MEM_read_byte(chardata));
         chardata++;
@@ -378,7 +397,7 @@ void lcd_clear_line(void) {
 }
 #endif
 
-#ifdef LCD_ST7565
+#if (LCD_ST_TYPE == 7565)
 static unsigned char reverse(unsigned char b)
 {
    unsigned char result = 0;
@@ -399,7 +418,7 @@ void lcd_pgm_bitmap(const struct tbitmap * const pbitmap,
                     unsigned char y,
                     unsigned char options)
 {
-#ifdef LCD_ST7565
+#if (LCD_ST_TYPE == 7565)
    if (x >= SCREEN_WIDTH || (y >= SCREEN_HEIGHT))
       return;
 

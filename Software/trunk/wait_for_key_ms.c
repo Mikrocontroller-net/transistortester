@@ -13,7 +13,6 @@ uint8_t wait_for_key_ms(int max_time) {
   uint8_t key_cs;			// period of key hold down in 10ms units
   int8_t kk;
   uint8_t key_pressed;
-  uint8_t wait_time;
   int count_time;
 
 #if WITH_ROTARY_SWITCH != 4
@@ -27,6 +26,7 @@ uint8_t wait_for_key_ms(int max_time) {
 #endif
 
 #ifdef WITH_ROTARY_SWITCH
+  uint8_t wait_time;
   // update the state of rotary switch 
   ROTARY_A_DDR &= ~(1<<ROTARY_A_PIN);	// switch A to input
   ROTARY_B_DDR &= ~(1<<ROTARY_B_PIN);	// switch A to input
@@ -59,7 +59,9 @@ uint8_t wait_for_key_ms(int max_time) {
   key_cs = 0;				// set key flag to not pressed
   key_pressed = 0x55;
   count_time = max_time;
+#ifdef WITH_ROTARY_SWITCH
   wait_time = 0;
+#endif
   while (count_time >= 0) {
 #ifdef WITH_ROTARY_SWITCH
      // monitor rotary switch during wait

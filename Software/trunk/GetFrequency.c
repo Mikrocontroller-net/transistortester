@@ -26,7 +26,9 @@
 #ifdef WITH_MENU
 void GetFrequency(uint8_t range) {
   unsigned char taste;			// set if key is pressed during measurement
+ #if PROCESSOR_TYP == 644
   unsigned long freq_count;		// the counted pulses in 1 second
+ #endif
   unsigned long long ext_period;
   unsigned long freq_from_per;
   uint8_t ii;
@@ -102,7 +104,9 @@ void GetFrequency(uint8_t range) {
      // one second is counted
      TCCR0B = 0;		// stop timer 0, if not stopped by timer 1 compare interrupt
      ext_freq.b[0] = TCNT0;	// add lower 8 bit to get total counts
+ #if PROCESSOR_TYP == 644
      freq_count = ext_freq.dw;	// save the frequency counter
+ #endif
  #ifdef FOUR_LINE_LCD
      lcd_line2();
      lcd_clear_line();

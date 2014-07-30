@@ -1,7 +1,7 @@
 #include "config.h"
 
 
-#ifdef LCD_ST7565
+#if (LCD_ST_TYPE == 7565)
 
 // Options for lcd_pgm_bitmap option parameter:
 #define OPT_HREVERSE    1 // Display bitmap reversed horizontally
@@ -10,26 +10,26 @@
 #define SCREEN_WIDTH  128
 #define SCREEN_HEIGHT  64
 
-#ifdef FONT_6X8
+ #ifdef FONT_6X8
 #define FONT_WIDTH    6
 #define FONT_HEIGHT   8
-#endif
-#ifdef FONT_8X8
+ #endif
+ #ifdef FONT_8X8
 #define FONT_WIDTH    8
 #define FONT_HEIGHT   8
-#endif
-#ifdef FONT_8X12
+ #endif
+ #ifdef FONT_8X12
 #define FONT_WIDTH    8
 #define FONT_HEIGHT   12
-#endif
-#ifdef FONT_8X14
+ #endif
+ #ifdef FONT_8X16
 #define FONT_WIDTH    8
-#define FONT_HEIGHT   14
-#endif
-#ifdef FONT_10X16
+#define FONT_HEIGHT   16
+ #endif
+ #ifdef FONT_10X16
 #define FONT_WIDTH    10
 #define FONT_HEIGHT   16
-#endif
+ #endif
 
 #define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
 #define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
@@ -63,7 +63,7 @@
 #define CMD_SET_POWER_CONTROL   0x28
 #define CMD_SET_RESISTOR_RATIO  0x20
 #define CMD_SET_VOLUME_FIRST    0x81
-#define CMD_SET_VOLUME_SECOND   0
+#define VOLUME_VALUE   29	/* second byte of CMD_SET_VOLUME == volume value */
 #define CMD_SET_STATIC_OFF      0xAC
 #define CMD_SET_STATIC_ON       0xAD
 #define CMD_SET_STATIC_REG      0x0

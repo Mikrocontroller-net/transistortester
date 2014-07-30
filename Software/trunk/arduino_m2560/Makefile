@@ -59,12 +59,10 @@ LCD_ST7565_RESISTOR_RATIO = 4
 WITH_LCD_ST7565_HV_FLIP = 1
 
 # If option WITH_LCD_ST7565 is present one of the following fonts should be
-# choosen. Currently only FONT_6X8 is completely supported.
+# choosen.
 CFLAGS += -DFONT_6X8
 #CFLAGS += -DFONT_8X8
-#CFLAGS += -DFONT_8X12
-#CFLAGS += -DFONT_8X14
-#CFLAGS += -DFONT_10X16
+#CFLAGS += -DFONT_8X16
 
 # Option STRIP_GRID_BOARD selects different board-layout, do not set for standard board!
 # The connection of LCD is totally different for both versions.

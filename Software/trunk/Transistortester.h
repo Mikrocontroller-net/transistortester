@@ -108,6 +108,9 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF Quarz";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF Quarz";
   #endif
+  #if (LCD_ST_TYPE == 7565)
+   const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
+  #endif
  #endif
  #define LANG_SELECTED
 #endif
@@ -146,6 +149,9 @@ End of configuration
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frequenza > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF quarzo";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF quarzo";
+  #endif
+  #if (LCD_ST_TYPE == 7565)
+   const unsigned char CONTRAST_str[] MEM2_TEXT = "Contrasto";
   #endif
  #endif
  #define LANG_SELECTED
@@ -187,6 +193,9 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kwarc";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF kwarc";
   #endif
+  #if (LCD_ST_TYPE == 7565)
+   const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
+  #endif
  #endif
  #define LANG_SELECTED
 #endif
@@ -226,6 +235,9 @@ End of configuration
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frekvence > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF Quarz";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF Quarz";
+  #endif
+  #if (LCD_ST_TYPE == 7565)
+   const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
   #endif
  #endif
  #define LANG_SELECTED
@@ -267,6 +279,9 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF krystal";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF krystal";
   #endif
+  #if (LCD_ST_TYPE == 7565)
+   const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
+  #endif
  #endif
  #define LANG_SELECTED
 #endif
@@ -305,6 +320,9 @@ End of configuration
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frekvenca > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kristal";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF kristal";
+  #endif
+  #if (LCD_ST_TYPE == 7565)
+   const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
   #endif
  #endif
  #endif
@@ -347,6 +365,9 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kristal";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF kristal";
   #endif
+  #if (LCD_ST_TYPE == 7565)
+   const unsigned char CONTRAST_str[] MEM2_TEXT = "Contrast";
+  #endif
  #endif
  #define LANG_SELECTED
 #endif
@@ -386,6 +407,9 @@ End of configuration
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frequencia > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF cristal";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF cristal";
+  #endif
+  #if (LCD_ST_TYPE == 7565)
+   const unsigned char CONTRAST_str[] MEM2_TEXT = "Contraste";
   #endif
  #endif
  #define LANG_SELECTED
@@ -430,6 +454,9 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF Quarz";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF Quarz";
   #endif
+  #if (LCD_ST_TYPE == 7565)
+   const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontraszt";
+  #endif
  #endif
  #define LANG_SELECTED
 #endif
@@ -469,6 +496,9 @@ End of configuration
    const unsigned char HFREQ_str[] MEM2_TEXT = "Daznis > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kvarcas";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF kvarcas";
+  #endif
+  #if (LCD_ST_TYPE == 7565)
+   const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrastas";
   #endif
  #endif
  #endif
@@ -513,6 +543,9 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF quartz";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF quartz";
   #endif
+  #if (LCD_ST_TYPE == 7565)
+   const unsigned char CONTRAST_str[] MEM2_TEXT = "Contrast";
+  #endif
  #endif
 #endif
 
@@ -523,7 +556,7 @@ End of configuration
  const unsigned char jfet_str[] MEM_TEXT = "JFET";
  const unsigned char igbt_str[] MEM_TEXT = "-IGBT";
  const unsigned char GateCap_str[] MEM_TEXT = "C=";
-#ifdef FOUR_LINE_LCD
+#ifdef TWENTY_COLUMN_LCD
  const unsigned char hfe_str[] MEM_TEXT ="hFE=";
 #else
  const unsigned char hfe_str[] MEM_TEXT ="B=";
@@ -1148,6 +1181,10 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 #ifdef WITH_ROTARY_SWITCH
 //  const uint8_t EE_RotarySwitch EEMEM = 0;	// rotation switch is not detected
 #endif
+#if (LCD_ST_TYPE == 7565)
+  const uint8_t EE_Volume_Value EEMEM = VOLUME_VALUE;	// Volume Value for ST7565 controller 
+#endif
+
 //End of EEPROM-Strings
 #else
  // no MAIN_C
@@ -1175,9 +1212,12 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   extern const unsigned char L_CRYSTAL_str[] MEM2_TEXT ;
   #endif
  #endif
-#ifdef WITH_VEXT
+ #ifdef WITH_VEXT
  extern const unsigned char Vext_str[] MEM_TEXT ;
-#endif
+ #endif
+ #if (LCD_ST_TYPE == 7565)
+ extern const unsigned char CONTRAST_str[] MEM2_TEXT;
+ #endif
  #ifdef AUTO_CAL
 //  extern uint16_t R680pl;
 //  extern uint16_t R680mi;
@@ -1185,18 +1225,18 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   extern uint16_t ref_offset;
   extern uint8_t c_zero_tab[];
  #endif
-#ifndef EBC_STYLE
+ #ifndef EBC_STYLE
  // default is the 123= style
  extern const unsigned char N123_str[] MEM_TEXT;
 // const unsigned char N123_str[] MEM_TEXT = " Pin=";
-#else
- #if EBC_STYLE == 321
+ #else
+  #if EBC_STYLE == 321
   extern const unsigned char N321_str[] MEM_TEXT;
- #endif
- #if EBC_STYLE == 123
+  #endif
+  #if EBC_STYLE == 123
   extern const unsigned char N123_str[] MEM_TEXT;
+  #endif
  #endif
-#endif
   extern const unsigned char Uf_str[] MEM_TEXT;
   extern const uint8_t EE_ESR_ZEROtab[] EEMEM;	// zero offset of ESR measurement
   extern  const uint16_t RLtab[];
@@ -1218,7 +1258,11 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   extern const unsigned char PinRHtab[];
  #endif
   extern const unsigned char PinADCtab[];
-#endif
+ #if (LCD_ST_TYPE == 7565)
+  extern const uint8_t EE_Volume_Value EEMEM;	// Volume Value for ST7565 controller 
+ #endif
+#endif /* if defined (MAIN_C) */
+
 #ifdef WITH_MENU
 COMMON const unsigned char FatTP2_str[];
 COMMON const unsigned char C_ESR_str[];

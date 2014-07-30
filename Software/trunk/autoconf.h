@@ -3,12 +3,19 @@
        Automatic Configuration
 */
 
-#ifdef LCD_ST7565
+#if (LCD_ST_TYPE == 7565)
 /* Define under which conditions a graphical display is supported. */
 /* The graphical display should at least support 128x64 pixels. */
  #define WITH_GRAPHICS
  #undef FOUR_LINE_LCD
  #define FOUR_LINE_LCD
+ #ifdef FONT_6X8
+  #define TWENTY_COLUMN_LCD
+ #endif
+#else  /* no ST7565 graphic controller */
+ #ifdef FOUR_LINE_LCD
+  #define TWENTY_COLUMN_LCD   /* usually 20x4 character display */
+ #endif
 #endif
 
 /* configure WITH_VEXT, TPext and TPex2  */
@@ -473,7 +480,7 @@
 #define LCD_CHAR_DEGREE 0xdf            // Character for degree
 #define LCD_CHAR_INSEP 0xff		// used as space character without separating text
 
-#ifdef LCD_ST7565
+#if (LCD_ST_TYPE == 7565)
         #undef LCD_CHAR_DEGREE
         #define LCD_CHAR_DEGREE 0xf8	// Character for degree
         #undef LCD_CHAR_OMEGA

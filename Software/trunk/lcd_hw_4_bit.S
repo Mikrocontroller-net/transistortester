@@ -63,6 +63,8 @@
 _lcd_hw_write:
                
 
+#if (LCD_ST_TYPE == 7565)
+; serial output for ST7565 controller
                ; Set RS (0=Cmd, 1=Char)
                sbrc    preg_1, 0
                        set_rs_high
@@ -70,8 +72,6 @@ _lcd_hw_write:
                        set_rs_low
                set_rs_output;		//init hardware
                nop	;		//wait for address setup
-#ifdef LCD_ST7565
-; serial output for ST7565 controller
                ; Send bit-7
                set_en_low
                sbrc    preg_2, 7
@@ -135,9 +135,99 @@ _lcd_hw_write:
                sbrs    preg_2, 0
                        set_b0_low
                set_en_high              ; force data read from LCD controller
+	ret
 
+#elif (LCD_ST_TYPE == 7920)
+; 1-bit interface for ST7920 controller
+	set_b0_high
+	set_b0_output		; enable output mode
+	set_en_low
+	set_en_output		; enable output mode
+	set_en_high              ;1 force data read from LCD controller
+	set_en_low
+        RCALL	four_bits	; output four times 1  
+	sbrc    preg_1, 0
+	set_b0_high		; data mode
+	sbrs    preg_1, 0
+	set_b0_low		; instruction mode
+	set_en_low
+	set_en_high              ;11111x force data read from LCD controller
+	set_b0_low
+	set_en_low
+	set_en_high              ;11111x0 force data read from LCD controller
+	set_en_low
+	set_en_high              ;11111x00 force data read from LCD controller
+				; first 8 bit transfer finished
+        sbrc    preg_2, 7
+	 set_b0_high		; bit 7 == 1
+	set_en_low
+	set_en_high              ;7 force data read from LCD controller
+	set_b0_low
+        sbrc    preg_2, 6
+	 set_b0_high		; bit 6 == 1
+	set_en_low
+	set_en_high              ;76 force data read from LCD controller
+	set_b0_low
+        sbrc    preg_2, 5
+	 set_b0_high		; bit 5 == 1
+	set_en_low
+	set_en_high              ;765 force data read from LCD controller
+	set_b0_low
+        sbrc    preg_2, 4
+	 set_b0_high		; bit 4 == 1
+	set_en_low
+	set_en_high              ;7654 force data read from LCD controller
+	set_en_low
+	set_b0_low
+	RCALL	four_bits	; output 4 times 0
+				; the upper 4-bit are followed by 4 x 0
+	set_b0_low
+        sbrc    preg_2, 3
+	 set_b0_high		; bit 3 == 1
+	set_en_low
+	set_en_high              ;3 force data read from LCD controller
+	set_b0_low
+        sbrc    preg_2, 2
+	 set_b0_high		; bit 2 == 1
+	set_en_low
+	set_en_high              ;32 force data read from LCD controller
+	set_b0_low
+        sbrc    preg_2, 1
+	 set_b0_high		; bit 1 == 1
+	set_en_low
+	set_en_high              ;321 force data read from LCD controller
+	set_b0_low
+        sbrc    preg_2, 0
+	 set_b0_high		; bit 0 == 1
+	set_en_low
+	set_en_high              ;3210 force data read from LCD controller
+	set_b0_low
+	RCALL	four_bits	; output 4 times 0
+				; the lower 4-bit are followed by 4 x 0
+	RCALL	wait50us
+	RCALL	wait30us	; at least 72 us delay
+	ret
+
+/* output 4 times the same bit */
+four_bits:
+	set_en_high              ;force data read from LCD controller
+	set_en_low
+	set_en_high              ;force data read from LCD controller
+	set_en_low
+	set_en_high              ;force data read from LCD controller
+	set_en_low
+	set_en_high              ;force data read from LCD controller
+	set_en_low
+	ret
 #else
 ; 4-bit interface for HD44780 compatible controller
+               ; Set RS (0=Cmd, 1=Char)
+               sbrc    preg_1, 0
+                       set_rs_high
+               sbrs    preg_1, 0
+                       set_rs_low
+               set_rs_output;		//init hardware
+               nop	;		//wait for address setup
                set_en_high
                set_en_output;		//init hardware
 
@@ -188,9 +278,9 @@ _lcd_hw_write:
                nop			; wait for data setup time
                set_en_low		; force data read from LCD controller
                RCALL    wait1us
-#endif
-
 _lcd_hw_write_exit:
                ret
+#endif
+
        .endfunc
 

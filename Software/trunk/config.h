@@ -297,7 +297,7 @@
 /* Port(s) / Pins for LCD						     */
 /* ************************************************************************* */
 
-#if defined(LCD_ST7565)
+#if (LCD_ST_TYPE == 7565)
  // 128x64 pixel graphics LCD with ST7565 controller and 1-bit interface
  // LCD-P/S = low, LCD-CS1 = low, LCD-CS2 = high
  // LCD_B0_xxx=SI, LCD_EN_xxx=SCL, LCD_RS_xxx=A0, LCD_RES_xxx=RST, (CS-GND)
@@ -354,7 +354,7 @@
    #define HW_LCD_B0_PIN          3
  #endif	/* PROCESSOR_TYP */
  
-#else /* not defined(LCD_ST7565) */
+#else /* not (LCD_ST_TYPE == 7565) */
  //  with character LCD
  #if PROCESSOR_TYP == 644	/* normal layout with character LCD and mega324/644/1284 */
   #ifdef STRIP_GRID_BOARD
@@ -450,7 +450,7 @@
    #define HW_LCD_B7_PIN          3
   #endif 		/* STRIP_GRID_BOARD */
  #endif		/* PROCESSOR_TYP */
-#endif		/* defined(ST7565) */
+#endif		/* (ST7565 == ?) */
 
 
 

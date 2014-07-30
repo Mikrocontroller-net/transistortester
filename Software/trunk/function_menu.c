@@ -9,36 +9,57 @@
 // selection of different functions
 
 #if PROCESSOR_TYP == 644
- #define MODE_TRANS 0
- #define MODE_FREQ 1
- #define MODE_HFREQ 2
- #define MODE_FGEN 3
- #define MODE_PWM 4
- #define MODE_ESR 5
- #define MODE_ROTARY 6
- #define MODE_H_CRYSTAL 7
- #define MODE_L_CRYSTAL 8
- #define MODE_SELFTEST 9
+ // the ATmega644 has additional menu functions HFREQ, H_CRYSTALs and L_CRYSTAL
+ #define MODE_TRANS 0		/* normal TransistorTester function */
+ #define MODE_FREQ 1		/* frequency measurement without 16:1 divider */
+ #define MODE_HFREQ 2		/* frequency measurement with the 16:1 divider */
+ #define MODE_FGEN 3		/* frequency generator function */
+ #define MODE_PWM 4		/* Pulse Width variation function */
+ #define MODE_ESR 5		/* ESR measurement in circuit */
+ #define MODE_ROTARY 6		/* Test Rotary Switch */
+ #define MODE_H_CRYSTAL 7	/* test of high frequency crystal */
+ #define MODE_L_CRYSTAL 8	/* test of low frequency crystal */
+ #define MODE_SELFTEST 9	/* full selftest function with calibration */
  #ifdef WITH_VEXT
-  #define MODE_VEXT 10
-  #define MODE_OFF 11
+  #define MODE_VEXT 10		/* external voltage measurement and zener voltage */
+  #if (LCD_ST_TYPE == 7565)
+   #define MODE_CONTRAST 11	/* select contrast */
+   #define MODE_OFF 12		/* switch off function */
+  #else
+   #define MODE_OFF 11		/* switch off function */
+  #endif
  #else
-  #define MODE_OFF 10
+  #if (LCD_ST_TYPE == 7565)
+   #define MODE_CONTRAST 10	/* select contrast */
+   #define MODE_OFF 11		/* switch off function */
+  #else
+   #define MODE_OFF 10		/* switch off function */
+  #endif
   #define MODE_VEXT 66
  #endif
 #else
- #define MODE_TRANS 0
- #define MODE_FREQ 1
- #define MODE_FGEN 2
- #define MODE_PWM 3
- #define MODE_ESR 4
- #define MODE_ROTARY 5
- #define MODE_SELFTEST 6
+ #define MODE_TRANS 0		/* normal TransistorTester function */
+ #define MODE_FREQ 1		/* frequency measurement */
+ #define MODE_FGEN 2		/* frequency generator function */
+ #define MODE_PWM 3		/* Pulse Width variation function */
+ #define MODE_ESR 4		/* ESR measurement in circuit */
+ #define MODE_ROTARY 5		/* Test Rotary Switch */
+ #define MODE_SELFTEST 6	/* full selftest function with calibration */
  #ifdef WITH_VEXT
-  #define MODE_VEXT 7
-  #define MODE_OFF 8
+  #define MODE_VEXT 7		/* external voltage measurement and zener voltage */
+  #if (LCD_ST_TYPE == 7565)
+   #define MODE_CONTRAST 8	/* select contrast */
+   #define MODE_OFF 9		/* switch off function */
+  #else
+   #define MODE_OFF 8		/* switch off function */
+  #endif
  #else
-  #define MODE_OFF 7
+  #if (LCD_ST_TYPE == 7565)
+   #define MODE_CONTRAST 7	/* select contrast */
+   #define MODE_OFF 8		/* switch off function */
+  #else
+   #define MODE_OFF 7		/* switch off function */
+  #endif
   #define MODE_VEXT 66
  #endif
  #define MODE_HFREQ 66
@@ -191,6 +212,9 @@ void function_menu() {
         }
         if (func_number == MODE_SELFTEST) AutoCheck(0x11);	// Full selftest with calibration
         if (func_number == MODE_VEXT) show_vext();
+  #if (LCD_ST_TYPE == 7565)
+        if (func_number == MODE_CONTRAST) set_contrast();
+  #endif
         if (func_number == MODE_OFF) {
            ON_PORT &= ~(1<<ON_PIN);              //switch off power
            wait_for_key_ms(0); //never ending loop 
@@ -237,6 +261,9 @@ void message2line(uint8_t number) {
      if (number == MODE_SELFTEST) lcd_MEM2_string(FULLCHECK_str);
  #ifdef WITH_VEXT
      if (number == MODE_VEXT) lcd_MEM_string(VOLTAGE_str); 
+ #endif
+ #if (LCD_ST_TYPE == 7565)
+     if (number == MODE_CONTRAST) lcd_MEM_string(CONTRAST_str); 
  #endif
      if (number == MODE_OFF) {
         lcd_MEM_string(OFF_str);
@@ -743,7 +770,7 @@ void do_10bit_PWM() {
            wait_about300ms();	// wait some time to release the button
         }
      } /* end if percent != old_perc */
-     key_pressed = wait_for_key_ms(2000);
+     key_pressed = wait_for_key_ms(1600);
      if(key_pressed > 130) break;	// more than 1.3 seconds
 #ifdef WITH_ROTARY_SWITCH
      if (rotary.incre > FAST_ROTATION) break;		// fast rotation ends voltage measurement
@@ -773,4 +800,59 @@ void do_10bit_PWM() {
   R_DDR = 0;		// switch resistor ports to Input
   DDRB  &= ~(1<<DDB2);	// disable output 
 } /* end do_10bit_PWM */
+
+ #if (LCD_ST_TYPE == 7565)
+/* *************************************************** */
+/* set the contrast value of the ST7565 display */
+/* *************************************************** */
+#define MAX_CONTRAST 0x3f
+set_contrast(void) {
+uint8_t key_pressed;
+uint8_t contrast;
+  // set the contrast value
+  message_key_released(CONTRAST_str);	// display Contrast and wait for key released
+  contrast = eeprom_read_byte(&EE_Volume_Value);
+  #ifdef POWER_OFF
+  uint8_t times;
+  for (times=0;times<240;times++)
+  #else
+  while (1)                     /* wait endless without option POWER_OFF */
+  #endif
+  {
+     lcd_command(CMD_SET_VOLUME_FIRST);		// 0x81 set  volume command
+     lcd_command(contrast);			// value from 1 to 63 (0x3f) */
+     lcd_line2();
+     lcd_clear_line();
+     lcd_line2();
+     DisplayValue(contrast,0,' ',4);
+     key_pressed = wait_for_key_ms(1600);
+#ifdef POWER_OFF
+ #ifdef WITH_ROTARY_SWITCH
+     if ((key_pressed != 0) || (rotary.incre > 0)) times = 0;	// reset counter, operator is active
+ #else
+     if (key_pressed != 0)  times = 0;	// reset counter, operator is active
+ #endif
+#endif
+     if(key_pressed >= 130) break;	// more than 1.3 seconds
+#ifdef WITH_ROTARY_SWITCH
+     if (rotary.incre > FAST_ROTATION) break;		// fast rotation ends setting of contrast
+     if (rotary.count >= 0) {
+        contrast += rotary.count;		// increase the contrast by rotary.count
+     } else {
+        contrast += (MAX_CONTRAST + 1 + rotary.count);	// decrease the contrast by rotary.count
+     }
+#endif
+     if (key_pressed > 0) {
+        if (key_pressed > 40) {
+           contrast++; // longer key press select higher contrast value
+        } else {
+           contrast += MAX_CONTRAST;	// decrease the contrast 
+        }
+     }
+     contrast &= MAX_CONTRAST;
+  } /* end for times */
+
+  eeprom_write_byte((uint8_t *)(&EE_Volume_Value), (int8_t)contrast);	// save contrast value
+}
+ #endif /* LCD_ST_TYPE == 7565 */
 #endif  /* WITH_MENU */

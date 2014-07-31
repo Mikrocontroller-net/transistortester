@@ -806,7 +806,7 @@ void do_10bit_PWM() {
 /* set the contrast value of the ST7565 display */
 /* *************************************************** */
 #define MAX_CONTRAST 0x3f
-set_contrast(void) {
+void set_contrast(void) {
 uint8_t key_pressed;
 uint8_t contrast;
   // set the contrast value

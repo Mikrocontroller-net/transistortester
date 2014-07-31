@@ -12301,15 +12301,16 @@ end3:
   ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
     3d46:	b7 b8       	out	0x07, r11	; 7
   // there is one resistor or more detected
+#ifdef FOUR_LINE_LCD
+  ADC_DDR =  TXD_MSK; 	// switch pin with reference to input, activate relay
+  lcd_line3();
+#else
   wait_for_key_ms(display_time);
     3d48:	80 91 0c 01 	lds	r24, 0x010C
     3d4c:	90 91 0d 01 	lds	r25, 0x010D
     3d50:	0e 94 db 03 	call	0x7b6	; 0x7b6 <wait_for_key_ms>
   ADC_DDR =  TXD_MSK; 	// switch pin with reference to input, activate relay
     3d54:	17 b9       	out	0x07, r17	; 7
-#ifdef FOUR_LINE_LCD
-  lcd_line3();
-#else
   lcd_clear();
     3d56:	0e 94 0d 01 	call	0x21a	; 0x21a <lcd_clear>
 //#if FLASHEND > 0x1fff

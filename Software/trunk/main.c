@@ -1004,11 +1004,12 @@ end3:
   if (ResistorsFound == 0) goto end;
   ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
   // there is one resistor or more detected
-  wait_for_key_ms(display_time);
-  ADC_DDR =  TXD_MSK; 	// switch pin with reference to input, activate relay
 #ifdef FOUR_LINE_LCD
+  ADC_DDR =  TXD_MSK; 	// switch pin with reference to input, activate relay
   lcd_line3();
 #else
+  wait_for_key_ms(display_time);
+  ADC_DDR =  TXD_MSK; 	// switch pin with reference to input, activate relay
   lcd_clear();
 //#if FLASHEND > 0x1fff
   lcd_data('0'+NumOfDiodes);

@@ -236,11 +236,19 @@
  #define ROTARY_A_DDR DDRD
  #define ROTARY_B_DDR DDRD
  #if CHANGE_ROTARY_DIRECTION
-  #define ROTARY_B_PIN PD3
-  #define ROTARY_A_PIN PD2
+  #define ROTARY_B_PIN PD3	/* is connected to LCD-D7/D5 or ST7565-B0 */
+  #if (LCD_ST_TYPE == 7565)
+   #define ROTARY_A_PIN PD5	/* use PD5, PD2 is connected to ST7565 EN */
+  #else
+   #define ROTARY_A_PIN PD2	/* is connected to LCD-D6 */
+  #endif
  #else		/* CHANGE_ROTARY_DIRECTION */
-  #define ROTARY_A_PIN PD3
-  #define ROTARY_B_PIN PD2
+  #define ROTARY_A_PIN PD3	/* is connected to LCD-D7/D5 or ST7565-B0 */
+  #if (LCD_ST_TYPE == 7565)
+   #define ROTARY_B_PIN PD5	/* use PD5, PD2 is connected to ST7565 EN */
+  #else
+   #define ROTARY_B_PIN PD2	/* is connected to LCD-D6 */
+  #endif
  #endif		/* CHANGE_ROTARY_DIRECTION */
  #define ROTARY_A_REG PIND
  #define ROTARY_B_REG PIND

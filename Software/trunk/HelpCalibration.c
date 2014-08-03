@@ -11,7 +11,7 @@
     // Output the help text for calibration.
     // The text is formatted for two 16 character display lines.
     zeich = ' ';		// initial value for while loop
-    line_nr = 0;		// begin with the first LCD line
+    line_nr = 4;		// begin with the first LCD line, but don't wait
     while (zeich != (char)0) {	// zero is end of text
        space_pos = 16;		// if no space is found
        for (ii=0;ii<17;ii++) {	// look for the last space character
@@ -21,8 +21,8 @@
        if (line_nr == 0) {
           // it is the first LCD line, wait for showing the last message
           if ((wait_for_key_ms(5000)) != 0) break;	// key pressed
-          lcd_clear();
        }
+       if ((line_nr & 3) == 0) lcd_clear();  // clear display, line_nr is 0 or 4
        if (line_nr == 1) lcd_line2(); // write to the second LCD line
 #ifdef FOUR_LINE_LCD
        if (line_nr == 2) lcd_line3(); // write to the third LCD line

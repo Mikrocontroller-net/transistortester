@@ -104,6 +104,7 @@ uint8_t wait_for_key_ms(int max_time) {
         }
      }
      if ((wait_time > 20) && (rotary.count != 0)) break;
+     if (wait_time > 20) wait_time = 0;		// reset time window
 #endif
   } /* end while (count_time >= 0) */
  return(key_cs);		// return period key is pressed within the specified time

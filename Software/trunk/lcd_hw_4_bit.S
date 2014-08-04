@@ -28,6 +28,7 @@
 ; for ST7565 controller: Serial data input (SI)
 #define set_b0_low       cbi       _SFR_IO_ADDR(HW_LCD_B0_PORT), HW_LCD_B0_PIN
 #define set_b0_high      sbi       _SFR_IO_ADDR(HW_LCD_B0_PORT), HW_LCD_B0_PIN
+#define set_b0_output          sbi             (_SFR_IO_ADDR(HW_LCD_B0_PORT) - 1), HW_LCD_B0_PIN
 
 #define set_b4_low             cbi             _SFR_IO_ADDR(HW_LCD_B4_PORT), HW_LCD_B4_PIN
 #define set_b4_high            sbi             _SFR_IO_ADDR(HW_LCD_B4_PORT), HW_LCD_B4_PIN
@@ -71,7 +72,7 @@ _lcd_hw_write:
                sbrs    preg_1, 0
                        set_rs_low
                set_rs_output;		//init hardware
-               nop	;		//wait for address setup
+               set_b0_output		; wait for address setup, set B0 to output
                ; Send bit-7
                set_en_low
                sbrc    preg_2, 7

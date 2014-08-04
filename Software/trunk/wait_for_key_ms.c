@@ -29,7 +29,7 @@ uint8_t wait_for_key_ms(int max_time) {
   uint8_t wait_time;
   // update the state of rotary switch 
   ROTARY_A_DDR &= ~(1<<ROTARY_A_PIN);	// switch A to input
-  ROTARY_B_DDR &= ~(1<<ROTARY_B_PIN);	// switch A to input
+  ROTARY_B_DDR &= ~(1<<ROTARY_B_PIN);	// switch B to input
   wait1ms();
  #if WITH_ROTARY_SWITCH == 4
   rotary.ind = ROT_MSK+1;		//initilize with next call of check_rotary()

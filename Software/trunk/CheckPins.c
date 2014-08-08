@@ -104,6 +104,13 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   LoADCm = LoADCp | TXD_MSK;
 
   //setting of Pins 
+#if (PROCESSOR_TYP != 8)
+ #define EXACT_OTR
+ // with option EXACT_OTR the vCE0 and vCEs is determined with common emitter circuit for
+ // PNP and NPN transistors. Without this option set the circuit is common emitter for PNP and
+ // common collector for NPN.
+#endif
+#ifndef EXACT_OTR
   R_PORT = 0;				//resistor-Port outputs to 0
   R_DDR = LoPinRL;			//Low-Pin to output and across R_L to GND
   ADC_DDR = HiADCm;		//High-Pin to output
@@ -127,6 +134,35 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   } else {
      if ((adc.vCEs+288) > adc.lp2) goto checkDiode;	// no significant change
   }
+#else
+  R_PORT = TriPinRL;			//resistor-Port TriState to 1
+  R_DDR = LoPinRL | TriPinRL;		// resistor-Port Low-Pin to 0
+  ADC_DDR = HiADCm;		//High-Pin to output
+  ADC_PORT = HiADCp;		//High-Pin fix to Vcc
+  //for some MOSFET the gate (TristatePin) must be discharged
+  adc.vCEs = W5msReadADC(LowPin);	// lp1 is the voltage at 680 Ohm with + Gate
+  R_DDR = LoPinRL;	
+  adc.lp_otr = W5msReadADC(LowPin);	//read voltage of Low-Pin  , without Gate current (+)
+  R_DDR = 0;
+  wait5ms();				// release all current (clear TRIAC and Thyristor)
+  R_PORT = 0;
+  R_DDR = LoPinRL | TriPinRL;		// start current again
+  adc.lp2 = W5msReadADC(LowPin);	// lp2 is the voltage at 680 Ohm with - Gate
+  if (adc.lp2 < adc.vCEs) {
+     // current is lower with Gate switched to 0
+     if ((adc.lp2+288) > adc.vCEs) goto checkDiode;	// no significant change
+     // switch to common emitter for NPN or N-channel FET
+     ADC_DDR = LoADCm;		//Low-Pin to output
+     ADC_PORT = TXD_VAL;		//Low-Pin fix to GND
+     R_PORT = HiPinRL;			//resistor-Port High-Pin to +, TriState to 0
+     R_DDR = HiPinRL | TriPinRL;	// resistor-Port High-Pin to 1
+     adc.vCEs = ADCconfig.U_AVCC - W5msReadADC(HighPin);	// voltage at 680 Ohm with - Gate
+     R_DDR = HiPinRL;			// resistor-Port High-Pin to 1, TriState open
+     adc.lp_otr = ADCconfig.U_AVCC - W5msReadADC(HighPin); // voltage at 680 Ohm with open Gate
+  } else {
+     if ((adc.vCEs+288) > adc.lp2) goto checkDiode;	// no significant change
+  }
+#endif
 
 //  ChargePin10ms(TriPinRL,0);		//discharge for N-Kanal
 //  adc.lp_otr = W5msReadADC(LowPin);	//read voltage of Low-Pin 
@@ -162,10 +198,15 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 //  if((PartMode <= PART_MODE_P_JFET) && (adc.lp_otr > 455)  && (adc.vCEs > 455))
   
 //  if((adc.lp_otr > 455)  && (adc.vCEs > 455))
-  if((adc.vCEs > 115)  && ((adc.vCEs+100) > adc.lp_otr))
+//  if((adc.vCEs > 115)  && ((adc.vCEs+100) > adc.lp_otr))
+  if((adc.vCEs > 115)  && ((adc.vCEs+adc.vCEs+20) > adc.lp_otr))
      {  //there is more than 650uA current without TristatePin current 
      // can be JFET or D-FET
      //Test if N-JFET or if self-conducting N-MOSFET
+#ifdef EXACT_OTR
+     ADC_DDR = HiADCm;		//High-Pin to output
+     ADC_PORT = HiADCp;		//High-Pin fix to Vcc
+#endif
      R_DDR = LoPinRL | TriPinRH;	//switch R_H for Tristate-Pin (probably Gate) to GND
      adc.lp1 = W10msReadADC(LowPin);	//measure voltage at the assumed Source 
      adc.tp1 = ReadADC(TristatePin);	// measure Gate voltage
@@ -433,10 +474,11 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     ADC_DDR = LoADCm;		//Low-Pin to output 0V
     ADC_PORT = TXD_VAL;			//switch Low-Pin to GND
     R_DDR = TriPinRL | HiPinRL;		//RL port for High-Pin and Tristate-Pin to output
-#ifdef SHOW_ICE
-    R_PORT =  HiPinRL;	//RL port for High-Pin and Tristate-Pin to GND
-    adc.vCEs = ADCconfig.U_AVCC - W5msReadADC(HighPin); // measure voltage a High-Pin, Base low
-#endif
+    // vCEs is already measured correctly with common emitter circuit
+//#ifdef SHOW_ICE
+//    R_PORT =  HiPinRL;	//RL port for High-Pin and Tristate-Pin to GND
+//    adc.vCEs = ADCconfig.U_AVCC - W5msReadADC(HighPin); // measure voltage a High-Pin, Base low
+//#endif
     R_PORT = TriPinRL | HiPinRL;	//RL port for High-Pin and Tristate-Pin to Vcc
     adc.hp1 = W5msReadADC(HighPin);	//measure voltage at High-Pin  (Collector)
 #ifdef WITH_THYRISTOR_GATE_V

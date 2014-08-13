@@ -78,6 +78,7 @@ WITH_LCD_ST7565 = 1
 LCD_ST7565_RESISTOR_RATIO = 4
 
 # If LCD_ST7565 option is used: Flip the display on horizontal direction
+# Set to 1 for flip only, >1 for flip with horizontal offset, SPLC501 controller require a 4 for flip!
 WITH_LCD_ST7565_H_FLIP = 1
 # If LCD_ST7565 option is used: Flip the display on vertical direction
 WITH_LCD_ST7565_V_FLIP = 1

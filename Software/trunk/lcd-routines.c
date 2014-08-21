@@ -214,12 +214,12 @@ void lcd_init(void) {
    lcd_command(eeprom_read_byte(&EE_Volume_Value) & 0x3f);	//set volume value of EEprom
    lcd_command(CMD_SET_RESISTOR_RATIO | (7 & LCD_ST7565_RESISTOR_RATIO));	// 0x20
    lcd_command(CMD_SET_BIAS_9);			// 0xa3
- #ifdef LCD_ST7565_V_FLIP
+ #if (LCD_ST7565_V_FLIP > 0)
    lcd_command(CMD_SET_COM_REVERSE);		// 0xc8
  #else
    lcd_command(CMD_SET_COM_NORMAL);		// 0xc0
  #endif
- #ifdef LCD_ST7565_H_FLIP
+ #if (LCD_ST7565_H_FLIP > 0)
    lcd_command(CMD_SET_ADC_REVERSE);		// 0xa1
  #else
    lcd_command(CMD_SET_ADC_NORMAL);		// 0xa0
@@ -428,49 +428,46 @@ void lcd_pgm_bitmap(const struct tbitmap * const pbitmap,
    if (x >= SCREEN_WIDTH || (y >= SCREEN_HEIGHT))
       return;
 
-   if (pgm_read_byte(&pbitmap->type) == BITMAP_UNCOMPRESSED)
-   {
-      unsigned char offset;
-      unsigned char width;
-      unsigned char page;
-      unsigned char pagemax;
-      const unsigned char *pdata;
+   unsigned char offset;
+   unsigned char width;
+   unsigned char page;
+   unsigned char pagemax;
+   const unsigned char *pdata;
 
-      pdata = (const unsigned char *)pgm_read_word(&pbitmap->data);
-      width = pgm_read_byte(&pbitmap->width);
-      page = y >> 3;
-      pagemax = (y + pgm_read_byte(&pbitmap->height) - 1) >> 3;
-      if (options & OPT_VREVERSE)
-         pdata += (pagemax - page) * width;
-      if (pagemax >= (SCREEN_HEIGHT >> 3))
-         pagemax = ((SCREEN_HEIGHT - 1) >> 3);
-      for (; page <= pagemax; page++)
-      { 
-         lcd_command(CMD_SET_PAGE | page);
-         lcd_command(CMD_SET_COLUMN_UPPER | (0x0f & (x >> 4)));
-         lcd_command(CMD_SET_COLUMN_LOWER | (0x0f & x));
-         for (offset = 0; offset < width; offset++)
-         {
-            unsigned char byte;
+   pdata = (const unsigned char *)pgm_read_word(&pbitmap->data);
+   width = pgm_read_byte(&pbitmap->width);
+   page = y >> 3;
+   pagemax = (y + pgm_read_byte(&pbitmap->height) - 1) >> 3;
+   if (options & OPT_VREVERSE)
+      pdata += (pagemax - page) * width;
+   if (pagemax >= (SCREEN_HEIGHT >> 3))
+      pagemax = ((SCREEN_HEIGHT - 1) >> 3);
+   for (; page <= pagemax; page++)
+   { 
+      lcd_command(CMD_SET_PAGE | page);
+      lcd_command(CMD_SET_COLUMN_UPPER | (0x0f & (x >> 4)));
+      lcd_command(CMD_SET_COLUMN_LOWER | (0x0f & x));
+      for (offset = 0; offset < width; offset++)
+      {
+         unsigned char byte;
 
-            if (options & OPT_HREVERSE)
-               byte = pgm_read_byte(pdata + width - offset - 1);
-            else
-               byte = pgm_read_byte(pdata + offset);
-            if (options & OPT_VREVERSE)
-               byte = reverse(byte);
-            lcd_write_data(byte);
-         }
-         if (options & OPT_VREVERSE)
-            pdata -= width;
+         if (options & OPT_HREVERSE)
+            byte = pgm_read_byte(pdata + width - offset - 1);
          else
-            pdata += width;
+            byte = pgm_read_byte(pdata + offset);
+         if (options & OPT_VREVERSE)
+            byte = reverse(byte);
+         lcd_write_data(byte);
       }
-      // Restore previous cursor position
-      lcd_command(CMD_SET_PAGE | (0x0f & _page));
-      lcd_command(CMD_SET_COLUMN_UPPER | (0x0f & (_xpos >> 4)));
-      lcd_command(CMD_SET_COLUMN_LOWER | (0x0f &  _xpos));
+      if (options & OPT_VREVERSE)
+         pdata -= width;
+      else
+         pdata += width;
    }
+   // Restore previous cursor position
+   lcd_command(CMD_SET_PAGE | (0x0f & _page));
+   lcd_command(CMD_SET_COLUMN_UPPER | (0x0f & (_xpos >> 4)));
+   lcd_command(CMD_SET_COLUMN_LOWER | (0x0f &  _xpos));
 #endif
 }
 #endif

@@ -415,7 +415,7 @@ no_c0save:
         } else {
            cap_found = 0;		// wait for stable connection
         }
-        if (cap_found > 1) {
+        if (cap_found > 4) {
            // value of capacitor is correct
            (void) eeprom_write_word((uint16_t *)(&ref_offset), load_diff);	// hold zero offset + slew rate dependend offset
            lcd_clear();

@@ -231,10 +231,10 @@ ad_35ac:
 ad_35ba:
 	cpi	r17, -9;                /* while (prefix < -9) { // set cval to nF unit */
 	brlt	ad_35ac;                /*  } */
-	std	Y+cap_val_nF, r18
-	std	Y+cap_val_nF+1, r19
-	std	Y+cap_val_nF+2, r20
-	std	Y+cap_val_nF+3, r21
+;	std	Y+cap_val_nF, r18
+;	std	Y+cap_val_nF+1, r19
+;	std	Y+cap_val_nF+2, r20
+;	std	Y+cap_val_nF+3, r21
 
 
 	cpi	r18, lo8(1800/10);       /* if (cap_val_nF < (1800/10)) return(0xffff);   //capacity lower than 0.18 uF */
@@ -247,6 +247,29 @@ ad_35ba:
 	ldi	r25, 0xff;
 	rjmp	ad_exit; 
 ad_35e4:				/* } */
+	cpi	r17, -9;		/* if ((pp > -9) || (cap_val_nF > 32000)) { */
+	brne	load_max;
+	ldi	r24, lo8(32000);
+	cp	r18, r24
+        ldi	r24, hi8(32000);
+	cpc	r19, r24;
+;	ldi	r24, hlo8(32000);
+;	cpc	r20, r24;
+	cpc	r20, r1;
+;	ldi	r24, hhi8(32000);
+;	cpc	r21, r24;
+	cpc	r20, r1;
+	brcs	store_cvn;
+load_max:
+	ldi	r18, lo8(32000);		/* cap_val_nF = 65000 */
+	ldi	r19, hi8(32000);
+;	ldi	r20, hlo8(32000);		/* upper word is allways zero */
+;	ldi	r21, hhi8(32000);		/* upper word is allways zero */
+store_cvn:
+	std	Y+cap_val_nF, r18
+	std	Y+cap_val_nF+1, r19
+;	std	Y+cap_val_nF+2, r20;		/* upper word is allways zero */
+;	std	Y+cap_val_nF+3, r21;		/* upper word is allways zero */
 
 
 #ifdef ADC_Sleep_Mode
@@ -575,8 +598,10 @@ ad_3924:
 
 	ldd	r22, Y+cap_val_nF;	/* sumvolt1 -= (1745098UL*MAX_CNT) / (cap_val_nF * (cap_val_nF + 19)); */
 	ldd	r23, Y+cap_val_nF+1;
-	ldd	r24, Y+cap_val_nF+2;
-	ldd	r25, Y+cap_val_nF+3;
+;	ldd	r24, Y+cap_val_nF+2;
+	mov	r24, r1			/* upper bits of cap_val_nF are allway zero */
+;	ldd	r25, Y+cap_val_nF+3;
+	mov	r25, r1			/* upper bits of cap_val_nF are allway zero */
 	movw	r18, r22;		/* r18:21 = r22:25 = cap_val_nF; */
 	movw	r20, r24;
        	subi	r22, lo8(-137180/(PIN_RM+PIN_RP+R_L_VAL)); 0xED; 237

@@ -131,19 +131,24 @@ uint16_t GetESR(uint8_t hipin, uint8_t lopin) {
   uint8_t LoPinR_L;		// used to switch 680 Ohm to LowPin
   uint8_t LoADC;		// used to switch Lowpin directly to GND or VCC
   uint8_t ii;			// tempory value
+  int8_t pp;			// tempory prefix
   uint8_t StartADCmsk;		// Bit mask to start the ADC
   uint8_t SelectLowPin,SelectHighPin;
   int8_t esr0;			// used for ESR zero correction
 
   cap_val_nF = 10000;
   if (PartFound == PART_CAPACITOR) {
-     ii = cap.cpre_max;
+     pp = cap.cpre_max;
      cap_val_nF = cap.cval_max;
-     while (ii < -9) { // set cval to nF unit
+     while (pp < -9) { // set cval to nF unit
          cap_val_nF /= 10;		// reduce value by factor ten
-         ii++;		// take next decimal prefix
+         pp++;		// take next decimal prefix
      }
      if (cap_val_nF < (1800/18)) return(0xffff);			//capacity lower than 1.8 uF
+     if ((pp > -9) || (cap_val_nF > 32000)) {
+        // limit cap_val_nF to prevent overflow
+        cap_val_nF = 32000;
+     }
 //     if (cap_val_nF > (1800/18)) {
         /* normal ADC-speed, ADC-Clock 8us */
 #ifdef ADC_Sleep_Mode

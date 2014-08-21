@@ -19,21 +19,26 @@
  #define MODE_ROTARY 6		/* Test Rotary Switch */
  #define MODE_H_CRYSTAL 7	/* test of high frequency crystal */
  #define MODE_L_CRYSTAL 8	/* test of low frequency crystal */
- #define MODE_SELFTEST 9	/* full selftest function with calibration */
+ #define NNN 8
+ #ifdef WITH_SELFTEST
+  #define MODE_SELFTEST 9	/* full selftest function with calibration */
+  #undef NNN
+  #define NNN 9
+ #endif
  #ifdef WITH_VEXT
-  #define MODE_VEXT 10		/* external voltage measurement and zener voltage */
+  #define MODE_VEXT NNN+1	/* external voltage measurement and zener voltage */
   #if (LCD_ST_TYPE == 7565)
-   #define MODE_CONTRAST 11	/* select contrast */
-   #define MODE_OFF 12		/* switch off function */
+   #define MODE_CONTRAST NNN+2	/* select contrast */
+   #define MODE_OFF NNN+3	/* switch off function */
   #else
-   #define MODE_OFF 11		/* switch off function */
+   #define MODE_OFF NNN+2	/* switch off function */
   #endif
  #else
   #if (LCD_ST_TYPE == 7565)
-   #define MODE_CONTRAST 10	/* select contrast */
-   #define MODE_OFF 11		/* switch off function */
+   #define MODE_CONTRAST NNN+1	/* select contrast */
+   #define MODE_OFF NNN+2		/* switch off function */
   #else
-   #define MODE_OFF 10		/* switch off function */
+   #define MODE_OFF NNN+1	/* switch off function */
   #endif
   #define MODE_VEXT 66
  #endif
@@ -44,21 +49,26 @@
  #define MODE_PWM 3		/* Pulse Width variation function */
  #define MODE_ESR 4		/* ESR measurement in circuit */
  #define MODE_ROTARY 5		/* Test Rotary Switch */
- #define MODE_SELFTEST 6	/* full selftest function with calibration */
+ #define NNN 5
+ #ifdef WITH_SELFTEST
+  #define MODE_SELFTEST 6	/* full selftest function with calibration */
+  #undef NNN
+  #define NNN 6
+ #endif
  #ifdef WITH_VEXT
-  #define MODE_VEXT 7		/* external voltage measurement and zener voltage */
+  #define MODE_VEXT NNN+1	/* external voltage measurement and zener voltage */
   #if (LCD_ST_TYPE == 7565)
-   #define MODE_CONTRAST 8	/* select contrast */
-   #define MODE_OFF 9		/* switch off function */
+   #define MODE_CONTRAST NNN+2	/* select contrast */
+   #define MODE_OFF NNN+3	/* switch off function */
   #else
-   #define MODE_OFF 8		/* switch off function */
+   #define MODE_OFF NNN+2	/* switch off function */
   #endif
  #else
   #if (LCD_ST_TYPE == 7565)
-   #define MODE_CONTRAST 7	/* select contrast */
-   #define MODE_OFF 8		/* switch off function */
+   #define MODE_CONTRAST NNN+1	/* select contrast */
+   #define MODE_OFF NNN+2	/* switch off function */
   #else
-   #define MODE_OFF 7		/* switch off function */
+   #define MODE_OFF NNN+1	/* switch off function */
   #endif
   #define MODE_VEXT 66
  #endif
@@ -210,7 +220,9 @@ void function_menu() {
         if (func_number == MODE_ROTARY) {
            CheckRotaryEncoder();		// check rotary encoder
         }
+  #ifdef WITH_SELFTEST
         if (func_number == MODE_SELFTEST) AutoCheck(0x11);	// Full selftest with calibration
+  #endif
         if (func_number == MODE_VEXT) show_vext();
   #if (LCD_ST_TYPE == 7565)
         if (func_number == MODE_CONTRAST) set_contrast();
@@ -258,7 +270,9 @@ void message2line(uint8_t number) {
      if (number == MODE_PWM) lcd_MEM2_string(PWM_10bit_str);
      if (number == MODE_ESR) lcd_MEM2_string(C_ESR_str);
      if (number == MODE_ROTARY) lcd_MEM2_string(RotaryEncoder_str);
+ #ifdef WITH_SELFTEST
      if (number == MODE_SELFTEST) lcd_MEM2_string(FULLCHECK_str);
+ #endif
  #ifdef WITH_VEXT
      if (number == MODE_VEXT) lcd_MEM_string(VOLTAGE_str); 
  #endif

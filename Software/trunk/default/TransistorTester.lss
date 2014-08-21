@@ -21,15 +21,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   8 .debug_abbrev 00001102  00000000  00000000  0000a8c1  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   00001ba8  00000000  00000000  0000b9c3  2**0
+  9 .debug_line   00001baa  00000000  00000000  0000b9c3  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_frame  0000051c  00000000  00000000  0000d56c  2**2
+ 10 .debug_frame  0000051c  00000000  00000000  0000d570  2**2
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_str    00000be1  00000000  00000000  0000da88  2**0
+ 11 .debug_str    00000be1  00000000  00000000  0000da8c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_loc    00003bd9  00000000  00000000  0000e669  2**0
+ 12 .debug_loc    00003bd9  00000000  00000000  0000e66d  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_ranges 00000018  00000000  00000000  00012242  2**0
+ 13 .debug_ranges 00000018  00000000  00000000  00012246  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -11092,7 +11092,7 @@ start:
     35dc:	67 e4       	ldi	r22, 0x47	; 71
     35de:	83 e4       	ldi	r24, 0x43	; 67
     35e0:	09 c0       	rjmp	.+18     	; 0x35f4 <main+0x356>
-    lcd_draw_trans_pins(121, 56, 94, 48, 121, 32);
+    lcd_draw_trans_pins(90, 48);
 #endif
     goto TyUfAusgabe;
   }
@@ -11109,9 +11109,10 @@ start:
     35f0:	67 e4       	ldi	r22, 0x47	; 71
     35f2:	81 e3       	ldi	r24, 0x31	; 49
     35f4:	0e 94 aa 01 	call	0x354	; 0x354 <PinLayout>
-#ifdef WITH_GRAPHICS
-    lcd_pgm_bitmap(&g_bmp_triac, 104, 32, 0);
-    lcd_draw_trans_pins(104, 56, 97, 48, 106, 32);
+//    lcd_pgm_bitmap(&g_bmp_triac, 104, 32, 0);
+    lcd_pgm_bitmap(&g_bmp_triac, 94, 32, 0);
+//    lcd_draw_trans_pins(104, 56, 97, 48, 106, 32);
+    lcd_draw_trans_pins(88, 48);
 #endif
     goto TyUfAusgabe;
     35f8:	9c c3       	rjmp	.+1848   	; 0x3d32 <main+0xa94>
@@ -11561,8 +11562,8 @@ start:
     390e:	0e 94 cd 00 	call	0x19a	; 0x19a <lcd_data>
     3912:	11 c0       	rjmp	.+34     	; 0x3936 <main+0x698>
 #ifdef WITH_GRAPHICS
-       lcd_pgm_bitmap(&g_bmp_npn, 96, 32, 0);
-       lcd_draw_trans_pins(121, 56, 90, 40, 121, 32);
+       lcd_pgm_bitmap(&g_bmp_npn, 90, 32, 0);
+       lcd_draw_trans_pins(90-6, 40);
 #endif
     } else {
        lcd_MEM_string(PNP_str);		//"PNP "
@@ -11582,9 +11583,9 @@ start:
     392c:	91 e0       	ldi	r25, 0x01	; 1
     392e:	90 93 55 01 	sts	0x0155, r25
     3932:	80 93 54 01 	sts	0x0154, r24
-#ifdef WITH_GRAPHICS
-       lcd_pgm_bitmap(&g_bmp_pnp, 96, 32, 0);
-       lcd_draw_trans_pins(121, 32, 90, 40, 121, 56);
+       lcd_pgm_bitmap(&g_bmp_npn, 90, 32, 0);
+       lcd_pgm_bitmap(&g_bmp_pnp, 90+14, 32+16, 0);	// update for PNP
+       lcd_draw_trans_pins(90-6, 40);
 #endif
     }
     lcd_space();
@@ -11637,7 +11638,7 @@ start:
     3986:	8f e5       	ldi	r24, 0x5F	; 95
     3988:	90 e0       	ldi	r25, 0x00	; 0
     398a:	0e 94 5d 01 	call	0x2ba	; 0x2ba <lcd_fix_string>
-       lcd_draw_trans_pins(121, 32, 90, 40, 121, 56);
+       lcd_draw_trans_pins(90-6, 40);
 #endif
     }
     lcd_space();
@@ -11788,9 +11789,9 @@ start:
     3a8c:	85 eb       	ldi	r24, 0xB5	; 181
     3a8e:	90 e0       	ldi	r25, 0x00	; 0
     3a90:	13 c0       	rjmp	.+38     	; 0x3ab8 <main+0x81a>
-#ifdef WITH_GRAPHICS
-       lcd_draw_jfet(fetidx, 96, 32);
-       lcd_draw_trans_pins(121, 56, 90, 48, 121, 32);
+          lcd_pgm_bitmap(&g_bmp_p_jfet, 96+6, 32+16, 0);
+       }
+       lcd_draw_trans_pins(96-6, 48);
 #endif
     } else {
        if ((PartMode&D_MODE) == D_MODE) {
@@ -11812,7 +11813,7 @@ start:
     3aa4:	8f ea       	ldi	r24, 0xAF	; 175
     3aa6:	90 e0       	ldi	r25, 0x00	; 0
     3aa8:	0e 94 5d 01 	call	0x2ba	; 0x2ba <lcd_fix_string>
-          lcd_draw_trans_pins(121, 56, 82, 40, 121, 32);
+          lcd_draw_trans_pins(82, 40);
 #endif
        }
     }
@@ -11823,8 +11824,8 @@ start:
     3ab0:	85 e4       	ldi	r24, 0x45	; 69
     3ab2:	07 c0       	rjmp	.+14     	; 0x3ac2 <main+0x824>
 #ifdef WITH_GRAPHICS
-          lcd_draw_igbt(fetidx, 88, 32);
-          lcd_draw_trans_pins(121, 56, 82, 48, 121, 32);
+          lcd_draw_igbt(fetidx);
+          lcd_draw_trans_pins(82, 48);
 #endif
        } else {
           lcd_MEM_string(mosfet_str);	//"-MOS "

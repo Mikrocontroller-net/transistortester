@@ -387,7 +387,7 @@ start:
     PinLayout(Cathode_char,'G','A'); 	// CGA= or 123=...
 #ifdef WITH_GRAPHICS
     lcd_pgm_bitmap(&g_bmp_thyristor, 102, 32, 0);
-    lcd_draw_trans_pins(121, 56, 94, 48, 121, 32);
+    lcd_draw_trans_pins(90, 48);
 #endif
     goto TyUfAusgabe;
   }
@@ -396,8 +396,10 @@ start:
     lcd_MEM_string(Triac);		//"Triac"
     PinLayout('1','G','2'); 	// CGA= or 123=...
 #ifdef WITH_GRAPHICS
-    lcd_pgm_bitmap(&g_bmp_triac, 104, 32, 0);
-    lcd_draw_trans_pins(104, 56, 97, 48, 106, 32);
+//    lcd_pgm_bitmap(&g_bmp_triac, 104, 32, 0);
+    lcd_pgm_bitmap(&g_bmp_triac, 94, 32, 0);
+//    lcd_draw_trans_pins(104, 56, 97, 48, 106, 32);
+    lcd_draw_trans_pins(88, 48);
 #endif
     goto TyUfAusgabe;
   }
@@ -609,8 +611,8 @@ start:
        }
 //       _trans = &ntrans;  is allready selected a default
 #ifdef WITH_GRAPHICS
-       lcd_pgm_bitmap(&g_bmp_npn, 96, 32, 0);
-       lcd_draw_trans_pins(121, 56, 90, 40, 121, 32);
+       lcd_pgm_bitmap(&g_bmp_npn, 90, 32, 0);
+       lcd_draw_trans_pins(90-6, 40);
 #endif
     } else {
        lcd_MEM_string(PNP_str);		//"PNP "
@@ -619,8 +621,9 @@ start:
        }
        _trans = &ptrans;		// change transistor structure
 #ifdef WITH_GRAPHICS
-       lcd_pgm_bitmap(&g_bmp_pnp, 96, 32, 0);
-       lcd_draw_trans_pins(121, 32, 90, 40, 121, 56);
+       lcd_pgm_bitmap(&g_bmp_npn, 90, 32, 0);
+       lcd_pgm_bitmap(&g_bmp_pnp, 90+14, 32+16, 0);	// update for PNP
+       lcd_draw_trans_pins(90-6, 40);
 #endif
     }
     lcd_space();
@@ -699,8 +702,13 @@ start:
     if (tmp == PART_MODE_JFET) {
        lcd_MEM_string(jfet_str);	//"JFET"
 #ifdef WITH_GRAPHICS
-       lcd_draw_jfet(fetidx, 96, 32);
-       lcd_draw_trans_pins(121, 56, 90, 48, 121, 32);
+//     lcd_draw_jfet(fetidx, 96, 32);
+       lcd_pgm_bitmap(&g_bmp_n_jfet, 96, 32, 0);
+       if (fetidx != 0) {
+          // update the n_jfet bitmat at relative location 6, 16
+          lcd_pgm_bitmap(&g_bmp_p_jfet, 96+6, 32+16, 0);
+       }
+       lcd_draw_trans_pins(96-6, 48);
 #endif
     } else {
        if ((PartMode&D_MODE) == D_MODE) {
@@ -712,14 +720,14 @@ start:
        if (tmp == (PART_MODE_IGBT)) {
           lcd_MEM_string(igbt_str);	//"-IGBT"
 #ifdef WITH_GRAPHICS
-          lcd_draw_igbt(fetidx, 88, 32);
-          lcd_draw_trans_pins(121, 56, 82, 48, 121, 32);
+          lcd_draw_igbt(fetidx);
+          lcd_draw_trans_pins(82, 48);
 #endif
        } else {
           lcd_MEM_string(mosfet_str);	//"-MOS "
 #ifdef WITH_GRAPHICS
-          lcd_draw_mosfet(fetidx, 88, 32);
-          lcd_draw_trans_pins(121, 56, 82, 40, 121, 32);
+          lcd_draw_mosfet(fetidx);
+          lcd_draw_trans_pins(82, 40);
 #endif
        }
     }
@@ -796,7 +804,7 @@ start:
 
        if (_trans->c != diodes.Anode[0])
           options |= OPT_VREVERSE;
-       lcd_pgm_bitmap(&g_bmp_vakdiode, 112, 32, options);
+       lcd_pgm_bitmap(&g_bmp_vakdiode, 114, 32, options);
        lcd_line3();			//3. Row
   #else
        lcd_line3();			//3. Row

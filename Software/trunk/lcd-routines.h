@@ -1,5 +1,4 @@
 #include "lcd_defines.h"
-#include "bitmaps/tbitmap.h"
 #include <stdint.h>
 
 // Interfacing of a HD44780 compatible LCD with 4-Bit-Interface mode
@@ -27,7 +26,7 @@ void lcd_line2(void);
 void lcd_line3(void);
 void lcd_line4(void);
 #ifdef WITH_GRAPHICS
-void lcd_pgm_bitmap(const struct tbitmap * const pbitmap,
+void lcd_pgm_bitmap(const unsigned char * pbitmap,
                     unsigned char x,
                     unsigned char y,
                     unsigned char options);

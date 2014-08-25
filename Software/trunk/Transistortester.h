@@ -13,7 +13,6 @@
 #include "lcd-routines.h"
 #include "wait1000ms.h"
 #include "part_defs.h"
-#include "bitmaps.h"
 
 
 #if defined (MAIN_C)
@@ -1217,6 +1216,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  #endif
  #if (LCD_ST_TYPE == 7565)
  extern const unsigned char CONTRAST_str[] MEM2_TEXT;
+ #include "bitmaps.h"
  #endif
  #ifdef AUTO_CAL
 //  extern uint16_t R680pl;

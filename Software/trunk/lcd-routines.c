@@ -419,7 +419,7 @@ static unsigned char reverse(unsigned char b)
 #endif
 
 #ifdef WITH_GRAPHICS
-void lcd_pgm_bitmap(const struct tbitmap * const pbitmap,
+void lcd_pgm_bitmap(const unsigned char * pbitmap,
                     unsigned char x,
                     unsigned char y,
                     unsigned char options)
@@ -434,10 +434,13 @@ void lcd_pgm_bitmap(const struct tbitmap * const pbitmap,
    unsigned char pagemax;
    const unsigned char *pdata;
 
-   pdata = (const unsigned char *)pgm_read_word(&pbitmap->data);
-   width = pgm_read_byte(&pbitmap->width);
+//   pdata = (const unsigned char *)pgm_read_word(&pbitmap->data);
+   pdata = pbitmap + 2;
+//   width = pgm_read_byte(&pbitmap->width);
+   width = (unsigned char)pgm_read_byte(&pbitmap[0]);
    page = y >> 3;
-   pagemax = (y + pgm_read_byte(&pbitmap->height) - 1) >> 3;
+//   pagemax = (y + pgm_read_byte(&pbitmap->height) - 1) >> 3;
+   pagemax = (y + (unsigned char)pgm_read_byte(&pbitmap[1]) - 1) >> 3;
    if (options & OPT_VREVERSE)
       pdata += (pagemax - page) * width;
    if (pagemax >= (SCREEN_HEIGHT >> 3))

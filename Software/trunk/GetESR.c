@@ -300,7 +300,7 @@ uint16_t GetESR(uint8_t hipin, uint8_t lopin) {
       esrvalue -= esr0;
    } else {
 #ifdef AUTO_CAL
-      if ((esrvalue + R_LIMIT_TO_UNCALIBRATED) < esr0) {
+      if (((esrvalue + R_LIMIT_TO_UNCALIBRATED) < esr0) && (cap_val_nF > 4500)) {
          mark_as_uncalibrated();
       }
 #endif

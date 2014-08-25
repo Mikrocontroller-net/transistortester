@@ -269,13 +269,6 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 OBJECTS = lcd_hw_4_bit.o lcd-routines.o i2lcd.o PinLayout.o RvalOut.o UfAusgabe.o DisplayValue.o
 ifeq ($(WITH_LCD_ST7565),1)
 OBJECTS += font.o lcd-draw.o
-OBJECTS += bmp_one.o bmp_two.o bmp_three.o
-OBJECTS += bmp_npn.o bmp_pnp.o 
-OBJECTS += bmp_n_e_mos.o bmp_n_d_mos.o bmp_p_e_mos.o bmp_p_d_mos.o
-OBJECTS += bmp_n_e_igbt.o bmp_n_d_igbt.o bmp_p_e_igbt.o bmp_p_d_igbt.o
-OBJECTS += bmp_vakdiode.o
-OBJECTS += bmp_n_jfet.o bmp_p_jfet.o bmp_triac.o bmp_thyristor.o
-OBJECTS += bmp_inductor.o
 endif
 OBJECTS += swuart.o wait1000ms.o 
 ifneq ($(INHIBIT_SLEEP_MODE),1)

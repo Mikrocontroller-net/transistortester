@@ -386,7 +386,7 @@ start:
     lcd_MEM_string(Thyristor);		//"Thyristor"
     PinLayout(Cathode_char,'G','A'); 	// CGA= or 123=...
 #ifdef WITH_GRAPHICS
-    lcd_pgm_bitmap(&g_bmp_thyristor, 102, 32, 0);
+    lcd_pgm_bitmap(bmp_thyristor_data, 102, 32, 0);
     lcd_draw_trans_pins(90, 48);
 #endif
     goto TyUfAusgabe;
@@ -396,8 +396,8 @@ start:
     lcd_MEM_string(Triac);		//"Triac"
     PinLayout('1','G','2'); 	// CGA= or 123=...
 #ifdef WITH_GRAPHICS
-//    lcd_pgm_bitmap(&g_bmp_triac, 104, 32, 0);
-    lcd_pgm_bitmap(&g_bmp_triac, 94, 32, 0);
+//    lcd_pgm_bitmap(bmp_triac_data, 104, 32, 0);
+    lcd_pgm_bitmap(bmp_triac_data, 94, 32, 0);
 //    lcd_draw_trans_pins(104, 56, 97, 48, 106, 32);
     lcd_draw_trans_pins(88, 48);
 #endif
@@ -611,7 +611,7 @@ start:
        }
 //       _trans = &ntrans;  is allready selected a default
 #ifdef WITH_GRAPHICS
-       lcd_pgm_bitmap(&g_bmp_npn, 90, 32, 0);
+       lcd_pgm_bitmap(bmp_npn_data, 90, 32, 0);
        lcd_draw_trans_pins(90-6, 40);
 #endif
     } else {
@@ -621,8 +621,8 @@ start:
        }
        _trans = &ptrans;		// change transistor structure
 #ifdef WITH_GRAPHICS
-       lcd_pgm_bitmap(&g_bmp_npn, 90, 32, 0);
-       lcd_pgm_bitmap(&g_bmp_pnp, 90+14, 32+16, 0);	// update for PNP
+       lcd_pgm_bitmap(bmp_npn_data, 90, 32, 0);
+       lcd_pgm_bitmap(bmp_pnp_data, 90+14, 32+16, 0);	// update for PNP
        lcd_draw_trans_pins(90-6, 40);
 #endif
     }
@@ -703,10 +703,10 @@ start:
        lcd_MEM_string(jfet_str);	//"JFET"
 #ifdef WITH_GRAPHICS
 //     lcd_draw_jfet(fetidx, 96, 32);
-       lcd_pgm_bitmap(&g_bmp_n_jfet, 96, 32, 0);
+       lcd_pgm_bitmap(bmp_n_jfet_data, 96, 32, 0);
        if (fetidx != 0) {
           // update the n_jfet bitmat at relative location 6, 16
-          lcd_pgm_bitmap(&g_bmp_p_jfet, 96+6, 32+16, 0);
+          lcd_pgm_bitmap(bmp_p_jfet_data, 96+6, 32+16, 0);
        }
        lcd_draw_trans_pins(96-6, 48);
 #endif
@@ -804,7 +804,7 @@ start:
 
        if (_trans->c != diodes.Anode[0])
           options |= OPT_VREVERSE;
-       lcd_pgm_bitmap(&g_bmp_vakdiode, 114, 32, options);
+       lcd_pgm_bitmap(bmp_vakdiode_data, 114, 32, options);
        lcd_line3();			//3. Row
   #else
        lcd_line3();			//3. Row
@@ -883,7 +883,7 @@ resistor_out:
           lcd_MEM_string(Lis_str);	// "L="
           DisplayValue(inductor_lx,inductor_lpre,'H',3);	// output inductance
  #ifdef WITH_GRAPHICS
-          lcd_pgm_bitmap(&g_bmp_inductor, 103, 56, 0);
+          lcd_pgm_bitmap(bmp_inductor_data, 103, 56, 0);
           lcd_draw_pin(resis[0].rb, 95, 56);
           lcd_draw_pin(resis[0].ra, 120, 56);
  #endif

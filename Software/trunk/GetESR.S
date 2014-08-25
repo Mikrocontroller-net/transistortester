@@ -722,6 +722,13 @@ esr_too_less:
 	cp	r24, r6;		/* if ((esrvalue+20) < esr0) ; */
 	cpc	r25, zero_reg;
 	brcc	esr_too_less2;
+	ldd	r24, Y+cap_val_nF;	/* mark only, if cap_val_nF > 4500 */
+	ldd     r25, Y+cap_val_nF+1;
+;	ldd	r26, Y+cap_val_nF+2;	/* the upper bits (cap_val_nF+2|3) are always zero */ 
+	cpi	r24, lo8(4500);
+	ldi	r24, hi8(4500);
+	cpc	r25, r24;
+	brcs	esr_too_less2;
 	call	mark_as_uncalibrated;
 /*	ldi	r24,'<'; */
 /*	call	lcd_data; */

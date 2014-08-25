@@ -54,63 +54,6 @@ EntladePins.o: ../EntladePins.c Makefile
 EE_check_init.o: ../EE_check_init.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-bmp_one.o: bmp_one.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_two.o: bmp_two.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_three.o: bmp_three.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_npn.o: bmp_npn.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_pnp.o: bmp_pnp.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_p_e_mos.o: bmp_p_e_mos.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_p_d_mos.o: bmp_p_d_mos.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_n_e_mos.o: bmp_n_e_mos.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_n_d_mos.o: bmp_n_d_mos.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_p_e_igbt.o: bmp_p_e_igbt.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_p_d_igbt.o: bmp_p_d_igbt.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_n_e_igbt.o: bmp_n_e_igbt.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_n_d_igbt.o: bmp_n_d_igbt.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_vakdiode.o: bmp_vakdiode.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_n_jfet.o: bmp_n_jfet.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_p_jfet.o: bmp_p_jfet.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_triac.o: bmp_triac.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_thyristor.o: bmp_thyristor.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-bmp_inductor.o: bmp_inductor.c Makefile
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
 ##Link
 $(TARGET): $(OBJECTS)
 	 $(CC) $(LDFLAGS) $(OBJECTS) $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $(TARGET)

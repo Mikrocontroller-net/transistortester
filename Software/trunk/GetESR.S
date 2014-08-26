@@ -594,7 +594,8 @@ ad_3924:
 /* Aproximation of 5000*(1 - exp(13.5e-6/(cap_val_nF*1.e-9*(0.1*(PIN_RM+PIN_RP+R_L_VAL)))) - 2500*(1 - exp(-27e-6/(cap_val_nF*1.e-9*(0.1*(PIN_RM+PIN_RP+R_L_VAL))))) */
 /*  is done by ((6744116/(PIN_RM+PIN_RP+R_L_VAL))*(6744116/(PIN_RM+PIN_RP+R_L_VAL))) / (cap_val_nF * (cap_val_nF + (137180/(PIN_RM+PIN_RP+R_L_VAL)))) */
 /*  is done by 872520 / (cap_val_nF * (cap_val_nF + 19)) */
- #define FAKTOR_ESR (9537620/(PIN_RM+PIN_RP+R_L_VAL))
+; #define FAKTOR_ESR (9537620/(PIN_RM+PIN_RP+R_L_VAL))
+ #define FAKTOR_ESR (8500000/(PIN_RM+PIN_RP+R_L_VAL))
 
 	ldd	r22, Y+cap_val_nF;	/* sumvolt1 -= (1745098UL*MAX_CNT) / (cap_val_nF * (cap_val_nF + 19)); */
 	ldd	r23, Y+cap_val_nF+1;

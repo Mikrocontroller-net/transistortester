@@ -312,5 +312,5 @@ wait_for_key_ms.o: ../wait_for_key_ms.c Makefile
 get_log.o: ../get_log.S Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-#include ../finish.mk
+include ../finish.mk
 

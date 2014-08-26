@@ -1216,7 +1216,6 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  #endif
  #if (LCD_ST_TYPE == 7565)
  extern const unsigned char CONTRAST_str[] MEM2_TEXT;
- #include "bitmaps.h"
  #endif
  #ifdef AUTO_CAL
 //  extern uint16_t R680pl;
@@ -1262,6 +1261,10 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   extern const uint8_t EE_Volume_Value EEMEM;	// Volume Value for ST7565 controller 
  #endif
 #endif /* if defined (MAIN_C) */
+
+#if (LCD_ST_TYPE == 7565)
+ #include "bitmaps.h"
+#endif
 
 #ifdef WITH_MENU
 COMMON const unsigned char FatTP2_str[];

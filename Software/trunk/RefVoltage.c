@@ -54,9 +54,9 @@ void RefVoltage(void) {
   referenz = ref_mv;		// use the read out internal Reference voltage
 #endif
 #ifdef AUTO_CAL
-  ADCconfig.U_Bandgap = (ref_mv + (int8_t)eeprom_read_byte((uint8_t *)&RefDiff));
+  ADCconfig.U_Bandgap = (referenz + (int8_t)eeprom_read_byte((uint8_t *)&RefDiff));
 #else
-  ADCconfig.U_Bandgap = (ref_mv + REF_R_KORR);
+  ADCconfig.U_Bandgap = (referenz + REF_R_KORR);
 #endif
   adc_internal_reference = ADCconfig.U_Bandgap;
  }

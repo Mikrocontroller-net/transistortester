@@ -95,6 +95,7 @@ End of configuration
    const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
    const unsigned char FREQ_str[] MEM2_TEXT = "Frequenz";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Spannung";
+   const unsigned char SHOW_str[] MEM2_TEXT = "Zeige Daten";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "Schalte aus";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
@@ -137,6 +138,7 @@ End of configuration
    const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
    const unsigned char FREQ_str[] MEM2_TEXT = "Frequenza";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltaggio";
+   const unsigned char SHOW_str[] MEM2_TEXT = "Mostra dati";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "Spegnere";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generatore";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
@@ -180,6 +182,7 @@ End of configuration
    const unsigned char TESTER_str[] MEM2_TEXT = "Tranzystor";
    const unsigned char FREQ_str[] MEM2_TEXT = "Czestosc";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
+   const unsigned char SHOW_str[] MEM2_TEXT = "pokaz dane";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "wylaczyc";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
@@ -223,6 +226,7 @@ End of configuration
    const unsigned char TESTER_str[] MEM2_TEXT = "Tranzistor";
    const unsigned char FREQ_str[] MEM2_TEXT = "Frekvence";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Napeti";
+   const unsigned char SHOW_str[] MEM2_TEXT = "zobrazit udaje";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "Vypnout";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
@@ -245,7 +249,7 @@ End of configuration
 #if defined(LANG_SLOVAK)		//slowakisch
    const unsigned char TestRunning[] MEM_TEXT = "Prebieha meranie";
    const unsigned char BatWeak[] MEM_TEXT = "slaba"; //€€";
-   const unsigned char BatEmpty[] MEM_TEXT = "vybita!"		//"prazdna!";
+   const unsigned char BatEmpty[] MEM_TEXT = "vybita!";		//"prazdna!";
    const unsigned char TestFailed2[] MEM_TEXT = "vadna "; //€€€€€€";
    const unsigned char Bauteil[] MEM_TEXT = "suciastka!";
 //   const unsigned char Diode[] MEM_TEXT = "Dioda: ";
@@ -266,6 +270,7 @@ End of configuration
    const unsigned char TESTER_str[] MEM2_TEXT = "Tranzistor";
    const unsigned char FREQ_str[] MEM2_TEXT = "Frekvencia";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Napetie";
+   const unsigned char SHOW_str[] MEM2_TEXT = "zobrazit udaje";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "Vypnut";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
@@ -308,6 +313,7 @@ End of configuration
    const unsigned char TESTER_str[] MEM2_TEXT = "Tranzistor";
    const unsigned char FREQ_str[] MEM2_TEXT = "Frekvenca";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
+   const unsigned char SHOW_str[] MEM2_TEXT = "Prikazi podatke";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "izklopi";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
@@ -352,6 +358,7 @@ End of configuration
    const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
    const unsigned char FREQ_str[] MEM2_TEXT = "Frequentie";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Spanning";
+   const unsigned char SHOW_str[] MEM2_TEXT = "toon gegevens";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "uitschakelen";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
@@ -395,6 +402,7 @@ End of configuration
    const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
    const unsigned char FREQ_str[] MEM2_TEXT = "Frequencia";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltagem";
+   const unsigned char SHOW_str[] MEM2_TEXT = "mostram dados";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "desconectar";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
@@ -441,6 +449,7 @@ End of configuration
    const unsigned char TESTER_str[] MEM2_TEXT = "Tranzisztor";
    const unsigned char FREQ_str[] MEM2_TEXT = "Frekvencia";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
+   const unsigned char SHOW_str[] MEM2_TEXT = "adatokat mutat";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "kikapcsol";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
@@ -483,6 +492,7 @@ End of configuration
    const unsigned char TESTER_str[] MEM2_TEXT = "Tranzistorius";
    const unsigned char FREQ_str[] MEM2_TEXT = "Daznis";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
+   const unsigned char SHOW_str[] MEM2_TEXT = "Rodyti informacija";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "isjungti";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
@@ -530,6 +540,7 @@ End of configuration
    const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
    const unsigned char FREQ_str[] MEM2_TEXT = "Frequency";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
+   const unsigned char SHOW_str[] MEM2_TEXT = "Show data";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "Switch off";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
@@ -1198,6 +1209,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   extern const unsigned char TESTER_str[] MEM2_TEXT ;
   extern const unsigned char FREQ_str[] MEM2_TEXT;
   extern const unsigned char VOLTAGE_str[] MEM2_TEXT ;
+  extern const unsigned char SHOW_str[] MEM2_TEXT ;
   extern const unsigned char OFF_str[] MEM2_TEXT ;
   extern const unsigned char F_GEN_str[] MEM2_TEXT ;
   extern const unsigned char PWM_10bit_str[] MEM2_TEXT ;
@@ -1267,8 +1279,15 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 #endif
 
 #ifdef WITH_MENU
-COMMON const unsigned char FatTP2_str[];
-COMMON const unsigned char C_ESR_str[];
+extern const unsigned char FatTP2_str[];
+extern const unsigned char VERSION_str[];
+extern const unsigned char C_ESR_str[];
+extern const unsigned char REF_C_str[];
+extern const unsigned char REF_R_str[];
+extern const unsigned char R0_str[];
+extern const unsigned char C0_str[];
+extern const unsigned char RIHI[];
+extern const unsigned char RILO[];
 #endif
 
 

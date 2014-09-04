@@ -57,3 +57,4 @@ void message2line(uint8_t number);	// write menue message number to lcd line
 void switch_frequency(uint8_t freq_num);	// switch frequency and write actual frequency to LCD
 void CalibrationCap(void);		// read voltage offsets with calibration capacitor
 void set_contrast(void);		// set the contrast value of ST7565 controller
+void ShowData(void);			// show software revision and calibration parameters

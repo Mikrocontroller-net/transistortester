@@ -204,13 +204,15 @@
 /* define both input pins for rotaty encoder */
  #define ROTARY_A_DDR DDRB
  #define ROTARY_B_DDR DDRB
- #if CHANGE_ROTARY_DIRECTION
-  #define ROTARY_B_PIN PB6	/* MISO at ISP connector, LCD-D6 */
-  #define ROTARY_A_PIN PB7	/* SCK at ISP connector, LCD-D7 */
- #else		/* CHANGE_ROTARY_DIRECTION */
-  #define ROTARY_A_PIN PB6	/* MISO at ISP connector, LCD-D6 */
-  #define ROTARY_B_PIN PB7	/* SCK at ISP connector, LCD-D7 */
- #endif		/* CHANGE_ROTARY_DIRECTION */
+ #ifndef ROTARY_1_PIN
+  // default connection is PB7
+  #define ROTARY_1_PIN PB7
+ #endif
+ #ifndef ROTARY_2_PIN
+  // PB5 is connected to character LCD D5 or ST7565 RS
+  #define ROTARY_2_PIN PB5
+  // can be preset to PB6 for character display and PB3 for ST7565 graphic controller
+ #endif
  #define ROTARY_A_REG PINB
  #define ROTARY_B_REG PINB
 /* FDIV_PIN specifies the output pin, which switch on a 16:1 frequency divider */
@@ -226,6 +228,19 @@
 #elif PROCESSOR_TYP == 1280
 /* define the input pin for frequency measuring and also the pin change monitoring port for measuring the periode */
 /* define both input pins for rotaty encoder */
+ #define ROTARY_A_DDR DDRA
+ #define ROTARY_B_DDR DDRA
+ #define ROTARY_A_REG PINA
+ #define ROTARY_B_REG PINA
+ #ifndef ROTARY_1_PIN
+  // default connection is PA3
+  #define ROTARY_1_PIN PA3
+ #endif
+ #ifndef ROTARY_2_PIN
+  // PB5 is connected to character LCD D5 or ST7565 RS
+  #define ROTARY_2_PIN PA1
+  // can be preset to PB6 for character display and PB3 for ST7565 graphic controller
+ #endif
 #else		/* PROCESSOR_TYP */
 /* define the input pin for frequency measuring and also the pin change monitoring port for measuring the periode */
  #define FREQINP_DDR DDRD
@@ -235,24 +250,26 @@
 /* define both input pins for rotaty encoder */
  #define ROTARY_A_DDR DDRD
  #define ROTARY_B_DDR DDRD
- #if CHANGE_ROTARY_DIRECTION
-  #define ROTARY_B_PIN PD3	/* is connected to LCD-D7/D5 or ST7565-B0 */
-  #if (LCD_ST_TYPE == 7565)
-   #define ROTARY_A_PIN PD5	/* use PD5, PD2 is connected to ST7565 EN */
-  #else
-   #define ROTARY_A_PIN PD2	/* is connected to LCD-D6 */
-  #endif
- #else		/* CHANGE_ROTARY_DIRECTION */
-  #define ROTARY_A_PIN PD3	/* is connected to LCD-D7/D5 or ST7565-B0 */
-  #if (LCD_ST_TYPE == 7565)
-   #define ROTARY_B_PIN PD5	/* use PD5, PD2 is connected to ST7565 EN */
-  #else
-   #define ROTARY_B_PIN PD2	/* is connected to LCD-D6 */
-  #endif
- #endif		/* CHANGE_ROTARY_DIRECTION */
+ #ifndef ROTARY_1_PIN
+  // default connection is PD3
+  #define ROTARY_1_PIN PD3
+ #endif
+ #ifndef ROTARY_2_PIN
+  // PD1 is connected to character LCD D5/D7 or ST7565 RS
+  #define ROTARY_2_PIN PD1
+  // can be preset to PD2 for character display and PD5 for ST7565 graphic controller
+ #endif
  #define ROTARY_A_REG PIND
  #define ROTARY_B_REG PIND
 #endif		/* PROCESSOR_TYP */
+
+#if CHANGE_ROTARY_DIRECTION
+ #define ROTARY_B_PIN ROTARY_1_PIN	/* is connected to LCD-D7/D5 or ST7565-B0 */
+ #define ROTARY_A_PIN ROTARY_2_PIN
+#else		/* CHANGE_ROTARY_DIRECTION */
+ #define ROTARY_A_PIN ROTARY_1_PIN	/* is connected to LCD-D7/D5 or ST7565-B0 */
+ #define ROTARY_B_PIN ROTARY_2_PIN
+#endif		/* CHANGE_ROTARY_DIRECTION */
 
 
 /* ************************************************************************* */
@@ -311,21 +328,25 @@
  // LCD_B0_xxx=SI, LCD_EN_xxx=SCL, LCD_RS_xxx=A0, LCD_RES_xxx=RST, (CS-GND)
  #if PROCESSOR_TYP == 644	/* mega324/644/1284 with st7565 */
   // currently no difference between normal and strip grid board
+   /* the ST7565 Reset signal */
    #define HW_LCD_RES_DDR         DDRB
    #define HW_LCD_RES_PORT        PORTB
-   #define HW_LCD_RES_PIN         2
+   #define HW_LCD_RES_PIN         4
 
+   /* EN is the serial clock signal SCL */
    #define HW_LCD_EN_DDR          DDRB
    #define HW_LCD_EN_PORT         PORTB
-   #define HW_LCD_EN_PIN          4
+   #define HW_LCD_EN_PIN          6
 
+   /* the data/instruction signal RS */
    #define HW_LCD_RS_DDR          DDRB
    #define HW_LCD_RS_PORT         PORTB
-   #define HW_LCD_RS_PIN          3
+   #define HW_LCD_RS_PIN          5
 
+   /* the data signal SI */
    #define HW_LCD_B0_DDR          DDRB
    #define HW_LCD_B0_PORT         PORTB
-   #define HW_LCD_B0_PIN          5
+   #define HW_LCD_B0_PIN          7
  #elif PROCESSOR_TYP == 1280	/* mega1280/2560 with st7565 */
   // currently no difference between normal and strip grid board
    #define HW_LCD_RES_DDR         DDRA
@@ -345,18 +366,22 @@
    #define HW_LCD_B0_PIN          3
  #else				/* mega8/168/328 with st7565  */
   // currently no difference between normal and strip grid board
+   /* the Reset Pin, 0 = Reset */
    #define HW_LCD_RES_DDR         DDRD
    #define HW_LCD_RES_PORT        PORTD
    #define HW_LCD_RES_PIN         0
 
+   /* serial clock input  (SCL) */
    #define HW_LCD_EN_DDR          DDRD
    #define HW_LCD_EN_PORT         PORTD
    #define HW_LCD_EN_PIN          2
 
+   /* command / data switch  0=command 1=data */
    #define HW_LCD_RS_DDR          DDRD
    #define HW_LCD_RS_PORT         PORTD
    #define HW_LCD_RS_PIN          1
 
+   /* serial data input SI | SDA */
    #define HW_LCD_B0_DDR          DDRD
    #define HW_LCD_B0_PORT         PORTD
    #define HW_LCD_B0_PIN          3
@@ -501,6 +526,7 @@
 
 
 #define LONG_WAIT_TIME 28000
+#define MIDDLE_WAIT_TIME 15000
 #define SHORT_WAIT_TIME 5000
 
 //**********************************************************
@@ -563,6 +589,9 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 
 // all ESR measurements results does not go R_LIMIT_TO_UNCALIBRATED 0.01 Ohm units below the calibrated zero resistance.
 #define R_LIMIT_TO_UNCALIBRATED 20   
+
+// number of rotation steps to identify a fast rotation of rotary switch
+#define FAST_ROTATION 10
 
 /*########################################################################################
 End of configuration 

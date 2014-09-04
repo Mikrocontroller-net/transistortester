@@ -115,6 +115,7 @@ LOAD message_key_released.o
 LOAD ReadBigCap.o
 LOAD CheckRotaryEncoder.o
 LOAD CalibrationCap.o
+LOAD ShowData.o
 LOAD EE_check_init.o
 LOAD /usr/lib/gcc/avr/4.7.2/avr5/libgcc.a
 LOAD /usr/lib/gcc/avr/4.7.2/../../../avr/lib/avr5/libc.a
@@ -419,6 +420,7 @@ LOAD /usr/lib/gcc/avr/4.7.2/avr5/libgcc.a
  .text          0x00000000000032a8        0x0 ReadBigCap.o
  .text          0x00000000000032a8        0x0 CheckRotaryEncoder.o
  .text          0x00000000000032a8        0x0 CalibrationCap.o
+ .text          0x00000000000032a8        0x0 ShowData.o
  .text          0x00000000000032a8        0x2 EE_check_init.o
                 0x00000000000032a8                EE_check_init
  .text          0x00000000000032aa        0x0 /usr/lib/gcc/avr/4.7.2/avr5/libgcc.a(_umulhisi3.o)
@@ -623,6 +625,7 @@ LOAD /usr/lib/gcc/avr/4.7.2/avr5/libgcc.a
  .data          0x0000000000800100        0x0 ReadBigCap.o
  .data          0x0000000000800100        0x0 CheckRotaryEncoder.o
  .data          0x0000000000800100        0x0 CalibrationCap.o
+ .data          0x0000000000800100        0x0 ShowData.o
  .data          0x0000000000800100        0x0 EE_check_init.o
  .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/4.7.2/avr5/libgcc.a(_umulhisi3.o)
  .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/4.7.2/avr5/libgcc.a(_usmulhisi3.o)
@@ -680,6 +683,7 @@ LOAD /usr/lib/gcc/avr/4.7.2/avr5/libgcc.a
  .bss           0x0000000000800100        0x0 ReadBigCap.o
  .bss           0x0000000000800100        0x0 CheckRotaryEncoder.o
  .bss           0x0000000000800100        0x0 CalibrationCap.o
+ .bss           0x0000000000800100        0x0 ShowData.o
  .bss           0x0000000000800100        0x0 EE_check_init.o
  .bss           0x0000000000800100        0x0 /usr/lib/gcc/avr/4.7.2/avr5/libgcc.a(_umulhisi3.o)
  .bss           0x0000000000800100        0x0 /usr/lib/gcc/avr/4.7.2/avr5/libgcc.a(_usmulhisi3.o)
@@ -864,6 +868,7 @@ LOAD /usr/lib/gcc/avr/4.7.2/avr5/libgcc.a
  .comment       0x0000000000000000       0x12 ReadBigCap.o
  .comment       0x0000000000000000       0x12 CheckRotaryEncoder.o
  .comment       0x0000000000000000       0x12 CalibrationCap.o
+ .comment       0x0000000000000000       0x12 ShowData.o
  .comment       0x0000000000000000       0x12 EE_check_init.o
 
 .debug
@@ -878,7 +883,7 @@ LOAD /usr/lib/gcc/avr/4.7.2/avr5/libgcc.a
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x0000000000000000      0x3b8
+.debug_aranges  0x0000000000000000      0x3d0
  *(.debug_aranges)
  .debug_aranges
                 0x0000000000000000       0x20 lcd_hw_4_bit.o
@@ -941,12 +946,14 @@ LOAD /usr/lib/gcc/avr/4.7.2/avr5/libgcc.a
  .debug_aranges
                 0x0000000000000380       0x18 CalibrationCap.o
  .debug_aranges
-                0x0000000000000398       0x20 EE_check_init.o
+                0x0000000000000398       0x18 ShowData.o
+ .debug_aranges
+                0x00000000000003b0       0x20 EE_check_init.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x5781
+.debug_info     0x0000000000000000     0x5832
  *(.debug_info)
  .debug_info    0x0000000000000000       0x7d lcd_hw_4_bit.o
  .debug_info    0x000000000000007d       0x7d lcd-routines.o
@@ -978,10 +985,11 @@ LOAD /usr/lib/gcc/avr/4.7.2/avr5/libgcc.a
  .debug_info    0x000000000000549f       0xb1 ReadBigCap.o
  .debug_info    0x0000000000005550       0xb1 CheckRotaryEncoder.o
  .debug_info    0x0000000000005601       0xb1 CalibrationCap.o
- .debug_info    0x00000000000056b2       0xcf EE_check_init.o
+ .debug_info    0x00000000000056b2       0xb1 ShowData.o
+ .debug_info    0x0000000000005763       0xcf EE_check_init.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x0000000000000000     0x1102
+.debug_abbrev   0x0000000000000000     0x1158
  *(.debug_abbrev)
  .debug_abbrev  0x0000000000000000       0x14 lcd_hw_4_bit.o
  .debug_abbrev  0x0000000000000014       0x14 lcd-routines.o
@@ -1013,9 +1021,10 @@ LOAD /usr/lib/gcc/avr/4.7.2/avr5/libgcc.a
  .debug_abbrev  0x0000000000000f8e       0x56 ReadBigCap.o
  .debug_abbrev  0x0000000000000fe4       0x56 CheckRotaryEncoder.o
  .debug_abbrev  0x000000000000103a       0x56 CalibrationCap.o
- .debug_abbrev  0x0000000000001090       0x72 EE_check_init.o
+ .debug_abbrev  0x0000000000001090       0x56 ShowData.o
+ .debug_abbrev  0x00000000000010e6       0x72 EE_check_init.o
 
-.debug_line     0x0000000000000000     0x1bb2
+.debug_line     0x0000000000000000     0x1c1d
  *(.debug_line)
  .debug_line    0x0000000000000000       0x6c lcd_hw_4_bit.o
  .debug_line    0x000000000000006c      0x11b lcd-routines.o
@@ -1047,7 +1056,8 @@ LOAD /usr/lib/gcc/avr/4.7.2/avr5/libgcc.a
  .debug_line    0x00000000000019e6       0x6b ReadBigCap.o
  .debug_line    0x0000000000001a51       0x6b CheckRotaryEncoder.o
  .debug_line    0x0000000000001abc       0x6b CalibrationCap.o
- .debug_line    0x0000000000001b27       0x8b EE_check_init.o
+ .debug_line    0x0000000000001b27       0x6b ShowData.o
+ .debug_line    0x0000000000001b92       0x8b EE_check_init.o
 
 .debug_frame    0x0000000000000000      0x51c
  *(.debug_frame)
@@ -1062,7 +1072,7 @@ LOAD /usr/lib/gcc/avr/4.7.2/avr5/libgcc.a
  .debug_frame   0x00000000000004a0       0x58 GetVloss.o
  .debug_frame   0x00000000000004f8       0x24 EE_check_init.o
 
-.debug_str      0x0000000000000000      0xbe1
+.debug_str      0x0000000000000000      0xbef
  *(.debug_str)
  .debug_str     0x0000000000000000      0x13d DisplayValue.o
                                         0x183 (size before relaxing)
@@ -1094,7 +1104,9 @@ LOAD /usr/lib/gcc/avr/4.7.2/avr5/libgcc.a
                                         0x100 (size before relaxing)
  .debug_str     0x0000000000000bac       0x14 CalibrationCap.o
                                          0xfc (size before relaxing)
- .debug_str     0x0000000000000bc0       0x21 EE_check_init.o
+ .debug_str     0x0000000000000bc0        0xe ShowData.o
+                                         0xf6 (size before relaxing)
+ .debug_str     0x0000000000000bce       0x21 EE_check_init.o
                                         0x109 (size before relaxing)
 
 .debug_loc      0x0000000000000000     0x3bd9

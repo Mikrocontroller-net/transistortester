@@ -49,6 +49,10 @@ CFLAGS += -DWITH_MENU
 #CFLAGS += -DWITH_ROTARY_SWITCH=2
 # the option CHANGE_ROTARY_DIRECTION changes the rotary direction by swap of switches
 #CFLAGS += -DCHANGE_ROTARY_DIRECTION
+# The best solution for connecting the rotary switch is PD1 and PD3, because this setting can be used
+# with character and ST7565 LCD. But the first draft has used PD2 instead of PD1.
+# To return to old setting, you can override the PB5 default setting with the following setting:
+# CFLAGS += -DROTARY_2_PIN=PD2
 
 # Select your language:
 # Available languages are: LANG_BRASIL, LANG_CZECH, LANG_DUTCH, LANG_ENGLISH, LANG_GERMAN, LANG_HUNGARIAN, LANG_ITALIAN,

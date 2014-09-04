@@ -29,16 +29,20 @@
   #define MODE_VEXT NNN+1	/* external voltage measurement and zener voltage */
   #if (LCD_ST_TYPE == 7565)
    #define MODE_CONTRAST NNN+2	/* select contrast */
-   #define MODE_OFF NNN+3	/* switch off function */
+   #define MODE_SHOW NNN+3	/* show data function */
+   #define MODE_OFF NNN+4	/* switch off function */
   #else
-   #define MODE_OFF NNN+2	/* switch off function */
+   #define MODE_SHOW NNN+2	/* show data function */
+   #define MODE_OFF NNN+3	/* switch off function */
   #endif
  #else
   #if (LCD_ST_TYPE == 7565)
    #define MODE_CONTRAST NNN+1	/* select contrast */
-   #define MODE_OFF NNN+2		/* switch off function */
+   #define MODE_SHOW NNN+2	/* show data function */
+   #define MODE_OFF NNN+3		/* switch off function */
   #else
-   #define MODE_OFF NNN+1	/* switch off function */
+   #define MODE_SHOW NNN+1	/* show data function */
+   #define MODE_OFF NNN+2	/* switch off function */
   #endif
   #define MODE_VEXT 66
  #endif
@@ -59,24 +63,26 @@
   #define MODE_VEXT NNN+1	/* external voltage measurement and zener voltage */
   #if (LCD_ST_TYPE == 7565)
    #define MODE_CONTRAST NNN+2	/* select contrast */
-   #define MODE_OFF NNN+3	/* switch off function */
+   #define MODE_SHOW NNN+3	/* show data function */
+   #define MODE_OFF NNN+4	/* switch off function */
   #else
-   #define MODE_OFF NNN+2	/* switch off function */
+   #define MODE_SHOW NNN+2	/* show data function */
+   #define MODE_OFF NNN+3	/* switch off function */
   #endif
  #else
   #if (LCD_ST_TYPE == 7565)
    #define MODE_CONTRAST NNN+1	/* select contrast */
-   #define MODE_OFF NNN+2	/* switch off function */
+   #define MODE_SHOW NNN+2	/* show data function */
+   #define MODE_OFF NNN+3	/* switch off function */
   #else
-   #define MODE_OFF NNN+1	/* switch off function */
+   #define MODE_SHOW NNN+1	/* show data function */
+   #define MODE_OFF NNN+2	/* switch off function */
   #endif
   #define MODE_VEXT 66
  #endif
  #define MODE_HFREQ 66
 #endif
 #define MIN_SELECT_TIME 50	/* 50x10ms must be hold down to select function without a rotary switch */
-
-#define FAST_ROTATION 10		/* number of rotation steps to identify a fast rotation of rotary switch */
 
 #ifdef WITH_MENU
 /* ****************************************************************** */
@@ -227,6 +233,9 @@ void function_menu() {
   #if (LCD_ST_TYPE == 7565)
         if (func_number == MODE_CONTRAST) set_contrast();
   #endif
+        if (func_number == MODE_SHOW) {
+           ShowData();			// Show Calibration Data
+        }
         if (func_number == MODE_OFF) {
            ON_PORT &= ~(1<<ON_PIN);              //switch off power
            wait_for_key_ms(0); //never ending loop 
@@ -279,8 +288,11 @@ void message2line(uint8_t number) {
  #if (LCD_ST_TYPE == 7565)
      if (number == MODE_CONTRAST) lcd_MEM_string(CONTRAST_str); 
  #endif
+     if (number == MODE_SHOW) {
+        lcd_MEM2_string(SHOW_str);
+     }
      if (number == MODE_OFF) {
-        lcd_MEM_string(OFF_str);
+        lcd_MEM2_string(OFF_str);
      }
 }
 

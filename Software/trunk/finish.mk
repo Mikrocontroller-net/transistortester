@@ -53,6 +53,8 @@ EntladePins.o: ../EntladePins.c Makefile
 
 EE_check_init.o: ../EE_check_init.c Makefile
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+ShowData.o: ../ShowData.c Makefile
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link
 $(TARGET): $(OBJECTS)

@@ -205,30 +205,35 @@ void lcd_init(void) {
    wait_about30ms();  // Wait for 30 ms after RESET
 
    lcd_command(CMD_INTERNAL_RESET);		// 0xe2
-   lcd_command(CMD_DISPLAY_ON);			// 0xaf
-
-   //Booster on, Voltage regulator/follower circuit on
-   lcd_command(CMD_SET_POWER_CONTROL | 7);	// 0x28 BOOSTER ON | V_REGULATOR ON | V_FOLLOWER ON
-
-   lcd_command(CMD_SET_VOLUME_FIRST);		// 0x81 set  volume command
-   lcd_command(eeprom_read_byte(&EE_Volume_Value) & 0x3f);	//set volume value of EEprom
-   lcd_command(CMD_SET_RESISTOR_RATIO | (7 & LCD_ST7565_RESISTOR_RATIO));	// 0x20
    lcd_command(CMD_SET_BIAS_9);			// 0xa3
- #if (LCD_ST7565_V_FLIP > 0)
-   lcd_command(CMD_SET_COM_REVERSE);		// 0xc8
- #else
-   lcd_command(CMD_SET_COM_NORMAL);		// 0xc0
- #endif
  #if (LCD_ST7565_H_FLIP > 0)
    lcd_command(CMD_SET_ADC_REVERSE);		// 0xa1
  #else
    lcd_command(CMD_SET_ADC_NORMAL);		// 0xa0
  #endif
-   lcd_command(CMD_SET_ALLPTS_NORMAL);		// 0xa4
-   lcd_command(CMD_SET_DISP_NORMAL);		// 0xa6
-   lcd_command(CMD_SET_STATIC_OFF);		// 0xac
-   lcd_command(CMD_SET_STATIC_REG | 0);		// 0x00
+ #if (LCD_ST7565_V_FLIP > 0)
+   lcd_command(CMD_SET_COM_REVERSE);		// 0xc8
+ #else
+   lcd_command(CMD_SET_COM_NORMAL);		// 0xc0
+ #endif
+
+   //Booster on, Voltage regulator/follower circuit on
+   lcd_command(CMD_SET_POWER_CONTROL | 7);	// 0x28 BOOSTER ON | V_REGULATOR ON | V_FOLLOWER ON
+   lcd_command(CMD_SET_RESISTOR_RATIO | (7 & LCD_ST7565_RESISTOR_RATIO));	// 0x20
+
+   lcd_command(CMD_SET_VOLUME_FIRST);		// 0x81 set  volume command
+   lcd_command(eeprom_read_byte(&EE_Volume_Value) & 0x3f);	//set volume value of EEprom
+
    lcd_command(CMD_SET_DISP_START_LINE | 0);	// 0x40
+   lcd_command(CMD_SET_ALLPTS_NORMAL);		// 0xa4
+   lcd_command(CMD_SET_DISP_NORMAL);		// 0xa6 not reverse
+
+//   lcd_command(CMD_SET_STATIC_OFF);		// 0xac , set Static indicator off
+//   lcd_command(CMD_SET_STATIC_REG | 0);	// 0x00 , set Static indicator no flashing
+
+   lcd_command(CMD_RMW);			// 0xe0 , set Read Modify Write mode
+   lcd_command(CMD_DISPLAY_ON);			// 0xaf
+
    //Center the two lines
    //lcd_command(CMD_SET_DISP_START_LINE | (0x3f & 40));
 

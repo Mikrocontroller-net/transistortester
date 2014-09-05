@@ -247,37 +247,37 @@ End of configuration
 #endif
 
 #if defined(LANG_SLOVAK)		//slowakisch
-   const unsigned char TestRunning[] MEM_TEXT = "Prebieha meranie";
+   const unsigned char TestRunning[] MEM_TEXT = "Testujem ..."; //"Prebieha meranie";
    const unsigned char BatWeak[] MEM_TEXT = "slaba"; //€€";
-   const unsigned char BatEmpty[] MEM_TEXT = "vybita!";		//"prazdna!";
+   const unsigned char BatEmpty[] MEM_TEXT = "vybita";		//"prazdna!";
    const unsigned char TestFailed2[] MEM_TEXT = "vadna "; //€€€€€€";
    const unsigned char Bauteil[] MEM_TEXT = "suciastka!";
 //   const unsigned char Diode[] MEM_TEXT = "Dioda: ";
    const unsigned char Triac[] MEM_TEXT = "Triak";
-   const unsigned char Thyristor[] MEM_TEXT = "Tyristor"; //€";
-   const unsigned char Unknown[] MEM_TEXT = " neznama"; //€";
-   const unsigned char TestFailed1[] MEM_TEXT = "Ziadna, neznama"; //€";
-   const unsigned char OrBroken[] MEM_TEXT = "alebo vadna "; //€";
-   const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
+   const unsigned char Thyristor[] MEM_TEXT = "Tyristor"; 
+   const unsigned char Unknown[] MEM_TEXT = " neznama"; 
+   const unsigned char TestFailed1[] MEM_TEXT = "Ziadna, neznama,"; 
+   const unsigned char OrBroken[] MEM_TEXT = "alebo vadna "; 
+   const unsigned char TestTimedOut[] MEM_TEXT = "Prekroceny cas!"; //"Timeout!";
    #define Cathode_char 'K'
  #ifdef WITH_SELFTEST
    const unsigned char SELFTEST[] MEM_TEXT = "Samotestovanie..";
-   const unsigned char RELPROBE[] MEM_TEXT = "Izoluj sondy!";
+   const unsigned char RELPROBE[] MEM_TEXT = "Odpoj sondy!";
    const unsigned char ATE[] MEM_TEXT = "Koniec testu";
  #endif
  #ifdef WITH_MENU
    const unsigned char SELECTION_str[] MEM2_TEXT = "Vyber:";
-   const unsigned char TESTER_str[] MEM2_TEXT = "Tranzistor";
+   const unsigned char TESTER_str[] MEM2_TEXT = "Tester";	//"Tranzistor";
    const unsigned char FREQ_str[] MEM2_TEXT = "Frekvencia";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Napetie";
-   const unsigned char SHOW_str[] MEM2_TEXT = "zobrazit udaje";	// "Show data"
+   const unsigned char SHOW_str[] MEM2_TEXT = "Informacie";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "Vypnut";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
-   const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotacny koder";
-   const unsigned char TURN_str[] MEM2_TEXT = "tocte!";
+   const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Rotacny koder";
+   const unsigned char TURN_str[] MEM2_TEXT = "Krut!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Samotestovanie";
-   const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "prepoj sondy!";
+   const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "Prepoj sondy!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frekvencia > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF krystal";

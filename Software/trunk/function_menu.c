@@ -30,19 +30,15 @@
   #if (LCD_ST_TYPE == 7565)
    #define MODE_CONTRAST NNN+2	/* select contrast */
    #define MODE_SHOW NNN+3	/* show data function */
-   #define MODE_OFF NNN+4	/* switch off function */
   #else
    #define MODE_SHOW NNN+2	/* show data function */
-   #define MODE_OFF NNN+3	/* switch off function */
   #endif
  #else
   #if (LCD_ST_TYPE == 7565)
    #define MODE_CONTRAST NNN+1	/* select contrast */
    #define MODE_SHOW NNN+2	/* show data function */
-   #define MODE_OFF NNN+3		/* switch off function */
   #else
    #define MODE_SHOW NNN+1	/* show data function */
-   #define MODE_OFF NNN+2	/* switch off function */
   #endif
   #define MODE_VEXT 66
  #endif
@@ -64,25 +60,28 @@
   #if (LCD_ST_TYPE == 7565)
    #define MODE_CONTRAST NNN+2	/* select contrast */
    #define MODE_SHOW NNN+3	/* show data function */
-   #define MODE_OFF NNN+4	/* switch off function */
   #else
    #define MODE_SHOW NNN+2	/* show data function */
-   #define MODE_OFF NNN+3	/* switch off function */
   #endif
  #else
   #if (LCD_ST_TYPE == 7565)
    #define MODE_CONTRAST NNN+1	/* select contrast */
    #define MODE_SHOW NNN+2	/* show data function */
-   #define MODE_OFF NNN+3	/* switch off function */
   #else
    #define MODE_SHOW NNN+1	/* show data function */
-   #define MODE_OFF NNN+2	/* switch off function */
   #endif
   #define MODE_VEXT 66
  #endif
  #define MODE_HFREQ 66
 #endif
 #define MIN_SELECT_TIME 50	/* 50x10ms must be hold down to select function without a rotary switch */
+#ifdef POWER_OFF
+ #define MODE_OFF MODE_SHOW+1	/* add the power off function */
+ #define MODE_LAST MODE_OFF
+#else
+ #define MODE_LAST MODE_SHOW	/* without POWER_OFF, the SHOW function is the last */
+ #define MODE_OFF 66
+#endif
 
 #ifdef WITH_MENU
 /* ****************************************************************** */
@@ -94,7 +93,7 @@ void function_menu() {
   uint8_t page_nr;
   uint8_t p_nr;
   uint8_t ff;
-  page_nr = MODE_OFF;
+  page_nr = MODE_LAST;
  #ifdef WITH_ROTARY_SWITCH
   rotary.count = 0;
  #endif
@@ -103,32 +102,32 @@ void function_menu() {
   func_number = 0;
  #ifdef POWER_OFF
   uint8_t ll;
-  for (ll=0;ll<((MODE_OFF+1)*10);ll++) 
+  for (ll=0;ll<((MODE_LAST+1)*10);ll++) 
  #else
   while (1)		/* without end, if no power off specified */
  #endif
   {
-     if (func_number > MODE_OFF) func_number -= (MODE_OFF + 1);
+     if (func_number > MODE_LAST) func_number -= (MODE_LAST + 1);
      message_key_released(SELECTION_str);
 #ifdef FOUR_LINE_LCD
  #ifdef PAGE_MODE
      ff = 0;
      if (func_number == page_nr) ff = 1;	// number is found
      p_nr = page_nr + 1;
-     if (p_nr > MODE_OFF) p_nr -= (MODE_OFF + 1);
+     if (p_nr > MODE_LAST) p_nr -= (MODE_LAST + 1);
      if (func_number == p_nr) ff = 1;		// number is found
      p_nr = page_nr + 2;
-     if (p_nr > MODE_OFF) p_nr -= (MODE_OFF + 1);
+     if (p_nr > MODE_LAST) p_nr -= (MODE_LAST + 1);
      if (func_number == p_nr) ff = 1;		// number is found
      if (ff == 0) {
         // func_number is not in page list
   #ifdef WITH_ROTARY_SWITCH
         if (rotary.count >= 0) {
-           page_nr = (func_number + MODE_OFF -1);  // page_nr = func_number - 2
+           page_nr = (func_number + MODE_LAST -1);  // page_nr = func_number - 2
         } else {
            page_nr = func_number;	// for backward, set page_nr to func_number
         }
-       if (page_nr > MODE_OFF) page_nr -= (MODE_OFF + 1);
+       if (page_nr > MODE_LAST) page_nr -= (MODE_LAST + 1);
   #else
         page_nr = func_number;
   #endif
@@ -151,7 +150,7 @@ void function_menu() {
      }
      lcd_line3();				// reset cursor to begin of line 3
      p_nr = page_nr + 1;
-     if (p_nr > MODE_OFF) p_nr -= (MODE_OFF + 1);
+     if (p_nr > MODE_LAST) p_nr -= (MODE_LAST + 1);
      if (func_number == p_nr) {
         lcd_data('>');
      } else {
@@ -164,7 +163,7 @@ void function_menu() {
      }
      lcd_line4();				// reset cursor to begin of line 4
      p_nr = page_nr + 2;
-     if (p_nr > MODE_OFF) p_nr -= (MODE_OFF + 1);
+     if (p_nr > MODE_LAST) p_nr -= (MODE_LAST + 1);
      if (func_number == p_nr) {
         lcd_data('>');
      } else {
@@ -176,7 +175,7 @@ void function_menu() {
      lcd_clear_line();				// clear line 2
      lcd_line2();				// reset cursor to begin of line 2
      lcd_space();				// put a blank to 1. row of line 2
-     message2line(func_number + MODE_OFF);	// show lower (previous) function
+     message2line(func_number + MODE_LAST);	// show lower (previous) function
      lcd_line3();
      lcd_clear_line();				// clear line 3
      lcd_line3();				// reset cursor to begin of line 3
@@ -255,7 +254,7 @@ void function_menu() {
      if (rotary.count >= 0) {
         func_number += rotary.count;	// function number is increased by rotary steps
      } else {
-        func_number += (MODE_OFF + 1 + rotary.count);	// function is decreased by rotary steps
+        func_number += (MODE_LAST + 1 + rotary.count);	// function is decreased by rotary steps
      }
 #endif
      if (ii > 0) func_number++;	// increase the function number with key press
@@ -267,7 +266,7 @@ void function_menu() {
 /* message2line writes the message corresponding to the number to LCD */
 /* ****************************************************************** */
 void message2line(uint8_t number) {
-     if (number > MODE_OFF) number -= (MODE_OFF + 1);
+     if (number > MODE_LAST) number -= (MODE_LAST + 1);
      if (number == MODE_TRANS) lcd_MEM2_string(TESTER_str);
      if (number == MODE_FREQ) lcd_MEM2_string(FREQ_str);
  #if PROCESSOR_TYP == 644

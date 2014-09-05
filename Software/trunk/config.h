@@ -308,7 +308,13 @@
  // Strip Grid board version
   #define RST_PORT PORTD
   #define RST_PIN_REG PIND
-  #define RST_PIN PD0     //Pin, is switched to low, if push button is pressed
+  #if (LCD_ST_TYPE == 7565)
+   #define RST_PIN PD7     //Pin, is switched to low, if push button is pressed
+   // option STRIP_GRID is used to specify other connection of the LCD (chinese version),
+   // the RST_PIN remain at PD7.
+  #else
+   #define RST_PIN PD0     //Pin, is switched to low, if push button is pressed
+  #endif
  #else		/* no STRIP_GRID_BOARD */
  // normal layout version
   #define RST_PORT PORTD
@@ -365,7 +371,29 @@
    #define HW_LCD_B0_PORT         PORTA
    #define HW_LCD_B0_PIN          3
  #else				/* mega8/168/328 with st7565  */
-  // currently no difference between normal and strip grid board
+  #ifdef STRIP_GRID_BOARD
+   // alternative connection of graphical LCD 
+   /* the Reset Pin, 0 = Reset */
+   #define HW_LCD_RES_DDR         DDRD
+   #define HW_LCD_RES_PORT        PORTD
+   #define HW_LCD_RES_PIN         4
+
+   /* serial clock input  (SCL) */
+   #define HW_LCD_EN_DDR          DDRD
+   #define HW_LCD_EN_PORT         PORTD
+   #define HW_LCD_EN_PIN          2
+
+   /* command / data switch  0=command 1=data */
+   #define HW_LCD_RS_DDR          DDRD
+   #define HW_LCD_RS_PORT         PORTD
+   #define HW_LCD_RS_PIN          3
+
+   /* serial data input SI | SDA */
+   #define HW_LCD_B0_DDR          DDRD
+   #define HW_LCD_B0_PORT         PORTD
+   #define HW_LCD_B0_PIN          1
+  #else
+   // the default connection of LCD for chinese version from Fish8840, weiweitm
    /* the Reset Pin, 0 = Reset */
    #define HW_LCD_RES_DDR         DDRD
    #define HW_LCD_RES_PORT        PORTD
@@ -385,13 +413,14 @@
    #define HW_LCD_B0_DDR          DDRD
    #define HW_LCD_B0_PORT         PORTD
    #define HW_LCD_B0_PIN          3
+  #endif
  #endif	/* PROCESSOR_TYP */
  
 #else /* not (LCD_ST_TYPE == 7565) */
  //  with character LCD
  #if PROCESSOR_TYP == 644	/* normal layout with character LCD and mega324/644/1284 */
   #ifdef STRIP_GRID_BOARD
- // special Layout for strip grid board
+ // special Layout for strip grid board with ATmega324/644/1284
    #define HW_LCD_EN_PORT         PORTB
    #define HW_LCD_EN_PIN          2
  
@@ -399,7 +428,7 @@
    #define HW_LCD_RS_PIN          3
 
   #else
- // normal layout
+ // normal layout with character LCD and ATmega324/644/1284
    #define HW_LCD_EN_PORT         PORTB
    #define HW_LCD_EN_PIN          3
  
@@ -417,7 +446,7 @@
    #define HW_LCD_B7_PIN          7
  #elif PROCESSOR_TYP == 1280	/* normal layout with character LCD and mega1280/2560 */
   #ifdef STRIP_GRID_BOARD
-   // special Layout for strip grid board
+   // special Layout for strip grid board with character LCD and ATmega1280
    #define HW_LCD_EN_PORT         PORTA
    #define HW_LCD_EN_PIN          5
  
@@ -432,7 +461,7 @@
    #define HW_LCD_B6_PIN          2
    #define HW_LCD_B7_PORT         PORTA
    #define HW_LCD_B7_PIN          1
-  #else 	/* no STRIP_GRID_BOARD */
+  #else 	/* no STRIP_GRID_BOARD  with character LCD and ATmega1280 */
    #define HW_LCD_EN_PORT         PORTA
    #define HW_LCD_EN_PIN          5
  

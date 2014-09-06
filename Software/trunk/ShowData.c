@@ -74,7 +74,7 @@ show_page_4:
 #endif
   /* output line 7 */
   lcd_MEM2_string(REF_C_str);	// "REF_C="
-  i2lcd(eeprom_read_word((uint16_t *)(&ref_offset)));
+  i2lcd((int16_t)eeprom_read_word((uint16_t *)(&ref_offset)));
 #ifdef FOUR_LINE_LCD
   lcd_line4();
 #else
@@ -82,7 +82,7 @@ show_page_4:
 #endif
   /* output line 8 */
   lcd_MEM2_string(REF_R_str);  // "REF_R="
-  i2lcd(eeprom_read_byte((uint8_t *)(&RefDiff)));
+  i2lcd((int8_t)eeprom_read_byte((uint8_t *)(&RefDiff)));
   wait_for_key_ms(MIDDLE_WAIT_TIME);
 #ifdef WITH_ROTARY_SWITCH
   if (rotary.incre > FAST_ROTATION) return;	// fast rotation ends the function

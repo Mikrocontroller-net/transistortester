@@ -41,8 +41,9 @@
    #define MODE_SHOW NNN+1	/* show data function */
   #endif
   #define MODE_VEXT 66
- #endif
+ #endif		/* end #ifdef WITH_VEXT */
 #else
+ /* no PROCESSOR_TYP == 644 , mega8/168/328 */
  #define MODE_TRANS 0		/* normal TransistorTester function */
  #define MODE_FREQ 1		/* frequency measurement */
  #define MODE_FGEN 2		/* frequency generator function */
@@ -71,7 +72,7 @@
    #define MODE_SHOW NNN+1	/* show data function */
   #endif
   #define MODE_VEXT 66
- #endif
+ #endif		/* end #ifdef WITH_VEXT */
  #define MODE_HFREQ 66
 #endif
 #define MIN_SELECT_TIME 50	/* 50x10ms must be hold down to select function without a rotary switch */

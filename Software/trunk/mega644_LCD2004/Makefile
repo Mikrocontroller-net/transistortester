@@ -36,7 +36,7 @@ PARTNO = m1284p
 CFLAGS += -DWITH_MENU
 
 # The menu function can be easier controlled with a incremental encoder (rotary switch).
-# Both switches of the rotary switch can be connected with 1 kOhm resistors to PD2 and PD3.
+# Both switches of the rotary switch can be connected with 1 kOhm resistors to PB5 and PB7.
 # The common contact of the two switches must be connected to GND.
 # You must also connect both switch contacts with two 10 kOhm resistors to VCC (pull up).
 # The best choise is a incremental encoder with Push Button. The button can be connected

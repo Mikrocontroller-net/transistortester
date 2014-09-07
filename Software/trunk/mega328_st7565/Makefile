@@ -32,7 +32,7 @@ PARTNO = m328p
 CFLAGS += -DWITH_MENU
 
 # The menu function can be easier controlled with a incremental encoder (rotary switch).
-# Both switches of the rotary switch can be connected with 1 kOhm resistors to PD2 and PD3.
+# Both switches of the rotary switch can be connected with 1 kOhm resistors to PD1 and PD3.
 # The common contact of the two switches must be connected to GND.
 # You must also connect both switch contacts with two 10 kOhm resistors to VCC (pull up).
 # The best choise is a incremental encoder with Push Button. The button can be connected
@@ -50,10 +50,10 @@ CFLAGS += -DWITH_MENU
 # the option CHANGE_ROTARY_DIRECTION changes the rotary direction by swap of switches
 #CFLAGS += -DCHANGE_ROTARY_DIRECTION
 # The best solution for connecting the rotary switch is PD1 and PD3, because this setting can be used
-# with character and ST7565 LCD. But the first draft has used PD2 instead of PD1.
-# To return to old setting, you can override the PB5 default setting with the following setting:
+# with character and ST7565 LCD. But the first draft has used PD5 instead of PD1.
+# To return to old setting, you can override the PD1 default setting with the following setting:
 # You can override the PD1 default setting with the setting:
-# CFLAGS += -DROTARY_2_PIN=PD2
+# CFLAGS += -DROTARY_2_PIN=PD5
 
 # Select your language:
 # Available languages are: LANG_BRASIL, LANG_CZECH, LANG_DUTCH, LANG_ENGLISH, LANG_GERMAN, LANG_HUNGARIAN, LANG_ITALIAN,

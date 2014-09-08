@@ -261,7 +261,7 @@ End of configuration
    const unsigned char TestTimedOut[] MEM_TEXT = "Prekroceny cas!"; //"Timeout!";
    #define Cathode_char 'K'
  #ifdef WITH_SELFTEST
-   const unsigned char SELFTEST[] MEM_TEXT = "Samotestovanie..";
+   const unsigned char SELFTEST[] MEM_TEXT = "Kalibracia";	//"Samotestovanie..";
    const unsigned char RELPROBE[] MEM_TEXT = "Odpoj sondy!";
    const unsigned char ATE[] MEM_TEXT = "Koniec testu";
  #endif
@@ -276,7 +276,7 @@ End of configuration
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Rotacny koder";
    const unsigned char TURN_str[] MEM2_TEXT = "Krut!";
-   const unsigned char FULLCHECK_str[] MEM2_TEXT = "Samotestovanie";
+   const unsigned char FULLCHECK_str[] MEM2_TEXT = "Plna kalibracia";	//"Samotestovanie";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "Prepoj sondy!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frekvencia > 2MHz";

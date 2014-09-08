@@ -202,15 +202,15 @@ start:
   // A good result can be get with multiply by 4 and divide by 10 (about 0.75%).
 //  cap.cval = (ptrans.uBE*4)/10+((BAT_OUT+5)/10); // usually output only 2 digits
 //  DisplayValue(cap.cval,-2,'V',2);		// Display 2 Digits of this 10mV units
-#if BAT_NUMERATOR <= (0xffff/U_VCC)
+  #if BAT_NUMERATOR <= (0xffff/U_VCC)
   cap.cval = (ptrans.uBE*BAT_NUMERATOR)/BAT_DENOMINATOR + BAT_OUT;
-#else
- #if (BAT_NUMERATOR == 133) && (BAT_DENOMINATOR == 33)
+  #else
+   #if (BAT_NUMERATOR == 133) && (BAT_DENOMINATOR == 33)
   cap.cval = (ptrans.uBE*4)+BAT_OUT;		// usually output only 2 digits
- #else
+   #else
   cap.cval = ((unsigned long)ptrans.uBE*BAT_NUMERATOR)/BAT_DENOMINATOR + BAT_OUT;
- #endif
-#endif
+   #endif
+  #endif
   DisplayValue(cap.cval,-3,'V',2);		// Display 2 Digits of this 10mV units
   lcd_space();
  #endif
@@ -234,6 +234,7 @@ start:
   #define WARN_LEVEL (((unsigned long)(BAT_POOR+100)*(unsigned long)BAT_DENOMINATOR)/BAT_NUMERATOR)
  #endif
  #define POOR_LEVEL (((unsigned long)(BAT_POOR)*(unsigned long)BAT_DENOMINATOR)/BAT_NUMERATOR)
+
   // check the battery voltage
   if (ptrans.uBE <  WARN_LEVEL) {
      //Vcc < 7,3V; show Warning 
@@ -250,7 +251,7 @@ start:
   }
 #else
   lcd_MEM2_string(VERSION_str);		// if no Battery check, Version .. in row 1
-#endif
+#endif	/* BAT_CHECK */
 #ifdef WDT_enabled
   wdt_enable(WDTO_2S);		//Watchdog on
 #endif
@@ -975,7 +976,7 @@ wait_again:
      goto start;
   }
 #endif
-  if (ii != 0 ) goto start;
+  if (ii != 0 ) goto start;	// key is pressed again, repeat measurement
 #ifdef WITH_ROTARY_SWITCH
   if (rotary.incre > 0) goto wait_again;
 #endif
@@ -1003,6 +1004,9 @@ wait_again:
   ON_PORT &= ~(1<<ON_PIN);		//switch off power
   wait_for_key_ms(0); //never ending loop 
 #else
+  // look, if the tester is uncalibrated (C-source will be included directly)
+  lcd_cursor_off();
+  #include "HelpCalibration.c"
   goto start;	// POWER_OFF not selected, repeat measurement
 #endif
   return 0;

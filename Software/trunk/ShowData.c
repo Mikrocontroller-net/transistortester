@@ -10,9 +10,9 @@ show_page_1:
   lcd_MEM2_string(VERSION_str);	// "Version x.xxk"
   lcd_line2();
   lcd_MEM2_string(R0_str);	// "R0="
-  DisplayValue(eeprom_read_byte(&EE_ESR_ZEROtab[1]),-2,' ',3);
   DisplayValue(eeprom_read_byte(&EE_ESR_ZEROtab[2]),-2,' ',3);
-  DisplayValue(eeprom_read_byte(&EE_ESR_ZEROtab[3]),-2,LCD_CHAR_OMEGA,3);
+  DisplayValue(eeprom_read_byte(&EE_ESR_ZEROtab[3]),-2,' ',3);
+  DisplayValue(eeprom_read_byte(&EE_ESR_ZEROtab[1]),-2,LCD_CHAR_OMEGA,3);
 #ifdef FOUR_LINE_LCD
   lcd_line3();
 #else

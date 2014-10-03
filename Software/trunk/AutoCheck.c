@@ -37,7 +37,7 @@ void AutoCheck(uint8_t test_mode) {
   } else {
      // report to user, that probes should be shorted
      ww = 0;
-     for (tt=0;tt<200;tt++) {	/* wait about 40 seconds for shorted probes */
+     for (tt=0;tt<150;tt++) {	/* wait about 30 seconds for shorted probes */
         lcd_clear();
         lcd_MEM2_string(SHORT_PROBES_str);	// message "Short probes!" to LCD
         if (AllProbesShorted() == 3) {
@@ -48,13 +48,15 @@ void AutoCheck(uint8_t test_mode) {
         if (ww > 3) break;	// connection seems to be stable
         wait_about200ms();			// wait 200ms and try again
      }  /* end for (tt...) */
-     if (tt < 200) goto begin_selftest;		// is shorted before time limit
+     if (tt < 150) goto begin_selftest;		// is shorted before time limit
+     goto no_zero_resistance;			// skip measuring of the zero resistance
  #endif
   }
   // no key pressed for 2s
   lcd_clear();
   lcd_MEM2_string(VERSION_str);	//"Version ..."
   return;
+
 begin_selftest:
   lcd_line2();
   lcd_MEM2_string(R0_str);		// "R0="
@@ -68,17 +70,21 @@ begin_selftest:
   DisplayValue(adcmv[0],-2,' ',3);
   DisplayValue(adcmv[1],-2,' ',3);
   DisplayValue(adcmv[2],-2,LCD_CHAR_OMEGA,3);
-  if (adcmv[0] < 90) {
-     eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (int8_t)adcmv[0]);	// fix zero offset
+  if (adcmv[0] >= 90) {
+     adcmv[0] = ESR_ZERO;	// set back to default value
   }
-  if (adcmv[1] < 90) {
-     eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[3]), (int8_t)adcmv[1]);	// fix zero offset
+  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (int8_t)adcmv[0]);	// fix zero offset
+  if (adcmv[1] >= 90) {
+     adcmv[1] = ESR_ZERO;	// set back to default value
   }
-  if (adcmv[2] < 90) {
-     eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (int8_t)adcmv[2]);	// fix zero offset
+  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[3]), (int8_t)adcmv[1]);	// fix zero offset
+  if (adcmv[2] >= 90) {
+     adcmv[2] = ESR_ZERO;	// set back to default value
   }
+  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (int8_t)adcmv[2]);	// fix zero offset
   wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 
+no_zero_resistance:
  #ifdef EXTENDED_TESTS
   #define TEST_COUNT 8
   if((test_mode & 0x0f) == 1) {  /* full test requested */

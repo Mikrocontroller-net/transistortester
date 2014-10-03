@@ -31,7 +31,7 @@ int main(void) {
   ON_DDR = (1<<ON_PIN);			// switch to output
   ON_PORT = (1<<ON_PIN); 		// switch power on 
 #ifndef PULLUP_DISABLE
-  RST_PORT = (1<<RST_PIN); 	// enable internal Pullup for Start-Pin
+  RST_PORT |= (1<<RST_PIN); 	// enable internal Pullup for Start-Pin
 #endif
   uint8_t tmp;
   //ADC-Init
@@ -311,6 +311,8 @@ start:
     lcd_space();
     DisplayValue(cell_mv[2],-3,'V',3);
 #endif
+    wait_about2s();
+    AutoCheck(0x11);		// full Selftest with "Short probes" message
     goto end;
   }
 

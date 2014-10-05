@@ -210,7 +210,8 @@ GetESR:
 
 	lds	r18, PartFound;		/* if (PartFound == PART_CAPACITOR) { */
 	cpi	r18, PART_CAPACITOR;	
- 	brne	ad_35e4;
+; 	brne	ad_35e4;
+	brne	load_max;
 	lds	r18, cap+cval_max;      /* cap_val_nF = cap.cval_max; */
 	lds	r19, cap+cval_max+1;
 	lds	r20, cap+cval_max+2;
@@ -702,6 +703,7 @@ ad_3972:
         add	r24, r23;
 	adc	r25, zero_reg;
 	call	eeprom_read_byte;
+        ldi	r25, 0;		/* upper bits allways zero */
 	mov	r6, r24;
 	movw	r24,r18;	/* r24:25 = r18:19 = esrvalue */
 	ldi	r22, 16;

@@ -136,7 +136,7 @@ uint16_t GetESR(uint8_t hipin, uint8_t lopin) {
   uint8_t SelectLowPin,SelectHighPin;
   int8_t esr0;			// used for ESR zero correction
 
-  cap_val_nF = 10000;
+  cap_val_nF = 32000;
   if (PartFound == PART_CAPACITOR) {
      pp = cap.cpre_max;
      cap_val_nF = cap.cval_max;

@@ -25,6 +25,7 @@ void AutoCheck(uint8_t test_mode) {
   int8_t udiff2;
   #endif
  #endif
+  PartFound = PART_NONE;		// no part found before
   if ((test_mode & 0xf0) == 0) {
      // probed should be shorted already to begin selftest
      if (AllProbesShorted() != 3) return;
@@ -60,9 +61,9 @@ void AutoCheck(uint8_t test_mode) {
 begin_selftest:
   lcd_line2();
   lcd_MEM2_string(R0_str);		// "R0="
-  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (int8_t)0);	// clear zero offset
-  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[3]), (int8_t)0);	// clear zero offset
-  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (int8_t)0);	// clear zero offset
+  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (uint8_t)0);	// clear zero offset
+  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[3]), (uint8_t)0);	// clear zero offset
+  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (uint8_t)0);	// clear zero offset
 
   adcmv[0] = GetESR(TP3, TP1);
   adcmv[1] = GetESR(TP3, TP2);
@@ -73,15 +74,15 @@ begin_selftest:
   if (adcmv[0] >= 90) {
      adcmv[0] = ESR_ZERO;	// set back to default value
   }
-  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (int8_t)adcmv[0]);	// fix zero offset
+  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (uint8_t)adcmv[0]);	// fix zero offset
   if (adcmv[1] >= 90) {
      adcmv[1] = ESR_ZERO;	// set back to default value
   }
-  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[3]), (int8_t)adcmv[1]);	// fix zero offset
+  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[3]), (uint8_t)adcmv[1]);	// fix zero offset
   if (adcmv[2] >= 90) {
      adcmv[2] = ESR_ZERO;	// set back to default value
   }
-  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (int8_t)adcmv[2]);	// fix zero offset
+  eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (uint8_t)adcmv[2]);	// fix zero offset
   wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 
 no_zero_resistance:

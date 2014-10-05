@@ -137,8 +137,8 @@ int main(void) {
   rotary.ind = ROT_MSK+1;		//initilize state history with next call of check_rotary()
 #endif
 #if 1
-  for (ii=0; ii<35; ii++) {
-  if (RST_PIN_REG & (1<<RST_PIN)) break;	// button is released
+  for (ii=0; ii<60; ii++) {
+     if (RST_PIN_REG & (1<<RST_PIN)) break;	// button is released
      wait_about10ms();
   }
 #else
@@ -163,7 +163,7 @@ int main(void) {
   ADCconfig.RefFlag = 0;
   Calibrate_UR();		// get Ref Voltages and Pin resistance
 #ifdef WITH_MENU
-  if (ii > 60) {
+  if (ii >= 60) {
      function_menu();		// selection of function
   }
 #endif
@@ -973,7 +973,7 @@ wait_again:
   if (ii >= 50) 
  #endif
   {
-     // menu selected by long keay press or rotary switch
+     // menu selected by long key press or rotary switch
      function_menu();		// start the function menu
      goto start;
   }

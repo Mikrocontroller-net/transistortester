@@ -311,8 +311,10 @@ start:
     lcd_space();
     DisplayValue(cell_mv[2],-3,'V',3);
 #endif
+#ifdef WITH_SELFTEST
     wait_about2s();
     AutoCheck(0x11);		// full Selftest with "Short probes" message
+#endif
     goto end;
   }
 

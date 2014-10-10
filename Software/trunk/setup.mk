@@ -1,3 +1,6 @@
+# MKFILES == list of all Makefile parts
+MKFILES = Makefile ../setup.mk ../finish.mk
+CFLAGS += -mcall-prologues
 ifeq ($(INHIBIT_SLEEP_MODE),1)
 # set the option for gcc 
 CFLAGS += -DINHIBIT_SLEEP_MODE

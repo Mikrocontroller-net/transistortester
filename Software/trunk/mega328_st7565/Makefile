@@ -46,7 +46,7 @@ CFLAGS += -DWITH_MENU
 # WITH_ROTARY_COUNT to 5 for getting the best resolution.
 # You can also use two separate push-buttons for Up and Down instead ot the rotary encoder.
 # You must set the WITH_ROTARY_SWITCH to 4 for the UP/DOWN push-buttons.
-#CFLAGS += -DWITH_ROTARY_SWITCH=2
+CFLAGS += -DWITH_ROTARY_SWITCH=2
 # the option CHANGE_ROTARY_DIRECTION changes the rotary direction by swap of switches
 #CFLAGS += -DCHANGE_ROTARY_DIRECTION
 # The best solution for connecting the rotary switch is PD1 and PD3, because this setting can be used
@@ -148,7 +148,7 @@ CFLAGS += -DWITH_UART
 # is not used for serial output (WITH_UART option).
 # For ATmega644/1284 processor the UART has a separate pin.  Therefore the external input
 # at pin ADC3 can be enabled separate by setting the WITH_UART option.
-#CFLAGS += -DWITH_VEXT
+CFLAGS += -DWITH_VEXT
 
 # The CAP_EMPTY_LEVEL  defines the empty voltage level for capacitors in mV.
 # Choose a higher value, if your Tester reports "Cell!" by unloading capacitors.
@@ -235,9 +235,7 @@ CFLAGS += -DBAT_OUT=150
 CFLAGS += -DBAT_POOR=6400
 
 # Voltage divider for battery voltage measurement  10k / 3.3k = 133/33
-#CFLAGS += -DBAT_NUMERATOR=133
-#CFLAGS += -DBAT_DENOMINATOR=33
-CFLAGS += -DBAT_NUMERATOR=66
+CFLAGS += -DBAT_NUMERATOR=133
 CFLAGS += -DBAT_DENOMINATOR=33
 # Voltage divider for the external zener voltage measurement 180k / 20k = 10/1
 #CFLAGS += -DEXT_NUMERATOR=10
@@ -267,56 +265,56 @@ PORT=usb
 include ../setup.mk
 
 ########### Compile only Assembler source available 
-lcd_hw_4_bit.o: ../lcd_hw_4_bit.S Makefile
+lcd_hw_4_bit.o: ../lcd_hw_4_bit.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-wait1000ms.o: ../wait1000ms.S Makefile
+wait1000ms.o: ../wait1000ms.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-swuart.o: ../swuart.S Makefile
+swuart.o: ../swuart.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ########### Compile  Assembler source only, is time critical 
-GetESR.o: ../GetESR.S Makefile
+GetESR.o: ../GetESR.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ########### Compile C or Assembler , Assembler saves more than 400 bytes flash
 ifeq ($(WITH_LCD_ST7565),1)
-lcd-routines.o: ../lcd-routines.c Makefile
+lcd-routines.o: ../lcd-routines.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 else
-lcd-routines.o: ../lcd-routines.S Makefile
+lcd-routines.o: ../lcd-routines.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 endif
 
-GetRLmultip.o: ../GetRLmultip.S Makefile
+GetRLmultip.o: ../GetRLmultip.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-UfAusgabe.o: ../UfAusgabe.S Makefile
+UfAusgabe.o: ../UfAusgabe.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-RvalOut.o: ../RvalOut.S Makefile
+RvalOut.o: ../RvalOut.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-PinLayout.o: ../PinLayout.S Makefile
+PinLayout.o: ../PinLayout.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-RefVoltage.o: ../RefVoltage.S Makefile
+RefVoltage.o: ../RefVoltage.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-i2lcd.o: ../i2lcd.S Makefile
+i2lcd.o: ../i2lcd.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-ReadADC.o: ../ReadADC.S Makefile
+ReadADC.o: ../ReadADC.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-sleep_5ms.o: ../sleep_5ms.S Makefile
+sleep_5ms.o: ../sleep_5ms.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-wait_for_key_ms.o: ../wait_for_key_ms.c Makefile
+wait_for_key_ms.o: ../wait_for_key_ms.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-get_log.o: ../get_log.S Makefile
+get_log.o: ../get_log.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 include ../finish.mk

@@ -502,10 +502,10 @@
 // Otherwise the shown type (NPNp or PNPn) depends on the selected pin sequence of the tester!
 #define SEARCH_PARASITIC
 
-#if FLASHEND > 0x1fff
+//#if FLASHEND > 0x1fff
 // you can save about 14 bytes of Flash, if you deselect Thyristor gate voltage
  #define WITH_THYRISTOR_GATE_V
-#endif
+//#endif
 
 #if FLASHEND > 0x1fff
  // You can save about 328 bytes of Flash, if you don't show the ICE0 and ICEs Collector cutoff current.
@@ -531,6 +531,7 @@
 #ifdef COMMON_EMITTER
  #ifdef COMMON_COLLECTOR
   // both hFE measurement methodes
+  #define BOTH_HFE
   #if FLASHEND > 0x3fff
     // extended tests are only possible with enough memory!
     #define EXTENDED_TESTS
@@ -559,25 +560,34 @@
  #endif
 #endif
 
+//#define EXTENDED_TESTS  /* extended tests are possible for ATmega168, if the gcc option -mcall-prologues is set */
+
 #ifdef NO_TEST_T1_T7
- #undef EXTENDED_TESTS
+ #undef EXTENDED_TESTS	/* extended tests are deselected! */
 #endif
 
 #ifdef EXTENDED_TESTS
  #if FLASHEND <= 0x3fff
   // we have to save some memory for the mega168 to enable the extended tests!
   #ifdef WITH_UART
+   /* WITH_UART require about 146 byte of memory */
    #warning "Serial Output is deselected to save memory!"
    #undef WITH_UART
   #endif
-  #undef SEARCH_PARASITIC
-  #warning "Search of parasitic transistor not possible. NPNp or PNPn result depends on the selected pin sequence!"
+  #ifdef BOTH_HFE
+   /* SEARCH_PARASITIC require abaut 112 byte of memory */
+   #undef SEARCH_PARASITIC
+   #warning "Search of parasitic transistor not possible. NPNp or PNPn result depends on the selected pin sequence!"
+  #endif	/* BOTH_HFE */
   #ifdef SHOW_ICE
-   #undef SHOW_ICE
-   #warning "Display of ICE is disabled to save memory!"
+   #ifdef BOTH_HFE
+    /* SHOW_ICE require about 290 byte of memory */
+    #undef SHOW_ICE
+    #warning "Display of ICE is disabled to save memory!"
+   #endif	/* BOTH_HFE */
   #endif
  #endif
-#endif
+#endif	/* EXTENDED_TESTS */
 
 // the following Options needs WAIT_LINE2_CLEAR
 #ifdef WITH_SELFTEST

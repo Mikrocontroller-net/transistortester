@@ -242,56 +242,56 @@ AVRDUDE_BAUD = -b 115200 -D
 include ../setup.mk
 
 ########### Compile only Assembler source available 
-lcd_hw_4_bit.o: ../lcd_hw_4_bit.S Makefile
+lcd_hw_4_bit.o: ../lcd_hw_4_bit.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-wait1000ms.o: ../wait1000ms.S Makefile
+wait1000ms.o: ../wait1000ms.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-swuart.o: ../swuart.S Makefile
+swuart.o: ../swuart.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ########### Compile  Assembler source only, is time critical 
-GetESR.o: ../GetESR.S Makefile
+GetESR.o: ../GetESR.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ########### Compile C or Assembler , Assembler saves more than 400 bytes flash
 ifeq ($(WITH_LCD_ST7565),1)
-lcd-routines.o: ../lcd-routines.c Makefile
+lcd-routines.o: ../lcd-routines.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 else
-lcd-routines.o: ../lcd-routines.S Makefile
+lcd-routines.o: ../lcd-routines.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 endif
 
-GetRLmultip.o: ../GetRLmultip.S Makefile
+GetRLmultip.o: ../GetRLmultip.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-UfAusgabe.o: ../UfAusgabe.S Makefile
+UfAusgabe.o: ../UfAusgabe.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-RvalOut.o: ../RvalOut.S Makefile
+RvalOut.o: ../RvalOut.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-PinLayout.o: ../PinLayout.S Makefile
+PinLayout.o: ../PinLayout.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-RefVoltage.o: ../RefVoltage.S Makefile
+RefVoltage.o: ../RefVoltage.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-i2lcd.o: ../i2lcd.S Makefile
+i2lcd.o: ../i2lcd.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-ReadADC.o: ../ReadADC.S Makefile
+ReadADC.o: ../ReadADC.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-sleep_5ms.o: ../sleep_5ms.S Makefile
+sleep_5ms.o: ../sleep_5ms.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-wait_for_key_ms.o: ../wait_for_key_ms.c Makefile
+wait_for_key_ms.o: ../wait_for_key_ms.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-get_log.o: ../get_log.S Makefile
+get_log.o: ../get_log.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 include ../finish.mk

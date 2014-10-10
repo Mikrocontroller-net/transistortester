@@ -1,59 +1,59 @@
 
 ########### Compile C source only 
-font.o: ../font.c Makefile
+font.o: ../font.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-lcd-draw.o: ../lcd-draw.c Makefile
+lcd-draw.o: ../lcd-draw.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-DisplayValue.o: ../DisplayValue.c Makefile
+DisplayValue.o: ../DisplayValue.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-function_menu.o: ../function_menu.c Makefile
+function_menu.o: ../function_menu.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-message_key_released.o: ../message_key_released.c Makefile
+message_key_released.o: ../message_key_released.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-ReadCapacity.o: ../ReadCapacity.c Makefile
+ReadCapacity.o: ../ReadCapacity.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-CalibrationCap.o: ../CalibrationCap.c Makefile
+CalibrationCap.o: ../CalibrationCap.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-ReadBigCap.o: ../ReadBigCap.c Makefile
+ReadBigCap.o: ../ReadBigCap.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-ReadInductance.o: ../ReadInductance.c Makefile
+ReadInductance.o: ../ReadInductance.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-Calibrate_UR.o: ../Calibrate_UR.c Makefile
+Calibrate_UR.o: ../Calibrate_UR.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-CheckPins.o: ../CheckPins.c Makefile
+CheckPins.o: ../CheckPins.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-GetVloss.o: ../GetVloss.c Makefile
+GetVloss.o: ../GetVloss.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-GetFrequency.o: ../GetFrequency.c Makefile
+GetFrequency.o: ../GetFrequency.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-CheckRotaryEncoder.o: ../CheckRotaryEncoder.c Makefile
+CheckRotaryEncoder.o: ../CheckRotaryEncoder.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-main.o: ../main.c Makefile
+main.o: ../main.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -D$(UI_LANGUAGE) -c  $<
 
-ChargePin10ms.o: ../ChargePin10ms.c Makefile
+ChargePin10ms.o: ../ChargePin10ms.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-EntladePins.o: ../EntladePins.c Makefile
+EntladePins.o: ../EntladePins.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-EE_check_init.o: ../EE_check_init.c Makefile
+EE_check_init.o: ../EE_check_init.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-ShowData.o: ../ShowData.c Makefile
+ShowData.o: ../ShowData.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link

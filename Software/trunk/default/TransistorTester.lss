@@ -233,10 +233,14 @@ Disassembly of section .text:
      18e:	00 00       	nop
                set_en_low		; force data read from LCD controller
      190:	5d 98       	cbi	0x0b, 5	; 11
+ #ifdef SLOW_LCD
+               RCALL    wait30us
+ #else
                RCALL    wait1us
      192:	55 d2       	rcall	.+1194   	; 0x63e <wait1us>
 
 00000194 <_lcd_hw_write_exit>:
+ #endif
 _lcd_hw_write_exit:
                ret
      194:	08 95       	ret

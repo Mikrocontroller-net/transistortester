@@ -676,7 +676,7 @@ End of configuration
 'k','r','a','t','s','i',' ','2',LCD_CHAR_INSEP,'s','e','k','u','n','d',' ',
 
 'p','r','i',LCD_CHAR_INSEP,'h','l','a','s','c','e',' ',' ',
-'"','i','s','o','l','a','t','e',LCD_CHAR_INSEP,'P','r','o','b','e','!','"',' ',
+'"','i','z','o','l','u','j',LCD_CHAR_INSEP,'s','o','n','d','y','!','"',' ',
 
 'O','d','s','t','r','a','n',' ','z','k','r','a','t',' ',
 'm','e','r','i','c','i','c','h',' ','b','o','d','u',' ',

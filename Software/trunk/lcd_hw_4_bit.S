@@ -278,7 +278,11 @@ four_bits:
 
                nop			; wait for data setup time
                set_en_low		; force data read from LCD controller
+ #ifdef SLOW_LCD
+               RCALL    wait30us
+ #else
                RCALL    wait1us
+ #endif
 _lcd_hw_write_exit:
                ret
 #endif

@@ -60,6 +60,7 @@
        .global _lcd_hw_write
        .func _lcd_hw_write
        .extern wait1us
+       .extern wait30us		; used only for slow 4-bit interface (SLOW_LCD)
 
 _lcd_hw_write:
                

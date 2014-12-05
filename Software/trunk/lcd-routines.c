@@ -80,13 +80,10 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
 #if (LCD_ST_TYPE == 7565)
    //move to the specified position (depends on used font)
    _page = y;
-#if LCD_ST7565_H_FLIP > 1
-    // If LCD_ST7565_H_FLIP is set greater 1, the pixel memory is greater as the display window.
+    // The pixel memory is greater as the display window.
     // For example the SPL501 controller has 132x65 dot matrix memory
-   _xpos = (x * FONT_WIDTH) + LCD_ST7565_H_FLIP;
-#else
-   _xpos = x * FONT_WIDTH;
-#endif
+    // LCD_ST7565_H_OFFSET specifies the offset of the 128 pixel of the display window.
+   _xpos = (x * FONT_WIDTH) + LCD_ST7565_H_OFFSET;
  #if FONT_HEIGHT > 8
    _page <<= 1;
  #endif

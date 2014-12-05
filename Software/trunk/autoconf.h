@@ -17,6 +17,9 @@
   #define TWENTY_COLUMN_LCD   /* usually 20x4 character display */
  #endif
 #endif
+#ifndef LCD_ST7565_H_OFFSET
+ #define LCD_ST7565_H_OFFSET 0	/* default horizontal offset of the display window */
+#endif
 
 /* configure WITH_VEXT, TPext and TPex2  */
 #if (PROCESSOR_TYP == 8) || (PROCESSOR_TYP == 168) || (PROCESSOR_TYP == 328)

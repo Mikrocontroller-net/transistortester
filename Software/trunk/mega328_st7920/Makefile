@@ -82,10 +82,11 @@ WITH_LCD_ST7920 = 1
 # Good values are e.g. 4 or 7. If unsure just have a try.
 LCD_ST7565_RESISTOR_RATIO = 4
 
-# If LCD_ST7565 option is set greater 0: Flip the display's horizontal direction.
-# A value > 1 specifies a offset, if the display don't have 132 horizontal pixels.
-# Set the LCD_ST7565_H_FLIP to 4, if your display have only 128 pixels (132-128).
-CFLAGS += -DLCD_ST7565_H_FLIP=4
+# If LCD_ST7565 option is set to 1: Flip the display's horizontal direction.
+CFLAGS += -DLCD_ST7565_H_FLIP=1
+# With LCD_ST7565_H_OFFSET you can specify a horizontal pixel offset to the display window.
+# The controller knows 132 horizontal pixel, the window shows only 128 pixel.
+CFLAGS += -DLCD_ST7565_H_OFFSET=4
 # If LCD_ST7565 option is set to 1: Flip the display's vertical direction
 CFLAGS += -DLCD_ST7565_V_FLIP=0
 

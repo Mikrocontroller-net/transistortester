@@ -49,6 +49,19 @@
 
 #define RCALL rcall
 
+#define WAIT_I2C wait5us    /* for normal mode 5us wait time */
+;#define HW_LCD_SDA_PORT	PORTD
+;#define HW_LCD_SCL_PORT	PORTD
+;#define HW_LCD_SDA_BIT	PD5
+;#define HW_LCD_SCL_BIT	PD4
+#define HW_LCD_SDA_DDR		(_SFR_IO_ADDR(HW_LCD_SDA_PORT) - 1)
+#define HW_LCD_SCL_DDR		(_SFR_IO_ADDR(HW_LCD_SCL_PORT) - 1)
+#define HW_LCD_SDA_OUT		_SFR_IO_ADDR(HW_LCD_SDA_PORT)
+#define HW_LCD_SCL_OUT		_SFR_IO_ADDR(HW_LCD_SCL_PORT)
+#define HW_LCD_SDA_IN		(_SFR_IO_ADDR(HW_LCD_SDA_PORT) - 2)
+#define HW_LCD_SCL_IN		(_SFR_IO_ADDR(HW_LCD_SCL_PORT) - 2)
+#define I2C_ADDR 0x78		/* SSD1306 controller defines 0x78 or 0x7a (SA0=1) as address */
+
 ;----------------------------------------------------------------------
 ;
 ; "_lcd_hw_write"
@@ -65,8 +78,8 @@
 _lcd_hw_write:
                
 
-#if (LCD_ST_TYPE == 7565)
-; serial output for ST7565 controller
+#if (LCD_INTERFACE_MODE == MODE_SPI)
+; serial output for ST7565 controller, 4-Bit SPI
                ; Set RS (0=Cmd, 1=Char)
                sbrc    preg_1, 0
                        set_rs_high
@@ -138,8 +151,9 @@ _lcd_hw_write:
                        set_b0_low
                set_en_high              ; force data read from LCD controller
 	ret
+	.endfunc
 
-#elif (LCD_ST_TYPE == 7920)
+#elif (LCD_INTERFACE_MODE == MODE_7920)
 ; 1-bit interface for ST7920 controller
 	set_b0_high
 	set_b0_output		; enable output mode
@@ -209,6 +223,7 @@ _lcd_hw_write:
 	RCALL	wait50us
 	RCALL	wait30us	; at least 72 us delay
 	ret
+	.endfunc
 
 /* output 4 times the same bit */
 four_bits:
@@ -221,6 +236,51 @@ four_bits:
 	set_en_high              ;force data read from LCD controller
 	set_en_low
 	ret
+#elif (LCD_INTERFACE_MODE == MODE_I2C)
+	; use I2C as master
+	sec			;set carry
+	rol	r24		; shift carry to r24 bit 0 and bit 7 of r24 to carry
+	rjmp	i2c_wf
+next_bit:
+	lsl	r24
+	breq	finish		; last bit shifted?
+i2c_wf:
+	brcc	wr0
+			; carry was set
+	cbi	HW_LCD_SDA_DDR, HW_LCD_SDA_BIT	; release SDA
+	rjmp	wr1
+wr0:
+	sbi	HW_LCD_SDA_DDR, HW_LCD_SDA_BIT	; SDA to low level
+wr1:
+	rcall	WAIT_I2C	; wait defined time
+	cbi	HW_LCD_SCL_DDR, HW_LCD_SCL_BIT	; release SCL
+	rcall	WAIT_I2C	; wait defined time
+        rjmp	next_bit
+finish:
+	sbis	HW_LCD_SCL_IN, HW_LCD_SCL_BIT
+	rjmp	finish
+	; r24 is zero, return 0
+	sbic	HW_LCD_SDA_IN, HW_LCD_SDA_BIT
+	ldi	r24,1		; if SDA is returned high, answer 1
+	rcall	WAIT_I2C
+	ret
+	.endfunc
+
+       .global	i2c_init
+       .func	i2c_init
+       .extern	wait5us
+i2c_init:
+	cbi	HW_LCD_SDA_DDR, HW_LCD_SDA_BIT	; SDA to high impedance
+	cbi	HW_LCD_SCL_DDR, HW_LCD_SCL_BIT	; SCL to high impedance
+	cbi	HW_LCD_SDA_OUT, HW_LCD_SDA_BIT	; set output to 0, no pull up
+	cbi	HW_LCD_SCL_OUT, HW_LCD_SCL_BIT	; set output to 0, no pull up
+
+	sbi	HW_LCD_SDA_DDR, HW_LCD_SDA_BIT	; set SDA to low
+	rcall	WAIT_I2C
+	ldi	r24, I2C_ADDR
+	rcall	_lcd_hw_write		; write I2C address
+	ret
+	.endfunc
 #else
 ; 4-bit interface for HD44780 compatible controller
                ; Set RS (0=Cmd, 1=Char)
@@ -286,7 +346,7 @@ four_bits:
  #endif
 _lcd_hw_write_exit:
                ret
+       .endfunc
 #endif
 
-       .endfunc
 

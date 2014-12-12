@@ -58,3 +58,4 @@ void switch_frequency(uint8_t freq_num);	// switch frequency and write actual fr
 void CalibrationCap(void);		// read voltage offsets with calibration capacitor
 void set_contrast(void);		// set the contrast value of ST7565 controller
 void ShowData(void);			// show software revision and calibration parameters
+void i2c_init(void);			// init the I2C interface

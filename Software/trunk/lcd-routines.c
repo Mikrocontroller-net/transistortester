@@ -187,6 +187,7 @@ void lcd_command(unsigned char temp1) {
 #if (LCD_ST_TYPE == 7565)
 void lcd_init(void) {
 
+ #if (LCD_INTERFACE_MODE == MODE_SPI)
    HW_LCD_RES_PORT &= ~_BV(HW_LCD_RES_PIN); // RESET LCD-Display
    HW_LCD_EN_PORT  &= ~_BV(HW_LCD_EN_PIN);
    HW_LCD_RS_PORT  &= ~_BV(HW_LCD_RS_PIN);
@@ -199,6 +200,10 @@ void lcd_init(void) {
 
    wait_about100ms(); // Set LCD for 100 ms into RESET
    HW_LCD_RES_PORT |= _BV(HW_LCD_RES_PIN);
+ #endif
+ #if (LCD_INTERFACE_MODE == MODE_I2C)
+   i2c_init();		// init the I2C interface
+ #endif
    wait_about30ms();  // Wait for 30 ms after RESET
 
    lcd_command(CMD_INTERNAL_RESET);		// 0xe2

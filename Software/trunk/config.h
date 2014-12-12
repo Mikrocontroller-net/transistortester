@@ -9,6 +9,12 @@
 //#define DebugOut 10		// if set, output of capacity measurements (ReadCapacity) in row 3+4 
 //#define DebugOut 11		// if set, output of load time (ReadCapacity) in row 3 for C at pins 1+3
 
+// defines for LCD_INTERFACE_MODE
+#define MODE_PARALLEL 1		/* default 4-Bit parallel mode for character LCD */
+#define MODE_I2C 2		/* I2C interface for SSD1306 */
+#define MODE_SPI 4		/* 4 bit SPI interface for ST7565 or SSD1306 */
+#define MODE_7920 5		/* serial interface for ST7920 */
+
 // select the right Processor Typ
 #if defined(__AVR_ATmega48__)
  #define PROCESSOR_TYP 168
@@ -329,6 +335,10 @@
 /* ************************************************************************* */
 
 #if (LCD_ST_TYPE == 7565)
+
+ #ifndef LCD_INTERFACE_MODE
+  #define LCD_INTERFACE_MODE MODE_SPI
+ #endif
  // 128x64 pixel graphics LCD with ST7565 controller and 1-bit interface
  // LCD-P/S = low, LCD-CS1 = low, LCD-CS2 = high
  // LCD_B0_xxx=SI, LCD_EN_xxx=SCL, LCD_RS_xxx=A0, LCD_RES_xxx=RST, (CS-GND)
@@ -418,6 +428,9 @@
  
 #else /* not (LCD_ST_TYPE == 7565) */
  //  with character LCD
+ #ifndef LCD_INTERFACE_MODE
+  #define LCD_INTERFACE_MODE MODE_PARALLEL
+ #endif
  #if PROCESSOR_TYP == 644	/* normal layout with character LCD and mega324/644/1284 */
   #ifdef STRIP_GRID_BOARD
  // special Layout for strip grid board with ATmega324/644/1284

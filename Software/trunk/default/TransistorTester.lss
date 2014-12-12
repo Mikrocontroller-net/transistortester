@@ -17,19 +17,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   6 .debug_aranges 000003d0  00000000  00000000  00004c60  2**3
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_info   000058e2  00000000  00000000  00005030  2**0
+  7 .debug_info   000058de  00000000  00000000  00005030  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 00001212  00000000  00000000  0000a912  2**0
+  8 .debug_abbrev 00001205  00000000  00000000  0000a90e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   00001bea  00000000  00000000  0000bb24  2**0
+  9 .debug_line   00001bea  00000000  00000000  0000bb13  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_frame  0000039c  00000000  00000000  0000d710  2**2
+ 10 .debug_frame  0000039c  00000000  00000000  0000d700  2**2
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_str    00000c02  00000000  00000000  0000daac  2**0
+ 11 .debug_str    00000c02  00000000  00000000  0000da9c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_loc    00003391  00000000  00000000  0000e6ae  2**0
+ 12 .debug_loc    00003391  00000000  00000000  0000e69e  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_ranges 00000018  00000000  00000000  00011a3f  2**0
+ 13 .debug_ranges 00000018  00000000  00000000  00011a2f  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -129,8 +129,8 @@ Disassembly of section .text:
      136:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 0000013a <_lcd_hw_write>:
-	set_en_low
 	ret
+	.endfunc
 #else
 ; 4-bit interface for HD44780 compatible controller
                ; Set RS (0=Cmd, 1=Char)
@@ -10465,10 +10465,10 @@ int main(void) {
     3214:	10 92 3c 01 	sts	0x013C, r1
   Calibrate_UR();		// get Ref Voltages and Pin resistance
     3218:	0e 94 03 13 	call	0x2606	; 0x2606 <Calibrate_UR>
-  ptrans.count = 0;		// Number of found P type transistors
-  ntrans.count = 0;		// Number of found N type transistors
-  PartMode = PART_MODE_NONE;
-  WithReference = 0;		// no precision reference voltage
+#if (LCD_ST_TYPE == 7565)
+  lcd_command(CMD_DISPLAY_ON);
+  lcd_command(CMD_SET_ALLPTS_NORMAL);		// 0xa4
+#endif
   lcd_clear();			// clear the LCD
   ADC_DDR = TXD_MSK;		// activate Software-UART 
     321c:	18 e0       	ldi	r17, 0x08	; 8
@@ -10501,7 +10501,7 @@ int main(void) {
           PartMode = PART_MODE_PNP;	// switch to parasitic transistor
     3230:	2d e0       	ldi	r18, 0x0D	; 13
     3232:	a2 2e       	mov	r10, r18
-  return 0;
+//  return 0;
 
 end3:
   // the diode  is already shown on the LCD
@@ -10550,6 +10550,10 @@ start:
     3254:	10 92 13 01 	sts	0x0113, r1
   WithReference = 0;		// no precision reference voltage
     3258:	10 92 53 01 	sts	0x0153, r1
+#if (LCD_ST_TYPE == 7565)
+  lcd_command(CMD_DISPLAY_ON);
+  lcd_command(CMD_SET_ALLPTS_NORMAL);		// 0xa4
+#endif
   lcd_clear();			// clear the LCD
     325c:	0e 94 0d 01 	call	0x21a	; 0x21a <lcd_clear>
   ADC_DDR = TXD_MSK;		// activate Software-UART 
@@ -12137,13 +12141,14 @@ wait_again:
     3bf6:	80 e0       	ldi	r24, 0x00	; 0
     3bf8:	90 e0       	ldi	r25, 0x00	; 0
     3bfa:	0e 94 b5 03 	call	0x76a	; 0x76a <wait_for_key_ms>
+#else
   // look, if the tester is uncalibrated (C-source will be included directly)
   lcd_cursor_off();
   #include "HelpCalibration.c"
-  goto start;	// POWER_OFF not selected, repeat measurement
 #endif
-  return 0;
-    3bfe:	18 c0       	rjmp	.+48     	; 0x3c30 <main+0xaf6>
+  goto start;	// POWER_OFF not selected, repeat measurement
+    3bfe:	22 cb       	rjmp	.-2492   	; 0x3244 <main+0x10a>
+//  return 0;
 
 end3:
   // the diode  is already shown on the LCD

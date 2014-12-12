@@ -76,6 +76,7 @@ CFLAGS += -DFOUR_LINE_LCD
 # The LCD_ST7565 option must be set to support a 128x64 LCD graphics display
 # with ST7565 controller. It is controlled with a 1-bit interface.
 WITH_LCD_ST7565 = 1
+#CFLAGS += -DLCD_INTERFACE_MODE=2
 
 # If LCD_ST7565 option is used: Set the resitor ratio for the internal
 # voltage regulator. Supported value range: 0..7.
@@ -149,7 +150,7 @@ CFLAGS += -DWITH_UART
 # is not used for serial output (WITH_UART option).
 # For ATmega644/1284 processor the UART has a separate pin.  Therefore the external input
 # at pin ADC3 can be enabled separate by setting the WITH_UART option.
-CFLAGS += -DWITH_VEXT
+#CFLAGS += -DWITH_VEXT
 
 # The CAP_EMPTY_LEVEL  defines the empty voltage level for capacitors in mV.
 # Choose a higher value, if your Tester reports "Cell!" by unloading capacitors.

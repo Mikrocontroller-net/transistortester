@@ -177,6 +177,10 @@ start:
   ntrans.count = 0;		// Number of found N type transistors
   PartMode = PART_MODE_NONE;
   WithReference = 0;		// no precision reference voltage
+#if (LCD_ST_TYPE == 7565)
+  lcd_command(CMD_DISPLAY_ON);
+  lcd_command(CMD_SET_ALLPTS_NORMAL);		// 0xa4
+#endif
   lcd_clear();			// clear the LCD
   ADC_DDR = TXD_MSK;		// activate Software-UART 
   ResistorsFound = 0;		// no resistors found
@@ -1011,9 +1015,9 @@ wait_again:
   // look, if the tester is uncalibrated (C-source will be included directly)
   lcd_cursor_off();
   #include "HelpCalibration.c"
-  goto start;	// POWER_OFF not selected, repeat measurement
 #endif
-  return 0;
+  goto start;	// POWER_OFF not selected, repeat measurement
+//  return 0;
 
 end3:
   // the diode  is already shown on the LCD

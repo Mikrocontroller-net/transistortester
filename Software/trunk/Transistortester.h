@@ -580,7 +580,7 @@ End of configuration
 // const unsigned char N123_str[] MEM_TEXT = " Pin=";
 #else
  #if EBC_STYLE == 321
-  const unsigned char N123_str[] MEM_TEXT = {' ','3'+TP_OFFSET,'2'+TP_OFFSET,'1'+TP_OFFSET,'=',0};
+  const unsigned char N321_str[] MEM_TEXT = {' ','3'+TP_OFFSET,'2'+TP_OFFSET,'1'+TP_OFFSET,'=',0};
  #endif
  #if EBC_STYLE == 123
   const unsigned char N123_str[] MEM_TEXT = {' ','1'+TP_OFFSET,'2'+TP_OFFSET,'3'+TP_OFFSET,'=',0};

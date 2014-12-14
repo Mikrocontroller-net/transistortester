@@ -335,14 +335,22 @@
 /* ************************************************************************* */
 
 #if (LCD_ST_TYPE == 7565)
-
+ /* set the default INTERFACE_MODE for the ST7565 controller */
  #ifndef LCD_INTERFACE_MODE
   #define LCD_INTERFACE_MODE MODE_SPI
  #endif
- // 128x64 pixel graphics LCD with ST7565 controller and 1-bit interface
+#else
+ // default interface  with character LCD
+ #ifndef LCD_INTERFACE_MODE
+  #define LCD_INTERFACE_MODE MODE_PARALLEL
+ #endif
+#endif
+
+#if (LCD_INTERFACE_MODE == MODE_SPI)
+ // SPI-mode is used for the 128x64 pixel graphics LCD with ST7565 controller
  // LCD-P/S = low, LCD-CS1 = low, LCD-CS2 = high
  // LCD_B0_xxx=SI, LCD_EN_xxx=SCL, LCD_RS_xxx=A0, LCD_RES_xxx=RST, (CS-GND)
- #if PROCESSOR_TYP == 644	/* mega324/644/1284 with st7565 */
+ #if PROCESSOR_TYP == 644	/* mega324/644/1284 with SPI */
   // currently no difference between normal and strip grid board
    /* the ST7565 Reset signal */
    #define HW_LCD_RES_DDR         DDRB
@@ -363,24 +371,29 @@
    #define HW_LCD_B0_DDR          DDRB
    #define HW_LCD_B0_PORT         PORTB
    #define HW_LCD_B0_PIN          7
- #elif PROCESSOR_TYP == 1280	/* mega1280/2560 with st7565 */
+ #elif PROCESSOR_TYP == 1280	/* mega1280/2560 with SPI */
   // currently no difference between normal and strip grid board
+   /* the ST7565 Reset signal */
    #define HW_LCD_RES_DDR         DDRA
    #define HW_LCD_RES_PORT        PORTA
    #define HW_LCD_RES_PIN         0
 
+   /* EN is the serial clock signal SCL */
    #define HW_LCD_EN_DDR          DDRA
    #define HW_LCD_EN_PORT         PORTA
    #define HW_LCD_EN_PIN          2
 
+   /* the data/instruction signal RS */
    #define HW_LCD_RS_DDR          DDRA
    #define HW_LCD_RS_PORT         PORTA
    #define HW_LCD_RS_PIN          1
 
+   /* the data signal SI */
    #define HW_LCD_B0_DDR          DDRA
    #define HW_LCD_B0_PORT         PORTA
    #define HW_LCD_B0_PIN          3
- #else				/* mega8/168/328 with st7565  */
+ #else				/* mega8/168/328 with SPI  */
+  /* The SPI interface uses four signals  RES, EN, RS and B0 */
   #ifdef STRIP_GRID_BOARD
    // alternative connection of graphical LCD 
    /* the Reset Pin, 0 = Reset */
@@ -424,16 +437,37 @@
    #define HW_LCD_B0_PORT         PORTD
    #define HW_LCD_B0_PIN          3
   #endif
- #endif	/* PROCESSOR_TYP */
+ #endif	/* PROCESSOR_TYP for SPI Interface*/
  
-#else /* not (LCD_ST_TYPE == 7565) */
- //  with character LCD
- #ifndef LCD_INTERFACE_MODE
-  #define LCD_INTERFACE_MODE MODE_PARALLEL
+#elif (LCD_INTERFACE_MODE == MODE_I2C)
+ /* only two wires are required for the I2C interface: SCL and SDA */
+ #ifndef I2C_ADDR
+  #define I2C_ADDR 0x78		/* SSD1306 controller defines 0x78 or 0x7a (SA0=1) as address */
  #endif
- #if PROCESSOR_TYP == 644	/* normal layout with character LCD and mega324/644/1284 */
+ #if PROCESSOR_TYP == 644	/* mega324/644/1284 with I2C interface */
+   #define HW_LCD_SCL_PORT         PORTB
+   #define HW_LCD_SCL_PIN          3
+
+   #define HW_LCD_SDA_PORT         PORTB
+   #define HW_LCD_SDA_PIN          4
+ #elif PROCESSOR_TYP == 1280	/* mega1280/2560 with I2C interface */
+   #define HW_LCD_SCL_PORT         PORTA
+   #define HW_LCD_SCL_PIN          5
+
+   #define HW_LCD_SDA_PORT         PORTA
+   #define HW_LCD_SDA_PIN          4
+ #else				/* mega8/168/328 with I2C interface  */
+   #define HW_LCD_SCL_PORT         PORTD
+   #define HW_LCD_SCL_PIN          5
+
+   #define HW_LCD_SDA_PORT         PORTD
+   #define HW_LCD_SDA_PIN          2
+ #endif	/* PROCESSOR_TYP for the I2C Interface */
+#else /* not (LCD_INTERFACE_MODE == MODE_SPI), not (LCD_INTERFACE_MODE == MODE_I2C) */
+ /* The 4-bit parallel Interface is usually used for the character display */
+ #if PROCESSOR_TYP == 644	/* connection for 4-bit parallel interface and mega324/644/1284 */
   #ifdef STRIP_GRID_BOARD
- // special Layout for strip grid board with ATmega324/644/1284
+ // special Layout for strip grid board with the 4-bit parallel interface and ATmega324/644/1284
    #define HW_LCD_EN_PORT         PORTB
    #define HW_LCD_EN_PIN          2
  
@@ -441,7 +475,7 @@
    #define HW_LCD_RS_PIN          3
 
   #else
- // normal layout with character LCD and ATmega324/644/1284
+ // normal connection for the 4-bit parallel interface and ATmega324/644/1284
    #define HW_LCD_EN_PORT         PORTB
    #define HW_LCD_EN_PIN          3
  
@@ -457,9 +491,9 @@
    #define HW_LCD_B6_PIN          6
    #define HW_LCD_B7_PORT         PORTB
    #define HW_LCD_B7_PIN          7
- #elif PROCESSOR_TYP == 1280	/* normal layout with character LCD and mega1280/2560 */
+ #elif PROCESSOR_TYP == 1280	/* normal layout with 4-bit parallel interface and mega1280/2560 */
   #ifdef STRIP_GRID_BOARD
-   // special Layout for strip grid board with character LCD and ATmega1280
+   // special connection for strip grid board with 4-bit parallel interface and ATmega1280
    #define HW_LCD_EN_PORT         PORTA
    #define HW_LCD_EN_PIN          5
  
@@ -474,7 +508,7 @@
    #define HW_LCD_B6_PIN          2
    #define HW_LCD_B7_PORT         PORTA
    #define HW_LCD_B7_PIN          1
-  #else 	/* no STRIP_GRID_BOARD  with character LCD and ATmega1280 */
+  #else 	/* no STRIP_GRID_BOARD  with 4-bit parallel interface and ATmega1280 */
    #define HW_LCD_EN_PORT         PORTA
    #define HW_LCD_EN_PIN          5
  
@@ -490,9 +524,9 @@
    #define HW_LCD_B7_PORT         PORTA
    #define HW_LCD_B7_PIN          3
   #endif	/* STRIP_GRID_BOARD */
- #else		/* PROCESSOR_TYP */
+ #else		/* PROCESSOR_TYP  ATmega8/168/328 with 4-bit parallel interface*/
   #ifdef STRIP_GRID_BOARD
-  			/* strip grid layout with character LCD and mega8/168/328 */
+  			/* strip grid layout with 4-bit parallel interface and mega8/168/328 */
    #define HW_LCD_EN_PORT         PORTD
    #define HW_LCD_EN_PIN          5
  
@@ -508,7 +542,7 @@
    #define HW_LCD_B7_PORT         PORTD
    #define HW_LCD_B7_PIN          1
   #else		/* no STRIP_GRID_BOARD */
-			/* normal layout with character LCD and  mega8/168/328 */
+			/* normal layout with 4-bit parallel interface and  mega8/168/328 */
    #define HW_LCD_EN_PORT         PORTD
    #define HW_LCD_EN_PIN          5
 
@@ -524,8 +558,8 @@
    #define HW_LCD_B7_PORT         PORTD
    #define HW_LCD_B7_PIN          3
   #endif 		/* STRIP_GRID_BOARD */
- #endif		/* PROCESSOR_TYP */
-#endif		/* (ST7565 == ?) */
+ #endif		/* PROCESSOR_TYP for 4-bit parallel interface*/
+#endif		/* INTERFACE_MODE */
 
 
 

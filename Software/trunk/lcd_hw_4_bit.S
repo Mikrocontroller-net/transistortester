@@ -50,17 +50,15 @@
 #define RCALL rcall
 
 #define WAIT_I2C wait5us    /* for normal mode 5us wait time */
-;#define HW_LCD_SDA_PORT	PORTD
-;#define HW_LCD_SCL_PORT	PORTD
-;#define HW_LCD_SDA_BIT	PD5
-;#define HW_LCD_SCL_BIT	PD4
-#define HW_LCD_SDA_DDR		(_SFR_IO_ADDR(HW_LCD_SDA_PORT) - 1)
-#define HW_LCD_SCL_DDR		(_SFR_IO_ADDR(HW_LCD_SCL_PORT) - 1)
+#define release_sda	cbi	(_SFR_IO_ADDR(HW_LCD_SDA_PORT) - 1), HW_LCD_SDA_PIN
+#define set_low_sda	sbi	(_SFR_IO_ADDR(HW_LCD_SDA_PORT) - 1), HW_LCD_SDA_PIN
+#define release_scl	cbi	(_SFR_IO_ADDR(HW_LCD_SCL_PORT) - 1), HW_LCD_SCL_PIN
+#define set_low_scl	sbi	(_SFR_IO_ADDR(HW_LCD_SCL_PORT) - 1), HW_LCD_SCL_PIN
 #define HW_LCD_SDA_OUT		_SFR_IO_ADDR(HW_LCD_SDA_PORT)
 #define HW_LCD_SCL_OUT		_SFR_IO_ADDR(HW_LCD_SCL_PORT)
 #define HW_LCD_SDA_IN		(_SFR_IO_ADDR(HW_LCD_SDA_PORT) - 2)
 #define HW_LCD_SCL_IN		(_SFR_IO_ADDR(HW_LCD_SCL_PORT) - 2)
-#define I2C_ADDR 0x78		/* SSD1306 controller defines 0x78 or 0x7a (SA0=1) as address */
+	/* SSD1306 controller defines 0x78 or 0x7a (SA0=1) as address I2C_ADDR */
 
 ;----------------------------------------------------------------------
 ;
@@ -245,22 +243,23 @@ next_bit:
 	lsl	r24
 	breq	finish		; last bit shifted?
 i2c_wf:
+	set_low_scl
 	brcc	wr0
 			; carry was set
-	cbi	HW_LCD_SDA_DDR, HW_LCD_SDA_BIT	; release SDA
+	release_sda
 	rjmp	wr1
 wr0:
-	sbi	HW_LCD_SDA_DDR, HW_LCD_SDA_BIT	; SDA to low level
+	set_low_sda
 wr1:
 	rcall	WAIT_I2C	; wait defined time
-	cbi	HW_LCD_SCL_DDR, HW_LCD_SCL_BIT	; release SCL
+	release_scl
 	rcall	WAIT_I2C	; wait defined time
         rjmp	next_bit
 finish:
-	sbis	HW_LCD_SCL_IN, HW_LCD_SCL_BIT
+	sbis	HW_LCD_SCL_IN, HW_LCD_SCL_PIN
 	rjmp	finish
 	; r24 is zero, return 0
-	sbic	HW_LCD_SDA_IN, HW_LCD_SDA_BIT
+	sbic	HW_LCD_SDA_IN, HW_LCD_SDA_PIN
 	ldi	r24,1		; if SDA is returned high, answer 1
 	rcall	WAIT_I2C
 	ret
@@ -270,12 +269,12 @@ finish:
        .func	i2c_init
        .extern	wait5us
 i2c_init:
-	cbi	HW_LCD_SDA_DDR, HW_LCD_SDA_BIT	; SDA to high impedance
-	cbi	HW_LCD_SCL_DDR, HW_LCD_SCL_BIT	; SCL to high impedance
-	cbi	HW_LCD_SDA_OUT, HW_LCD_SDA_BIT	; set output to 0, no pull up
-	cbi	HW_LCD_SCL_OUT, HW_LCD_SCL_BIT	; set output to 0, no pull up
+	release_sda
+	release_scl
+	cbi	HW_LCD_SDA_OUT, HW_LCD_SDA_PIN	; set output to 0, no pull up
+	cbi	HW_LCD_SCL_OUT, HW_LCD_SCL_PIN	; set output to 0, no pull up
 
-	sbi	HW_LCD_SDA_DDR, HW_LCD_SDA_BIT	; set SDA to low
+	set_low_sda
 	rcall	WAIT_I2C
 	ldi	r24, I2C_ADDR
 	rcall	_lcd_hw_write		; write I2C address

@@ -39,6 +39,11 @@ UI_LANGUAGE = LANG_ENGLISH
 # For this LCD type the contrast must be set with software command.
 #CFLAGS += -DLCD_DOGM
 
+# Can be used with a 4x20 character display for better using the additional space.
+# Additional parameters, which are shown only short in row 2, will be shown in row 3 and 4 with this option.
+CFLAGS += -DFOUR_LINE_LCD
+#CFLAGS += -DLCD_LINE_LENGTH=20
+
 
 # The LCD_ST7565 option must be set to support a 128x64 LCD graphics display
 # with ST7565 controller. It is controlled with a 1-bit interface (SPI or I2C)

@@ -27,6 +27,9 @@ int main(void) {
   int8_t n_cpre;		// capacitor prefix of NPN B-E diode
 #endif
   char an_cat;			// diode is anode-cathode type
+#ifdef WITH_GRAPHICS
+  unsigned char options;
+#endif
   //switch on
   ON_DDR = (1<<ON_PIN);			// switch to output
   ON_PORT = (1<<ON_PIN); 		// switch power on 
@@ -478,7 +481,11 @@ start:
         /* load current of capacity is (5V-1.1V)/(470000 Ohm) = 8298nA */
         lcd_MEM_string(GateCap_str);	//"C="
         ReadCapacity(diodes.Cathode[0],diodes.Anode[0]);	// Capacity opposite flow direction
+#if LCD_LINE_LENGTH > 16
         DisplayValue(cap.cval,cap.cpre,'F',3);
+#else
+        DisplayValue(cap.cval,cap.cpre,'F',2);
+#endif
         goto end3;
      } else if(NumOfDiodes == 2) { // double diode
         lcd_data('2');
@@ -658,6 +665,12 @@ start:
        }
     }
     PinLayout('E','B','C'); 		//  EBC= or 123=...
+#ifdef WITH_GRAPHICS
+    options = 0;
+    if (_trans->c != diodes.Anode[ii])
+       options |= OPT_VREVERSE;
+    lcd_pgm_bitmap(bmp_vakdiode_data, 90+24, 32, options);
+#endif    
     lcd_line2(); //2. row 
 #ifndef FOUR_LINE_LCD
  #ifdef SHOW_ICE
@@ -809,8 +822,7 @@ start:
        // there is enough space for long form of showing protection diode
     if(NumOfDiodes == 1) {
   #ifdef WITH_GRAPHICS
-       unsigned char options = 0;
-
+       options = 0;
        if (_trans->c != diodes.Anode[0])
           options |= OPT_VREVERSE;
        lcd_pgm_bitmap(bmp_vakdiode_data, 114, 32, options);

@@ -1,7 +1,7 @@
 #include "config.h"
 
 
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
 
 // Options for lcd_pgm_bitmap option parameter:
 #define OPT_HREVERSE    1 // Display bitmap reversed horizontally
@@ -63,7 +63,19 @@
 #define CMD_SET_POWER_CONTROL   0x28
 #define CMD_SET_RESISTOR_RATIO  0x20
 #define CMD_SET_VOLUME_FIRST    0x81
-#define VOLUME_VALUE   29	/* second byte of CMD_SET_VOLUME == volume value */
+#if (LCD_ST_TYPE == 1306)
+ #define VOLUME_VALUE   60	/* second byte of CMD_SET_VOLUME == volume value */
+ #define CMD_SET_MEMORY_ADDR_MODE 0x20
+ #define CMD_SET_ChargePump	0x8D
+ #define CMD_SET_MUX_RATIO	0xA8
+ #define CMD_SET_DISPLAY_OFFSET	0xD3
+ #define CMD_SET_DIVIDE_RATIO	0xD5
+ #define CMD_SET_PreCharge_PERIOD 0xD9
+ #define CMD_SET_COM_Pins_CONFIG 0xDA
+ #define CMD_SET_Vcomh_DESELECT_LEVEL 0xDB
+#else
+ #define VOLUME_VALUE   40	/* second byte of CMD_SET_VOLUME == volume value */
+#endif
 #define CMD_SET_STATIC_OFF      0xAC
 #define CMD_SET_STATIC_ON       0xAD
 #define CMD_SET_STATIC_REG      0x0

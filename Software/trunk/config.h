@@ -314,7 +314,7 @@
  // Strip Grid board version
   #define RST_PORT PORTD
   #define RST_PIN_REG PIND
-  #if (LCD_ST_TYPE == 7565)
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    #define RST_PIN PD7     //Pin, is switched to low, if push button is pressed
    // option STRIP_GRID is used to specify other connection of the LCD (chinese version),
    // the RST_PIN remain at PD7.
@@ -334,7 +334,7 @@
 /* Port(s) / Pins for LCD						     */
 /* ************************************************************************* */
 
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
  /* set the default INTERFACE_MODE for the ST7565 controller */
  #ifndef LCD_INTERFACE_MODE
   #define LCD_INTERFACE_MODE MODE_SPI
@@ -441,8 +441,8 @@
  
 #elif (LCD_INTERFACE_MODE == MODE_I2C)
  /* only two wires are required for the I2C interface: SCL and SDA */
- #ifndef I2C_ADDR
-  #define I2C_ADDR 0x78		/* SSD1306 controller defines 0x78 or 0x7a (SA0=1) as address */
+ #ifndef LCD_I2C_ADDR
+  #define LCD_I2C_ADDR 0x3C		/* SSD1306 controller defines 0x3c or 0x3d (SA0=1) as address */
  #endif
  #if PROCESSOR_TYP == 644	/* mega324/644/1284 with I2C interface */
    #define HW_LCD_SCL_PORT         PORTB

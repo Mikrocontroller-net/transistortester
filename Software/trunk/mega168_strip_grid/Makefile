@@ -39,9 +39,25 @@ UI_LANGUAGE = LANG_ENGLISH
 # For this LCD type the contrast must be set with software command.
 #CFLAGS += -DLCD_DOGM
 
+
 # The LCD_ST7565 option must be set to support a 128x64 LCD graphics display
-# with ST7565 controller. It is controlled with a 1-bit interface.
+# with ST7565 controller. It is controlled with a 1-bit interface (SPI or I2C)
+# The normal ST7565 controller will be supported by setting the WITH_LCD_ST7565 to 1 or 7565.
+# The special action for a simular SSD1306 controller can be activated by
+# setting the WITH_LCD_ST7565 variable to 1306.
 #WITH_LCD_ST7565 = 1
+#WITH_LCD_ST7565 = 1306
+
+# Normally the ST7565 controller is connected with a SPI 4-wire interface, but
+# you can enable a I2C interface with address 0x3c for the SSD1306 controller 
+# by setting the LCD_INTERFACE_MODE to 2.
+# The SCL signal is available at PD5 (LCD-E, LCD-6), the SDA signal at PD2 (LCD-D6, LCD-13).
+# A pull up resistor of about 4.7k is required for both signals to 3.3V.
+# Please check, if your display module can also tolerate a 5V signal level.
+#CFLAGS += -DLCD_INTERFACE_MODE=2
+
+# The I2C Address can be preset to a address of 0x3d instead of 0x3c by setting the constant LCD_I2C_ADDR.
+#CFLAGS += -DLCD_I2C_ADDR=0x3d
 
 # If LCD_ST7565 option is used: Set the resitor ratio for the internal
 # voltage regulator. Supported value range: 0..7.
@@ -77,15 +93,15 @@ CFLAGS += -DWITH_SELFTEST
 # for the atmega328 and atmega168.
 #CFLAGS += -DNO_TEST_T1_T7
 
+# FREQUENCY_50HZ enables a 50 Hz frequency generator for up to one minute at the end of selftests.
+#CFLAGS += -DFREQUENCY_50HZ
+
 # AUTO_CAL will enable the autocalibration of zero offset of capacity measurement and
 # also the port output resistance values will be find out in SELFTEST section.
 # With a external capacitor a additionally correction of reference voltage is figured out for 
 # low capacity measurement and also for the AUTOSCALE_ADC measurement.
 # The AUTO_CAL option is only selectable for mega168 and mega328.
 CFLAGS += -DAUTO_CAL
-
-# FREQUENCY_50HZ enables a 50 Hz frequency generator for up to one minute at the end of selftests.
-#CFLAGS += -DFREQUENCY_50HZ
 
 
 # The WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring.
@@ -153,7 +169,7 @@ CFLAGS += -DUSE_EEPROM
 #CFLAGS += -DEBC_STYLE
 #CFLAGS += -DEBC_STYLE=321
 
-# Setting of NO_NANO avoids the use of n as prefix for Farad (nF), the mikro prefix is used insted (uF).
+# Setting of NO_NANO avoids the use of n as prefix for Farad (nF), the mikro prefix is used instead (uF).
 # CFLAGS += -DNO_NANO
 
 # The PULLUP_DISABLE option disable the pull-up Resistors of IO-Ports.

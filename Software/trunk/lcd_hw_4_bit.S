@@ -49,7 +49,9 @@
 
 #define RCALL rcall
 
-#define WAIT_I2C wait5us    /* for normal mode 5us wait time */
+/* For normal I2C mode use 5us wait time, but SSD1306 is faster, the cycle time is specified as 2.5us. */
+/* So we use 2us, which results to a cycle time of >4us */
+#define WAIT_I2C wait2us    
 #define release_sda	cbi	(_SFR_IO_ADDR(HW_LCD_SDA_PORT) - 1), HW_LCD_SDA_PIN
 #define set_low_sda	sbi	(_SFR_IO_ADDR(HW_LCD_SDA_PORT) - 1), HW_LCD_SDA_PIN
 #define release_scl	cbi	(_SFR_IO_ADDR(HW_LCD_SCL_PORT) - 1), HW_LCD_SCL_PIN
@@ -58,7 +60,7 @@
 #define HW_LCD_SCL_OUT		_SFR_IO_ADDR(HW_LCD_SCL_PORT)
 #define HW_LCD_SDA_IN		(_SFR_IO_ADDR(HW_LCD_SDA_PORT) - 2)
 #define HW_LCD_SCL_IN		(_SFR_IO_ADDR(HW_LCD_SCL_PORT) - 2)
-	/* SSD1306 controller defines 0x78 or 0x7a (SA0=1) as address I2C_ADDR */
+	/* SSD1306 controller defines 0x3C or 0x3D (SA0=1) as address LCD_I2C_ADDR */
 
 ;----------------------------------------------------------------------
 ;
@@ -73,11 +75,11 @@
        .extern wait1us
        .extern wait30us		; used only for slow 4-bit interface (SLOW_LCD)
 
-_lcd_hw_write:
                
 
 #if (LCD_INTERFACE_MODE == MODE_SPI)
 ; serial output for ST7565 controller, 4-Bit SPI
+_lcd_hw_write:
                ; Set RS (0=Cmd, 1=Char)
                sbrc    preg_1, 0
                        set_rs_high
@@ -152,6 +154,7 @@ _lcd_hw_write:
 	.endfunc
 
 #elif (LCD_INTERFACE_MODE == MODE_7920)
+_lcd_hw_write:
 ; 1-bit interface for ST7920 controller
 	set_b0_high
 	set_b0_output		; enable output mode
@@ -235,33 +238,64 @@ four_bits:
 	set_en_low
 	ret
 #elif (LCD_INTERFACE_MODE == MODE_I2C)
+;===================================================
+_lcd_hw_write:
 	; use I2C as master
+	push 	preg_2
+        push	preg_1		; save data/command
+	release_scl
+	rcall	WAIT_I2C
+	set_low_sda		; set START bit
+	rcall	WAIT_I2C
+	ldi	preg_1, (LCD_I2C_ADDR*2)
+	rcall	i2c_send	; write I2C address
+	pop	preg_2
+	ldi	preg_1,0x80	; send command type
+	sbrc	preg_2,0	; skip if bit 0 is unset
+	ldi	preg_1,0x40	; send data type
+	rcall	i2c_send	; send command/data
+	pop	preg_1		;restore data from parameter
+	rcall	i2c_send	; write the data
+	set_low_sda		; set the sda signal to low STOP
+	rcall	WAIT_I2C
+	release_scl		; pullup move the scl signal to high
+	rcall	WAIT_I2C
+	release_sda		; pullup move the sda signal to high, STOP
+	rcall	WAIT_I2C
+	ret
+;
+;===================================================
+i2c_send:
 	sec			;set carry
-	rol	r24		; shift carry to r24 bit 0 and bit 7 of r24 to carry
-	rjmp	i2c_wf
-next_bit:
-	lsl	r24
-	breq	finish		; last bit shifted?
+	rol	preg_1		; shift carry to r24 bit 0 and bit 7 of r24 to carry
 i2c_wf:
-	set_low_scl
+	set_low_scl		; scl signal to low, data change
 	brcc	wr0
 			; carry was set
-	release_sda
+	release_sda		; pullup move the sda signal to high
 	rjmp	wr1
 wr0:
-	set_low_sda
+	set_low_sda		; set the sda signal to low
 wr1:
 	rcall	WAIT_I2C	; wait defined time
-	release_scl
+	release_scl		; pullup move the scl signal to high
 	rcall	WAIT_I2C	; wait defined time
-        rjmp	next_bit
-finish:
+	lsl	preg_1
+	brne	i2c_wf
+; 8 bit are transfered
+	set_low_scl		; scl signal to low, data change
+	release_sda		; give sda free
+	rcall	WAIT_I2C	; wait defined time
+	release_scl		; pullup move the scl signal to high, ack cycle
+loop:
 	sbis	HW_LCD_SCL_IN, HW_LCD_SCL_PIN
-	rjmp	finish
+	rjmp	loop		; wait for releasing SCL
 	; r24 is zero, return 0
 	sbic	HW_LCD_SDA_IN, HW_LCD_SDA_PIN
-	ldi	r24,1		; if SDA is returned high, answer 1
-	rcall	WAIT_I2C
+	ldi	preg_1,1		; if SDA is returned high, answer 1
+	rcall	WAIT_I2C	; wait defined time
+	set_low_scl
+	rcall	WAIT_I2C	; wait defined time
 	ret
 	.endfunc
 
@@ -274,13 +308,10 @@ i2c_init:
 	cbi	HW_LCD_SDA_OUT, HW_LCD_SDA_PIN	; set output to 0, no pull up
 	cbi	HW_LCD_SCL_OUT, HW_LCD_SCL_PIN	; set output to 0, no pull up
 
-	set_low_sda
-	rcall	WAIT_I2C
-	ldi	r24, I2C_ADDR
-	rcall	_lcd_hw_write		; write I2C address
 	ret
 	.endfunc
 #else
+_lcd_hw_write:
 ; 4-bit interface for HD44780 compatible controller
                ; Set RS (0=Cmd, 1=Char)
                sbrc    preg_1, 0

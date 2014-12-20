@@ -84,7 +84,7 @@ int main(void) {
      lcd_line1();
      lcd_MEM_string(TestTimedOut);	//Output Timeout
      wait_about3s();				//wait for 3 s
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
      lcd_powersave();			// set graphical display to power save mode
 #endif
      ON_PORT &= ~(1<<ON_PIN);			//shut off!
@@ -177,7 +177,7 @@ start:
   ntrans.count = 0;		// Number of found N type transistors
   PartMode = PART_MODE_NONE;
   WithReference = 0;		// no precision reference voltage
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
   lcd_command(CMD_DISPLAY_ON);
   lcd_command(CMD_SET_ALLPTS_NORMAL);		// 0xa4
 #endif
@@ -1006,7 +1006,7 @@ wait_again:
   #include "HelpCalibration.c"
  #endif
 //  MCUSR = 0;
- #if (LCD_ST_TYPE == 7565)
+ #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
   lcd_powersave();			// set graphical display to power save mode
  #endif
   ON_PORT &= ~(1<<ON_PIN);		//switch off power

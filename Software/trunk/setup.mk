@@ -11,6 +11,14 @@ ifeq ($(WITH_LCD_ST7565),1)
 CFLAGS += -DLCD_ST_TYPE=7565
 CFLAGS += -DLCD_ST7565_RESISTOR_RATIO=$(LCD_ST7565_RESISTOR_RATIO)
 endif
+ifeq ($(WITH_LCD_ST7565),7565)
+CFLAGS += -DLCD_ST_TYPE=7565
+CFLAGS += -DLCD_ST7565_RESISTOR_RATIO=$(LCD_ST7565_RESISTOR_RATIO)
+endif
+ifeq ($(WITH_LCD_ST7565),1306)
+CFLAGS += -DLCD_ST_TYPE=1306
+CFLAGS += -DLCD_ST7565_RESISTOR_RATIO=$(LCD_ST7565_RESISTOR_RATIO)
+endif
 
 ifeq ($(PARTNO),m8)
 MCU = atmega8
@@ -271,6 +279,12 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 ## Objects that must be built in order to link
 OBJECTS = lcd_hw_4_bit.o lcd-routines.o i2lcd.o PinLayout.o RvalOut.o UfAusgabe.o DisplayValue.o
 ifeq ($(WITH_LCD_ST7565),1)
+OBJECTS += font.o lcd-draw.o
+endif
+ifeq ($(WITH_LCD_ST7565),7565)
+OBJECTS += font.o lcd-draw.o
+endif
+ifeq ($(WITH_LCD_ST7565),1306)
 OBJECTS += font.o lcd-draw.o
 endif
 OBJECTS += swuart.o wait1000ms.o 

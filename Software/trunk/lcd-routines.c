@@ -19,7 +19,7 @@
 
 
  
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
 uint8_t _page;
 uint8_t _xpos;
 #if FONT_HEIGHT > 8
@@ -42,7 +42,7 @@ void lcd_space(void) {
 
 //move to the beginning of the 1. row
 void lcd_line1() {
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    lcd_set_cursor(0,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress));
@@ -51,7 +51,7 @@ void lcd_line1() {
 
 //move to the beginning of the 2. row
 void lcd_line2() {
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    lcd_set_cursor(1,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x40));
@@ -60,7 +60,7 @@ void lcd_line2() {
 
 //move to the beginning of the 3. row
 void lcd_line3() {
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    lcd_set_cursor(2,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x14));
@@ -69,7 +69,7 @@ void lcd_line3() {
 
 //move to the beginning of the 4. row
 void lcd_line4() {
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    lcd_set_cursor(3,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x54));
@@ -77,7 +77,7 @@ void lcd_line4() {
 }
 
 void lcd_set_cursor(uint8_t y, uint8_t x) {
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    //move to the specified position (depends on used font)
    _page = y;
     // The pixel memory is greater as the display window.
@@ -98,7 +98,7 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
 
 // sends a character to the LCD 
 void lcd_data(unsigned char temp1) {
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
  uint8_t i, data;
  uint8_t *pfont;
 
@@ -184,7 +184,7 @@ void lcd_command(unsigned char temp1) {
 // Initialise: 
 // Must be called first .
  
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
 void lcd_init(void) {
 
  #if (LCD_INTERFACE_MODE == MODE_SPI)
@@ -200,12 +200,14 @@ void lcd_init(void) {
 
    wait_about100ms(); // Set LCD for 100 ms into RESET
    HW_LCD_RES_PORT |= _BV(HW_LCD_RES_PIN);
+   wait_about30ms();  // Wait for 30 ms after RESET
  #endif
  #if (LCD_INTERFACE_MODE == MODE_I2C)
    i2c_init();		// init the I2C interface
+   wait_about30ms();	// Set LCD for 100 ms into RESET
  #endif
-   wait_about30ms();  // Wait for 30 ms after RESET
 
+   lcd_command(CMD_DISPLAY_OFF);		// display off
    lcd_command(CMD_INTERNAL_RESET);		// 0xe2
    lcd_command(CMD_SET_BIAS_9);			// 0xa3
  #if (LCD_ST7565_H_FLIP > 0)
@@ -219,6 +221,7 @@ void lcd_init(void) {
    lcd_command(CMD_SET_COM_NORMAL);		// 0xc0
  #endif
 
+ #if (LCD_ST_TYPE == 7565)
    //Booster on, Voltage regulator/follower circuit on
    lcd_command(CMD_SET_POWER_CONTROL | 7);	// 0x28 BOOSTER ON | V_REGULATOR ON | V_FOLLOWER ON
    lcd_command(CMD_SET_RESISTOR_RATIO | (7 & LCD_ST7565_RESISTOR_RATIO));	// 0x20
@@ -226,18 +229,48 @@ void lcd_init(void) {
    lcd_command(CMD_SET_VOLUME_FIRST);		// 0x81 set  volume command
    lcd_command(eeprom_read_byte(&EE_Volume_Value) & 0x3f);	//set volume value of EEprom
 
-   lcd_command(CMD_SET_DISP_START_LINE | 0);	// 0x40
-   lcd_command(CMD_SET_ALLPTS_NORMAL);		// 0xa4
-   lcd_command(CMD_SET_DISP_NORMAL);		// 0xa6 not reverse
 
 //   lcd_command(CMD_SET_STATIC_OFF);		// 0xac , set Static indicator off
 //   lcd_command(CMD_SET_STATIC_REG | 0);	// 0x00 , set Static indicator no flashing
 
    lcd_command(CMD_RMW);			// 0xe0 , set Read Modify Write mode
-   lcd_command(CMD_DISPLAY_ON);			// 0xaf
 
    //Center the two lines
    //lcd_command(CMD_SET_DISP_START_LINE | (0x3f & 40));
+ #endif
+ #if (LCD_ST_TYPE == 1306)
+
+   lcd_command(CMD_SET_DIVIDE_RATIO);		// set display clock div (0xd5), 0x70 is default	
+   lcd_command(0x80);		// suggested ratio
+
+//   lcd_command(CMD_SET_MUX_RATIO);		// set multiplex (0xa8)
+//   lcd_command(0x3f);
+
+//   lcd_command(CMD_SET_DISPLAY_OFFSET);	// set display offset (0xd3)
+//   lcd_command(0x00);		// no offset
+
+   lcd_command(CMD_SET_ChargePump);		// charge pump setting (0x8d)
+   lcd_command(0x14);
+
+//   lcd_command(CMD_SET_MEMORY_ADDR_MODE);		// set memory addressing mode (0x20)
+//   lcd_command(0x00);		// horizontal mode
+
+//   lcd_command(CMD_SET_COM_Pins_CONFIG);		// sequential COM pin configuration (0xda)
+//   lcd_command(0x12);		// disable COM Left/Right remap, alternative COM pin
+
+   lcd_command(CMD_SET_VOLUME_FIRST);	// set contrast
+   lcd_command(eeprom_read_byte(&EE_Volume_Value));	//set volume value of EEprom
+
+//   lcd_command(CMD_SET_PreCharge_PERIOD);		// set precharge periodi (0xd9), 0x22 is reset value
+//   lcd_command(0xf1);
+
+//   lcd_command(CMD_SET_Vcomh_DESELECT_LEVEL);		// set Vcomh deselect level (0xdb), 0x20 is reset value
+//   lcd_command(0x40);
+ #endif
+   lcd_command(CMD_SET_DISP_START_LINE | 0);	// 0x40
+   lcd_command(CMD_SET_ALLPTS_NORMAL);		// 0xa4
+   lcd_command(CMD_SET_DISP_NORMAL);		// 0xa6 not reverse
+   lcd_command(CMD_DISPLAY_ON);			// 0xaf
 
    lcd_clear();
 
@@ -305,7 +338,7 @@ void lcd_init(void) {
 }
 #endif
  
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
 void lcd_powersave(void) {
      lcd_command(CMD_DISPLAY_OFF);
      lcd_command(CMD_SET_ALLPTS_ON); // Enter power save mode
@@ -315,7 +348,7 @@ void lcd_powersave(void) {
 // send the command to clear the display 
  
 void lcd_clear(void) {
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    unsigned char p;
    unsigned char count;
 
@@ -408,7 +441,7 @@ void lcd_clear_line(void) {
 }
 #endif
 
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
 static unsigned char reverse(unsigned char b)
 {
    unsigned char result = 0;
@@ -429,7 +462,7 @@ void lcd_pgm_bitmap(const unsigned char * pbitmap,
                     unsigned char y,
                     unsigned char options)
 {
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    if (x >= SCREEN_WIDTH || (y >= SCREEN_HEIGHT))
       return;
 

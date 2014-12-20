@@ -596,7 +596,6 @@ ad_3924:
 /*  is done by ((6744116/(PIN_RM+PIN_RP+R_L_VAL))*(6744116/(PIN_RM+PIN_RP+R_L_VAL))) / (cap_val_nF * (cap_val_nF + (137180/(PIN_RM+PIN_RP+R_L_VAL)))) */
 /*  is done by 872520 / (cap_val_nF * (cap_val_nF + 19)) */
 ; #define FAKTOR_ESR (9537620/(PIN_RM+PIN_RP+R_L_VAL))
- #define FAKTOR_ESR (8500000/(PIN_RM+PIN_RP+R_L_VAL))
 
 	ldd	r22, Y+cap_val_nF;	/* sumvolt1 -= (1745098UL*MAX_CNT) / (cap_val_nF * (cap_val_nF + 19)); */
 	ldd	r23, Y+cap_val_nF+1;
@@ -604,6 +603,8 @@ ad_3924:
 	mov	r24, r1			/* upper bits of cap_val_nF are allway zero */
 ;	ldd	r25, Y+cap_val_nF+3;
 	mov	r25, r1			/* upper bits of cap_val_nF are allway zero */
+#if 0
+ #define FAKTOR_ESR (8500000/(PIN_RM+PIN_RP+R_L_VAL))
 	movw	r18, r22;		/* r18:21 = r22:25 = cap_val_nF; */
 	movw	r20, r24;
        	subi	r22, lo8(-137180/(PIN_RM+PIN_RP+R_L_VAL)); 0xED; 237
@@ -611,6 +612,18 @@ ad_3924:
        	sbci	r24, hlo8(-137180/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
        	sbci	r25, hhi8(-137180/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
 	call	__mulsi3;		/* cap_val_nF * (cap_val_nF + 19) */
+#else
+; #define FAKTOR_ESR (5256239/(PIN_RM+PIN_RP+R_L_VAL))
+; #define FAKTOR_ESR (5498588/(PIN_RM+PIN_RP+R_L_VAL))
+ #define FAKTOR_ESR (6168770/(PIN_RM+PIN_RP+R_L_VAL))
+       	subi	r22, lo8(361000/(PIN_RM+PIN_RP+R_L_VAL)); 0xED; 237
+       	sbci	r23, hi8(361000/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
+       	sbci	r24, hlo8(361000/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
+       	sbci	r25, hhi8(361000/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
+	movw	r18, r22;		/* r18:21 = r22:25 = cap_val_nF; */
+	movw	r20, r24;
+	call	__mulsi3;		/* (cap_val_nF - 50) * (cap_val_nF - 50) */
+#endif
        	movw	r18, r22;
        	movw	r20, r24;
        	ldi	r22, lo8(FAKTOR_ESR*FAKTOR_ESR*MAX_CNT); 0x36; 54

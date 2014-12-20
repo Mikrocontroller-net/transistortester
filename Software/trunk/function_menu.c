@@ -27,14 +27,14 @@
  #endif
  #ifdef WITH_VEXT
   #define MODE_VEXT NNN+1	/* external voltage measurement and zener voltage */
-  #if (LCD_ST_TYPE == 7565)
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    #define MODE_CONTRAST NNN+2	/* select contrast */
    #define MODE_SHOW NNN+3	/* show data function */
   #else
    #define MODE_SHOW NNN+2	/* show data function */
   #endif
  #else
-  #if (LCD_ST_TYPE == 7565)
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    #define MODE_CONTRAST NNN+1	/* select contrast */
    #define MODE_SHOW NNN+2	/* show data function */
   #else
@@ -58,14 +58,14 @@
  #endif
  #ifdef WITH_VEXT
   #define MODE_VEXT NNN+1	/* external voltage measurement and zener voltage */
-  #if (LCD_ST_TYPE == 7565)
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    #define MODE_CONTRAST NNN+2	/* select contrast */
    #define MODE_SHOW NNN+3	/* show data function */
   #else
    #define MODE_SHOW NNN+2	/* show data function */
   #endif
  #else
-  #if (LCD_ST_TYPE == 7565)
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    #define MODE_CONTRAST NNN+1	/* select contrast */
    #define MODE_SHOW NNN+2	/* show data function */
   #else
@@ -230,7 +230,7 @@ void function_menu() {
         if (func_number == MODE_SELFTEST) AutoCheck(0x11);	// Full selftest with calibration
   #endif
         if (func_number == MODE_VEXT) show_vext();
-  #if (LCD_ST_TYPE == 7565)
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
         if (func_number == MODE_CONTRAST) set_contrast();
   #endif
         if (func_number == MODE_SHOW) {
@@ -285,7 +285,7 @@ void message2line(uint8_t number) {
  #ifdef WITH_VEXT
      if (number == MODE_VEXT) lcd_MEM_string(VOLTAGE_str); 
  #endif
- #if (LCD_ST_TYPE == 7565)
+ #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
      if (number == MODE_CONTRAST) lcd_MEM_string(CONTRAST_str); 
  #endif
      if (number == MODE_SHOW) {
@@ -827,11 +827,15 @@ void do_10bit_PWM() {
   DDRB  &= ~(1<<DDB2);	// disable output 
 } /* end do_10bit_PWM */
 
- #if (LCD_ST_TYPE == 7565)
+ #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
 /* *************************************************** */
 /* set the contrast value of the ST7565 display */
 /* *************************************************** */
-#define MAX_CONTRAST 0x3f
+ #if (LCD_ST_TYPE == 1306)
+  #define MAX_CONTRAST 0x7f
+ #else
+  #define MAX_CONTRAST 0x3f
+ #endif
 void set_contrast(void) {
 uint8_t key_pressed;
 uint8_t contrast;

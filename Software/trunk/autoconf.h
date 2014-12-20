@@ -3,7 +3,7 @@
        Automatic Configuration
 */
 
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
 /* Define under which conditions a graphical display is supported. */
 /* The graphical display should at least support 128x64 pixels. */
  #define WITH_GRAPHICS
@@ -12,7 +12,7 @@
  #ifdef FONT_6X8
   #define TWENTY_COLUMN_LCD
  #endif
-#else  /* no ST7565 graphic controller */
+#else  /* no ST7565 or SSD1306 graphic controller */
  #ifdef FOUR_LINE_LCD
   #define TWENTY_COLUMN_LCD   /* usually 20x4 character display */
  #endif
@@ -483,7 +483,7 @@
 #define LCD_CHAR_DEGREE 0xdf            // Character for degree
 #define LCD_CHAR_INSEP 0xff		// used as space character without separating text
 
-#if (LCD_ST_TYPE == 7565)
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
         #undef LCD_CHAR_DEGREE
         #define LCD_CHAR_DEGREE 0xf8	// Character for degree
         #undef LCD_CHAR_OMEGA

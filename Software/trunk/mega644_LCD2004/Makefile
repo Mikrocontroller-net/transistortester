@@ -64,15 +64,6 @@ CFLAGS += -DWITH_ROTARY_SWITCH=1
 #                          LANG_LITHUANIAN, LANG_POLISH, LANG_RUSSIAN , LANG_SLOVAK, LANG_SLOVENE, LANG_UKRAINIAN
 UI_LANGUAGE = LANG_ENGLISH
 
-# Can be used with a 4x20 character display for better using the additional space.
-# Additional parameters, which are shown only short in row 2, will be shown in row 3 and 4 with this option.
-CFLAGS += -DFOUR_LINE_LCD
-
-# The PAGE_MODE activates a moving line cursor for menu function selection together with FOUR_LINE_LCD
-# and WITH_ROTARY_SWITCH.
-# Without the PAGE_MODE option, the line cursor is fixed to line 3 and the text moves.
-#CFLAGS += -DPAGE_MODE
-
 # The LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset.
 # This lcd-display don't have a character for Ohm and for µ (micro).
 # Russian language requires a LCD controller with russian characterset and option LCD_CYRILLIC!
@@ -82,9 +73,34 @@ CFLAGS += -DFOUR_LINE_LCD
 # For this LCD type the contrast must be set with software command.
 #CFLAGS += -DLCD_DOGM
 
+# Can be used with a 4x20 character display for better using the additional space.
+# Additional parameters, which are shown only short in row 2, will be shown in row 3 and 4 with this option.
+CFLAGS += -DFOUR_LINE_LCD
+
+# The PAGE_MODE activates a moving line cursor for menu function selection together with FOUR_LINE_LCD
+# and WITH_ROTARY_SWITCH.
+# Without the PAGE_MODE option, the line cursor is fixed to line 3 and the text moves.
+#CFLAGS += -DPAGE_MODE
+
+
 # The LCD_ST7565 option must be set to support a 128x64 LCD graphics display
-# with ST7565 controller. It is controlled with a 1-bit interface.
+# with ST7565 controller. It is controlled with a 1-bit interface (SPI or I2C)
+# The normal ST7565 controller will be supported by setting the WITH_LCD_ST7565 to 1 or 7565.
+# The special action for a simular SSD1306 controller can be activated by
+# setting the WITH_LCD_ST7565 variable to 1306.
 #WITH_LCD_ST7565 = 1
+#WITH_LCD_ST7565 = 1306
+
+# Normally the ST7565 controller is connected with a SPI 4-wire interface, but
+# you can enable a I2C interface with address 0x3c for the SSD1306 controller 
+# by setting the LCD_INTERFACE_MODE to 2.
+# The SCL signal is available at PD5 (LCD-E, LCD-6), the SDA signal at PD2 (LCD-D6, LCD-13).
+# A pull up resistor of about 4.7k is required for both signals to 3.3V.
+# Please check, if your display module can also tolerate a 5V signal level.
+#CFLAGS += -DLCD_INTERFACE_MODE=2
+
+# The I2C Address can be preset to a address of 0x3d instead of 0x3c by setting the constant LCD_I2C_ADDR.
+#CFLAGS += -DLCD_I2C_ADDR=0x3d
 
 # If LCD_ST7565 option is used: Set the resitor ratio for the internal
 # voltage regulator. Supported value range: 0..7.
@@ -95,6 +111,7 @@ LCD_ST7565_RESISTOR_RATIO = 4
 CFLAGS += -DLCD_ST7565_H_FLIP=1
 # With LCD_ST7565_H_OFFSET you can specify a horizontal pixel offset to the display window.
 # The controller knows 132 horizontal pixel, the window shows only 128 pixel.
+# OFFSET values can vary for the connected display type to 0, 2 or 4.
 CFLAGS += -DLCD_ST7565_H_OFFSET=4
 # If LCD_ST7565 option is set to 1: Flip the display's vertical direction
 CFLAGS += -DLCD_ST7565_V_FLIP=0
@@ -114,11 +131,15 @@ CFLAGS += -DFONT_8X16
 CFLAGS += -DWITH_SELFTEST
 # You can enable the extended tests T1 to T7 for the atmega168 by selecting the  NO_COMMON_COLLECTOR_HFE  option.
 # The T1 to T7 tests are usefull to find problems with your tester.
-#CFLAGS += -DNO_COMMON_COLLECTOR_HFE
-#CFLAGS += -DNO_COMMON_EMITTER_HFE
 # You can also disable the extended tests T1 to T7 with the option NO_TEST_T1_T7 to accelerate the calibration
 # for the atmega328 and atmega168.
 #CFLAGS += -DNO_TEST_T1_T7
+
+# FREQUENCY_50HZ enables a 50 Hz frequency generator for up to one minute at the end of selftests.
+#CFLAGS += -DFREQUENCY_50HZ
+
+#CFLAGS += -DNO_COMMON_COLLECTOR_HFE
+#CFLAGS += -DNO_COMMON_EMITTER_HFE
 
 # AUTO_CAL will enable the autocalibration of zero offset of capacity measurement and
 # also the port output resistance values will be find out in SELFTEST section.
@@ -126,9 +147,6 @@ CFLAGS += -DWITH_SELFTEST
 # low capacity measurement and also for the AUTOSCALE_ADC measurement.
 # The AUTO_CAL option is only selectable for mega168 and mega328.
 CFLAGS += -DAUTO_CAL
-
-# FREQUENCY_50HZ enables a 50 Hz frequency generator for up to one minute at the end of selftests.
-#CFLAGS += -DFREQUENCY_50HZ
 
 
 # The WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring.
@@ -196,7 +214,7 @@ OP_MHZ = 8
 #CFLAGS += -DEBC_STYLE
 #CFLAGS += -DEBC_STYLE=321
 
-# Setting of NO_NANO avoids the use of n as prefix for Farad (nF), the mikro prefix is used insted (uF).
+# Setting of NO_NANO avoids the use of n as prefix for Farad (nF), the mikro prefix is used instead (uF).
 # CFLAGS += -DNO_NANO
 
 # The PULLUP_DISABLE option disable the pull-up Resistors of IO-Ports.
@@ -289,11 +307,11 @@ GetESR.o: ../GetESR.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ########### Compile C or Assembler , Assembler saves more than 400 bytes flash
-ifeq ($(WITH_LCD_ST7565),1)
-lcd-routines.o: ../lcd-routines.c $(MKFILES)
+ifeq ($(WITH_LCD_ST7565),0)
+lcd-routines.o: ../lcd-routines.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 else
-lcd-routines.o: ../lcd-routines.S $(MKFILES)
+lcd-routines.o: ../lcd-routines.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 endif
 

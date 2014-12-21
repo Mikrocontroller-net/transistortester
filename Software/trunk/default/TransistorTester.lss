@@ -11279,21 +11279,16 @@ start:
     3878:	80 91 12 01 	lds	r24, 0x0112
     387c:	08 17       	cp	r16, r24
     387e:	98 f2       	brcs	.-90     	; 0x3826 <main+0x68e>
-          lcd_MEM_string(AnKat);	//"->|-"
-       } else {
-          lcd_MEM_string(KatAn);	//"-|<-"
-       }
+    if (_trans->c != diodes.Anode[ii])
+       options |= OPT_VREVERSE;
+    lcd_pgm_bitmap(bmp_vakdiode_data, 90+24, 32, options);
+#endif    
     }
     PinLayout('E','B','C'); 		//  EBC= or 123=...
     3880:	43 e4       	ldi	r20, 0x43	; 67
     3882:	62 e4       	ldi	r22, 0x42	; 66
     3884:	85 e4       	ldi	r24, 0x45	; 69
     3886:	0e 94 d9 01 	call	0x3b2	; 0x3b2 <PinLayout>
-    options = 0;
-    if (_trans->c != diodes.Anode[ii])
-       options |= OPT_VREVERSE;
-    lcd_pgm_bitmap(bmp_vakdiode_data, 90+24, 32, options);
-#endif    
     lcd_line2(); //2. row 
     388a:	0e 94 30 01 	call	0x260	; 0x260 <lcd_line2>
        DisplayValue(_trans->ices,-5,'A',3);

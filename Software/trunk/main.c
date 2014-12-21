@@ -663,14 +663,14 @@ start:
        } else {
           lcd_MEM_string(KatAn);	//"-|<-"
        }
-    }
-    PinLayout('E','B','C'); 		//  EBC= or 123=...
 #ifdef WITH_GRAPHICS
     options = 0;
     if (_trans->c != diodes.Anode[ii])
        options |= OPT_VREVERSE;
     lcd_pgm_bitmap(bmp_vakdiode_data, 90+24, 32, options);
 #endif    
+    }
+    PinLayout('E','B','C'); 		//  EBC= or 123=...
     lcd_line2(); //2. row 
 #ifndef FOUR_LINE_LCD
  #ifdef SHOW_ICE

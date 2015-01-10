@@ -270,9 +270,10 @@ void lcd_init(void) {
    lcd_command(CMD_SET_DISP_START_LINE | 0);	// 0x40
    lcd_command(CMD_SET_ALLPTS_NORMAL);		// 0xa4
    lcd_command(CMD_SET_DISP_NORMAL);		// 0xa6 not reverse
-   lcd_command(CMD_DISPLAY_ON);			// 0xaf
 
    lcd_clear();
+
+   lcd_command(CMD_DISPLAY_ON);			// 0xaf
 
    lcd_set_cursor(0,0);
 }

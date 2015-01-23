@@ -17,6 +17,9 @@
 /* ADC_Sleep_Mode enables the sleep state for reading ADC */
 //#define ADC_Sleep_Mode
 
+/* ESR_LONG_PULSE can be set for longer current pulses */
+//#define ESR_LONG_PULSE
+
 /* ESR_DEBUG enables additional Output on row 3 and row 4 */
 //#define ESR_DEBUG
 
@@ -120,31 +123,64 @@
 				// Charging of capacitor begins with negative voltage and
 				// should be zero at SH time with a zero ESR capacitor.
  .macro DelayBigCap
- 	call	wait20us;			// SH at 2.5 ADC clocks behind start = 20 us
+ /* defines the pulse length with current */
 #ifdef ADC_Sleep_Mode
  /* Wake up from sleep with Interrupt: 1+4+4T, jmp, rti, ldi, out takes 18 clock tics,  */
  /* 3+1 clock tics (sts,out) are needed for instructions before the current is switched off. */
  #if F_CPU == 8000000UL
-         /* current begin after last ADCready:  2.25us (wakeup) + 5us + 5tics = 7.875us  */
+  #ifdef ESR_LONG_PULSE
+ 	call	wait20us;			// SH at 2.5 ADC clocks behind start = 20 us
+         /* current begin after last ADCready:  2.25us (wakeup) + 20us + 5tics = 7.875us  */
 	/* half puls length = (20us - 7.875us) = 12.125us (PL=24.25us) */
 	call	wait3us; /* pulse length 23us + 2 clock tics (CALL instead of RCALL) = 23.25 us @ 8 MHz */ 
 	wdr	;
+  #else /* no ESR_LONG_PULSE, 8MHz, interrupt mode */
+ 	// SH at 2.5 ADC clocks behind start = 20 us
+   #define EXTRA_DELAY2PULSE wait3us
+         /* current begin after last ADCready:  2.25us (wakeup) + 13us + 6tics = 16.0  us  */
+	/* half puls length = (20us - 16.0  us) = 4.0  us (PL= 8.0 us) */
+        call	wait5us;
+	call	wait2us; /* pulse length 7us + 2 clock tics (CALL instead of RCALL) = 7.25 us @ 8 MHz */ 
+	push    r24;            /* 7.5   us */
+	pop     r24;            /* 7.75  us */
+	wdr	;
+	wdr	;		/* 8.0   us */
+  #endif
  #endif
  #if F_CPU == 16000000UL
+  #ifdef ESR_LONG_PULSE
+ 	// SH at 2.5 ADC clocks behind start = 20 us
+ 	call	wait20us;			// SH at 2.5 ADC clocks behind start = 20 us
         /* current begin after last ADCready:  1.125us (wakeup) + 5us + 5tics = 6.4375us  */
 	/* half puls length = (20us - 6.4375us) = 13.5625us (PL=27.125us) */
  	call	wait5us
 	call	wait1us; /* pulse length 26us + 3 clock tics (CALL instead of RCALL) = 26.1875 us */
-	push	r24;		/* 26.3125 us */
-	pop	r24;            /* 26.4375 us */
-	push	r24;		/* 26.5625 us */
-	pop	r24;            /* 26.6875 us */
- #endif
+	push    r24;            /* 26.3125 us */
+	pop     r24;            /* 26.4375 us */
+	push    r24;            /* 26.5625 us */
+	pop     r24;            /* 26.6875 us */
+  #else /* no ESR_LONG_PULSE, 16MHz, interrupt mode */
+   #define EXTRA_DELAY2PULSE wait4us
+        /* current begin after last ADCready:  1.125us (wakeup) + 14us + 6tics = 15.5 us  */
+	/* half puls length = (20us - 15.5 us) = 4.5 us (PL=9.0 us) */
+ 	call	wait5us
+	call	wait3us; /* pulse length 8us + 3 clock tics (CALL instead of RCALL) = 8.1875 us */
+	push    r24;            /* 8.3125 us */
+	pop     r24;            /* 8.4375 us */
+	push    r24;            /* 8.5625 us */
+	pop     r24;            /* 8.6875 us */
+	push    r24;            /* 8.8125 us */
+	pop     r24;            /* 8.9375 us */
+	wdr	;		/* 9.0    us */
+  #endif /* ESR_LONG_PULSE */
+ #endif	/* 16 MHz */
 
 
-#else
- /* Polling mode: lds,sbrc,sts and out Instructions are 7 clock tics */
+#else /* Polling mode: lds,sbrc,sts and out Instructions are 7 clock tics */
  #if F_CPU == 8000000UL
+  #ifdef ESR_LONG_PULSE
+ 	// SH at 2.5 ADC clocks behind start = 20 us
+ 	call	wait20us;			// SH at 2.5 ADC clocks behind start = 20 us
         /* current begin after last ADCready:  0.875us (loop) + 5us + 5tics = 6.5us  */
 	/* half puls length = (20us - 6.5us) = 13.5us  (PL=27us) */
  	call	wait5us
@@ -152,19 +188,44 @@
          /* pulse length 26us + 3 clock tics (CALL instead of RCALL) = 26.375 us @ 8 MHz */
 	push	r24;		/* 26.625 us */
 	pop	r24;            /* 26.875 us */
-	wdr	;
+	wdr	;		/* 27.0   us */
 	wdr	;		/* 27.125 us */
+  #else /* no ESR_LONG_PULSE, 8MHz, polling mode */
+   #define EXTRA_DELAY2PULSE wait4us
+        /* current begin after last ADCready:  0.875us (loop) + 14us + 6tics = 15.625us  */
+	/* half puls length = (20us - 15.625us) = 4.375us  (PL=8.75us) */
+ 	call	wait5us
+	call	wait3us;
+         /* pulse length 8us + 2 clock tics (CALL instead of RCALL) = 8.25 us @ 8 MHz */
+	wdr	;		/* 8.375   us */
+	wdr	;		/* 8.5   us */
+	wdr	;		/* 8.625 us */
+	wdr	;		/* 8.75  us */
+  #endif /* ESR_LONG_PULSE */
  #endif
  #if F_CPU == 16000000UL
+ 	// SH at 2.5 ADC clocks behind start = 20 us
+  #ifdef ESR_LONG_PULSE
+ 	call	wait20us;			// SH at 2.5 ADC clocks behind start = 20 us
         /* current begin after last ADCready:  0.4375us (loop) + 5us + 5tics = 5.75us  */
 	/* half puls length = (20us - 5.75us) = 14.25us (PL=28.5us) */
  	call	wait5us
  	call	wait3us;
-        /* pulse length 28us + 3 clock tics (CALL instead of RCALL) = 28.1875 us */
-	push	r24;		/* 28.3125 us */
-	pop	r24;            /* 28.4375 us */
-	wdr	;		/* 28.50   us */
- #endif
+	/* pulse length 28us + 3 clock tics (CALL instead of RCALL) = 28.1875 us */
+	push    r24;            /* 28.3125 us */
+	pop     r24;            /* 28.4375 us */
+	wdr     ;               /* 28.50   us */
+  #else /* no ESR_LONG_PULSE, 16Mhz, polling mode */
+   #define EXTRA_DELAY2PULSE wait5us
+        /* current begin after last ADCready:  0.4375us (loop) + 15us + 6tics = 15.8125us  */
+	/* half puls length = (20us - 15.8125us) = 4.1875us (PL=8.375us) */
+ 	call	wait5us
+ 	call	wait3us;
+        /* pulse length 8us + 2 clock tics (CALL instead of RCALL) = 8.125 us */
+	push    r24;            /* 8.25   us */
+	pop     r24;            /* 8.375  us */
+  #endif /* ESR_LONG_PULSE */
+ #endif	/* 16 MHz */
 #endif
  .endm
 
@@ -238,8 +299,13 @@ ad_35ba:
 ;	std	Y+cap_val_nF+3, r21
 
 
+#ifdef ESR_LONG_PULSE
 	cpi	r18, lo8(1800/10);       /* if (cap_val_nF < (1800/10)) return(0xffff);   //capacity lower than 0.18 uF */
 	ldi	r22, hi8(1800/10)
+#else
+	cpi	r18, lo8(900/10);       /* if (cap_val_nF < (900/10)) return(0xffff);   //capacity lower than 90 nF */
+	ldi	r22, hi8(900/10)
+#endif
 	cpc	r19, r22
 	cpc	r20, zero_reg
 	cpc	r21, zero_reg
@@ -353,6 +419,8 @@ ad_3604:
 	std	Y+sumvolt2+3, zero_reg;
 	std	Y+LowUpCount, zero_reg;
 	std	Y+HighUpCount, zero_reg;
+	std	Y+HighTooHigh, zero_reg;
+	std	Y+LowTooHigh, zero_reg;
 	call	EntladePins;	/* EntladePins();	// discharge capacitor */
 	ldi	r24, TXD_VAL;
 	AOUT	ADC_PORT, r24; /* ADC_PORT = TXD_VAL;	// switch ADC-Port to GND */
@@ -367,18 +435,23 @@ ad_3604:
 	AOUT	ADC_DDR, r19;		/* switch High Pin to GND */
 	AOUT	R_PORT, LoPinR_L
 	AOUT	R_DDR, LoPinR_L
+#ifdef ESR_LONG_PULSE
+#warning "Long current pulses are used for ESR-measurement!"
 	call	wait10us;	/* Delay about half the current puls-length of measurement loop */
-#ifdef ADC_Sleep_Mode
- #if F_CPU == 8000000UL
+ #ifdef ADC_Sleep_Mode
+  #if F_CPU == 8000000UL
 	call	wait1us;	/* shorter pulse-length */
+  #else
+	call	wait2us;
+  #endif
  #else
 	call	wait2us;
  #endif
 #else
-	call	wait2us;
+	call	wait4us;	/* Delay about half the current puls-length of measurement loop */
 #endif
-	AOUT	R_PORT, zero_reg;	/* R_PORT = 0 */
 	AOUT	R_DDR, zero_reg;	/* R_DDR = 0 */
+	AOUT	R_PORT, zero_reg;	/* R_PORT = 0 */
 
 	   // Measurement frequency is given by sum of ADC-Reads < 1116 Hz for normal ADC speed.
 	   // ADC Sample and Hold (SH) is done 1.5 ADC clock number after real start of conversion.
@@ -394,7 +467,7 @@ ad_3604:
 	ldi	r26, (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV;	/* enable ADC and start with ADSC */
 	mov	r8, r26
 	      /* ********* Forward direction, connect Low side with GND *********** */
-ad_3692:
+esr_loop:
 	ldd	r19, Y+LoADC;
 	AOUT	ADC_DDR, r19;		/* ADC_DDR = LoADC;	// switch Low-Pin to output (GND) */
 	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L */
@@ -411,7 +484,12 @@ ad_3692:
 	StartADCwait			/* start ADC and wait */
 			// Start Conversion, real start is next rising edge of ADC clock
 	sts	ADCSRA, r8;		/* ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; // enable ADC and start */
-	call	wait5us;
+#ifdef ESR_LONG_PULSE
+	call	wait5us;		/* wait normal to start the longer current pulse */
+#else
+	call	wait10us;		/* wait longer to start the short current pulse */
+	call	EXTRA_DELAY2PULSE;
+#endif
 	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L;	// switch R-Port to VCC */
 	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L;	// switch R_L port for HighPin to output (VCC) */
 	DelayBigCap;			/* wait the time defined by macro */
@@ -456,7 +534,12 @@ ad_370c:
 	// ****** Polling mode big cap
 	StartADCwait		/* start ADC and wait */
 	sts	ADCSRA, r8;	/* ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; // enable ADC and start with ADSC */
-	call	wait5us;
+#ifdef ESR_LONG_PULSE
+	call	wait5us;		/* wait normal to start the longer current pulse */
+#else
+	call	wait10us;		/* wait longer to start the short current pulse */
+	call	EXTRA_DELAY2PULSE;
+#endif
 	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L; */
 	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L;	// switch LowPin with 680 Ohm to VCC */
 
@@ -507,13 +590,13 @@ ad_37f4:
 	std	Y+sumvolt1+3, r23;
 
   	/* Y+adcvv1 is still the voltage of forward direction, r20:21 the voltage of reverse direction */
-	ldi	r18, lo8(100);
+	ldi	r18, lo8(50);
 	cp	r18, r20;
 	cpc	zero_reg, r21;
-	brcs	is_ok1;		/* r20:21 >= 100 */
+	brcs	is_ok1;		/* r20:21 >= 50 */
 	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L; */
 	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L;	// switch LowPin with 680 Ohm to VCC */
-	call	wait2us;			/* additional charge the capacitor */
+	call	wait1us;			/* additional charge the capacitor */
 	AOUT	R_DDR, zero_reg; 	// switch current off
 	AOUT	R_PORT, zero_reg; 
 	ldd	r24, Y+LowUpCount; 	/* count additional load pulses at Low side */
@@ -532,14 +615,14 @@ is_ok1b:
 	ldd	r24, Y+adcvv1;
 	ldd	r25, Y+adcvv1+1;
 	cp	r18, r24;
-	cpc	zero_reg, r25;	/* adcvv1 >= 100 */
+	cpc	zero_reg, r25;	/* adcvv1 >= 50 */
 	brcs	is_ok2;
 	ldd	r19, Y+LoADC;
 	AOUT	ADC_DDR, r19;		/* ADC_DDR = LoADC;	// switch Low-Pin to output (GND) */
 	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L;	// switch R-Port to VCC */
 	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L;	// switch R_L port for HighPin to output (VCC) */
-	call	wait2us;			/* additional charge the capacitor */
-	DelayBigCap;			/* wait the time defined by macro */
+	call	wait1us;			/* additional charge the capacitor */
+;##	DelayBigCap;			/* wait the time defined by macro */
 	AOUT	R_DDR, zero_reg;	/* R_DDR = 0; // switch current off,  SH is 1.5 ADC clock behind real start */
 	AOUT	R_PORT, zero_reg;	/* R_PORT = 0; */
 	ldd	r24, Y+HighUpCount;	/* count additional load pulses at High side */
@@ -559,7 +642,7 @@ is_ok2b:
 	mov	r21, r13;
 	cpi	r21, MAX_CNT;
 	breq	ad_38ac;
-	rjmp	ad_3692;		/* } // end for */
+	rjmp	esr_loop;		/* } // end for */
 ad_38ac:
 
 #if RRpinMI == PIN_RM
@@ -603,16 +686,8 @@ ad_3924:
 	mov	r24, r1			/* upper bits of cap_val_nF are allway zero */
 ;	ldd	r25, Y+cap_val_nF+3;
 	mov	r25, r1			/* upper bits of cap_val_nF are allway zero */
-#if 0
- #define FAKTOR_ESR (8500000/(PIN_RM+PIN_RP+R_L_VAL))
-	movw	r18, r22;		/* r18:21 = r22:25 = cap_val_nF; */
-	movw	r20, r24;
-       	subi	r22, lo8(-137180/(PIN_RM+PIN_RP+R_L_VAL)); 0xED; 237
-       	sbci	r23, hi8(-137180/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
-       	sbci	r24, hlo8(-137180/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
-       	sbci	r25, hhi8(-137180/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
-	call	__mulsi3;		/* cap_val_nF * (cap_val_nF + 19) */
-#else
+
+#ifdef ESR_LONG_PULSE
 ; #define FAKTOR_ESR (5256239/(PIN_RM+PIN_RP+R_L_VAL))
 ; #define FAKTOR_ESR (5498588/(PIN_RM+PIN_RP+R_L_VAL))
  #define FAKTOR_ESR (6168770/(PIN_RM+PIN_RP+R_L_VAL))
@@ -623,6 +698,16 @@ ad_3924:
 	movw	r18, r22;		/* r18:21 = r22:25 = cap_val_nF; */
 	movw	r20, r24;
 	call	__mulsi3;		/* (cap_val_nF - 50) * (cap_val_nF - 50) */
+#else
+;#define FAKTOR_ESR (3480000/(PIN_RM+PIN_RP+R_L_VAL))
+#define FAKTOR_ESR (920000/(PIN_RM+PIN_RP+R_L_VAL))
+      	subi	r22, lo8(433200/(PIN_RM+PIN_RP+R_L_VAL)); 0xED; 237
+      	sbci	r23, hi8(433200/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
+      	sbci	r24, hlo8(433200/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
+      	sbci	r25, hhi8(433200/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
+	movw	r18, r22;		/* r18:21 = r22:25 = (cap_val_nF-60); */
+	movw	r20, r24;
+	call	__mulsi3;		/* (cap_val_nF - 60) * (cap_val_nF - 60) */
 #endif
        	movw	r18, r22;
        	movw	r20, r24;

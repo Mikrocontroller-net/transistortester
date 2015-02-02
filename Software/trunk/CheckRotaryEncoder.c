@@ -149,10 +149,10 @@ void CheckRotaryEncoder(void) {
      if (((iim == 0) && (close_state != 0)) || ((iim  == 3) && (open_state != 0))) {
         if (iim == 0) lcd_data('C');
         if (iim == 3) lcd_data('o');
-        taste = wait_for_key_ms(800);	// this state is monitored for a long time
+        taste = wait_for_key_ms(2000);	// this state is monitored for a long time
      } else {
         lcd_space();
-        taste = wait_for_key_ms(200);	// this state is monitored only for a short time
+        taste = wait_for_key_ms(400);	// this state is monitored only for a short time
      }
      if (taste != 0) break;
   } /* end for ii */

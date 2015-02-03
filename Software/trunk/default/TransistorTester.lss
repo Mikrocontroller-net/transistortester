@@ -479,9 +479,9 @@ void lcd_line4() {
 
 0000026a <lcd_clear>:
        lcd_write_data(0);
+     lcd_command(CMD_RMW_CLEAR); // Clear Read-Modify-Write ???
    }
 
-   lcd_command(CMD_RMW_CLEAR); // Clear Read-Modify-Write ???
 #else
    lcd_command(CLEAR_DISPLAY);
      26a:	81 e0       	ldi	r24, 0x01	; 1

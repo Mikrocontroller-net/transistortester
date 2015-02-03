@@ -353,17 +353,17 @@ void lcd_clear(void) {
    unsigned char p;
    unsigned char count;
 
-   lcd_command(CMD_RMW); // Start Read-Modify-Write
 
    for (p = 0; p < 8; p++) {
-     lcd_command(CMD_SET_PAGE | (0x0f & p));
-     lcd_command(CMD_SET_COLUMN_UPPER);
+     lcd_command(CMD_SET_COLUMN_UPPER);		// set horizontal position to 0
      lcd_command(CMD_SET_COLUMN_LOWER);
+     lcd_command(CMD_SET_PAGE | (0x0f & p));	// set page 0 to 7
+     lcd_command(CMD_RMW); // Start Read-Modify-Write
      for (count = 0; count < 132; count++)
        lcd_write_data(0);
+     lcd_command(CMD_RMW_CLEAR); // Clear Read-Modify-Write ???
    }
 
-   lcd_command(CMD_RMW_CLEAR); // Clear Read-Modify-Write ???
 #else
    lcd_command(CLEAR_DISPLAY);
    wait_about10ms();

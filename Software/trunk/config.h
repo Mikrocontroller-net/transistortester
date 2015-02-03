@@ -601,9 +601,18 @@
 #define CABLE_CAP 3
 
 
+// LONG_WAIT_TIME is the time for displaying the successfull test result
+#ifndef LONG_WAIT_TIME
 #define LONG_WAIT_TIME 28000
+#endif
+
+// MIDDLE_WAIT_TIME is used for display the next parameter for Show data menu function
 #define MIDDLE_WAIT_TIME 15000
+
+// SHORT_WAIT_TIME is the time for displaying a unknown component message
+#ifndef SHORT_WAIT_TIME
 #define SHORT_WAIT_TIME 5000
+#endif
 
 //**********************************************************
 

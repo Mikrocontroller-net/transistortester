@@ -908,7 +908,7 @@ Cyr_P,'o',Cyr_v,Cyr_t,'o','p',Cyr_n,'o',LCD_CHAR_INSEP,Cyr_n,'a',Cyr_zsch,'a',Cy
 
 
 
-'2','c','.',LCD_CHAR_INSEP,'P','o',Cyr_z,Cyr_k,'o','p','o',Cyr_t,Cyr_i,Cyr_t,'e',' ',
+'2','c','.',LCD_CHAR_INSEP,'P','a','c',Cyr_k,'o','p','o',Cyr_t,Cyr_i,Cyr_t,'e',' ',
 
 Cyr_k,'o',Cyr_n,Cyr_t,'a',Cyr_k,Cyr_t,Cyr_y,LCD_CHAR_INSEP,Cyr_k,'o',Cyr_g,Cyr_d,'a',' ',
 

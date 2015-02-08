@@ -71,6 +71,12 @@ UI_LANGUAGE = LANG_GERMAN
 # Can be used with a 4x20 character display for better using the additional space.
 # Additional parameters, which are shown only short in row 2, will be shown in row 3 and 4 with this option.
 #CFLAGS += -DFOUR_LINE_LCD
+#CFLAGS += -DLCD_LINE_LENGTH=20
+
+# The PAGE_MODE activates a moving line cursor for menu function selection together with FOUR_LINE_LCD
+# and WITH_ROTARY_SWITCH.
+# Without the PAGE_MODE option, the line cursor is fixed to line 3 and the text moves.
+#CFLAGS += -DPAGE_MODE
 
 
 # The LCD_ST7565 option must be set to support a 128x64 LCD graphics display

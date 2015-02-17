@@ -95,7 +95,7 @@ WITH_LCD_ST7565 = 7920
 # Please check, if your display module can also tolerate a 5V signal level.
 # For the ST7920 controller you can select the serial interface by setting the LCD_INTERFACE_MODE to 5 . 
 # ST7920-RW <--> PD2 , ST7920-E <--> PD5 , ST7920-PSB <--> GND , ST7920-RS <--> VCC , ST7920-RST <--> VCC
-#CFLAGS += -DLCD_INTERFACE_MODE=2
+CFLAGS += -DLCD_INTERFACE_MODE=5
 
 # The I2C Address can be preset to a address of 0x3d instead of 0x3c by setting the constant LCD_I2C_ADDR.
 #CFLAGS += -DLCD_I2C_ADDR=0x3d

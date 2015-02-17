@@ -340,8 +340,10 @@
   #define LCD_INTERFACE_MODE MODE_SPI
  #endif
 #elif (LCD_ST_TYPE == 7920)
-  #define LCD_INTERFACE_MODE MODE_7920_SERIAL
-//  #define LCD_INTERFACE_MODE MODE_PARALLEL
+ #ifndef LCD_INTERFACE_MODE
+//  #define LCD_INTERFACE_MODE MODE_7920_SERIAL
+  #define LCD_INTERFACE_MODE MODE_PARALLEL
+ #endif
   #define SLOW_LCD
 #else
  // default interface  with character LCD

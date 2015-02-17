@@ -59,6 +59,8 @@ CFLAGS += -DFOUR_LINE_LCD
 # The SCL signal is available at PD5 (LCD-E, LCD-6), the SDA signal at PD2 (LCD-D6, LCD-13).
 # A pull up resistor of about 4.7k is required for both signals to 3.3V.
 # Please check, if your display module can also tolerate a 5V signal level.
+# For the ST7920 controller you can select the serial interface by setting the LCD_INTERFACE_MODE to 5 . 
+# ST7920-RW <--> PD2 , ST7920-E <--> PD5 , ST7920-PSB <--> GND , ST7920-RS <--> VCC , ST7920-RST <--> VCC
 #CFLAGS += -DLCD_INTERFACE_MODE=2
 
 # The I2C Address can be preset to a address of 0x3d instead of 0x3c by setting the constant LCD_I2C_ADDR.

@@ -1,7 +1,7 @@
 #include "config.h"
 
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920))
 
 // Options for lcd_pgm_bitmap option parameter:
 #define OPT_HREVERSE    1 // Display bitmap reversed horizontally
@@ -30,6 +30,9 @@
 #define FONT_WIDTH    10
 #define FONT_HEIGHT   16
  #endif
+#endif
+
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
 
 #define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
 #define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
@@ -96,9 +99,32 @@
 #define lcd_cursor_on()  // ignored
 #define lcd_cursor_off() // ignored
 
-#else
-#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd); wait50us();
-#define lcd_write_data(data)                   _lcd_hw_write(0x01, data); wait50us();
+#elif (LCD_ST_TYPE == 7920)  /* not ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306)) */
+#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
+#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
+#define lcd_write_init(data_length)            _lcd_hw_write(0x80, CMD_SetIFOptions | (data_length << 4))
+#define lcd_cursor_on()  // ignored
+#define lcd_cursor_off() // ignored
+#define CMD_CLEAR	0x01		/* clear display, basic Instruction */
+#define CMD_CGRAM_SELECT 0x02		/* SR=0, enable CGRAM address */
+#define CMD_SET_ENTRY_MODE 0x04		/* set cursor posistion and shift for read/write */
+ #define MODE_RIGHT_MOVE 0x02
+#define CMD_DISPLAY_CONTROL	0x08	/* display control, basic Instruction */
+ #define DISPLAY_ON 0x4
+ #define CURSOR_ON 0x02
+ #define BLINK_ON 0x01
+#define CMD_CURSOR_DISPLAY_CONTROL 0x10
+#define CMD_SET_FUNCTION 0x20		/* basic + extended Instruction */
+ #define MODE_8_BIT 0x10		/* Bit 4 is 8 bit mode */
+ #define MODE_EXTENDED 0x04		/* Bit 2 is used for extended Intruction */
+ #define GRAPHIC_DISPLAY_ON 0x02	/* Bit 1 is used for graphic display on, only extended Instruction */
+#define CMD_SET_GDRAM_ADDRESS 0x80	/* set graphic display RAM address ,extended Instruction */
+					/* 2x, first vertical address 5:0, second horizontal address 3:0 */
+					/* followed by pairs of horizontal data (16-bit) */
+
+#else /* not ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920)) */
+#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
+#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
 #define lcd_write_init(data_length)            _lcd_hw_write(0x80, CMD_SetIFOptions | (data_length << 4))
 
 

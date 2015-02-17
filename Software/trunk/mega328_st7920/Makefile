@@ -83,9 +83,9 @@ CFLAGS += -DFOUR_LINE_LCD
 # The normal ST7565 controller will be supported by setting the WITH_LCD_ST7565 to 1 or 7565.
 # The special action for a simular SSD1306 controller can be activated by
 # setting the WITH_LCD_ST7565 variable to 1306.
-#WITH_LCD_ST7565 = 1
+WITH_LCD_ST7565 = 7920
 #WITH_LCD_ST7565 = 1306
-WITH_LCD_ST7920 = 1
+#WITH_LCD_ST7920 = 1
 
 # Normally the ST7565 controller is connected with a SPI 4-wire interface, but
 # you can enable a I2C interface with address 0x3c for the SSD1306 controller 
@@ -93,6 +93,8 @@ WITH_LCD_ST7920 = 1
 # The SCL signal is available at PD5 (LCD-E, LCD-6), the SDA signal at PD2 (LCD-D6, LCD-13).
 # A pull up resistor of about 4.7k is required for both signals to 3.3V.
 # Please check, if your display module can also tolerate a 5V signal level.
+# For the ST7920 controller you can select the serial interface by setting the LCD_INTERFACE_MODE to 5 . 
+# ST7920-RW <--> PD2 , ST7920-E <--> PD5 , ST7920-PSB <--> GND , ST7920-RS <--> VCC , ST7920-RST <--> VCC
 #CFLAGS += -DLCD_INTERFACE_MODE=2
 
 # The I2C Address can be preset to a address of 0x3d instead of 0x3c by setting the constant LCD_I2C_ADDR.
@@ -110,7 +112,7 @@ CFLAGS += -DLCD_ST7565_H_FLIP=1
 # OFFSET values can vary for the connected display type to 0, 2 or 4.
 CFLAGS += -DLCD_ST7565_H_OFFSET=4
 # If LCD_ST7565 option is set to 1: Flip the display's vertical direction
-CFLAGS += -DLCD_ST7565_V_FLIP=0
+CFLAGS += -DLCD_ST7565_V_FLIP=1
 
 # If option WITH_LCD_ST7565 is present one of the following fonts should be
 # choosen.
@@ -259,9 +261,7 @@ CFLAGS += -DBAT_OUT=150
 CFLAGS += -DBAT_POOR=6400
 
 # Voltage divider for battery voltage measurement  10k / 3.3k = 133/33
-#CFLAGS += -DBAT_NUMERATOR=133
-#CFLAGS += -DBAT_DENOMINATOR=33
-CFLAGS += -DBAT_NUMERATOR=66
+CFLAGS += -DBAT_NUMERATOR=133
 CFLAGS += -DBAT_DENOMINATOR=33
 # Voltage divider for the external zener voltage measurement 180k / 20k = 10/1
 #CFLAGS += -DEXT_NUMERATOR=10

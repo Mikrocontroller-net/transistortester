@@ -572,3 +572,13 @@
  extern const unsigned char bmp_inductor_data[] PROGMEM ;
 #endif
 
+#if (LCD_ST_TYPE == 7920)
+ #if defined (MAIN_C)
+  const unsigned char set_msk[] PROGMEM = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
+  const unsigned char clear_msk[] PROGMEM = { 0xfe, 0xfd, 0xfb, 0xf7, 0xef, 0xdf, 0xbf, 0x7f};
+ #else
+  extern const unsigned char set_msk[] PROGMEM ;
+  extern const unsigned char clear_msk[] PROGMEM ;
+ #endif
+#endif
+

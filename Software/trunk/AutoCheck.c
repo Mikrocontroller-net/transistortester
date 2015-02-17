@@ -32,30 +32,33 @@ int8_t udiff2;
  #endif
 PartFound = PART_NONE;		// no part found before
 if ((test_mode & 0xf0) == 0) {
-// probed should be shorted already to begin selftest
-if (AllProbesShorted() != 3) return;
-lcd_clear();
-lcd_MEM_string(SELFTEST);		// "Selftest mode.."
-lcd_line2();
-lcd_data('?');			// wait for key pressed for confirmation
-if (wait_for_key_ms(2000) > 10) goto begin_selftest;	// key is pressed again
+  // probed should be shorted already to begin selftest
+  if (AllProbesShorted() != 3) return;
+  lcd_clear();
+  lcd_MEM_string(SELFTEST);		// "Selftest mode.."
+  lcd_line2();
+  lcd_data('?');			// wait for key pressed for confirmation
+  if (wait_for_key_ms(2000) > 10) goto begin_selftest;	// key is pressed again
  #ifdef WITH_MENU
 } else {
-// report to user, that probes should be shorted
-ww = 0;
-for (tt=0;tt<150;tt++) {	/* wait about 30 seconds for shorted probes */
-lcd_clear();
-lcd_MEM2_string(SHORT_PROBES_str);	// message "Short probes!" to LCD
-if (AllProbesShorted() == 3) {
-   ww++;	// all probes now shorted
-} else {
-   ww = 0;	// connection not stable, retry
-}
-if (ww > 3) break;	// connection seems to be stable
-wait_about200ms();			// wait 200ms and try again
-}  /* end for (tt...) */
-if (tt < 150) goto begin_selftest;		// is shorted before time limit
-goto no_zero_resistance;			// skip measuring of the zero resistance
+  // report to user, that probes should be shorted
+  ww = 0;
+  for (tt=0;tt<150;tt++) {	/* wait about 30 seconds for shorted probes */
+    lcd_clear();
+    lcd_MEM2_string(SHORT_PROBES_str);	// message "Short probes!" to LCD
+    if (AllProbesShorted() == 3) {
+       ww++;	// all probes now shorted
+    } else {
+       ww = 0;	// connection not stable, retry
+    }
+    if (ww > 3) break;	// connection seems to be stable
+  #if (LCD_ST_TYPE == 7920)
+    lcd_refresh();
+  #endif
+    wait_about200ms();			// wait 200ms and try again
+  }  /* end for (tt...) */
+  if (tt < 150) goto begin_selftest;		// is shorted before time limit
+  goto no_zero_resistance;			// skip measuring of the zero resistance
  #endif
 }
 // no key pressed for 2s
@@ -77,15 +80,15 @@ DisplayValue(adcmv[0],-2,' ',3);
 DisplayValue(adcmv[1],-2,' ',3);
 DisplayValue(adcmv[2],-2,LCD_CHAR_OMEGA,3);
 if (adcmv[0] >= 90) {
-adcmv[0] = ESR_ZERO;	// set back to default value
+  adcmv[0] = ESR_ZERO;	// set back to default value
 }
 eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (uint8_t)adcmv[0]);	// fix zero offset
 if (adcmv[1] >= 90) {
-adcmv[1] = ESR_ZERO;	// set back to default value
+  adcmv[1] = ESR_ZERO;	// set back to default value
 }
 eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[3]), (uint8_t)adcmv[1]);	// fix zero offset
 if (adcmv[2] >= 90) {
-adcmv[2] = ESR_ZERO;	// set back to default value
+  adcmv[2] = ESR_ZERO;	// set back to default value
 }
 eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (uint8_t)adcmv[2]);	// fix zero offset
 wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
@@ -339,13 +342,16 @@ wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
  #endif		/* end EXTENDED_TESTS */
 
 for (ww=0;ww<120;ww++) {
-// wait up to 1 minute for releasing the probes
-if (AllProbesShorted() == 0) break;
-lcd_line2();		//Cursor to column 1, row 2
-lcd_clear_line();		// clear total line
-lcd_line2();		//Cursor to column 1, row 2
-lcd_MEM_string(RELPROBE);	// "Release Probes"
-wait_about500ms();
+  // wait up to 1 minute for releasing the probes
+  if (AllProbesShorted() == 0) break;
+  lcd_line2();		//Cursor to column 1, row 2
+  lcd_clear_line();		// clear total line
+  lcd_line2();		//Cursor to column 1, row 2
+  lcd_MEM_string(RELPROBE);	// "Release Probes"
+ #if (LCD_ST_TYPE == 7920)
+  lcd_refresh();
+ #endif
+  wait_about500ms();
 }
 
 
@@ -383,8 +389,8 @@ for (ww=0;ww<7;ww++) {			//checking loop
 if ((adcmv[ww] > 190) || (adcmv[ww] < 10)) goto no_c0save;
 }
 for (ww=0;ww<7;ww++) {
-// write all zero offsets to the EEprom 
-(void) eeprom_write_byte((uint8_t *)(&c_zero_tab[ww]),adcmv[ww]+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)));
+  // write all zero offsets to the EEprom 
+  (void) eeprom_write_byte((uint8_t *)(&c_zero_tab[ww]),adcmv[ww]+(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)));
 }
 lcd_line2();
 lcd_MEM_string(OK_str);		// output "OK"
@@ -407,62 +413,62 @@ if (((test_mode & 0x0f) == 1) || (UnCalibrated == 2))
 cap_found = 0;
 for (ww=0;ww<64;ww++) {
   #if (TPCAP >= 0)
-PartFound = PART_NONE;
-CalibrationCap();	// measure with internal calibration capacitor
+  PartFound = PART_NONE;
+  CalibrationCap();	// measure with internal calibration capacitor
   #else
-lcd_clear();
-lcd_testpin(TP1);
-lcd_MEM_string(CapZeich);	// "-||-"
-lcd_testpin(TP3);
-lcd_MEM2_string(MinCap_str); // " >100nF!"
-PartFound = PART_NONE;
-//measure  offset Voltage of analog Comparator for Capacity measurement
-ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
+  lcd_clear();
+  lcd_testpin(TP1);
+  lcd_MEM_string(CapZeich);	// "-||-"
+  lcd_testpin(TP3);
+  lcd_MEM2_string(MinCap_str); // " >100nF!"
+  PartFound = PART_NONE;
+  //measure  offset Voltage of analog Comparator for Capacity measurement
+  ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
   #endif
-while (cap.cpre < -9) {
+  while (cap.cpre < -9) {
    cap.cpre++;
    cap.cval /= 10;
-}
-if ((cap.cpre == -9) && (cap.cval > 95) && (cap.cval < 22000) &&
+  }
+  if ((cap.cpre == -9) && (cap.cval > 95) && (cap.cval < 22000) &&
     (load_diff > -150) && (load_diff < 150)) {
    cap_found++;
-} else {
+  } else {
    cap_found = 0;		// wait for stable connection
-}
-if (cap_found > 4) {
-   // value of capacitor is correct
-   (void) eeprom_write_word((uint16_t *)(&ref_offset), load_diff);	// hold zero offset + slew rate dependend offset
-   lcd_clear();
-   lcd_MEM2_string(REF_C_str);	// "REF_C="
-   i2lcd(load_diff);		// lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
-   RefVoltage();			// new ref_mv_offs and RHmultip
+  }
+  if (cap_found > 4) {
+     // value of capacitor is correct
+     (void) eeprom_write_word((uint16_t *)(&ref_offset), load_diff);	// hold zero offset + slew rate dependend offset
+     lcd_clear();
+     lcd_MEM2_string(REF_C_str);	// "REF_C="
+     i2lcd(load_diff);		// lcd_string(itoa(load_diff, outval, 10));	//output REF_C_KORR
+     RefVoltage();			// new ref_mv_offs and RHmultip
   #if 0
 //#######################################
    // Test for switching level of the digital input of port TP3
    for (tt=0;tt<8;tt++) {
-   ADC_PORT =  TXD_VAL;	//ADC-Port 1 to GND
-   ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
-   R_PORT = 1<<PIN_RH3;		//Pin 3 over R_H to VCC
-   R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to VCC
-   while (1) {
-      wdt_reset();
-      if ((ADC_PIN&(1<<TP3)) == (1<<TP3)) break;
-   }
-   R_DDR = 0;		//Pin 3 without current
-   R_PORT = 0;
-   adcmv[0] = ReadADC(TP3);
-   lcd_line3();
-   DisplayValue(adcmv[0],-3,'V',4);
-   R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to GND
-   while (1) {
-      wdt_reset();
-      if ((ADC_PIN&(1<<TP3)) != (1<<TP3)) break;
-   }
-   R_DDR = 0;		//Pin 3 without current
-   lcd_line4();
-   adcmv[0] = ReadADC(TP3);
-   DisplayValue(adcmv[0],-3,'V',4);
-   wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
+     ADC_PORT =  TXD_VAL;	//ADC-Port 1 to GND
+     ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
+     R_PORT = 1<<PIN_RH3;		//Pin 3 over R_H to VCC
+     R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to VCC
+     while (1) {
+        wdt_reset();
+        if ((ADC_PIN&(1<<TP3)) == (1<<TP3)) break;
+     }
+     R_DDR = 0;		//Pin 3 without current
+     R_PORT = 0;
+     adcmv[0] = ReadADC(TP3);
+     lcd_line3();
+     DisplayValue(adcmv[0],-3,'V',4);
+     R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to GND
+     while (1) {
+        wdt_reset();
+        if ((ADC_PIN&(1<<TP3)) != (1<<TP3)) break;
+     }
+     R_DDR = 0;		//Pin 3 without current
+     lcd_line4();
+     adcmv[0] = ReadADC(TP3);
+     DisplayValue(adcmv[0],-3,'V',4);
+     wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
    }
 //#######################################
   #endif
@@ -505,10 +511,13 @@ if (cap_found > 4) {
   #endif	/* end AUTOSCALE_ADC */
    wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
    break;
-}
-lcd_line2();
-DisplayValue(cap.cval,cap.cpre,'F',4);
-wait_about200ms();			// wait additional time
+  }
+  lcd_line2();
+  DisplayValue(cap.cval,cap.cpre,'F',4);
+  #if (LCD_ST_TYPE == 7920)
+  lcd_refresh();
+  #endif
+  wait_about200ms();			// wait additional time
 } // end for ww
 }	/* end if((test_mode & 0x0f) == 1) */
  #endif  /* end AUTO_CAL */
@@ -517,42 +526,46 @@ wait_about200ms();			// wait additional time
 UnCalibrated = 0;		// clear the UnCalibrated Flag
 lcd_cursor_off();		// switch cursor off
 ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples
+
+ #ifdef FREQUENCY_50HZ
+//#define TEST_SLEEP_MODE	/* only select for checking the sleep delay */
+ lcd_clear();
+ lcd_MEM_string(T50HZ);	//" 50Hz"
+  #if (LCD_ST_TYPE == 7920)
+ lcd_refresh();
+  #endif
+ ADC_PORT = TXD_VAL;
+ ADC_DDR = 1<<TP1 | TXD_MSK;	// Pin 1 to GND
+ R_DDR = (1<<PIN_RL3) | (1<<PIN_RL2);
+ for(ww=0;ww<30;ww++) {	// repeat the signal up to 30 times (1 minute)
+   for (ff50=0;ff50<100;ff50++) {	// for 2 s generate 50 Hz
+      R_PORT = (1<<PIN_RL2);	// Pin 2 over R_L to VCC, Pin 3 over R_L to GND
+  #ifdef TEST_SLEEP_MODE
+      sleep_5ms(2); 		// test of timing of sleep mode call 
+  #else
+      wait10ms();		// normal delay
+  #endif
+      R_PORT = (1<<PIN_RL3);	// Pin 3 over R_L to VCC, Pin 2 over R_L to GND
+  #ifdef TEST_SLEEP_MODE
+      sleep_5ms(2); 		// test of timing of sleep mode call 
+  #else
+      wait10ms();		// normal delay
+  #endif
+      wdt_reset();
+   } /* end for ff50 */
+   if (!(RST_PIN_REG & (1<<RST_PIN))) {
+      // if key is pressed, don't repeat
+      break;
+   }
+ } /* end for ww */
+ #endif		/* end FREQUENCY_50HZ */
 lcd_clear();
 lcd_MEM2_string(VERSION_str);	//"Version ..."
 lcd_line2();
 lcd_MEM_string(ATE);		//"Selftest End"
-
- #ifdef FREQUENCY_50HZ
-//#define TEST_SLEEP_MODE	/* only select for checking the sleep delay */
-lcd_MEM_string(T50HZ);	//" 50Hz"
-ADC_PORT = TXD_VAL;
-ADC_DDR = 1<<TP1 | TXD_MSK;	// Pin 1 to GND
-R_DDR = (1<<PIN_RL3) | (1<<PIN_RL2);
-for(ww=0;ww<30;ww++) {	// repeat the signal up to 30 times (1 minute)
-for (ff50=0;ff50<100;ff50++) {	// for 2 s generate 50 Hz
-         R_PORT = (1<<PIN_RL2);	// Pin 2 over R_L to VCC, Pin 3 over R_L to GND
-  #ifdef TEST_SLEEP_MODE
-         sleep_5ms(2); 		// test of timing of sleep mode call 
-  #else
-         wait10ms();		// normal delay
-  #endif
-         R_PORT = (1<<PIN_RL3);	// Pin 3 over R_L to VCC, Pin 2 over R_L to GND
-  #ifdef TEST_SLEEP_MODE
-         sleep_5ms(2); 		// test of timing of sleep mode call 
-  #else
-         wait10ms();		// normal delay
-  #endif
-         wdt_reset();
-     }
-     if (!(RST_PIN_REG & (1<<RST_PIN))) {
-        // if key is pressed, don't repeat
-        break;
-     }
-  }
- #endif		/* end FREQUENCY_50HZ */
- PartFound = PART_NONE;
- wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
- } 
+PartFound = PART_NONE;
+wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
+} /* end AutoCheck */ 
 
  
 /*

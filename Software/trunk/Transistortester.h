@@ -1109,7 +1109,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  const unsigned char Dioden[] MEM_TEXT = {'*',LCD_CHAR_DIODE1, ' ', ' ',0};
  const unsigned char Resistor_str[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
 #if defined (WITH_SELFTEST) || !defined (BAT_CHECK)
- const unsigned char VERSION_str[] MEM2_TEXT = "Version 1.11k";
+ const unsigned char VERSION_str[] MEM2_TEXT = "Version 1.12k";
 #endif
 #ifdef SHOW_ICE
  const unsigned char ICE0_str[] MEM2_TEXT = "ICE0=";
@@ -1239,6 +1239,9 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
   const uint8_t EE_Volume_Value EEMEM = VOLUME_VALUE;	// Volume Value for ST7565 controller 
 #endif
+#if (LCD_ST_TYPE == 7920)
+  uint8_t lcd_bit_mem[64][16];
+#endif
 
 //End of EEPROM-Strings
 #else
@@ -1319,7 +1322,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  #endif
 #endif /* if defined (MAIN_C) */
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920))
  #include "bitmaps.h"
 #endif
 
@@ -1464,3 +1467,6 @@ COMMON uint8_t rotary_switch_present;	// is set to 1, if rotary switch movement 
 //#if POWER_OFF+0 > 1
 COMMON unsigned int display_time;	// display time of measurement in ms units
 //#endif
+#if (LCD_ST_TYPE == 7920)
+COMMON uint8_t lcd_bit_mem[64][16];
+#endif

@@ -13,7 +13,7 @@
 #define MODE_PARALLEL 1		/* default 4-Bit parallel mode for character LCD */
 #define MODE_I2C 2		/* I2C interface for SSD1306 */
 #define MODE_SPI 4		/* 4 bit SPI interface for ST7565 or SSD1306 */
-#define MODE_7920 5		/* serial interface for ST7920 */
+#define MODE_7920_SERIAL 5		/* serial interface for ST7920 */
 
 // select the right Processor Typ
 #if defined(__AVR_ATmega48__)
@@ -339,6 +339,10 @@
  #ifndef LCD_INTERFACE_MODE
   #define LCD_INTERFACE_MODE MODE_SPI
  #endif
+#elif (LCD_ST_TYPE == 7920)
+  #define LCD_INTERFACE_MODE MODE_7920_SERIAL
+//  #define LCD_INTERFACE_MODE MODE_PARALLEL
+  #define SLOW_LCD
 #else
  // default interface  with character LCD
  #ifndef LCD_INTERFACE_MODE
@@ -415,7 +419,7 @@
    #define HW_LCD_B0_DDR          DDRD
    #define HW_LCD_B0_PORT         PORTD
    #define HW_LCD_B0_PIN          1
-  #else
+  #else		/* no STRIP_GRID_BOARD */
    // the default connection of LCD for chinese version from Fish8840, weiweitm
    /* the Reset Pin, 0 = Reset */
    #define HW_LCD_RES_DDR         DDRD
@@ -463,7 +467,47 @@
    #define HW_LCD_SDA_PORT         PORTD
    #define HW_LCD_SDA_PIN          2
  #endif	/* PROCESSOR_TYP for the I2C Interface */
-#else /* not (LCD_INTERFACE_MODE == MODE_SPI), not (LCD_INTERFACE_MODE == MODE_I2C) */
+#elif (LCD_INTERFACE_MODE == MODE_7920_SERIAL)
+ /* only two wires are required for the serial interface of the ST7920: RW and E */
+ /* PSB must be connected to GND and RS(CS) and RESET must be connected to 1. */
+ #if PROCESSOR_TYP == 644	/* mega324/644/1284 with serial ST7920 interface */
+   #define HW_LCD_EN_PORT         PORTB
+   #define HW_LCD_EN_DDR          DDRB
+   #define HW_LCD_EN_PIN          3
+
+   #define HW_LCD_B0_PORT         PORTB
+   #define HW_LCD_B0_DDR          DDRB
+   #define HW_LCD_B0_PIN          4
+
+   #define HW_LCD_RESET_PORT      PORTB
+   #define HW_LCD_RESET_DDR       DDRB
+   #define HW_LCD_RESET_PIN       2
+ #elif PROCESSOR_TYP == 1280	/* mega1280/2560 with serial ST7920 interface */
+   #define HW_LCD_EN_PORT         PORTA
+   #define HW_LCD_EN_DDR          DDRA
+   #define HW_LCD_EN_PIN          5
+
+   #define HW_LCD_B0_PORT         PORTA
+   #define HW_LCD_B0_DDR          DDRA
+   #define HW_LCD_B0_PIN          4
+
+   #define HW_LCD_RESET_PORT      PORTA
+   #define HW_LCD_RESET_DDR       DDRA
+   #define HW_LCD_RESET_PIN       0
+ #else				/* mega8/168/328 with serial ST7920 interface  */
+   #define HW_LCD_EN_PORT         PORTD
+   #define HW_LCD_EN_DDR          DDRD
+   #define HW_LCD_EN_PIN          5
+
+   #define HW_LCD_B0_PORT         PORTD
+   #define HW_LCD_B0_DDR          DDRD
+   #define HW_LCD_B0_PIN          2
+
+   #define HW_LCD_RESET_PORT      PORTD
+   #define HW_LCD_RESET_DDR       DDRD
+   #define HW_LCD_RESET_PIN       0
+ #endif	/* PROCESSOR_TYP for the serial ST7920 Interface */
+#else /* (LCD_INTERFACE_MODE != MODE_SPI || MODE_I2C || MODE_ST7920_SERIAL) */
  /* The 4-bit parallel Interface is usually used for the character display */
  #if PROCESSOR_TYP == 644	/* connection for 4-bit parallel interface and mega324/644/1284 */
   #ifdef STRIP_GRID_BOARD
@@ -560,6 +604,7 @@
   #endif 		/* STRIP_GRID_BOARD */
  #endif		/* PROCESSOR_TYP for 4-bit parallel interface*/
 #endif		/* INTERFACE_MODE */
+
 
 
 

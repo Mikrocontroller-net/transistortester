@@ -31,6 +31,7 @@ void lcd_pgm_bitmap(const unsigned char * pbitmap,
                     unsigned char y,
                     unsigned char options);
 #endif
+void lcd_refresh(void);		/* for ST7920 controller only*/
 
 //Software-UART
 void uart_putc(uint8_t data);

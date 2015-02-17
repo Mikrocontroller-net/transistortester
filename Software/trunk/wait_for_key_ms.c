@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include "Transistortester.h"
+#include "lcd-routines.h"
 
 #define MAX_CS 150	/* maximum key hold time in 10ms units  */
 
@@ -23,6 +24,10 @@ uint8_t wait_for_key_ms(int max_time) {
  // separate Up / Down key instead of rotary encoder, sample with 1ms
  #define WWend 5
  #define WaitRotary wait1ms
+#endif
+
+#if (LCD_ST_TYPE == 7920)
+  lcd_refresh();
 #endif
 
 #ifdef WITH_ROTARY_SWITCH

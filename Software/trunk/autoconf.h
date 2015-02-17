@@ -3,7 +3,7 @@
        Automatic Configuration
 */
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920))
 /* Define under which conditions a graphical display is supported. */
 /* The graphical display should at least support 128x64 pixels. */
  #define WITH_GRAPHICS
@@ -487,7 +487,7 @@
 #define LCD_CHAR_DEGREE 0xdf            // Character for degree
 #define LCD_CHAR_INSEP 0xff		// used as space character without separating text
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) | (LCD_ST_TYPE == 7920))
         #undef LCD_CHAR_DEGREE
         #define LCD_CHAR_DEGREE 0xf8	// Character for degree
         #undef LCD_CHAR_OMEGA

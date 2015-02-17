@@ -19,14 +19,14 @@
 
 
  
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920))
 uint8_t _page;
 uint8_t _xpos;
-#if FONT_HEIGHT > 8
+ #if FONT_HEIGHT > 8
 extern const uint8_t PROGMEM font[256][FONT_WIDTH << 1];
-#else
+ #else
 extern const uint8_t PROGMEM font[256][FONT_WIDTH];
-#endif
+ #endif
 #endif
 
 // sends numeric character (Pin Number) to the LCD 
@@ -44,6 +44,9 @@ void lcd_space(void) {
 void lcd_line1() {
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    lcd_set_cursor(0,0);
+#elif (LCD_ST_TYPE == 7920)
+   _page = 0;
+   _xpos = 0;
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress));
 #endif
@@ -53,6 +56,9 @@ void lcd_line1() {
 void lcd_line2() {
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    lcd_set_cursor(1,0);
+#elif (LCD_ST_TYPE == 7920)
+   _page = FONT_HEIGHT * 1;
+   _xpos = 0;
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x40));
 #endif
@@ -62,6 +68,9 @@ void lcd_line2() {
 void lcd_line3() {
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    lcd_set_cursor(2,0);
+#elif (LCD_ST_TYPE == 7920)
+   _page = FONT_HEIGHT * 2;
+   _xpos = 0;
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x14));
 #endif
@@ -71,6 +80,9 @@ void lcd_line3() {
 void lcd_line4() {
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    lcd_set_cursor(3,0);
+#elif (LCD_ST_TYPE == 7920)
+   _page = FONT_HEIGHT * 3;
+   _xpos = 0;
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x54));
 #endif
@@ -90,6 +102,9 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
    lcd_command(CMD_SET_PAGE | (0x0f & _page));
    lcd_command(CMD_SET_COLUMN_UPPER | (0x0f & (_xpos >> 4)));
    lcd_command(CMD_SET_COLUMN_LOWER | (0x0f &  _xpos));
+#elif (LCD_ST_TYPE == 7920)
+   _page = y * FONT_HEIGHT;
+   _xpos = (x * FONT_WIDTH) + LCD_ST7565_H_OFFSET;
 #else
    //move to the specified position
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + (0x40*(y-1)) + x));
@@ -99,13 +114,13 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
 // sends a character to the LCD 
 void lcd_data(unsigned char temp1) {
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
- uint8_t i, data;
+ uint8_t ii, data;
  uint8_t *pfont;
 
  #if FONT_HEIGHT > 8
  lcd_command(CMD_RMW);
  pfont = (uint8_t *)font + ((FONT_WIDTH << 1) * temp1);
- for (i = 0; i < FONT_WIDTH; i++) {
+ for (ii = 0; ii < FONT_WIDTH; ii++) {
    data = pgm_read_byte(pfont);
    lcd_write_data(data);
    pfont += 2;
@@ -114,7 +129,7 @@ void lcd_data(unsigned char temp1) {
 
  lcd_command(CMD_SET_PAGE | (0x0f & (_page+1)));
  pfont = (uint8_t *)font + ((FONT_WIDTH << 1) * temp1) + 1;
- for (i = 0; i < FONT_WIDTH; i++) {
+ for (ii = 0; ii < FONT_WIDTH; ii++) {
    data = pgm_read_byte(pfont);
    lcd_write_data(data);
    pfont += 2;
@@ -122,12 +137,49 @@ void lcd_data(unsigned char temp1) {
  lcd_command(CMD_SET_PAGE | (0x0f & _page));
  #else
  pfont = (uint8_t *)font + (temp1*FONT_WIDTH);
- for (i = 0; i < FONT_WIDTH; i++) {
+ for (ii = 0; ii < FONT_WIDTH; ii++) {
    data = pgm_read_byte(pfont);
    lcd_write_data(data);
    pfont++;
  }
  #endif
+_xpos += FONT_WIDTH;
+#elif (LCD_ST_TYPE == 7920)
+   unsigned char ii,hh,hmsk;
+   unsigned char jj;
+   unsigned char xx,xxbit;
+   unsigned char ymem;
+   const unsigned char *pfont;
+  #define NR_BYTE ((FONT_HEIGHT + 7) / 8)
+   pfont = (uint8_t *)font + ((FONT_WIDTH << 1) * temp1);
+   for (ii=0;ii<FONT_HEIGHT;ii++) {
+     hh = ii/8;
+     if ((_page + ii) >= 64) break;
+#if (LCD_ST7565_V_FLIP > 0)
+     ymem = 63 - (_page + ii);
+#else
+     ymem = _page + ii;
+#endif
+     hmsk = pgm_read_byte(set_msk+(ii%8));
+     for (jj=0; jj<FONT_WIDTH; jj++) {
+       if ((_xpos + jj) >= 128) break;
+       xx = (_xpos + jj) / 8;
+       xxbit = (_xpos + jj) % 8;
+       if ((pgm_read_byte(pfont + ((jj * NR_BYTE) + hh)) & hmsk) == 0) {
+#if (LCD_ST7565_H_FLIP > 0)
+         lcd_bit_mem[ymem][15-xx] &= pgm_read_byte(clear_msk+xxbit);
+#else
+         lcd_bit_mem[ymem][xx] &= pgm_read_byte(clear_msk+(7-xxbit));
+#endif
+       } else {
+#if (LCD_ST7565_H_FLIP > 0)
+         lcd_bit_mem[ymem][15-xx] |= pgm_read_byte(set_msk+xxbit);
+#else
+         lcd_bit_mem[ymem][xx] |= pgm_read_byte(set_msk+(7-xxbit));
+#endif
+       }
+     } /* end for(jj) */
+   } /* end for(ii) */
 _xpos += FONT_WIDTH;
 #else
  lcd_write_data(temp1);		// set RS to 1
@@ -168,7 +220,7 @@ _xpos += FONT_WIDTH;
     	uart_putc(temp1);
  }
 #endif
-}
+} /* end lcd_data() */
  
 // sends a command to the LCD
  
@@ -277,25 +329,39 @@ void lcd_init(void) {
 
    lcd_set_cursor(0,0);
 }
-#elif (LCD_ST_TYPE == 7920)
+#elif (LCD_ST_TYPE == 7920)  /* not ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306)) */
+
 void lcd_init(void) {
    // reset the ST7920 controller
+ #if (LCD_INTERFACE_MODE == MODE_7920_SERIAL)
    HW_LCD_B0_PORT  &= ~_BV(HW_LCD_B0_PIN); // LCD B0 = 0
    HW_LCD_B0_DDR   |= _BV(HW_LCD_B0_PIN);  // LCD SI is Output
    HW_LCD_EN_PORT  &= ~_BV(HW_LCD_EN_PIN); // LCD EN = 0
    HW_LCD_EN_DDR   |= _BV(HW_LCD_EN_PIN);  // LCD SCL is Output
-   HW_LCD_RES_PORT &= ~_BV(HW_LCD_RES_PIN); // set reset low
-   HW_LCD_RES_DDR  |= _BV(HW_LCD_RES_PIN); // LCD RESET is Output
-   wait1ms();
-   HW_LCD_RES_PORT |= _BV(HW_LCD_RES_PIN); // set reset high
+ #endif
+   wait50ms();		// wait after power up reset
+ #if (LCD_INTERFACE_MODE == MODE_7920_SERIAL)
+//   HW_LCD_RESET_PORT &= ~_BV(HW_LCD_RESET_PIN); // set reset low
+//   HW_LCD_RESET_DDR  |= _BV(HW_LCD_RESET_PIN); // LCD RESET is Output
+//   wait1ms();
+//   HW_LCD_RESET_PORT |= _BV(HW_LCD_RESET_PIN); // set reset high
+ #endif
+
+ #if (LCD_INTERFACE_MODE == MODE_PARALLEL)
+   lcd_command(0x22); // set to 4-bit mode
+   lcd_command(0x22 ); // set to 4-bit mode
+ #endif
+   lcd_command(CMD_CLEAR);			// clear display
    wait10ms();
-   lcd_command(0b00110000); // 8 bit data, basic instructions
-   lcd_command(0b00110000); // 8 bit data, basic instructions
-   lcd_command(0b00001100); // display on
+   lcd_command(CMD_DISPLAY_CONTROL | DISPLAY_ON); // display on
+   lcd_command(CMD_SET_ENTRY_MODE | MODE_RIGHT_MOVE); // increase address counter after read/write
+   lcd_command(CMD_SET_FUNCTION | MODE_EXTENDED); // set to extended mode
    lcd_clear();
-   lcd_command(0b00000110); // increment, no shift 
+   lcd_command(CMD_SET_FUNCTION | MODE_EXTENDED | GRAPHIC_DISPLAY_ON);
+   lcd_refresh();
+   lcd_line1();
 }
-#else 
+#else    /* not ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920)) */
 void lcd_init(void) {
    wait_about30ms();
    // to initialise, send 3 times to be shure to be in 8 Bit mode
@@ -364,6 +430,14 @@ void lcd_clear(void) {
      lcd_command(CMD_RMW_CLEAR); // Clear Read-Modify-Write ???
    }
 
+#elif (LCD_ST_TYPE == 7920)
+   unsigned char p;
+   unsigned char count;
+   for (count = 0; count < 64; count++) {
+     for (p = 0; p < 16; p++) {
+       lcd_bit_mem[count][p] = 0;
+     }
+   }
 #else
    lcd_command(CLEAR_DISPLAY);
    wait_about10ms();
@@ -463,7 +537,7 @@ void lcd_pgm_bitmap(const unsigned char * pbitmap,
                     unsigned char y,
                     unsigned char options)
 {
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+ #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    if (x >= SCREEN_WIDTH || (y >= SCREEN_HEIGHT))
       return;
 
@@ -510,7 +584,66 @@ void lcd_pgm_bitmap(const unsigned char * pbitmap,
    lcd_command(CMD_SET_PAGE | (0x0f & _page));
    lcd_command(CMD_SET_COLUMN_UPPER | (0x0f & (_xpos >> 4)));
    lcd_command(CMD_SET_COLUMN_LOWER | (0x0f &  _xpos));
+ #elif (LCD_ST_TYPE == 7920)
+   unsigned char ii,hh,hmsk;
+   unsigned char jj;
+   unsigned char xx,xxbit;
+   unsigned char width;
+   unsigned char height;
+   unsigned char ymem;
+   const unsigned char *pdata;
+   pdata = pbitmap + 2;
+   width = (unsigned char)pgm_read_byte(&pbitmap[0]);
+   height = (unsigned char)pgm_read_byte(&pbitmap[1]);
+   for (ii=0;ii<height;ii++) {
+     hh = ii/8;
+     hmsk = pgm_read_byte(set_msk+(ii%8));
+     for (jj=0; jj<width; jj++) {
+       xx = (x + jj) / 8;
+       xxbit = (x + jj) % 8;
+#if (LCD_ST7565_V_FLIP > 0)
+       ymem = 63 - y - ii;
+#else
+       ymem = y + ii;
 #endif
+       if ((pgm_read_byte(pdata + jj + (hh*width)) & hmsk) == 0) {
+#if (LCD_ST7565_H_FLIP > 0)
+         lcd_bit_mem[ymem][15-xx] &= pgm_read_byte(clear_msk+xxbit);
+#else
+         lcd_bit_mem[ymem][xx] &= pgm_read_byte(clear_msk+(7-xxbit));
+#endif
+       } else {
+#if (LCD_ST7565_H_FLIP > 0)
+         lcd_bit_mem[ymem][15-xx] |= pgm_read_byte(set_msk+xxbit);
+#else
+         lcd_bit_mem[ymem][xx] |= pgm_read_byte(set_msk+(7-xxbit));
+#endif
+       }
+     }
+   }
+ #endif
 }
 #endif
+
+#if (LCD_ST_TYPE == 7920)
+/* lcd_refresh writes the internal graphic memory to the ST7920 controller */
+void lcd_refresh(void) {
+  unsigned char xx;
+  unsigned char yy;
+  for (yy=0; yy<64; yy++) {
+    if (yy < 32) {
+      lcd_command(CMD_SET_GDRAM_ADDRESS|yy);	/* set vertical start address */
+      lcd_command(CMD_SET_GDRAM_ADDRESS|0);	/* horizontal address starts with 0 */
+    } else {
+      lcd_command(CMD_SET_GDRAM_ADDRESS|(yy-32));	/* set vertical start address */
+      lcd_command(CMD_SET_GDRAM_ADDRESS|8);	/* horizontal address starts with 0 */
+    }
+    for (xx=0; xx<16; xx++) {
+      lcd_write_data(lcd_bit_mem[yy][xx]);
+    }
+  }
+  wdt_reset();
+}
+#endif
+
 

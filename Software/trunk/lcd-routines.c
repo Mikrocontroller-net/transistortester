@@ -153,8 +153,8 @@ _xpos += FONT_WIDTH;
   #define NR_BYTE ((FONT_HEIGHT + 7) / 8)
    pfont = (uint8_t *)font + ((FONT_WIDTH << 1) * temp1);
    for (ii=0;ii<FONT_HEIGHT;ii++) {
-     hh = ii/8;
      if ((_page + ii) >= 64) break;
+     hh = ii/8;			// 8 bit per byte
 #if (LCD_ST7565_V_FLIP > 0)
      ymem = 63 - (_page + ii);
 #else
@@ -549,7 +549,6 @@ void lcd_pgm_bitmap(const unsigned char * pbitmap,
 
 //   pdata = (const unsigned char *)pgm_read_word(&pbitmap->data);
    pdata = pbitmap + 2;
-//   width = pgm_read_byte(&pbitmap->width);
    width = (unsigned char)pgm_read_byte(&pbitmap[0]);
    page = y >> 3;
 //   pagemax = (y + pgm_read_byte(&pbitmap->height) - 1) >> 3;
@@ -596,11 +595,21 @@ void lcd_pgm_bitmap(const unsigned char * pbitmap,
    width = (unsigned char)pgm_read_byte(&pbitmap[0]);
    height = (unsigned char)pgm_read_byte(&pbitmap[1]);
    for (ii=0;ii<height;ii++) {
-     hh = ii/8;
-     hmsk = pgm_read_byte(set_msk+(ii%8));
+     if (options & OPT_VREVERSE) {
+       hh = (height - 1 - ii) /8;
+       hmsk = pgm_read_byte(set_msk+((height - 1 - ii) %8));
+     } else {
+       hh = ii/8;
+       hmsk = pgm_read_byte(set_msk+(ii%8));
+     }
      for (jj=0; jj<width; jj++) {
-       xx = (x + jj) / 8;
-       xxbit = (x + jj) % 8;
+       if (options & OPT_HREVERSE) {
+         xx = (width - 1 + x - jj) / 8;
+         xxbit = (width - 1 + x - jj) % 8;
+       } else {
+         xx = (x + jj) / 8;
+         xxbit = (x + jj) % 8;
+       }
 #if (LCD_ST7565_V_FLIP > 0)
        ymem = 63 - y - ii;
 #else

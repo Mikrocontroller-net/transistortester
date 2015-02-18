@@ -22,6 +22,10 @@
 #define FONT_WIDTH    8
 #define FONT_HEIGHT   12
  #endif
+ #ifdef FONT_8X14
+#define FONT_WIDTH    8
+#define FONT_HEIGHT   14
+ #endif
  #ifdef FONT_8X16
 #define FONT_WIDTH    8
 #define FONT_HEIGHT   16

@@ -685,7 +685,7 @@ start:
        options |= OPT_VREVERSE;
     lcd_pgm_bitmap(bmp_vakdiode_data, 90+24, 32, options);
 #endif    
-    }
+    } /* end for ii */
     PinLayout('E','B','C'); 		//  EBC= or 123=...
     lcd_line2(); //2. row 
 #ifndef FOUR_LINE_LCD

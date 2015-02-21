@@ -83,7 +83,9 @@ CFLAGS += -DLCD_ST7565_V_FLIP=0
 # If option WITH_LCD_ST7565 is present one of the following fonts should be
 # choosen.
 #CFLAGS += -DFONT_6X8
-#CFLAGS += -DFONT_8X12
+#CFLAGS += -DFONT_8X8
+#CFLAGS += -DFONT 8x14
+#CFLAGS += -DFONT 8x15
 CFLAGS += -DFONT_8X16
 
 # Option STRIP_GRID_BOARD selects different board-layout, do not set for standard board!

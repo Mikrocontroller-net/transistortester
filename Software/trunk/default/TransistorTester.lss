@@ -23,15 +23,15 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_abbrev 000013ce  00000000  00000000  0000b031  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   000019d8  00000000  00000000  0000c3ff  2**0
+ 10 .debug_line   000019da  00000000  00000000  0000c3ff  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  00000504  00000000  00000000  0000ddd8  2**2
+ 11 .debug_frame  00000504  00000000  00000000  0000dddc  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000cd9  00000000  00000000  0000e2dc  2**0
+ 12 .debug_str    00000cd9  00000000  00000000  0000e2e0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    0000357e  00000000  00000000  0000efb5  2**0
+ 13 .debug_loc    0000357e  00000000  00000000  0000efb9  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000030  00000000  00000000  00012533  2**0
+ 14 .debug_ranges 00000030  00000000  00000000  00012537  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -433,7 +433,7 @@ void lcd_command(unsigned char temp1) {
 00000240 <lcd_line2>:
    lcd_set_cursor(1,0);
 #elif (LCD_ST_TYPE == 7920)
-   _page = FONT_HEIGHT * 1;	// _page is the vertical pixel address for ST7920 controller
+   _page = FONT_V_SPACE * 1;	// _page is the vertical pixel address for ST7920 controller
    _xpos = 0;			// LCD_ST7565_H_OFFSET is not used for ST7920 controller
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x40));
@@ -444,7 +444,7 @@ void lcd_command(unsigned char temp1) {
 00000248 <lcd_line3>:
    lcd_set_cursor(2,0);
 #elif (LCD_ST_TYPE == 7920)
-   _page = FONT_HEIGHT * 2;	// _page is the vertical pixel address for ST7920 controller
+   _page = FONT_V_SPACE * 2;	// _page is the vertical pixel address for ST7920 controller
    _xpos = 0;			// LCD_ST7565_H_OFFSET is not used for ST7920 controller
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x14));
@@ -455,7 +455,7 @@ void lcd_command(unsigned char temp1) {
 00000250 <lcd_line4>:
    lcd_set_cursor(3,0);
 #elif (LCD_ST_TYPE == 7920)
-   _page = FONT_HEIGHT * 3;	// _page is the vertical pixel address for ST7920 controller
+   _page = FONT_V_SPACE * 3;	// _page is the vertical pixel address for ST7920 controller
    _xpos = 0;			// LCD_ST7565_H_OFFSET is not used for ST7920 controller
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x54));
@@ -465,7 +465,7 @@ void lcd_command(unsigned char temp1) {
 
 00000258 <lcd_set_cursor>:
 #elif (LCD_ST_TYPE == 7920)
-   _page = y * FONT_HEIGHT; 		// _page is the vertical pixel address for ST7920 controller
+   _page = y * FONT_V_SPACE; 		// _page is the vertical pixel address for ST7920 controller
    _xpos = x * FONT_WIDTH;		//  LCD_ST7565_H_OFFSET is not used for the ST7920 controller
 #else
    //move to the specified position

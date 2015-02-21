@@ -14,13 +14,17 @@
     #ifdef FONT_8X14
 #include "fonts/8x14_vertikal_LSB_1.h"
     #else
-     #ifdef FONT_8X16 
-#include "fonts/8x16_vertikal_LSB_1.h"
+     #ifdef FONT_8X15
+#include "fonts/8x15_vertikal_LSB_1.h"
      #else
-      #ifdef FONT_10X16 
-#include "fonts/10x16_vertikal_LSB_1.h"
+      #ifdef FONT_8X16 
+#include "fonts/8x16_vertikal_LSB_1.h"
       #else
+       #ifdef FONT_10X16 
+#include "fonts/10x16_vertikal_LSB_1.h"
+       #else
 #error No Font specified. Check Makefile!
+       #endif
       #endif
      #endif
     #endif

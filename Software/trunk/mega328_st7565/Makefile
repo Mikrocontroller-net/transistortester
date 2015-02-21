@@ -118,6 +118,8 @@ CFLAGS += -DLCD_ST7565_V_FLIP=1
 # choosen.
 #CFLAGS += -DFONT_6X8
 #CFLAGS += -DFONT_8X8
+#CFLAGS += -DFONT 8x14
+#CFLAGS += -DFONT 8x15
 CFLAGS += -DFONT_8X16
 
 # Option STRIP_GRID_BOARD selects different board-layout, do not set for standard board!

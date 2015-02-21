@@ -57,12 +57,13 @@ CFLAGS += -DWITH_MENU
 # Select your language:
 # Available languages are: LANG_BRASIL, LANG_CZECH, LANG_DUTCH, LANG_ENGLISH, LANG_GERMAN, LANG_HUNGARIAN, LANG_ITALIAN,
 #                          LANG_LITHUANIAN, LANG_POLISH, LANG_RUSSIAN , LANG_SLOVAK, LANG_SLOVENE, LANG_SPANISH, LANG_UKRAINIAN
-UI_LANGUAGE = LANG_ENGLISH
+#UI_LANGUAGE = LANG_ENGLISH
+UI_LANGUAGE = LANG_RUSSIAN
 
 # The LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset.
 # This lcd-display don't have a character for Ohm and for µ (micro).
 # Russian language requires a LCD controller with russian characterset and option LCD_CYRILLIC!
-#CFLAGS += -DLCD_CYRILLIC
+CFLAGS += -DLCD_CYRILLIC
 
 # The LCD_DOGM option must be set for support of the DOG-M type of LCD modules with ST7036 controller.
 # For this LCD type the contrast must be set with software command.
@@ -118,8 +119,9 @@ CFLAGS += -DLCD_ST7565_H_OFFSET=4
 # choosen.
 #CFLAGS += -DFONT_6X8
 #CFLAGS += -DFONT_8X8
-#CFLAGS += -DFONT_8X14
-CFLAGS += -DFONT_8X16
+CFLAGS += -DFONT_8X14
+#CFLAGS += -DFONT_8X15
+#CFLAGS += -DFONT_8X16
 
 # Option STRIP_GRID_BOARD selects different board-layout, do not set for standard board!
 # The connection of LCD is totally different for both versions.

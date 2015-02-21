@@ -28,6 +28,9 @@ void CheckRotaryEncoder(void) {
   message_key_released(RotaryEncoder_str);	// RotaryEncoder in line 1
   lcd_line2();
   lcd_MEM_string(TURN_str);			// "turn!" at line 2 of LCD
+#if (LCD_ST_TYPE == 7920)
+  lcd_refresh();
+#endif
   
   for (ii=0;ii<4;ii++) {
      TP13tab[ii] = 0;		//reset count of bit TP1:TP3 to zero

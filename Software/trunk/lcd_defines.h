@@ -10,33 +10,58 @@
 #define SCREEN_WIDTH  128
 #define SCREEN_HEIGHT  64
 
- #ifdef FONT_6X8
-#define FONT_WIDTH    6
-#define FONT_HEIGHT   8
- #endif
- #ifdef FONT_8X8
-#define FONT_WIDTH    8
-#define FONT_HEIGHT   8
- #endif
- #ifdef FONT_8X12
-#define FONT_WIDTH    8
-#define FONT_HEIGHT   12
- #endif
- #ifdef FONT_8X14
-#define FONT_WIDTH    8
-#define FONT_HEIGHT   14
- #endif
- #ifdef FONT_8X15
-#define FONT_WIDTH    8
-#define FONT_HEIGHT   15
- #endif
  #ifdef FONT_8X16
-#define FONT_WIDTH    8
-#define FONT_HEIGHT   16
+  #define FONT_WIDTH    8
+  #define FONT_HEIGHT   16
  #endif
+
+ #ifdef FONT_8X16thin
+  #ifndef FONT_WIDTH
+   #define FONT_WIDTH    8
+   #define FONT_HEIGHT   16
+  #endif
+ #endif
+
+ #ifdef FONT_8X15
+  #ifndef FONT_WIDTH
+   #define FONT_WIDTH    8
+   #define FONT_HEIGHT   15
+  #endif
+ #endif
+
+ #ifdef FONT_8X14
+  #ifndef FONT_WIDTH
+   #define FONT_WIDTH    8
+   #define FONT_HEIGHT   14
+  #endif
+ #endif
+
+ #ifdef FONT_8X12
+  #ifndef FONT_WIDTH
+   #define FONT_WIDTH    8
+   #define FONT_HEIGHT   12
+  #endif
+ #endif
+
+ #ifdef FONT_8X8
+  #ifndef FONT_WIDTH
+   #define FONT_WIDTH    8
+   #define FONT_HEIGHT   8
+  #endif
+ #endif
+
+ #ifdef FONT_6X8
+  #ifndef FONT_WIDTH
+   #define FONT_WIDTH    6
+   #define FONT_HEIGHT   8
+  #endif
+ #endif
+
  #ifdef FONT_10X16
-#define FONT_WIDTH    10
-#define FONT_HEIGHT   16
+  #ifndef FONT_WIDTH
+   #define FONT_WIDTH    10
+   #define FONT_HEIGHT   16
+  #endif
  #endif
 #endif
 

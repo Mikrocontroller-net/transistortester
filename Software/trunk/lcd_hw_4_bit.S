@@ -46,6 +46,18 @@
 #define set_b7_high            sbi             _SFR_IO_ADDR(HW_LCD_B7_PORT), HW_LCD_B7_PIN
 #define set_b7_output          sbi             (_SFR_IO_ADDR(HW_LCD_B7_PORT) - 1), HW_LCD_B7_PIN
 
+; for ST7108 Controller: select CS1 and CS2
+#define set_cs1_low             cbi             _SFR_IO_ADDR(HW_LCD_CS1_PORT), HW_LCD_CS1_PIN
+#define set_cs1_high            sbi             _SFR_IO_ADDR(HW_LCD_CS1_PORT), HW_LCD_CS1_PIN
+#define set_cs1_output          sbi             (_SFR_IO_ADDR(HW_LCD_CS1_PORT) - 1), HW_LCD_CS1_PIN
+
+#define set_cs2_low             cbi             _SFR_IO_ADDR(HW_LCD_CS2_PORT), HW_LCD_CS2_PIN
+#define set_cs2_high            sbi             _SFR_IO_ADDR(HW_LCD_CS2_PORT), HW_LCD_CS2_PIN
+#define set_cs2_output          sbi             (_SFR_IO_ADDR(HW_LCD_CS2_PORT) - 1), HW_LCD_CS2_PIN
+
+#define set_clk_low             cbi             _SFR_IO_ADDR(HW_LCD_CLK_PORT), HW_LCD_CLK_PIN
+#define set_clk_high            sbi             _SFR_IO_ADDR(HW_LCD_CLK_PORT), HW_LCD_CLK_PIN
+#define set_clk_output          sbi             (_SFR_IO_ADDR(HW_LCD_CLK_PORT) - 1), HW_LCD_CLK_PIN
 
 #define RCALL rcall
 
@@ -74,6 +86,7 @@
        .func _lcd_hw_write
        .extern wait1us
        .extern wait30us		; used only for slow 4-bit interface (SLOW_LCD)
+       .extern wait50us		; used for ST7920 controller
 
                
 
@@ -312,6 +325,69 @@ i2c_init:
 
 	ret
 	.endfunc
+#elif (LCD_INTERFACE_MODE == MODE_7108_SERIAL)
+_lcd_hw_write:
+; serial interface for ST7108 controller
+	set_clk_low
+	set_clk_output
+
+        set_en_low
+        set_en_output
+
+	set_b0_low
+        set_b0_output
+        sbrc    preg_2, 7
+	 set_b0_high		; bit 7 == 1
+	RCALL	toggle_clk	; set clk high and low
+
+        sbrc    preg_2, 6
+	 set_b0_high		; bit 6 == 1
+	RCALL	toggle_clk	; set clk high and low
+
+        sbrc    preg_2, 5
+	 set_b0_high		; bit 5 == 1
+	RCALL	toggle_clk	; set clk high and low
+
+        sbrc    preg_2, 4
+	 set_b0_high		; bit 4 == 1
+	RCALL	toggle_clk	; set clk high and low
+
+        sbrc    preg_2, 3
+	 set_b0_high		; bit 3 == 1
+	RCALL	toggle_clk	; set clk high and low
+
+        sbrc    preg_2, 2
+	 set_b0_high		; bit 2 == 1
+	RCALL	toggle_clk	; set clk high and low
+
+        sbrc    preg_2, 1
+	 set_b0_high		; bit 1 == 1
+	RCALL	toggle_clk	; set clk high and low
+
+        sbrc    preg_2, 0
+	 set_b0_high		; bit 0 == 1
+	RCALL	toggle_clk	; set clk high and low
+        ; all 8 bit are loaded to the 74HC164 output
+
+	set_rs_low		; instruction mode
+        set_rs_output		; if RS is set to same as B0, RS is allready output
+	sbrc    preg_1, 0
+	set_rs_high		; data mode
+
+	set_en_high
+	RCALL	wait1us
+	set_en_low
+	RCALL	wait30us	; at least 30 us delay
+	ret
+	.endfunc
+
+toggle_clk:
+	set_clk_high
+	set_clk_high
+	set_clk_low
+	set_b0_low
+	ret
+
 #else
 _lcd_hw_write:
 ; 4-bit interface for HD44780 compatible controller
@@ -382,6 +458,28 @@ _lcd_hw_write:
 _lcd_hw_write_exit:
                ret
        .endfunc
+#endif
+;----------------------------------------------------------------------
+#if (LCD_ST_TYPE == 7108)
+       .global _lcd_hw_select
+       .func _lcd_hw_select
+; select one of the two controllers or both
+;
+;      preg_1 (r24) = bit 0 for CS1 and bit 1 for CS2
+;
+_lcd_hw_select:
+	sbrc    preg_1, 0
+	  set_cs1_high		; enable controller 1
+	sbrs    preg_1, 0
+	  set_cs1_low		; disable controller 1
+	sbrc    preg_1, 1
+	  set_cs2_high		; enable controller 2
+	sbrs    preg_1, 1
+	  set_cs2_low		; disable controller 2
+	set_cs1_output		; enable output CS1
+	set_cs2_output		; enable output CS2
+	ret
+        .endfunc
 #endif
 
 

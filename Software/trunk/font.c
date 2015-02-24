@@ -1,7 +1,7 @@
 #include <avr/io.h>
 #include <avr/pgmspace.h> 
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7108))
 
  #ifdef FONT_8X16 
    #define FONT_SELECTED

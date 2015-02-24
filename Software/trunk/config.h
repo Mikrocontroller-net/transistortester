@@ -14,6 +14,7 @@
 #define MODE_I2C 2		/* I2C interface for SSD1306 */
 #define MODE_SPI 4		/* 4 bit SPI interface for ST7565 or SSD1306 */
 #define MODE_7920_SERIAL 5		/* serial interface for ST7920 */
+#define MODE_7108_SERIAL 6		/* serial interface for ST7108 with shift register 74HC164 */
 
 // select the right Processor Typ
 #if defined(__AVR_ATmega48__)
@@ -345,6 +346,10 @@
   #define LCD_INTERFACE_MODE MODE_PARALLEL
  #endif
   #define SLOW_LCD
+#elif (LCD_ST_TYPE == 7108)
+ #ifndef LCD_INTERFACE_MODE
+  #define LCD_INTERFACE_MODE MODE_7108_SERIAL
+ #endif
 #else
  // default interface  with character LCD
  #ifndef LCD_INTERFACE_MODE
@@ -509,7 +514,83 @@
    #define HW_LCD_RESET_DDR       DDRD
    #define HW_LCD_RESET_PIN       0
  #endif	/* PROCESSOR_TYP for the serial ST7920 Interface */
-#else /* (LCD_INTERFACE_MODE != MODE_SPI || MODE_I2C || MODE_ST7920_SERIAL) */
+#elif (LCD_INTERFACE_MODE == MODE_7108_SERIAL)
+ /* EN_PIN is connected to LCD-E  */
+ /* RS_PIN is connected to LCD-RS and serial data input of the '164 shift register */
+ /* CLK_PIN is connected to the clock input of the '164 shift register */
+ /* CS1_PIN is connected to the LCD-CS1  (chip select of controller 1, row 0-63) */
+ /* CS2_PIN is connected to the LCD-CS2  (chip select of controller 2, row 64-127) */
+ #if PROCESSOR_TYP == 644	/* mega324/644/1284 with serial ST7108 interface */
+   #define HW_LCD_EN_PORT         PORTB
+   #define HW_LCD_EN_DDR          DDRB
+   #define HW_LCD_EN_PIN          3
+
+   #define HW_LCD_RS_PORT         PORTB
+   #define HW_LCD_RS_PIN          2
+
+   #define HW_LCD_B0_PORT         PORTB
+   #define HW_LCD_B0_PIN          2
+ 
+   #define HW_LCD_CS1_PORT         PORTB
+   #define HW_LCD_CS1_DDR          DDRB
+   #define HW_LCD_CS1_PIN          7
+
+   #define HW_LCD_CS2_PORT         PORTB
+   #define HW_LCD_CS2_DDR          DDRB
+   #define HW_LCD_CS2_PIN          5
+
+   #define HW_LCD_CLK_PORT         PORTB
+   #define HW_LCD_CLK_DDR          DDRB
+   #define HW_LCD_CLK_PIN          6
+
+ #elif PROCESSOR_TYP == 1280	/* mega1280/2560 with serial ST7108 interface */
+   #define HW_LCD_EN_PORT         PORTA
+   #define HW_LCD_EN_DDR          DDRA
+   #define HW_LCD_EN_PIN          5
+
+   #define HW_LCD_RS_PORT         PORTA
+   #define HW_LCD_RS_PIN          4
+
+   #define HW_LCD_B0_PORT         PORTA
+   #define HW_LCD_B0_PIN          4
+ 
+   #define HW_LCD_CS1_PORT         PORTA
+   #define HW_LCD_CS1_DDR          DDRA
+   #define HW_LCD_CS1_PIN          3
+
+   #define HW_LCD_CS2_PORT         PORTA
+   #define HW_LCD_CS2_DDR          DDRA
+   #define HW_LCD_CS2_PIN          1
+
+   #define HW_LCD_CLK_PORT         PORTA
+   #define HW_LCD_CLK_DDR          DDRA
+   #define HW_LCD_CLK_PIN          2
+
+ #else				/* mega8/168/328 with serial ST7108 interface  */
+   #define HW_LCD_EN_PORT         PORTD
+   #define HW_LCD_EN_DDR          DDRD
+   #define HW_LCD_EN_PIN          5
+
+   #define HW_LCD_RS_PORT         PORTD
+   #define HW_LCD_RS_PIN          4
+
+   #define HW_LCD_B0_PORT         PORTD
+   #define HW_LCD_B0_PIN          4
+ 
+   #define HW_LCD_CS1_PORT         PORTD
+   #define HW_LCD_CS1_DDR          DDRD
+   #define HW_LCD_CS1_PIN          3
+
+   #define HW_LCD_CS2_PORT         PORTD
+   #define HW_LCD_CS2_DDR          DDRD
+   #define HW_LCD_CS2_PIN          1
+
+   #define HW_LCD_CLK_PORT         PORTD
+   #define HW_LCD_CLK_DDR          DDRD
+   #define HW_LCD_CLK_PIN          2
+
+ #endif	/* PROCESSOR_TYP for the serial ST7108 Interface */
+#else /* (LCD_INTERFACE_MODE != MODE_SPI || MODE_I2C || MODE_ST7920_SERIAL || MODE_ST7108_SERIAL) */
  /* The 4-bit parallel Interface is usually used for the character display */
  #if PROCESSOR_TYP == 644	/* connection for 4-bit parallel interface and mega324/644/1284 */
   #ifdef STRIP_GRID_BOARD

@@ -249,9 +249,7 @@ start:
      if(ptrans.uBE < POOR_LEVEL) {	
         //Vcc <6,3V; no proper operation is possible
         lcd_MEM_string(BatEmpty);	//Battery empty!
- #if (LCD_ST7565_TYPE == 7920)
-        lcd_refresh();
- #endif
+        lcd_refresh();			// write the pixels to display, ST7920 only
         wait_about2s();
         PORTD = 0;			//switch power off
         return 0;
@@ -280,9 +278,7 @@ start:
          lcd_line2();
          lcd_MEM_string(VCC_str);		// VCC=
          DisplayValue(ADCconfig.U_AVCC,-3,'V',3);	// Display 3 Digits of this mV units
- #if (LCD_ST_TYPE == 7920)
-         lcd_refresh();
- #endif
+         lcd_refresh();			// write the pixels to display, ST7920 only
          wait_about1s();
      }
   }
@@ -306,9 +302,7 @@ start:
  #else
      DisplayValue((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);	// Display 3 Digits of this mV units
  #endif
- #if (LCD_ST_TYPE == 7920)
-     lcd_refresh();
- #endif
+     lcd_refresh();			// write the pixels to display, ST7920 only
      wait_about300ms();
   }
 #endif /* WITH_VEXT */
@@ -329,9 +323,7 @@ start:
     DisplayValue(cell_mv[2],-3,'V',3);
 #endif
 #ifdef WITH_SELFTEST
- #if (LCD_ST_TYPE == 7920)
-    lcd_refresh();
- #endif
+    lcd_refresh();			// write the pixels to display, ST7920 only
     wait_about2s();
     AutoCheck(0x11);		// full Selftest with "Short probes" message
 #endif
@@ -355,9 +347,7 @@ start:
 #endif
   lcd_line2();			//LCD position row2, column 1
   lcd_MEM_string(TestRunning);		//String: testing...
- #if (LCD_ST_TYPE == 7920)
-  lcd_refresh();
- #endif
+  lcd_refresh();			// write the pixels to display, ST7920 only
      
   // check all 6 combinations for the 3 pins 
 //         High  Low  Tri
@@ -984,9 +974,7 @@ TyUfAusgabe:
 
  end2:
   ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
-#if (LCD_ST_TYPE  == 7920)
-  lcd_refresh();
-#endif
+  lcd_refresh();			// write the pixels to display, ST7920 only
   while(!(RST_PIN_REG & (1<<RST_PIN)));	//wait ,until button is released
 #ifdef WITH_ROTARY_SWITCH
 wait_again:

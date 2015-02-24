@@ -10,8 +10,8 @@
 #include <math.h>
 #include "config.h"
 #include "tt_function.h"
-#include "lcd-routines.h"
 #include "wait1000ms.h"
+#include "lcd-routines.h"
 #include "part_defs.h"
 
 
@@ -1322,7 +1322,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  #endif
 #endif /* if defined (MAIN_C) */
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7108))
  #include "bitmaps.h"
 #endif
 

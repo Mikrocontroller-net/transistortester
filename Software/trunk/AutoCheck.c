@@ -52,9 +52,7 @@ if ((test_mode & 0xf0) == 0) {
        ww = 0;	// connection not stable, retry
     }
     if (ww > 3) break;	// connection seems to be stable
-  #if (LCD_ST_TYPE == 7920)
-    lcd_refresh();
-  #endif
+    lcd_refresh();		// write the pixels to display, ST7920 only
     wait_about200ms();			// wait 200ms and try again
   }  /* end for (tt...) */
   if (tt < 150) goto begin_selftest;		// is shorted before time limit
@@ -348,9 +346,7 @@ for (ww=0;ww<120;ww++) {
   lcd_clear_line();		// clear total line
   lcd_line2();		//Cursor to column 1, row 2
   lcd_MEM_string(RELPROBE);	// "Release Probes"
- #if (LCD_ST_TYPE == 7920)
-  lcd_refresh();
- #endif
+  lcd_refresh();		// write the pixels to display, ST7920 only
   wait_about500ms();
 }
 
@@ -514,9 +510,7 @@ for (ww=0;ww<64;ww++) {
   }
   lcd_line2();
   DisplayValue(cap.cval,cap.cpre,'F',4);
-  #if (LCD_ST_TYPE == 7920)
-  lcd_refresh();
-  #endif
+  lcd_refresh();		// write the pixels to display, ST7920 only
   wait_about200ms();			// wait additional time
 } // end for ww
 }	/* end if((test_mode & 0x0f) == 1) */
@@ -531,9 +525,7 @@ ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples
 //#define TEST_SLEEP_MODE	/* only select for checking the sleep delay */
  lcd_clear();
  lcd_MEM_string(T50HZ);	//" 50Hz"
-  #if (LCD_ST_TYPE == 7920)
- lcd_refresh();
-  #endif
+ lcd_refresh();		// write the pixels to display, ST7920 only
  ADC_PORT = TXD_VAL;
  ADC_DDR = 1<<TP1 | TXD_MSK;	// Pin 1 to GND
  R_DDR = (1<<PIN_RL3) | (1<<PIN_RL2);

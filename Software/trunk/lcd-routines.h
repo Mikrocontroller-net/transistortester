@@ -6,6 +6,7 @@
 //
 
 extern void _lcd_hw_write(uint8_t flags, uint8_t data);
+extern void _lcd_hw_select(uint8_t flags);
 
 //LCD
 void lcd_testpin(unsigned char temp);
@@ -25,13 +26,16 @@ void lcd_line1(void);
 void lcd_line2(void);
 void lcd_line3(void);
 void lcd_line4(void);
+unsigned char reverse_byte(unsigned char);
 #ifdef WITH_GRAPHICS
 void lcd_pgm_bitmap(const unsigned char * pbitmap,
                     unsigned char x,
                     unsigned char y,
                     unsigned char options);
 #endif
+#if (LCD_ST_TYPE == 7920)
 void lcd_refresh(void);		/* for ST7920 controller only*/
+#endif
 
 //Software-UART
 void uart_putc(uint8_t data);

@@ -19,19 +19,19 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY
   7 .debug_aranges 000003d0  00000000  00000000  00004ca8  2**3
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_info   00005fb9  00000000  00000000  00005078  2**0
+  8 .debug_info   00005fbb  00000000  00000000  00005078  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_abbrev 000013ce  00000000  00000000  0000b031  2**0
+  9 .debug_abbrev 000013b4  00000000  00000000  0000b033  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   000019da  00000000  00000000  0000c3ff  2**0
+ 10 .debug_line   000019db  00000000  00000000  0000c3e7  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  00000504  00000000  00000000  0000dddc  2**2
+ 11 .debug_frame  00000504  00000000  00000000  0000ddc4  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000cd9  00000000  00000000  0000e2e0  2**0
+ 12 .debug_str    00000cd9  00000000  00000000  0000e2c8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    0000357e  00000000  00000000  0000efb9  2**0
+ 13 .debug_loc    0000357e  00000000  00000000  0000efa1  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000030  00000000  00000000  00012537  2**0
+ 14 .debug_ranges 00000030  00000000  00000000  0001251f  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -131,7 +131,7 @@ Disassembly of section .text:
      136:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 0000013a <_lcd_hw_write>:
-	.endfunc
+
 #else
 _lcd_hw_write:
 ; 4-bit interface for HD44780 compatible controller
@@ -250,10 +250,10 @@ _lcd_hw_write_exit:
      194:	08 95       	ret
 
 00000196 <lcd_data>:
-   lcd_command((uint8_t)(CMD_SetDDRAMAddress + (0x40*(y-1)) + x));
-#endif
 }
 
+/* ******************************************************************************* */
+/* ******************************************************************************* */
 // sends a character to the LCD 
 void lcd_data(unsigned char temp1) {
      196:	cf 93       	push	r28
@@ -358,8 +358,8 @@ _xpos += FONT_WIDTH;		// move pointer to the next character position
      1fa:	08 95       	ret
 
 000001fc <lcd_testpin>:
-#endif
 
+/* ******************************************************************************* */
 // sends numeric character (Pin Number) to the LCD 
 // from binary 0 we send ASCII 1 ....
 void lcd_testpin(unsigned char temp) {
@@ -371,6 +371,7 @@ void lcd_testpin(unsigned char temp) {
 00000204 <lcd_space>:
 }
 
+/* ******************************************************************************* */
 // send space character to LCD
 void lcd_space(void) {
    lcd_data(' ');
@@ -468,7 +469,7 @@ void lcd_command(unsigned char temp1) {
    _page = y * FONT_V_SPACE; 		// _page is the vertical pixel address for ST7920 controller
    _xpos = x * FONT_WIDTH;		//  LCD_ST7565_H_OFFSET is not used for the ST7920 controller
 #else
-   //move to the specified position
+   // move to the specified position for character display
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + (0x40*(y-1)) + x));
      258:	8f 5f       	subi	r24, 0xFF	; 255
      25a:	90 e4       	ldi	r25, 0x40	; 64
@@ -501,10 +502,10 @@ void lcd_command(unsigned char temp1) {
      27e:	08 95       	ret
 
 00000280 <lcd_init>:
-   lcd_refresh();
-   lcd_line1();
+   wait_about5ms();
 }
-#else    /* not ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920)) */
+#else    /* not ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920)) */
+/* must be a character display */
 void lcd_init(void) {
    wait_about30ms();
      280:	86 e0       	ldi	r24, 0x06	; 6
@@ -574,9 +575,9 @@ void lcd_init(void) {
      2ee:	08 95       	ret
 
 000002f0 <lcd_string>:
-#endif
  
  
+/* ******************************************************************************* */
 // writes a string to the LCD 
  
 void lcd_string(char *data) {
@@ -630,6 +631,7 @@ void lcd_pgm_string(const unsigned char *data) {
 00000326 <lcd_fix_string>:
 #endif
 
+/* ******************************************************************************* */
 #ifdef USE_EEPROM
 //Load string from PGM or EEprom and send to LCD 
 void lcd_fix_string(const unsigned char *data) {
@@ -661,6 +663,7 @@ void lcd_fix_string(const unsigned char *data) {
 00000346 <lcd_fix_customchar>:
 #endif
 
+/* ******************************************************************************* */
 // load custom character from PGM or EEprom and send to LCD
 void lcd_fix_customchar(const unsigned char *chardata) {	
      346:	0f 93       	push	r16
@@ -679,8 +682,8 @@ void lcd_fix_customchar(const unsigned char *chardata) {
      35c:	0e 94 cb 00 	call	0x196	; 0x196 <lcd_data>
         chardata++;
      360:	21 96       	adiw	r28, 0x01	; 1
-#endif
 
+/* ******************************************************************************* */
 // load custom character from PGM or EEprom and send to LCD
 void lcd_fix_customchar(const unsigned char *chardata) {	
 #if (LCD_ST_TYPE == 0)
@@ -701,6 +704,7 @@ void lcd_fix_customchar(const unsigned char *chardata) {
 
 00000372 <lcd_clear_line>:
 
+/* ******************************************************************************* */
 #ifdef LCD_CLEAR
 void lcd_clear_line(void) {
      372:	cf 93       	push	r28
@@ -711,7 +715,7 @@ void lcd_clear_line(void) {
     lcd_space();
      376:	0e 94 02 01 	call	0x204	; 0x204 <lcd_space>
      37a:	c1 50       	subi	r28, 0x01	; 1
-
+/* ******************************************************************************* */
 #ifdef LCD_CLEAR
 void lcd_clear_line(void) {
  // writes 20 spaces to LCD-Display, Cursor must be positioned to first column
@@ -3107,9 +3111,7 @@ for (ww=0;ww<120;ww++) {
      c26:	83 ed       	ldi	r24, 0xD3	; 211
      c28:	90 e0       	ldi	r25, 0x00	; 0
      c2a:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
- #if (LCD_ST_TYPE == 7920)
-  lcd_refresh();
- #endif
+  lcd_refresh();		// write the pixels to display, ST7920 only
   wait_about500ms();
      c2e:	84 e6       	ldi	r24, 0x64	; 100
      c30:	0e 94 4c 03 	call	0x698	; 0x698 <sleep_5ms>
@@ -3455,9 +3457,7 @@ for (ww=0;ww<64;ww++) {
      e32:	26 e4       	ldi	r18, 0x46	; 70
      e34:	40 91 8e 01 	lds	r20, 0x018E
      e38:	0e 94 79 02 	call	0x4f2	; 0x4f2 <DisplayValue>
-  #if (LCD_ST_TYPE == 7920)
-  lcd_refresh();
-  #endif
+  lcd_refresh();		// write the pixels to display, ST7920 only
   wait_about200ms();			// wait additional time
      e3c:	88 e2       	ldi	r24, 0x28	; 40
      e3e:	0e 94 4c 03 	call	0x698	; 0x698 <sleep_5ms>
@@ -10372,9 +10372,7 @@ start:
     32f0:	8e e3       	ldi	r24, 0x3E	; 62
     32f2:	91 e0       	ldi	r25, 0x01	; 1
     32f4:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
- #if (LCD_ST7565_TYPE == 7920)
-        lcd_refresh();
- #endif
+        lcd_refresh();			// write the pixels to display, ST7920 only
         wait_about2s();
     32f8:	8a ec       	ldi	r24, 0xCA	; 202
     32fa:	0e 94 4c 03 	call	0x698	; 0x698 <sleep_5ms>
@@ -10433,9 +10431,7 @@ start:
     3342:	26 e5       	ldi	r18, 0x56	; 86
     3344:	4d ef       	ldi	r20, 0xFD	; 253
     3346:	0e 94 79 02 	call	0x4f2	; 0x4f2 <DisplayValue>
- #if (LCD_ST_TYPE == 7920)
-         lcd_refresh();
- #endif
+         lcd_refresh();			// write the pixels to display, ST7920 only
          wait_about1s();
     334a:	88 ec       	ldi	r24, 0xC8	; 200
     334c:	0e 94 4c 03 	call	0x698	; 0x698 <sleep_5ms>
@@ -10459,11 +10455,11 @@ start:
     3364:	83 e8       	ldi	r24, 0x83	; 131
     3366:	90 e0       	ldi	r25, 0x00	; 0
     3368:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
+    lcd_space();
+    DisplayValue(cell_mv[2],-3,'V',3);
 #endif
 #ifdef WITH_SELFTEST
- #if (LCD_ST_TYPE == 7920)
-    lcd_refresh();
- #endif
+    lcd_refresh();			// write the pixels to display, ST7920 only
     wait_about2s();
     336c:	8a ec       	ldi	r24, 0xCA	; 202
     336e:	0e 94 4c 03 	call	0x698	; 0x698 <sleep_5ms>
@@ -10513,8 +10509,7 @@ start:
     33ac:	8a e4       	ldi	r24, 0x4A	; 74
     33ae:	91 e0       	ldi	r25, 0x01	; 1
     33b0:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
-  lcd_refresh();
- #endif
+  lcd_refresh();			// write the pixels to display, ST7920 only
      
   // check all 6 combinations for the 3 pins 
 //         High  Low  Tri
@@ -11901,9 +11896,7 @@ TyUfAusgabe:
  end2:
   ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
     3c2c:	77 b8       	out	0x07, r7	; 7
-#if (LCD_ST_TYPE  == 7920)
-  lcd_refresh();
-#endif
+  lcd_refresh();			// write the pixels to display, ST7920 only
   while(!(RST_PIN_REG & (1<<RST_PIN)));	//wait ,until button is released
     3c2e:	4f 9b       	sbis	0x09, 7	; 9
     3c30:	fe cf       	rjmp	.-4      	; 0x3c2e <main+0xaea>

@@ -6,6 +6,7 @@
 #include <avr/io.h>
 #include "config.h"
 
+;#define FAST_SERIAL_OUT
        .section .text
 
 ;----------------------------------------------------------------------
@@ -91,6 +92,7 @@
                
 
 #if (LCD_INTERFACE_MODE == MODE_SPI)
+;---------------------------------------------------------------------------------
 ; serial output for ST7565 controller, 4-Bit SPI
 _lcd_hw_write:
                ; Set RS (0=Cmd, 1=Char)
@@ -167,6 +169,7 @@ _lcd_hw_write:
 	.endfunc
 
 #elif (LCD_INTERFACE_MODE == MODE_7920_SERIAL)
+;---------------------------------------------------------------------------------
 _lcd_hw_write:
 ; 1-bit interface for ST7920 controller
 	set_b0_high
@@ -253,6 +256,7 @@ toggle_en:
 	set_en_low		; set SCLK back to low
 	ret
 #elif (LCD_INTERFACE_MODE == MODE_I2C)
+;---------------------------------------------------------------------------------
 ;===================================================
 _lcd_hw_write:
 	; use I2C as master
@@ -326,6 +330,7 @@ i2c_init:
 	ret
 	.endfunc
 #elif (LCD_INTERFACE_MODE == MODE_7108_SERIAL)
+;---------------------------------------------------------------------------------
 _lcd_hw_write:
 ; serial interface for ST7108 controller
 	set_clk_low
@@ -338,35 +343,83 @@ _lcd_hw_write:
         set_b0_output
         sbrc    preg_2, 7
 	 set_b0_high		; bit 7 == 1
+ #ifdef FAST_SERIAL_OUT
+	set_clk_high		; set clk high and low
+	set_clk_low
+	set_b0_low
+ #else
 	RCALL	toggle_clk	; set clk high and low
+ #endif
 
         sbrc    preg_2, 6
 	 set_b0_high		; bit 6 == 1
+ #ifdef FAST_SERIAL_OUT
+	set_clk_high		; set clk high and low
+	set_clk_low
+	set_b0_low
+ #else
 	RCALL	toggle_clk	; set clk high and low
+ #endif
 
         sbrc    preg_2, 5
 	 set_b0_high		; bit 5 == 1
+ #ifdef FAST_SERIAL_OUT
+	set_clk_high		; set clk high and low
+	set_clk_low
+	set_b0_low
+ #else
 	RCALL	toggle_clk	; set clk high and low
+ #endif
 
         sbrc    preg_2, 4
 	 set_b0_high		; bit 4 == 1
+ #ifdef FAST_SERIAL_OUT
+	set_clk_high		; set clk high and low
+	set_clk_low
+	set_b0_low
+ #else
 	RCALL	toggle_clk	; set clk high and low
+ #endif
 
         sbrc    preg_2, 3
 	 set_b0_high		; bit 3 == 1
+ #ifdef FAST_SERIAL_OUT
+	set_clk_high		; set clk high and low
+	set_clk_low
+	set_b0_low
+ #else
 	RCALL	toggle_clk	; set clk high and low
+ #endif
 
         sbrc    preg_2, 2
 	 set_b0_high		; bit 2 == 1
+ #ifdef FAST_SERIAL_OUT
+	set_clk_high		; set clk high and low
+	set_clk_low
+	set_b0_low
+ #else
 	RCALL	toggle_clk	; set clk high and low
+ #endif
 
         sbrc    preg_2, 1
 	 set_b0_high		; bit 1 == 1
+ #ifdef FAST_SERIAL_OUT
+	set_clk_high		; set clk high and low
+	set_clk_low
+	set_b0_low
+ #else
 	RCALL	toggle_clk	; set clk high and low
+ #endif
 
         sbrc    preg_2, 0
 	 set_b0_high		; bit 0 == 1
+ #ifdef FAST_SERIAL_OUT
+	set_clk_high		; set clk high and low
+	set_clk_low
+	set_b0_low
+ #else
 	RCALL	toggle_clk	; set clk high and low
+ #endif
         ; all 8 bit are loaded to the 74HC164 output
 
 	set_rs_low		; instruction mode
@@ -381,16 +434,19 @@ _lcd_hw_write:
 	ret
 	.endfunc
 
+#ifndef FAST_SERIAL_OUT
 toggle_clk:
 	set_clk_high
 	set_clk_high
 	set_clk_low
 	set_b0_low
 	ret
+#endif
 
-#else
+#else	/* !(LCD_INTERFACE_MODE == (MODE_SPI | MODE_7920_SERIAL | MODE_I2C | MODE_7108_SERIAL)) */
+;---------------------------------------------------------------------------------
 _lcd_hw_write:
-; 4-bit interface for HD44780 compatible controller
+; must be a 4-bit parallel interface for HD44780 compatible controller or simular
                ; Set RS (0=Cmd, 1=Char)
                sbrc    preg_1, 0
                        set_rs_high
@@ -458,7 +514,7 @@ _lcd_hw_write:
 _lcd_hw_write_exit:
                ret
        .endfunc
-#endif
+#endif /* LCD_INTERFACE_MODE */
 ;----------------------------------------------------------------------
 #if (LCD_ST_TYPE == 7108)
        .global _lcd_hw_select

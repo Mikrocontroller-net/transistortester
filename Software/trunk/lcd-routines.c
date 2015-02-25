@@ -139,6 +139,7 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
 /* ******************************************************************************* */
 // sends a character to the LCD 
 void lcd_data(unsigned char temp1) {
+/* -------------------------------------------------------------------------- */
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
  uint8_t ii, data;
  uint8_t *pfont;
@@ -245,6 +246,7 @@ void lcd_data(unsigned char temp1) {
  }
  #endif
 _xpos += FONT_WIDTH;		// move pointer to next character position
+/* -------------------------------------------------------------------------- */
 #elif (LCD_ST_TYPE == 7920)
    unsigned char ii,hh,hmsk;
    unsigned char jj;
@@ -283,7 +285,8 @@ _xpos += FONT_WIDTH;		// move pointer to next character position
      } /* end for(jj) */
    } /* end for(ii) */
 _xpos += FONT_WIDTH;		// move pointer to the next character position
-#else
+/* -------------------------------------------------------------------------- */
+#else /* !(LCD_ST_TYPE == 7565 | 1306 | 7108 | 7920) must be character display */
  lcd_write_data(temp1);		// set RS to 1
 #endif
 
@@ -339,6 +342,7 @@ void lcd_command(unsigned char temp1) {
 // Initialise: 
 // Must be called first .
  
+/* -------------------------------------------------------------------------- */
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
 void lcd_init(void) {
 
@@ -433,7 +437,8 @@ void lcd_init(void) {
 
    lcd_set_cursor(0,0);
 }
-#elif (LCD_ST_TYPE == 7920)  /* not ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306)) */
+/* -------------------------------------------------------------------------- */
+#elif (LCD_ST_TYPE == 7920)  /* !(LCD_ST_TYPE == 7565 | 1306) */
 
 void lcd_init(void) {
    // reset the ST7920 controller
@@ -465,14 +470,16 @@ void lcd_init(void) {
    lcd_refresh();
    lcd_line1();
 }
-#elif (LCD_ST_TYPE == 7108)  /* not ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) */
+/* -------------------------------------------------------------------------- */
+#elif (LCD_ST_TYPE == 7108)  /* !(LCD_ST_TYPE == 7565 | 1306 | 7920) */
 void lcd_init(void) {
    wait_about30ms();
    _lcd_hw_select(3);		// select both controllers
    lcd_command(CMD_DISPLAY_ON);
    wait_about5ms();
 }
-#else    /* not ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920)) */
+/* -------------------------------------------------------------------------- */
+#else    /* !(LCD_ST_TYPE == 7565 | 1306) | 7108 | 7920) */
 /* must be a character display */
 void lcd_init(void) {
    wait_about30ms();
@@ -824,10 +831,10 @@ void lcd_refresh(void) {
     } else {
       // the second half of display is located at GDRAM address 128..255 ((8..15) x 16 pixel)
       lcd_command(CMD_SET_GDRAM_ADDRESS|(yy-32));	/* set vertical start address */
-      lcd_command(CMD_SET_GDRAM_ADDRESS|8);	/* horizontal address starts with 0 */
+      lcd_command(CMD_SET_GDRAM_ADDRESS|(SCREEN_WIDTH / 16));	/* horizontal address starts with 0 (128)*/
     }
     for (xx=0; xx<(SCREEN_WIDTH / 8); xx++) {
-      lcd_write_data(lcd_bit_mem[yy][xx]);	// write 8 x 16 bits to GDRAM (= 16 bytes)
+      lcd_write_data(lcd_bit_mem[yy][xx]);	// write 16 x 8 bits to GDRAM (= 128 pixel)
     }
   } /* end for yy */
   wdt_reset();

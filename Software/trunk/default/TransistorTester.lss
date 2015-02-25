@@ -131,10 +131,10 @@ Disassembly of section .text:
      136:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 0000013a <_lcd_hw_write>:
-
-#else
+#else	/* !(LCD_INTERFACE_MODE == (MODE_SPI | MODE_7920_SERIAL | MODE_I2C | MODE_7108_SERIAL)) */
+;---------------------------------------------------------------------------------
 _lcd_hw_write:
-; 4-bit interface for HD44780 compatible controller
+; must be a 4-bit parallel interface for HD44780 compatible controller or simular
                ; Set RS (0=Cmd, 1=Char)
                sbrc    preg_1, 0
      13a:	80 fd       	sbrc	r24, 0
@@ -258,11 +258,11 @@ _lcd_hw_write_exit:
 void lcd_data(unsigned char temp1) {
      196:	cf 93       	push	r28
      198:	c8 2f       	mov	r28, r24
-       }
      } /* end for(jj) */
    } /* end for(ii) */
 _xpos += FONT_WIDTH;		// move pointer to the next character position
-#else
+/* -------------------------------------------------------------------------- */
+#else /* !(LCD_ST_TYPE == 7565 | 1306 | 7108 | 7920) must be character display */
  lcd_write_data(temp1);		// set RS to 1
      19a:	68 2f       	mov	r22, r24
      19c:	81 e0       	ldi	r24, 0x01	; 1
@@ -286,7 +286,7 @@ _xpos += FONT_WIDTH;		// move pointer to the next character position
     	uart_putc('>');
      1ba:	8e e3       	ldi	r24, 0x3E	; 62
      1bc:	12 c0       	rjmp	.+36     	; 0x1e2 <lcd_data+0x4c>
-#else
+#else /* !(LCD_ST_TYPE == 7565 | 1306 | 7108 | 7920) must be character display */
  lcd_write_data(temp1);		// set RS to 1
 #endif
 
@@ -502,9 +502,9 @@ void lcd_command(unsigned char temp1) {
      27e:	08 95       	ret
 
 00000280 <lcd_init>:
-   wait_about5ms();
 }
-#else    /* not ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920)) */
+/* -------------------------------------------------------------------------- */
+#else    /* !(LCD_ST_TYPE == 7565 | 1306) | 7108 | 7920) */
 /* must be a character display */
 void lcd_init(void) {
    wait_about30ms();

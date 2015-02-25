@@ -121,6 +121,7 @@ CFLAGS += -DLCD_ST7565_H_OFFSET=4
 CFLAGS += -DFONT_8X14
 #CFLAGS += -DFONT_8X15
 #CFLAGS += -DFONT_8X16
+#CFLAGS += -DFONT_8X16thin
 
 # Option STRIP_GRID_BOARD selects different board-layout, do not set for standard board!
 # The connection of LCD is totally different for both versions.

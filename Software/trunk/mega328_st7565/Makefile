@@ -123,6 +123,12 @@ CFLAGS += -DLCD_ST7565_V_FLIP=1
 CFLAGS += -DFONT_8X16
 #CFLAGS += -DFONT_8X16thin
 
+# option BIG_TP makes the 123 for the test pins bigger
+CFLAGS += -DBIG_TP
+# option INVERSE_TP inverse the 123 for the test pins (black on white)
+# the option INVERSE_TP disable the option BIG_TP because a frame is required
+#CFLAGS += -DINVERSE_TP
+
 # Option STRIP_GRID_BOARD selects different board-layout, do not set for standard board!
 # The connection of LCD is totally different for both versions.
 #CFLAGS += -DSTRIP_GRID_BOARD

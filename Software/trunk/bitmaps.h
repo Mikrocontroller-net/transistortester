@@ -428,10 +428,23 @@
 // Memory usage: 7 bytes
 //*****************************************************************************
 #if defined (MAIN_C)
- const unsigned char bmp_one_data[(5 * 1) + 2] PROGMEM ={
-	5, /* The width of the bitmap. */
+ #ifdef INVERSE_TP
+  #define TP_DATA_COUNT 7
+ #else
+  #define TP_DATA_COUNT 5
+ #endif
+ const unsigned char bmp_one_data[(TP_DATA_COUNT * 1) + 2] PROGMEM ={
+	TP_DATA_COUNT, /* The width of the bitmap. */
 	8, /* The height of the bitmap. */
+ #ifdef INVERSE_TP
+        0xff, 0xff, 0xf7, 0xfb, 0x81, 0xff, 0xff
+ #else
+  #ifdef BIG_TP
+        0x00, 0x04, 0x02, 0xff, 0x00
+  #else
 	0x00, 0x08, 0x04, 0x7e, 0x00
+  #endif
+ #endif
 };
 #else
  extern const unsigned char bmp_one_data[] PROGMEM ;
@@ -445,10 +458,18 @@
 // Memory usage: 7 bytes
 //*****************************************************************************
 #if defined (MAIN_C)
- const unsigned char bmp_two_data[(5 * 1) + 2] PROGMEM ={
-	5, // The width of the bitmap.
-	8, // The height of the bitmap.
-	0x44, 0x62, 0x52, 0x52, 0x4c, 
+ const unsigned char bmp_two_data[(TP_DATA_COUNT * 1) + 2] PROGMEM ={
+	TP_DATA_COUNT, /* The width of the bitmap. */
+	8, /* The height of the bitmap. */
+ #ifdef INVERSE_TP
+        0xff, 0xbb, 0x9d, 0xad, 0xad, 0xb3, 0xff
+ #else
+  #ifdef BIG_TP
+        0xc2, 0xa1, 0x91, 0x89, 0x86
+  #else
+	0x44, 0x62, 0x52, 0x52, 0x4c
+  #endif
+ #endif
 };
 #else
  extern const unsigned char bmp_two_data[] PROGMEM ;
@@ -462,10 +483,18 @@
 // Memory usage: 7 bytes
 //*****************************************************************************
 #if defined (MAIN_C)
- const unsigned char bmp_three_data[(5 * 1) + 2] PROGMEM ={
-	5, // The width of the bitmap.
-	8, // The height of the bitmap.
-	0x24, 0x42, 0x4a, 0x4a, 0x34, 
+ const unsigned char bmp_three_data[(TP_DATA_COUNT * 1) + 2] PROGMEM ={
+	TP_DATA_COUNT, /* The width of the bitmap. */
+	8, /* The height of the bitmap. */
+ #ifdef INVERSE_TP
+        0xff, 0xdb, 0xbd, 0xb5, 0xb5, 0xcb, 0xff
+ #else
+  #ifdef BIG_TP
+        0x42, 0x81, 0x89, 0x89, 0x76
+  #else
+	0x24, 0x42, 0x4a, 0x4a, 0x34
+  #endif
+ #endif
 };
 #else
  extern const unsigned char bmp_three_data[] PROGMEM ;
@@ -544,7 +573,7 @@
 	32, // The height of the bitmap.
 	0x02, 0x02, 0x02, 0x02,  0xfe, 0x00, 0x00, 0x00, 
 
-	0x00, 0x20, 0x60, 0xa0,  0x3f, 0xa0, 0x60, 0x20, 
+	0x00, 0x20, 0x60, 0xe0,  0xff, 0xe0, 0x60, 0x20, 
 
 	0x00, 0x02, 0x02, 0x02,  0xff, 0x02, 0x02, 0x02, 
 

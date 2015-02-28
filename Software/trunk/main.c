@@ -404,7 +404,7 @@ start:
     lcd_MEM_string(Thyristor);		//"Thyristor"
     PinLayout(Cathode_char,'G','A'); 	// CGA= or 123=...
 #ifdef WITH_GRAPHICS
-    lcd_pgm_bitmap(bmp_thyristor_data, 102, 32, 0);
+    lcd_pgm_bitmap(bmp_thyristor_data, 100, 32, 0);
     lcd_draw_trans_pins(90, 48);
 #endif
     goto TyUfAusgabe;
@@ -633,8 +633,8 @@ start:
        }
 //       _trans = &ntrans;  is allready selected a default
 #ifdef WITH_GRAPHICS
-       lcd_pgm_bitmap(bmp_npn_data, 90, 32, 0);
-       lcd_draw_trans_pins(90-6, 40);
+       lcd_pgm_bitmap(bmp_npn_data, 88, 32, 0);
+       lcd_draw_trans_pins(88-7, 40);
 #endif
     } else {
        lcd_MEM_string(PNP_str);		//"PNP "
@@ -643,9 +643,9 @@ start:
        }
        _trans = &ptrans;		// change transistor structure
 #ifdef WITH_GRAPHICS
-       lcd_pgm_bitmap(bmp_npn_data, 90, 32, 0);
-       lcd_pgm_bitmap(bmp_pnp_data, 90+14, 32+16, 0);	// update for PNP
-       lcd_draw_trans_pins(90-6, 40);
+       lcd_pgm_bitmap(bmp_npn_data, 88, 32, 0);
+       lcd_pgm_bitmap(bmp_pnp_data, 88+14, 32+16, 0);	// update for PNP
+       lcd_draw_trans_pins(88-7, 40);
 #endif
     }
     lcd_space();
@@ -673,7 +673,7 @@ start:
     options = 0;
     if (_trans->c != diodes.Anode[ii])
        options |= OPT_VREVERSE;
-    lcd_pgm_bitmap(bmp_vakdiode_data, 90+24, 32, options);
+    lcd_pgm_bitmap(bmp_vakdiode_data, 88+24, 32, options);
 #endif    
     } /* end for ii */
     PinLayout('E','B','C'); 		//  EBC= or 123=...
@@ -764,7 +764,7 @@ start:
     } else {
        PinLayout('S','G','D'); 		//  SGD= or 123=...
     }
-//    if((NumOfDiodes == 1) && ((PartMode&D_MODE) != D_MODE)) 
+
     an_cat = 0;
     if(NumOfDiodes == 1) {
        //MOSFET with protection diode; only with enhancement-FETs
@@ -780,12 +780,15 @@ start:
        // layout with 123= style
        an_cat = (((PartMode&P_CHANNEL) && (ptrans.c < ptrans.e)) || ((!(PartMode&P_CHANNEL)) && (ntrans.c > ntrans.e)));
 #endif
-       //  show diode symbol in right direction 
+#if FLASHEND <= 0x1fff
+       //  show diode symbol in right direction  (short form for less flash memory)
        if (an_cat) {
           lcd_data(LCD_CHAR_DIODE1);	//show Diode symbol >|
        } else {
           lcd_data(LCD_CHAR_DIODE2);	//show Diode symbol |<
        }
+#endif
+
 #ifndef WITH_GRAPHICS
  #ifndef FOUR_LINE_LCD
   #if FLASHEND > 0x1fff
@@ -831,9 +834,8 @@ start:
        options = 0;
        if (_trans->c != diodes.Anode[0])
           options |= OPT_VREVERSE;
-       lcd_pgm_bitmap(bmp_vakdiode_data, 114, 32, options);
-       lcd_line3();			//3. Row
-  #else
+       lcd_pgm_bitmap(bmp_vakdiode_data, 112, 32, options);
+  #endif
        lcd_line3();			//3. Row
        if (an_cat) {
           lcd_testpin(diodes.Anode[0]);
@@ -844,8 +846,7 @@ start:
           lcd_MEM_string(KatAn);	//"-|<-"
           lcd_testpin(diodes.Anode[0]);
        }
-       lcd_space();
-  #endif
+       lcd_line4();
        lcd_MEM_string(Uf_str);			//"Uf="
        mVAusgabe(0);
     }

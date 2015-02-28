@@ -677,6 +677,7 @@ void lcd_pgm_bitmap(const unsigned char * pbitmap,
                     unsigned char y,
                     unsigned char options)
 {
+/* ------------------------------------------------------------------------------- */
  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
    if (x >= SCREEN_WIDTH || (y >= SCREEN_HEIGHT))
       return;
@@ -750,6 +751,9 @@ void lcd_pgm_bitmap(const unsigned char * pbitmap,
    #endif
             { byte = reverse_byte(byte);
          }
+//         if ((options & OPT_CINVERSE) == OPT_CINVERSE) {
+//            byte = ~byte;
+//         }
          lcd_write_data(byte);
          xx++;
       } /* end for offset */
@@ -765,6 +769,7 @@ void lcd_pgm_bitmap(const unsigned char * pbitmap,
    #else
    lcd_command(CMD_SET_PAGE | (0x0f & _page));
    #endif
+/* ------------------------------------------------------------------------------- */
  #elif (LCD_ST_TYPE == 7920)
    unsigned char ii,hh,hmsk;
    unsigned char jj;
@@ -797,6 +802,8 @@ void lcd_pgm_bitmap(const unsigned char * pbitmap,
   #else
        ymem = y + ii;
   #endif
+//       if ((((pgm_read_byte(pdata + jj + (hh*width)) & hmsk) == 0) && ((options & OPT_CINVERSE) == 0)) ||
+//           (((pgm_read_byte(pdata + jj + (hh*width)) & hmsk) != 0) && ((options & OPT_CINVERSE) != 0))) {
        if ((pgm_read_byte(pdata + jj + (hh*width)) & hmsk) == 0) {
          // clear bit in the pixel image
   #if (LCD_ST7565_H_FLIP > 0)

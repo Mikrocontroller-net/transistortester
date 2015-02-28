@@ -6,6 +6,7 @@
 // Options for lcd_pgm_bitmap option parameter:
 #define OPT_HREVERSE    1 // Display bitmap reversed horizontally
 #define OPT_VREVERSE    2 // Display bitmap reversed vertically
+#define OPT_CINVERSE	4 // color is inverted (black to white ...) not used!
 
 #define SCREEN_WIDTH  128
 #define SCREEN_HEIGHT  64

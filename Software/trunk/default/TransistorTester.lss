@@ -3,35 +3,35 @@ TransistorTester.elf:     Dateiformat elf32-avr
 
 Sektionen:
 Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
-  0 .data         00000000  00800100  00003e52  00003f06  2**0
+  0 .data         00000000  00800100  00003e3c  00003ef0  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00003e52  00000000  00000000  000000b4  2**1
+  1 .text         00003e3c  00000000  00000000  000000b4  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          000000aa  00800100  00800100  00003f06  2**0
+  2 .bss          000000aa  00800100  00800100  00003ef0  2**0
                   ALLOC
-  3 .eeprom       000001af  00810000  00810000  00003f06  2**0
+  3 .eeprom       000001af  00810000  00810000  00003ef0  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  4 .stab         00000a98  00000000  00000000  000040b8  2**2
+  4 .stab         00000a98  00000000  00000000  000040a0  2**2
                   CONTENTS, READONLY, DEBUGGING
-  5 .stabstr      00000141  00000000  00000000  00004b50  2**0
+  5 .stabstr      00000141  00000000  00000000  00004b38  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .comment      00000011  00000000  00000000  00004c91  2**0
+  6 .comment      00000011  00000000  00000000  00004c79  2**0
                   CONTENTS, READONLY
-  7 .debug_aranges 000003d0  00000000  00000000  00004ca8  2**3
+  7 .debug_aranges 000003d0  00000000  00000000  00004c90  2**3
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_info   00005fbb  00000000  00000000  00005078  2**0
+  8 .debug_info   00005f95  00000000  00000000  00005060  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_abbrev 000013b4  00000000  00000000  0000b033  2**0
+  9 .debug_abbrev 000013b4  00000000  00000000  0000aff5  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   000019db  00000000  00000000  0000c3e7  2**0
+ 10 .debug_line   000019d4  00000000  00000000  0000c3a9  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  00000504  00000000  00000000  0000ddc4  2**2
+ 11 .debug_frame  00000504  00000000  00000000  0000dd80  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000cd9  00000000  00000000  0000e2c8  2**0
+ 12 .debug_str    00000cd9  00000000  00000000  0000e284  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    0000357e  00000000  00000000  0000efa1  2**0
+ 13 .debug_loc    00003572  00000000  00000000  0000ef5d  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000030  00000000  00000000  0001251f  2**0
+ 14 .debug_ranges 00000030  00000000  00000000  000124cf  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -125,7 +125,7 @@ Disassembly of section .text:
      12a:	b1 07       	cpc	r27, r17
      12c:	e1 f7       	brne	.-8      	; 0x126 <.do_clear_bss_loop>
      12e:	0e 94 a2 18 	call	0x3144	; 0x3144 <main>
-     132:	0c 94 27 1f 	jmp	0x3e4e	; 0x3e4e <_exit>
+     132:	0c 94 1c 1f 	jmp	0x3e38	; 0x3e38 <_exit>
 
 00000136 <__bad_interrupt>:
      136:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -642,7 +642,7 @@ void lcd_fix_string(const unsigned char *data) {
    while(1) {
       cc = MEM_read_byte(data);
      32c:	ce 01       	movw	r24, r28
-     32e:	0e 94 fc 1e 	call	0x3df8	; 0x3df8 <__eerd_byte_m168>
+     32e:	0e 94 f1 1e 	call	0x3de2	; 0x3de2 <__eerd_byte_m168>
       if((cc==0) || (cc==128)) {
      332:	98 2f       	mov	r25, r24
      334:	9f 77       	andi	r25, 0x7F	; 127
@@ -678,7 +678,7 @@ void lcd_fix_customchar(const unsigned char *chardata) {
     for(uint8_t i=0;i<8;i++) {
         lcd_data(MEM_read_byte(chardata));
      356:	ce 01       	movw	r24, r28
-     358:	0e 94 fc 1e 	call	0x3df8	; 0x3df8 <__eerd_byte_m168>
+     358:	0e 94 f1 1e 	call	0x3de2	; 0x3de2 <__eerd_byte_m168>
      35c:	0e 94 cb 00 	call	0x196	; 0x196 <lcd_data>
         chardata++;
      360:	21 96       	adiw	r28, 0x01	; 1
@@ -771,7 +771,7 @@ to_lcd:			;	void i2lcd(uint16_t iw)
  	ldi	r21, 0x00	; 0
      39e:	50 e0       	ldi	r21, 0x00	; 0
  	ACALL	utoa		; utoa(iw, outval, 10);	//output voltage to string
-     3a0:	0e 94 e6 1e 	call	0x3dcc	; 0x3dcc <utoa>
+     3a0:	0e 94 db 1e 	call	0x3db6	; 0x3db6 <utoa>
  	RCALL	lcd_string	;lcd_string(utoa(iw, outval, 10));	//output correction voltage
      3a4:	a5 df       	rcall	.-182    	; 0x2f0 <lcd_string>
 
@@ -1197,7 +1197,7 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
      4f4:	b0 e0       	ldi	r27, 0x00	; 0
      4f6:	ef e7       	ldi	r30, 0x7F	; 127
      4f8:	f2 e0       	ldi	r31, 0x02	; 2
-     4fa:	0c 94 b5 1e 	jmp	0x3d6a	; 0x3d6a <__prologue_saves__+0xc>
+     4fa:	0c 94 aa 1e 	jmp	0x3d54	; 0x3d54 <__prologue_saves__+0xc>
      4fe:	dc 01       	movw	r26, r24
      500:	cb 01       	movw	r24, r22
      502:	14 2f       	mov	r17, r20
@@ -1277,7 +1277,7 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
     Value = Value / 10;			/* scale down by 10^1 */
      544:	a5 01       	movw	r20, r10
      546:	94 01       	movw	r18, r8
-     548:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+     548:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
      54c:	da 01       	movw	r26, r20
      54e:	c9 01       	movw	r24, r18
      550:	1f 5f       	subi	r17, 0xFF	; 255
@@ -1345,7 +1345,7 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
      584:	50 e0       	ldi	r21, 0x00	; 0
      586:	65 e4       	ldi	r22, 0x45	; 69
      588:	71 e0       	ldi	r23, 0x01	; 1
-     58a:	0e 94 e6 1e 	call	0x3dcc	; 0x3dcc <utoa>
+     58a:	0e 94 db 1e 	call	0x3db6	; 0x3db6 <utoa>
 #endif
 
   Length = strlen(OutBuffer);
@@ -1371,7 +1371,7 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
      5a8:	90 e0       	ldi	r25, 0x00	; 0
      5aa:	82 5f       	subi	r24, 0xF2	; 242
      5ac:	9f 4f       	sbci	r25, 0xFF	; 255
-     5ae:	0e 94 fc 1e 	call	0x3df8	; 0x3df8 <__eerd_byte_m168>
+     5ae:	0e 94 f1 1e 	call	0x3de2	; 0x3de2 <__eerd_byte_m168>
      5b2:	b8 2e       	mov	r11, r24
 
 
@@ -1493,7 +1493,7 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
      61e:	cd b7       	in	r28, 0x3d	; 61
      620:	de b7       	in	r29, 0x3e	; 62
      622:	ec e0       	ldi	r30, 0x0C	; 12
-     624:	0c 94 d1 1e 	jmp	0x3da2	; 0x3da2 <__epilogue_restores__+0xc>
+     624:	0c 94 c6 1e 	jmp	0x3d8c	; 0x3d8c <__epilogue_restores__+0xc>
 
 00000628 <uart_putc>:
  .section .text
@@ -2139,7 +2139,7 @@ r2b02:
 	ldi	r25, 0x00; 0
      796:	90 e0       	ldi	r25, 0x00	; 0
 	ACALL	__mulsi3;			; sum(ADCreads) * ADC_reference
-     798:	0e 94 4a 1e 	call	0x3c94	; 0x3c94 <__mulsi3>
+     798:	0e 94 3f 1e 	call	0x3c7e	; 0x3c7e <__mulsi3>
 	ldi	r18, lo8(1023)			; Value /= 1023; /* / 1024 for 10bit ADC */
      79c:	2f ef       	ldi	r18, 0xFF	; 255
 	ldi	r19, hi8(1023);
@@ -2149,7 +2149,7 @@ r2b02:
 	ldi	r21, 0x00; 0
      7a2:	50 e0       	ldi	r21, 0x00	; 0
 	ACALL	__udivmodsi4;			R22-25 / R18-21
-     7a4:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+     7a4:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
 	movw	r22, r18;
      7a8:	b9 01       	movw	r22, r18
 	movw	r24, r20;
@@ -2164,7 +2164,7 @@ r2b02:
 	ldi	r21, 0x00; 0
      7b4:	50 e0       	ldi	r21, 0x00	; 0
 	ACALL	__udivmodsi4;			R22-25 / R18-21
-     7b6:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+     7b6:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
 	movw	r24, r18			;;//   return ((unsigned int)(Value / (1023 * (unsigned long)ADCconfig.Samples)));
      7ba:	c9 01       	movw	r24, r18
 	pop	r17;
@@ -2363,7 +2363,7 @@ RefVoltage:
 ;; 	add	r18, r24		; referenz =  ref_mv +
 ;; 	adc	r19, r25
 	ACALL	eeprom_read_byte	; eeprom_read_word((uint16_t *)(&ref_offset)); done as two read_byte
-     840:	0e 94 fc 1e 	call	0x3df8	; 0x3df8 <__eerd_byte_m168>
+     840:	0e 94 f1 1e 	call	0x3de2	; 0x3de2 <__eerd_byte_m168>
 	mov	r19, r24
      844:	38 2f       	mov	r19, r24
 	ldi	r24, lo8(ref_offset+1)
@@ -2371,7 +2371,7 @@ RefVoltage:
 	ldi	r25, hi8(ref_offset+1)
      848:	90 e0       	ldi	r25, 0x00	; 0
 	ACALL	eeprom_read_byte
-     84a:	0e 94 fc 1e 	call	0x3df8	; 0x3df8 <__eerd_byte_m168>
+     84a:	0e 94 f1 1e 	call	0x3de2	; 0x3de2 <__eerd_byte_m168>
  	lds	r18, ref_mv
      84e:	20 91 43 01 	lds	r18, 0x0143
 	add	r18, r19
@@ -2422,7 +2422,7 @@ ad2112:
  	ldi	r23, hi8(Ref_Tab_Abstand)	; 0
      878:	70 e0       	ldi	r23, 0x00	; 0
  	ACALL	__udivmodhi4
-     87a:	0e 94 5a 1e 	call	0x3cb4	; 0x3cb4 <__udivmodhi4>
+     87a:	0e 94 4f 1e 	call	0x3c9e	; 0x3c9e <__udivmodhi4>
 ;  r22 = tabind = referenz / Ref_Tab_Abstand;
 ;  r24 =  tabres = referenz % Ref_Tab_Abstand;
  	cpi	r22, 0x08	; if (tabind > 7) 
@@ -2491,7 +2491,7 @@ ad2120:
  	ldi	r23, hi8(Ref_Tab_Abstand)	; 0
      8ae:	70 e0       	ldi	r23, 0x00	; 0
  	ACALL	__udivmodhi4	; ((y1 - y2) * tabres + (Ref_Tab_Abstand/2)) / Ref_Tab_Abstand 
-     8b0:	0e 94 5a 1e 	call	0x3cb4	; 0x3cb4 <__udivmodhi4>
+     8b0:	0e 94 4f 1e 	call	0x3c9e	; 0x3c9e <__udivmodhi4>
  	add	r22, r18	; + y2
      8b4:	62 0f       	add	r22, r18
  	adc	r23, r19
@@ -2510,7 +2510,7 @@ ad2120:
 	ldi	r25, hi8(RefDiff)
      8c2:	90 e0       	ldi	r25, 0x00	; 0
 	ACALL	eeprom_read_byte	; (int8_t)eeprom_read_byte((uint8_t *)&RefDiff));
-     8c4:	0e 94 fc 1e 	call	0x3df8	; 0x3df8 <__eerd_byte_m168>
+     8c4:	0e 94 f1 1e 	call	0x3de2	; 0x3de2 <__eerd_byte_m168>
 	eor	r25, r25		; set zero for sign extend
      8c8:	99 27       	eor	r25, r25
         sbrc	r24, 7			; minus?
@@ -2561,7 +2561,7 @@ get_log:
  	movw	r22, r18
      8f4:	b9 01       	movw	r22, r18
  	call	__udivmodhi4		; tabind = permil / Log_Tab_Distance;	// index to table
-     8f6:	0e 94 5a 1e 	call	0x3cb4	; 0x3cb4 <__udivmodhi4>
+     8f6:	0e 94 4f 1e 	call	0x3c9e	; 0x3c9e <__udivmodhi4>
  	movw	r26, r24
      8fa:	dc 01       	movw	r26, r24
 ;  r26:27 = tabres = permil % Log_Tab_Distance;	// fraction of table distance
@@ -2603,7 +2603,7 @@ get_log:
  	movw	r22, r18	; Log_Tab_Distance
      918:	b9 01       	movw	r22, r18
  	call	__udivmodhi4	;   ((y2 - y1) * tabres ) / Log_Tab_Distance
-     91a:	0e 94 5a 1e 	call	0x3cb4	; 0x3cb4 <__udivmodhi4>
+     91a:	0e 94 4f 1e 	call	0x3c9e	; 0x3c9e <__udivmodhi4>
  	add	r22, r28	;  result = ((y2 - y1) * tabres ) / Log_Tab_Distance + y1; // interpolate
      91e:	6c 0f       	add	r22, r28
  	adc	r23, r29
@@ -2641,7 +2641,7 @@ uint8_t ShortedProbes(uint8_t Probe1, uint8_t Probe2)
      930:	b0 e0       	ldi	r27, 0x00	; 0
      932:	ed e9       	ldi	r30, 0x9D	; 157
      934:	f4 e0       	ldi	r31, 0x04	; 4
-     936:	0c 94 bd 1e 	jmp	0x3d7a	; 0x3d7a <__prologue_saves__+0x1c>
+     936:	0c 94 b2 1e 	jmp	0x3d64	; 0x3d64 <__prologue_saves__+0x1c>
    *  Set up a voltage divider between the two probes:
    *  - Probe1: Rl pull-up
    *  - Probe2: Rl pull-down
@@ -2729,7 +2729,7 @@ uint8_t ShortedProbes(uint8_t Probe1, uint8_t Probe2)
      99e:	84 2f       	mov	r24, r20
      9a0:	21 96       	adiw	r28, 0x01	; 1
      9a2:	e4 e0       	ldi	r30, 0x04	; 4
-     9a4:	0c 94 d9 1e 	jmp	0x3db2	; 0x3db2 <__epilogue_restores__+0x1c>
+     9a4:	0c 94 ce 1e 	jmp	0x3d9c	; 0x3d9c <__epilogue_restores__+0x1c>
 
 000009a8 <AllProbesShorted>:
  *  - 0 if no probes are short-circuited
@@ -2771,7 +2771,7 @@ void AutoCheck(uint8_t test_mode) {
      9ce:	b0 e0       	ldi	r27, 0x00	; 0
      9d0:	ec ee       	ldi	r30, 0xEC	; 236
      9d2:	f4 e0       	ldi	r31, 0x04	; 4
-     9d4:	0c 94 b7 1e 	jmp	0x3d6e	; 0x3d6e <__prologue_saves__+0x10>
+     9d4:	0c 94 ac 1e 	jmp	0x3d58	; 0x3d58 <__prologue_saves__+0x10>
   #ifdef AUTOSCALE_ADC
 int8_t udiff;		// difference between ADC Voltage with VCC or Bandgap reference
 int8_t udiff2;
@@ -2837,17 +2837,17 @@ eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (uint8_t)0);	// clear zero of
      a26:	60 e0       	ldi	r22, 0x00	; 0
      a28:	82 e0       	ldi	r24, 0x02	; 2
      a2a:	90 e0       	ldi	r25, 0x00	; 0
-     a2c:	0e 94 04 1f 	call	0x3e08	; 0x3e08 <__eewr_byte_m168>
+     a2c:	0e 94 f9 1e 	call	0x3df2	; 0x3df2 <__eewr_byte_m168>
 eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[3]), (uint8_t)0);	// clear zero offset
      a30:	60 e0       	ldi	r22, 0x00	; 0
      a32:	83 e0       	ldi	r24, 0x03	; 3
      a34:	90 e0       	ldi	r25, 0x00	; 0
-     a36:	0e 94 04 1f 	call	0x3e08	; 0x3e08 <__eewr_byte_m168>
+     a36:	0e 94 f9 1e 	call	0x3df2	; 0x3df2 <__eewr_byte_m168>
 eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (uint8_t)0);	// clear zero offset
      a3a:	60 e0       	ldi	r22, 0x00	; 0
      a3c:	81 e0       	ldi	r24, 0x01	; 1
      a3e:	90 e0       	ldi	r25, 0x00	; 0
-     a40:	0e 94 04 1f 	call	0x3e08	; 0x3e08 <__eewr_byte_m168>
+     a40:	0e 94 f9 1e 	call	0x3df2	; 0x3df2 <__eewr_byte_m168>
 
 adcmv[0] = GetESR(TP3, TP1);
      a44:	60 e0       	ldi	r22, 0x00	; 0
@@ -2913,7 +2913,7 @@ eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (uint8_t)adcmv[0]);	// fix ze
      ab6:	69 81       	ldd	r22, Y+1	; 0x01
      ab8:	82 e0       	ldi	r24, 0x02	; 2
      aba:	90 e0       	ldi	r25, 0x00	; 0
-     abc:	0e 94 04 1f 	call	0x3e08	; 0x3e08 <__eewr_byte_m168>
+     abc:	0e 94 f9 1e 	call	0x3df2	; 0x3df2 <__eewr_byte_m168>
 if (adcmv[1] >= 90) {
      ac0:	8a e5       	ldi	r24, 0x5A	; 90
      ac2:	c8 16       	cp	r12, r24
@@ -2929,7 +2929,7 @@ eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[3]), (uint8_t)adcmv[1]);	// fix ze
      ad0:	6b 81       	ldd	r22, Y+3	; 0x03
      ad2:	83 e0       	ldi	r24, 0x03	; 3
      ad4:	90 e0       	ldi	r25, 0x00	; 0
-     ad6:	0e 94 04 1f 	call	0x3e08	; 0x3e08 <__eewr_byte_m168>
+     ad6:	0e 94 f9 1e 	call	0x3df2	; 0x3df2 <__eewr_byte_m168>
 if (adcmv[2] >= 90) {
      ada:	9a e5       	ldi	r25, 0x5A	; 90
      adc:	e9 16       	cp	r14, r25
@@ -2945,7 +2945,7 @@ eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (uint8_t)adcmv[2]);	// fix ze
      aea:	6d 81       	ldd	r22, Y+5	; 0x05
      aec:	81 e0       	ldi	r24, 0x01	; 1
      aee:	90 e0       	ldi	r25, 0x00	; 0
-     af0:	0e 94 04 1f 	call	0x3e08	; 0x3e08 <__eewr_byte_m168>
+     af0:	0e 94 f9 1e 	call	0x3df2	; 0x3df2 <__eewr_byte_m168>
 wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
      af4:	0e 94 17 04 	call	0x82e	; 0x82e <wait_for_key_5s_line2>
      af8:	18 e7       	ldi	r17, 0x78	; 120
@@ -3163,7 +3163,7 @@ for (ww=0;ww<7;ww++) {
      c60:	f1 1c       	adc	r15, r1
      c62:	61 5f       	subi	r22, 0xF1	; 241
      c64:	c8 01       	movw	r24, r16
-     c66:	0e 94 04 1f 	call	0x3e08	; 0x3e08 <__eewr_byte_m168>
+     c66:	0e 94 f9 1e 	call	0x3df2	; 0x3df2 <__eewr_byte_m168>
      c6a:	0f 5f       	subi	r16, 0xFF	; 255
      c6c:	1f 4f       	sbci	r17, 0xFF	; 255
 DisplayValue(adcmv[2],-12,'F',3);		//output cap0 1:2
@@ -3249,7 +3249,7 @@ for (ww=0;ww<64;ww++) {
    cap.cval /= 10;
      cd8:	a7 01       	movw	r20, r14
      cda:	96 01       	movw	r18, r12
-     cdc:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+     cdc:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
   PartFound = PART_NONE;
   //measure  offset Voltage of analog Comparator for Capacity measurement
   ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
@@ -3306,7 +3306,7 @@ for (ww=0;ww<64;ww++) {
      (void) eeprom_write_word((uint16_t *)(&ref_offset), load_diff);	// hold zero offset + slew rate dependend offset
      d38:	8b e0       	ldi	r24, 0x0B	; 11
      d3a:	90 e0       	ldi	r25, 0x00	; 0
-     d3c:	0e 94 12 1f 	call	0x3e24	; 0x3e24 <__eewr_word_m168>
+     d3c:	0e 94 07 1f 	call	0x3e0e	; 0x3e0e <__eewr_word_m168>
      lcd_clear();
      d40:	0e 94 35 01 	call	0x26a	; 0x26a <lcd_clear>
      lcd_MEM2_string(REF_C_str);	// "REF_C="
@@ -3393,7 +3393,7 @@ for (ww=0;ww<64;ww++) {
    udiff2 = udiff + (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
      dd4:	8d e0       	ldi	r24, 0x0D	; 13
      dd6:	90 e0       	ldi	r25, 0x00	; 0
-     dd8:	0e 94 fc 1e 	call	0x3df8	; 0x3df8 <__eerd_byte_m168>
+     dd8:	0e 94 f1 1e 	call	0x3de2	; 0x3de2 <__eerd_byte_m168>
    adcmv[1] += adcmv[1];		// double the value
    ADCconfig.U_Bandgap = 0;	// do not use internal Ref
    adcmv[2] = ReadADC(CAP_ADC);  // get cap voltage with VCC reference
@@ -3405,13 +3405,13 @@ for (ww=0;ww<64;ww++) {
      de0:	b8 0e       	add	r11, r24
      de2:	96 01       	movw	r18, r12
      de4:	d7 01       	movw	r26, r14
-     de6:	0e 94 38 1e 	call	0x3c70	; 0x3c70 <__usmulhisi3>
+     de6:	0e 94 2d 1e 	call	0x3c5a	; 0x3c5a <__usmulhisi3>
      dea:	98 01       	movw	r18, r16
      dec:	44 27       	eor	r20, r20
      dee:	37 fd       	sbrc	r19, 7
      df0:	40 95       	com	r20
      df2:	54 2f       	mov	r21, r20
-     df4:	0e 94 90 1e 	call	0x3d20	; 0x3d20 <__divmodsi4>
+     df4:	0e 94 85 1e 	call	0x3d0a	; 0x3d0a <__divmodsi4>
    lcd_line2();
    lcd_MEM2_string(REF_R_str);	// "REF_R="
    udiff2 = udiff + (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
@@ -3420,7 +3420,7 @@ for (ww=0;ww<64;ww++) {
      dfa:	6b 2d       	mov	r22, r11
      dfc:	8d e0       	ldi	r24, 0x0D	; 13
      dfe:	90 e0       	ldi	r25, 0x00	; 0
-     e00:	0e 94 04 1f 	call	0x3e08	; 0x3e08 <__eewr_byte_m168>
+     e00:	0e 94 f9 1e 	call	0x3df2	; 0x3df2 <__eewr_byte_m168>
 //        lcd_string(itoa(udiff2, outval, 10));	//output correction voltage
    i2lcd(udiff2);
      e04:	8b 2d       	mov	r24, r11
@@ -3507,7 +3507,7 @@ wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 } /* end AutoCheck */ 
      e78:	2e 96       	adiw	r28, 0x0e	; 14
      e7a:	ea e0       	ldi	r30, 0x0A	; 10
-     e7c:	0c 94 d3 1e 	jmp	0x3da6	; 0x3da6 <__epilogue_restores__+0x10>
+     e7c:	0c 94 c8 1e 	jmp	0x3d90	; 0x3d90 <__epilogue_restores__+0x10>
 
 00000e80 <mark_as_uncalibrated>:
 void mark_as_uncalibrated( void) {
@@ -3520,7 +3520,7 @@ void mark_as_uncalibrated( void) {
     ii = eeprom_read_byte((uint8_t *)&c_zero_tab[0]);	// read first zero offset
      e88:	84 e0       	ldi	r24, 0x04	; 4
      e8a:	90 e0       	ldi	r25, 0x00	; 0
-     e8c:	0e 94 fc 1e 	call	0x3df8	; 0x3df8 <__eerd_byte_m168>
+     e8c:	0e 94 f1 1e 	call	0x3de2	; 0x3de2 <__eerd_byte_m168>
     ii++;
      e90:	61 e0       	ldi	r22, 0x01	; 1
      e92:	68 0f       	add	r22, r24
@@ -3528,7 +3528,7 @@ void mark_as_uncalibrated( void) {
     eeprom_write_byte((uint8_t *)&c_zero_tab[3], ii);	// mark uncalibrated permanent
      e94:	87 e0       	ldi	r24, 0x07	; 7
      e96:	90 e0       	ldi	r25, 0x00	; 0
-     e98:	0e 94 04 1f 	call	0x3e08	; 0x3e08 <__eewr_byte_m168>
+     e98:	0e 94 f9 1e 	call	0x3df2	; 0x3df2 <__eewr_byte_m168>
     UnCalibrated = 1;
      e9c:	81 e0       	ldi	r24, 0x01	; 1
      e9e:	80 93 50 01 	sts	0x0150, r24
@@ -3598,12 +3598,12 @@ void GetIr(uint8_t hipin, uint8_t lopin) {
      ee2:	36 e8       	ldi	r19, 0x86	; 134
      ee4:	41 e0       	ldi	r20, 0x01	; 1
      ee6:	50 e0       	ldi	r21, 0x00	; 0
-     ee8:	0e 94 3f 1e 	call	0x3c7e	; 0x3c7e <__muluhisi3>
+     ee8:	0e 94 34 1e 	call	0x3c68	; 0x3c68 <__muluhisi3>
      eec:	28 e9       	ldi	r18, 0x98	; 152
      eee:	37 eb       	ldi	r19, 0xB7	; 183
      ef0:	40 e0       	ldi	r20, 0x00	; 0
      ef2:	50 e0       	ldi	r21, 0x00	; 0
-     ef4:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+     ef4:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
      ef8:	ca 01       	movw	r24, r20
      efa:	b9 01       	movw	r22, r18
      DisplayValue(ir_nano,-9,'A',2);	// output two digits of current with nA units
@@ -3644,7 +3644,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      f1c:	b0 e0       	ldi	r27, 0x00	; 0
      f1e:	e3 e9       	ldi	r30, 0x93	; 147
      f20:	f7 e0       	ldi	r31, 0x07	; 7
-     f22:	0c 94 af 1e 	jmp	0x3d5e	; 0x3d5e <__prologue_saves__>
+     f22:	0c 94 a4 1e 	jmp	0x3d48	; 0x3d48 <__prologue_saves__>
      f26:	98 2e       	mov	r9, r24
      f28:	86 2e       	mov	r8, r22
      f2a:	34 2e       	mov	r3, r20
@@ -3970,12 +3970,12 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     10e0:	98 01       	movw	r18, r16
     10e2:	a8 ee       	ldi	r26, 0xE8	; 232
     10e4:	b3 e0       	ldi	r27, 0x03	; 3
-    10e6:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    10e6:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     10ea:	20 91 0e 01 	lds	r18, 0x010E
     10ee:	30 91 0f 01 	lds	r19, 0x010F
     10f2:	40 e0       	ldi	r20, 0x00	; 0
     10f4:	50 e0       	ldi	r21, 0x00	; 0
-    10f6:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    10f6:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     10fa:	30 93 5d 01 	sts	0x015D, r19
     10fe:	20 93 5c 01 	sts	0x015C, r18
     1102:	a7 c3       	rjmp	.+1870   	; 0x1852 <CheckPins+0x938>
@@ -4070,12 +4070,12 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     1182:	31 0b       	sbc	r19, r17
     1184:	a8 ee       	ldi	r26, 0xE8	; 232
     1186:	b3 e0       	ldi	r27, 0x03	; 3
-    1188:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    1188:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     118c:	20 91 15 01 	lds	r18, 0x0115
     1190:	30 91 16 01 	lds	r19, 0x0116
     1194:	40 e0       	ldi	r20, 0x00	; 0
     1196:	50 e0       	ldi	r21, 0x00	; 0
-    1198:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    1198:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     119c:	30 93 6f 01 	sts	0x016F, r19
     11a0:	20 93 6e 01 	sts	0x016E, r18
     11a4:	69 c1       	rjmp	.+722    	; 0x1478 <CheckPins+0x55e>
@@ -4147,9 +4147,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     1212:	77 eb       	ldi	r23, 0xB7	; 183
     1214:	87 e4       	ldi	r24, 0x47	; 71
     1216:	90 e0       	ldi	r25, 0x00	; 0
-    1218:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    1218:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     121c:	d7 01       	movw	r26, r14
-    121e:	0e 94 3f 1e 	call	0x3c7e	; 0x3c7e <__muluhisi3>
+    121e:	0e 94 34 1e 	call	0x3c68	; 0x3c68 <__muluhisi3>
               (unsigned int)RR680PL)) / (unsigned int)adc.tp1;	
     1222:	98 01       	movw	r18, r16
     1224:	40 e0       	ldi	r20, 0x00	; 0
@@ -4160,7 +4160,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      adc.tp1 = ReadADC(TristatePin);	// voltage at base resistor 
  #ifdef LONG_HFE
      c_hfe = ((unsigned long)adc.rhp * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
-    1228:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    1228:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     122c:	69 01       	movw	r12, r18
     122e:	7a 01       	movw	r14, r20
     1230:	0d c0       	rjmp	.+26     	; 0x124c <CheckPins+0x332>
@@ -4184,7 +4184,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     123c:	80 1b       	sub	r24, r16
     123e:	91 0b       	sbc	r25, r17
     1240:	b8 01       	movw	r22, r16
-    1242:	0e 94 5a 1e 	call	0x3cb4	; 0x3cb4 <__udivmodhi4>
+    1242:	0e 94 4f 1e 	call	0x3c9e	; 0x3c9e <__udivmodhi4>
     1246:	6b 01       	movw	r12, r22
     1248:	e1 2c       	mov	r14, r1
     124a:	f1 2c       	mov	r15, r1
@@ -4303,10 +4303,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     12e6:	90 e0       	ldi	r25, 0x00	; 0
     12e8:	a3 01       	movw	r20, r6
     12ea:	92 01       	movw	r18, r4
-    12ec:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    12ec:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     12f0:	a8 8d       	ldd	r26, Y+24	; 0x18
     12f2:	b9 8d       	ldd	r27, Y+25	; 0x19
-    12f4:	0e 94 3f 1e 	call	0x3c7e	; 0x3c7e <__muluhisi3>
+    12f4:	0e 94 34 1e 	call	0x3c68	; 0x3c68 <__muluhisi3>
               (unsigned int)RR680MI)) / (unsigned int)adc.tp2;	
     12f8:	ae 85       	ldd	r26, Y+14	; 0x0e
     12fa:	bf 85       	ldd	r27, Y+15	; 0x0f
@@ -4319,7 +4319,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 
  #ifdef LONG_HFE
            e_hfe = ((unsigned int)tmp16 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
-    1302:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    1302:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
               (unsigned int)RR680MI)) / (unsigned int)adc.tp2;	
  #else
            e_hfe = ((tmp16 / ((RR680MI+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/500);
@@ -4409,10 +4409,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     1394:	95 01       	movw	r18, r10
     1396:	a8 ee       	ldi	r26, 0xE8	; 232
     1398:	b3 e0       	ldi	r27, 0x03	; 3
-    139a:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    139a:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     139e:	a3 01       	movw	r20, r6
     13a0:	92 01       	movw	r18, r4
-    13a2:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    13a2:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     13a6:	30 93 6f 01 	sts	0x016F, r19
     13aa:	20 93 6e 01 	sts	0x016E, r18
               ptrans.ices = (unsigned int)(((unsigned long)adc.vCEs * 1000) / RR680MI); // ICEs 0.01mA
@@ -4420,10 +4420,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     13b0:	3a 81       	ldd	r19, Y+2	; 0x02
     13b2:	a8 ee       	ldi	r26, 0xE8	; 232
     13b4:	b3 e0       	ldi	r27, 0x03	; 3
-    13b6:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    13b6:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     13ba:	a3 01       	movw	r20, r6
     13bc:	92 01       	movw	r18, r4
-    13be:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    13be:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     13c2:	30 93 71 01 	sts	0x0171, r19
     13c6:	20 93 70 01 	sts	0x0170, r18
     13ca:	21 e0       	ldi	r18, 0x01	; 1
@@ -4559,7 +4559,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
            ptrans.gthvoltage = tmp16 / 9;		// gives resolution in mV
     1468:	69 e0       	ldi	r22, 0x09	; 9
     146a:	70 e0       	ldi	r23, 0x00	; 0
-    146c:	0e 94 5a 1e 	call	0x3cb4	; 0x3cb4 <__udivmodhi4>
+    146c:	0e 94 4f 1e 	call	0x3c9e	; 0x3c9e <__udivmodhi4>
     1470:	70 93 71 01 	sts	0x0171, r23
     1474:	60 93 70 01 	sts	0x0170, r22
            ptrans.count++;		// count FET as two for accelerate searching
@@ -4629,10 +4629,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     14e4:	77 eb       	ldi	r23, 0xB7	; 183
     14e6:	87 e4       	ldi	r24, 0x47	; 71
     14e8:	90 e0       	ldi	r25, 0x00	; 0
-    14ea:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    14ea:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     14ee:	ac 81       	ldd	r26, Y+4	; 0x04
     14f0:	bd 81       	ldd	r27, Y+5	; 0x05
-    14f2:	0e 94 3f 1e 	call	0x3c7e	; 0x3c7e <__muluhisi3>
+    14f2:	0e 94 34 1e 	call	0x3c68	; 0x3c68 <__muluhisi3>
        wait_about5ms();		// clear TRIAC and Thyristor
        R_DDR = LoPinRL | TriPinRH;
        R_PORT = TriPinRH;		// Tripin=RH+
@@ -4656,7 +4656,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        adc.rtp = ADCconfig.U_AVCC - adc.tp1;	// voltage at Base resistor
  #ifdef LONG_HFE
        c_hfe = ((unsigned long)adc.lp1 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
-    150a:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    150a:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     150e:	69 01       	movw	r12, r18
     1510:	7a 01       	movw	r14, r20
     1512:	09 c0       	rjmp	.+18     	; 0x1526 <CheckPins+0x60c>
@@ -4670,7 +4670,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     1516:	9d 81       	ldd	r25, Y+5	; 0x05
     1518:	86 1b       	sub	r24, r22
     151a:	97 0b       	sbc	r25, r23
-    151c:	0e 94 5a 1e 	call	0x3cb4	; 0x3cb4 <__udivmodhi4>
+    151c:	0e 94 4f 1e 	call	0x3c9e	; 0x3c9e <__udivmodhi4>
     1520:	6b 01       	movw	r12, r22
     1522:	e1 2c       	mov	r14, r1
     1524:	f1 2c       	mov	r15, r1
@@ -4976,10 +4976,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     16c8:	90 e0       	ldi	r25, 0x00	; 0
     16ca:	a3 01       	movw	r20, r6
     16cc:	92 01       	movw	r18, r4
-    16ce:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    16ce:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     16d2:	ae 85       	ldd	r26, Y+14	; 0x0e
     16d4:	bf 85       	ldd	r27, Y+15	; 0x0f
-    16d6:	0e 94 3f 1e 	call	0x3c7e	; 0x3c7e <__muluhisi3>
+    16d6:	0e 94 34 1e 	call	0x3c68	; 0x3c68 <__muluhisi3>
               (unsigned int)RR680PL)) / (unsigned int)adc.rtp;	
     16da:	98 01       	movw	r18, r16
     16dc:	40 e0       	ldi	r20, 0x00	; 0
@@ -4990,7 +4990,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 
   #ifdef LONG_HFE
          e_hfe = ((unsigned int)tmp16 * (unsigned long)(((unsigned long)R_H_VAL * 100) / 
-    16e0:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    16e0:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
               (unsigned int)RR680PL)) / (unsigned int)adc.rtp;	
   #else
          e_hfe = ((tmp16 / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.rtp/500);
@@ -5080,12 +5080,12 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     1776:	95 01       	movw	r18, r10
     1778:	a8 ee       	ldi	r26, 0xE8	; 232
     177a:	b3 e0       	ldi	r27, 0x03	; 3
-    177c:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    177c:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     1780:	20 91 0e 01 	lds	r18, 0x010E
     1784:	30 91 0f 01 	lds	r19, 0x010F
     1788:	40 e0       	ldi	r20, 0x00	; 0
     178a:	50 e0       	ldi	r21, 0x00	; 0
-    178c:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    178c:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     1790:	30 93 5d 01 	sts	0x015D, r19
     1794:	20 93 5c 01 	sts	0x015C, r18
             ntrans.ices = (unsigned int)(((unsigned long)adc.vCEs * 1000) / RR680PL); // ICEs 0.01mA
@@ -5093,10 +5093,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     179a:	3a 81       	ldd	r19, Y+2	; 0x02
     179c:	a8 ee       	ldi	r26, 0xE8	; 232
     179e:	b3 e0       	ldi	r27, 0x03	; 3
-    17a0:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    17a0:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     17a4:	a3 01       	movw	r20, r6
     17a6:	92 01       	movw	r18, r4
-    17a8:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    17a8:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     17ac:	30 93 5f 01 	sts	0x015F, r19
     17b0:	20 93 5e 01 	sts	0x015E, r18
     17b4:	cc c1       	rjmp	.+920    	; 0x1b4e <CheckPins+0xc34>
@@ -5208,7 +5208,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
          ntrans.gthvoltage = tmp16/ 9;	//scale to mV
     1842:	69 e0       	ldi	r22, 0x09	; 9
     1844:	70 e0       	ldi	r23, 0x00	; 0
-    1846:	0e 94 5a 1e 	call	0x3cb4	; 0x3cb4 <__udivmodhi4>
+    1846:	0e 94 4f 1e 	call	0x3c9e	; 0x3c9e <__udivmodhi4>
     184a:	70 93 5f 01 	sts	0x015F, r23
     184e:	60 93 5e 01 	sts	0x015E, r22
          ntrans.count++;		// count FET as two to accelerate  searching
@@ -5746,7 +5746,7 @@ widmes:
 } // end CheckPins()
     1b2a:	69 96       	adiw	r28, 0x19	; 25
     1b2c:	e2 e1       	ldi	r30, 0x12	; 18
-    1b2e:	0c 94 cb 1e 	jmp	0x3d96	; 0x3d96 <__epilogue_restores__>
+    1b2e:	0c 94 c0 1e 	jmp	0x3d80	; 0x3d80 <__epilogue_restores__>
 //---------------------------------------------------------------------------
 savePresult:
 #if DebugOut == 5
@@ -5852,13 +5852,13 @@ saveNresult:
     1ba2:	98 01       	movw	r18, r16
     1ba4:	a8 e9       	ldi	r26, 0x98	; 152
     1ba6:	b7 eb       	ldi	r27, 0xB7	; 183
-    1ba8:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    1ba8:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     1bac:	96 01       	movw	r18, r12
     1bae:	20 1b       	sub	r18, r16
     1bb0:	31 0b       	sbc	r19, r17
     1bb2:	40 e0       	ldi	r20, 0x00	; 0
     1bb4:	50 e0       	ldi	r21, 0x00	; 0
-    1bb6:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    1bb6:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     1bba:	29 01       	movw	r4, r18
     1bbc:	3a 01       	movw	r6, r20
         // lirx2 (measurement at LowPin)
@@ -5868,13 +5868,13 @@ saveNresult:
     1bc2:	3b 09       	sbc	r19, r11
     1bc4:	a8 e9       	ldi	r26, 0x98	; 152
     1bc6:	b7 eb       	ldi	r27, 0xB7	; 183
-    1bc8:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    1bc8:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     1bcc:	65 01       	movw	r12, r10
     1bce:	e1 2c       	mov	r14, r1
     1bd0:	f1 2c       	mov	r15, r1
     1bd2:	a7 01       	movw	r20, r14
     1bd4:	96 01       	movw	r18, r12
-    1bd6:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    1bd6:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
 #define FAKT_LOW 2		//resolution is about twice as good
 #else
 #define FAKT_LOW 4		//resolution is about four times better
@@ -5924,7 +5924,7 @@ saveNresult:
     1c24:	30 e0       	ldi	r19, 0x00	; 0
     1c26:	40 e0       	ldi	r20, 0x00	; 0
     1c28:	50 e0       	ldi	r21, 0x00	; 0
-    1c2a:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    1c2a:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     1c2e:	08 c0       	rjmp	.+16     	; 0x1c40 <CheckPins+0xd26>
         } else 
 #endif
@@ -5942,7 +5942,7 @@ saveNresult:
         lrx1 *= 100;
     1c40:	a4 e6       	ldi	r26, 0x64	; 100
     1c42:	b0 e0       	ldi	r27, 0x00	; 0
-    1c44:	0e 94 3f 1e 	call	0x3c7e	; 0x3c7e <__muluhisi3>
+    1c44:	0e 94 34 1e 	call	0x3c68	; 0x3c68 <__muluhisi3>
     1c48:	6b 01       	movw	r12, r22
     1c4a:	7c 01       	movw	r14, r24
         lrx1 += RH_OFFSET;			// add constant for correction of systematic error
@@ -5984,13 +5984,13 @@ saveNresult:
     1c8a:	62 1b       	sub	r22, r18
     1c8c:	73 0b       	sbc	r23, r19
     1c8e:	9b 01       	movw	r18, r22
-    1c90:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    1c90:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     1c94:	96 01       	movw	r18, r12
     1c96:	2a 19       	sub	r18, r10
     1c98:	3b 09       	sbc	r19, r11
     1c9a:	40 e0       	ldi	r20, 0x00	; 0
     1c9c:	50 e0       	ldi	r21, 0x00	; 0
-    1c9e:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    1c9e:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     1ca2:	29 01       	movw	r4, r18
     1ca4:	3a 01       	movw	r6, r20
     1ca6:	78 01       	movw	r14, r16
@@ -6010,13 +6010,13 @@ saveNresult:
     1cbc:	98 01       	movw	r18, r16
     1cbe:	2e 19       	sub	r18, r14
     1cc0:	3f 09       	sbc	r19, r15
-    1cc2:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    1cc2:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     1cc6:	87 01       	movw	r16, r14
     1cc8:	20 e0       	ldi	r18, 0x00	; 0
     1cca:	30 e0       	ldi	r19, 0x00	; 0
     1ccc:	a9 01       	movw	r20, r18
     1cce:	98 01       	movw	r18, r16
-    1cd0:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    1cd0:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
 //     lrx1 =(unsigned long)R_L_VAL * (unsigned long)adc.hp1 / (adc.hp3 - adc.hp1);
 
 #ifdef AUTOSCALE_ADC
@@ -6065,7 +6065,7 @@ saveNresult:
     1d20:	30 e0       	ldi	r19, 0x00	; 0
     1d22:	40 e0       	ldi	r20, 0x00	; 0
     1d24:	50 e0       	ldi	r21, 0x00	; 0
-    1d26:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    1d26:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     1d2a:	69 01       	movw	r12, r18
     1d2c:	7a 01       	movw	r14, r20
     1d2e:	0a c0       	rjmp	.+20     	; 0x1d44 <CheckPins+0xe2a>
@@ -6137,7 +6137,7 @@ saveNresult:
     1d92:	5f 4f       	sbci	r21, 0xFF	; 255
     1d94:	aa e0       	ldi	r26, 0x0A	; 10
     1d96:	b0 e0       	ldi	r27, 0x00	; 0
-    1d98:	0e 94 3f 1e 	call	0x3c7e	; 0x3c7e <__muluhisi3>
+    1d98:	0e 94 34 1e 	call	0x3c68	; 0x3c68 <__muluhisi3>
     1d9c:	a5 01       	movw	r20, r10
     1d9e:	94 01       	movw	r18, r8
     1da0:	2c 59       	subi	r18, 0x9C	; 156
@@ -6148,7 +6148,7 @@ saveNresult:
     1daa:	3d 1d       	adc	r19, r13
     1dac:	4e 1d       	adc	r20, r14
     1dae:	5f 1d       	adc	r21, r15
-    1db0:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    1db0:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
               if (lirx1  > 0) {
     1db4:	23 2b       	or	r18, r19
     1db6:	24 2b       	or	r18, r20
@@ -6281,7 +6281,7 @@ void EntladePins() {
     1e38:	b0 e0       	ldi	r27, 0x00	; 0
     1e3a:	e1 e2       	ldi	r30, 0x21	; 33
     1e3c:	ff e0       	ldi	r31, 0x0F	; 15
-    1e3e:	0c 94 b8 1e 	jmp	0x3d70	; 0x3d70 <__prologue_saves__+0x12>
+    1e3e:	0c 94 ad 1e 	jmp	0x3d5a	; 0x3d5a <__prologue_saves__+0x12>
     1e42:	8a e0       	ldi	r24, 0x0A	; 10
     1e44:	c8 2e       	mov	r12, r24
 // max. time of discharge in ms  (10000/20) == 10s
@@ -6504,7 +6504,7 @@ void EntladePins() {
     1f2e:	cd b7       	in	r28, 0x3d	; 61
     1f30:	de b7       	in	r29, 0x3e	; 62
     1f32:	e9 e0       	ldi	r30, 0x09	; 9
-    1f34:	0c 94 d4 1e 	jmp	0x3da8	; 0x3da8 <__epilogue_restores__+0x12>
+    1f34:	0c 94 c9 1e 	jmp	0x3d92	; 0x3d92 <__epilogue_restores__+0x12>
 
 00001f38 <Scale_C_with_vcc>:
   R_PORT = 0; 			// switch all resistor outputs to GND, no pull up
@@ -6550,7 +6550,7 @@ void Scale_C_with_vcc(void) {
     1f74:	b9 01       	movw	r22, r18
     1f76:	a7 01       	movw	r20, r14
     1f78:	96 01       	movw	r18, r12
-    1f7a:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    1f7a:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     1f7e:	f0 cf       	rjmp	.-32     	; 0x1f60 <Scale_C_with_vcc+0x28>
     1f80:	80 93 8e 01 	sts	0x018E, r24
       cap.cpre ++;			// prevent overflow
@@ -6558,13 +6558,13 @@ void Scale_C_with_vcc(void) {
    cap.cval *= ADCconfig.U_AVCC;	// scale with measured voltage
     1f84:	a0 91 3f 01 	lds	r26, 0x013F
     1f88:	b0 91 40 01 	lds	r27, 0x0140
-    1f8c:	0e 94 3f 1e 	call	0x3c7e	; 0x3c7e <__muluhisi3>
+    1f8c:	0e 94 34 1e 	call	0x3c68	; 0x3c68 <__muluhisi3>
    cap.cval /= U_VCC;			// Factors are computed for U_VCC
     1f90:	28 e8       	ldi	r18, 0x88	; 136
     1f92:	33 e1       	ldi	r19, 0x13	; 19
     1f94:	40 e0       	ldi	r20, 0x00	; 0
     1f96:	50 e0       	ldi	r21, 0x00	; 0
-    1f98:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    1f98:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     1f9c:	20 93 7c 01 	sts	0x017C, r18
     1fa0:	30 93 7d 01 	sts	0x017D, r19
     1fa4:	40 93 7e 01 	sts	0x017E, r20
@@ -6588,7 +6588,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     1fba:	b0 e0       	ldi	r27, 0x00	; 0
     1fbc:	e2 ee       	ldi	r30, 0xE2	; 226
     1fbe:	ff e0       	ldi	r31, 0x0F	; 15
-    1fc0:	0c 94 b5 1e 	jmp	0x3d6a	; 0x3d6a <__prologue_saves__+0xc>
+    1fc0:	0c 94 aa 1e 	jmp	0x3d54	; 0x3d54 <__prologue_saves__+0xc>
     1fc4:	c8 2f       	mov	r28, r24
     1fc6:	d6 2f       	mov	r29, r22
      adcv[0] = ReadADC(HighPin);		// voltage before any load 
@@ -6914,13 +6914,13 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     2154:	98 01       	movw	r18, r16
     2156:	a8 ee       	ldi	r26, 0xE8	; 232
     2158:	b3 e0       	ldi	r27, 0x03	; 3
-    215a:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    215a:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     215e:	47 01       	movw	r8, r14
     2160:	a1 2c       	mov	r10, r1
     2162:	b1 2c       	mov	r11, r1
     2164:	a5 01       	movw	r20, r10
     2166:	94 01       	movw	r18, r8
-    2168:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    2168:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     216c:	69 01       	movw	r12, r18
     216e:	04 c0       	rjmp	.+8      	; 0x2178 <ReadCapacity+0x1c0>
     2170:	00 e0       	ldi	r16, 0x00	; 0
@@ -6953,7 +6953,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     21a2:	0e 94 d3 12 	call	0x25a6	; 0x25a6 <GetRLmultip>
     21a6:	9c 01       	movw	r18, r24
     21a8:	d5 01       	movw	r26, r10
-    21aa:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    21aa:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     21ae:	60 93 84 01 	sts	0x0184, r22
     21b2:	70 93 85 01 	sts	0x0185, r23
     21b6:	80 93 86 01 	sts	0x0186, r24
@@ -6977,13 +6977,13 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     21e4:	50 91 7f 01 	lds	r21, 0x017F
     21e8:	a8 ee       	ldi	r26, 0xE8	; 232
     21ea:	b3 e0       	ldi	r27, 0x03	; 3
-    21ec:	0e 94 3f 1e 	call	0x3c7e	; 0x3c7e <__muluhisi3>
+    21ec:	0e 94 34 1e 	call	0x3c68	; 0x3c68 <__muluhisi3>
    cap.cval /= 100;
     21f0:	24 e6       	ldi	r18, 0x64	; 100
     21f2:	30 e0       	ldi	r19, 0x00	; 0
     21f4:	40 e0       	ldi	r20, 0x00	; 0
     21f6:	50 e0       	ldi	r21, 0x00	; 0
-    21f8:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    21f8:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     21fc:	20 93 7c 01 	sts	0x017C, r18
     2200:	30 93 7d 01 	sts	0x017D, r19
     2204:	40 93 7e 01 	sts	0x017E, r20
@@ -7197,7 +7197,7 @@ messe_mit_rh:
     2340:	30 e0       	ldi	r19, 0x00	; 0
     2342:	40 e0       	ldi	r20, 0x00	; 0
     2344:	50 e0       	ldi	r21, 0x00	; 0
-    2346:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    2346:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     234a:	20 93 84 01 	sts	0x0184, r18
     234e:	30 93 85 01 	sts	0x0185, r19
     2352:	40 93 86 01 	sts	0x0186, r20
@@ -7213,13 +7213,13 @@ messe_mit_rh:
     236c:	30 91 85 01 	lds	r19, 0x0185
     2370:	40 91 86 01 	lds	r20, 0x0186
     2374:	50 91 87 01 	lds	r21, 0x0187
-    2378:	0e 94 3f 1e 	call	0x3c7e	; 0x3c7e <__muluhisi3>
+    2378:	0e 94 34 1e 	call	0x3c68	; 0x3c68 <__muluhisi3>
   cap.cval_uncorrected.dw /= (F_CPU / 10000);	// divide by 100 (@ 1MHz clock), 800 (@ 8MHz clock)
     237c:	20 e2       	ldi	r18, 0x20	; 32
     237e:	33 e0       	ldi	r19, 0x03	; 3
     2380:	40 e0       	ldi	r20, 0x00	; 0
     2382:	50 e0       	ldi	r21, 0x00	; 0
-    2384:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    2384:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     2388:	20 93 84 01 	sts	0x0184, r18
     238c:	30 93 85 01 	sts	0x0185, r19
     2390:	40 93 86 01 	sts	0x0186, r20
@@ -7261,7 +7261,7 @@ messe_mit_rh:
     23e2:	7f e0       	ldi	r23, 0x0F	; 15
     23e4:	80 e0       	ldi	r24, 0x00	; 0
     23e6:	90 e0       	ldi	r25, 0x00	; 0
-    23e8:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    23e8:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     23ec:	2c 0d       	add	r18, r12
     23ee:	3d 1d       	adc	r19, r13
     23f0:	4e 1d       	adc	r20, r14
@@ -7279,7 +7279,7 @@ messe_mit_rh:
     2408:	90 e0       	ldi	r25, 0x00	; 0
     240a:	8c 5f       	subi	r24, 0xFC	; 252
     240c:	9f 4f       	sbci	r25, 0xFF	; 255
-    240e:	0e 94 fc 1e 	call	0x3df8	; 0x3df8 <__eerd_byte_m168>
+    240e:	0e 94 f1 1e 	call	0x3de2	; 0x3de2 <__eerd_byte_m168>
      if (cap.cval > tmpint) {
     2412:	c0 90 7c 01 	lds	r12, 0x017C
     2416:	d0 90 7d 01 	lds	r13, 0x017D
@@ -7422,7 +7422,7 @@ keinC:
     250c:	cd b7       	in	r28, 0x3d	; 61
     250e:	de b7       	in	r29, 0x3e	; 62
     2510:	ec e0       	ldi	r30, 0x0C	; 12
-    2512:	0c 94 d1 1e 	jmp	0x3da2	; 0x3da2 <__epilogue_restores__+0xc>
+    2512:	0c 94 c6 1e 	jmp	0x3d8c	; 0x3d8c <__epilogue_restores__+0xc>
 
 00002516 <__vector_13>:
    cap.cval /= U_VCC;			// Factors are computed for U_VCC
@@ -7546,7 +7546,7 @@ is_bigger:
  	ldi	r23, hi8(RL_Tab_Abstand)	; 0
     25ba:	70 e0       	ldi	r23, 0x00	; 0
  	ACALL	__udivmodhi4 	;tabind = uvolt / RL_Tab_Abstand;
-    25bc:	0e 94 5a 1e 	call	0x3cb4	; 0x3cb4 <__udivmodhi4>
+    25bc:	0e 94 4f 1e 	call	0x3c9e	; 0x3c9e <__udivmodhi4>
 ;  r24:25 tabres = uvolt % RL_Tab_Abstand;  // r25 allways zero
 ;  tabres = RL_Tab_Abstand - tabres;
  	ldi	r25, RL_Tab_Abstand	; 25
@@ -7585,7 +7585,7 @@ is_lower:
 	movw	r24,r30
     25da:	cf 01       	movw	r24, r30
 	ACALL	eeprom_read_byte	; y1 = MEM_read_word(&RLtab[tabind]);
-    25dc:	0e 94 fc 1e 	call	0x3df8	; 0x3df8 <__eerd_byte_m168>
+    25dc:	0e 94 f1 1e 	call	0x3de2	; 0x3de2 <__eerd_byte_m168>
 	mov	r20, r24
     25e0:	48 2f       	mov	r20, r24
 	adiw	r30, 1			; address of high order byte
@@ -7593,7 +7593,7 @@ is_lower:
 	movw	r24,r30
     25e4:	cf 01       	movw	r24, r30
 	ACALL	eeprom_read_byte	; y1 = MEM_read_word(&RLtab[tabind]);
-    25e6:	0e 94 fc 1e 	call	0x3df8	; 0x3df8 <__eerd_byte_m168>
+    25e6:	0e 94 f1 1e 	call	0x3de2	; 0x3de2 <__eerd_byte_m168>
 	mov	r21, r24
     25ea:	58 2f       	mov	r21, r24
 	adiw	r30, 1			; tabind+1
@@ -7601,7 +7601,7 @@ is_lower:
 	movw	r24,r30
     25ee:	cf 01       	movw	r24, r30
 	ACALL	eeprom_read_byte	; y2 = MEM_read_word(&RLtab[tabind+1]);
-    25f0:	0e 94 fc 1e 	call	0x3df8	; 0x3df8 <__eerd_byte_m168>
+    25f0:	0e 94 f1 1e 	call	0x3de2	; 0x3de2 <__eerd_byte_m168>
 	mov	r18, r24
     25f4:	28 2f       	mov	r18, r24
 	adiw	r30, 1			; address of high order byte
@@ -7609,7 +7609,7 @@ is_lower:
 	movw	r24,r30
     25f8:	cf 01       	movw	r24, r30
 	ACALL	eeprom_read_byte	; y2 = MEM_read_word(&RLtab[tabind+1]);
-    25fa:	0e 94 fc 1e 	call	0x3df8	; 0x3df8 <__eerd_byte_m168>
+    25fa:	0e 94 f1 1e 	call	0x3de2	; 0x3de2 <__eerd_byte_m168>
 	mov	r19, r24
     25fe:	38 2f       	mov	r19, r24
         pop	r22			; restore tabres in r22
@@ -7643,7 +7643,7 @@ is_lower:
  	ldi	r23, hi8(RL_Tab_Abstand)	; 0
     2614:	70 e0       	ldi	r23, 0x00	; 0
  	ACALL	__udivmodhi4	; ((y1 - y2) * tabres + (RL_Tab_Abstand/2)) / RL_Tab_Abstand 
-    2616:	0e 94 5a 1e 	call	0x3cb4	; 0x3cb4 <__udivmodhi4>
+    2616:	0e 94 4f 1e 	call	0x3c9e	; 0x3c9e <__udivmodhi4>
  	add	r22, r18			; + y2
     261a:	62 0f       	add	r22, r18
  	adc	r23, r19
@@ -7662,7 +7662,7 @@ void Calibrate_UR(void) {
     2626:	b0 e0       	ldi	r27, 0x00	; 0
     2628:	e8 e1       	ldi	r30, 0x18	; 24
     262a:	f3 e1       	ldi	r31, 0x13	; 19
-    262c:	0c 94 b5 1e 	jmp	0x3d6a	; 0x3d6a <__prologue_saves__+0xc>
+    262c:	0c 94 aa 1e 	jmp	0x3d54	; 0x3d54 <__prologue_saves__+0xc>
   uint16_t sum_rp;	// sum of 3 Pin voltages with 680 Ohm load
   uint16_t u680;	// 3 * (Voltage at 680 Ohm)
 #endif
@@ -7708,11 +7708,11 @@ void Calibrate_UR(void) {
     266c:	30 91 40 01 	lds	r19, 0x0140
     2670:	af eb       	ldi	r26, 0xBF	; 191
     2672:	b9 e0       	ldi	r27, 0x09	; 9
-    2674:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    2674:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     2678:	9a 01       	movw	r18, r20
     267a:	40 e0       	ldi	r20, 0x00	; 0
     267c:	50 e0       	ldi	r21, 0x00	; 0
-    267e:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    267e:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     2682:	30 93 40 01 	sts	0x0140, r19
     2686:	20 93 3f 01 	sts	0x013F, r18
   }
@@ -7863,10 +7863,10 @@ void Calibrate_UR(void) {
     2754:	97 01       	movw	r18, r14
     2756:	a0 e9       	ldi	r26, 0x90	; 144
     2758:	ba e1       	ldi	r27, 0x1A	; 26
-    275a:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    275a:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     275e:	a5 01       	movw	r20, r10
     2760:	94 01       	movw	r18, r8
-    2762:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    2762:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     2766:	69 01       	movw	r12, r18
     2768:	7a 01       	movw	r14, r20
     276a:	30 93 52 01 	sts	0x0152, r19
@@ -7876,10 +7876,10 @@ void Calibrate_UR(void) {
     2772:	9e 01       	movw	r18, r28
     2774:	a0 e9       	ldi	r26, 0x90	; 144
     2776:	ba e1       	ldi	r27, 0x1A	; 26
-    2778:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    2778:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     277c:	a5 01       	movw	r20, r10
     277e:	94 01       	movw	r18, r8
-    2780:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    2780:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     2784:	30 93 42 01 	sts	0x0142, r19
     2788:	20 93 41 01 	sts	0x0141, r18
   resis680pl = pin_rpl + R_L_VAL;
@@ -7903,7 +7903,7 @@ void Calibrate_UR(void) {
     27ae:	cd b7       	in	r28, 0x3d	; 61
     27b0:	de b7       	in	r29, 0x3e	; 62
     27b2:	ec e0       	ldi	r30, 0x0C	; 12
-    27b4:	0c 94 d1 1e 	jmp	0x3da2	; 0x3da2 <__epilogue_restores__+0xc>
+    27b4:	0c 94 c6 1e 	jmp	0x3d8c	; 0x3d8c <__epilogue_restores__+0xc>
 
 000027b8 <ReadInductance>:
 #include <stdlib.h>
@@ -7916,7 +7916,7 @@ void ReadInductance(void) {
     27ba:	b0 e0       	ldi	r27, 0x00	; 0
     27bc:	e2 ee       	ldi	r30, 0xE2	; 226
     27be:	f3 e1       	ldi	r31, 0x13	; 19
-    27c0:	0c 94 af 1e 	jmp	0x3d5e	; 0x3d5e <__prologue_saves__>
+    27c0:	0c 94 a4 1e 	jmp	0x3d48	; 0x3d48 <__prologue_saves__>
   int8_t ukorr;		// correction of comparator voltage
   uint8_t nr_pol1;	// number of successfull inductance measurement with polarity 1
   uint8_t nr_pol2;	// number of successfull inductance measurement with polarity 2
@@ -8276,7 +8276,7 @@ void ReadInductance(void) {
     29a2:	c6 01       	movw	r24, r12
     29a4:	65 e0       	ldi	r22, 0x05	; 5
     29a6:	70 e0       	ldi	r23, 0x00	; 0
-    29a8:	0e 94 5a 1e 	call	0x3cb4	; 0x3cb4 <__udivmodhi4>
+    29a8:	0e 94 4f 1e 	call	0x3c9e	; 0x3c9e <__udivmodhi4>
     29ac:	64 51       	subi	r22, 0x14	; 20
     29ae:	01 c0       	rjmp	.+2      	; 0x29b2 <ReadInductance+0x1fa>
            } else {
@@ -8307,7 +8307,7 @@ void ReadInductance(void) {
     29c2:	c4 01       	movw	r24, r8
     29c4:	60 eb       	ldi	r22, 0xB0	; 176
     29c6:	76 e3       	ldi	r23, 0x36	; 54
-    29c8:	0e 94 5a 1e 	call	0x3cb4	; 0x3cb4 <__udivmodhi4>
+    29c8:	0e 94 4f 1e 	call	0x3c9e	; 0x3c9e <__udivmodhi4>
            }
            tmpint -= (((REF_L_KORR * 10) / 10) + ukorr);
         } else {
@@ -8381,7 +8381,7 @@ void ReadInductance(void) {
         per_ref1 = ((unsigned long)tmpint * 1000) / umax;
     2a32:	a8 ee       	ldi	r26, 0xE8	; 232
     2a34:	b3 e0       	ldi	r27, 0x03	; 3
-    2a36:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    2a36:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     2a3a:	2b 01       	movw	r4, r22
     2a3c:	3c 01       	movw	r6, r24
         if (timeconstant.w[1] >= (F_CPU/100000UL)) timeconstant.dw = 0; // no transition found
@@ -8392,16 +8392,16 @@ void ReadInductance(void) {
         umax = ((unsigned long)mess_r * (unsigned long)ADCconfig.U_AVCC) / total_r;
     2a3e:	98 01       	movw	r18, r16
     2a40:	da 01       	movw	r26, r20
-    2a42:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    2a42:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     2a46:	a5 01       	movw	r20, r10
     2a48:	94 01       	movw	r18, r8
-    2a4a:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    2a4a:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
         per_ref1 = ((unsigned long)tmpint * 1000) / umax;
     2a4e:	44 27       	eor	r20, r20
     2a50:	55 27       	eor	r21, r21
     2a52:	c3 01       	movw	r24, r6
     2a54:	b2 01       	movw	r22, r4
-    2a56:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    2a56:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
 //        per_ref2 = (uint8_t)MEM2_read_byte(&LogTab[per_ref1]);	// -log(1 - per_ref1/100)
         per_ref2 = get_log(per_ref1);		// -log(1 - per_ref1/1000)
     2a5a:	c9 01       	movw	r24, r18
@@ -8417,7 +8417,7 @@ void ReadInductance(void) {
     2a64:	94 01       	movw	r18, r8
     2a66:	c7 01       	movw	r24, r14
     2a68:	b6 01       	movw	r22, r12
-    2a6a:	0e 94 4a 1e 	call	0x3c94	; 0x3c94 <__mulsi3>
+    2a6a:	0e 94 3f 1e 	call	0x3c7e	; 0x3c7e <__mulsi3>
     2a6e:	4b 01       	movw	r8, r22
     2a70:	5c 01       	movw	r10, r24
              wait_about2s();
@@ -8444,11 +8444,11 @@ void ReadInductance(void) {
     2a90:	30 e0       	ldi	r19, 0x00	; 0
     2a92:	40 e0       	ldi	r20, 0x00	; 0
     2a94:	50 e0       	ldi	r21, 0x00	; 0
-    2a96:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    2a96:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
         inductance[count] = (timeconstant.dw * total_r ) / per_ref1;
     2a9a:	c5 01       	movw	r24, r10
     2a9c:	b4 01       	movw	r22, r8
-    2a9e:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    2a9e:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     2aa2:	83 2d       	mov	r24, r3
     2aa4:	90 e0       	ldi	r25, 0x00	; 0
     2aa6:	e1 e0       	ldi	r30, 0x01	; 1
@@ -8651,7 +8651,7 @@ void ReadInductance(void) {
     2be8:	30 e0       	ldi	r19, 0x00	; 0
     2bea:	40 e0       	ldi	r20, 0x00	; 0
     2bec:	50 e0       	ldi	r21, 0x00	; 0
-    2bee:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    2bee:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     2bf2:	20 93 07 01 	sts	0x0107, r18
     2bf6:	30 93 08 01 	sts	0x0108, r19
     2bfa:	40 93 09 01 	sts	0x0109, r20
@@ -8679,7 +8679,7 @@ void ReadInductance(void) {
  } // end ReadInductance()
     2c24:	60 96       	adiw	r28, 0x10	; 16
     2c26:	e2 e1       	ldi	r30, 0x12	; 18
-    2c28:	0c 94 cb 1e 	jmp	0x3d96	; 0x3d96 <__epilogue_restores__>
+    2c28:	0c 94 c0 1e 	jmp	0x3d80	; 0x3d80 <__epilogue_restores__>
 
 00002c2c <GetESR>:
    #define EXTRA_DELAY2PULSE wait3us
@@ -8786,7 +8786,7 @@ void ReadInductance(void) {
    #define EXTRA_DELAY2PULSE wait4us
     2c90:	51 2d       	mov	r21, r1
         /* current begin after last ADCready:  0.875us (loop) + 14us + 6tics = 15.625us  */
-    2c92:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    2c92:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
 	/* half puls length = (20us - 15.625us) = 4.375us  (PL=8.75us) */
     2c96:	1f 5f       	subi	r17, 0xFF	; 255
 
@@ -9485,7 +9485,7 @@ ad_3924:
 	movw	r20, r24;
     2f18:	ac 01       	movw	r20, r24
 	call	__mulsi3;		/* (cap_val_nF - 60) * (cap_val_nF - 60) */
-    2f1a:	0e 94 4a 1e 	call	0x3c94	; 0x3c94 <__mulsi3>
+    2f1a:	0e 94 3f 1e 	call	0x3c7e	; 0x3c7e <__mulsi3>
 #endif
        	movw	r18, r22;
     2f1e:	9b 01       	movw	r18, r22
@@ -9500,7 +9500,7 @@ ad_3924:
        	ldi	r25, hhi8(FAKTOR_ESR*FAKTOR_ESR*MAX_CNT); 0x1A; 26
     2f28:	90 e0       	ldi	r25, 0x00	; 0
 	call	__udivmodsi4;
-    2f2a:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    2f2a:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
 	sub	r6, r18
     2f2e:	62 1a       	sub	r6, r18
 	sbc	r7, r19
@@ -9566,13 +9566,13 @@ ad_396c:
 	movw	r20, r8;
     2f58:	a4 01       	movw	r20, r8
 	call	__mulsi3;		/* r22:25 = r22:25 * r18:21 */
-    2f5a:	0e 94 4a 1e 	call	0x3c94	; 0x3c94 <__mulsi3>
+    2f5a:	0e 94 3f 1e 	call	0x3c7e	; 0x3c7e <__mulsi3>
 	movw	r18, r10;	/* r18:21 = r10:13 = sumvolt0 */
     2f5e:	95 01       	movw	r18, r10
 	movw	r20, r12;
     2f60:	a6 01       	movw	r20, r12
 	call	__udivmodsi4;		/* r18:21 = r22:25  / r18:21 */
-    2f62:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    2f62:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
 	ldi	r24, lo8(EE_ESR_ZEROtab);	/* esr0 = (int8_t)eeprom_read_byte(&EE_ESR_ZEROtab[lopin+hipin]); */
     2f66:	80 e0       	ldi	r24, 0x00	; 0
 	ldi	r25, hi8(EE_ESR_ZEROtab);
@@ -9584,7 +9584,7 @@ ad_396c:
 	adc	r25, zero_reg;
     2f6e:	91 1d       	adc	r25, r1
 	call	eeprom_read_byte;
-    2f70:	0e 94 fc 1e 	call	0x3df8	; 0x3df8 <__eerd_byte_m168>
+    2f70:	0e 94 f1 1e 	call	0x3de2	; 0x3de2 <__eerd_byte_m168>
         ldi	r25, 0;		/* upper bits allways zero */
     2f74:	90 e0       	ldi	r25, 0x00	; 0
 	mov	r6, r24;
@@ -9596,7 +9596,7 @@ ad_396c:
 	ldi	r23, 0;
     2f7c:	70 e0       	ldi	r23, 0x00	; 0
 	call	__udivmodhi4	/* r22:23 = r24:25 / r22:23 */
-    2f7e:	0e 94 5a 1e 	call	0x3cb4	; 0x3cb4 <__udivmodhi4>
+    2f7e:	0e 94 4f 1e 	call	0x3c9e	; 0x3c9e <__udivmodhi4>
 	add	r18, r22;	/* esrvalue += esrvalue / 16; */
     2f82:	26 0f       	add	r18, r22
 	adc	r19, r23;
@@ -9723,7 +9723,7 @@ void GetVloss() {
     2fe6:	b0 e0       	ldi	r27, 0x00	; 0
     2fe8:	e8 ef       	ldi	r30, 0xF8	; 248
     2fea:	f7 e1       	ldi	r31, 0x17	; 23
-    2fec:	0c 94 b5 1e 	jmp	0x3d6a	; 0x3d6a <__prologue_saves__+0xc>
+    2fec:	0c 94 aa 1e 	jmp	0x3d54	; 0x3d54 <__prologue_saves__+0xc>
   } lval;
   uint8_t ii;
   uint8_t HiPinR_L;
@@ -9801,7 +9801,7 @@ void GetVloss() {
     3064:	9f 4f       	sbci	r25, 0xFF	; 255
     3066:	a5 01       	movw	r20, r10
     3068:	94 01       	movw	r18, r8
-    306a:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    306a:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
   adcv[0] = ReadADC(cap.cb);		// voltage before any load 
 // ******** should adcv[0] be measured without current???
   if (cap.cpre_max > -9) return;	// too much capacity
@@ -9948,11 +9948,11 @@ void GetVloss() {
      cap.v_loss = (unsigned long)(adcv[1] * 500UL) / adcv[2];
     3110:	a4 ef       	ldi	r26, 0xF4	; 244
     3112:	b1 e0       	ldi	r27, 0x01	; 1
-    3114:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+    3114:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
     3118:	95 01       	movw	r18, r10
     311a:	40 e0       	ldi	r20, 0x00	; 0
     311c:	50 e0       	ldi	r21, 0x00	; 0
-    311e:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
+    311e:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
     3122:	30 93 8b 01 	sts	0x018B, r19
     3126:	20 93 8a 01 	sts	0x018A, r18
   lcd_line4();
@@ -9979,7 +9979,7 @@ void GetVloss() {
     3138:	cd b7       	in	r28, 0x3d	; 61
     313a:	de b7       	in	r29, 0x3e	; 62
     313c:	ec e0       	ldi	r30, 0x0C	; 12
-    313e:	0c 94 d1 1e 	jmp	0x3da2	; 0x3da2 <__epilogue_restores__+0xc>
+    313e:	0c 94 c6 1e 	jmp	0x3d8c	; 0x3d8c <__epilogue_restores__+0xc>
 
 00003142 <EE_check_init>:
 #include <avr/eeprom.h>
@@ -9999,7 +9999,7 @@ int main(void) {
     3146:	b0 e0       	ldi	r27, 0x00	; 0
     3148:	e8 ea       	ldi	r30, 0xA8	; 168
     314a:	f8 e1       	ldi	r31, 0x18	; 24
-    314c:	0c 94 af 1e 	jmp	0x3d5e	; 0x3d5e <__prologue_saves__>
+    314c:	0c 94 a4 1e 	jmp	0x3d48	; 0x3d48 <__prologue_saves__>
   char an_cat;			// diode is anode-cathode type
 #ifdef WITH_GRAPHICS
   unsigned char options;
@@ -10083,7 +10083,7 @@ int main(void) {
     31a6:	5e 98       	cbi	0x0b, 6	; 11
 //     ON_DDR = (1<<ON_PIN);		//switch to GND
      return 0;
-    31a8:	4e c5       	rjmp	.+2716   	; 0x3c46 <main+0xb02>
+    31a8:	43 c5       	rjmp	.+2694   	; 0x3c30 <main+0xaec>
   }
 #if (LCD_ST_TYPE == 0)
   LCDLoadCustomChar(LCD_CHAR_DIODE1);	//Custom-Character Diode symbol
@@ -10379,7 +10379,7 @@ start:
         PORTD = 0;			//switch power off
     32fe:	1b b8       	out	0x0b, r1	; 11
         return 0;
-    3300:	a2 c4       	rjmp	.+2372   	; 0x3c46 <main+0xb02>
+    3300:	97 c4       	rjmp	.+2350   	; 0x3c30 <main+0xaec>
      }
      lcd_MEM_string(BatWeak);		//Battery weak
     3302:	85 e4       	ldi	r24, 0x45	; 69
@@ -10468,7 +10468,7 @@ start:
     3374:	0e 94 e6 04 	call	0x9cc	; 0x9cc <AutoCheck>
 #endif
     goto end;
-    3378:	55 c4       	rjmp	.+2218   	; 0x3c24 <main+0xae0>
+    3378:	4a c4       	rjmp	.+2196   	; 0x3c0e <main+0xaca>
   }
 
 #ifdef WITH_SELFTEST
@@ -10479,11 +10479,11 @@ start:
   UnCalibrated = (eeprom_read_byte(&c_zero_tab[3]) - eeprom_read_byte(&c_zero_tab[0]));
     3380:	87 e0       	ldi	r24, 0x07	; 7
     3382:	90 e0       	ldi	r25, 0x00	; 0
-    3384:	0e 94 fc 1e 	call	0x3df8	; 0x3df8 <__eerd_byte_m168>
+    3384:	0e 94 f1 1e 	call	0x3de2	; 0x3de2 <__eerd_byte_m168>
     3388:	08 2f       	mov	r16, r24
     338a:	84 e0       	ldi	r24, 0x04	; 4
     338c:	90 e0       	ldi	r25, 0x00	; 0
-    338e:	0e 94 fc 1e 	call	0x3df8	; 0x3df8 <__eerd_byte_m168>
+    338e:	0e 94 f1 1e 	call	0x3de2	; 0x3de2 <__eerd_byte_m168>
     3392:	08 1b       	sub	r16, r24
     3394:	00 93 50 01 	sts	0x0150, r16
   if (UnCalibrated != 0) {
@@ -10663,7 +10663,7 @@ TyUfAusgabe:
     34a2:	02 e0       	ldi	r16, 0x02	; 2
     34a4:	26 e5       	ldi	r18, 0x56	; 86
     34a6:	4d ef       	ldi	r20, 0xFD	; 253
-    34a8:	bb c3       	rjmp	.+1910   	; 0x3c20 <main+0xadc>
+    34a8:	b0 c3       	rjmp	.+1888   	; 0x3c0a <main+0xac6>
     lcd_draw_trans_pins(88, 48);
 #endif
     goto TyUfAusgabe;
@@ -10729,7 +10729,7 @@ TyUfAusgabe:
     352a:	8a 3f       	cpi	r24, 0xFA	; 250
     352c:	9f 4f       	sbci	r25, 0xFF	; 255
     352e:	08 f0       	brcs	.+2      	; 0x3532 <main+0x3ee>
-    3530:	79 c3       	rjmp	.+1778   	; 0x3c24 <main+0xae0>
+    3530:	6e c3       	rjmp	.+1756   	; 0x3c0e <main+0xaca>
         lcd_MEM_string(ESR_str);
     3532:	88 e7       	ldi	r24, 0x78	; 120
     3534:	90 e0       	ldi	r25, 0x00	; 0
@@ -10742,7 +10742,7 @@ TyUfAusgabe:
     3546:	02 e0       	ldi	r16, 0x02	; 2
     3548:	24 ef       	ldi	r18, 0xF4	; 244
     354a:	4e ef       	ldi	r20, 0xFE	; 254
-    354c:	69 c3       	rjmp	.+1746   	; 0x3c20 <main+0xadc>
+    354c:	5e c3       	rjmp	.+1724   	; 0x3c0a <main+0xac6>
      }
 #endif
      goto end;
@@ -10822,7 +10822,7 @@ TyUfAusgabe:
     35ce:	0e 94 79 02 	call	0x4f2	; 0x4f2 <DisplayValue>
 #endif
         goto end3;
-    35d2:	6a c2       	rjmp	.+1236   	; 0x3aa8 <main+0x964>
+    35d2:	5f c2       	rjmp	.+1214   	; 0x3a92 <main+0x94e>
      } else if(NumOfDiodes == 2) { // double diode
     35d4:	82 30       	cpi	r24, 0x02	; 2
     35d6:	09 f0       	breq	.+2      	; 0x35da <main+0x496>
@@ -10884,7 +10884,7 @@ TyUfAusgabe:
     364a:	81 e0       	ldi	r24, 0x01	; 1
     364c:	0e 94 35 02 	call	0x46a	; 0x46a <UfAusgabe>
            goto end3;
-    3650:	2b c2       	rjmp	.+1110   	; 0x3aa8 <main+0x964>
+    3650:	20 c2       	rjmp	.+1088   	; 0x3a92 <main+0x94e>
 //        else if ((diodes.Cathode[0] == diodes.Anode[1]) && (diodes.Cathode[1] == diodes.Anode[0])) 
         } 
         if (diodes.Cathode[0] == diodes.Anode[1]) {
@@ -10989,7 +10989,7 @@ TyUfAusgabe:
            SerienDiodenAusgabe();
     36d6:	0e 94 4b 02 	call	0x496	; 0x496 <SerienDiodenAusgabe>
            goto end3;
-    36da:	e6 c1       	rjmp	.+972    	; 0x3aa8 <main+0x964>
+    36da:	db c1       	rjmp	.+950    	; 0x3a92 <main+0x94e>
         }
      }  // end (NumOfDiodes == 3)
      lcd_MEM_string(Bauteil);		//"Bauteil"
@@ -11013,7 +11013,7 @@ TyUfAusgabe:
      lcd_MEM_string(AnKat);		//"->|-"
     3702:	83 e6       	ldi	r24, 0x63	; 99
     3704:	90 e0       	ldi	r25, 0x00	; 0
-    3706:	87 c2       	rjmp	.+1294   	; 0x3c16 <main+0xad2>
+    3706:	7c c2       	rjmp	.+1272   	; 0x3c00 <main+0xabc>
      goto not_known;
      // end (PartFound == PART_DIODE)
   } else if (PartFound == PART_TRANSISTOR) {
@@ -11117,8 +11117,8 @@ TyUfAusgabe:
     37c0:	0e 94 cb 00 	call	0x196	; 0x196 <lcd_data>
     37c4:	11 c0       	rjmp	.+34     	; 0x37e8 <main+0x6a4>
 #ifdef WITH_GRAPHICS
-       lcd_pgm_bitmap(bmp_npn_data, 90, 32, 0);
-       lcd_draw_trans_pins(90-6, 40);
+       lcd_pgm_bitmap(bmp_npn_data, 88, 32, 0);
+       lcd_draw_trans_pins(88-7, 40);
 #endif
     } else {
        lcd_MEM_string(PNP_str);		//"PNP "
@@ -11138,9 +11138,9 @@ TyUfAusgabe:
     37de:	91 e0       	ldi	r25, 0x01	; 1
     37e0:	90 93 55 01 	sts	0x0155, r25
     37e4:	80 93 54 01 	sts	0x0154, r24
-       lcd_pgm_bitmap(bmp_npn_data, 90, 32, 0);
-       lcd_pgm_bitmap(bmp_pnp_data, 90+14, 32+16, 0);	// update for PNP
-       lcd_draw_trans_pins(90-6, 40);
+       lcd_pgm_bitmap(bmp_npn_data, 88, 32, 0);
+       lcd_pgm_bitmap(bmp_pnp_data, 88+14, 32+16, 0);	// update for PNP
+       lcd_draw_trans_pins(88-7, 40);
 #endif
     }
     lcd_space();
@@ -11195,7 +11195,7 @@ TyUfAusgabe:
     383e:	8f e5       	ldi	r24, 0x5F	; 95
     3840:	90 e0       	ldi	r25, 0x00	; 0
     3842:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
-       lcd_draw_trans_pins(90-6, 40);
+       lcd_draw_trans_pins(88-7, 40);
 #endif
     }
     lcd_space();
@@ -11205,7 +11205,7 @@ TyUfAusgabe:
     3848:	d2 cf       	rjmp	.-92     	; 0x37ee <main+0x6aa>
     if (_trans->c != diodes.Anode[ii])
        options |= OPT_VREVERSE;
-    lcd_pgm_bitmap(bmp_vakdiode_data, 90+24, 32, options);
+    lcd_pgm_bitmap(bmp_vakdiode_data, 88+24, 32, options);
 #endif    
     } /* end for ii */
     PinLayout('E','B','C'); 		//  EBC= or 123=...
@@ -11285,7 +11285,7 @@ TyUfAusgabe:
     38dc:	91 85       	ldd	r25, Z+9	; 0x09
     38de:	89 2b       	or	r24, r25
     38e0:	09 f4       	brne	.+2      	; 0x38e4 <main+0x7a0>
-    38e2:	a0 c1       	rjmp	.+832    	; 0x3c24 <main+0xae0>
+    38e2:	95 c1       	rjmp	.+810    	; 0x3c0e <main+0xaca>
        lcd_line4(); //4. row 
     38e4:	0e 94 28 01 	call	0x250	; 0x250 <lcd_line4>
        lcd_MEM2_string(ICEs_str);		// "ICEs="
@@ -11302,7 +11302,7 @@ TyUfAusgabe:
     3900:	03 e0       	ldi	r16, 0x03	; 3
     3902:	21 e4       	ldi	r18, 0x41	; 65
     3904:	4b ef       	ldi	r20, 0xFB	; 251
-    3906:	8c c1       	rjmp	.+792    	; 0x3c20 <main+0xadc>
+    3906:	81 c1       	rjmp	.+770    	; 0x3c0a <main+0xac6>
     }
  #endif
 #endif
@@ -11311,7 +11311,7 @@ TyUfAusgabe:
   } else if (PartFound == PART_FET) {	//JFET or MOSFET
     3908:	84 30       	cpi	r24, 0x04	; 4
     390a:	09 f0       	breq	.+2      	; 0x390e <main+0x7ca>
-    390c:	d6 c0       	rjmp	.+428    	; 0x3aba <main+0x976>
+    390c:	cb c0       	rjmp	.+406    	; 0x3aa4 <main+0x960>
     unsigned char fetidx = 0;
     if((PartMode&P_CHANNEL) == P_CHANNEL) {
     390e:	80 91 13 01 	lds	r24, 0x0113
@@ -11402,12 +11402,12 @@ TyUfAusgabe:
     3976:	83 e5       	ldi	r24, 0x53	; 83
     3978:	0e 94 d4 01 	call	0x3a8	; 0x3a8 <PinLayout>
     }
-//    if((NumOfDiodes == 1) && ((PartMode&D_MODE) != D_MODE)) 
+
     an_cat = 0;
     if(NumOfDiodes == 1) {
     397c:	80 91 12 01 	lds	r24, 0x0112
     3980:	81 30       	cpi	r24, 0x01	; 1
-    3982:	01 f5       	brne	.+64     	; 0x39c4 <main+0x880>
+    3982:	a9 f4       	brne	.+42     	; 0x39ae <main+0x86a>
        // Layout with SGD= style
        an_cat = (PartMode&P_CHANNEL);	/* N or P MOS */
  #endif
@@ -11429,812 +11429,796 @@ TyUfAusgabe:
     39a6:	c0 f7       	brcc	.-16     	; 0x3998 <main+0x854>
     39a8:	81 e0       	ldi	r24, 0x01	; 1
     39aa:	f8 2e       	mov	r15, r24
-#endif
-       //  show diode symbol in right direction 
-       if (an_cat) {
-    39ac:	88 23       	and	r24, r24
-    39ae:	31 f0       	breq	.+12     	; 0x39bc <main+0x878>
-          lcd_data(LCD_CHAR_DIODE1);	//show Diode symbol >|
-    39b0:	81 e0       	ldi	r24, 0x01	; 1
-    39b2:	0e 94 cb 00 	call	0x196	; 0x196 <lcd_data>
-    39b6:	ff 24       	eor	r15, r15
-    39b8:	f3 94       	inc	r15
-    39ba:	05 c0       	rjmp	.+10     	; 0x39c6 <main+0x882>
-       } else {
-          lcd_data(LCD_CHAR_DIODE2);	//show Diode symbol |<
-    39bc:	82 e0       	ldi	r24, 0x02	; 2
-    39be:	0e 94 cb 00 	call	0x196	; 0x196 <lcd_data>
-    39c2:	01 c0       	rjmp	.+2      	; 0x39c6 <main+0x882>
+    39ac:	01 c0       	rjmp	.+2      	; 0x39b0 <main+0x86c>
        PinLayout('E','G','C'); 		//  SGD= or 123=...
     } else {
        PinLayout('S','G','D'); 		//  SGD= or 123=...
     }
-//    if((NumOfDiodes == 1) && ((PartMode&D_MODE) != D_MODE)) 
+
     an_cat = 0;
-    39c4:	f1 2c       	mov	r15, r1
+    39ae:	f1 2c       	mov	r15, r1
        wait_for_key_5s_line2();		// wait 5s and clear line 2
   #endif
  #endif
 #endif
     } /* end if NumOfDiodes == 1 */
     lcd_line2();			//2. Row
-    39c6:	0e 94 20 01 	call	0x240	; 0x240 <lcd_line2>
+    39b0:	0e 94 20 01 	call	0x240	; 0x240 <lcd_line2>
     if((PartMode&D_MODE) != D_MODE) {	//enhancement-MOSFET
-    39ca:	80 91 13 01 	lds	r24, 0x0113
-    39ce:	85 fd       	sbrc	r24, 5
-    39d0:	1d c0       	rjmp	.+58     	; 0x3a0c <main+0x8c8>
+    39b4:	80 91 13 01 	lds	r24, 0x0113
+    39b8:	85 fd       	sbrc	r24, 5
+    39ba:	1d c0       	rjmp	.+58     	; 0x39f6 <main+0x8b2>
 	//Gate capacity
        lcd_MEM_string(GateCap_str);		//"C="
-    39d2:	8e ea       	ldi	r24, 0xAE	; 174
-    39d4:	90 e0       	ldi	r25, 0x00	; 0
-    39d6:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
+    39bc:	8e ea       	ldi	r24, 0xAE	; 174
+    39be:	90 e0       	ldi	r25, 0x00	; 0
+    39c0:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
        ReadCapacity(_trans->b,_trans->e);	//measure capacity
-    39da:	e0 91 54 01 	lds	r30, 0x0154
-    39de:	f0 91 55 01 	lds	r31, 0x0155
-    39e2:	64 85       	ldd	r22, Z+12	; 0x0c
-    39e4:	82 85       	ldd	r24, Z+10	; 0x0a
-    39e6:	0e 94 dc 0f 	call	0x1fb8	; 0x1fb8 <ReadCapacity>
+    39c4:	e0 91 54 01 	lds	r30, 0x0154
+    39c8:	f0 91 55 01 	lds	r31, 0x0155
+    39cc:	64 85       	ldd	r22, Z+12	; 0x0c
+    39ce:	82 85       	ldd	r24, Z+10	; 0x0a
+    39d0:	0e 94 dc 0f 	call	0x1fb8	; 0x1fb8 <ReadCapacity>
        DisplayValue(cap.cval,cap.cpre,'F',3);
-    39ea:	60 91 7c 01 	lds	r22, 0x017C
-    39ee:	70 91 7d 01 	lds	r23, 0x017D
-    39f2:	80 91 7e 01 	lds	r24, 0x017E
-    39f6:	90 91 7f 01 	lds	r25, 0x017F
-    39fa:	03 e0       	ldi	r16, 0x03	; 3
-    39fc:	26 e4       	ldi	r18, 0x46	; 70
-    39fe:	40 91 8e 01 	lds	r20, 0x018E
-    3a02:	0e 94 79 02 	call	0x4f2	; 0x4f2 <DisplayValue>
+    39d4:	60 91 7c 01 	lds	r22, 0x017C
+    39d8:	70 91 7d 01 	lds	r23, 0x017D
+    39dc:	80 91 7e 01 	lds	r24, 0x017E
+    39e0:	90 91 7f 01 	lds	r25, 0x017F
+    39e4:	03 e0       	ldi	r16, 0x03	; 3
+    39e6:	26 e4       	ldi	r18, 0x46	; 70
+    39e8:	40 91 8e 01 	lds	r20, 0x018E
+    39ec:	0e 94 79 02 	call	0x4f2	; 0x4f2 <DisplayValue>
        lcd_MEM_string(vt_str);		// "Vt="
-    3a06:	82 e9       	ldi	r24, 0x92	; 146
-    3a08:	90 e0       	ldi	r25, 0x00	; 0
-    3a0a:	15 c0       	rjmp	.+42     	; 0x3a36 <main+0x8f2>
+    39f0:	82 e9       	ldi	r24, 0x92	; 146
+    39f2:	90 e0       	ldi	r25, 0x00	; 0
+    39f4:	15 c0       	rjmp	.+42     	; 0x3a20 <main+0x8dc>
     } else {
        lcd_data('I');
-    3a0c:	89 e4       	ldi	r24, 0x49	; 73
-    3a0e:	0e 94 cb 00 	call	0x196	; 0x196 <lcd_data>
+    39f6:	89 e4       	ldi	r24, 0x49	; 73
+    39f8:	0e 94 cb 00 	call	0x196	; 0x196 <lcd_data>
        lcd_data('=');
-    3a12:	8d e3       	ldi	r24, 0x3D	; 61
-    3a14:	0e 94 cb 00 	call	0x196	; 0x196 <lcd_data>
+    39fc:	8d e3       	ldi	r24, 0x3D	; 61
+    39fe:	0e 94 cb 00 	call	0x196	; 0x196 <lcd_data>
        DisplayValue(_trans->current,-5,'A',2);
-    3a18:	e0 91 54 01 	lds	r30, 0x0154
-    3a1c:	f0 91 55 01 	lds	r31, 0x0155
-    3a20:	66 81       	ldd	r22, Z+6	; 0x06
-    3a22:	77 81       	ldd	r23, Z+7	; 0x07
-    3a24:	80 e0       	ldi	r24, 0x00	; 0
-    3a26:	90 e0       	ldi	r25, 0x00	; 0
-    3a28:	02 e0       	ldi	r16, 0x02	; 2
-    3a2a:	21 e4       	ldi	r18, 0x41	; 65
-    3a2c:	4b ef       	ldi	r20, 0xFB	; 251
-    3a2e:	0e 94 79 02 	call	0x4f2	; 0x4f2 <DisplayValue>
+    3a02:	e0 91 54 01 	lds	r30, 0x0154
+    3a06:	f0 91 55 01 	lds	r31, 0x0155
+    3a0a:	66 81       	ldd	r22, Z+6	; 0x06
+    3a0c:	77 81       	ldd	r23, Z+7	; 0x07
+    3a0e:	80 e0       	ldi	r24, 0x00	; 0
+    3a10:	90 e0       	ldi	r25, 0x00	; 0
+    3a12:	02 e0       	ldi	r16, 0x02	; 2
+    3a14:	21 e4       	ldi	r18, 0x41	; 65
+    3a16:	4b ef       	ldi	r20, 0xFB	; 251
+    3a18:	0e 94 79 02 	call	0x4f2	; 0x4f2 <DisplayValue>
        lcd_MEM_string(Vgs_str);		// " Vg="
-    3a32:	8d e8       	ldi	r24, 0x8D	; 141
-    3a34:	90 e0       	ldi	r25, 0x00	; 0
-    3a36:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
+    3a1c:	8d e8       	ldi	r24, 0x8D	; 141
+    3a1e:	90 e0       	ldi	r25, 0x00	; 0
+    3a20:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
     }
     //Gate-threshold voltage
     DisplayValue(_trans->gthvoltage,-3,'V',2);
-    3a3a:	e0 91 54 01 	lds	r30, 0x0154
-    3a3e:	f0 91 55 01 	lds	r31, 0x0155
-    3a42:	60 85       	ldd	r22, Z+8	; 0x08
-    3a44:	71 85       	ldd	r23, Z+9	; 0x09
-    3a46:	80 e0       	ldi	r24, 0x00	; 0
-    3a48:	90 e0       	ldi	r25, 0x00	; 0
-    3a4a:	02 e0       	ldi	r16, 0x02	; 2
-    3a4c:	26 e5       	ldi	r18, 0x56	; 86
-    3a4e:	4d ef       	ldi	r20, 0xFD	; 253
-    3a50:	0e 94 79 02 	call	0x4f2	; 0x4f2 <DisplayValue>
+    3a24:	e0 91 54 01 	lds	r30, 0x0154
+    3a28:	f0 91 55 01 	lds	r31, 0x0155
+    3a2c:	60 85       	ldd	r22, Z+8	; 0x08
+    3a2e:	71 85       	ldd	r23, Z+9	; 0x09
+    3a30:	80 e0       	ldi	r24, 0x00	; 0
+    3a32:	90 e0       	ldi	r25, 0x00	; 0
+    3a34:	02 e0       	ldi	r16, 0x02	; 2
+    3a36:	26 e5       	ldi	r18, 0x56	; 86
+    3a38:	4d ef       	ldi	r20, 0xFD	; 253
+    3a3a:	0e 94 79 02 	call	0x4f2	; 0x4f2 <DisplayValue>
 #ifdef FOUR_LINE_LCD
  #if FLASHEND > 0x1fff
        // there is enough space for long form of showing protection diode
     if(NumOfDiodes == 1) {
-    3a54:	80 91 12 01 	lds	r24, 0x0112
-    3a58:	81 30       	cpi	r24, 0x01	; 1
-    3a5a:	09 f0       	breq	.+2      	; 0x3a5e <main+0x91a>
-    3a5c:	e3 c0       	rjmp	.+454    	; 0x3c24 <main+0xae0>
+    3a3e:	80 91 12 01 	lds	r24, 0x0112
+    3a42:	81 30       	cpi	r24, 0x01	; 1
+    3a44:	09 f0       	breq	.+2      	; 0x3a48 <main+0x904>
+    3a46:	e3 c0       	rjmp	.+454    	; 0x3c0e <main+0xaca>
+       options = 0;
        if (_trans->c != diodes.Anode[0])
           options |= OPT_VREVERSE;
-       lcd_pgm_bitmap(bmp_vakdiode_data, 114, 32, options);
+       lcd_pgm_bitmap(bmp_vakdiode_data, 112, 32, options);
+  #endif
        lcd_line3();			//3. Row
-  #else
-       lcd_line3();			//3. Row
-    3a5e:	0e 94 24 01 	call	0x248	; 0x248 <lcd_line3>
+    3a48:	0e 94 24 01 	call	0x248	; 0x248 <lcd_line3>
        if (an_cat) {
-    3a62:	ff 20       	and	r15, r15
-    3a64:	59 f0       	breq	.+22     	; 0x3a7c <main+0x938>
+    3a4c:	ff 20       	and	r15, r15
+    3a4e:	59 f0       	breq	.+22     	; 0x3a66 <main+0x922>
           lcd_testpin(diodes.Anode[0]);
-    3a66:	80 91 92 01 	lds	r24, 0x0192
-    3a6a:	0e 94 fe 00 	call	0x1fc	; 0x1fc <lcd_testpin>
+    3a50:	80 91 92 01 	lds	r24, 0x0192
+    3a54:	0e 94 fe 00 	call	0x1fc	; 0x1fc <lcd_testpin>
           lcd_MEM_string(AnKat);	//"->|-"
-    3a6e:	83 e6       	ldi	r24, 0x63	; 99
-    3a70:	90 e0       	ldi	r25, 0x00	; 0
-    3a72:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
+    3a58:	83 e6       	ldi	r24, 0x63	; 99
+    3a5a:	90 e0       	ldi	r25, 0x00	; 0
+    3a5c:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
           lcd_testpin(diodes.Cathode[0]);
-    3a76:	80 91 98 01 	lds	r24, 0x0198
-    3a7a:	0a c0       	rjmp	.+20     	; 0x3a90 <main+0x94c>
+    3a60:	80 91 98 01 	lds	r24, 0x0198
+    3a64:	0a c0       	rjmp	.+20     	; 0x3a7a <main+0x936>
        } else {
           lcd_testpin(diodes.Cathode[0]);
-    3a7c:	80 91 98 01 	lds	r24, 0x0198
-    3a80:	0e 94 fe 00 	call	0x1fc	; 0x1fc <lcd_testpin>
+    3a66:	80 91 98 01 	lds	r24, 0x0198
+    3a6a:	0e 94 fe 00 	call	0x1fc	; 0x1fc <lcd_testpin>
           lcd_MEM_string(KatAn);	//"-|<-"
-    3a84:	8f e5       	ldi	r24, 0x5F	; 95
-    3a86:	90 e0       	ldi	r25, 0x00	; 0
-    3a88:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
+    3a6e:	8f e5       	ldi	r24, 0x5F	; 95
+    3a70:	90 e0       	ldi	r25, 0x00	; 0
+    3a72:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
           lcd_testpin(diodes.Anode[0]);
-    3a8c:	80 91 92 01 	lds	r24, 0x0192
-    3a90:	0e 94 fe 00 	call	0x1fc	; 0x1fc <lcd_testpin>
+    3a76:	80 91 92 01 	lds	r24, 0x0192
+    3a7a:	0e 94 fe 00 	call	0x1fc	; 0x1fc <lcd_testpin>
        }
-       lcd_space();
-    3a94:	0e 94 02 01 	call	0x204	; 0x204 <lcd_space>
-  #endif
+       lcd_line4();
+    3a7e:	0e 94 28 01 	call	0x250	; 0x250 <lcd_line4>
        lcd_MEM_string(Uf_str);			//"Uf="
-    3a98:	87 e9       	ldi	r24, 0x97	; 151
-    3a9a:	90 e0       	ldi	r25, 0x00	; 0
-    3a9c:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
+    3a82:	87 e9       	ldi	r24, 0x97	; 151
+    3a84:	90 e0       	ldi	r25, 0x00	; 0
+    3a86:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
        mVAusgabe(0);
-    3aa0:	80 e0       	ldi	r24, 0x00	; 0
-    3aa2:	0e 94 21 02 	call	0x442	; 0x442 <mVAusgabe>
-    3aa6:	be c0       	rjmp	.+380    	; 0x3c24 <main+0xae0>
+    3a8a:	80 e0       	ldi	r24, 0x00	; 0
+    3a8c:	0e 94 21 02 	call	0x442	; 0x442 <mVAusgabe>
+    3a90:	be c0       	rjmp	.+380    	; 0x3c0e <main+0xaca>
   goto start;	// POWER_OFF not selected, repeat measurement
 //  return 0;
 
 end3:
   // the diode  is already shown on the LCD
   if (ResistorsFound == 0) goto end;
-    3aa8:	80 91 78 01 	lds	r24, 0x0178
-    3aac:	88 23       	and	r24, r24
-    3aae:	09 f4       	brne	.+2      	; 0x3ab2 <main+0x96e>
-    3ab0:	b9 c0       	rjmp	.+370    	; 0x3c24 <main+0xae0>
+    3a92:	80 91 78 01 	lds	r24, 0x0178
+    3a96:	88 23       	and	r24, r24
+    3a98:	09 f4       	brne	.+2      	; 0x3a9c <main+0x958>
+    3a9a:	b9 c0       	rjmp	.+370    	; 0x3c0e <main+0xaca>
   ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
-    3ab2:	77 b8       	out	0x07, r7	; 7
+    3a9c:	77 b8       	out	0x07, r7	; 7
   // there is one resistor or more detected
 #ifdef FOUR_LINE_LCD
   ADC_DDR =  TXD_MSK; 	// switch pin with reference to input, activate relay
-    3ab4:	17 b9       	out	0x07, r17	; 7
+    3a9e:	17 b9       	out	0x07, r17	; 7
   lcd_line3();
-    3ab6:	0e 94 24 01 	call	0x248	; 0x248 <lcd_line3>
+    3aa0:	0e 94 24 01 	call	0x248	; 0x248 <lcd_line3>
     goto end;
     // end (PartFound == PART_FET)
   }
 //   if(PartFound == PART_RESISTOR) 
 resistor_out:
    if(ResistorsFound != 0) {
-    3aba:	20 91 78 01 	lds	r18, 0x0178
-    3abe:	22 23       	and	r18, r18
-    3ac0:	09 f4       	brne	.+2      	; 0x3ac4 <main+0x980>
-    3ac2:	9d c0       	rjmp	.+314    	; 0x3bfe <main+0xaba>
+    3aa4:	20 91 78 01 	lds	r18, 0x0178
+    3aa8:	22 23       	and	r18, r18
+    3aaa:	09 f4       	brne	.+2      	; 0x3aae <main+0x96a>
+    3aac:	9d c0       	rjmp	.+314    	; 0x3be8 <main+0xaa4>
     ii = 0;
     if (ResistorsFound == 1) { // single resistor
-    3ac4:	21 30       	cpi	r18, 0x01	; 1
-    3ac6:	71 f4       	brne	.+28     	; 0x3ae4 <main+0x9a0>
+    3aae:	21 30       	cpi	r18, 0x01	; 1
+    3ab0:	71 f4       	brne	.+28     	; 0x3ace <main+0x98a>
        lcd_testpin(resis[0].rb);  	//Pin-number 1
-    3ac8:	80 91 28 01 	lds	r24, 0x0128
-    3acc:	0e 94 fe 00 	call	0x1fc	; 0x1fc <lcd_testpin>
+    3ab2:	80 91 28 01 	lds	r24, 0x0128
+    3ab6:	0e 94 fe 00 	call	0x1fc	; 0x1fc <lcd_testpin>
        lcd_MEM_string(Resistor_str);
-    3ad0:	85 e5       	ldi	r24, 0x55	; 85
-    3ad2:	90 e0       	ldi	r25, 0x00	; 0
-    3ad4:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
+    3aba:	85 e5       	ldi	r24, 0x55	; 85
+    3abc:	90 e0       	ldi	r25, 0x00	; 0
+    3abe:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
        lcd_testpin(resis[0].ra);		//Pin-number 2
-    3ad8:	80 91 27 01 	lds	r24, 0x0127
-    3adc:	0e 94 fe 00 	call	0x1fc	; 0x1fc <lcd_testpin>
+    3ac2:	80 91 27 01 	lds	r24, 0x0127
+    3ac6:	0e 94 fe 00 	call	0x1fc	; 0x1fc <lcd_testpin>
     // end (PartFound == PART_FET)
   }
 //   if(PartFound == PART_RESISTOR) 
 resistor_out:
    if(ResistorsFound != 0) {
     ii = 0;
-    3ae0:	00 e0       	ldi	r16, 0x00	; 0
-    3ae2:	55 c0       	rjmp	.+170    	; 0x3b8e <main+0xa4a>
+    3aca:	00 e0       	ldi	r16, 0x00	; 0
+    3acc:	55 c0       	rjmp	.+170    	; 0x3b78 <main+0xa34>
     if (ResistorsFound == 1) { // single resistor
        lcd_testpin(resis[0].rb);  	//Pin-number 1
        lcd_MEM_string(Resistor_str);
        lcd_testpin(resis[0].ra);		//Pin-number 2
     } else { // R-Max suchen
        if (resis[1].rx > resis[0].rx)
-    3ae4:	40 91 2b 01 	lds	r20, 0x012B
-    3ae8:	50 91 2c 01 	lds	r21, 0x012C
-    3aec:	60 91 2d 01 	lds	r22, 0x012D
-    3af0:	70 91 2e 01 	lds	r23, 0x012E
-    3af4:	80 91 23 01 	lds	r24, 0x0123
-    3af8:	90 91 24 01 	lds	r25, 0x0124
-    3afc:	a0 91 25 01 	lds	r26, 0x0125
-    3b00:	b0 91 26 01 	lds	r27, 0x0126
+    3ace:	40 91 2b 01 	lds	r20, 0x012B
+    3ad2:	50 91 2c 01 	lds	r21, 0x012C
+    3ad6:	60 91 2d 01 	lds	r22, 0x012D
+    3ada:	70 91 2e 01 	lds	r23, 0x012E
+    3ade:	80 91 23 01 	lds	r24, 0x0123
+    3ae2:	90 91 24 01 	lds	r25, 0x0124
+    3ae6:	a0 91 25 01 	lds	r26, 0x0125
+    3aea:	b0 91 26 01 	lds	r27, 0x0126
           ii = 1;
        if (ResistorsFound == 2) {
-    3b04:	22 30       	cpi	r18, 0x02	; 2
-    3b06:	59 f1       	breq	.+86     	; 0x3b5e <main+0xa1a>
+    3aee:	22 30       	cpi	r18, 0x02	; 2
+    3af0:	59 f1       	breq	.+86     	; 0x3b48 <main+0xa04>
     if (ResistorsFound == 1) { // single resistor
        lcd_testpin(resis[0].rb);  	//Pin-number 1
        lcd_MEM_string(Resistor_str);
        lcd_testpin(resis[0].ra);		//Pin-number 2
     } else { // R-Max suchen
        if (resis[1].rx > resis[0].rx)
-    3b08:	21 e0       	ldi	r18, 0x01	; 1
-    3b0a:	84 17       	cp	r24, r20
-    3b0c:	95 07       	cpc	r25, r21
-    3b0e:	a6 07       	cpc	r26, r22
-    3b10:	b7 07       	cpc	r27, r23
-    3b12:	08 f0       	brcs	.+2      	; 0x3b16 <main+0x9d2>
-    3b14:	20 e0       	ldi	r18, 0x00	; 0
+    3af2:	21 e0       	ldi	r18, 0x01	; 1
+    3af4:	84 17       	cp	r24, r20
+    3af6:	95 07       	cpc	r25, r21
+    3af8:	a6 07       	cpc	r26, r22
+    3afa:	b7 07       	cpc	r27, r23
+    3afc:	08 f0       	brcs	.+2      	; 0x3b00 <main+0x9bc>
+    3afe:	20 e0       	ldi	r18, 0x00	; 0
           ii = 1;
        if (ResistorsFound == 2) {
           ii = 2;
        } else {
           if (resis[2].rx > resis[ii].rx) {
-    3b16:	e2 2f       	mov	r30, r18
-    3b18:	f0 e0       	ldi	r31, 0x00	; 0
-    3b1a:	a3 e0       	ldi	r26, 0x03	; 3
-    3b1c:	ee 0f       	add	r30, r30
-    3b1e:	ff 1f       	adc	r31, r31
-    3b20:	aa 95       	dec	r26
-    3b22:	e1 f7       	brne	.-8      	; 0x3b1c <main+0x9d8>
-    3b24:	ed 5d       	subi	r30, 0xDD	; 221
-    3b26:	fe 4f       	sbci	r31, 0xFE	; 254
-    3b28:	40 91 33 01 	lds	r20, 0x0133
-    3b2c:	50 91 34 01 	lds	r21, 0x0134
-    3b30:	60 91 35 01 	lds	r22, 0x0135
-    3b34:	70 91 36 01 	lds	r23, 0x0136
-    3b38:	80 81       	ld	r24, Z
-    3b3a:	91 81       	ldd	r25, Z+1	; 0x01
-    3b3c:	a2 81       	ldd	r26, Z+2	; 0x02
-    3b3e:	b3 81       	ldd	r27, Z+3	; 0x03
-    3b40:	84 17       	cp	r24, r20
-    3b42:	95 07       	cpc	r25, r21
-    3b44:	a6 07       	cpc	r26, r22
-    3b46:	b7 07       	cpc	r27, r23
-    3b48:	50 f0       	brcs	.+20     	; 0x3b5e <main+0xa1a>
+    3b00:	e2 2f       	mov	r30, r18
+    3b02:	f0 e0       	ldi	r31, 0x00	; 0
+    3b04:	a3 e0       	ldi	r26, 0x03	; 3
+    3b06:	ee 0f       	add	r30, r30
+    3b08:	ff 1f       	adc	r31, r31
+    3b0a:	aa 95       	dec	r26
+    3b0c:	e1 f7       	brne	.-8      	; 0x3b06 <main+0x9c2>
+    3b0e:	ed 5d       	subi	r30, 0xDD	; 221
+    3b10:	fe 4f       	sbci	r31, 0xFE	; 254
+    3b12:	40 91 33 01 	lds	r20, 0x0133
+    3b16:	50 91 34 01 	lds	r21, 0x0134
+    3b1a:	60 91 35 01 	lds	r22, 0x0135
+    3b1e:	70 91 36 01 	lds	r23, 0x0136
+    3b22:	80 81       	ld	r24, Z
+    3b24:	91 81       	ldd	r25, Z+1	; 0x01
+    3b26:	a2 81       	ldd	r26, Z+2	; 0x02
+    3b28:	b3 81       	ldd	r27, Z+3	; 0x03
+    3b2a:	84 17       	cp	r24, r20
+    3b2c:	95 07       	cpc	r25, r21
+    3b2e:	a6 07       	cpc	r26, r22
+    3b30:	b7 07       	cpc	r27, r23
+    3b32:	50 f0       	brcs	.+20     	; 0x3b48 <main+0xa04>
     // end (PartFound == PART_FET)
   }
 //   if(PartFound == PART_RESISTOR) 
 resistor_out:
    if(ResistorsFound != 0) {
     ii = 0;
-    3b4a:	02 2f       	mov	r16, r18
+    3b34:	02 2f       	mov	r16, r18
        }
        char x = '1';
        char y = '3';
        char z = '2';
    
        if (ii == 1) {
-    3b4c:	21 30       	cpi	r18, 0x01	; 1
-    3b4e:	19 f0       	breq	.+6      	; 0x3b56 <main+0xa12>
-    3b50:	22 e3       	ldi	r18, 0x32	; 50
-    3b52:	33 e3       	ldi	r19, 0x33	; 51
-    3b54:	02 c0       	rjmp	.+4      	; 0x3b5a <main+0xa16>
+    3b36:	21 30       	cpi	r18, 0x01	; 1
+    3b38:	19 f0       	breq	.+6      	; 0x3b40 <main+0x9fc>
+    3b3a:	22 e3       	ldi	r18, 0x32	; 50
+    3b3c:	33 e3       	ldi	r19, 0x33	; 51
+    3b3e:	02 c0       	rjmp	.+4      	; 0x3b44 <main+0xa00>
           // x = '1';
           y = '2';
           z = '3';
-    3b56:	23 e3       	ldi	r18, 0x33	; 51
+    3b40:	23 e3       	ldi	r18, 0x33	; 51
        char y = '3';
        char z = '2';
    
        if (ii == 1) {
           // x = '1';
           y = '2';
-    3b58:	32 e3       	ldi	r19, 0x32	; 50
+    3b42:	32 e3       	ldi	r19, 0x32	; 50
        } else {
           if (resis[2].rx > resis[ii].rx) {
              ii = 2;
           }
        }
        char x = '1';
-    3b5a:	81 e3       	ldi	r24, 0x31	; 49
-    3b5c:	04 c0       	rjmp	.+8      	; 0x3b66 <main+0xa22>
-    3b5e:	02 e0       	ldi	r16, 0x02	; 2
+    3b44:	81 e3       	ldi	r24, 0x31	; 49
+    3b46:	04 c0       	rjmp	.+8      	; 0x3b50 <main+0xa0c>
+    3b48:	02 e0       	ldi	r16, 0x02	; 2
           z = '3';
        }
        if (ii == 2) {
           x = '2';
           y = '1';
           z = '3';
-    3b60:	23 e3       	ldi	r18, 0x33	; 51
+    3b4a:	23 e3       	ldi	r18, 0x33	; 51
           y = '2';
           z = '3';
        }
        if (ii == 2) {
           x = '2';
           y = '1';
-    3b62:	31 e3       	ldi	r19, 0x31	; 49
+    3b4c:	31 e3       	ldi	r19, 0x31	; 49
           // x = '1';
           y = '2';
           z = '3';
        }
        if (ii == 2) {
           x = '2';
-    3b64:	82 e3       	ldi	r24, 0x32	; 50
+    3b4e:	82 e3       	ldi	r24, 0x32	; 50
           y = '1';
           z = '3';
        }
        lcd_data(x);
-    3b66:	2a 83       	std	Y+2, r18	; 0x02
-    3b68:	39 83       	std	Y+1, r19	; 0x01
-    3b6a:	0e 94 cb 00 	call	0x196	; 0x196 <lcd_data>
+    3b50:	2a 83       	std	Y+2, r18	; 0x02
+    3b52:	39 83       	std	Y+1, r19	; 0x01
+    3b54:	0e 94 cb 00 	call	0x196	; 0x196 <lcd_data>
        lcd_MEM_string(Resistor_str);    // -[=]-
-    3b6e:	85 e5       	ldi	r24, 0x55	; 85
-    3b70:	90 e0       	ldi	r25, 0x00	; 0
-    3b72:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
+    3b58:	85 e5       	ldi	r24, 0x55	; 85
+    3b5a:	90 e0       	ldi	r25, 0x00	; 0
+    3b5c:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
        lcd_data(y);
-    3b76:	39 81       	ldd	r19, Y+1	; 0x01
-    3b78:	83 2f       	mov	r24, r19
-    3b7a:	0e 94 cb 00 	call	0x196	; 0x196 <lcd_data>
+    3b60:	39 81       	ldd	r19, Y+1	; 0x01
+    3b62:	83 2f       	mov	r24, r19
+    3b64:	0e 94 cb 00 	call	0x196	; 0x196 <lcd_data>
        lcd_MEM_string(Resistor_str);    // -[=]-
-    3b7e:	85 e5       	ldi	r24, 0x55	; 85
-    3b80:	90 e0       	ldi	r25, 0x00	; 0
-    3b82:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
+    3b68:	85 e5       	ldi	r24, 0x55	; 85
+    3b6a:	90 e0       	ldi	r25, 0x00	; 0
+    3b6c:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
        lcd_data(z);
-    3b86:	2a 81       	ldd	r18, Y+2	; 0x02
-    3b88:	82 2f       	mov	r24, r18
-    3b8a:	0e 94 cb 00 	call	0x196	; 0x196 <lcd_data>
+    3b70:	2a 81       	ldd	r18, Y+2	; 0x02
+    3b72:	82 2f       	mov	r24, r18
+    3b74:	0e 94 cb 00 	call	0x196	; 0x196 <lcd_data>
     }
 #ifdef FOUR_LINE_LCD
     if(PartFound == PART_DIODE) {
-    3b8e:	80 91 14 01 	lds	r24, 0x0114
-    3b92:	82 30       	cpi	r24, 0x02	; 2
-    3b94:	19 f4       	brne	.+6      	; 0x3b9c <main+0xa58>
+    3b78:	80 91 14 01 	lds	r24, 0x0114
+    3b7c:	82 30       	cpi	r24, 0x02	; 2
+    3b7e:	19 f4       	brne	.+6      	; 0x3b86 <main+0xa42>
        lcd_line4(); //4. row 
-    3b96:	0e 94 28 01 	call	0x250	; 0x250 <lcd_line4>
-    3b9a:	02 c0       	rjmp	.+4      	; 0x3ba0 <main+0xa5c>
+    3b80:	0e 94 28 01 	call	0x250	; 0x250 <lcd_line4>
+    3b84:	02 c0       	rjmp	.+4      	; 0x3b8a <main+0xa46>
     } else {
        lcd_line2(); //2. row 
-    3b9c:	0e 94 20 01 	call	0x240	; 0x240 <lcd_line2>
+    3b86:	0e 94 20 01 	call	0x240	; 0x240 <lcd_line2>
     }
 #else
     lcd_line2(); //2. row 
 #endif
     if (ResistorsFound == 1) {
-    3ba0:	80 91 78 01 	lds	r24, 0x0178
-    3ba4:	81 30       	cpi	r24, 0x01	; 1
-    3ba6:	d1 f4       	brne	.+52     	; 0x3bdc <main+0xa98>
+    3b8a:	80 91 78 01 	lds	r24, 0x0178
+    3b8e:	81 30       	cpi	r24, 0x01	; 1
+    3b90:	d1 f4       	brne	.+52     	; 0x3bc6 <main+0xa82>
 #if FLASHEND > 0x1fff
        ReadInductance();		// measure inductance, possible only with single R<2.1k
-    3ba8:	0e 94 dc 13 	call	0x27b8	; 0x27b8 <ReadInductance>
+    3b92:	0e 94 dc 13 	call	0x27b8	; 0x27b8 <ReadInductance>
        RvalOut(0);
-    3bac:	80 e0       	ldi	r24, 0x00	; 0
-    3bae:	0e 94 fb 01 	call	0x3f6	; 0x3f6 <RvalOut>
+    3b96:	80 e0       	ldi	r24, 0x00	; 0
+    3b98:	0e 94 fb 01 	call	0x3f6	; 0x3f6 <RvalOut>
        if (inductor_lpre != 0) {
-    3bb2:	80 91 00 01 	lds	r24, 0x0100
-    3bb6:	88 23       	and	r24, r24
-    3bb8:	a9 f1       	breq	.+106    	; 0x3c24 <main+0xae0>
+    3b9c:	80 91 00 01 	lds	r24, 0x0100
+    3ba0:	88 23       	and	r24, r24
+    3ba2:	a9 f1       	breq	.+106    	; 0x3c0e <main+0xaca>
 	  // resistor have also Inductance
           lcd_MEM_string(Lis_str);	// "L="
-    3bba:	8d e6       	ldi	r24, 0x6D	; 109
-    3bbc:	90 e0       	ldi	r25, 0x00	; 0
-    3bbe:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
+    3ba4:	8d e6       	ldi	r24, 0x6D	; 109
+    3ba6:	90 e0       	ldi	r25, 0x00	; 0
+    3ba8:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
           DisplayValue(inductor_lx,inductor_lpre,'H',3);	// output inductance
-    3bc2:	60 91 07 01 	lds	r22, 0x0107
-    3bc6:	70 91 08 01 	lds	r23, 0x0108
-    3bca:	80 91 09 01 	lds	r24, 0x0109
-    3bce:	90 91 0a 01 	lds	r25, 0x010A
-    3bd2:	03 e0       	ldi	r16, 0x03	; 3
-    3bd4:	28 e4       	ldi	r18, 0x48	; 72
-    3bd6:	40 91 00 01 	lds	r20, 0x0100
-    3bda:	22 c0       	rjmp	.+68     	; 0x3c20 <main+0xadc>
+    3bac:	60 91 07 01 	lds	r22, 0x0107
+    3bb0:	70 91 08 01 	lds	r23, 0x0108
+    3bb4:	80 91 09 01 	lds	r24, 0x0109
+    3bb8:	90 91 0a 01 	lds	r25, 0x010A
+    3bbc:	03 e0       	ldi	r16, 0x03	; 3
+    3bbe:	28 e4       	ldi	r18, 0x48	; 72
+    3bc0:	40 91 00 01 	lds	r20, 0x0100
+    3bc4:	22 c0       	rjmp	.+68     	; 0x3c0a <main+0xac6>
 #else
        RvalOut(0);
 #endif
     } else {
        // output resistor values in right order
        if (ii == 0) {
-    3bdc:	01 11       	cpse	r16, r1
-    3bde:	02 c0       	rjmp	.+4      	; 0x3be4 <main+0xaa0>
+    3bc6:	01 11       	cpse	r16, r1
+    3bc8:	02 c0       	rjmp	.+4      	; 0x3bce <main+0xa8a>
           RvalOut(1);
-    3be0:	81 e0       	ldi	r24, 0x01	; 1
-    3be2:	03 c0       	rjmp	.+6      	; 0x3bea <main+0xaa6>
+    3bca:	81 e0       	ldi	r24, 0x01	; 1
+    3bcc:	03 c0       	rjmp	.+6      	; 0x3bd4 <main+0xa90>
           RvalOut(2);
        }
        if (ii == 1) {
           RvalOut(0);
-    3be4:	80 e0       	ldi	r24, 0x00	; 0
+    3bce:	80 e0       	ldi	r24, 0x00	; 0
        // output resistor values in right order
        if (ii == 0) {
           RvalOut(1);
           RvalOut(2);
        }
        if (ii == 1) {
-    3be6:	01 30       	cpi	r16, 0x01	; 1
-    3be8:	21 f4       	brne	.+8      	; 0x3bf2 <main+0xaae>
+    3bd0:	01 30       	cpi	r16, 0x01	; 1
+    3bd2:	21 f4       	brne	.+8      	; 0x3bdc <main+0xa98>
           RvalOut(0);
-    3bea:	0e 94 fb 01 	call	0x3f6	; 0x3f6 <RvalOut>
+    3bd4:	0e 94 fb 01 	call	0x3f6	; 0x3f6 <RvalOut>
           RvalOut(2);
-    3bee:	82 e0       	ldi	r24, 0x02	; 2
-    3bf0:	03 c0       	rjmp	.+6      	; 0x3bf8 <main+0xab4>
+    3bd8:	82 e0       	ldi	r24, 0x02	; 2
+    3bda:	03 c0       	rjmp	.+6      	; 0x3be2 <main+0xa9e>
        }
        if (ii == 2) {
           RvalOut(0);
-    3bf2:	0e 94 fb 01 	call	0x3f6	; 0x3f6 <RvalOut>
+    3bdc:	0e 94 fb 01 	call	0x3f6	; 0x3f6 <RvalOut>
           RvalOut(1);
-    3bf6:	81 e0       	ldi	r24, 0x01	; 1
-    3bf8:	0e 94 fb 01 	call	0x3f6	; 0x3f6 <RvalOut>
-    3bfc:	13 c0       	rjmp	.+38     	; 0x3c24 <main+0xae0>
+    3be0:	81 e0       	ldi	r24, 0x01	; 1
+    3be2:	0e 94 fb 01 	call	0x3f6	; 0x3f6 <RvalOut>
+    3be6:	13 c0       	rjmp	.+38     	; 0x3c0e <main+0xaca>
     }
     goto end;
 
   } // end (PartFound == PART_RESISTOR)
 
   lcd_MEM_string(TestFailed1); 	//"Kein,unbek. oder"
-    3bfe:	88 e0       	ldi	r24, 0x08	; 8
-    3c00:	91 e0       	ldi	r25, 0x01	; 1
-    3c02:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
+    3be8:	88 e0       	ldi	r24, 0x08	; 8
+    3bea:	91 e0       	ldi	r25, 0x01	; 1
+    3bec:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
   lcd_line2(); //2. row 
-    3c06:	0e 94 20 01 	call	0x240	; 0x240 <lcd_line2>
+    3bf0:	0e 94 20 01 	call	0x240	; 0x240 <lcd_line2>
 #if defined(LANG_ITALIAN)               //italiano
   lcd_MEM_string(Bauteil);		//"campione"
   lcd_space();
   lcd_MEM_string(TestFailed2); 		//"guasto "
 #else
   lcd_MEM_string(TestFailed2); 		//"defektes "
-    3c0a:	85 e3       	ldi	r24, 0x35	; 53
-    3c0c:	91 e0       	ldi	r25, 0x01	; 1
-    3c0e:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
+    3bf4:	85 e3       	ldi	r24, 0x35	; 53
+    3bf6:	91 e0       	ldi	r25, 0x01	; 1
+    3bf8:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
   lcd_MEM_string(Bauteil);		//"Bauteil"
-    3c12:	80 e3       	ldi	r24, 0x30	; 48
-    3c14:	91 e0       	ldi	r25, 0x01	; 1
-    3c16:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
+    3bfc:	80 e3       	ldi	r24, 0x30	; 48
+    3bfe:	91 e0       	ldi	r25, 0x01	; 1
+    3c00:	0e 94 93 01 	call	0x326	; 0x326 <lcd_fix_string>
 not_known:
 #if POWER_OFF+0 > 1
   empty_count++;
   mess_count = 0;
 #endif
   max_time = SHORT_WAIT_TIME;		// use allways the short wait time
-    3c1a:	88 e8       	ldi	r24, 0x88	; 136
-    3c1c:	93 e1       	ldi	r25, 0x13	; 19
-    3c1e:	06 c0       	rjmp	.+12     	; 0x3c2c <main+0xae8>
+    3c04:	88 e8       	ldi	r24, 0x88	; 136
+    3c06:	93 e1       	ldi	r25, 0x13	; 19
+    3c08:	06 c0       	rjmp	.+12     	; 0x3c16 <main+0xad2>
 //  PinLayout(Cathode_char,'G','A'); 	// CGA= or 123=...
 TyUfAusgabe:
 #ifdef WITH_THYRISTOR_GATE_V
   lcd_line2(); //2. row 
   lcd_MEM_string(Uf_str);		// "Uf="
   DisplayValue(ntrans.uBE,-3,'V',2);
-    3c20:	0e 94 79 02 	call	0x4f2	; 0x4f2 <DisplayValue>
+    3c0a:	0e 94 79 02 	call	0x4f2	; 0x4f2 <DisplayValue>
  end:
 #if POWER_OFF+0 > 1
   empty_count = 0;		// reset counter, if part is found
   mess_count++;			// count measurements
 #endif
   max_time = display_time;	// full specified wait time
-    3c24:	80 91 0c 01 	lds	r24, 0x010C
-    3c28:	90 91 0d 01 	lds	r25, 0x010D
+    3c0e:	80 91 0c 01 	lds	r24, 0x010C
+    3c12:	90 91 0d 01 	lds	r25, 0x010D
 
  end2:
   ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
-    3c2c:	77 b8       	out	0x07, r7	; 7
+    3c16:	77 b8       	out	0x07, r7	; 7
   lcd_refresh();			// write the pixels to display, ST7920 only
   while(!(RST_PIN_REG & (1<<RST_PIN)));	//wait ,until button is released
-    3c2e:	4f 9b       	sbis	0x09, 7	; 9
-    3c30:	fe cf       	rjmp	.-4      	; 0x3c2e <main+0xaea>
+    3c18:	4f 9b       	sbis	0x09, 7	; 9
+    3c1a:	fe cf       	rjmp	.-4      	; 0x3c18 <main+0xad4>
 #ifdef WITH_ROTARY_SWITCH
 wait_again:
 #endif
   ii = wait_for_key_ms(max_time);
-    3c32:	0e 94 e0 03 	call	0x7c0	; 0x7c0 <wait_for_key_ms>
+    3c1c:	0e 94 e0 03 	call	0x7c0	; 0x7c0 <wait_for_key_ms>
      // menu selected by long key press or rotary switch
      function_menu();		// start the function menu
      goto start;
   }
 #endif
   if (ii != 0 ) goto start;	// key is pressed again, repeat measurement
-    3c36:	81 11       	cpse	r24, r1
-    3c38:	09 cb       	rjmp	.-2542   	; 0x324c <main+0x108>
+    3c20:	81 11       	cpse	r24, r1
+    3c22:	14 cb       	rjmp	.-2520   	; 0x324c <main+0x108>
  #endif
 //  MCUSR = 0;
  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
   lcd_powersave();			// set graphical display to power save mode
  #endif
   ON_PORT &= ~(1<<ON_PIN);		//switch off power
-    3c3a:	5e 98       	cbi	0x0b, 6	; 11
+    3c24:	5e 98       	cbi	0x0b, 6	; 11
   wait_for_key_ms(0); //never ending loop 
-    3c3c:	80 e0       	ldi	r24, 0x00	; 0
-    3c3e:	90 e0       	ldi	r25, 0x00	; 0
-    3c40:	0e 94 e0 03 	call	0x7c0	; 0x7c0 <wait_for_key_ms>
+    3c26:	80 e0       	ldi	r24, 0x00	; 0
+    3c28:	90 e0       	ldi	r25, 0x00	; 0
+    3c2a:	0e 94 e0 03 	call	0x7c0	; 0x7c0 <wait_for_key_ms>
 #else
   // look, if the tester is uncalibrated (C-source will be included directly)
   lcd_cursor_off();
   #include "HelpCalibration.c"
 #endif
   goto start;	// POWER_OFF not selected, repeat measurement
-    3c44:	fb ca       	rjmp	.-2570   	; 0x323c <main+0xf8>
+    3c2e:	06 cb       	rjmp	.-2548   	; 0x323c <main+0xf8>
   lcd_MEM_string(Dioden);	//"Diodes "
 //#endif
 #endif
   goto resistor_out;
 
 }   // end main
-    3c46:	80 e0       	ldi	r24, 0x00	; 0
-    3c48:	90 e0       	ldi	r25, 0x00	; 0
-    3c4a:	22 96       	adiw	r28, 0x02	; 2
-    3c4c:	e2 e1       	ldi	r30, 0x12	; 18
-    3c4e:	0c 94 cb 1e 	jmp	0x3d96	; 0x3d96 <__epilogue_restores__>
+    3c30:	80 e0       	ldi	r24, 0x00	; 0
+    3c32:	90 e0       	ldi	r25, 0x00	; 0
+    3c34:	22 96       	adiw	r28, 0x02	; 2
+    3c36:	e2 e1       	ldi	r30, 0x12	; 18
+    3c38:	0c 94 c0 1e 	jmp	0x3d80	; 0x3d80 <__epilogue_restores__>
 
-00003c52 <__umulhisi3>:
-    3c52:	a2 9f       	mul	r26, r18
-    3c54:	b0 01       	movw	r22, r0
-    3c56:	b3 9f       	mul	r27, r19
-    3c58:	c0 01       	movw	r24, r0
-    3c5a:	a3 9f       	mul	r26, r19
-    3c5c:	70 0d       	add	r23, r0
-    3c5e:	81 1d       	adc	r24, r1
-    3c60:	11 24       	eor	r1, r1
-    3c62:	91 1d       	adc	r25, r1
-    3c64:	b2 9f       	mul	r27, r18
-    3c66:	70 0d       	add	r23, r0
-    3c68:	81 1d       	adc	r24, r1
-    3c6a:	11 24       	eor	r1, r1
-    3c6c:	91 1d       	adc	r25, r1
-    3c6e:	08 95       	ret
+00003c3c <__umulhisi3>:
+    3c3c:	a2 9f       	mul	r26, r18
+    3c3e:	b0 01       	movw	r22, r0
+    3c40:	b3 9f       	mul	r27, r19
+    3c42:	c0 01       	movw	r24, r0
+    3c44:	a3 9f       	mul	r26, r19
+    3c46:	70 0d       	add	r23, r0
+    3c48:	81 1d       	adc	r24, r1
+    3c4a:	11 24       	eor	r1, r1
+    3c4c:	91 1d       	adc	r25, r1
+    3c4e:	b2 9f       	mul	r27, r18
+    3c50:	70 0d       	add	r23, r0
+    3c52:	81 1d       	adc	r24, r1
+    3c54:	11 24       	eor	r1, r1
+    3c56:	91 1d       	adc	r25, r1
+    3c58:	08 95       	ret
 
-00003c70 <__usmulhisi3>:
-    3c70:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
+00003c5a <__usmulhisi3>:
+    3c5a:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
 
-00003c74 <__usmulhisi3_tail>:
-    3c74:	b7 ff       	sbrs	r27, 7
-    3c76:	08 95       	ret
-    3c78:	82 1b       	sub	r24, r18
-    3c7a:	93 0b       	sbc	r25, r19
+00003c5e <__usmulhisi3_tail>:
+    3c5e:	b7 ff       	sbrs	r27, 7
+    3c60:	08 95       	ret
+    3c62:	82 1b       	sub	r24, r18
+    3c64:	93 0b       	sbc	r25, r19
+    3c66:	08 95       	ret
+
+00003c68 <__muluhisi3>:
+    3c68:	0e 94 1e 1e 	call	0x3c3c	; 0x3c3c <__umulhisi3>
+    3c6c:	a5 9f       	mul	r26, r21
+    3c6e:	90 0d       	add	r25, r0
+    3c70:	b4 9f       	mul	r27, r20
+    3c72:	90 0d       	add	r25, r0
+    3c74:	a4 9f       	mul	r26, r20
+    3c76:	80 0d       	add	r24, r0
+    3c78:	91 1d       	adc	r25, r1
+    3c7a:	11 24       	eor	r1, r1
     3c7c:	08 95       	ret
 
-00003c7e <__muluhisi3>:
-    3c7e:	0e 94 29 1e 	call	0x3c52	; 0x3c52 <__umulhisi3>
-    3c82:	a5 9f       	mul	r26, r21
-    3c84:	90 0d       	add	r25, r0
-    3c86:	b4 9f       	mul	r27, r20
-    3c88:	90 0d       	add	r25, r0
-    3c8a:	a4 9f       	mul	r26, r20
-    3c8c:	80 0d       	add	r24, r0
-    3c8e:	91 1d       	adc	r25, r1
-    3c90:	11 24       	eor	r1, r1
-    3c92:	08 95       	ret
+00003c7e <__mulsi3>:
+    3c7e:	db 01       	movw	r26, r22
+    3c80:	8f 93       	push	r24
+    3c82:	9f 93       	push	r25
+    3c84:	0e 94 34 1e 	call	0x3c68	; 0x3c68 <__muluhisi3>
+    3c88:	bf 91       	pop	r27
+    3c8a:	af 91       	pop	r26
+    3c8c:	a2 9f       	mul	r26, r18
+    3c8e:	80 0d       	add	r24, r0
+    3c90:	91 1d       	adc	r25, r1
+    3c92:	a3 9f       	mul	r26, r19
+    3c94:	90 0d       	add	r25, r0
+    3c96:	b2 9f       	mul	r27, r18
+    3c98:	90 0d       	add	r25, r0
+    3c9a:	11 24       	eor	r1, r1
+    3c9c:	08 95       	ret
 
-00003c94 <__mulsi3>:
-    3c94:	db 01       	movw	r26, r22
-    3c96:	8f 93       	push	r24
-    3c98:	9f 93       	push	r25
-    3c9a:	0e 94 3f 1e 	call	0x3c7e	; 0x3c7e <__muluhisi3>
-    3c9e:	bf 91       	pop	r27
-    3ca0:	af 91       	pop	r26
-    3ca2:	a2 9f       	mul	r26, r18
-    3ca4:	80 0d       	add	r24, r0
-    3ca6:	91 1d       	adc	r25, r1
-    3ca8:	a3 9f       	mul	r26, r19
-    3caa:	90 0d       	add	r25, r0
-    3cac:	b2 9f       	mul	r27, r18
-    3cae:	90 0d       	add	r25, r0
-    3cb0:	11 24       	eor	r1, r1
-    3cb2:	08 95       	ret
+00003c9e <__udivmodhi4>:
+    3c9e:	aa 1b       	sub	r26, r26
+    3ca0:	bb 1b       	sub	r27, r27
+    3ca2:	51 e1       	ldi	r21, 0x11	; 17
+    3ca4:	07 c0       	rjmp	.+14     	; 0x3cb4 <__udivmodhi4_ep>
 
-00003cb4 <__udivmodhi4>:
-    3cb4:	aa 1b       	sub	r26, r26
-    3cb6:	bb 1b       	sub	r27, r27
-    3cb8:	51 e1       	ldi	r21, 0x11	; 17
-    3cba:	07 c0       	rjmp	.+14     	; 0x3cca <__udivmodhi4_ep>
+00003ca6 <__udivmodhi4_loop>:
+    3ca6:	aa 1f       	adc	r26, r26
+    3ca8:	bb 1f       	adc	r27, r27
+    3caa:	a6 17       	cp	r26, r22
+    3cac:	b7 07       	cpc	r27, r23
+    3cae:	10 f0       	brcs	.+4      	; 0x3cb4 <__udivmodhi4_ep>
+    3cb0:	a6 1b       	sub	r26, r22
+    3cb2:	b7 0b       	sbc	r27, r23
 
-00003cbc <__udivmodhi4_loop>:
-    3cbc:	aa 1f       	adc	r26, r26
-    3cbe:	bb 1f       	adc	r27, r27
-    3cc0:	a6 17       	cp	r26, r22
-    3cc2:	b7 07       	cpc	r27, r23
-    3cc4:	10 f0       	brcs	.+4      	; 0x3cca <__udivmodhi4_ep>
-    3cc6:	a6 1b       	sub	r26, r22
-    3cc8:	b7 0b       	sbc	r27, r23
+00003cb4 <__udivmodhi4_ep>:
+    3cb4:	88 1f       	adc	r24, r24
+    3cb6:	99 1f       	adc	r25, r25
+    3cb8:	5a 95       	dec	r21
+    3cba:	a9 f7       	brne	.-22     	; 0x3ca6 <__udivmodhi4_loop>
+    3cbc:	80 95       	com	r24
+    3cbe:	90 95       	com	r25
+    3cc0:	bc 01       	movw	r22, r24
+    3cc2:	cd 01       	movw	r24, r26
+    3cc4:	08 95       	ret
 
-00003cca <__udivmodhi4_ep>:
-    3cca:	88 1f       	adc	r24, r24
-    3ccc:	99 1f       	adc	r25, r25
-    3cce:	5a 95       	dec	r21
-    3cd0:	a9 f7       	brne	.-22     	; 0x3cbc <__udivmodhi4_loop>
-    3cd2:	80 95       	com	r24
-    3cd4:	90 95       	com	r25
-    3cd6:	bc 01       	movw	r22, r24
-    3cd8:	cd 01       	movw	r24, r26
-    3cda:	08 95       	ret
+00003cc6 <__udivmodsi4>:
+    3cc6:	a1 e2       	ldi	r26, 0x21	; 33
+    3cc8:	1a 2e       	mov	r1, r26
+    3cca:	aa 1b       	sub	r26, r26
+    3ccc:	bb 1b       	sub	r27, r27
+    3cce:	fd 01       	movw	r30, r26
+    3cd0:	0d c0       	rjmp	.+26     	; 0x3cec <__udivmodsi4_ep>
 
-00003cdc <__udivmodsi4>:
-    3cdc:	a1 e2       	ldi	r26, 0x21	; 33
-    3cde:	1a 2e       	mov	r1, r26
-    3ce0:	aa 1b       	sub	r26, r26
-    3ce2:	bb 1b       	sub	r27, r27
-    3ce4:	fd 01       	movw	r30, r26
-    3ce6:	0d c0       	rjmp	.+26     	; 0x3d02 <__udivmodsi4_ep>
+00003cd2 <__udivmodsi4_loop>:
+    3cd2:	aa 1f       	adc	r26, r26
+    3cd4:	bb 1f       	adc	r27, r27
+    3cd6:	ee 1f       	adc	r30, r30
+    3cd8:	ff 1f       	adc	r31, r31
+    3cda:	a2 17       	cp	r26, r18
+    3cdc:	b3 07       	cpc	r27, r19
+    3cde:	e4 07       	cpc	r30, r20
+    3ce0:	f5 07       	cpc	r31, r21
+    3ce2:	20 f0       	brcs	.+8      	; 0x3cec <__udivmodsi4_ep>
+    3ce4:	a2 1b       	sub	r26, r18
+    3ce6:	b3 0b       	sbc	r27, r19
+    3ce8:	e4 0b       	sbc	r30, r20
+    3cea:	f5 0b       	sbc	r31, r21
 
-00003ce8 <__udivmodsi4_loop>:
-    3ce8:	aa 1f       	adc	r26, r26
-    3cea:	bb 1f       	adc	r27, r27
-    3cec:	ee 1f       	adc	r30, r30
-    3cee:	ff 1f       	adc	r31, r31
-    3cf0:	a2 17       	cp	r26, r18
-    3cf2:	b3 07       	cpc	r27, r19
-    3cf4:	e4 07       	cpc	r30, r20
-    3cf6:	f5 07       	cpc	r31, r21
-    3cf8:	20 f0       	brcs	.+8      	; 0x3d02 <__udivmodsi4_ep>
-    3cfa:	a2 1b       	sub	r26, r18
-    3cfc:	b3 0b       	sbc	r27, r19
-    3cfe:	e4 0b       	sbc	r30, r20
-    3d00:	f5 0b       	sbc	r31, r21
+00003cec <__udivmodsi4_ep>:
+    3cec:	66 1f       	adc	r22, r22
+    3cee:	77 1f       	adc	r23, r23
+    3cf0:	88 1f       	adc	r24, r24
+    3cf2:	99 1f       	adc	r25, r25
+    3cf4:	1a 94       	dec	r1
+    3cf6:	69 f7       	brne	.-38     	; 0x3cd2 <__udivmodsi4_loop>
+    3cf8:	60 95       	com	r22
+    3cfa:	70 95       	com	r23
+    3cfc:	80 95       	com	r24
+    3cfe:	90 95       	com	r25
+    3d00:	9b 01       	movw	r18, r22
+    3d02:	ac 01       	movw	r20, r24
+    3d04:	bd 01       	movw	r22, r26
+    3d06:	cf 01       	movw	r24, r30
+    3d08:	08 95       	ret
 
-00003d02 <__udivmodsi4_ep>:
-    3d02:	66 1f       	adc	r22, r22
-    3d04:	77 1f       	adc	r23, r23
-    3d06:	88 1f       	adc	r24, r24
-    3d08:	99 1f       	adc	r25, r25
-    3d0a:	1a 94       	dec	r1
-    3d0c:	69 f7       	brne	.-38     	; 0x3ce8 <__udivmodsi4_loop>
-    3d0e:	60 95       	com	r22
-    3d10:	70 95       	com	r23
-    3d12:	80 95       	com	r24
-    3d14:	90 95       	com	r25
-    3d16:	9b 01       	movw	r18, r22
-    3d18:	ac 01       	movw	r20, r24
-    3d1a:	bd 01       	movw	r22, r26
-    3d1c:	cf 01       	movw	r24, r30
-    3d1e:	08 95       	ret
+00003d0a <__divmodsi4>:
+    3d0a:	05 2e       	mov	r0, r21
+    3d0c:	97 fb       	bst	r25, 7
+    3d0e:	1e f4       	brtc	.+6      	; 0x3d16 <__divmodsi4+0xc>
+    3d10:	00 94       	com	r0
+    3d12:	0e 94 9c 1e 	call	0x3d38	; 0x3d38 <__negsi2>
+    3d16:	57 fd       	sbrc	r21, 7
+    3d18:	07 d0       	rcall	.+14     	; 0x3d28 <__divmodsi4_neg2>
+    3d1a:	0e 94 63 1e 	call	0x3cc6	; 0x3cc6 <__udivmodsi4>
+    3d1e:	07 fc       	sbrc	r0, 7
+    3d20:	03 d0       	rcall	.+6      	; 0x3d28 <__divmodsi4_neg2>
+    3d22:	4e f4       	brtc	.+18     	; 0x3d36 <__divmodsi4_exit>
+    3d24:	0c 94 9c 1e 	jmp	0x3d38	; 0x3d38 <__negsi2>
 
-00003d20 <__divmodsi4>:
-    3d20:	05 2e       	mov	r0, r21
-    3d22:	97 fb       	bst	r25, 7
-    3d24:	1e f4       	brtc	.+6      	; 0x3d2c <__divmodsi4+0xc>
-    3d26:	00 94       	com	r0
-    3d28:	0e 94 a7 1e 	call	0x3d4e	; 0x3d4e <__negsi2>
-    3d2c:	57 fd       	sbrc	r21, 7
-    3d2e:	07 d0       	rcall	.+14     	; 0x3d3e <__divmodsi4_neg2>
-    3d30:	0e 94 6e 1e 	call	0x3cdc	; 0x3cdc <__udivmodsi4>
-    3d34:	07 fc       	sbrc	r0, 7
-    3d36:	03 d0       	rcall	.+6      	; 0x3d3e <__divmodsi4_neg2>
-    3d38:	4e f4       	brtc	.+18     	; 0x3d4c <__divmodsi4_exit>
-    3d3a:	0c 94 a7 1e 	jmp	0x3d4e	; 0x3d4e <__negsi2>
+00003d28 <__divmodsi4_neg2>:
+    3d28:	50 95       	com	r21
+    3d2a:	40 95       	com	r20
+    3d2c:	30 95       	com	r19
+    3d2e:	21 95       	neg	r18
+    3d30:	3f 4f       	sbci	r19, 0xFF	; 255
+    3d32:	4f 4f       	sbci	r20, 0xFF	; 255
+    3d34:	5f 4f       	sbci	r21, 0xFF	; 255
 
-00003d3e <__divmodsi4_neg2>:
-    3d3e:	50 95       	com	r21
-    3d40:	40 95       	com	r20
-    3d42:	30 95       	com	r19
-    3d44:	21 95       	neg	r18
-    3d46:	3f 4f       	sbci	r19, 0xFF	; 255
-    3d48:	4f 4f       	sbci	r20, 0xFF	; 255
-    3d4a:	5f 4f       	sbci	r21, 0xFF	; 255
+00003d36 <__divmodsi4_exit>:
+    3d36:	08 95       	ret
 
-00003d4c <__divmodsi4_exit>:
-    3d4c:	08 95       	ret
+00003d38 <__negsi2>:
+    3d38:	90 95       	com	r25
+    3d3a:	80 95       	com	r24
+    3d3c:	70 95       	com	r23
+    3d3e:	61 95       	neg	r22
+    3d40:	7f 4f       	sbci	r23, 0xFF	; 255
+    3d42:	8f 4f       	sbci	r24, 0xFF	; 255
+    3d44:	9f 4f       	sbci	r25, 0xFF	; 255
+    3d46:	08 95       	ret
 
-00003d4e <__negsi2>:
-    3d4e:	90 95       	com	r25
-    3d50:	80 95       	com	r24
-    3d52:	70 95       	com	r23
-    3d54:	61 95       	neg	r22
-    3d56:	7f 4f       	sbci	r23, 0xFF	; 255
-    3d58:	8f 4f       	sbci	r24, 0xFF	; 255
-    3d5a:	9f 4f       	sbci	r25, 0xFF	; 255
-    3d5c:	08 95       	ret
+00003d48 <__prologue_saves__>:
+    3d48:	2f 92       	push	r2
+    3d4a:	3f 92       	push	r3
+    3d4c:	4f 92       	push	r4
+    3d4e:	5f 92       	push	r5
+    3d50:	6f 92       	push	r6
+    3d52:	7f 92       	push	r7
+    3d54:	8f 92       	push	r8
+    3d56:	9f 92       	push	r9
+    3d58:	af 92       	push	r10
+    3d5a:	bf 92       	push	r11
+    3d5c:	cf 92       	push	r12
+    3d5e:	df 92       	push	r13
+    3d60:	ef 92       	push	r14
+    3d62:	ff 92       	push	r15
+    3d64:	0f 93       	push	r16
+    3d66:	1f 93       	push	r17
+    3d68:	cf 93       	push	r28
+    3d6a:	df 93       	push	r29
+    3d6c:	cd b7       	in	r28, 0x3d	; 61
+    3d6e:	de b7       	in	r29, 0x3e	; 62
+    3d70:	ca 1b       	sub	r28, r26
+    3d72:	db 0b       	sbc	r29, r27
+    3d74:	0f b6       	in	r0, 0x3f	; 63
+    3d76:	f8 94       	cli
+    3d78:	de bf       	out	0x3e, r29	; 62
+    3d7a:	0f be       	out	0x3f, r0	; 63
+    3d7c:	cd bf       	out	0x3d, r28	; 61
+    3d7e:	09 94       	ijmp
 
-00003d5e <__prologue_saves__>:
-    3d5e:	2f 92       	push	r2
-    3d60:	3f 92       	push	r3
-    3d62:	4f 92       	push	r4
-    3d64:	5f 92       	push	r5
-    3d66:	6f 92       	push	r6
-    3d68:	7f 92       	push	r7
-    3d6a:	8f 92       	push	r8
-    3d6c:	9f 92       	push	r9
-    3d6e:	af 92       	push	r10
-    3d70:	bf 92       	push	r11
-    3d72:	cf 92       	push	r12
-    3d74:	df 92       	push	r13
-    3d76:	ef 92       	push	r14
-    3d78:	ff 92       	push	r15
-    3d7a:	0f 93       	push	r16
-    3d7c:	1f 93       	push	r17
-    3d7e:	cf 93       	push	r28
-    3d80:	df 93       	push	r29
-    3d82:	cd b7       	in	r28, 0x3d	; 61
-    3d84:	de b7       	in	r29, 0x3e	; 62
-    3d86:	ca 1b       	sub	r28, r26
-    3d88:	db 0b       	sbc	r29, r27
-    3d8a:	0f b6       	in	r0, 0x3f	; 63
-    3d8c:	f8 94       	cli
-    3d8e:	de bf       	out	0x3e, r29	; 62
-    3d90:	0f be       	out	0x3f, r0	; 63
-    3d92:	cd bf       	out	0x3d, r28	; 61
-    3d94:	09 94       	ijmp
+00003d80 <__epilogue_restores__>:
+    3d80:	2a 88       	ldd	r2, Y+18	; 0x12
+    3d82:	39 88       	ldd	r3, Y+17	; 0x11
+    3d84:	48 88       	ldd	r4, Y+16	; 0x10
+    3d86:	5f 84       	ldd	r5, Y+15	; 0x0f
+    3d88:	6e 84       	ldd	r6, Y+14	; 0x0e
+    3d8a:	7d 84       	ldd	r7, Y+13	; 0x0d
+    3d8c:	8c 84       	ldd	r8, Y+12	; 0x0c
+    3d8e:	9b 84       	ldd	r9, Y+11	; 0x0b
+    3d90:	aa 84       	ldd	r10, Y+10	; 0x0a
+    3d92:	b9 84       	ldd	r11, Y+9	; 0x09
+    3d94:	c8 84       	ldd	r12, Y+8	; 0x08
+    3d96:	df 80       	ldd	r13, Y+7	; 0x07
+    3d98:	ee 80       	ldd	r14, Y+6	; 0x06
+    3d9a:	fd 80       	ldd	r15, Y+5	; 0x05
+    3d9c:	0c 81       	ldd	r16, Y+4	; 0x04
+    3d9e:	1b 81       	ldd	r17, Y+3	; 0x03
+    3da0:	aa 81       	ldd	r26, Y+2	; 0x02
+    3da2:	b9 81       	ldd	r27, Y+1	; 0x01
+    3da4:	ce 0f       	add	r28, r30
+    3da6:	d1 1d       	adc	r29, r1
+    3da8:	0f b6       	in	r0, 0x3f	; 63
+    3daa:	f8 94       	cli
+    3dac:	de bf       	out	0x3e, r29	; 62
+    3dae:	0f be       	out	0x3f, r0	; 63
+    3db0:	cd bf       	out	0x3d, r28	; 61
+    3db2:	ed 01       	movw	r28, r26
+    3db4:	08 95       	ret
 
-00003d96 <__epilogue_restores__>:
-    3d96:	2a 88       	ldd	r2, Y+18	; 0x12
-    3d98:	39 88       	ldd	r3, Y+17	; 0x11
-    3d9a:	48 88       	ldd	r4, Y+16	; 0x10
-    3d9c:	5f 84       	ldd	r5, Y+15	; 0x0f
-    3d9e:	6e 84       	ldd	r6, Y+14	; 0x0e
-    3da0:	7d 84       	ldd	r7, Y+13	; 0x0d
-    3da2:	8c 84       	ldd	r8, Y+12	; 0x0c
-    3da4:	9b 84       	ldd	r9, Y+11	; 0x0b
-    3da6:	aa 84       	ldd	r10, Y+10	; 0x0a
-    3da8:	b9 84       	ldd	r11, Y+9	; 0x09
-    3daa:	c8 84       	ldd	r12, Y+8	; 0x08
-    3dac:	df 80       	ldd	r13, Y+7	; 0x07
-    3dae:	ee 80       	ldd	r14, Y+6	; 0x06
-    3db0:	fd 80       	ldd	r15, Y+5	; 0x05
-    3db2:	0c 81       	ldd	r16, Y+4	; 0x04
-    3db4:	1b 81       	ldd	r17, Y+3	; 0x03
-    3db6:	aa 81       	ldd	r26, Y+2	; 0x02
-    3db8:	b9 81       	ldd	r27, Y+1	; 0x01
-    3dba:	ce 0f       	add	r28, r30
-    3dbc:	d1 1d       	adc	r29, r1
-    3dbe:	0f b6       	in	r0, 0x3f	; 63
-    3dc0:	f8 94       	cli
-    3dc2:	de bf       	out	0x3e, r29	; 62
-    3dc4:	0f be       	out	0x3f, r0	; 63
-    3dc6:	cd bf       	out	0x3d, r28	; 61
-    3dc8:	ed 01       	movw	r28, r26
-    3dca:	08 95       	ret
+00003db6 <utoa>:
+    3db6:	fb 01       	movw	r30, r22
+    3db8:	9f 01       	movw	r18, r30
+    3dba:	42 30       	cpi	r20, 0x02	; 2
+    3dbc:	74 f0       	brlt	.+28     	; 0x3dda <utoa+0x24>
+    3dbe:	45 32       	cpi	r20, 0x25	; 37
+    3dc0:	64 f4       	brge	.+24     	; 0x3dda <utoa+0x24>
+    3dc2:	64 2f       	mov	r22, r20
+    3dc4:	77 27       	eor	r23, r23
+    3dc6:	0e 94 4f 1e 	call	0x3c9e	; 0x3c9e <__udivmodhi4>
+    3dca:	80 5d       	subi	r24, 0xD0	; 208
+    3dcc:	8a 33       	cpi	r24, 0x3A	; 58
+    3dce:	0c f0       	brlt	.+2      	; 0x3dd2 <utoa+0x1c>
+    3dd0:	89 5d       	subi	r24, 0xD9	; 217
+    3dd2:	81 93       	st	Z+, r24
+    3dd4:	cb 01       	movw	r24, r22
+    3dd6:	00 97       	sbiw	r24, 0x00	; 0
+    3dd8:	a1 f7       	brne	.-24     	; 0x3dc2 <utoa+0xc>
+    3dda:	10 82       	st	Z, r1
+    3ddc:	c9 01       	movw	r24, r18
+    3dde:	0c 94 0c 1f 	jmp	0x3e18	; 0x3e18 <strrev>
 
-00003dcc <utoa>:
-    3dcc:	fb 01       	movw	r30, r22
-    3dce:	9f 01       	movw	r18, r30
-    3dd0:	42 30       	cpi	r20, 0x02	; 2
-    3dd2:	74 f0       	brlt	.+28     	; 0x3df0 <utoa+0x24>
-    3dd4:	45 32       	cpi	r20, 0x25	; 37
-    3dd6:	64 f4       	brge	.+24     	; 0x3df0 <utoa+0x24>
-    3dd8:	64 2f       	mov	r22, r20
-    3dda:	77 27       	eor	r23, r23
-    3ddc:	0e 94 5a 1e 	call	0x3cb4	; 0x3cb4 <__udivmodhi4>
-    3de0:	80 5d       	subi	r24, 0xD0	; 208
-    3de2:	8a 33       	cpi	r24, 0x3A	; 58
-    3de4:	0c f0       	brlt	.+2      	; 0x3de8 <utoa+0x1c>
-    3de6:	89 5d       	subi	r24, 0xD9	; 217
-    3de8:	81 93       	st	Z+, r24
-    3dea:	cb 01       	movw	r24, r22
-    3dec:	00 97       	sbiw	r24, 0x00	; 0
-    3dee:	a1 f7       	brne	.-24     	; 0x3dd8 <utoa+0xc>
-    3df0:	10 82       	st	Z, r1
-    3df2:	c9 01       	movw	r24, r18
-    3df4:	0c 94 17 1f 	jmp	0x3e2e	; 0x3e2e <strrev>
+00003de2 <__eerd_byte_m168>:
+    3de2:	f9 99       	sbic	0x1f, 1	; 31
+    3de4:	fe cf       	rjmp	.-4      	; 0x3de2 <__eerd_byte_m168>
+    3de6:	92 bd       	out	0x22, r25	; 34
+    3de8:	81 bd       	out	0x21, r24	; 33
+    3dea:	f8 9a       	sbi	0x1f, 0	; 31
+    3dec:	99 27       	eor	r25, r25
+    3dee:	80 b5       	in	r24, 0x20	; 32
+    3df0:	08 95       	ret
 
-00003df8 <__eerd_byte_m168>:
-    3df8:	f9 99       	sbic	0x1f, 1	; 31
-    3dfa:	fe cf       	rjmp	.-4      	; 0x3df8 <__eerd_byte_m168>
-    3dfc:	92 bd       	out	0x22, r25	; 34
-    3dfe:	81 bd       	out	0x21, r24	; 33
-    3e00:	f8 9a       	sbi	0x1f, 0	; 31
-    3e02:	99 27       	eor	r25, r25
-    3e04:	80 b5       	in	r24, 0x20	; 32
-    3e06:	08 95       	ret
+00003df2 <__eewr_byte_m168>:
+    3df2:	26 2f       	mov	r18, r22
 
-00003e08 <__eewr_byte_m168>:
-    3e08:	26 2f       	mov	r18, r22
+00003df4 <__eewr_r18_m168>:
+    3df4:	f9 99       	sbic	0x1f, 1	; 31
+    3df6:	fe cf       	rjmp	.-4      	; 0x3df4 <__eewr_r18_m168>
+    3df8:	1f ba       	out	0x1f, r1	; 31
+    3dfa:	92 bd       	out	0x22, r25	; 34
+    3dfc:	81 bd       	out	0x21, r24	; 33
+    3dfe:	20 bd       	out	0x20, r18	; 32
+    3e00:	0f b6       	in	r0, 0x3f	; 63
+    3e02:	f8 94       	cli
+    3e04:	fa 9a       	sbi	0x1f, 2	; 31
+    3e06:	f9 9a       	sbi	0x1f, 1	; 31
+    3e08:	0f be       	out	0x3f, r0	; 63
+    3e0a:	01 96       	adiw	r24, 0x01	; 1
+    3e0c:	08 95       	ret
 
-00003e0a <__eewr_r18_m168>:
-    3e0a:	f9 99       	sbic	0x1f, 1	; 31
-    3e0c:	fe cf       	rjmp	.-4      	; 0x3e0a <__eewr_r18_m168>
-    3e0e:	1f ba       	out	0x1f, r1	; 31
-    3e10:	92 bd       	out	0x22, r25	; 34
-    3e12:	81 bd       	out	0x21, r24	; 33
-    3e14:	20 bd       	out	0x20, r18	; 32
-    3e16:	0f b6       	in	r0, 0x3f	; 63
-    3e18:	f8 94       	cli
-    3e1a:	fa 9a       	sbi	0x1f, 2	; 31
-    3e1c:	f9 9a       	sbi	0x1f, 1	; 31
-    3e1e:	0f be       	out	0x3f, r0	; 63
-    3e20:	01 96       	adiw	r24, 0x01	; 1
-    3e22:	08 95       	ret
+00003e0e <__eewr_word_m168>:
+    3e0e:	0e 94 f9 1e 	call	0x3df2	; 0x3df2 <__eewr_byte_m168>
+    3e12:	27 2f       	mov	r18, r23
+    3e14:	0c 94 fa 1e 	jmp	0x3df4	; 0x3df4 <__eewr_r18_m168>
 
-00003e24 <__eewr_word_m168>:
-    3e24:	0e 94 04 1f 	call	0x3e08	; 0x3e08 <__eewr_byte_m168>
-    3e28:	27 2f       	mov	r18, r23
-    3e2a:	0c 94 05 1f 	jmp	0x3e0a	; 0x3e0a <__eewr_r18_m168>
+00003e18 <strrev>:
+    3e18:	dc 01       	movw	r26, r24
+    3e1a:	fc 01       	movw	r30, r24
+    3e1c:	67 2f       	mov	r22, r23
+    3e1e:	71 91       	ld	r23, Z+
+    3e20:	77 23       	and	r23, r23
+    3e22:	e1 f7       	brne	.-8      	; 0x3e1c <strrev+0x4>
+    3e24:	32 97       	sbiw	r30, 0x02	; 2
+    3e26:	04 c0       	rjmp	.+8      	; 0x3e30 <strrev+0x18>
+    3e28:	7c 91       	ld	r23, X
+    3e2a:	6d 93       	st	X+, r22
+    3e2c:	70 83       	st	Z, r23
+    3e2e:	62 91       	ld	r22, -Z
+    3e30:	ae 17       	cp	r26, r30
+    3e32:	bf 07       	cpc	r27, r31
+    3e34:	c8 f3       	brcs	.-14     	; 0x3e28 <strrev+0x10>
+    3e36:	08 95       	ret
 
-00003e2e <strrev>:
-    3e2e:	dc 01       	movw	r26, r24
-    3e30:	fc 01       	movw	r30, r24
-    3e32:	67 2f       	mov	r22, r23
-    3e34:	71 91       	ld	r23, Z+
-    3e36:	77 23       	and	r23, r23
-    3e38:	e1 f7       	brne	.-8      	; 0x3e32 <strrev+0x4>
-    3e3a:	32 97       	sbiw	r30, 0x02	; 2
-    3e3c:	04 c0       	rjmp	.+8      	; 0x3e46 <strrev+0x18>
-    3e3e:	7c 91       	ld	r23, X
-    3e40:	6d 93       	st	X+, r22
-    3e42:	70 83       	st	Z, r23
-    3e44:	62 91       	ld	r22, -Z
-    3e46:	ae 17       	cp	r26, r30
-    3e48:	bf 07       	cpc	r27, r31
-    3e4a:	c8 f3       	brcs	.-14     	; 0x3e3e <strrev+0x10>
-    3e4c:	08 95       	ret
+00003e38 <_exit>:
+    3e38:	f8 94       	cli
 
-00003e4e <_exit>:
-    3e4e:	f8 94       	cli
-
-00003e50 <__stop_program>:
-    3e50:	ff cf       	rjmp	.-2      	; 0x3e50 <__stop_program>
+00003e3a <__stop_program>:
+    3e3a:	ff cf       	rjmp	.-2      	; 0x3e3a <__stop_program>

@@ -1,5 +1,6 @@
 #include "Transistortester.h"
 
+
 #ifdef WITH_GRAPHICS
 extern const unsigned char bmp_one_data[] PROGMEM;
 extern const unsigned char bmp_two_data[] PROGMEM;
@@ -50,17 +51,17 @@ void lcd_draw_trans_pins( unsigned char xb, unsigned char yb)
    const unsigned char *pbmp;
 
    pbmp = (const unsigned char *)pgm_read_word(&bmp_number[_trans->e]);
-   lcd_pgm_bitmap(pbmp, 122, 56, 0);
+   lcd_pgm_bitmap(pbmp, 120, 56, 0);
    pbmp = (const unsigned char *)pgm_read_word(&bmp_number[_trans->b]);
    lcd_pgm_bitmap(pbmp, xb, yb, 0);
    pbmp = (const unsigned char *)pgm_read_word(&bmp_number[_trans->c]);
-   lcd_pgm_bitmap(pbmp, 122, 32, 0);
+   lcd_pgm_bitmap(pbmp, 120, 32, 0);
 }
 
 
 void lcd_draw_mosfet(unsigned char index)
 {
-#define X_POS 90	/* left side x-Position of bitmap */ 
+#define X_POS 88	/* left side x-Position of bitmap */ 
 #define Y_POS 32	/* upper side y-position of the bitmap, must match to multiply of 8 */
    const unsigned char *pbmp;
 

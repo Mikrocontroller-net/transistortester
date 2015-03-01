@@ -678,16 +678,21 @@ start:
     } /* end for ii */
     PinLayout('E','B','C'); 		//  EBC= or 123=...
     lcd_line2(); //2. row 
+#if (LCD_LINE_LENGTH > 18)
+ #define SIGNIFICANT_IC 3
+#else
+ #define SIGNIFICANT_IC 2
+#endif
 #ifndef FOUR_LINE_LCD
  #ifdef SHOW_ICE
     if (_trans->ice0 > 0) {
        lcd_MEM2_string(ICE0_str);		// "ICE0="
-       DisplayValue(_trans->ice0,-5,'A',3);
+       DisplayValue(_trans->ice0,-5,'A',SIGNIFICANT_IC);
        wait_for_key_5s_line2();		// wait 5s and clear line 2
     }
     if (_trans->ices > 0) {
        lcd_MEM2_string(ICEs_str);		// "ICEs="
-       DisplayValue(_trans->ices,-5,'A',3);
+       DisplayValue(_trans->ices,-5,'A',SIGNIFICANT_IC);
        wait_for_key_5s_line2();		// wait 5s and clear line 2
     }
  #endif
@@ -703,12 +708,12 @@ start:
     if (_trans->ice0 > 0) {
        lcd_line3(); //3. row 
        lcd_MEM2_string(ICE0_str);		// "ICE0="
-       DisplayValue(_trans->ice0,-5,'A',3);
+       DisplayValue(_trans->ice0,-5,'A',SIGNIFICANT_IC);
     }
     if (_trans->ices > 0) {
        lcd_line4(); //4. row 
        lcd_MEM2_string(ICEs_str);		// "ICEs="
-       DisplayValue(_trans->ices,-5,'A',3);
+       DisplayValue(_trans->ices,-5,'A',SIGNIFICANT_IC);
     }
  #endif
 #endif

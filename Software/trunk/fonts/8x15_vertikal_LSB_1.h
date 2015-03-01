@@ -1,4 +1,11 @@
-const unsigned char PROGMEM font[256][16]={
+// table of the bits for the 8x15 character set
+// each byte hold 8 bits of a row, the upper bit is 1, the bit for the 8th line is 128
+ #ifdef LCD_CYRILLIC                                      
+  #define CHAR_COUNT15 (Cyr_ja + 16)
+ #else
+  #define CHAR_COUNT15 128
+ #endif
+const unsigned char PROGMEM font[CHAR_COUNT15][16]={
 {0xC0,0xF8,0x18,0x18,0x18,0x18,0xF8,0xC0,
  0x00,0x07,0x06,0x06,0x06,0x06,0x07,0x00},	/* 0x00 Resistor3  */
 {0xC0,0xFC,0xF8,0xF0,0xE0,0xDC,0xFC,0xC0,

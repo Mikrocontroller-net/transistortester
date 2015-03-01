@@ -208,52 +208,62 @@
 #endif
 
 //Makros for LCD
+#ifdef WITH_GRAPHICS
+ #define GR_OFFSET1 0x20	/* shift 0xa0 to 0x80, direct behind ASCII table, to save place in font table */
+ #define GR_OFFSET2 0xb0	/* shift 0xe0 to 0x10, before the ASCII table */  
+#else
+ #define GR_OFFSET1 0
+ #define GR_OFFSET2 0
+#endif
 
-#define Cyr_B 0xa0
-#define Cyr_b 0xb2
-#define Cyr_v 0xb3
-#define Cyr_G 0xa1
-#define Cyr_g 0xb4
-#define Cyr_D 0xe0
-#define Cyr_d 0xe3
-#define Cyr_Jo 0xa2
-#define Cyr_jo 0xb5
-#define Cyr_Zsch 0xa3
-#define Cyr_zsch 0xb6
-#define Cyr_Z 0xa4
-#define Cyr_z 0xb7
-#define Cyr_I 0xa5
-#define Cyr_i 0xb8
-#define Cyr_J 0xa6
-#define Cyr_j 0xb9
-#define Cyr_k 0xba
-#define Cyr_L 0xa7
-#define Cyr_l 0xbb
-#define Cyr_m 0xbc
-#define Cyr_n 0xbd
-#define Cyr_P 0xa8
-#define Cyr_p 0xbe
-#define Cyr_U 0xa9
-#define Cyr_t 0xbf
-#define Cyr_F 0xaa
-#define Cyr_f 0xe4
-#define Cyr_C 0xe1
-#define Cyr_c 0xe5
-#define Cyr_Tsch 0xab
-#define Cyr_tsch 0xc0
-#define Cyr_Sch 0xac
-#define Cyr_sch 0xc1
-#define Cyr_Schtsch 0xe2
-#define Cyr_schtsch 0xe6
-#define Cyr_HH 0xad
-#define Cyr_hh 0xc2
-#define Cyr_Y 0xae
-#define Cyr_y 0xc3
-#define Cyr_ww 0xc4
-#define Cyr_E 0xaf
-#define Cyr_e 0xc5
-#define Cyr_Ju 0xb0
-#define Cyr_ju 0xc6
-#define Cyr_Ja 0xb1
-#define Cyr_ja 0xc7
+#define Cyr_B	(0xa0 - GR_OFFSET1)
+#define Cyr_G	(0xa1 - GR_OFFSET1)
+#define Cyr_Jo	(0xa2 - GR_OFFSET1)
+#define Cyr_Zsch (0xa3 - GR_OFFSET1)
+#define Cyr_Z	(0xa4 - GR_OFFSET1)
+#define Cyr_I	(0xa5 - GR_OFFSET1)
+#define Cyr_J	(0xa6 - GR_OFFSET1)
+#define Cyr_L	(0xa7 - GR_OFFSET1)
+#define Cyr_P	(0xa8 - GR_OFFSET1)
+#define Cyr_U	(0xa9 - GR_OFFSET1)
+#define Cyr_F	(0xaa - GR_OFFSET1)
+#define Cyr_Tsch (0xab - GR_OFFSET1)
+#define Cyr_Sch (0xac - GR_OFFSET1)
+#define Cyr_HH	(0xad - GR_OFFSET1)
+#define Cyr_Y	(0xae - GR_OFFSET1)
+#define Cyr_E	(0xaf - GR_OFFSET1)
+
+#define Cyr_Ju	(0xb0 - GR_OFFSET1)
+#define Cyr_Ja	(0xb1 - GR_OFFSET1)
+#define Cyr_b	(0xb2 - GR_OFFSET1)
+#define Cyr_v	(0xb3 - GR_OFFSET1)
+#define Cyr_g	(0xb4 - GR_OFFSET1)
+#define Cyr_jo	(0xb5 - GR_OFFSET1)
+#define Cyr_zsch (0xb6 - GR_OFFSET1)
+#define Cyr_z	(0xb7 - GR_OFFSET1)
+#define Cyr_i	(0xb8 - GR_OFFSET1)
+#define Cyr_j	(0xb9 - GR_OFFSET1)
+#define Cyr_k	(0xba - GR_OFFSET1)
+#define Cyr_l	(0xbb - GR_OFFSET1)
+#define Cyr_m	(0xbc - GR_OFFSET1)
+#define Cyr_n	(0xbd - GR_OFFSET1)
+#define Cyr_p	(0xbe - GR_OFFSET1)
+#define Cyr_t	(0xbf - GR_OFFSET1)
+
+#define Cyr_tsch (0xc0 - GR_OFFSET1)
+#define Cyr_sch (0xc1 - GR_OFFSET1)
+#define Cyr_hh	(0xc2 - GR_OFFSET1)
+#define Cyr_y	(0xc3 - GR_OFFSET1)
+#define Cyr_ww	(0xc4 - GR_OFFSET1)
+#define Cyr_e	(0xc5 - GR_OFFSET1)
+#define Cyr_ju	(0xc6 - GR_OFFSET1)
+#define Cyr_ja	(0xc7 - GR_OFFSET1)
+
+#define Cyr_D	(0xe0 - GR_OFFSET2)
+#define Cyr_C	(0xe1 - GR_OFFSET2)
+#define Cyr_Schtsch (0xe2 - GR_OFFSET2)
+#define Cyr_d	(0xe3 - GR_OFFSET2)
+#define Cyr_f	(0xe4 - GR_OFFSET2)
+#define Cyr_c	(0xe5 - GR_OFFSET2)
+#define Cyr_schtsch (0xe6 - GR_OFFSET2)
 

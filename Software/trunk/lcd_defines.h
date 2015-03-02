@@ -138,6 +138,7 @@
 #define CMD_DISPLAY_ON	0x3f
 #define CMD_SET_COLUMN_ADDR	0x40
 #define CMD_SET_PAGE		0xb8
+#define CMD_SET_START_LINE	0xC0		/* set the start line for ST7108, Z address */
 
 //Makros for LCD
 #define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);

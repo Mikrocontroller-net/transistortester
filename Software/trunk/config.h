@@ -536,6 +536,7 @@
  /* CLK_PIN is connected to the clock input of the '164 shift register */
  /* CS1_PIN is connected to the LCD-CS1  (chip select of controller 1, row 0-63) */
  /* CS2_PIN is connected to the LCD-CS2  (chip select of controller 2, row 64-127) */
+ /* PCK_PIN can be connected to the 74HCT595 parallel clock */
 				/* --------------------------------------------- */
  #if PROCESSOR_TYP == 644	/* mega324/644/1284 with serial ST7108 interface */
    #define HW_LCD_EN_PORT         PORTB
@@ -559,6 +560,10 @@
    #define HW_LCD_CLK_PORT         PORTB
    #define HW_LCD_CLK_DDR          DDRB
    #define HW_LCD_CLK_PIN          6
+
+   #define HW_LCD_PCLK_PORT        PORTB
+   #define HW_LCD_PCLK_DDR         DDRB
+   #define HW_LCD_PCLK_PIN         4
 
 				/* --------------------------------------------- */
  #elif PROCESSOR_TYP == 1280	/* mega1280/2560 with serial ST7108 interface */
@@ -584,6 +589,10 @@
    #define HW_LCD_CLK_DDR          DDRA
    #define HW_LCD_CLK_PIN          2
 
+   #define HW_LCD_PCLK_PORT        PORTA
+   #define HW_LCD_PCLK_DDR         DDRA
+   #define HW_LCD_PCLK_PIN         0
+
 				/* --------------------------------------------- */
  #else				/* mega8/168/328 with serial ST7108 interface  */
    #define HW_LCD_EN_PORT         PORTD
@@ -607,6 +616,10 @@
    #define HW_LCD_CLK_PORT         PORTD
    #define HW_LCD_CLK_DDR          DDRD
    #define HW_LCD_CLK_PIN          2
+
+   #define HW_LCD_PCLK_PORT        PORTD
+   #define HW_LCD_PCLK_DDR         DDRD
+   #define HW_LCD_PCLK_PIN         0
 
  #endif	/* PROCESSOR_TYP for the serial ST7108 Interface */
 /* ----------------------------------------------------------------------------- */

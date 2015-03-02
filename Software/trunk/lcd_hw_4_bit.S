@@ -60,6 +60,10 @@
 #define set_clk_high            sbi             _SFR_IO_ADDR(HW_LCD_CLK_PORT), HW_LCD_CLK_PIN
 #define set_clk_output          sbi             (_SFR_IO_ADDR(HW_LCD_CLK_PORT) - 1), HW_LCD_CLK_PIN
 
+#define set_pclk_low             cbi             _SFR_IO_ADDR(HW_LCD_PCLK_PORT), HW_LCD_PCLK_PIN
+#define set_pclk_high            sbi             _SFR_IO_ADDR(HW_LCD_PCLK_PORT), HW_LCD_PCLK_PIN
+#define set_pclk_output          sbi             (_SFR_IO_ADDR(HW_LCD_PCLK_PORT) - 1), HW_LCD_PCLK_PIN
+
 #define RCALL rcall
 
 /* For normal I2C mode use 5us wait time, but SSD1306 is faster, the cycle time is specified as 2.5us. */
@@ -336,6 +340,9 @@ _lcd_hw_write:
 	set_clk_low
 	set_clk_output
 
+	set_pclk_low
+	set_pclk_output
+
         set_en_low
         set_en_output
 
@@ -421,6 +428,8 @@ _lcd_hw_write:
 	RCALL	toggle_clk	; set clk high and low
  #endif
         ; all 8 bit are loaded to the 74HC164 output
+	set_pclk_high		; set parallel clk high and low
+	set_pclk_low
 
 	set_rs_low		; instruction mode
         set_rs_output		; if RS is set to same as B0, RS is allready output
@@ -525,13 +534,13 @@ _lcd_hw_write_exit:
 ;
 _lcd_hw_select:
 	sbrc    preg_1, 0
-	  set_cs1_high		; enable controller 1
+	  set_cs1_low		; enable controller 1
 	sbrs    preg_1, 0
-	  set_cs1_low		; disable controller 1
+	  set_cs1_high		; disable controller 1
 	sbrc    preg_1, 1
-	  set_cs2_high		; enable controller 2
+	  set_cs2_low		; enable controller 2
 	sbrs    preg_1, 1
-	  set_cs2_low		; disable controller 2
+	  set_cs2_high		; disable controller 2
 	set_cs1_output		; enable output CS1
 	set_cs2_output		; enable output CS2
 	ret

@@ -431,10 +431,12 @@ void lcd_init(void) {
 /* -------------------------------------------------------------------------- */
 #elif (LCD_ST_TYPE == 7108)  /* !(LCD_ST_TYPE == 7565 | 1306 | 7920) */
 void lcd_init(void) {
-   wait_about30ms();
+   wait_about50ms();
    _lcd_hw_select(3);		// select both controllers
+   lcd_command(CMD_SET_START_LINE);	// set the start line 0
+   lcd_clear();
    lcd_command(CMD_DISPLAY_ON);
-   wait_about5ms();
+   wait_about50ms();
 }
 /* -------------------------------------------------------------------------- */
 #else    /* !(LCD_ST_TYPE == 7565 | 1306) | 7108 | 7920) */

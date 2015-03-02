@@ -473,6 +473,16 @@
 #define LCD_CHAR_RESIS1 7       // Resistor left part will be generated as custom character
 #define LCD_CHAR_RESIS2 6       // Resistor right part will be generated as custom character
 
+#if (defined(LANG_RUSSIAN) || defined(LANG_UKRAINIAN)) && !defined(LCD_CYRILLIC)
+ #warning LCD_CYRILLIC automatically set!
+ #define LCD_CYRILLIC
+#endif
+
+#ifdef LANG_UKRAINIAN
+ #undef LCD_CYRILLIC
+ #define LCD_CYRILLIC
+#endif
+
 #ifdef LCD_CYRILLIC
         #define LCD_CHAR_OMEGA  4       //Omega-character 
         #define LCD_CHAR_U  5           //µ-character 

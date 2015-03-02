@@ -210,7 +210,7 @@
 //Makros for LCD
 #ifdef WITH_GRAPHICS
  #define GR_OFFSET1 0x20	/* shift 0xa0 to 0x80, direct behind ASCII table, to save place in font table */
- #define GR_OFFSET2 0xb0	/* shift 0xe0 to 0x10, before the ASCII table */  
+ #define GR_OFFSET2 0xd0	/* shift 0xe0 to 0x10, before the ASCII table */  
 #else
  #define GR_OFFSET1 0
  #define GR_OFFSET2 0

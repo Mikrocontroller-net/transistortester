@@ -4,7 +4,7 @@ CC = gcc
 
 CPP = g++
 
-CFLAGS = -Wall
+CFLAGS = -Wall -g
 
 
 

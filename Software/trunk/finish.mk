@@ -1,5 +1,8 @@
 
 ########### Compile C source only 
+lcd-routines.o: ../lcd-routines.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 font.o: ../font.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 

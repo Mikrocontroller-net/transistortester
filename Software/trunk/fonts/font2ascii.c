@@ -9,15 +9,18 @@ int main(int argc, char *argv[])
  int width;
  int height;
  int anz;
- int hex[128];
+ int hexwert;
  int ii, kk;
  int hh;
- int step;
- int hbit;
  int lev;
+ int line, row;
  int line_cnt[20];
  char linebuf[256];
  char filename[256];
+ char asc_table[100][130];
+ char *end_line;
+ char BitSetChar;
+ char BitClearChar;
  char *tx;
  FILE *outfile;
  if (argc != 2) {
@@ -61,7 +64,7 @@ int main(int argc, char *argv[])
  
  lev = 0;    
     anz = width;
-    if (height > 8) anz *= 2;
+    anz *= ((height + 7) / 8);
     line_cnt[lev] = 0;
     while (fgets(linebuf,256,stdin) != NULL)
     {
@@ -70,57 +73,138 @@ int main(int argc, char *argv[])
         if (linebuf[ii] == '\r') linebuf[ii] = (char)0;
       }
       if (linebuf[0] == '{') { 
-         fprintf(outfile,"/* 0x%02x ",line_cnt[lev]);
+         fprintf(outfile," /* 0x%02x ",line_cnt[lev]);
          if ((line_cnt[lev] >= (int)' ') && (line_cnt[lev] < 0x7f)) {
            fprintf(outfile,"'%c'",(char)line_cnt[lev]);
          }
-         if (line_cnt[lev] == 0) fprintf(outfile,"Resistor3 ");
-         if (line_cnt[lev] == 1) fprintf(outfile,"Diode1 ");
-         if (line_cnt[lev] == 2) fprintf(outfile,"Diode2 ");
-         if (line_cnt[lev] == 3) fprintf(outfile,"Capacitor ");
-         if (line_cnt[lev] == 4) fprintf(outfile,"Omega ");
-         if (line_cnt[lev] == 5) fprintf(outfile,"mu ");
-         if (line_cnt[lev] == 6) fprintf(outfile,"Resistor1 ");
-         if (line_cnt[lev] == 7) fprintf(outfile,"Resistor2 ");
+         if (height <= 16) {
+           if (line_cnt[lev] == 0) fprintf(outfile,"Resistor3 ");
+           if (line_cnt[lev] == 1) fprintf(outfile,"Diode1 ");
+           if (line_cnt[lev] == 2) fprintf(outfile,"Diode2 ");
+           if (line_cnt[lev] == 3) fprintf(outfile,"Capacitor ");
+           if (line_cnt[lev] == 4) fprintf(outfile,"Omega ");
+           if (line_cnt[lev] == 5) fprintf(outfile,"mu ");
+           if (line_cnt[lev] == 6) fprintf(outfile,"Resistor1 ");
+           if (line_cnt[lev] == 7) fprintf(outfile,"Resistor2 ");
+         }
          fprintf(outfile," */\r\n");
+         // init the table
+         for (ii=0;ii<100;ii++) {
+            for (kk=0;kk<height;kk++) asc_table[ii][kk] = '.';
+            asc_table[ii][width] = (char)0;
+         }
+         BitSetChar = '*';
+         BitClearChar = '.';
          tx = &linebuf[1];
-         for (ii=0; ii<anz; ii++) {
-            sscanf( tx,"%x,", &hex[ii]);
-            tx += 5;
+         ii = 0;
+         end_line = &linebuf[strlen(linebuf)];
+         while (ii<anz ) {
+            line = (ii / width) * 8;
+            if ((tx[0] == '0') && ((tx[1] == 'x') || (tx[1] == 'X'))) {
+              sscanf( tx,"%x,", &hexwert);
+              row = (ii % width);
+              if ((hexwert & 0x01) != 0) {
+                asc_table[line][row] = BitSetChar;
+              } else {
+                asc_table[line][row] = BitClearChar;
+              }
+              if ((hexwert & 0x02) != 0) {
+                asc_table[line+1][row] = BitSetChar;
+              } else {
+                asc_table[line+1][row] = BitClearChar;
+              }
+              if ((hexwert & 0x04) != 0) {
+                asc_table[line+2][row] = BitSetChar;
+              } else {
+                asc_table[line+2][row] = BitClearChar;
+              }
+              if ((hexwert & 0x08) != 0) {
+                asc_table[line+3][row] = BitSetChar;
+              } else {
+                asc_table[line+3][row] = BitClearChar;
+              }
+              if ((hexwert & 0x10) != 0) {
+                asc_table[line+4][row] = BitSetChar;
+              } else {
+                asc_table[line+4][row] = BitClearChar;
+              }
+              if ((hexwert & 0x20) != 0) {
+                asc_table[line+5][row] = BitSetChar;
+              } else {
+                asc_table[line+5][row] = BitClearChar;
+              }
+              if ((hexwert & 0x40) != 0) {
+                asc_table[line+6][row] = BitSetChar;
+              } else {
+                asc_table[line+6][row] = BitClearChar;
+              }
+              if ((hexwert & 0x80) != 0) {
+                asc_table[line+7][row] = BitSetChar;
+              } else {
+                asc_table[line+7][row] = BitClearChar;
+              }
+              tx += 5;
+              ii++;
+            } else {
+              if ((tx[0] == '/') && (tx[1] == '*')) {
+                BitClearChar = ' ';
+                BitSetChar = ':';
+              }
+              if ((tx[0] == '*') && (tx[1] == '/')) {
+                BitSetChar = '*';
+                BitClearChar = '.';
+              }
+              tx++;
+              if (tx[0] == '}') {
+                 fprintf(stderr,"Warning } is found!\r\n");
+                 break;
+              } 
+              if (tx >= end_line) {
+              // read new line
+                if (fgets(linebuf,256,stdin) != NULL) {
+                   for(kk=0;kk<256;kk++) {
+                     if (linebuf[kk] == '\n') linebuf[kk] = (char)0;
+                     if (linebuf[kk] == '\r') linebuf[kk] = (char)0;
+                   }
+                   end_line = &linebuf[strlen(linebuf)];
+                   tx = &linebuf[0];
+                }
+              }
+            }
          }
          fprintf(outfile," ");
          for (kk=0; kk<width; kk++) {
-            fprintf(outfile,"-");
+            if ( ((kk % 8) == 0) && (kk != 0) ) {
+              fprintf(outfile,"+");
+            } else {
+              fprintf(outfile,"-");
+            }
          }
          fprintf(outfile," \r\n");
 
          for (kk=0; kk<height; kk++) {
-//         for (kk=2; kk<(height+2); kk++) { /* for shifted font data, move 2 lines up */
             // Zeile aufbereiten
-            fprintf(outfile,"|");
-            hbit = (kk % 8); 
-            step = 1;
-            ii = 0;
-            if (height > 8) {
-               step = 2;		// 2 Byte for row
-               if (kk >= 8) {
-                  ii = 1;			// begin mit 2. Byte
-               }
+            if ((kk % 8) == 0) {
+              fprintf(outfile,"+");
+            } else {
+              fprintf(outfile,"|");
             }
-            for (; ii<anz; ii+=step) {
-               if ((hex[ii] & (1<<hbit)) != 0) {
-                  fprintf(outfile,"*");
-               } else {
-                  fprintf(outfile," ");
-               }
+              fprintf(outfile,"%s",&asc_table[kk][0]);
+            if ((kk % 8) == 0) {
+              fprintf(outfile,"+\r\n");
+            } else {
+              fprintf(outfile,"|\r\n");
             }
-            fprintf(outfile,"|\r\n");
          }
 
          fprintf(outfile," ");
          for (kk=0; kk<width; kk++) {
-           fprintf(outfile,"-");
-         }
+            if ( ((kk % 8) == 0) && (kk != 0) ) {
+              fprintf(outfile,"+");
+            } else {
+              fprintf(outfile,"-");
+            }
+          }
          fprintf(outfile," \r\n");
          line_cnt[lev]++;
       } else {

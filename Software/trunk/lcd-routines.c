@@ -20,6 +20,7 @@
 uint8_t _page;
 uint8_t _xpos;
 extern const uint8_t PROGMEM font[256][FONT_WIDTH * NR_BYTE];
+extern const uint8_t PROGMEM bigfont[13][ICON_WIDTH * (ICON_HEIGHT / 8)];
 #endif
 
 /* ******************************************************************************* */
@@ -127,124 +128,55 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
    _xpos = x * FONT_WIDTH;		//  LCD_ST7565_H_OFFSET is not used for the ST7920 controller
 #else
    // move to the specified position for character display
-   lcd_command((uint8_t)(CMD_SetDDRAMAddress + (0x40*(y-1)) + x));
+   if ((y & 0x01) != 0) {
+     lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x40 + (20*(y/2)) + x));
+   } else {
+     lcd_command((uint8_t)(CMD_SetDDRAMAddress + (20*(y/2)) + x));
+   }
 #endif
 }
+
+/* ******************************************************************************* */
+// send a icon to right lower half of LCD
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920))
+void lcd_big_icon(unsigned char temp1) {
+ uint8_t *pfont;
+ pfont = (uint8_t *) bigfont[temp1];	// first byte of character data
+ lcd_set_pixels( pfont, SCREEN_WIDTH - 16 - ICON_WIDTH, (SCREEN_HEIGHT / 2), 0,
+ ICON_WIDTH, ICON_HEIGHT);
+}
+
+/* ******************************************************************************* */
+// update a icon 
+void lcd_update_icon(const unsigned char *ubitmap) {
+ lcd_update_icon_opt(ubitmap, 0);	// call with no special option
+}
+/* ******************************************************************************* */
+void lcd_update_icon_opt(const unsigned char *ubitmap, unsigned char options) {
+ const unsigned char *pfont;
+ uint8_t xx, yy, ww, hh;
+ pfont =  &ubitmap[4];
+ xx = (SCREEN_WIDTH - 16 - ICON_WIDTH) + pgm_read_byte(&ubitmap[0]);
+ yy = (SCREEN_HEIGHT / 2) + pgm_read_byte(&ubitmap[1]);
+ ww =  pgm_read_byte(&ubitmap[2]);
+ hh =  pgm_read_byte(&ubitmap[3]);
+ lcd_set_pixels( pfont, xx, yy, options, ww, hh);
+}
+#endif
 
 /* ******************************************************************************* */
 /* ******************************************************************************* */
 // sends a character to the LCD 
 void lcd_data(unsigned char temp1) {
 /* -------------------------------------------------------------------------- */
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
- uint8_t ii, data;
+
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920))
  uint8_t *pfont;
- uint8_t xx;
-
- #if (LCD_ST7565_H_FLIP == 1)
- xx = SCREEN_WIDTH - _xpos - FONT_WIDTH + LCD_ST7565_H_OFFSET;
- #else
- xx = _xpos + LCD_ST7565_H_OFFSET;
- #endif
- #if (LCD_ST_TYPE == 7108)
- if (xx < 64) {
-   _lcd_hw_select(1);		// select controller 1
- } else {
-   _lcd_hw_select(2);		// select controller 2
- }
- #endif
-
- uint8_t page1;
- #if (LCD_ST7565_H_FLIP == 1)
-// pfont = (uint8_t *)font + (FONT_WIDTH * NR_BYTE * temp1) + ((FONT_WIDTH -1) * NR_BYTE);
- pfont = (uint8_t *)font + (FONT_WIDTH * NR_BYTE * (temp1+1)) - 1; // last byte of character data
- #else
  pfont = (uint8_t *)font + (FONT_WIDTH * NR_BYTE * temp1);	// first byte of character data
- #endif
- // load upper + lower part of character data to the controller
- for (ii = 0; ii < (FONT_WIDTH * NR_BYTE); ii++) {
-   if ((ii == 0) || (ii == FONT_WIDTH)) {
-     // set start address to the controller
-  #if (LCD_ST7565_H_FLIP == 1)
-     if (ii == FONT_WIDTH) {
-       page1 = _page;		// reverse x address, upper part behind lower
-     } else {
-       page1 = _page + 1;	// reverse x address, lower part of character first
-     }
-  #else
-     if (ii == FONT_WIDTH) {
-       page1 = _page + 1;	// normal x address, lower part of character
-     } else {
-       page1 = _page;		// normal x address. upper part of character
-     }
-  #endif
-  #if (LCD_ST7565_V_FLIP == 1)
-     lcd_command(CMD_SET_PAGE | (((SCREEN_HEIGHT / 8) - 1) - page1));
-  #else
-     lcd_command(CMD_SET_PAGE | (0x0f & page1));
-  #endif
-  #if (LCD_ST_TYPE == 7108)
-     lcd_command(CMD_SET_COLUMN_ADDR | (0x3f & xx ));
-  #else
-     lcd_command(CMD_SET_COLUMN_UPPER | (0x0f & (xx >> 4)));
-     lcd_command(CMD_SET_COLUMN_LOWER | (0x0f &  xx));
-  #endif
-   } /* end if (ii == 0 || (ii == FONT_WIDTH) */
-   // load character data to the controller
-   data = pgm_read_byte(pfont);
- #if (LCD_ST7565_V_FLIP == 1)
-   data = reverse_byte(data);
- #endif
-   lcd_write_data(data);
- #if (LCD_ST7565_H_FLIP == 1)
-   pfont--;	// reverse addressing
- #else
-   pfont++;	// normal addressing
- #endif
- } /* end for ii */
-_xpos += FONT_WIDTH;		// move pointer to next character position
-/* -------------------------------------------------------------------------- */
-#elif (LCD_ST_TYPE == 7920)
-   unsigned char ii,hh,hmsk;
-   unsigned char jj;
-   unsigned char xx,xxbit;
-   unsigned char ymem;
-   const unsigned char *pfont;
-   // compute the begin of character data in font array
-   pfont = (uint8_t *)font + ((FONT_WIDTH * NR_BYTE) * temp1);
-   for (ii=0; ii<FONT_HEIGHT; ii++) {
-     if ((_page + ii) >= SCREEN_HEIGHT) break;	// outside the vertically memory boundary
-     hh = ii/8;			// 8 vertical bits per byte in the font data
- #if (LCD_ST7565_V_FLIP > 0)
-     ymem = (SCREEN_HEIGHT - 1) - (_page + ii);
- #else
-     ymem = _page + ii;
- #endif
-     hmsk = pgm_read_byte(set_msk+(ii%8));  /* set_msk[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80}; */
-     for (jj=0; jj<FONT_WIDTH; jj++) {
-       if ((_xpos + jj) >= SCREEN_WIDTH) break;	// outside the horizontal memory boundary
-       xx = (_xpos + jj) / 8;		// horizontal byte number in pixel image 
-       xxbit = (_xpos + jj) % 8;	// horizontal bit number in the image byte
-//       if ((pgm_read_byte(pfont + ((jj * NR_BYTE) + hh)) & hmsk) == 0) {
-       if ((pgm_read_byte(pfont + (jj + (hh * 8))) & hmsk) == 0) {
- #if (LCD_ST7565_H_FLIP > 0)
-         /* clear_msk[] = {0xfe,0xfd,0xfb,0xf7,0xef,0xdf,0xbf,0x7f}; */
-         lcd_bit_mem[ymem][((SCREEN_WIDTH / 8) - 1)-xx] &= pgm_read_byte(clear_msk+xxbit);
- #else
-         lcd_bit_mem[ymem][xx] &= pgm_read_byte(clear_msk+(7-xxbit));
- #endif
-       } else {
- #if (LCD_ST7565_H_FLIP > 0)
-         lcd_bit_mem[ymem][((SCREEN_WIDTH / 8) - 1)-xx] |= pgm_read_byte(set_msk+xxbit);
- #else
-         lcd_bit_mem[ymem][xx] |= pgm_read_byte(set_msk+(7-xxbit));
- #endif
-       }
-     } /* end for(jj) */
-   } /* end for(ii) */
+ lcd_set_pixels( pfont, _xpos, _page*8, 0,
+ (unsigned char)FONT_WIDTH, (unsigned char)(NR_BYTE*8));
 _xpos += FONT_WIDTH;		// move pointer to the next character position
-/* -------------------------------------------------------------------------- */
-#else /* !(LCD_ST_TYPE == 7565 | 1306 | 7108 | 7920) must be character display */
+#else
  lcd_write_data(temp1);		// set RS to 1
 #endif
 
@@ -637,26 +569,32 @@ void lcd_pgm_bitmap(const unsigned char * pbitmap,
                     unsigned char y,
                     unsigned char options)
 {
+ lcd_set_pixels( (const unsigned char *)(pbitmap+2), x, y, options,
+ (unsigned char)pgm_read_byte(&pbitmap[0]), (unsigned char)pgm_read_byte(&pbitmap[1]));
+}
+/* ******************************************************************************* */
+/* Function lcd_set pixels                                                         */
+/* ******************************************************************************* */
+void lcd_set_pixels(const unsigned char *pdata, unsigned char x, unsigned char y,
+unsigned char options, unsigned char width, unsigned char height) {
 /* ------------------------------------------------------------------------------- */
  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
    if (x >= SCREEN_WIDTH || (y >= SCREEN_HEIGHT))
       return;
 
    unsigned char offset;
-   unsigned char width;
+//   unsigned char width;
    unsigned char page;
    unsigned char pagemax;
    unsigned char xx;
-   const unsigned char *pdata;
+//   const unsigned char *pdata;
 
-//   pdata = (const unsigned char *)pgm_read_word(&pbitmap->data);
-   pdata = pbitmap + 2;		// first bytes are width and height
-   width = (unsigned char)pgm_read_byte(&pbitmap[0]);
    page = y >> 3;		// page of screen has 8 pixel lines each
-   pagemax = (y + (unsigned char)pgm_read_byte(&pbitmap[1]) - 1) >> 3;
+   pagemax = (y + height - 1) >> 3;
 
    if ((options & OPT_VREVERSE) == OPT_VREVERSE)
       pdata += (pagemax - page) * width;
+
    if (pagemax >= (SCREEN_HEIGHT >> 3))
       pagemax = ((SCREEN_HEIGHT - 1) >> 3);	// limit to last page of screen
    for (; page <= pagemax; page++)
@@ -734,13 +672,10 @@ void lcd_pgm_bitmap(const unsigned char * pbitmap,
    unsigned char ii,hh,hmsk;
    unsigned char jj;
    unsigned char xx,xxbit;
-   unsigned char width;
-   unsigned char height;
+//   unsigned char width;
+//   unsigned char height;
    unsigned char ymem;
-   const unsigned char *pdata;
-   pdata = pbitmap + 2;
-   width = (unsigned char)pgm_read_byte(&pbitmap[0]);
-   height = (unsigned char)pgm_read_byte(&pbitmap[1]);
+//   const unsigned char *pdata;
    for (ii=0; ii<height; ii++) {
      if (options & OPT_VREVERSE) {
        hh = (height - 1 - ii) / 8;

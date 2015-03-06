@@ -208,7 +208,7 @@
 
 #endif
 
-//Makros for LCD
+//defines for the cyrillic character set
 #ifdef WITH_GRAPHICS
  #define GR_OFFSET1 0x20	/* shift 0xa0 to 0x80, direct behind ASCII table, to save place in font table */
  #define GR_OFFSET2 0xd0	/* shift 0xe0 to 0x10, before the ASCII table */  
@@ -268,3 +268,20 @@
 #define Cyr_c	(0xe5 - GR_OFFSET2)
 #define Cyr_schtsch (0xe6 - GR_OFFSET2)
 
+//defines for the big special "character" set, the graphical symbols
+#define ICON_WIDTH 24
+#define ICON_HEIGHT 32
+#define BJT_NPN 0
+#define N_E_IGBT 1
+#define N_E_MOS 2
+#define N_JFET 3
+#define TRIAC 4
+#define THYRISTOR 5
+#define INDUCTOR 6
+#define RESISTOR 7
+#define CAPACITOR 8
+#define DIODE_C_A 9
+#define DIODES_C_A_C_A 10
+#define DIODES_A_C_C_A 11
+#define DIODES_C_A_A_C 12
+#define RESISTORS 13

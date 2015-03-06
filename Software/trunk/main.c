@@ -404,7 +404,8 @@ start:
     lcd_MEM_string(Thyristor);		//"Thyristor"
     PinLayout(Cathode_char,'G','A'); 	// CGA= or 123=...
 #ifdef WITH_GRAPHICS
-    lcd_pgm_bitmap(bmp_thyristor_data, 100, 32, 0);
+//    lcd_pgm_bitmap(bmp_thyristor_data, 100, 32, 0);
+    lcd_big_icon(THYRISTOR);
     lcd_draw_trans_pins(90, 48);
 #endif
     goto TyUfAusgabe;
@@ -414,8 +415,8 @@ start:
     lcd_MEM_string(Triac);		//"Triac"
     PinLayout('1','G','2'); 	// CGA= or 123=...
 #ifdef WITH_GRAPHICS
-//    lcd_pgm_bitmap(bmp_triac_data, 104, 32, 0);
-    lcd_pgm_bitmap(bmp_triac_data, 94, 32, 0);
+//    lcd_pgm_bitmap(bmp_triac_data, 94, 32, 0);
+    lcd_big_icon(TRIAC);
 //    lcd_draw_trans_pins(104, 56, 97, 48, 106, 32);
     lcd_draw_trans_pins(88, 48);
 #endif
@@ -442,6 +443,9 @@ start:
         lcd_MEM_string(ESR_str);
         DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
      }
+#endif
+#ifdef WITH_GRAPHICS
+     lcd_big_icon(CAPACITOR);
 #endif
      goto end;
   }
@@ -633,7 +637,8 @@ start:
        }
 //       _trans = &ntrans;  is allready selected a default
 #ifdef WITH_GRAPHICS
-       lcd_pgm_bitmap(bmp_npn_data, 88, 32, 0);
+//       lcd_pgm_bitmap(bmp_npn_data, 88, 32, 0);
+       lcd_big_icon(BJT_NPN);
        lcd_draw_trans_pins(88-7, 40);
 #endif
     } else {
@@ -643,8 +648,10 @@ start:
        }
        _trans = &ptrans;		// change transistor structure
 #ifdef WITH_GRAPHICS
-       lcd_pgm_bitmap(bmp_npn_data, 88, 32, 0);
-       lcd_pgm_bitmap(bmp_pnp_data, 88+14, 32+16, 0);	// update for PNP
+//       lcd_pgm_bitmap(bmp_npn_data, 88, 32, 0);
+       lcd_big_icon(BJT_NPN);
+//       lcd_pgm_bitmap(bmp_pnp_data, 88+14, 32+16, 0);	// update for PNP
+       lcd_update_icon(bmp_pnp);	// update for PNP
        lcd_draw_trans_pins(88-7, 40);
 #endif
     }
@@ -673,7 +680,8 @@ start:
     options = 0;
     if (_trans->c != diodes.Anode[ii])
        options |= OPT_VREVERSE;
-    lcd_pgm_bitmap(bmp_vakdiode_data, 88+24, 32, options);
+//    lcd_pgm_bitmap(bmp_vakdiode_data, 88+24, 32, options);
+    lcd_update_icon_opt(bmp_vakdiode,options);
 #endif    
     } /* end for ii */
     PinLayout('E','B','C'); 		//  EBC= or 123=...
@@ -736,10 +744,12 @@ start:
        lcd_MEM_string(jfet_str);	//"JFET"
 #ifdef WITH_GRAPHICS
 //     lcd_draw_jfet(fetidx, 96, 32);
-       lcd_pgm_bitmap(bmp_n_jfet_data, 96, 32, 0);
+//       lcd_pgm_bitmap(bmp_n_jfet_data, 96, 32, 0);
+       lcd_big_icon(N_JFET);
        if (fetidx != 0) {
           // update the n_jfet bitmat at relative location 6, 16
-          lcd_pgm_bitmap(bmp_p_jfet_data, 96+6, 32+16, 0);
+//          lcd_pgm_bitmap(bmp_p_jfet_data, 96+6, 32+16, 0);
+          lcd_update_icon(bmp_p_jfet);
        }
        lcd_draw_trans_pins(96-6, 48);
 #endif
@@ -753,13 +763,21 @@ start:
        if (tmp == (PART_MODE_IGBT)) {
           lcd_MEM_string(igbt_str);	//"-IGBT"
 #ifdef WITH_GRAPHICS
-          lcd_draw_igbt(fetidx);
+//          lcd_draw_igbt(fetidx);
+          lcd_big_icon(N_E_IGBT);
+          if (fetidx == 1)  lcd_update_icon(bmp_p_e_igbt);
+          if (fetidx == 2)  lcd_update_icon(bmp_n_d_igbt);
+          if (fetidx == 3)  lcd_update_icon(bmp_p_d_igbt);
           lcd_draw_trans_pins(82, 48);
 #endif
        } else {
           lcd_MEM_string(mosfet_str);	//"-MOS "
 #ifdef WITH_GRAPHICS
-          lcd_draw_mosfet(fetidx);
+//          lcd_draw_mosfet(fetidx);
+          lcd_big_icon(N_E_MOS);
+          if (fetidx == 1)  lcd_update_icon(bmp_p_e_mos);
+          if (fetidx == 2)  lcd_update_icon(bmp_n_d_mos);
+          if (fetidx == 3)  lcd_update_icon(bmp_p_d_mos);
           lcd_draw_trans_pins(82, 40);
 #endif
        }
@@ -839,7 +857,8 @@ start:
        options = 0;
        if (_trans->c != diodes.Anode[0])
           options |= OPT_VREVERSE;
-       lcd_pgm_bitmap(bmp_vakdiode_data, 112, 32, options);
+//       lcd_pgm_bitmap(bmp_vakdiode_data, 112, 32, options);
+       lcd_update_icon_opt(bmp_vakdiode,options);
   #endif
        lcd_line3();			//3. Row
        if (an_cat) {
@@ -866,7 +885,7 @@ resistor_out:
     ii = 0;
     if (ResistorsFound == 1) { // single resistor
        lcd_testpin(resis[0].rb);  	//Pin-number 1
-       lcd_MEM_string(Resistor_str);
+       lcd_MEM_string(Resistor_str);	// -[=]-
        lcd_testpin(resis[0].ra);		//Pin-number 2
     } else { // R-Max suchen
        if (resis[1].rx > resis[0].rx)
@@ -915,10 +934,14 @@ resistor_out:
 	  // resistor have also Inductance
           lcd_MEM_string(Lis_str);	// "L="
           DisplayValue(inductor_lx,inductor_lpre,'H',3);	// output inductance
+	  lcd_set_cursor(0,5);
+          lcd_MEM_string(Inductor_str);		// -ww-
+          lcd_testpin(resis[0].ra);		//Pin-number 2
  #ifdef WITH_GRAPHICS
-          lcd_pgm_bitmap(bmp_inductor_data, 103, 56, 0);
-          lcd_draw_pin(resis[0].rb, 95, 56);
-          lcd_draw_pin(resis[0].ra, 120, 56);
+//          lcd_pgm_bitmap(bmp_inductor_data, 103, 56, 0);
+// //          lcd_big_icon(INDUCTOR);
+//          lcd_draw_pin(resis[0].rb, 95, 56);
+//          lcd_draw_pin(resis[0].ra, 120, 56);
  #endif
        }
 #else

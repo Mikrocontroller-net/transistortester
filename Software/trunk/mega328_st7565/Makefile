@@ -315,14 +315,6 @@ GetESR.o: ../GetESR.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ########### Compile C or Assembler , Assembler saves more than 400 bytes flash
-ifeq ($(WITH_LCD_ST7565),0)
-lcd-routines.o: ../lcd-routines.S $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-else
-lcd-routines.o: ../lcd-routines.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-endif
-
 GetRLmultip.o: ../GetRLmultip.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 

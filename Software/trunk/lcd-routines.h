@@ -1,5 +1,5 @@
-#include "lcd_defines.h"
 #include <stdint.h>
+#include "lcd_defines.h"
 
 // Interfacing of a HD44780 compatible LCD with 4-Bit-Interface mode
 // http://www.mikrocontroller.net/articles/AVR-GCC-Tutorial
@@ -11,6 +11,9 @@ extern void _lcd_hw_select(uint8_t flags);
 //LCD
 void lcd_testpin(unsigned char temp);
 void lcd_data(unsigned char temp1);
+void lcd_big_icon(unsigned char temp1);
+void lcd_update_icon(const unsigned char * ubitmap);
+void lcd_update_icon_opt(const unsigned char * ubitmap, unsigned char options);
 void lcd_space(void);
 void lcd_command(unsigned char temp1);
 void lcd_string(char *data);
@@ -29,9 +32,12 @@ void lcd_line4(void);
 unsigned char reverse_byte(unsigned char);
 #ifdef WITH_GRAPHICS
 void lcd_pgm_bitmap(const unsigned char * pbitmap,
-                    unsigned char x,
-                    unsigned char y,
+                    unsigned char x, unsigned char y,
                     unsigned char options);
+void lcd_set_pixels(const unsigned char * pdata,
+                    unsigned char x, unsigned char y,
+                    unsigned char options,
+                    unsigned char width, unsigned char height);
 #endif
 #if (LCD_ST_TYPE == 7920)
 void lcd_refresh(void);		/* for ST7920 controller only*/

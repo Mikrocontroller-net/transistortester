@@ -30,8 +30,6 @@ void PinLayout(char pin1, char pin2, char pin3); // show pin layout with EBC= or
 #ifdef WITH_GRAPHICS
 void lcd_draw_pin(unsigned char index, unsigned char x, unsigned char y);
 void lcd_draw_trans_pins( unsigned char xb, unsigned char yb);
-void lcd_draw_mosfet(unsigned char index);
-void lcd_draw_igbt(unsigned char index) ;
 #endif
 void Calibrate_UR(void);		// get reference voltages and port resistance
 uint16_t get_log(uint16_t permil);	// get -log(1-(permil/1000))

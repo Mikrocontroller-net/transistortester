@@ -119,7 +119,10 @@ CFLAGS += -DLCD_ST7565_H_OFFSET=0
 #CFLAGS += -DFONT_8X8
 #CFLAGS += -DFONT_8X14
 #CFLAGS += -DFONT_8X15
+#CFLAGS += -DFONT_8X16
 CFLAGS += -DFONT_8X16thin
+
+CFLAGS += -DICON_TYPE=1
 
 # option BIG_TP makes the 123 for the test pins bigger
 CFLAGS += -DBIG_TP
@@ -314,14 +317,6 @@ GetESR.o: ../GetESR.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ########### Compile C or Assembler , Assembler saves more than 400 bytes flash
-ifeq ($(WITH_LCD_ST7565),0)
-lcd-routines.o: ../lcd-routines.S $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-else
-lcd-routines.o: ../lcd-routines.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-endif
-
 GetRLmultip.o: ../GetRLmultip.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 

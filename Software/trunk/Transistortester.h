@@ -633,7 +633,7 @@ End of configuration
  const unsigned char Uf_str[] MEM_TEXT = "Uf=";
  const unsigned char vt_str[] MEM_TEXT = " Vt=";
  const unsigned char Vgs_str[] MEM_TEXT = "@Vg=";
- const unsigned char CapZeich[] MEM_TEXT = {'-',LCD_CHAR_CAP,'-',0};
+ const unsigned char CapZeich[] MEM_TEXT = {LCD_CHAR_LINE1,LCD_CHAR_CAP,LCD_CHAR_LINE1,0};
  const unsigned char Cell_str[] MEM_TEXT = "Cell!";
  const unsigned char VCC_str[] MEM_TEXT = "VCC=";
 
@@ -682,7 +682,7 @@ End of configuration
 'e','r','s','t',' ', 'n','a','c','h',' ','d','e','r',' ',
 'M','e','l','d','u','n','g',' ',
 
-'"','1'+TP_OFFSET,'-',LCD_CHAR_CAP,'-','3'+TP_OFFSET,LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
+'"','1'+TP_OFFSET,LCD_CHAR_LINE1,LCD_CHAR_CAP,LCD_CHAR_LINE1,'3'+TP_OFFSET,LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
 'e','i','n','e','n',' ','g','u','t','e','n',' ',
 
 'K','o','n','d','e','n','s','a','t','o','r',' ',
@@ -725,7 +725,7 @@ End of configuration
 'm','e','r','i','c','i','c','h',' ','b','o','d','u',' ',
 
 'P','r','i',' ','z','o','b','r','a','z','e','n','i',' ',
-'"','1'+TP_OFFSET,'-',LCD_CHAR_CAP,'-','3'+TP_OFFSET,LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
+'"','1'+TP_OFFSET,LCD_CHAR_LINE1,LCD_CHAR_CAP,LCD_CHAR_LINE1,'3'+TP_OFFSET,LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
 
 'v',LCD_CHAR_INSEP,'p','o','s','l','e','d','n','i','m',' ',
 'k','r','o','k','u',' ', 'k','a','l','i','b','r','a','c','e',' ',
@@ -790,7 +790,7 @@ End of configuration
 
 'N','a',' ','d','a','l','s','i','u',' ','v','y','z','v','u',' ',
 
-'"','1'+TP_OFFSET,'-',LCD_CHAR_CAP,'-','3'+TP_OFFSET,' ','>','1','0','0','n','F','"',' ',
+'"','1'+TP_OFFSET,LCD_CHAR_LINE1,LCD_CHAR_CAP,LCD_CHAR_LINE1,'3'+TP_OFFSET,' ','>','1','0','0','n','F','"',' ',
 
 
 
@@ -859,7 +859,7 @@ End of configuration
 'o','n','l','y',' ','a','f','t','e','r',' ',
 
 't','h','e',' ','m','e','s','s','a','g','e',' ',
-'"','1','-',LCD_CHAR_CAP,'-','3',LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
+'"','1',LCD_CHAR_LINE1,LCD_CHAR_CAP,LCD_CHAR_LINE1,'3',LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
 
 'i','s',LCD_CHAR_INSEP,'s','h','o','w','n','.',' ',
 'S','o','f','t','w','a','r','e',' ','a','n','d',' ',
@@ -934,7 +934,7 @@ Cyr_k,LCD_CHAR_INSEP,'"','T','P','1'+TP_OFFSET,'"',LCD_CHAR_INSEP,Cyr_i,LCD_CHAR
 
 Cyr_k,'o',Cyr_g,Cyr_d,'a',LCD_CHAR_INSEP,'c','o','o',Cyr_b,Cyr_schtsch,'e',Cyr_n,Cyr_i,'e',' ',
 
-'"','1','-',LCD_CHAR_CAP,'-','3',LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
+'"','1',LCD_CHAR_LINE1,LCD_CHAR_CAP,LCD_CHAR_LINE1,'3',LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
 
 
 
@@ -1025,7 +1025,7 @@ Cyr_p,'o',Cyr_v,'i',Cyr_d,'o',Cyr_m,Cyr_l,'e',Cyr_n,Cyr_n,Cyr_ja,':',' ',
 
 
 
-'"','1','-',LCD_CHAR_CAP,'-','3',LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
+'"','1',LCD_CHAR_LINE1,LCD_CHAR_CAP,LCD_CHAR_LINE1,'3',LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
 
 Cyr_v,'i',Cyr_d,'o',Cyr_b,'p','a',Cyr_zsch,'a','e',Cyr_t,Cyr_ww,'c',Cyr_ja,'.',' ',
 
@@ -1088,7 +1088,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 'o','n','l','y',' ','a','f','t','e','r',' ',
 
 't','h','e',' ','m','e','s','s','a','g','e',' ',
-'"','1'+TP_OFFSET,'-',LCD_CHAR_CAP,'-','3'+TP_OFFSET,LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
+'"','1'+TP_OFFSET,LCD_CHAR_LINE1,LCD_CHAR_CAP,LCD_CHAR_LINE1,'3'+TP_OFFSET,LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
 
 'i','s',LCD_CHAR_INSEP,'s','h','o','w','n','.',' ',
  #endif
@@ -1104,10 +1104,13 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  #endif
 #endif
 
- const unsigned char AnKat[] MEM_TEXT = {'-', LCD_CHAR_DIODE1, '-',0};
- const unsigned char KatAn[] MEM_TEXT = {'-', LCD_CHAR_DIODE2, '-',0};
+ const unsigned char AnKat[] MEM_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_DIODE1, LCD_CHAR_LINE1,0};
+ const unsigned char KatAn[] MEM_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_DIODE2, LCD_CHAR_LINE1,0};
  const unsigned char Dioden[] MEM_TEXT = {'*',LCD_CHAR_DIODE1, ' ', ' ',0};
- const unsigned char Resistor_str[] MEM_TEXT = {'-', LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,'-',0};
+ const unsigned char Resistor_str[] MEM_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1,0};
+#if FLASHEND > 0x1fff
+ const unsigned char Inductor_str[] MEM_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_INDUCTOR1, LCD_CHAR_INDUCTOR2,LCD_CHAR_LINE1,0};
+#endif
 #if defined (WITH_SELFTEST) || !defined (BAT_CHECK)
  const unsigned char VERSION_str[] MEM2_TEXT = "Version 1.12k";
 #endif
@@ -1139,6 +1142,14 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 #endif
  
 
+ const unsigned char CapIcon[] MEM_TEXT = { 0x1b,
+				     0x1b,
+				     0x1b,
+				     0x1b,
+				     0x1b,
+				     0x1b,
+				     0x1b,
+				     0x00};	// Capacitor Icon
  const unsigned char DiodeIcon1[] MEM_TEXT = { 0x11,
 				     0x19,
 				     0x1d,
@@ -1156,14 +1167,6 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 				     0x13,
 				     0x11,
 				     0x00};	// Diode-Icon Anode right
- const unsigned char CapIcon[] MEM_TEXT = { 0x1b,
-				     0x1b,
-				     0x1b,
-				     0x1b,
-				     0x1b,
-				     0x1b,
-				     0x1b,
-				     0x00};	// Capacitor Icon
  const unsigned char ResIcon1[] MEM_TEXT = { 0x00,
 				     0x0f,
 				     0x08,
@@ -1191,6 +1194,14 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 				     0x04};	// Resistor Icon2
 #endif
 
+//generate Omega- and µ-character as Custom-character, if these characters has a number of loadable type
+#if LCD_CHAR_OMEGA < 8
+   const unsigned char CyrillicOmegaIcon[] MEM_TEXT = {0,0,14,17,17,10,27,0};	//Omega
+#endif
+#if LCD_CHAR_U < 8
+   const unsigned char CyrillicMuIcon[] MEM_TEXT = {0,17,17,17,19,29,16,16};	//µ
+#endif
+
  const unsigned char PinRLtab[] PROGMEM = { (1<<PIN_RL1),
 				     (1<<PIN_RL2),
 				     (1<<PIN_RL3)};	// Table of commands to switch the  R-L resistors Pin 0,1,2
@@ -1210,13 +1221,6 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 
  const uint8_t PrefixTab[] MEM_TEXT = { 'p','n',LCD_CHAR_U,'m',0,'k','M'}; // p,n,u,m,-,k,M
 
-//generate Omega- and µ-character as Custom-character, if these characters has a number of loadable type
-#if LCD_CHAR_OMEGA < 8
-   const unsigned char CyrillicOmegaIcon[] MEM_TEXT = {0,0,14,17,17,10,27,0};	//Omega
-#endif
-#if LCD_CHAR_U < 8
-   const unsigned char CyrillicMuIcon[] MEM_TEXT = {0,17,17,17,19,29,16,16};	//µ
-#endif
 
 #ifdef AUTO_CAL
   const unsigned char MinCap_str[] MEM2_TEXT = " >100nF";
@@ -1303,6 +1307,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  #if FLASHEND > 0x1fff
   extern uint16_t LogTab[];
   extern const unsigned char ESR_str[];
+  extern const unsigned char Inductor_str[];
  #endif
 
  extern const unsigned char AnKat[] MEM_TEXT ;

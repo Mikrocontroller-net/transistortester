@@ -75,5 +75,6 @@
  #ifndef FONT_SELECTED
   #error No Font specified. Check Makefile!
  #endif
+ #include "fonts/24x32_vertical_LSB.h"
 #endif
 

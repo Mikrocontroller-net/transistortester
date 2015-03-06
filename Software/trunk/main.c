@@ -406,7 +406,7 @@ start:
 #ifdef WITH_GRAPHICS
 //    lcd_pgm_bitmap(bmp_thyristor_data, 100, 32, 0);
     lcd_big_icon(THYRISTOR);
-    lcd_draw_trans_pins(90, 48);
+    lcd_draw_trans_pins(88, 40);
 #endif
     goto TyUfAusgabe;
   }
@@ -418,7 +418,7 @@ start:
 //    lcd_pgm_bitmap(bmp_triac_data, 94, 32, 0);
     lcd_big_icon(TRIAC);
 //    lcd_draw_trans_pins(104, 56, 97, 48, 106, 32);
-    lcd_draw_trans_pins(88, 48);
+    lcd_draw_trans_pins(88, 40);
 #endif
     goto TyUfAusgabe;
   }
@@ -751,7 +751,7 @@ start:
 //          lcd_pgm_bitmap(bmp_p_jfet_data, 96+6, 32+16, 0);
           lcd_update_icon(bmp_p_jfet);
        }
-       lcd_draw_trans_pins(96-6, 48);
+       lcd_draw_trans_pins(88-7, 40);
 #endif
     } else {
        if ((PartMode&D_MODE) == D_MODE) {
@@ -768,7 +768,7 @@ start:
           if (fetidx == 1)  lcd_update_icon(bmp_p_e_igbt);
           if (fetidx == 2)  lcd_update_icon(bmp_n_d_igbt);
           if (fetidx == 3)  lcd_update_icon(bmp_p_d_igbt);
-          lcd_draw_trans_pins(82, 48);
+          lcd_draw_trans_pins(88-7, 40);
 #endif
        } else {
           lcd_MEM_string(mosfet_str);	//"-MOS "
@@ -778,7 +778,7 @@ start:
           if (fetidx == 1)  lcd_update_icon(bmp_p_e_mos);
           if (fetidx == 2)  lcd_update_icon(bmp_n_d_mos);
           if (fetidx == 3)  lcd_update_icon(bmp_p_d_mos);
-          lcd_draw_trans_pins(82, 40);
+          lcd_draw_trans_pins(88-7, 40);
 #endif
        }
     }

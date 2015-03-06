@@ -421,7 +421,7 @@ void lcd_command(unsigned char temp1) {
      236:	08 95       	ret
 
 00000238 <lcd_line1>:
-   lcd_set_cursor(0,0);
+   lcd_set_cursor(0 * ((FONT_HEIGHT + 7) / 8),0);
 #elif (LCD_ST_TYPE == 7920)
    _page = 0;			// _page is the vertical pixel address for ST7920 controller
    _xpos = 0;			// LCD_ST7565_H_OFFSET is not used for ST7920 controller
@@ -432,7 +432,7 @@ void lcd_command(unsigned char temp1) {
      23e:	08 95       	ret
 
 00000240 <lcd_line2>:
-   lcd_set_cursor(1,0);
+
 #elif (LCD_ST_TYPE == 7920)
    _page = FONT_V_SPACE * 1;	// _page is the vertical pixel address for ST7920 controller
    _xpos = 0;			// LCD_ST7565_H_OFFSET is not used for ST7920 controller
@@ -443,7 +443,7 @@ void lcd_command(unsigned char temp1) {
      246:	08 95       	ret
 
 00000248 <lcd_line3>:
-   lcd_set_cursor(2,0);
+   lcd_set_cursor(2 * ((FONT_HEIGHT + 7) / 8),0);
 #elif (LCD_ST_TYPE == 7920)
    _page = FONT_V_SPACE * 2;	// _page is the vertical pixel address for ST7920 controller
    _xpos = 0;			// LCD_ST7565_H_OFFSET is not used for ST7920 controller
@@ -454,7 +454,7 @@ void lcd_command(unsigned char temp1) {
      24e:	08 95       	ret
 
 00000250 <lcd_line4>:
-   lcd_set_cursor(3,0);
+   lcd_set_cursor(3 * ((FONT_HEIGHT + 7) / 8),0);
 #elif (LCD_ST_TYPE == 7920)
    _page = FONT_V_SPACE * 3;	// _page is the vertical pixel address for ST7920 controller
    _xpos = 0;			// LCD_ST7565_H_OFFSET is not used for ST7920 controller
@@ -473,7 +473,7 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
      258:	98 2f       	mov	r25, r24
      25a:	96 95       	lsr	r25
 #elif (LCD_ST_TYPE == 7920)
-   _page = y * FONT_V_SPACE; 		// _page is the vertical pixel address for ST7920 controller
+   _page = y * 8; 		// _page is the vertical pixel address for ST7920 controller
    _xpos = x * FONT_WIDTH;		//  LCD_ST7565_H_OFFSET is not used for the ST7920 controller
 #else
    // move to the specified position for character display
@@ -10641,7 +10641,7 @@ start:
     347a:	67 e4       	ldi	r22, 0x47	; 71
     347c:	83 e4       	ldi	r24, 0x43	; 67
     347e:	09 c0       	rjmp	.+18     	; 0x3492 <main+0x342>
-    lcd_draw_trans_pins(90, 48);
+    lcd_draw_trans_pins(88, 40);
 #endif
     goto TyUfAusgabe;
   }
@@ -10678,7 +10678,7 @@ TyUfAusgabe:
     34b0:	26 e5       	ldi	r18, 0x56	; 86
     34b2:	4d ef       	ldi	r20, 0xFD	; 253
     34b4:	c0 c3       	rjmp	.+1920   	; 0x3c36 <main+0xae6>
-    lcd_draw_trans_pins(88, 48);
+    lcd_draw_trans_pins(88, 40);
 #endif
     goto TyUfAusgabe;
   }
@@ -11365,7 +11365,7 @@ TyUfAusgabe:
     3954:	13 c0       	rjmp	.+38     	; 0x397c <main+0x82c>
           lcd_update_icon(bmp_p_jfet);
        }
-       lcd_draw_trans_pins(96-6, 48);
+       lcd_draw_trans_pins(88-7, 40);
 #endif
     } else {
        if ((PartMode&D_MODE) == D_MODE) {
@@ -11387,7 +11387,7 @@ TyUfAusgabe:
     3968:	86 eb       	ldi	r24, 0xB6	; 182
     396a:	90 e0       	ldi	r25, 0x00	; 0
     396c:	0e 94 99 01 	call	0x332	; 0x332 <lcd_fix_string>
-          lcd_draw_trans_pins(82, 40);
+          lcd_draw_trans_pins(88-7, 40);
 #endif
        }
     }
@@ -11399,7 +11399,7 @@ TyUfAusgabe:
     3976:	07 c0       	rjmp	.+14     	; 0x3986 <main+0x836>
           if (fetidx == 2)  lcd_update_icon(bmp_n_d_igbt);
           if (fetidx == 3)  lcd_update_icon(bmp_p_d_igbt);
-          lcd_draw_trans_pins(82, 48);
+          lcd_draw_trans_pins(88-7, 40);
 #endif
        } else {
           lcd_MEM_string(mosfet_str);	//"-MOS "

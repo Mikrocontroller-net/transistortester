@@ -38,6 +38,7 @@ void lcd_set_pixels(const unsigned char * pdata,
                     unsigned char x, unsigned char y,
                     unsigned char options,
                     unsigned char width, unsigned char height);
+void ShowIcons(void);		/* show the different Icons */
 #endif
 #if (LCD_ST_TYPE == 7920)
 void lcd_refresh(void);		/* for ST7920 controller only*/

@@ -1,3 +1,7 @@
+ShowData Funktion um Demonstration der verwendeten Icons erweitert.
+Die Funktion lcd_update_icon() arbeitet immer relativ zur letzten Icon Position.
+Die Funktion lcd_big_icon() kann als Ziel eine der 4 Quadranten des LCD angeben. Standard = unten rechts.
+SetCursor verwendet als vertikal Position (y) eine Auflösung von 8 Pixel, unabhängig von der Fonthöhe.
 Verschiedene Versionen der Transistor-Icons sind mit ICON_TYPE wählbar (1=thin, 2=bold).
 Die Spule wird bei graphischer Ausgabe mit zwei neuen Zeichen, beim Character-display mit "-ww-" gezeichnet.
 Die Update Teile für die Transistor-Icons werden als bitmap mit relativer Lage + Größe (x+y) definiert.

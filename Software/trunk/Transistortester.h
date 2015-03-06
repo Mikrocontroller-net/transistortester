@@ -1255,6 +1255,11 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   extern const unsigned char SELFTEST[] MEM_TEXT;
   extern const unsigned char RELPROBE[] MEM_TEXT;
   extern const unsigned char ATE[] MEM_TEXT;
+ extern unsigned char NPN_str[];
+ extern unsigned char PNP_str[];
+ extern unsigned char mosfet_str[];
+ extern unsigned char jfet_str[];
+ extern unsigned char igbt_str[];
  #endif
  #ifdef WITH_MENU
   extern const unsigned char SELECTION_str[] MEM2_TEXT ;

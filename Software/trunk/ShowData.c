@@ -96,5 +96,8 @@ show_page_4:
   if (rotary.count < 0) goto show_page_4;
  #endif
 #endif
+#ifdef WITH_GRAPHICS
+ ShowIcons();		// show all Icons
+#endif
 }
 #endif

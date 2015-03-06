@@ -17,8 +17,10 @@
  
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7108))
  #define NR_BYTE ((FONT_HEIGHT + 7) / 8)
-uint8_t _page;
-uint8_t _xpos;
+uint8_t _page;		// y position of the next character 
+uint8_t _xpos;		// x position of the next character
+uint8_t icon_xx;	// x position of the last loaded big 24x32 icon
+uint8_t icon_yy;	// y position of the last loaded big 24x32 icon
 extern const uint8_t PROGMEM font[256][FONT_WIDTH * NR_BYTE];
 extern const uint8_t PROGMEM bigfont[13][ICON_WIDTH * (ICON_HEIGHT / 8)];
 #endif
@@ -40,7 +42,7 @@ void lcd_space(void) {
 //move to the beginning of the 1. row
 void lcd_line1() {
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
-   lcd_set_cursor(0,0);
+   lcd_set_cursor(0 * ((FONT_HEIGHT + 7) / 8),0);
 #elif (LCD_ST_TYPE == 7920)
    _page = 0;			// _page is the vertical pixel address for ST7920 controller
    _xpos = 0;			// LCD_ST7565_H_OFFSET is not used for ST7920 controller
@@ -57,7 +59,8 @@ void lcd_line1() {
 #define FONT_V_SPACE (((FONT_HEIGHT + 7) / 8) * 8)
 void lcd_line2() {
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
-   lcd_set_cursor(1,0);
+   lcd_set_cursor(1 * ((FONT_HEIGHT + 7) / 8),0);
+
 #elif (LCD_ST_TYPE == 7920)
    _page = FONT_V_SPACE * 1;	// _page is the vertical pixel address for ST7920 controller
    _xpos = 0;			// LCD_ST7565_H_OFFSET is not used for ST7920 controller
@@ -70,7 +73,7 @@ void lcd_line2() {
 //move to the beginning of the 3. row
 void lcd_line3() {
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
-   lcd_set_cursor(2,0);
+   lcd_set_cursor(2 * ((FONT_HEIGHT + 7) / 8),0);
 #elif (LCD_ST_TYPE == 7920)
    _page = FONT_V_SPACE * 2;	// _page is the vertical pixel address for ST7920 controller
    _xpos = 0;			// LCD_ST7565_H_OFFSET is not used for ST7920 controller
@@ -83,7 +86,7 @@ void lcd_line3() {
 //move to the beginning of the 4. row
 void lcd_line4() {
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
-   lcd_set_cursor(3,0);
+   lcd_set_cursor(3 * ((FONT_HEIGHT + 7) / 8),0);
 #elif (LCD_ST_TYPE == 7920)
    _page = FONT_V_SPACE * 3;	// _page is the vertical pixel address for ST7920 controller
    _xpos = 0;			// LCD_ST7565_H_OFFSET is not used for ST7920 controller
@@ -102,7 +105,7 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
     // For example the SPL501 controller has 132x65 dot matrix memory
     // LCD_ST7565_H_OFFSET specifies the offset of the 128 pixel of the display window.
    _xpos = (x * FONT_WIDTH);
-   _page *= ((FONT_HEIGHT + 7) / 8);	// increment in steps of 8 pixel lines
+//   _page *= ((FONT_HEIGHT + 7) / 8);	// increment in steps of 8 pixel lines
    
   /* The actual positioning is done in functions lcd_data and lcd_pgm_bitmap, */
   /* so no positioning is requested here. */
@@ -124,7 +127,7 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
 // #endif
 //#endif
 #elif (LCD_ST_TYPE == 7920)
-   _page = y * FONT_V_SPACE; 		// _page is the vertical pixel address for ST7920 controller
+   _page = y * 8; 		// _page is the vertical pixel address for ST7920 controller
    _xpos = x * FONT_WIDTH;		//  LCD_ST7565_H_OFFSET is not used for the ST7920 controller
 #else
    // move to the specified position for character display
@@ -137,12 +140,29 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
 }
 
 /* ******************************************************************************* */
-// send a icon to right lower half of LCD
+// send a 24x32 icon to one quarter of the screen
+// the number temp1 is the icon-number  from 0 to 15
+// with offset  0 the icon is written to the right lower quarter of the screen
+// with offset 16 the icon is written to the left lower quarter of the screen
+// with offset 32 the icon is written to the right upper quarter of the screen
+// with offset 48 the icon is written to the left upper quarter of the screen
+// to the left of the quarter are at least 8 pixels free
+// to the right of the quarter are 16 pixels free  (8+24+16 < (SCREEN_WIDTH/2)
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920))
 void lcd_big_icon(unsigned char temp1) {
  uint8_t *pfont;
- pfont = (uint8_t *) bigfont[temp1];	// first byte of character data
- lcd_set_pixels( pfont, SCREEN_WIDTH - 16 - ICON_WIDTH, (SCREEN_HEIGHT / 2), 0,
+ uint8_t pos_nr;
+ pfont = (uint8_t *) bigfont[temp1 & 0x0f];	// first byte of character data
+ pos_nr = (temp1/16) & 0x03;
+ icon_xx = SCREEN_WIDTH - 32 - ICON_WIDTH;		// right side, (SCREEN_WIDTH/2 + 8) 
+ if ((pos_nr & 0x01) != 0) icon_xx -= (SCREEN_WIDTH / 2); // left side
+ icon_yy = 0;
+ if (pos_nr < 2) {
+   icon_yy = (SCREEN_HEIGHT / 2);
+   icon_xx +=  (SCREEN_WIDTH / 2)  - (ICON_WIDTH + 8 + 16); 	// shift lower icon position 8 pixel to the right
+ }
+
+ lcd_set_pixels( pfont, icon_xx, icon_yy, 0,
  ICON_WIDTH, ICON_HEIGHT);
 }
 
@@ -154,10 +174,11 @@ void lcd_update_icon(const unsigned char *ubitmap) {
 /* ******************************************************************************* */
 void lcd_update_icon_opt(const unsigned char *ubitmap, unsigned char options) {
  const unsigned char *pfont;
- uint8_t xx, yy, ww, hh;
+ uint8_t xx, yy;
+ uint8_t ww, hh;
  pfont =  &ubitmap[4];
- xx = (SCREEN_WIDTH - 16 - ICON_WIDTH) + pgm_read_byte(&ubitmap[0]);
- yy = (SCREEN_HEIGHT / 2) + pgm_read_byte(&ubitmap[1]);
+ xx = icon_xx + pgm_read_byte(&ubitmap[0]);
+ yy = icon_yy + pgm_read_byte(&ubitmap[1]);
  ww =  pgm_read_byte(&ubitmap[2]);
  hh =  pgm_read_byte(&ubitmap[3]);
  lcd_set_pixels( pfont, xx, yy, options, ww, hh);

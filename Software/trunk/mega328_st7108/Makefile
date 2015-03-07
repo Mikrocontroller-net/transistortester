@@ -46,7 +46,7 @@ CFLAGS += -DWITH_MENU
 # WITH_ROTARY_COUNT to 5 for getting the best resolution.
 # You can also use two separate push-buttons for Up and Down instead ot the rotary encoder.
 # You must set the WITH_ROTARY_SWITCH to 4 for the UP/DOWN push-buttons.
-#CFLAGS += -DWITH_ROTARY_SWITCH=2
+CFLAGS += -DWITH_ROTARY_SWITCH=2
 # the option CHANGE_ROTARY_DIRECTION changes the rotary direction by swap of switches
 #CFLAGS += -DCHANGE_ROTARY_DIRECTION
 # The best solution for connecting the rotary switch is PD1 and PD3, because this setting can be used
@@ -78,14 +78,14 @@ CFLAGS += -DFOUR_LINE_LCD
 # Without the PAGE_MODE option, the line cursor is fixed to line 3 and the text moves.
 #CFLAGS += -DPAGE_MODE
 
+
 # The LCD_ST7565 option must be set to support a 128x64 LCD graphics display
 # with ST7565 controller. It is controlled with a 1-bit interface (SPI or I2C)
 # The normal ST7565 controller will be supported by setting the WITH_LCD_ST7565 to 1 or 7565.
 # The special action for a simular SSD1306 controller can be activated by
 # setting the WITH_LCD_ST7565 variable to 1306.
-WITH_LCD_ST7565 = 7920
+WITH_LCD_ST7565 = 7108
 #WITH_LCD_ST7565 = 1306
-#WITH_LCD_ST7920 = 1
 
 # Normally the ST7565 controller is connected with a SPI 4-wire interface, but
 # you can enable a I2C interface with address 0x3c for the SSD1306 controller 
@@ -95,7 +95,7 @@ WITH_LCD_ST7565 = 7920
 # Please check, if your display module can also tolerate a 5V signal level.
 # For the ST7920 controller you can select the serial interface by setting the LCD_INTERFACE_MODE to 5 . 
 # ST7920-RW <--> PD2 , ST7920-E <--> PD5 , ST7920-PSB <--> GND , ST7920-RS <--> VCC , ST7920-RST <--> VCC
-CFLAGS += -DLCD_INTERFACE_MODE=5
+#CFLAGS += -DLCD_INTERFACE_MODE=2
 
 # The I2C Address can be preset to a address of 0x3d instead of 0x3c by setting the constant LCD_I2C_ADDR.
 #CFLAGS += -DLCD_I2C_ADDR=0x3d
@@ -106,24 +106,22 @@ CFLAGS += -DLCD_INTERFACE_MODE=5
 LCD_ST7565_RESISTOR_RATIO = 4
 
 # If LCD_ST7565 option is set to 1: Flip the display's horizontal direction.
-CFLAGS += -DLCD_ST7565_H_FLIP=1
+#CFLAGS += -DLCD_ST7565_H_FLIP=1
 # With LCD_ST7565_H_OFFSET you can specify a horizontal pixel offset to the display window.
 # The controller knows 132 horizontal pixel, the window shows only 128 pixel.
 # OFFSET values can vary for the connected display type to 0, 2 or 4.
-CFLAGS += -DLCD_ST7565_H_OFFSET=0
+#CFLAGS += -DLCD_ST7565_H_OFFSET=4
 # If LCD_ST7565 option is set to 1: Flip the display's vertical direction
-CFLAGS += -DLCD_ST7565_V_FLIP=1
+#CFLAGS += -DLCD_ST7565_V_FLIP=1
 
 # If option WITH_LCD_ST7565 is present one of the following fonts should be
 # choosen.
 #CFLAGS += -DFONT_6X8
 #CFLAGS += -DFONT_8X8
-#CFLAGS += -DFONT_8X14
-#CFLAGS += -DFONT_8X15
+#CFLAGS += -DFONT 8x14
+#CFLAGS += -DFONT 8x15
 #CFLAGS += -DFONT_8X16
 CFLAGS += -DFONT_8X16thin
-
-CFLAGS += -DICON_TYPE=1
 
 # option BIG_TP makes the 123 for the test pins bigger
 CFLAGS += -DBIG_TP
@@ -168,6 +166,7 @@ CFLAGS += -DREF_L_KORR=40
 # C_H_KORR defines a correction of 0.1% units for big capacitor measurement.
 # Positive values will reduce measurement results.
 CFLAGS += -DC_H_KORR=0
+
 
 # The WITH_UART option enables the software UART  (TTL level output at Pin PC3, 26).
 # If the option is deselected, PC3 can be used as external voltage input with a

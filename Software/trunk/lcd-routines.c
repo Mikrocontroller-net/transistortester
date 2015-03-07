@@ -194,7 +194,11 @@ void lcd_data(unsigned char temp1) {
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920))
  uint8_t *pfont;
  pfont = (uint8_t *)font + (FONT_WIDTH * NR_BYTE * temp1);	// first byte of character data
+#if (LCD_ST_TYPE == 7920)
+ lcd_set_pixels( pfont, _xpos, _page, 0,
+#else
  lcd_set_pixels( pfont, _xpos, _page*8, 0,
+#endif
  (unsigned char)FONT_WIDTH, (unsigned char)(NR_BYTE*8));
 _xpos += FONT_WIDTH;		// move pointer to the next character position
 #else

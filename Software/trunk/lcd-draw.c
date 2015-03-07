@@ -6,6 +6,8 @@
 extern const unsigned char bmp_one_data[] PROGMEM;
 extern const unsigned char bmp_two_data[] PROGMEM;
 extern const unsigned char bmp_three_data[] PROGMEM;
+extern uint8_t icon_xx;
+extern uint8_t icon_yy;
 static const unsigned char * const bmp_number[3] PROGMEM =
 {
    bmp_one_data,
@@ -14,32 +16,42 @@ static const unsigned char * const bmp_number[3] PROGMEM =
 };
 
 
+//*****************************************************************************
+// draw the pin number index to the relative position of the last icon location
 
-void lcd_draw_pin(unsigned char index, unsigned char x, unsigned char y)
+void lcd_draw_pin(unsigned char index, char dx, char dy)
 {
    const unsigned char *pbmp;
 
    pbmp = (const unsigned char *)pgm_read_word(&bmp_number[index]);
-   lcd_pgm_bitmap(pbmp, x, y, 0);
+   lcd_pgm_bitmap(pbmp, icon_xx + dx, icon_yy + dy, 0);
 }
 
+//*****************************************************************************
+// Draw the transistor pin numbers of transistor _trans to the last icon location
 // only the position of the base pin is selectable
-void lcd_draw_trans_pins( unsigned char xb, unsigned char yb)
+void lcd_draw_trans_pins( char dxb, char dyb)
 {
-   const unsigned char *pbmp;
+//   const unsigned char *pbmp;
 
-   pbmp = (const unsigned char *)pgm_read_word(&bmp_number[_trans->e]);
-   lcd_pgm_bitmap(pbmp, 121, 56, 0);
-   pbmp = (const unsigned char *)pgm_read_word(&bmp_number[_trans->b]);
-   lcd_pgm_bitmap(pbmp, xb, yb, 0);
-   pbmp = (const unsigned char *)pgm_read_word(&bmp_number[_trans->c]);
-   lcd_pgm_bitmap(pbmp, 121, 32, 0);
+//   pbmp = (const unsigned char *)pgm_read_word(&bmp_number[_trans->e]);
+//   lcd_pgm_bitmap(pbmp, 121, 56, 0);
+   lcd_draw_pin(_trans->e, 33, 24);	// relative to icon position
+//   pbmp = (const unsigned char *)pgm_read_word(&bmp_number[_trans->b]);
+//   lcd_pgm_bitmap(pbmp, xb, yb, 0);
+   lcd_draw_pin(_trans->b, dxb, dyb);	// relative to icon position
+//   pbmp = (const unsigned char *)pgm_read_word(&bmp_number[_trans->c]);
+//   lcd_pgm_bitmap(pbmp, 121, 32, 0);
+   lcd_draw_pin(_trans->c, 33, 0);	// relative to icon position
 }
 
+//*****************************************************************************
+// Show all Icons on the screen, up to four at one screen
 void ShowIcons(void) {
-#define ShowTime 10000
+#define ShowTime 10000  /* 10 seconds wait time, or key press, or rotary encoder movement */
  lcd_clear();
  lcd_big_icon(BJT_NPN|LCD_UPPER_LEFT);
+ lcd_update_icon_opt(bmp_vakdiode, OPT_VREVERSE);
  lcd_big_icon(BJT_NPN|LCD_UPPER_RIGHT);
  lcd_update_icon(bmp_pnp);	// update for PNP
  lcd_set_cursor(5,2);

@@ -404,9 +404,8 @@ start:
     lcd_MEM_string(Thyristor);		//"Thyristor"
     PinLayout(Cathode_char,'G','A'); 	// CGA= or 123=...
 #ifdef WITH_GRAPHICS
-//    lcd_pgm_bitmap(bmp_thyristor_data, 100, 32, 0);
     lcd_big_icon(THYRISTOR);
-    lcd_draw_trans_pins(88, 40);
+    lcd_draw_trans_pins(-8, 16);
 #endif
     goto TyUfAusgabe;
   }
@@ -415,10 +414,8 @@ start:
     lcd_MEM_string(Triac);		//"Triac"
     PinLayout('1','G','2'); 	// CGA= or 123=...
 #ifdef WITH_GRAPHICS
-//    lcd_pgm_bitmap(bmp_triac_data, 94, 32, 0);
     lcd_big_icon(TRIAC);
-//    lcd_draw_trans_pins(104, 56, 97, 48, 106, 32);
-    lcd_draw_trans_pins(88, 40);
+    lcd_draw_trans_pins(-8, 16);
 #endif
     goto TyUfAusgabe;
   }
@@ -639,7 +636,7 @@ start:
 #ifdef WITH_GRAPHICS
 //       lcd_pgm_bitmap(bmp_npn_data, 88, 32, 0);
        lcd_big_icon(BJT_NPN);
-       lcd_draw_trans_pins(88-7, 40);
+       lcd_draw_trans_pins(-7, 16);
 #endif
     } else {
        lcd_MEM_string(PNP_str);		//"PNP "
@@ -652,7 +649,7 @@ start:
        lcd_big_icon(BJT_NPN);
 //       lcd_pgm_bitmap(bmp_pnp_data, 88+14, 32+16, 0);	// update for PNP
        lcd_update_icon(bmp_pnp);	// update for PNP
-       lcd_draw_trans_pins(88-7, 40);
+       lcd_draw_trans_pins(-7, 16);
 #endif
     }
     lcd_space();
@@ -751,7 +748,7 @@ start:
 //          lcd_pgm_bitmap(bmp_p_jfet_data, 96+6, 32+16, 0);
           lcd_update_icon(bmp_p_jfet);
        }
-       lcd_draw_trans_pins(88-7, 40);
+       lcd_draw_trans_pins(-7, 16);
 #endif
     } else {
        if ((PartMode&D_MODE) == D_MODE) {
@@ -768,7 +765,7 @@ start:
           if (fetidx == 1)  lcd_update_icon(bmp_p_e_igbt);
           if (fetidx == 2)  lcd_update_icon(bmp_n_d_igbt);
           if (fetidx == 3)  lcd_update_icon(bmp_p_d_igbt);
-          lcd_draw_trans_pins(88-7, 40);
+          lcd_draw_trans_pins(-7, 16);
 #endif
        } else {
           lcd_MEM_string(mosfet_str);	//"-MOS "
@@ -778,7 +775,7 @@ start:
           if (fetidx == 1)  lcd_update_icon(bmp_p_e_mos);
           if (fetidx == 2)  lcd_update_icon(bmp_n_d_mos);
           if (fetidx == 3)  lcd_update_icon(bmp_p_d_mos);
-          lcd_draw_trans_pins(88-7, 40);
+          lcd_draw_trans_pins(-7, 16);
 #endif
        }
     }
@@ -940,8 +937,8 @@ resistor_out:
  #ifdef WITH_GRAPHICS
 //          lcd_pgm_bitmap(bmp_inductor_data, 103, 56, 0);
 // //          lcd_big_icon(INDUCTOR);
-//          lcd_draw_pin(resis[0].rb, 95, 56);
-//          lcd_draw_pin(resis[0].ra, 120, 56);
+//          lcd_draw_pin(resis[0].rb, 7, 24);
+//          lcd_draw_pin(resis[0].ra, 32, 24);
  #endif
        }
 #else

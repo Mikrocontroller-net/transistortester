@@ -4,7 +4,6 @@ unsigned int ReadADC(uint8_t mux);		// read Routine for ADC
 unsigned int W5msReadADC(uint8_t mux);		// wait 5ms and read than ADC
 unsigned int W10msReadADC(uint8_t mux);		// wait 10ms and read than ADC
 unsigned int W20msReadADC(uint8_t mux);		// wait 20ms and read then ADC
-void lcd_show_format_cap(void);
 void ReadCapacity(uint8_t HighPin, uint8_t LowPin);	//capacity measurement
 void ReadInductance(void);		//inductance measurement
 uint16_t GetESR(uint8_t hipin, uint8_t lopin);	//get ESR of capacitor
@@ -26,11 +25,6 @@ void DisplayValue(unsigned long vval,int8_t Expo,unsigned char Unit, unsigned ch
 unsigned int compute_hfe(unsigned int lpx, unsigned int tpy);
 void sleep_5ms(uint8_t xxx);		// set processor to sleep state for xxx times 5ms, xxx>200  (xxx-200)*100  
 void PinLayout(char pin1, char pin2, char pin3); // show pin layout with EBC= or 123=
-// Graphics display only: Some drawing functions for graphics LCD
-#ifdef WITH_GRAPHICS
-void lcd_draw_pin(unsigned char index, unsigned char x, unsigned char y);
-void lcd_draw_trans_pins( unsigned char xb, unsigned char yb);
-#endif
 void Calibrate_UR(void);		// get reference voltages and port resistance
 uint16_t get_log(uint16_t permil);	// get -log(1-(permil/1000))
 uint8_t ShortedProbes(uint8_t p1, uint8_t p2);	// check if two probes are shorted

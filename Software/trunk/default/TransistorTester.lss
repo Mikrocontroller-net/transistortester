@@ -23,15 +23,15 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_abbrev 000013ce  00000000  00000000  0000b09b  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   000019e0  00000000  00000000  0000c469  2**0
+ 10 .debug_line   000019de  00000000  00000000  0000c469  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  00000504  00000000  00000000  0000de4c  2**2
+ 11 .debug_frame  00000504  00000000  00000000  0000de48  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000ce6  00000000  00000000  0000e350  2**0
+ 12 .debug_str    00000ce6  00000000  00000000  0000e34c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    0000357e  00000000  00000000  0000f036  2**0
+ 13 .debug_loc    0000357e  00000000  00000000  0000f032  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000030  00000000  00000000  000125b4  2**0
+ 14 .debug_ranges 00000030  00000000  00000000  000125b0  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -10641,7 +10641,7 @@ start:
     347a:	67 e4       	ldi	r22, 0x47	; 71
     347c:	83 e4       	ldi	r24, 0x43	; 67
     347e:	09 c0       	rjmp	.+18     	; 0x3492 <main+0x342>
-    lcd_draw_trans_pins(88, 40);
+    lcd_draw_trans_pins(-8, 16);
 #endif
     goto TyUfAusgabe;
   }
@@ -10678,7 +10678,7 @@ TyUfAusgabe:
     34b0:	26 e5       	ldi	r18, 0x56	; 86
     34b2:	4d ef       	ldi	r20, 0xFD	; 253
     34b4:	c0 c3       	rjmp	.+1920   	; 0x3c36 <main+0xae6>
-    lcd_draw_trans_pins(88, 40);
+    lcd_draw_trans_pins(-8, 16);
 #endif
     goto TyUfAusgabe;
   }
@@ -11132,7 +11132,7 @@ TyUfAusgabe:
     37d0:	11 c0       	rjmp	.+34     	; 0x37f4 <main+0x6a4>
 //       lcd_pgm_bitmap(bmp_npn_data, 88, 32, 0);
        lcd_big_icon(BJT_NPN);
-       lcd_draw_trans_pins(88-7, 40);
+       lcd_draw_trans_pins(-7, 16);
 #endif
     } else {
        lcd_MEM_string(PNP_str);		//"PNP "
@@ -11154,7 +11154,7 @@ TyUfAusgabe:
     37f0:	80 93 54 01 	sts	0x0154, r24
 //       lcd_pgm_bitmap(bmp_pnp_data, 88+14, 32+16, 0);	// update for PNP
        lcd_update_icon(bmp_pnp);	// update for PNP
-       lcd_draw_trans_pins(88-7, 40);
+       lcd_draw_trans_pins(-7, 16);
 #endif
     }
     lcd_space();
@@ -11209,7 +11209,7 @@ TyUfAusgabe:
     384a:	84 e6       	ldi	r24, 0x64	; 100
     384c:	90 e0       	ldi	r25, 0x00	; 0
     384e:	0e 94 99 01 	call	0x332	; 0x332 <lcd_fix_string>
-       lcd_draw_trans_pins(88-7, 40);
+       lcd_draw_trans_pins(-7, 16);
 #endif
     }
     lcd_space();
@@ -11365,7 +11365,7 @@ TyUfAusgabe:
     3954:	13 c0       	rjmp	.+38     	; 0x397c <main+0x82c>
           lcd_update_icon(bmp_p_jfet);
        }
-       lcd_draw_trans_pins(88-7, 40);
+       lcd_draw_trans_pins(-7, 16);
 #endif
     } else {
        if ((PartMode&D_MODE) == D_MODE) {
@@ -11387,7 +11387,7 @@ TyUfAusgabe:
     3968:	86 eb       	ldi	r24, 0xB6	; 182
     396a:	90 e0       	ldi	r25, 0x00	; 0
     396c:	0e 94 99 01 	call	0x332	; 0x332 <lcd_fix_string>
-          lcd_draw_trans_pins(88-7, 40);
+          lcd_draw_trans_pins(-7, 16);
 #endif
        }
     }
@@ -11399,7 +11399,7 @@ TyUfAusgabe:
     3976:	07 c0       	rjmp	.+14     	; 0x3986 <main+0x836>
           if (fetidx == 2)  lcd_update_icon(bmp_n_d_igbt);
           if (fetidx == 3)  lcd_update_icon(bmp_p_d_igbt);
-          lcd_draw_trans_pins(88-7, 40);
+          lcd_draw_trans_pins(-7, 16);
 #endif
        } else {
           lcd_MEM_string(mosfet_str);	//"-MOS "

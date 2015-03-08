@@ -10,9 +10,9 @@
 #include <math.h>
 #include "config.h"
 #include "tt_function.h"
-#include "wait1000ms.h"
-#include "lcd-routines.h"
-#include "part_defs.h"
+//#include "wait1000ms.h"
+//#include "lcd-routines.h"
+//#include "part_defs.h"
 
 
 #if defined (MAIN_C)

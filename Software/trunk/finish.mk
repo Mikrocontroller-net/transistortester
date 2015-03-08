@@ -4,7 +4,7 @@ lcd-routines.o: ../lcd-routines.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 font.o: ../font.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+	$(CC) $(INCLUDES) $(CFLAGS) -D$(UI_LANGUAGE) -c  $<
 
 lcd-draw.o: ../lcd-draw.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<

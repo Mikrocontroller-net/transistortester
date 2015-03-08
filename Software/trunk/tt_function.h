@@ -1,3 +1,6 @@
+#include "wait1000ms.h"
+#include "lcd-routines.h"
+
 void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin);
 void ChargePin10ms(uint8_t PinToCharge, uint8_t ChargeDirection);
 unsigned int ReadADC(uint8_t mux);		// read Routine for ADC

@@ -123,6 +123,8 @@ LCD_ST7565_RESISTOR_RATIO = 4
 #CFLAGS += -DFONT_8X16
 CFLAGS += -DFONT_8X16thin
 
+CFLAGS += -DICON_TYPE=1
+
 # option BIG_TP makes the 123 for the test pins bigger
 CFLAGS += -DBIG_TP
 # option INVERSE_TP inverse the 123 for the test pins (black on white)

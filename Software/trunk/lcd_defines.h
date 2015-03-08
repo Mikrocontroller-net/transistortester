@@ -9,54 +9,47 @@
 #define SCREEN_WIDTH  128
 #define SCREEN_HEIGHT  64
 
- #ifdef FONT_8X16
+ #if defined(FONT_8X16) || defined(FONT_8x16) || defined(FONT_8X16thin) || defined(FONT_8x16thin)
   #define FONT_WIDTH    8
   #define FONT_HEIGHT   16
  #endif
 
- #ifdef FONT_8X16thin
-  #ifndef FONT_WIDTH
-   #define FONT_WIDTH    8
-   #define FONT_HEIGHT   16
-  #endif
- #endif
-
- #ifdef FONT_8X15
+ #if defined(FONT_8X15) || defined(FONT_8x15) || defined(FONT_8X15thin) || defined(FONT_8x15thin)
   #ifndef FONT_WIDTH
    #define FONT_WIDTH    8
    #define FONT_HEIGHT   15
   #endif
  #endif
 
- #ifdef FONT_8X14
+ #if defined(FONT_8X14) || defined(FONT_8x14) || defined(FONT_8X14thin) || defined(FONT_8x14thin)
   #ifndef FONT_WIDTH
    #define FONT_WIDTH    8
    #define FONT_HEIGHT   14
   #endif
  #endif
 
- #ifdef FONT_8X12
+ #if defined(FONT_8X12) || defined(FONT_8x12) || defined(FONT_8X12thin) || defined(FONT_8x12thin)
   #ifndef FONT_WIDTH
    #define FONT_WIDTH    8
    #define FONT_HEIGHT   12
   #endif
  #endif
 
- #ifdef FONT_8X8
+ #if defined(FONT_8X8) || defined(FONT_8x8)
   #ifndef FONT_WIDTH
    #define FONT_WIDTH    8
    #define FONT_HEIGHT   8
   #endif
  #endif
 
- #ifdef FONT_6X8
+ #if defined(FONT_6X8) || defined(FONT_6x8)
   #ifndef FONT_WIDTH
    #define FONT_WIDTH    6
    #define FONT_HEIGHT   8
   #endif
  #endif
 
- #ifdef FONT_10X16
+ #if defined(FONT_10x16) || defined(FONT_10x16) || defined(FONT_10x16thin) || defined(FONT_10x16thin)
   #ifndef FONT_WIDTH
    #define FONT_WIDTH    10
    #define FONT_HEIGHT   16
@@ -275,14 +268,15 @@
 #define N_JFET 3
 #define TRIAC 4
 #define THYRISTOR 5
-#define INDUCTOR 6
-#define RESISTOR 7
-#define CAPACITOR 8
-#define DIODE_C_A 9
-#define DIODES_C_A_C_A 10
-#define DIODES_A_C_C_A 11
-#define DIODES_C_A_A_C 12
-#define RESISTORS 13
+#define QUESTION 6
+#define INDUCTOR 7
+#define RESISTOR 8
+#define CAPACITOR 9
+#define DIODE_C_A 10
+#define DIODES_C_A_C_A 11
+#define DIODES_A_C_C_A 12
+#define DIODES_C_A_A_C 13
+#define RESISTORS 14
 // define the positioning bits for lcd_big_icon
 #define LCD_UPPER_LEFT 0x30
 #define LCD_UPPER_RIGHT 0x20

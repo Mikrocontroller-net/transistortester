@@ -974,6 +974,9 @@ resistor_out:
   lcd_MEM_string(Bauteil);		//"Bauteil"
 #endif
 not_known:
+#ifdef WITH_GRAPHICS
+     lcd_big_icon(QUESTION);		// show big question mark
+#endif
 #if POWER_OFF+0 > 1
   empty_count++;
   mess_count = 0;

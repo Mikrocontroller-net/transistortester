@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
             } else {
               if ((tx[0] == '/') && (tx[1] == '*')) {
                 BitClearChar = ' ';
-                BitSetChar = ':';
+                BitSetChar = 'O';
               }
               if ((tx[0] == '*') && (tx[1] == '/')) {
                 BitSetChar = '*';

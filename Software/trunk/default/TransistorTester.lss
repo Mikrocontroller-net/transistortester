@@ -23,15 +23,15 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_abbrev 000013ce  00000000  00000000  0000b09b  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   000019de  00000000  00000000  0000c469  2**0
+ 10 .debug_line   000019e0  00000000  00000000  0000c469  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  00000504  00000000  00000000  0000de48  2**2
+ 11 .debug_frame  00000504  00000000  00000000  0000de4c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000ce6  00000000  00000000  0000e34c  2**0
+ 12 .debug_str    00000ce6  00000000  00000000  0000e350  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    0000357e  00000000  00000000  0000f032  2**0
+ 13 .debug_loc    0000357e  00000000  00000000  0000f036  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000030  00000000  00000000  000125b0  2**0
+ 14 .debug_ranges 00000030  00000000  00000000  000125b4  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -11880,7 +11880,7 @@ resistor_out:
     3c28:	85 e3       	ldi	r24, 0x35	; 53
     3c2a:	91 e0       	ldi	r25, 0x01	; 1
     3c2c:	0e 94 99 01 	call	0x332	; 0x332 <lcd_fix_string>
-not_known:
+#endif
 #if POWER_OFF+0 > 1
   empty_count++;
   mess_count = 0;

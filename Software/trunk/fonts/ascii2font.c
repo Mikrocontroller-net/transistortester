@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
              bittab1[height/8][kk-1] = 0;  // clear all bits
              bittab2[height/8][kk-1] = 0;  // clear all bits
           }
-          if ((linebuf[kk] == '*') || (linebuf[kk] == ':')) bittab1[height/8][kk-1] |= (1<<(height % 8));
+          if ((linebuf[kk] == '*') || (linebuf[kk] == ':') || (linebuf[kk] == 'O')) bittab1[height/8][kk-1] |= (1<<(height % 8));
           if ((linebuf[kk] == '*') || (linebuf[kk] == ' ')) bittab2[height/8][kk-1] |= (1<<(height % 8));
        }
        height++;

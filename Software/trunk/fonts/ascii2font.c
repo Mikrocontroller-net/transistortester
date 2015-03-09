@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
             fprintf(stdout,"0x%02X",bittab1[ll/8][kk]);
             if (((ll+8) < height) || (kk != (width-1))) fprintf(stdout,",");
          }
-         fprintf(stdout,"\r\n\r\n  ");
+         fprintf(stdout,"\r\n  ");
        }
        if (comment_out != 0) {
           comment_out = 0;
@@ -107,6 +107,7 @@ int main(int argc, char *argv[])
        height = 0;
     } /* end if ((height > 5) && (beg_end != 0)) */
  } /* end while */
+fprintf(stdout,"};\r\n");
  return(0);
 }
 

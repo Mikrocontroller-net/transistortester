@@ -45,6 +45,24 @@
   #endif
  #endif
 
+ #ifdef FONT_8X12thin
+  #ifdef FONT_SELECTED
+   #warning Multiple fonts selected, please select only one!
+  #else
+   #define FONT_SELECTED
+   #include "fonts/8x12_vertikal_LSB_1thin.h"
+  #endif
+ #endif
+
+ #ifdef FONT_7X12 
+  #ifdef FONT_SELECTED
+   #warning Multiple fonts selected, please select only one!
+  #else
+   #define FONT_SELECTED
+   #include "fonts/7x12_vertical_LSB_1.h"
+  #endif
+ #endif
+
  #ifdef FONT_8X8 
   #ifdef FONT_SELECTED
    #warning Multiple fonts selected, please select only one!

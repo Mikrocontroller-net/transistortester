@@ -35,6 +35,13 @@
   #endif
  #endif
 
+ #if defined(FONT_7X12) || defined(FONT_7x12)
+  #ifndef FONT_WIDTH
+   #define FONT_WIDTH    7
+   #define FONT_HEIGHT   12
+  #endif
+ #endif
+
  #if defined(FONT_8X8) || defined(FONT_8x8)
   #ifndef FONT_WIDTH
    #define FONT_WIDTH    8

@@ -49,6 +49,7 @@ void lcd_draw_trans_pins( char dxb, char dyb)
 // Show all Icons on the screen, up to four at one screen
 void ShowIcons(void) {
 #define ShowTime 10000  /* 10 seconds wait time, or key press, or rotary encoder movement */
+ uint8_t cc;
  lcd_clear();
  lcd_big_icon(BJT_NPN|LCD_UPPER_LEFT);
  lcd_update_icon_opt(bmp_vakdiode, OPT_VREVERSE);
@@ -158,7 +159,53 @@ void ShowIcons(void) {
  lcd_big_icon(RESISTOR|LCD_UPPER_LEFT);
  lcd_big_icon(RESISTORS|LCD_UPPER_RIGHT);
  wait_for_key_ms(ShowTime);
-}
+ 
+ lcd_clear();
+ lcd_line1();
+ lcd_MEM_string(Resistor_str);    // -[=]-
+ lcd_line2();
+ lcd_MEM_string(Inductor_str);         // -ww-
+ lcd_line3();
+ lcd_MEM_string(CapZeich);          // capacitor sign
+ lcd_line4();
+ lcd_MEM_string(AnKat);       //"->|-"
+ lcd_space();
+ lcd_MEM_string(KatAn);       //"-|<-"
 
+
+// show character set
+ for (cc=0;cc<(0x7f-0x20);cc++) {
+   if ((cc%16) == 0) {
+     // begin new line
+     if((cc%64) == 0) {
+       wait_for_key_ms(ShowTime);
+       lcd_clear();
+     }
+     lcd_set_cursor(((cc/16)%4)*2,0);
+   }
+  lcd_data(cc+0x20);
+ } /* end for cc */
+ wait_for_key_ms(ShowTime);
+
+ lcd_clear();
+#ifdef LCD_CYRILLIC
+ for (cc=0;cc<((Cyr_ja+1-Cyr_B)+(Cyr_schtsch+1-Cyr_D));cc++) {
+   if ((cc%16) == 0) {
+     // begin new line
+     lcd_set_cursor(((cc/16)%4)*2,0);
+   }
+   if (cc <= (Cyr_ja-Cyr_B))
+   {
+     lcd_data(cc + Cyr_B);
+   } else {
+     lcd_data(cc + Cyr_D - (Cyr_ja + 1 - Cyr_B));
+   }
+ } /* end for cc */
+ wait_for_key_ms(ShowTime);
+
+ lcd_clear();
+#endif
+
+}
 #endif
 

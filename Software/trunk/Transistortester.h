@@ -1316,6 +1316,9 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  #endif
 
  extern const unsigned char AnKat[] MEM_TEXT ;
+ extern const unsigned char KatAn[] MEM_TEXT ;
+ extern const unsigned char Resistor_str[] MEM_TEXT ;
+ extern const unsigned char CapZeich[] MEM_TEXT ;
 
 
  #ifdef AUTO_RH

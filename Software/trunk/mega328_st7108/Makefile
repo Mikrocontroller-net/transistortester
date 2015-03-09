@@ -62,7 +62,7 @@ UI_LANGUAGE = LANG_ENGLISH
 # The LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset.
 # This lcd-display don't have a character for Ohm and for µ (micro).
 # Russian language requires a LCD controller with russian characterset and option LCD_CYRILLIC!
-#CFLAGS += -DLCD_CYRILLIC
+CFLAGS += -DLCD_CYRILLIC
 
 # The LCD_DOGM option must be set for support of the DOG-M type of LCD modules with ST7036 controller.
 # For this LCD type the contrast must be set with software command.
@@ -115,17 +115,23 @@ LCD_ST7565_RESISTOR_RATIO = 4
 #CFLAGS += -DLCD_ST7565_V_FLIP=1
 
 # If option WITH_LCD_ST7565 is present one of the following fonts should be
-# choosen.
+# choosen. With a font width below 8 more than 16 characters can be shown in one display line.
 #CFLAGS += -DFONT_6X8
 #CFLAGS += -DFONT_8X8
+CFLAGS += -DFONT_7X12
+#CFLAGS += -DFONT_8X12thin
 #CFLAGS += -DFONT_8X14
 #CFLAGS += -DFONT_8x15
 #CFLAGS += -DFONT_8X16
-CFLAGS += -DFONT_8X16thin
+#CFLAGS += -DFONT_8X16thin
 
-#CFLAGS += -DICON_TYPE=3
+# There are also different 24x32 pixel icons for presentation of the transistor symbols available.
+# you can select a special type with setting the ICON_TYPE.
+# Currently you can select 1 or 3 for one of two thin layouts for the icons.
+# You can also select two thick layouts for the icons by setting the ICON_TYPE to 2 or 0 (0=old style).
+CFLAGS += -DICON_TYPE=3
 
-# option BIG_TP makes the 123 for the test pins bigger
+# option BIG_TP makes the 123 for the test pins (beside the icon) bigger
 CFLAGS += -DBIG_TP
 # option INVERSE_TP inverse the 123 for the test pins (black on white)
 # the option INVERSE_TP disable the option BIG_TP because a frame is required

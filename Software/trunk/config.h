@@ -5,6 +5,7 @@
 #ifndef ADC_PORT
 #include "part_defs.h"
 #include "lcd_defines.h"
+#include "font.h"
 //#define DebugOut 3		// if set, output of voltages of resistor measurements in row 2,3,4
 //#define DebugOut 4		// if set, output of voltages of Diode measurement in row 3+4
 //#define DebugOut 5		// if set, output of Transistor checks in row 2+3

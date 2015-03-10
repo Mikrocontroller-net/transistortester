@@ -5,7 +5,8 @@
  #else
   #define CHAR_COUNT12 128
  #endif
-const unsigned char PROGMEM font[CHAR_COUNT12][16]={
+ #if defined (MAIN_C)
+const unsigned char PROGMEM font[CHAR_COUNT12][(FONT_WIDTH * ((FONT_HEIGHT + 7)/8))]={
  /* 0x00 Resistor3  */
 { 0x20,0xF8,0x88,0x88,0x88,0x88,0xF8,0x20,
   0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
@@ -1291,5 +1292,9 @@ const unsigned char PROGMEM font[CHAR_COUNT12][16]={
   },  /* x=0, y=0, w=8, h=16 */
 	
  #endif                                         
-#endif                                    
 };
+ #else
+ #ifndef __ASSEMBLER__
+ extern const unsigned char PROGMEM font[CHAR_COUNT12][16];
+  #endif                                    
+ #endif                                    

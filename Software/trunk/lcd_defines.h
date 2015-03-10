@@ -1,5 +1,4 @@
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7108))
 
 // Options for lcd_pgm_bitmap option parameter:
 #define OPT_HREVERSE    1 // Display bitmap reversed horizontally
@@ -8,61 +7,6 @@
 
 #define SCREEN_WIDTH  128
 #define SCREEN_HEIGHT  64
-
- #if defined(FONT_8X16) || defined(FONT_8x16) || defined(FONT_8X16thin) || defined(FONT_8x16thin)
-  #define FONT_WIDTH    8
-  #define FONT_HEIGHT   16
- #endif
-
- #if defined(FONT_8X15) || defined(FONT_8x15) || defined(FONT_8X15thin) || defined(FONT_8x15thin)
-  #ifndef FONT_WIDTH
-   #define FONT_WIDTH    8
-   #define FONT_HEIGHT   15
-  #endif
- #endif
-
- #if defined(FONT_8X14) || defined(FONT_8x14) || defined(FONT_8X14thin) || defined(FONT_8x14thin)
-  #ifndef FONT_WIDTH
-   #define FONT_WIDTH    8
-   #define FONT_HEIGHT   14
-  #endif
- #endif
-
- #if defined(FONT_8X12) || defined(FONT_8x12) || defined(FONT_8X12thin) || defined(FONT_8x12thin)
-  #ifndef FONT_WIDTH
-   #define FONT_WIDTH    8
-   #define FONT_HEIGHT   12
-  #endif
- #endif
-
- #if defined(FONT_7X12) || defined(FONT_7x12)
-  #ifndef FONT_WIDTH
-   #define FONT_WIDTH    7
-   #define FONT_HEIGHT   12
-  #endif
- #endif
-
- #if defined(FONT_8X8) || defined(FONT_8x8)
-  #ifndef FONT_WIDTH
-   #define FONT_WIDTH    8
-   #define FONT_HEIGHT   8
-  #endif
- #endif
-
- #if defined(FONT_6X8) || defined(FONT_6x8)
-  #ifndef FONT_WIDTH
-   #define FONT_WIDTH    6
-   #define FONT_HEIGHT   8
-  #endif
- #endif
-
- #if defined(FONT_10x16) || defined(FONT_10x16) || defined(FONT_10x16thin) || defined(FONT_10x16thin)
-  #ifndef FONT_WIDTH
-   #define FONT_WIDTH    10
-   #define FONT_HEIGHT   16
-  #endif
- #endif
-#endif
 
 
 /* *********************************************************************************************************** */

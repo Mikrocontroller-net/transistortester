@@ -376,7 +376,18 @@ ReadCapacity(TP2, TP3);
 adcmv[4] = (unsigned int) cap.cval_uncorrected.dw;	//save capacity value of empty Pin 3:2
 ReadCapacity(TP1, TP2);
 adcmv[0] = (unsigned int) cap.cval_uncorrected.dw;	//save capacity value of empty Pin 2:1
-adcmv[3] = adcmv[0];			// same as first for the checking loop, mark as calibrated
+ #ifdef WITH_MENU
+if (((test_mode & 0x0f) == 1) || (UnCalibrated == 2))
+ #else
+if (UnCalibrated == 2)
+ #endif
+{
+  adcmv[3] = adcmv[0] + 2;		// mark as uncalibrated until Cap > 100nF has success
+} else {
+  adcmv[3] = adcmv[0];			// mark as calibrated, short calibration is finished
+  UnCalibrated = 0;			// clear the UnCalibrated Flag
+  lcd_cursor_off();			// switch cursor off
+}
 DisplayValue(adcmv[5],0,' ',3);		//output cap0 1:3
 DisplayValue(adcmv[6],0,' ',3);		//output cap0 2:3
 DisplayValue(adcmv[2],-12,'F',3);		//output cap0 1:2
@@ -401,7 +412,7 @@ if (((test_mode & 0x0f) == 1) || (UnCalibrated == 2))
 // without menu function the capacitor is requested every time,
 // because there is no way to request recaltbration again
 // With menu function the capacitor is only requested for first time 
-// calibration (UnCalibrated = 1) or for the full selftest call (test_mode = 1) 
+// calibration (UnCalibrated = 2) or for the full selftest call (test_mode = 1) 
 // of the menu function, not with the automatically call (test_mode = 1).
 {
 // for full test or first time calibration, use external capacitor
@@ -470,11 +481,11 @@ for (ww=0;ww<64;ww++) {
   #endif
   #ifdef AUTOSCALE_ADC
    #if (TPCAP >= 0)
-#define CAP_ADC TPCAP
+    #define CAP_ADC TPCAP	/* Cap >100nF is integrated at TPCAP */
    TCAP_PORT &= ~(1<<TCAP_RH);	// 470k resistor to GND
    TCAP_DDR |= (1<<TCAP_RH);	// enable output
    #else
-#define CAP_ADC TP3
+    #define CAP_ADC TP3		/* Cap >100nF at TP3 */
    ADC_PORT =  TXD_VAL;	//ADC-Port 1 to GND
    ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
    R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to GND
@@ -495,19 +506,21 @@ for (ww=0;ww<64;ww++) {
    ADCconfig.U_Bandgap = 0;	// do not use internal Ref
    adcmv[2] = ReadADC(CAP_ADC);  // get cap voltage with VCC reference
    ADCconfig.U_Bandgap = adc_internal_reference;
-//        udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1])) * ADC_internal_reference / adcmv[1])+REF_R_KORR;
    udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1])) * adc_internal_reference / adcmv[1])+REF_R_KORR;
    lcd_line2();
    lcd_MEM2_string(REF_R_str);	// "REF_R="
    udiff2 = udiff + (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
    (void) eeprom_write_byte((uint8_t *)(&RefDiff), (uint8_t)udiff2);	// hold offset for true reference Voltage
-//        lcd_string(itoa(udiff2, outval, 10));	//output correction voltage
-   i2lcd(udiff2);
+   i2lcd(udiff2);		// output correction voltage
    RefVoltage();			// set new ADCconfig.U_Bandgap
   #endif	/* end AUTOSCALE_ADC */
    wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
-   break;
-  }
+   UnCalibrated = 0;		// clear the UnCalibrated Flag
+   lcd_cursor_off();		// switch cursor off
+   cap_found = eeprom_read_byte((uint8_t *)&c_zero_tab[0]);	// read first capacity zero offset
+   eeprom_write_byte((uint8_t *)&c_zero_tab[3], cap_found);	// mark as calibrated permanent
+   break;			// leave the ww for loop
+  }  /* end if (cap_found > 4) */
   lcd_line2();
   DisplayValue(cap.cval,cap.cpre,'F',4);
   lcd_refresh();		// write the pixels to display, ST7920 only
@@ -517,8 +530,6 @@ for (ww=0;ww<64;ww++) {
  #endif  /* end AUTO_CAL */
 
 
-UnCalibrated = 0;		// clear the UnCalibrated Flag
-lcd_cursor_off();		// switch cursor off
 ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples
 
  #ifdef FREQUENCY_50HZ

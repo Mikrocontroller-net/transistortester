@@ -286,19 +286,19 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 ## Objects that must be built in order to link
 OBJECTS = lcd_hw_4_bit.o lcd-routines.o i2lcd.o PinLayout.o RvalOut.o UfAusgabe.o DisplayValue.o
 ifeq ($(WITH_LCD_ST7565),1)
-OBJECTS += font.o lcd-draw.o
+OBJECTS += lcd-draw.o
 endif
 ifeq ($(WITH_LCD_ST7565),7565)
-OBJECTS += font.o lcd-draw.o
+OBJECTS += lcd-draw.o
 endif
 ifeq ($(WITH_LCD_ST7565),1306)
-OBJECTS += font.o lcd-draw.o
+OBJECTS += lcd-draw.o
 endif
 ifeq ($(WITH_LCD_ST7565),7920)
-OBJECTS += font.o lcd-draw.o
+OBJECTS += lcd-draw.o
 endif
 ifeq ($(WITH_LCD_ST7565),7108)
-OBJECTS += font.o lcd-draw.o
+OBJECTS += lcd-draw.o
 endif
 OBJECTS += swuart.o wait1000ms.o 
 ifneq ($(INHIBIT_SLEEP_MODE),1)

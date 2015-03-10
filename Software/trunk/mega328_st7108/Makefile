@@ -78,7 +78,6 @@ CFLAGS += -DFOUR_LINE_LCD
 # Without the PAGE_MODE option, the line cursor is fixed to line 3 and the text moves.
 #CFLAGS += -DPAGE_MODE
 
-
 # The LCD_ST7565 option must be set to support a 128x64 LCD graphics display
 # with ST7565 controller. It is controlled with a 1-bit interface (SPI or I2C)
 # The normal ST7565 controller will be supported by setting the WITH_LCD_ST7565 to 1 or 7565.

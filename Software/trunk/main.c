@@ -619,11 +619,15 @@ start:
     // not possible for mega8, change Pin sequence instead.
     if ((ptrans.count != 0) && (ntrans.count !=0) && (!(RST_PIN_REG & (1<<RST_PIN)))) {
        // if the Start key is still pressed, use the other Transistor
+#if 0
        if (PartMode == PART_MODE_NPN) {
           PartMode = PART_MODE_PNP;	// switch to parasitic transistor
        } else {
           PartMode = PART_MODE_NPN;	// switch to parasitic transistor
        }
+#else
+       PartMode ^= (PART_MODE_PNP - PART_MODE_NPN);
+#endif
     }
 //#endif
 
@@ -634,9 +638,8 @@ start:
        }
 //       _trans = &ntrans;  is allready selected a default
 #ifdef WITH_GRAPHICS
-//       lcd_pgm_bitmap(bmp_npn_data, 88, 32, 0);
-       lcd_big_icon(BJT_NPN);
-       lcd_draw_trans_pins(-7, 16);
+       lcd_big_icon(BJT_NPN);		// show the NPN Icon
+       lcd_draw_trans_pins(-7, 16);	// show the pin numbers
 #endif
     } else {
        lcd_MEM_string(PNP_str);		//"PNP "
@@ -645,42 +648,43 @@ start:
        }
        _trans = &ptrans;		// change transistor structure
 #ifdef WITH_GRAPHICS
-//       lcd_pgm_bitmap(bmp_npn_data, 88, 32, 0);
-       lcd_big_icon(BJT_NPN);
-//       lcd_pgm_bitmap(bmp_pnp_data, 88+14, 32+16, 0);	// update for PNP
+       lcd_big_icon(BJT_NPN);		// show the NPN Icon
        lcd_update_icon(bmp_pnp);	// update for PNP
-       lcd_draw_trans_pins(-7, 16);
+       lcd_draw_trans_pins(-7, 16);	// show the pin numbers
 #endif
     }
     lcd_space();
-//    if( NumOfDiodes > 2) 	//Transistor with protection diode
+
+    // show the protection diode of the BJT
     for (ii=0; ii<NumOfDiodes; ii++) {
        if ((diodes.Anode[ii] == _trans->b) || (diodes.Cathode[ii] == _trans->b)) continue;
-#ifdef EBC_STYLE
- #if EBC_STYLE == 321
+       // no side of the diode is connected to the base, this must be the protection diode   
+#ifdef WITH_GRAPHICS
+    options = 0;
+    if (_trans->c != diodes.Anode[ii])
+       options |= OPT_VREVERSE;
+    lcd_update_icon_opt(bmp_vakdiode,options);	// show the protection diode right to the Icon
+#else    /* only character display, show the diode in correct direction */    
+ #ifdef EBC_STYLE
+  #if EBC_STYLE == 321
        // Layout with 321= style
        if (((PartMode == PART_MODE_NPN) && (ntrans.c < ntrans.e)) || ((PartMode != PART_MODE_NPN) && (ptrans.c > ptrans.e)))
- #else
+  #else
        // Layout with EBC= style
        if(PartMode == PART_MODE_NPN)
- #endif
-#else
+  #endif
+ #else
        // Layout with 123= style
        if (((PartMode == PART_MODE_NPN) && (ntrans.c > ntrans.e)) || ((PartMode != PART_MODE_NPN) && (ptrans.c < ptrans.e)))
-#endif
+ #endif
        {
           lcd_MEM_string(AnKat);	//"->|-"
        } else {
           lcd_MEM_string(KatAn);	//"-|<-"
        }
-#ifdef WITH_GRAPHICS
-    options = 0;
-    if (_trans->c != diodes.Anode[ii])
-       options |= OPT_VREVERSE;
-//    lcd_pgm_bitmap(bmp_vakdiode_data, 88+24, 32, options);
-    lcd_update_icon_opt(bmp_vakdiode,options);
-#endif    
+#endif    /* !WITH_GRAPHICS */
     } /* end for ii */
+
     PinLayout('E','B','C'); 		//  EBC= or 123=...
     lcd_line2(); //2. row 
 #if (LCD_LINE_LENGTH > 18)

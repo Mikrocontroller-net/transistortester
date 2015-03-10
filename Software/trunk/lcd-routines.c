@@ -21,8 +21,6 @@ uint8_t _page;		// y position of the next character
 uint8_t _xpos;		// x position of the next character
 uint8_t icon_xx;	// x position of the last loaded big 24x32 icon
 uint8_t icon_yy;	// y position of the last loaded big 24x32 icon
-extern const uint8_t PROGMEM font[256][FONT_WIDTH * NR_BYTE];
-extern const uint8_t PROGMEM bigfont[13][ICON_WIDTH * (ICON_HEIGHT / 8)];
 #endif
 
 /* ******************************************************************************* */

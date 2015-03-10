@@ -5,7 +5,13 @@
  #else
   #define CHAR_COUNT8 128
  #endif
-const unsigned char PROGMEM font[CHAR_COUNT8][6]={
+ #if defined(MAIN_C)
+ #ifdef FONT_SELECTED
+const unsigned char PROGMEM tiny_font[CHAR_COUNT8][TINY_FONT_WIDTH]=
+ #else
+const unsigned char PROGMEM font[CHAR_COUNT8][FONT_WIDTH]=
+ #endif
+{
 {0x08,0x3E,0x22,0x22,0x3E,0x08},	/* 0x00 Resistor3  */                    
 {0x08,0x7F,0x22,0x14,0x08,0x7F},	/* 0x01 Diode1  */                       
 {0x7F,0x08,0x14,0x22,0x7F,0x08},	/* 0x02 Diode2  */                       
@@ -269,3 +275,12 @@ const unsigned char PROGMEM font[CHAR_COUNT8][6]={
  #endif
 #endif                                          
 };
+#else
+ #ifndef __ASSEMBLER__
+  #ifdef FONT_SELECTED
+ extern const unsigned char PROGMEM tiny_font[CHAR_COUNT8][TINY_FONT_WIDTH];
+  #else
+ extern const unsigned char PROGMEM font[CHAR_COUNT8][FONT_WIDTH];
+  #endif
+ #endif
+#endif

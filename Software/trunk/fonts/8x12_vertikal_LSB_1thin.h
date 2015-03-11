@@ -1450,6 +1450,6 @@ const unsigned char PROGMEM font[CHAR_COUNT12][(FONT_WIDTH * ((FONT_HEIGHT + 7)/
 };
 #else
  #ifndef __ASSEMBLER__
-extern const unsigned char PROGMEM font[CHAR_COUNT12][16];
+extern const unsigned char PROGMEM font[CHAR_COUNT12][(FONT_WIDTH * ((FONT_HEIGHT + 7)/8))];
  #endif                                    
 #endif                                    

@@ -93,7 +93,10 @@ void lcd_line4() {
 #endif
 }
 
-/* ******************************************************************************* */
+/* ************************************************************************************** */
+/* Set the character position to x,y , where x specifies the character number in a text line. */
+/* The y position is the page address (8 line units).                                     */
+/* For most controllers the y position must be increased by (Height + 7) / 8 for the next text line */
 void lcd_set_cursor(uint8_t y, uint8_t x) {
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
 //  unsigned char xx;
@@ -103,30 +106,9 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
     // For example the SPL501 controller has 132x65 dot matrix memory
     // LCD_ST7565_H_OFFSET specifies the offset of the 128 pixel of the display window.
    _xpos = (x * FONT_WIDTH);
-//   _page *= ((FONT_HEIGHT + 7) / 8);	// increment in steps of 8 pixel lines
    
-  /* The actual positioning is done in functions lcd_data and lcd_pgm_bitmap, */
-  /* so no positioning is requested here. */
-// #if (LCD_ST7565_V_FLIP == 1)
-//   lcd_command(CMD_SET_PAGE | (((SCREEN_HEIGHT / 8) - 1) - _page));
-// #else
-//   lcd_command(CMD_SET_PAGE | (0x0f & _page));
-// #endif
-// #if (LCD_ST7565_H_FLIP == 1)
-//   xx = (SCREEN_WIDTH - FONT_WIDTH) - _xpos + LCD_ST7565_H_OFFSET;
-// #else
-//   xx = _xpos + LCD_ST7565_H_OFFSET;
-// #endif
-// #if (LCD_ST_TYPE == 7108)
-//   lcd_command(CMD_SET_COLUMN_ADDR | (0x3f & xx ));
-// #else
-//   lcd_command(CMD_SET_COLUMN_UPPER | (0x0f & (xx >> 4)));
-//   lcd_command(CMD_SET_COLUMN_LOWER | (0x0f &  xx));
-// #endif
-//#endif
 #elif (LCD_ST_TYPE == 7920)
-   _page = y * 8; 		// _page is the vertical pixel address for ST7920 controller
-   _xpos = x * FONT_WIDTH;		//  LCD_ST7565_H_OFFSET is not used for the ST7920 controller
+   _page *=  8; 		// _page is the vertical pixel address for ST7920 controller
 #else
    // move to the specified position for character display
    if ((y & 0x01) != 0) {
@@ -141,31 +123,40 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
 // send a 24x32 icon to one quarter of the screen
 // the number temp1 is the icon-number  from 0 to 15
 // with offset  0 the icon is written to the right lower quarter of the screen
-// with offset 16 the icon is written to the left lower quarter of the screen
-// with offset 32 the icon is written to the right upper quarter of the screen
-// with offset 48 the icon is written to the left upper quarter of the screen
+// with offset 16, 0x10 the icon is written to the left lower quarter of the screen
+// with offset 32, 0x20 the icon is written to the right upper quarter of the screen
+// with offset 48, 0x30 the icon is written to the left upper quarter of the screen
 // to the left of the quarter are at least 8 pixels free
 // to the right of the quarter are 16 pixels free  (8+24+16 < (SCREEN_WIDTH/2)
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920))
 void lcd_big_icon(unsigned char temp1) {
- uint8_t *pfont;
+ uint8_t *pfont;	// pointer to the start of font data
  uint8_t pos_nr;
+ #define TP_WIDTH 8	/* specifies the width of the Test Port number */
+ #define DIODE_WIDTH 5    /* diode is 8 pixel width, but TP overlap the diode images with 3 pixels */
  pfont = (uint8_t *) bigfont[temp1 & 0x0f];	// first byte of character data
- pos_nr = (temp1/16) & 0x03;
- icon_xx = SCREEN_WIDTH - 32 - ICON_WIDTH;		// right side, (SCREEN_WIDTH/2 + 8) 
- if ((pos_nr & 0x01) != 0) icon_xx -= (SCREEN_WIDTH / 2); // left side
+ pos_nr = temp1 & 0x30;	// filter the position Information
+ icon_xx =  TP_WIDTH;		// left side 
+ if ((pos_nr & 0x10) == 0) icon_xx += (SCREEN_WIDTH / 2); // right side
  icon_yy = 0;
- if (pos_nr < 2) {
-   icon_yy = (SCREEN_HEIGHT / 2);
-   icon_xx +=  (SCREEN_WIDTH / 2)  - (ICON_WIDTH + 8 + 16); 	// shift lower icon position 8 pixel to the right
+ if (pos_nr < 0x20) {
+   icon_yy = (SCREEN_HEIGHT / 2);	// lower half of display
+   // shift lower icon position to the right
+   icon_xx +=  (SCREEN_WIDTH / 2)  - ICON_WIDTH - TP_WIDTH - TP_WIDTH - DIODE_WIDTH;
  }
 
- lcd_set_pixels( pfont, icon_xx, icon_yy, 0,
- ICON_WIDTH, ICON_HEIGHT);
+ lcd_set_pixels( pfont, icon_xx, icon_yy, 0, ICON_WIDTH, ICON_HEIGHT);	// write the pixel data of the Icon
 }
 
 /* ******************************************************************************* */
 // update a icon 
+// The left upper corner of the last loaded Icon is positioned to icon_xx, icon_yy
+// You can change parts of this Icon with a lcd_update_icon call.
+// The only parameter is a pointer to a array of bytes.
+// The first two bytes specify the location of the change bitmap relative to the upper left corner
+// (the start position) of the last loaded Icon ( call of lcd_big_icon(ICON_NUMBER);).
+// the next two bytes specify the width and height of the correction bitfield,
+// followed by the bitfield data.
 void lcd_update_icon(const unsigned char *ubitmap) {
  lcd_update_icon_opt(ubitmap, 0);	// call with no special option
 }
@@ -174,12 +165,12 @@ void lcd_update_icon_opt(const unsigned char *ubitmap, unsigned char options) {
  const unsigned char *pfont;
  uint8_t xx, yy;
  uint8_t ww, hh;
- pfont =  &ubitmap[4];
- xx = icon_xx + pgm_read_byte(&ubitmap[0]);
- yy = icon_yy + pgm_read_byte(&ubitmap[1]);
- ww =  pgm_read_byte(&ubitmap[2]);
- hh =  pgm_read_byte(&ubitmap[3]);
- lcd_set_pixels( pfont, xx, yy, options, ww, hh);
+ pfont =  &ubitmap[4];				// the bitfield data begin at position 4
+ xx = icon_xx + pgm_read_byte(&ubitmap[0]);	// first byte = offset x to left (upper) corner of the Icon
+ yy = icon_yy + pgm_read_byte(&ubitmap[1]);	// second byte = offset y to (left) upper corner of the Icon
+ ww =  pgm_read_byte(&ubitmap[2]);		// the width of the bitfield
+ hh =  pgm_read_byte(&ubitmap[3]);		// the height of the bitfield (must be multiple of 8 for ST7565)
+ lcd_set_pixels( pfont, xx, yy, options, ww, hh);	// update the icon at the specified position with specified size
 }
 #endif
 
@@ -193,11 +184,12 @@ void lcd_data(unsigned char temp1) {
  uint8_t *pfont;
  pfont = (uint8_t *)font + (FONT_WIDTH * NR_BYTE * temp1);	// first byte of character data
 #if (LCD_ST_TYPE == 7920)
- lcd_set_pixels( pfont, _xpos, _page, 0,
+ // for ST7920 the _page position is a pixel line.
+ lcd_set_pixels( pfont, _xpos, _page, 0, (unsigned char)FONT_WIDTH, (unsigned char)(NR_BYTE*8));
 #else
- lcd_set_pixels( pfont, _xpos, _page*8, 0,
+ // for other controllers like ST7565 the _page specifies the page of the controller (8 lines)
+ lcd_set_pixels( pfont, _xpos, _page*8, 0, (unsigned char)FONT_WIDTH, (unsigned char)(NR_BYTE*8));
 #endif
- (unsigned char)FONT_WIDTH, (unsigned char)(NR_BYTE*8));
 _xpos += FONT_WIDTH;		// move pointer to the next character position
 #else
  lcd_write_data(temp1);		// set RS to 1
@@ -229,7 +221,6 @@ _xpos += FONT_WIDTH;		// move pointer to the next character position
     	uart_putc('u');		// better use the ASCII u
     	break;
     case LCD_CHAR_OMEGA:	//Omega
-//	uart_putc(0xea);	// only codepage 437 has Omega
         uart_putc('O');
         uart_putc('h');
         uart_putc('m');
@@ -254,6 +245,7 @@ void lcd_command(unsigned char temp1) {
 /* ******************************************************************************* */
 // Initialise: 
 // Must be called first .
+// every controller has its own initialize sequence!
  
 /* -------------------------------------------------------------------------- */
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
@@ -282,16 +274,8 @@ void lcd_init(void) {
    lcd_command(CMD_DISPLAY_OFF);		// display off
    lcd_command(CMD_INTERNAL_RESET);		// 0xe2
    lcd_command(CMD_SET_BIAS_9);			// 0xa3
-// #if (LCD_ST7565_H_FLIP > 0)
-//   lcd_command(CMD_SET_ADC_REVERSE);		// 0xa1
-// #else
    lcd_command(CMD_SET_ADC_NORMAL);		// 0xa0
-// #endif
-// #if (LCD_ST7565_V_FLIP > 0)
-//   lcd_command(CMD_SET_COM_REVERSE);		// 0xc8
-// #else
    lcd_command(CMD_SET_COM_NORMAL);		// 0xc0
-// #endif
 
  #if (LCD_ST_TYPE == 7565)
    //Booster on, Voltage regulator/follower circuit on
@@ -471,9 +455,9 @@ void lcd_clear(void) {
    _lcd_hw_select(3);				// select both controllers
    for (p = 0; p < 8; p++) {
      lcd_command(CMD_SET_COLUMN_ADDR);		// set horizontal position to 0
-     lcd_command(CMD_SET_PAGE | (0x0f & p));	// set page 0 to 7
+     lcd_command(CMD_SET_PAGE | (0x07 & p));	// set page 0 to 7, vertical position = p*8
      for (count = 0; count < 64; count++)
-       lcd_write_data(0);
+       lcd_write_data(0);			// clear 64 row in each controller (128 row total)
    }
 
 #elif (LCD_ST_TYPE == 7920)
@@ -482,7 +466,7 @@ void lcd_clear(void) {
 
    for (count = 0; count < SCREEN_HEIGHT; count++) {
      for (p = 0; p < (SCREEN_WIDTH / 8); p++) {
-       lcd_bit_mem[count][p] = 0;
+       lcd_bit_mem[count][p] = 0;		// clea bits in image data
      }
    }
 #else
@@ -585,6 +569,9 @@ unsigned char reverse_byte(unsigned char b)
 
 /* ******************************************************************************* */
 /* Function lcd_pgm_bitmap                                                         */
+/* The first parameter pbitmap is a pointer to a array of bytes in the program memory */
+/* the first two bytes in pbitmap specifies the size (width + height) of the bitfield */
+/* the following data are written to the display to position x,y with options */
 /* ******************************************************************************* */
 #ifdef WITH_GRAPHICS
 void lcd_pgm_bitmap(const unsigned char * pbitmap,
@@ -592,11 +579,21 @@ void lcd_pgm_bitmap(const unsigned char * pbitmap,
                     unsigned char y,
                     unsigned char options)
 {
- lcd_set_pixels( (const unsigned char *)(pbitmap+2), x, y, options,
- (unsigned char)pgm_read_byte(&pbitmap[0]), (unsigned char)pgm_read_byte(&pbitmap[1]));
+ uint8_t dx;	// width
+ uint8_t dy;	// height
+ dx = (unsigned char)pgm_read_byte(&pbitmap[0]);	// width of the bitmap
+ dy = (unsigned char)pgm_read_byte(&pbitmap[1]);	// height of the bitmap
+ lcd_set_pixels( (const unsigned char *)(pbitmap+2), x, y, options, dx, dy);
 }
+
 /* ******************************************************************************* */
 /* Function lcd_set pixels                                                         */
+/* pdata is a pointer to the byte array in the program memory holding the pixel data. */
+/* x,y specifies the target position of this data at the display.                  */
+/* The parameter options can specify a inverted position in x or/and y direction.  */
+/* width and height specifies the dimension of the pixel field.                    */
+/* The different controller types uses different ways of loading the pixels.       */
+/* For the ST7920 controller the changes are only made in a memory field (RAM).    */
 /* ******************************************************************************* */
 void lcd_set_pixels(const unsigned char *pdata, unsigned char x, unsigned char y,
 unsigned char options, unsigned char width, unsigned char height) {
@@ -606,11 +603,9 @@ unsigned char options, unsigned char width, unsigned char height) {
       return;
 
    unsigned char offset;
-//   unsigned char width;
    unsigned char page;
    unsigned char pagemax;
    unsigned char xx;
-//   const unsigned char *pdata;
 
    page = y >> 3;		// page of screen has 8 pixel lines each
    pagemax = (y + height - 1) >> 3;
@@ -720,8 +715,6 @@ unsigned char options, unsigned char width, unsigned char height) {
   #else
        ymem = y + ii;
   #endif
-//       if ((((pgm_read_byte(pdata + jj + (hh*width)) & hmsk) == 0) && ((options & OPT_CINVERSE) == 0)) ||
-//           (((pgm_read_byte(pdata + jj + (hh*width)) & hmsk) != 0) && ((options & OPT_CINVERSE) != 0))) {
        if ((pgm_read_byte(pdata + jj + (hh*width)) & hmsk) == 0) {
          // clear bit in the pixel image
   #if (LCD_ST7565_H_FLIP > 0)
@@ -746,6 +739,7 @@ unsigned char options, unsigned char width, unsigned char height) {
 /* ******************************************************************************* */
 #if (LCD_ST_TYPE == 7920)
 /* lcd_refresh writes the pixel image data to the ST7920 controller GDRAM */
+/* usually the refresh is done after the display data are finished before waiting */
 void lcd_refresh(void) {
   unsigned char xx;
   unsigned char yy;

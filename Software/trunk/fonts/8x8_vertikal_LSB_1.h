@@ -272,6 +272,6 @@ const unsigned char PROGMEM font[CHAR_COUNT8][FONT_WIDTH]={
 };
 #else
  #ifndef __ASSEMBLER__
-extern const unsigned char PROGMEM font[CHAR_COUNT8][8];
+extern const unsigned char PROGMEM font[CHAR_COUNT8][FONT_WIDTH];
  #endif
 #endif

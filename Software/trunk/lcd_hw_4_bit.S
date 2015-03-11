@@ -435,11 +435,13 @@ _lcd_hw_write:
         set_rs_output		; if RS is set to same as B0, RS is allready output
 	sbrc    preg_1, 0
 	set_rs_high		; data mode
+	RCALL	wait1us		; hold the setup time of RS
 
 	set_en_high
 	RCALL	wait1us
 	set_en_low
-	RCALL	wait30us	; at least 30 us delay
+;	RCALL	wait30us	; at least 30 us delay
+	RCALL	wait10us	; at least 10 us delay
 	ret
 	.endfunc
 

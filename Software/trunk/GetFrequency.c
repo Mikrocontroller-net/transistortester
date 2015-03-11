@@ -107,7 +107,7 @@ void GetFrequency(uint8_t range) {
  #if PROCESSOR_TYP == 644
      freq_count = ext_freq.dw;	// save the frequency counter
  #endif
- #ifdef FOUR_LINE_LCD
+ #if (LCD_LINES > 3)
      lcd_line2();
      lcd_clear_line();
      lcd_line3();
@@ -180,7 +180,7 @@ void GetFrequency(uint8_t range) {
 //        lcd_line2();
 //        lcd_clear_line();
 //        wait50ms();		// let LCD flicker to 
- #ifdef FOUR_LINE_LCD
+ #if (LCD_LINES > 3)
         lcd_line3();		// use line3 to report the period with 4-line LCD
  #else
         lcd_line2();		// report period on line 2 of 2-line LCD
@@ -204,7 +204,7 @@ void GetFrequency(uint8_t range) {
            lcd_data('?');		// wait loop has regular finished
         } else {
            if (ext_period > 249500) {
- #ifdef FOUR_LINE_LCD
+ #if (LCD_LINES > 3)
               lcd_line4();		// use line 4 of 4-line LCD to report the computed frequency
  #else
               lcd_line1();		// overwrite line 1 of 2-line LCD to report the computed frequency

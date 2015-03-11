@@ -119,6 +119,7 @@ LCD_ST7565_RESISTOR_RATIO = 4
 #CFLAGS += -DFONT_8X8
 CFLAGS += -DFONT_7X12
 #CFLAGS += -DFONT_8X12thin
+#CFLAGS += -DFONT_8X12
 #CFLAGS += -DFONT_8X14
 #CFLAGS += -DFONT_8x15
 #CFLAGS += -DFONT_8X16
@@ -128,13 +129,13 @@ CFLAGS += -DFONT_7X12
 # you can select a special type with setting the ICON_TYPE.
 # Currently you can select 1 or 3 for one of two thin layouts for the icons.
 # You can also select two thick layouts for the icons by setting the ICON_TYPE to 2 or 0 (0=old style).
-CFLAGS += -DICON_TYPE=3
+CFLAGS += -DICON_TYPE=2
 
 # option BIG_TP makes the 123 for the test pins (beside the icon) bigger
-CFLAGS += -DBIG_TP
+#CFLAGS += -DBIG_TP
 # option INVERSE_TP inverse the 123 for the test pins (black on white)
 # the option INVERSE_TP disable the option BIG_TP because a frame is required
-#CFLAGS += -DINVERSE_TP
+CFLAGS += -DINVERSE_TP
 
 # Option STRIP_GRID_BOARD selects different board-layout, do not set for standard board!
 # The connection of LCD is totally different for both versions.

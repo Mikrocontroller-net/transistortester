@@ -24,7 +24,7 @@
        }
        if ((line_nr & 3) == 0) lcd_clear();  // clear display, line_nr is 0 or 4
        if (line_nr == 1) lcd_line2(); // write to the second LCD line
-#ifdef FOUR_LINE_LCD
+#if (LCD_LINES > 3)
        if (line_nr == 2) lcd_line3(); // write to the third LCD line
        if (line_nr == 3) lcd_line4(); // write to the fourth LCD line
        line_nr = (line_nr + 1) & 3;

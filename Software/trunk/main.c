@@ -639,7 +639,7 @@ start:
 //       _trans = &ntrans;  is allready selected a default
 #ifdef WITH_GRAPHICS
        lcd_big_icon(BJT_NPN);		// show the NPN Icon
-       lcd_draw_trans_pins(-7, 16);	// show the pin numbers
+//       lcd_draw_trans_pins(-7, 16);	// show the pin numbers
 #endif
     } else {
        lcd_MEM_string(PNP_str);		//"PNP "
@@ -650,7 +650,7 @@ start:
 #ifdef WITH_GRAPHICS
        lcd_big_icon(BJT_NPN);		// show the NPN Icon
        lcd_update_icon(bmp_pnp);	// update for PNP
-       lcd_draw_trans_pins(-7, 16);	// show the pin numbers
+//       lcd_draw_trans_pins(-7, 16);	// show the pin numbers
 #endif
     }
     lcd_space();
@@ -685,14 +685,18 @@ start:
 #endif    /* !WITH_GRAPHICS */
     } /* end for ii */
 
+#ifdef WITH_GRAPHICS
+    lcd_draw_trans_pins(-7, 16);	// show the pin numbers
+#else
     PinLayout('E','B','C'); 		//  EBC= or 123=...
+#endif
     lcd_line2(); //2. row 
 #if (LCD_LINE_LENGTH > 18)
  #define SIGNIFICANT_IC 3
 #else
  #define SIGNIFICANT_IC 2
 #endif
-#ifndef FOUR_LINE_LCD
+#if (LCD_LINES < 4)
  #ifdef SHOW_ICE
     if (_trans->ice0 > 0) {
        lcd_MEM2_string(ICE0_str);		// "ICE0="
@@ -712,7 +716,7 @@ start:
 
     lcd_MEM_string(Uf_str);		//"Uf="
     DisplayValue(_trans->uBE,-3,'V',3);
-#ifdef FOUR_LINE_LCD
+#if (LCD_LINES > 3)
  #ifdef SHOW_ICE
     if (_trans->ice0 > 0) {
        lcd_line3(); //3. row 
@@ -744,17 +748,14 @@ start:
     if (tmp == PART_MODE_JFET) {
        lcd_MEM_string(jfet_str);	//"JFET"
 #ifdef WITH_GRAPHICS
-//     lcd_draw_jfet(fetidx, 96, 32);
-//       lcd_pgm_bitmap(bmp_n_jfet_data, 96, 32, 0);
        lcd_big_icon(N_JFET);
        if (fetidx != 0) {
           // update the n_jfet bitmat at relative location 6, 16
-//          lcd_pgm_bitmap(bmp_p_jfet_data, 96+6, 32+16, 0);
           lcd_update_icon(bmp_p_jfet);
        }
-       lcd_draw_trans_pins(-7, 16);
+//       lcd_draw_trans_pins(-7, 16);
 #endif
-    } else {
+    } else {		// no JFET
        if ((PartMode&D_MODE) == D_MODE) {
           lcd_data('D');			// N-D or P-D
           fetidx += 2;
@@ -764,25 +765,23 @@ start:
        if (tmp == (PART_MODE_IGBT)) {
           lcd_MEM_string(igbt_str);	//"-IGBT"
 #ifdef WITH_GRAPHICS
-//          lcd_draw_igbt(fetidx);
           lcd_big_icon(N_E_IGBT);
           if (fetidx == 1)  lcd_update_icon(bmp_p_e_igbt);
           if (fetidx == 2)  lcd_update_icon(bmp_n_d_igbt);
           if (fetidx == 3)  lcd_update_icon(bmp_p_d_igbt);
-          lcd_draw_trans_pins(-7, 16);
+//          lcd_draw_trans_pins(-7, 16);
 #endif
        } else {
           lcd_MEM_string(mosfet_str);	//"-MOS "
 #ifdef WITH_GRAPHICS
-//          lcd_draw_mosfet(fetidx);
           lcd_big_icon(N_E_MOS);
           if (fetidx == 1)  lcd_update_icon(bmp_p_e_mos);
           if (fetidx == 2)  lcd_update_icon(bmp_n_d_mos);
           if (fetidx == 3)  lcd_update_icon(bmp_p_d_mos);
-          lcd_draw_trans_pins(-7, 16);
+//          lcd_draw_trans_pins(-7, 16);
 #endif
        }
-    }
+    } /* end PART_MODE_JFET */
     if (tmp == PART_MODE_IGBT) {
        PinLayout('E','G','C'); 		//  SGD= or 123=...
     } else {
@@ -814,7 +813,7 @@ start:
 #endif
 
 #ifndef WITH_GRAPHICS
- #ifndef FOUR_LINE_LCD
+ #if (LCD_LINES < 4)
   #if FLASHEND > 0x1fff
        // there is enough space for long form of showing protection diode
        lcd_line2();			//2. Row
@@ -833,7 +832,7 @@ start:
        wait_for_key_5s_line2();		// wait 5s and clear line 2
   #endif
  #endif
-#endif
+#endif  /* not WITH_GRAPHICS */
     } /* end if NumOfDiodes == 1 */
     lcd_line2();			//2. Row
     if((PartMode&D_MODE) != D_MODE) {	//enhancement-MOSFET
@@ -850,7 +849,7 @@ start:
     }
     //Gate-threshold voltage
     DisplayValue(_trans->gthvoltage,-3,'V',2);
-#ifdef FOUR_LINE_LCD
+#if (LCD_LINES > 3)
  #if FLASHEND > 0x1fff
        // there is enough space for long form of showing protection diode
     if(NumOfDiodes == 1) {
@@ -858,7 +857,6 @@ start:
        options = 0;
        if (_trans->c != diodes.Anode[0])
           options |= OPT_VREVERSE;
-//       lcd_pgm_bitmap(bmp_vakdiode_data, 112, 32, options);
        lcd_update_icon_opt(bmp_vakdiode,options);
   #endif
        lcd_line3();			//3. Row
@@ -876,6 +874,9 @@ start:
        mVAusgabe(0);
     }
  #endif
+#endif
+#ifdef WITH_GRAPHICS
+     lcd_draw_trans_pins(-7, 16);
 #endif
     goto end;
     // end (PartFound == PART_FET)
@@ -918,7 +919,7 @@ resistor_out:
        lcd_MEM_string(Resistor_str);    // -[=]-
        lcd_data(z);
     }
-#ifdef FOUR_LINE_LCD
+#if (LCD_LINES > 3)
     if(PartFound == PART_DIODE) {
        lcd_line4(); //4. row 
     } else {
@@ -1076,7 +1077,7 @@ end3:
   if (ResistorsFound == 0) goto end;
   ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
   // there is one resistor or more detected
-#ifdef FOUR_LINE_LCD
+#if (LCD_LINES > 3)
   ADC_DDR =  TXD_MSK; 	// switch pin with reference to input, activate relay
   lcd_line3();
 #else

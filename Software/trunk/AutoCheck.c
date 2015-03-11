@@ -216,7 +216,8 @@ for(ww=0;ww<MAX_REP;ww++) {	// repeat the test MAX_REP times
       break; // if key is pressed, don't repeat
    }
 } //end for ww
-wait_about1s();
+//wait_about1s();
+wait_for_key_ms(1000);	// wait up to 1 second or key is pressed
 } //end for tt
   #if PROCESSOR_TYP == 1280
 lcd_clear();

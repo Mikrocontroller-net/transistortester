@@ -13,7 +13,7 @@ show_page_1:
   DisplayValue(eeprom_read_byte(&EE_ESR_ZEROtab[2]),-2,' ',3);
   DisplayValue(eeprom_read_byte(&EE_ESR_ZEROtab[3]),-2,' ',3);
   DisplayValue(eeprom_read_byte(&EE_ESR_ZEROtab[1]),-2,LCD_CHAR_OMEGA,3);
-#ifdef FOUR_LINE_LCD
+#if (LCD_LINES > 3)
   lcd_line3();
 #else
   wait_for_key_ms(MIDDLE_WAIT_TIME);
@@ -27,7 +27,7 @@ show_page_2:
   /* output line 3 */
   lcd_MEM_string(RIHI); // "RiHi="
   DisplayValue(RRpinPL,-1,LCD_CHAR_OMEGA,3);
-#ifdef FOUR_LINE_LCD
+#if (LCD_LINES > 3)
   lcd_line4();
 #else
   lcd_line2();
@@ -39,7 +39,7 @@ show_page_2:
   wait_for_key_ms(MIDDLE_WAIT_TIME);
 #ifdef WITH_ROTARY_SWITCH
   if (rotary.incre > FAST_ROTATION) return;	// fast rotation ends the function
- #ifdef FOUR_LINE_LCD
+#if (LCD_LINES > 3)
   if (rotary.count < 0) goto show_page_1;
  #else
   if (rotary.count < -1) goto show_page_1;
@@ -59,7 +59,7 @@ show_page_3:
   DisplayValue(eeprom_read_byte(&c_zero_tab[1]),0,' ',3);		//output cap0 3:1
   DisplayValue(eeprom_read_byte(&c_zero_tab[4]),0,' ',3);		//output cap0 3:2
   DisplayValue(eeprom_read_byte(&c_zero_tab[0]),-12,'F',3);		//output cap0 2:1
-#ifdef FOUR_LINE_LCD
+#if (LCD_LINES > 3)
   lcd_line3();
 #else
   wait_for_key_ms(MIDDLE_WAIT_TIME);
@@ -75,7 +75,7 @@ show_page_4:
   /* output line 7 */
   lcd_MEM2_string(REF_C_str);	// "REF_C="
   i2lcd((int16_t)eeprom_read_word((uint16_t *)(&ref_offset)));
-#ifdef FOUR_LINE_LCD
+#if (LCD_LINES > 3)
   lcd_line4();
 #else
   lcd_line2();
@@ -86,7 +86,7 @@ show_page_4:
   wait_for_key_ms(MIDDLE_WAIT_TIME);
 #ifdef WITH_ROTARY_SWITCH
   if (rotary.incre > FAST_ROTATION) return;	// fast rotation ends the function
- #ifdef FOUR_LINE_LCD
+ #if (LCD_LINES > 3)
   if (rotary.count < -1) goto show_page_1;
   if (rotary.count < 0) goto show_page_3;
  #else

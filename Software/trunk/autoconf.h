@@ -7,14 +7,15 @@
 /* Define under which conditions a graphical display is supported. */
 /* The graphical display should at least support 128x64 pixels. */
  #define WITH_GRAPHICS
- #undef FOUR_LINE_LCD
- #define FOUR_LINE_LCD
- #ifdef FONT_6X8
-  #define TWENTY_COLUMN_LCD
- #endif
+ #define LCD_LINES ((SCREEN_HEIGHT/8) / ((FONT_HEIGHT + 7) / 8))
+ #undef LCD_LINE_LENGTH
+ #define LCD_LINE_LENGTH (SCREEN_WIDTH / FONT_WIDTH)
 #else  /* no ST7565 or SSD1306 graphic controller */
  #ifdef FOUR_LINE_LCD
-  #define TWENTY_COLUMN_LCD   /* usually 20x4 character display */
+  #define LCD_LINES 4
+  #ifndef LCD_LINE_LENGTH
+   #define LCD_LINE_LENGTH 20	/* usually a 20 character line */
+  #endif
  #endif
 #endif
 #ifndef LCD_ST7565_H_OFFSET
@@ -22,11 +23,21 @@
 #endif
 
 #ifndef LCD_LINE_LENGTH
+ // if line length is not specified otherwise, use 16 characters
  #define LCD_LINE_LENGTH 16
 #endif
 
 #if (LCD_ST_TYPE != 7920)
 #define lcd_refresh() 
+#endif
+#if (LCD_LINES < 2)
+ #warning LCD_LINES is not correctly set!
+ #if (SCREEN_HEIGHT < 32)
+  #warning SCREEN_HEIGHT is not correctly set!
+ #endif
+ #if (FONT_HEIGHT < 8)
+  #warning FONT_HEIGHT is not correctly set!
+ #endif
 #endif
 
 /* configure WITH_VEXT, TPext and TPex2  */

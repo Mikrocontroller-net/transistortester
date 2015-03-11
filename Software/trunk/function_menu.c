@@ -110,7 +110,7 @@ void function_menu() {
   {
      if (func_number > MODE_LAST) func_number -= (MODE_LAST + 1);
      message_key_released(SELECTION_str);
-#ifdef FOUR_LINE_LCD
+#if (LCD_LINES > 3)
  #ifdef PAGE_MODE
      ff = 0;
      if (func_number == page_nr) ff = 1;	// number is found
@@ -188,12 +188,12 @@ void function_menu() {
      lcd_space();				// put a blank to 1. row of line 4
      message2line(func_number + 1);		// show higher (next) function
  #endif         /* PAGE_MODE */
-#else	/* no FOUR_LINE_LCD */
+#else	/* not LCD_LINES > 3 */
      lcd_line2();
      lcd_clear_line();				// clear line 2
      lcd_line2();				// reset cursor to begin of line 2
      message2line(func_number);
-#endif /* FOUR_LINE_LCD */
+#endif /* (LCD_LINES > 3) */
 #ifdef POWER_OFF
      ii = wait_for_key_ms(SHORT_WAIT_TIME);	// wait about 5 seconds
      if (ii > 0) ll = 0;			// reset timer, operator present
@@ -481,7 +481,7 @@ void make_frequency() {
        // new frequency is selected
        if (freq_nr > MAX_FREQ_NR) freq_nr -= (MAX_FREQ_NR + 1);
        old_freq = freq_nr;	// update the last active frequency number
-#ifdef FOUR_LINE_LCD
+#if (LCD_LINES > 3)
        lcd_line2();
        lcd_clear_line();	// clear line 2 for previous frequency
        lcd_line2();

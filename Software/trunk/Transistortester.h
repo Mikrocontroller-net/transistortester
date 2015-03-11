@@ -609,13 +609,18 @@ End of configuration
  const unsigned char jfet_str[] MEM_TEXT = "JFET";
  const unsigned char igbt_str[] MEM_TEXT = "-IGBT";
  const unsigned char GateCap_str[] MEM_TEXT = "C=";
-#ifdef TWENTY_COLUMN_LCD
+#if (LCD_CHAR_PER_LINE > 19)
  const unsigned char hfe_str[] MEM_TEXT ="hFE=";
 #else
  const unsigned char hfe_str[] MEM_TEXT ="B=";
 #endif
+#ifdef WITH_GRAPHICS
+ const unsigned char NPN_str[] MEM_TEXT = "BJT-NPN";
+ const unsigned char PNP_str[] MEM_TEXT = "BJT-PNP";
+#else
  const unsigned char NPN_str[] MEM_TEXT = "NPN";
  const unsigned char PNP_str[] MEM_TEXT = "PNP";
+#endif
 
 #ifndef EBC_STYLE
  // default is the 123= style

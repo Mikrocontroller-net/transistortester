@@ -608,12 +608,14 @@ End of configuration
  const unsigned char mosfet_str[] MEM_TEXT = "-MOS";
  const unsigned char jfet_str[] MEM_TEXT = "JFET";
  const unsigned char igbt_str[] MEM_TEXT = "-IGBT";
- const unsigned char GateCap_str[] MEM_TEXT = "C=";
-#if (LCD_CHAR_PER_LINE > 19)
+#if ((LCD_CHAR_PER_LINE > 19) || defined(WITH_GRAPHICS))
  const unsigned char hfe_str[] MEM_TEXT ="hFE=";
+ const unsigned char GateCap_str[] MEM_TEXT = "Cg=";
 #else
  const unsigned char hfe_str[] MEM_TEXT ="B=";
+ const unsigned char GateCap_str[] MEM_TEXT = "C";
 #endif
+ const unsigned char Cap_str[] MEM_TEXT = "C";
 #ifdef WITH_GRAPHICS
  const unsigned char NPN_str[] MEM_TEXT = "BJT-NPN";
  const unsigned char PNP_str[] MEM_TEXT = "BJT-PNP";
@@ -635,6 +637,9 @@ End of configuration
  #endif
 #endif
 
+#ifdef WITH_GRAPHICS
+ const unsigned char Ube_str[] MEM_TEXT = "Ube=";
+#endif
  const unsigned char Uf_str[] MEM_TEXT = "Uf=";
  const unsigned char vt_str[] MEM_TEXT = " Vt=";
  const unsigned char Vgs_str[] MEM_TEXT = "@Vg=";
@@ -1311,6 +1316,9 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   #endif
  #endif
   extern const unsigned char Uf_str[] MEM_TEXT;
+#ifdef WITH_GRAPHICS
+  extern const unsigned char Ube_str[] MEM_TEXT;
+#endif
   extern const uint8_t EE_ESR_ZEROtab[] EEMEM;	// zero offset of ESR measurement
   extern  const uint16_t RLtab[];
 

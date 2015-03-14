@@ -535,6 +535,7 @@ _lcd_hw_write_exit:
 ;      preg_1 (r24) = bit 0 for CS1 and bit 1 for CS2
 ;
 _lcd_hw_select:
+#ifdef ST_CS_LOW   /* inverted CS level, 0 = enable */
 	sbrc    preg_1, 0
 	  set_cs1_low		; enable controller 1
 	sbrs    preg_1, 0
@@ -543,6 +544,16 @@ _lcd_hw_select:
 	  set_cs2_low		; enable controller 2
 	sbrs    preg_1, 1
 	  set_cs2_high		; disable controller 2
+#else	/* not inverted CS level, 1 = enable */
+	sbrc    preg_1, 0
+	  set_cs1_high		; enable controller 1
+	sbrs    preg_1, 0
+	  set_cs1_low		; disable controller 1
+	sbrc    preg_1, 1
+	  set_cs2_high		; enable controller 2
+	sbrs    preg_1, 1
+	  set_cs2_low		; disable controller 2
+#endif
 	set_cs1_output		; enable output CS1
 	set_cs2_output		; enable output CS2
 	ret

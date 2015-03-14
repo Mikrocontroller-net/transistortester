@@ -95,6 +95,7 @@ int main(int argc, char *argv[])
           comment_out = 0;
           fprintf(stdout,"*/ ");
        }
+#if 0
        fprintf(stdout,"}");
        sscanf(&comment[3],"%x",&line);
        if (line != 255) {
@@ -104,6 +105,7 @@ int main(int argc, char *argv[])
        }
        fprintf(stdout,"  /* x=%d, y=%d, w=%d, h=%d */\r\n", kk_min, ll_min, kk_max-kk_min+1, ll_max-ll_min+8);
        fprintf(stdout,"\t%s\r\n",comment);
+#endif
        height = 0;
     } /* end if ((height > 5) && (beg_end != 0)) */
  } /* end while */

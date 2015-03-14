@@ -29,6 +29,7 @@ void lcd_line2(void);
 void lcd_line3(void);
 void lcd_line4(void);
 unsigned char reverse_byte(unsigned char);
+void lcd_show_Cg(void);		// show Cg=xxxpF
 #ifdef WITH_GRAPHICS
 // Graphics display only: Some drawing functions for graphics LCD
 void lcd_pgm_bitmap(const unsigned char * pbitmap,

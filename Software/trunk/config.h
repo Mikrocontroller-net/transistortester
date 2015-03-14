@@ -778,7 +778,7 @@
 
 // SHORT_WAIT_TIME is the time for displaying a unknown component message
 #ifndef SHORT_WAIT_TIME
-#define SHORT_WAIT_TIME 5000
+#define SHORT_WAIT_TIME 8000
 #endif
 
 //**********************************************************

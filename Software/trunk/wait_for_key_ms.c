@@ -231,8 +231,10 @@ void check_rotary(void) {
 /* set the cursor to the beginning of line 2 */
 /* *********************************************************** */
 void wait_for_key_5s_line2(void) {
- #ifdef WITH_ROTARY_SWITCH
+  // add a + sign at the last location of screen
+  lcd_set_cursor(((LCD_LINES - 1) * ((FONT_HEIGHT + 7) / 8)), (LCD_LINE_LENGTH - 1));
   lcd_data('+');
+ #ifdef WITH_ROTARY_SWITCH
   do {
      if (wait_for_key_ms(SHORT_WAIT_TIME) > 0) break;
      // continue waiting, if the key is not pressed, but rotary switch is rotated

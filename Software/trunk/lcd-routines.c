@@ -735,6 +735,19 @@ unsigned char options, unsigned char width, unsigned char height) {
  #endif
 }
 #endif
+/* ******************************************************************************* */
+void lcd_show_Cg(void) {
+       lcd_MEM_string(GateCap_str);             //"Cg="
+#if FLASHEND > 0x1fff
+       if (cap.cpre < -3) {
+          DisplayValue(cap.cval,cap.cpre,'F',3);
+       } else {
+          lcd_data('?');
+       }
+#else
+       DisplayValue(cap.cval,cap.cpre,'F',3);
+#endif
+}
 
 /* ******************************************************************************* */
 #if (LCD_ST_TYPE == 7920)

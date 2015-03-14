@@ -637,9 +637,7 @@ End of configuration
  #endif
 #endif
 
-#ifdef WITH_GRAPHICS
  const unsigned char Ube_str[] MEM_TEXT = "Ube=";
-#endif
  const unsigned char Uf_str[] MEM_TEXT = "Uf=";
  const unsigned char vt_str[] MEM_TEXT = " Vt=";
  const unsigned char Vgs_str[] MEM_TEXT = "@Vg=";
@@ -1336,6 +1334,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  extern const unsigned char KatAn[] MEM_TEXT ;
  extern const unsigned char Resistor_str[] MEM_TEXT ;
  extern const unsigned char CapZeich[] MEM_TEXT ;
+ extern const unsigned char GateCap_str[] MEM_TEXT;
 
 
  #ifdef AUTO_RH

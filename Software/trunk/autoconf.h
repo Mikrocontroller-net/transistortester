@@ -22,7 +22,11 @@
    #define LCD_LINE_LENGTH 16
  #endif
  #define TEXT_RIGHT_TO_ICON 0
-#endif
+ #ifndef FONT_HEIGHT
+  #define FONT_HEIGHT 8
+ #endif
+#endif	/* end LCD_ST_TYPE == */
+
 #ifndef LCD_ST7565_H_OFFSET
  #define LCD_ST7565_H_OFFSET 0	/* default horizontal offset of the display window */
 #endif

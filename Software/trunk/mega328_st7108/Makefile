@@ -83,8 +83,12 @@ CFLAGS += -DFOUR_LINE_LCD
 # The normal ST7565 controller will be supported by setting the WITH_LCD_ST7565 to 1 or 7565.
 # The special action for a simular SSD1306 controller can be activated by
 # setting the WITH_LCD_ST7565 variable to 1306.
+# You can also select the ST7108 controller with a serial to parallel chip like 74HC(T)164 or
+# 74HC(T)595. For the ST7108 module you should also check the CS1 and CS2 polarity.
+# You must set the ST_CS_LOW option, if your ST7108 module need a low level CS1 and CS2.
 WITH_LCD_ST7565 = 7108
-#WITH_LCD_ST7565 = 1306
+
+CFLAGS += -DST_CS_LOW
 
 # Normally the ST7565 controller is connected with a SPI 4-wire interface, but
 # you can enable a I2C interface with address 0x3c for the SSD1306 controller 

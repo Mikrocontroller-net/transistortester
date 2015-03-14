@@ -751,7 +751,6 @@
        wait_for_key_5s_line2();		// wait 5s and clear line 2
        lcd_MEM2_string(ICE0_str);		// "ICE0="
        DisplayValue(_trans->ice0,-6,'A',3);
-       wait_for_key_5s_line2();		// wait 5s and clear line 2
     }
     if (_trans->ices > 0) {
        wait_for_key_5s_line2();		// wait 5s and clear line 2

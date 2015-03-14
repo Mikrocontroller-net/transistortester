@@ -23,7 +23,14 @@ void GetIr(uint8_t hipin, uint8_t lopin) {
 #endif
   u_res = W5msReadADC(lopin);		// read voltage
   if (u_res == 0) return;		// no Output, if no current in reverse direction
+#if (LCD_LINES > 3)
+ #define IR_DIGITS 3
+  lcd_line4();				// use Line 4 for Ir output
+  lcd_MEM_string(Ir_str);		// output text "Ir="
+#else
+ #define IR_DIGITS 2
   lcd_MEM_string(Ir_str);		// output text "  Ir="
+#endif
 #ifdef WITH_IRMICRO
   unsigned int ir_micro;
   if (u_res < 2500) {
@@ -38,7 +45,7 @@ void GetIr(uint8_t hipin, uint8_t lopin) {
      ir_nano = 0xffff;			// set to max
      /* RR680MI has units of 0.1 Ohm, u_res has units of mV, ir_micro has units of uA */
      ir_micro = (unsigned long)(u_res * 10000UL) / RR680MI;
-     DisplayValue(ir_micro,-6,'A',2);	// output two digits of current in uA units
+     DisplayValue(ir_micro,-6,'A',IR_DIGITS);	// output 2 or 3 digits of current in uA units
   }
 #endif
   ADC_DDR = TXD_MSK;			// switch off

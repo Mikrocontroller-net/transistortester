@@ -608,14 +608,14 @@ End of configuration
  const unsigned char mosfet_str[] MEM_TEXT = "-MOS";
  const unsigned char jfet_str[] MEM_TEXT = "JFET";
  const unsigned char igbt_str[] MEM_TEXT = "-IGBT";
-#if ((LCD_CHAR_PER_LINE > 19) || defined(WITH_GRAPHICS))
+#if ((LCD_LINE_LENGTH > 19) || defined(WITH_GRAPHICS))
  const unsigned char hfe_str[] MEM_TEXT ="hFE=";
  const unsigned char GateCap_str[] MEM_TEXT = "Cg=";
 #else
  const unsigned char hfe_str[] MEM_TEXT ="B=";
- const unsigned char GateCap_str[] MEM_TEXT = "C";
+ const unsigned char GateCap_str[] MEM_TEXT = "C=";
 #endif
- const unsigned char Cap_str[] MEM_TEXT = "C";
+ const unsigned char Cap_str[] MEM_TEXT = "C=";
 #ifdef WITH_GRAPHICS
  const unsigned char NPN_str[] MEM_TEXT = "BJT-NPN";
  const unsigned char PNP_str[] MEM_TEXT = "BJT-PNP";
@@ -651,7 +651,11 @@ End of configuration
  const unsigned char ESR_str[] MEM_TEXT = " ESR=";
  const unsigned char VLOSS_str[] MEM_TEXT = " Vloss=";
  const unsigned char Lis_str[] MEM_TEXT = "L=";
+ #if (LCD_LINES > 3)
+ const unsigned char Ir_str[] MEM_TEXT = "Ir=";
+ #else
  const unsigned char Ir_str[] MEM_TEXT = "  Ir=";
+ #endif
 #endif
 
 #ifdef WITH_VEXT
@@ -1380,7 +1384,7 @@ typedef struct {
   unsigned int uBE;		//B-E-voltage of the Transistor
   unsigned int current;		// current of Drain in 0.01mA
   				// for bipolar current is ICE0
- #define ice0 current
+  unsigned int ice0;		// for BJT ICEO
   unsigned int gthvoltage;	//Gate-threshold voltage 
   				// for bipolar gthvoltage is ICEs in 0.01mA
  #define ices gthvoltage

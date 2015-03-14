@@ -117,8 +117,8 @@ LCD_ST7565_RESISTOR_RATIO = 4
 # choosen. With a font width below 8 more than 16 characters can be shown in one display line.
 #CFLAGS += -DFONT_6X8
 #CFLAGS += -DFONT_8X8
-#CFLAGS += -DFONT_7X12
-CFLAGS += -DFONT_8X12thin
+CFLAGS += -DFONT_7X12
+#CFLAGS += -DFONT_8X12thin
 #CFLAGS += -DFONT_8X12
 #CFLAGS += -DFONT_8X14
 #CFLAGS += -DFONT_8x15
@@ -129,7 +129,7 @@ CFLAGS += -DFONT_8X12thin
 # you can select a special type with setting the ICON_TYPE.
 # Currently you can select 1 or 3 for one of two thin layouts for the icons.
 # You can also select two thick layouts for the icons by setting the ICON_TYPE to 2 or 0 (0=old style).
-CFLAGS += -DICON_TYPE=2
+CFLAGS += -DICON_TYPE=3
 
 # option BIG_TP makes the 123 for the test pins (beside the icon) bigger
 #CFLAGS += -DBIG_TP

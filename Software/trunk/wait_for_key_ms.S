@@ -117,12 +117,20 @@ to_ret:
 ; /* set the cursor to the beginning of line 2 */
 ; void wait_for_key_5s_line2(void) 
 wait_for_key_5s_line2:
+	ldi	r24, '+'
+	RCALL	lcd_data		; lcd_data('+');
  	ldi	r24, lo8(SHORT_WAIT_TIME)	; 0x88
  	ldi	r25, hi8(SHORT_WAIT_TIME)	; 0x13
  	RCALL	wait_for_key_ms		;wait_for_key_ms(SHORT_WAIT_TIME);
+#if (LCD_LINES < 4)
  	RCALL	lcd_line2	;              //2. row 
  	RCALL	lcd_clear_line	; lcd_clear_line();	// clear the whole line
  	RCALL	lcd_line2	;              //2. row 
+#else
+ 	RCALL	lcd_line4	;              //4. row 
+ 	RCALL	lcd_clear_line	; lcd_clear_line();	// clear the whole line
+ 	RCALL	lcd_line4	;              //4. row 
+#endif
  	ret
  .endfunc
 #endif

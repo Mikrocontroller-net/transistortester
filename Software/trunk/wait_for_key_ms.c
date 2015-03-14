@@ -232,6 +232,7 @@ void check_rotary(void) {
 /* *********************************************************** */
 void wait_for_key_5s_line2(void) {
  #ifdef WITH_ROTARY_SWITCH
+  lcd_data('+');
   do {
      if (wait_for_key_ms(SHORT_WAIT_TIME) > 0) break;
      // continue waiting, if the key is not pressed, but rotary switch is rotated
@@ -239,9 +240,15 @@ void wait_for_key_5s_line2(void) {
  #else
   wait_for_key_ms(SHORT_WAIT_TIME);	// wait until time is elapsed or key is pressed
  #endif
+ #if (LCD_LINES < 4)
   lcd_line2(); //2. row 
   lcd_clear_line();		// clear the whole line
   lcd_line2(); //2. row 
+ #else
+  lcd_line4(); //4. row 
+  lcd_clear_line();		// clear the whole line
+  lcd_line4(); //4. row 
+ #endif
 }  /* end wait_for_key_5s_line2() */
 #endif
 

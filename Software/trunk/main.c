@@ -402,10 +402,9 @@
 	  _trans = &ntrans;			// default transistor structure to show
 	  if (PartFound == PART_THYRISTOR) {
 #ifdef WITH_GRAPHICS
-    #define X_START ((ICON_WIDTH + 16 + 5 + 7) / FONT_WIDTH)
             lcd_big_icon(THYRISTOR|LCD_UPPER_LEFT);
             lcd_draw_trans_pins(-8, 16);
-            lcd_set_cursor(0,X_START);		// position behind the icon, Line 1
+            lcd_set_cursor(0,TEXT_RIGHT_TO_ICON);		// position behind the icon, Line 1
 	    lcd_MEM_string(Thyristor);		//"Thyristor"
 #else
 	    lcd_MEM_string(Thyristor);		//"Thyristor"
@@ -418,7 +417,7 @@
 #ifdef WITH_GRAPHICS
     lcd_big_icon(TRIAC|LCD_UPPER_LEFT);
     lcd_draw_trans_pins(-8, 16);
-    lcd_set_cursor(0,X_START);		// position behind the icon, Line 1
+    lcd_set_cursor(0,TEXT_RIGHT_TO_ICON);		// position behind the icon, Line 1
     lcd_MEM_string(Triac);		//"Triac"
 #else
     lcd_MEM_string(Triac);		//"Triac"
@@ -500,17 +499,22 @@
         lcd_testpin(diodes.Cathode[0]);
 #endif
 #if FLASHEND > 0x1fff
-	GetIr(diodes.Cathode[0],diodes.Anode[0]);
+	GetIr(diodes.Cathode[0],diodes.Anode[0]);	// measure and output Ir=x.xuA
 #endif
-        UfAusgabe(0x70);
+        UfAusgabe(0x70);		// mark for additional resistor and output Uf= in line 2
         /* load current of capacity is (5V-1.1V)/(470000 Ohm) = 8298nA */
-        lcd_MEM_string(Cap_str);	//"C="
         ReadCapacity(diodes.Cathode[0],diodes.Anode[0]);	// Capacity opposite flow direction
-#if LCD_LINE_LENGTH > 16
-        DisplayValue(cap.cval,cap.cpre,'F',3);
-#else
-        DisplayValue(cap.cval,cap.cpre,'F',2);
+        if (cap.cpre < -3) {	/* capacity is measured */
+#if (LCD_LINES > 3)
+           lcd_line3();		// output Capacity in line 3
 #endif
+           lcd_MEM_string(Cap_str);	//"C="
+#if LCD_LINE_LENGTH > 16
+           DisplayValue(cap.cval,cap.cpre,'F',3);
+#else
+           DisplayValue(cap.cval,cap.cpre,'F',2);
+#endif
+        }
         goto end3;
      } else if(NumOfDiodes == 2) { // double diode
         lcd_data('2');
@@ -550,7 +554,7 @@
      } else if(NumOfDiodes == 3) {
         //Serial of 2 Diodes; was detected as 3 Diodes 
         diode_sequence = 0x33;	// 3 3
-        /* Check for any constallation of 2 serial diodes:
+        /* Check for any constellation of 2 serial diodes:
           Only once the pin No of anyone Cathode is identical of another anode.
           two diodes in series is additionally detected as third big diode.
         */
@@ -578,27 +582,6 @@
           {
            diode_sequence = 0x21;	// 2 1
           }
-#if DebugOut == 4
-	lcd_line3();
-        lcd_testpin(diodes.Anode[0]);
-        lcd_data(':');
-        lcd_testpin(diodes.Cathode[0]);
-        lcd_space();
-        u2lcd(diodes.Voltage[0]);
-        lcd_space();
-        lcd_testpin(diodes.Anode[1]);
-        lcd_data(':');
-        lcd_testpin(diodes.Cathode[1]);
-        lcd_space();
-        u2lcd(diodes.Voltage[1]);
-	lcd_line4();
-        lcd_testpin(diodes.Anode[2]);
-        lcd_data(':');
-        lcd_testpin(diodes.Cathode[2]);
-        lcd_space();
-        u2lcd(diodes.Voltage[2]);
-        lcd_line1();
-#endif
 //        if((ptrans.b<3) && (ptrans.c<3)) 
         if(diode_sequence < 0x22) {
            lcd_data('3');
@@ -648,7 +631,7 @@
     }
 
 #ifdef WITH_GRAPHICS
-    lcd_set_cursor(0,X_START);			// position behind the icon, Line 1
+    lcd_set_cursor(0,TEXT_RIGHT_TO_ICON);			// position behind the icon, Line 1
     lcd_big_icon(BJT_NPN|LCD_UPPER_LEFT);	// show the NPN Icon at lower left corner
     if(PartMode == PART_MODE_NPN) {
 //       _trans = &ntrans;  is allready selected a default
@@ -713,59 +696,90 @@
 
 #ifdef WITH_GRAPHICS
     lcd_draw_trans_pins(-7, 16);	// show the pin numbers
-    lcd_set_cursor(2,X_START);	// position behind the icon, Line 2
+    lcd_set_cursor(2,TEXT_RIGHT_TO_ICON);	// position behind the icon, Line 2
     lcd_MEM_string(hfe_str);		//"B="  (hFE)
     DisplayValue(_trans->hfe,0,0,3);
-    lcd_set_cursor(4,X_START);	// position behind the icon, Line 3
+    lcd_set_cursor(4,TEXT_RIGHT_TO_ICON);	// position behind the icon, Line 3
     lcd_MEM_string(Ube_str);		//"Ube="
     DisplayValue(_trans->uBE,-3,'V',3);
  #ifdef SHOW_ICE
+    lcd_set_cursor(6,TEXT_RIGHT_TO_ICON+1);	// position behind the icon, Line 4
+    lcd_data('I');
+    if (_trans->current >= 10000) {
+       lcd_data('e');				// emitter current has 10mA offset
+       _trans->current -= 10000;
+    } else {
+       lcd_data('c');
+    }
+    lcd_data('=');
+    DisplayValue(_trans->current,-6,'A',2);	// display Ic or Ie current
     if (_trans->ice0 > 0) {
-       lcd_set_cursor(6,X_START);	// position behind the icon, Line 4
+       wait_for_key_5s_line2();		// wait and clear last line
+       lcd_set_cursor(6,TEXT_RIGHT_TO_ICON-1);	// position behind the icon, Line 4
        lcd_MEM2_string(ICE0_str);		// "ICE0="
-       DisplayValue(_trans->ice0,-5,'A',2);
+       DisplayValue(_trans->ice0,-6,'A',2);	// display ICEO
     }
     if (_trans->ices > 0) {
-       wait_for_key_ms(15000);
-       lcd_line4();
-       lcd_clear_line();
-       lcd_set_cursor(6,X_START-2);	// position behind the icon, Line 4
+       wait_for_key_5s_line2();		// wait and clear last line
+       lcd_set_cursor(6,TEXT_RIGHT_TO_ICON-1);	// position behind the icon, Line 4
        lcd_MEM2_string(ICEs_str);		// "ICEs="
-       DisplayValue(_trans->ices,-5,'A',2);
+       DisplayValue(_trans->ices,-6,'A',2);	// display ICEs
     }
  #endif
 #else		/* character display */
     PinLayout('E','B','C'); 		//  EBC= or 123=...
     lcd_line2(); //2. row 
-
- #if (LCD_LINES < 4) && defined(SHOW_ICE)
-    if (_trans->ice0 > 0) {
-       lcd_MEM2_string(ICE0_str);		// "ICE0="
-       DisplayValue(_trans->ice0,-5,'A',3);
-       wait_for_key_5s_line2();		// wait 5s and clear line 2
-    }
-    if (_trans->ices > 0) {
-       lcd_MEM2_string(ICEs_str);		// "ICEs="
-       DisplayValue(_trans->ices,-5,'A',3);
-       wait_for_key_5s_line2();		// wait 5s and clear line 2
-    }
- #endif
     lcd_MEM_string(hfe_str);		//"B="  (hFE)
     DisplayValue(_trans->hfe,0,0,3);
     lcd_space();
 
     lcd_MEM_string(Uf_str);		//"Uf="
     DisplayValue(_trans->uBE,-3,'V',3);
- #if (LCD_LINES > 3) && defined(SHOW_ICE)
+
+ #if (LCD_LINES < 4) && defined(SHOW_ICE)
+    wait_for_key_5s_line2();		// wait 5s and clear line 2
+    lcd_data('I');
+    if (_trans->current >= 10000) {
+       lcd_data('e');				// emitter current has 10mA offset
+       _trans->current -= 10000;
+    } else {
+       lcd_data('c');
+    }
+    lcd_data('=');
+    DisplayValue(_trans->current,-6,'A',2);	// display Ic or Ie current
     if (_trans->ice0 > 0) {
-       lcd_line3(); //3. row 
+       wait_for_key_5s_line2();		// wait 5s and clear line 2
        lcd_MEM2_string(ICE0_str);		// "ICE0="
-       DisplayValue(_trans->ice0,-5,'A',3);
+       DisplayValue(_trans->ice0,-6,'A',3);
+       wait_for_key_5s_line2();		// wait 5s and clear line 2
     }
     if (_trans->ices > 0) {
-       lcd_line4(); //4. row 
+       wait_for_key_5s_line2();		// wait 5s and clear line 2
        lcd_MEM2_string(ICEs_str);		// "ICEs="
-       DisplayValue(_trans->ices,-5,'A',3);
+       DisplayValue(_trans->ices,-6,'A',3);
+    }
+ #endif
+ #if (LCD_LINES > 3) && defined(SHOW_ICE)
+    lcd_line3(); //3. row 
+    lcd_space();
+    lcd_data('I');
+    if (_trans->current >= 10000) {
+       lcd_data('e');
+       _trans->current -= 10000;
+    } else {
+       lcd_data('c');
+    }
+    lcd_data('=');
+    DisplayValue(_trans->current,-6,'A',2);	// display Ic or Ie current
+    if (_trans->ice0 > 0) {
+       lcd_line4();
+       lcd_MEM2_string(ICE0_str);		// "ICE0="
+       DisplayValue(_trans->ice0,-6,'A',3);
+    }
+    if (_trans->ices > 0) {
+       wait_for_key_5s_line2();		// wait and clear last line
+       lcd_MEM2_string(ICEs_str);		// "ICEs="
+       DisplayValue(_trans->ices,-6,'A',3);
     }
  #endif
 #endif  /* WITH_GRAPHICS */
@@ -775,7 +789,7 @@
   } else if (PartFound == PART_FET) {	/* JFET or MOSFET */
     unsigned char fetidx = 0;
 #ifdef WITH_GRAPHICS
-    lcd_set_cursor(0,X_START);	// position behind the icon, Line 1
+    lcd_set_cursor(0,TEXT_RIGHT_TO_ICON);	// position behind the icon, Line 1
 #endif
     if((PartMode&P_CHANNEL) == P_CHANNEL) {
        lcd_data('P');			//P-channel
@@ -870,35 +884,47 @@
     } /* end if NumOfDiodes == 1 */
 
 #ifdef WITH_GRAPHICS
-    lcd_set_cursor(2,X_START);	// position text behind the icon, Line 2
-    lcd_MEM_string(vt_str+1);		// "Vt="
-    DisplayValue(_trans->gthvoltage,-3,'V',2);	//Gate-threshold voltage
+    lcd_set_cursor(2,TEXT_RIGHT_TO_ICON);	// position text behind the icon, Line 2
     if((PartMode&D_MODE) != D_MODE) {	//enhancement-MOSFET
-       lcd_set_cursor(4,X_START);	// position text behind the icon, Line 3
+       lcd_MEM_string(vt_str+1);		// "Vt="
+       DisplayValue(_trans->gthvoltage,-3,'V',2);	//Gate-threshold voltage
 	//Gate capacity
-       lcd_MEM_string(GateCap_str);		//"C="
        ReadCapacity(_trans->b,_trans->e);	//measure capacity
-       DisplayValue(cap.cval,cap.cpre,'F',3);
+       if (cap.cpre < -3) {
+          lcd_set_cursor(4,TEXT_RIGHT_TO_ICON);	// position text behind the icon, Line 3
+          lcd_MEM_string(GateCap_str);		//"Cg="
+          DisplayValue(cap.cval,cap.cpre,'F',3);
+       }
     } else {
-       lcd_line4();
+
+       if ((PartMode&0x0f)  != PART_MODE_JFET) {     /* kein JFET */
+          ReadCapacity(_trans->b,_trans->e);	//measure capacity
+          if (cap.cpre < -3) {
+             lcd_MEM_string(GateCap_str);		//"Cg="
+             DisplayValue(cap.cval,cap.cpre,'F',3);
+          }
+       }
+       lcd_line3();
        lcd_data('I');
        lcd_data('=');
-       DisplayValue(_trans->current,-5,'A',2);
-       lcd_MEM_string(Vgs_str);		// " Vg="
+       DisplayValue(_trans->current,-6,'A',2);
+       lcd_MEM_string(Vgs_str);		// "@Vg="
        DisplayValue(_trans->gthvoltage,-3,'V',2);	//Gate-threshold voltage
     }
 #else	/* character display */
     lcd_line2();			//2. Row
     if((PartMode&D_MODE) != D_MODE) {	//enhancement-MOSFET
 	//Gate capacity
-       lcd_MEM_string(GateCap_str);		//"C="
        ReadCapacity(_trans->b,_trans->e);	//measure capacity
-       DisplayValue(cap.cval,cap.cpre,'F',3);
-       lcd_MEM_string(vt_str);		// "Vt="
+       if (cap.cpre < -3) {
+          lcd_MEM_string(GateCap_str);		//"Cg="
+          DisplayValue(cap.cval,cap.cpre,'F',3);
+       }
+       lcd_MEM_string(vt_str);		// " Vt="
     } else {
        lcd_data('I');
        lcd_data('=');
-       DisplayValue(_trans->current,-5,'A',2);
+       DisplayValue(_trans->current,-6,'A',2);
        lcd_MEM_string(Vgs_str);		// "@Vg="
     }
     DisplayValue(_trans->gthvoltage,-3,'V',2);	//Gate-threshold voltage
@@ -1053,7 +1079,7 @@ not_known:
 TyUfAusgabe:
 #ifdef WITH_THYRISTOR_GATE_V
  #ifdef WITH_GRAPHICS
-  lcd_set_cursor(2,X_START);		// position behind the icon,line 2
+  lcd_set_cursor(2,TEXT_RIGHT_TO_ICON);		// position behind the icon,line 2
  #else
   lcd_line2(); //2. row 
  #endif

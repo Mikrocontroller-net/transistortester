@@ -30,9 +30,9 @@
  .extern lcd_space
  .extern lcd_testpin
  .extern _trans
-#define OFFS_b 10
-#define OFFS_c 11
-#define OFFS_e 12
+#define OFFS_b 12	/* offset to trans.b */
+#define OFFS_c 13	/* offset to trans.c */
+#define OFFS_e 14	/* offset to trans.e */
  .extern N123_str
  .extern N321_str
 

@@ -98,7 +98,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   vloss = 0;				// set lost voltage to zero
 #endif
   cap.cval = 0;				// set capacity value to zero
-  cap.cpre = -12;			//default unit is pF
+  cap.cpre = 0;			// mark for no cap
   EntladePins();			// discharge capacitor
   ADC_PORT = TXD_VAL;			// switch ADC-Port to GND
   R_PORT = 0;				// switch R-Port to GND

@@ -90,12 +90,12 @@ void ShowIcons(void) {
  lcd_update_icon(bmp_n_d_igbt);	// update to N-D-IGBT
  lcd_big_icon(N_E_IGBT|LCD_LOWER_RIGHT);
  lcd_update_icon(bmp_p_d_igbt);	// update to P-D-IGBT
- lcd_set_cursor(1,1);
+ lcd_set_cursor(1,0);
  lcd_data('N');
  lcd_data('-');
  lcd_data('D');
  lcd_MEM_string(igbt_str);
- lcd_set_cursor(2,(1+LCD_LINE_LENGTH / 2));
+ lcd_set_cursor(2,(LCD_LINE_LENGTH / 2));
  lcd_data('P');
  lcd_data('-');
  lcd_data('D');
@@ -138,8 +138,13 @@ void ShowIcons(void) {
  lcd_clear();
  lcd_big_icon(TRIAC|LCD_UPPER_LEFT);
  lcd_big_icon(THYRISTOR|LCD_UPPER_RIGHT);
+ wait_for_key_ms(ShowTime);
+
+ lcd_clear();
  lcd_big_icon(INDUCTOR|LCD_LOWER_LEFT);
  lcd_big_icon(CAPACITOR|LCD_LOWER_RIGHT);
+ lcd_big_icon(RESISTOR|LCD_UPPER_LEFT);
+ lcd_big_icon(RESISTORS|LCD_UPPER_RIGHT);
  wait_for_key_ms(ShowTime);
 
  lcd_clear();
@@ -149,10 +154,6 @@ void ShowIcons(void) {
  lcd_big_icon(DIODES_C_A_A_C|LCD_LOWER_RIGHT);
  wait_for_key_ms(ShowTime);
 
- lcd_clear();
- lcd_big_icon(RESISTOR|LCD_UPPER_LEFT);
- lcd_big_icon(RESISTORS|LCD_UPPER_RIGHT);
- wait_for_key_ms(ShowTime);
  
  lcd_clear();
  lcd_line1();

@@ -247,7 +247,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         } else {
           ntrans.gthvoltage = 0;	//voltage GS (Source - Gate)
         }
-        ntrans.current = (unsigned int)(((unsigned long)adc.lp1 * 1000) / RR680MI); // Id 0.01mA
+        ntrans.current = (unsigned int)(((unsigned long)adc.lp1 * 10000) / RR680MI); // Id 1uA
         ntrans.count++;			// count as two, the inverse is identical
         goto saveNresult;		// save Pin numbers and exit
      }
@@ -285,7 +285,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         } else {
           ptrans.gthvoltage = 0;
         }
-        ptrans.current = (unsigned int)(((unsigned long)(ADCconfig.U_AVCC - adc.hp1) * 1000) / RR680PL); // Id 0.01mA
+        ptrans.current = (unsigned int)(((unsigned long)(ADCconfig.U_AVCC - adc.hp1) * 10000) / RR680PL); // Id 1uA
         ptrans.count++;			// count as two, the inverse is identical
         goto savePresult;		// save pin numbers and exit
      }
@@ -375,6 +375,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
            // first hFE or e_hfe is greater than last hfe ?
            if ((ptrans.count == 0) || (e_hfe > ptrans.hfe)){
               ptrans.hfe = e_hfe;				// hFE with common emitter
+ #if FLASHEND > 0x1fff  /* at least ATmega16 */
+              ptrans.current = (unsigned int)(((unsigned long)adc.lp1 * 10000) / RR680MI); // Ic 1uA
+ #endif
               ptrans.uBE = adc.hp2 - adc.tp2;	// Base Emitter Voltage
               update_pins = 1;		// trans.ebc must be updated
            }
@@ -392,6 +395,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
            {
               ptrans.hfe = c_hfe;		// c_hfe is the best
               ptrans.uBE = adc.hp1 - adc.tp1;	// Base Emitter Voltage common collector
+ #if FLASHEND > 0x1fff  /* at least ATmega16 */
+              ptrans.current = (unsigned int)(((unsigned long)adc.rhp * 10000) / RR680PL); // Ie 1uA
+              ptrans.current += 10000;		// current at emitter!
+ #endif
               update_pins = 1;		// trans.ebc must be updated
            }
 #endif
@@ -401,8 +408,8 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 #ifdef SHOW_ICE
            if (update_pins != 0) {
 	      // update residual collector current without base current
-              ptrans.ice0 = (unsigned int)(((unsigned long)adc.lp_otr * 1000) / RR680MI); // ICE0 0.01mA
-              ptrans.ices = (unsigned int)(((unsigned long)adc.vCEs * 1000) / RR680MI); // ICEs 0.01mA
+              ptrans.ice0 = (unsigned int)(((unsigned long)adc.lp_otr * 10000) / RR680MI); // ICE0 0.01mA
+              ptrans.ices = (unsigned int)(((unsigned long)adc.vCEs * 10000) / RR680MI); // ICEs 0.01mA
            }
 #endif
            goto savePresult;		// marke P type, save Pins and exit
@@ -618,6 +625,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
          if ((ntrans.count == 0) || (e_hfe > ntrans.hfe)){
             ntrans.hfe = e_hfe;
             ntrans.uBE = adc.tp2 - adc.lp2;
+  #if FLASHEND > 0x1fff  /* at least ATmega16 */
+            ntrans.current = (unsigned int)(((unsigned long)adc.rhp * 10000) / RR680PL); // Ic 1uA
+  #endif
             update_pins = 1;
          }
  #endif
@@ -632,6 +642,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
           {
             ntrans.hfe = c_hfe;
             ntrans.uBE = adc.tp1 - adc.lp1;
+ #if FLASHEND > 0x1fff  /* at least ATmega16 */
+            ntrans.current = (unsigned int)(((unsigned long)adc.lp1 * 10000) / RR680MI); // Ie 1uA
+            ntrans.current += 10000;	// mark current at emitter!
+ #endif
             update_pins = 1;
           }
 #endif
@@ -641,8 +655,8 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 #ifdef SHOW_ICE
          if (update_pins != 0) {
 	    // update residual collector (emitter) current without base current
-            ntrans.ice0 = (unsigned int)(((unsigned long)adc.lp_otr * 1000) / RR680MI); // ICE0 0.01mA
-            ntrans.ices = (unsigned int)(((unsigned long)adc.vCEs * 1000) / RR680PL); // ICEs 0.01mA
+            ntrans.ice0 = (unsigned int)(((unsigned long)adc.lp_otr * 10000) / RR680MI); // ICE0 0.01mA
+            ntrans.ices = (unsigned int)(((unsigned long)adc.vCEs * 10000) / RR680PL); // ICEs 0.01mA
          }
 #endif
          goto saveNresult;		// count the found N-Type and exit

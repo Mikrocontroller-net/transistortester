@@ -53,9 +53,7 @@ show_page_3:
   DisplayValue(eeprom_read_byte(&c_zero_tab[6]),0,' ',3);		//output cap0 2:3
   DisplayValue(eeprom_read_byte(&c_zero_tab[2]),-12,'F',3);		//output cap0 1:2
   lcd_line2();
-  lcd_space();
-  lcd_space();
-  lcd_space();
+  lcd_spaces(3);
   DisplayValue(eeprom_read_byte(&c_zero_tab[1]),0,' ',3);		//output cap0 3:1
   DisplayValue(eeprom_read_byte(&c_zero_tab[4]),0,' ',3);		//output cap0 3:2
   DisplayValue(eeprom_read_byte(&c_zero_tab[0]),-12,'F',3);		//output cap0 2:1

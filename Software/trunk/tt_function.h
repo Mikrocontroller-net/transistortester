@@ -2,6 +2,7 @@
 #include "lcd-routines.h"
 
 void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin);
+void GetResistance(uint8_t HighPin, uint8_t LowPin);
 void ChargePin10ms(uint8_t PinToCharge, uint8_t ChargeDirection);
 unsigned int ReadADC(uint8_t mux);		// read Routine for ADC
 unsigned int W5msReadADC(uint8_t mux);		// wait 5ms and read than ADC
@@ -45,6 +46,8 @@ void message_key_released(const unsigned char XX_str[]); // clear display, show 
 void make_frequency(void);		// start counter 1 to make frequency at middle pin
 void do_10bit_PWM(void);		// start counter 1 to make fixed frequency with PWM
 void show_C_ESR();			// show big capacity values and ESR 
+void show_Resis13();			// show Resistor value at TP1:TP3 
+void show_Cap13(void);		// show one or two Resistors
 void ReadBigCap(uint8_t HighPin, uint8_t LowPin);	//capacity measurement only for big capacitors
 void CheckRotaryEncoder(void);				// check rotary puls generator
 void check_rotary(void);			// check state of rotary switch	for menu function

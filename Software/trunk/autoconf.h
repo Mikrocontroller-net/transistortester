@@ -7,17 +7,20 @@
 /* Define under which conditions a graphical display is supported. */
 /* The graphical display should at least support 128x64 pixels. */
  #define WITH_GRAPHICS
- #define LCD_LINES ((SCREEN_HEIGHT/8) / ((FONT_HEIGHT + 7) / 8))
+ #define PAGES_PER_LINE ((FONT_HEIGHT + 7) / 8)
+ #define LCD_LINES ((SCREEN_HEIGHT/8) / PAGES_PER_LINE)
  #undef LCD_LINE_LENGTH
  #define LCD_LINE_LENGTH (SCREEN_WIDTH / FONT_WIDTH)
  #define TEXT_RIGHT_TO_ICON ((ICON_WIDTH + 16 + 5 + 7) / FONT_WIDTH)
 #else  /* no ST7565 or SSD1306 graphic controller */
  #ifdef FOUR_LINE_LCD
   #define LCD_LINES 4
+  #define PAGES_PER_LINE 1
   #ifndef LCD_LINE_LENGTH
    #define LCD_LINE_LENGTH 20	/* usually a 20 character line */
   #endif
  #else	/* no FOUR_LINE_LCD */
+   #define PAGES_PER_LINE 1
    #define LCD_LINES 2
    #define LCD_LINE_LENGTH 16
  #endif

@@ -32,10 +32,8 @@
 	#endif
         #if FLASHEND > 0x3fff
           uint8_t vak_diode_nr;		// number of the protection diode of BJT
-         #if (LCD_LINES > 3)
-          uint8_t last_line_used;
-         #endif
         #endif
+        uint8_t x, y, z;
 	  //switch on
 	  ON_DDR = (1<<ON_PIN);			// switch to output
 	  ON_PORT = (1<<ON_PIN); 		// switch power on 
@@ -194,6 +192,9 @@
 	  lcd_clear();			// clear the LCD
 	  ADC_DDR = TXD_MSK;		// activate Software-UART 
 	  ResistorsFound = 0;		// no resistors found
+          ResistorChecked[0] = 0;
+          ResistorChecked[1] = 0;
+          ResistorChecked[2] = 0;
 	  cap.ca = 0;
 	  cap.cb = 0;
 	#if FLASHEND > 0x1fff
@@ -366,11 +367,13 @@
 	  CheckPins(TP2, TP3, TP1);
 	  CheckPins(TP3, TP2, TP1);
 
+#if 0
 	  if (ResistorsFound != 0) {
 	     if (resis[ResistorsFound-1].checked  == 0) {
 		ResistorsFound--;	// last resistor is not checked in both directions
 	     }
 	  }
+#endif
 	  
 	  // Capacity measurement is only possible correctly with two Pins connected.
 	  // A third connected pin will increase the capacity value!
@@ -716,11 +719,11 @@
 
 #ifdef WITH_GRAPHICS
     lcd_draw_trans_pins(-7, 16);	// show the pin numbers
-    lcd_set_cursor(2,TEXT_RIGHT_TO_ICON);	// position behind the icon, Line 2
+    lcd_next_line(TEXT_RIGHT_TO_ICON);	// position behind the icon, Line 2
     lcd_MEM_string(hfe_str);		//"B="  (hFE)
     DisplayValue(_trans->hfe,0,0,3);
 
-    lcd_set_cursor(4,TEXT_RIGHT_TO_ICON+1);	// position behind the icon, Line 3
+    lcd_next_line(TEXT_RIGHT_TO_ICON+1); // position behind the icon, Line 3
     lcd_data('I');
     if (_trans->current >= 10000) {
        lcd_data('e');				// emitter current has 10mA offset
@@ -731,21 +734,21 @@
     lcd_data('=');
     DisplayValue(_trans->current,-6,'A',2);	// display Ic or Ie current
 
-    lcd_set_cursor(6,TEXT_RIGHT_TO_ICON);	// position behind the icon, Line 4
+    lcd_next_line(TEXT_RIGHT_TO_ICON); // position behind the icon, Line 4
     lcd_MEM_string(Ube_str);		//"Ube="
     DisplayValue(_trans->uBE,-3,'V',3);
     last_line_used = 1;
 
  #ifdef SHOW_ICE
     if (_trans->ice0 > 0) {
+       lcd_next_line(TEXT_RIGHT_TO_ICON-1); // position behind the icon, Line 4
        wait_for_key_5s_line2();		// wait and clear last line
-       lcd_set_cursor(6,TEXT_RIGHT_TO_ICON-1);	// position behind the icon, Line 4
        lcd_MEM2_string(ICE0_str);		// "ICE0="
        DisplayValue(_trans->ice0,-6,'A',2);	// display ICEO
     }
     if (_trans->ices > 0) {
+       lcd_next_line(TEXT_RIGHT_TO_ICON-1); // position behind the icon, Line 4
        wait_for_key_5s_line2();		// wait and clear last line
-       lcd_set_cursor(6,TEXT_RIGHT_TO_ICON-1);	// position behind the icon, Line 4
        lcd_MEM2_string(ICEs_str);		// "ICEs="
        DisplayValue(_trans->ices,-6,'A',2);	// display ICEs
     }
@@ -770,58 +773,30 @@
  #endif
 
 
- #if (LCD_LINES < 4) && defined(SHOW_ICE)
+ #if defined(SHOW_ICE)
+    lcd_next_line(0);
     wait_for_key_5s_line2();		// wait 5s and clear line 2
     lcd_MEM_string(Ube_str);		//"Ube=" 
     DisplayValue(_trans->uBE,-3,'V',3);
 
     if (_trans->ice0 > 0) {
+       lcd_next_line(0);
        wait_for_key_5s_line2();		// wait 5s and clear line 2
        lcd_MEM2_string(ICE0_str);		// "ICE0="
        DisplayValue(_trans->ice0,-6,'A',3);
     }
     if (_trans->ices > 0) {
+       lcd_next_line(0);
        wait_for_key_5s_line2();		// wait 5s and clear line 2
        lcd_MEM2_string(ICEs_str);		// "ICEs="
        DisplayValue(_trans->ices,-6,'A',3);
-    }
- #endif
- #if (LCD_LINES > 3) && defined(SHOW_ICE)
-    lcd_line3(); //3. row 
-    lcd_MEM_string(Ube_str);		//"Ube="
-    DisplayValue(_trans->uBE,-3,'V',3);
-    lcd_line4();
-  #if (FLASHEND > 0x3fff) && (LCD_LINES > 3)
-    last_line_used = 0;
-  #endif
-    if (_trans->ice0 > 0) {
-       lcd_MEM2_string(ICE0_str);		// "ICE0="
-       DisplayValue(_trans->ice0,-6,'A',3);
-  #if (FLASHEND > 0x3fff) && (LCD_LINES > 3)
-       last_line_used = 1;
-  #endif
-    }
-    if (_trans->ices > 0) {
-       wait_for_key_5s_line2();		// wait and clear last line
-       lcd_MEM2_string(ICEs_str);		// "ICEs="
-       DisplayValue(_trans->ices,-6,'A',3);
-  #if (FLASHEND > 0x3fff) && (LCD_LINES > 3)
-       last_line_used = 1;
-  #endif
     }
  #endif
 #endif  /* WITH_GRAPHICS */
 #if FLASHEND > 0x3fff
     if (vak_diode_nr < 5) {
- #if (LCD_LINES > 3)
-       if (last_line_used) {
-          wait_for_key_5s_line2();	// wait 5s and clear line 2/4
-       } else {
-	  lcd_line4();		// last line not yet used
-       }
- #else /* for 2-line display last line is every time used */
+       lcd_next_line(0);
        wait_for_key_5s_line2();	// wait 5s and clear line 2/4
- #endif
        if (an_cat) {
           lcd_testpin(diodes.Anode[vak_diode_nr]);
           lcd_MEM_string(AnKat);	//"->|-"
@@ -939,21 +914,28 @@
     } /* end if NumOfDiodes == 1 */
 
 #ifdef WITH_GRAPHICS
-    lcd_set_cursor(2,TEXT_RIGHT_TO_ICON);	// position text behind the icon, Line 2
+    lcd_next_line(TEXT_RIGHT_TO_ICON);	// position text behind the icon, Line 2
+ #if LCD_LINES > 6
+       lcd_next_line(TEXT_RIGHT_TO_ICON);	// double line
+ #endif
     if((PartMode&D_MODE) != D_MODE) {	//enhancement-MOSFET
        lcd_MEM_string(vt_str+1);		// "Vt="
        DisplayValue(_trans->gthvoltage,-3,'V',2);	//Gate-threshold voltage
 	//Gate capacity
        ReadCapacity(_trans->b,_trans->e);	//measure capacity
-       lcd_set_cursor(4,TEXT_RIGHT_TO_ICON);	// position text behind the icon, Line 3
+       lcd_next_line(TEXT_RIGHT_TO_ICON);	// position text behind the icon, Line 3
        lcd_show_Cg();	// show Cg=xxxpF
+
     } else {
 
        if ((PartMode&0x0f)  != PART_MODE_JFET) {     /* kein JFET */
           ReadCapacity(_trans->b,_trans->e);	//measure capacity
           lcd_show_Cg();	// show Cg=xxxpF
        }
-       lcd_line3();
+       lcd_next_line(0);	// double line
+ #if LCD_LINES > 6
+       lcd_next_line(0);	// double line
+ #endif
        lcd_data('I');
  #if (LCD_LINE_LENGTH > 17)
        lcd_data('d');
@@ -976,11 +958,8 @@
           ReadCapacity(_trans->b,_trans->e);	//measure capacity
           lcd_show_Cg();	// show Cg=xxxpF
        }
-  #if (LCD_LINES > 3)
-       lcd_line3();
-  #else
+       lcd_next_line(0);		// line 3, if possible
        wait_for_key_5s_line2();		// wait and clear last line
-  #endif
  #endif
        lcd_data('I');			// show I=xmA@Vg=y.yV at line 2 or 3
  #if (LCD_LINE_LENGTH > 17)
@@ -1002,12 +981,11 @@
           options |= OPT_VREVERSE;
        lcd_update_icon_opt(bmp_vakdiode,options);	// update Icon with protection diode
  #endif
- #if (LCD_LINES > 3)
-       lcd_line4();			//4. Row
- #else
-       wait_for_key_5s_line2();		// wait 5s and clear line 2
-       lcd_line2();			//2. Row
+ #if LCD_LINES > 6
+       lcd_next_line(0);		// line 5 , if possible
  #endif
+       lcd_next_line(0);		// line 4, if possible
+       wait_for_key_5s_line2();		// wait 5s and clear last line 
        if (an_cat) {
           lcd_testpin(diodes.Anode[0]);
           lcd_MEM_string(AnKat);	//"->|-"
@@ -1031,40 +1009,43 @@
 //   if(PartFound == PART_RESISTOR) 
 resistor_out:
    if(ResistorsFound != 0) {
-    ii = 0;
     if (ResistorsFound == 1) { // single resistor
-       lcd_testpin(resis[0].rb);  	//Pin-number 1
+       x = pgm_read_byte(&RPinTab[ResistorList[0]]);
+       y = pgm_read_byte(&RPinTab[ResistorList[0]+2]);
+       lcd_testpin(x);  	//Pin-number 1
        lcd_MEM_string(Resistor_str);	// -[=]-
-       lcd_testpin(resis[0].ra);		//Pin-number 2
+       lcd_testpin(y);		//Pin-number 2
     } else { // R-Max suchen
-       if (resis[1].rx > resis[0].rx)
-          ii = 1;
+       ii = ResistorList[0];	// first resistor in the list with number 0,1,2
+       if (ResistorVal[ResistorList[1]] > ResistorVal[ii])
+          ii = ResistorList[1]; // second resistor in the list with number 0,1,2
        if (ResistorsFound == 2) {
-          ii = 2;
+          ii = (3 - ResistorList[0] - ResistorList[1]);
        } else {
-          if (resis[2].rx > resis[ii].rx) {
-             ii = 2;
+          if (ResistorVal[ResistorList[2]] > ResistorVal[ii]) {
+             ii = ResistorList[2];
           }
        }
-       char x = '1';
-       char y = '3';
-       char z = '2';
+       // ResistorVal[0] TP1:TP2, [1] TP1:TP3, [2] TP2:TP3
+       x = TP1;
+       y = TP3;
+       z = TP2;
    
-       if (ii == 1) {
-          // x = '1';
-          y = '2';
-          z = '3';
+       if (ii == 1) {	/* TP1:TP3 is maximum */
+          x = TP1;
+          y = TP2;
+          z = TP3;
        }
-       if (ii == 2) {
-          x = '2';
-          y = '1';
-          z = '3';
+       if (ii == 2) {	/* TP2:TP3 is maximum */
+          x = TP2;
+          y = TP1;
+          z = TP3;
        }
-       lcd_data(x);
+       lcd_testpin(x);  	//Pin-number 1
        lcd_MEM_string(Resistor_str);    // -[=]-
-       lcd_data(y);
+       lcd_testpin(y);		//Pin-number 2
        lcd_MEM_string(Resistor_str);    // -[=]-
-       lcd_data(z);
+       lcd_testpin(z);		//Pin-number 3
     }
 #if (LCD_LINES > 3)
     if(PartFound == PART_DIODE) {
@@ -1076,31 +1057,29 @@ resistor_out:
     lcd_line2(); //2. row 
 #endif
     if (ResistorsFound == 1) {
+       RvalOut(ResistorList[0]);
 #if FLASHEND > 0x1fff
        ReadInductance();		// measure inductance, possible only with single R<2.1k
-       RvalOut(0);
        if (inductor_lpre != 0) {
 	  // resistor have also Inductance
           lcd_MEM_string(Lis_str);	// "L="
           DisplayValue(inductor_lx,inductor_lpre,'H',3);	// output inductance
 	  lcd_set_cursor(0,5);
           lcd_MEM_string(Inductor_str);		// -ww-
-          lcd_testpin(resis[0].ra);		//Pin-number 2
+          lcd_testpin(y);		//Pin-number 2
        }
-#else
-       RvalOut(0);
 #endif
     } else {
        // output resistor values in right order
-       if (ii == 0) {
+       if (ii == 0) { /* resistor 0 has maximum */
           RvalOut(1);
           RvalOut(2);
        }
-       if (ii == 1) {
+       if (ii == 1) { /* resistor 1 has maximum */
           RvalOut(0);
           RvalOut(2);
        }
-       if (ii == 2) {
+       if (ii == 2) { /* resistor 2 has maximum */
           RvalOut(0);
           RvalOut(1);
        }

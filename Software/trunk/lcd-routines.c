@@ -15,6 +15,7 @@
 
 
  
+uint8_t lcd_text_line;
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7108))
  #define NR_BYTE ((FONT_HEIGHT + 7) / 8)
 uint8_t _page;		// y position of the next character 
@@ -35,10 +36,17 @@ void lcd_testpin(unsigned char temp) {
 void lcd_space(void) {
    lcd_data(' ');
 }
+void lcd_spaces(uint8_t nn) {
+   while (nn != 0) {
+     lcd_space();
+     nn--;
+   }
+}
 
 /* ******************************************************************************* */
 //move to the beginning of the 1. row
 void lcd_line1() {
+   lcd_text_line = 0;
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
    lcd_set_cursor(0 * ((FONT_HEIGHT + 7) / 8),0);
 #elif (LCD_ST_TYPE == 7920)
@@ -56,6 +64,7 @@ void lcd_line1() {
 // or you can select a 8-line rounding of the positioning of the lines with: 
 #define FONT_V_SPACE (((FONT_HEIGHT + 7) / 8) * 8)
 void lcd_line2() {
+   lcd_text_line = 1;
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
    lcd_set_cursor(1 * ((FONT_HEIGHT + 7) / 8),0);
 
@@ -70,6 +79,7 @@ void lcd_line2() {
 /* ******************************************************************************* */
 //move to the beginning of the 3. row
 void lcd_line3() {
+   lcd_text_line = 2;
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
    lcd_set_cursor(2 * ((FONT_HEIGHT + 7) / 8),0);
 #elif (LCD_ST_TYPE == 7920)
@@ -83,6 +93,7 @@ void lcd_line3() {
 /* ******************************************************************************* */
 //move to the beginning of the 4. row
 void lcd_line4() {
+   lcd_text_line = 3;
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
    lcd_set_cursor(3 * ((FONT_HEIGHT + 7) / 8),0);
 #elif (LCD_ST_TYPE == 7920)
@@ -93,6 +104,18 @@ void lcd_line4() {
 #endif
 }
 
+/* ******************************************************************************* */
+void lcd_next_line(uint8_t xx) {
+lcd_text_line ++;
+if (lcd_text_line > LCD_LINES)  {
+   // Limit is reached
+   lcd_text_line = (LCD_LINES - 1);
+   last_line_used = 1;
+} else {
+   last_line_used = 0;
+}
+lcd_set_cursor((uint8_t)(lcd_text_line * PAGES_PER_LINE), xx);
+}
 /* ************************************************************************************** */
 /* Set the character position to x,y , where x specifies the character number in a text line. */
 /* The y position is the page address (8 line units).                                     */
@@ -436,11 +459,12 @@ void lcd_powersave(void) {
 // send the command to clear the display 
  
 void lcd_clear(void) {
+   
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
    unsigned char p;
    unsigned char count;
 
-   for (p = 0; p < 8; p++) {
+   for (p = 0; p < (SCREEN_HEIGHT / 8); p++) {
      lcd_command(CMD_SET_COLUMN_UPPER);		// set horizontal position to 0
      lcd_command(CMD_SET_COLUMN_LOWER);
      lcd_command(CMD_SET_PAGE | (0x0f & p));	// set page 0 to 7
@@ -453,7 +477,7 @@ void lcd_clear(void) {
    unsigned char count;
 
    _lcd_hw_select(3);				// select both controllers
-   for (p = 0; p < 8; p++) {
+   for (p = 0; p < (SCREEN_HEIGHT / 8); p++) {
      lcd_command(CMD_SET_COLUMN_ADDR);		// set horizontal position to 0
      lcd_command(CMD_SET_PAGE | (0x07 & p));	// set page 0 to 7, vertical position = p*8
      for (count = 0; count < 64; count++)
@@ -466,7 +490,7 @@ void lcd_clear(void) {
 
    for (count = 0; count < SCREEN_HEIGHT; count++) {
      for (p = 0; p < (SCREEN_WIDTH / 8); p++) {
-       lcd_bit_mem[count][p] = 0;		// clea bits in image data
+       lcd_bit_mem[count][p] = 0;		// clear bits in image data
      }
    }
 #else
@@ -477,6 +501,7 @@ void lcd_clear(void) {
    uart_newline();
 #endif
    lcd_line1();			// set cursor to Line1 Column 1, (only for OLED-Display)
+   lcd_text_line = 0;
 }
 
 
@@ -533,9 +558,9 @@ void lcd_fix_string(const unsigned char *data) {
 // load custom character from PGM or EEprom and send to LCD
 void lcd_fix_customchar(const unsigned char *chardata) {	
 #if (LCD_ST_TYPE == 0)
-    for(uint8_t i=0;i<8;i++) {
-        lcd_data(MEM_read_byte(chardata));
-        chardata++;
+    uint8_t ii;
+    for (ii=0;ii<8;ii++) {
+        lcd_data(MEM_read_byte(chardata++));
     }
 #endif
 }
@@ -544,10 +569,7 @@ void lcd_fix_customchar(const unsigned char *chardata) {
 #ifdef LCD_CLEAR
 void lcd_clear_line(void) {
  // writes 20 spaces to LCD-Display, Cursor must be positioned to first column
- unsigned char ll;
- for (ll=0;ll<20;ll++) {
-    lcd_space();
- }
+    lcd_spaces(20);
 }
 #endif
 

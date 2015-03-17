@@ -121,8 +121,8 @@ LCD_ST7565_RESISTOR_RATIO = 4
 # choosen. With a font width below 8 more than 16 characters can be shown in one display line.
 #CFLAGS += -DFONT_6X8
 #CFLAGS += -DFONT_8X8
-CFLAGS += -DFONT_7X12
-#CFLAGS += -DFONT_8X12thin
+#CFLAGS += -DFONT_7X12
+CFLAGS += -DFONT_8X12thin
 #CFLAGS += -DFONT_8X12
 #CFLAGS += -DFONT_8X14
 #CFLAGS += -DFONT_8x15

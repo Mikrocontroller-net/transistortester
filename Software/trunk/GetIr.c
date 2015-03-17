@@ -13,7 +13,7 @@ void GetIr(uint8_t hipin, uint8_t lopin) {
   ADC_PORT = HiADC;		 	// switch ADC port to high level
   ADC_DDR = HiADC | TXD_MSK;		// switch High Pin direct to VCC
   R_PORT = 0;				// switch R-Port to GND
-#if FLASHEND > 0x3fff
+#if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
   R_DDR = pgm_read_byte(&PinRHtab[lopin]);  //R_H mask for LowPin R_H load
 #else
   uint8_t LoPinR_L;

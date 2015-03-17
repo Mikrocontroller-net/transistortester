@@ -39,28 +39,17 @@
  .extern DisplayValue
  .extern GetESR
  .extern lcd_space
- .extern resis
+ .extern ResistorVal
 
  .section .text
 
 RvalOut:		; void RvalOut(uint8_t nrr) 	
  	push	r16
 
-; 	mov	r30, r24
-; 	ldi	r31, 0x00	; 0
-; 	ldi	r24, 0x03	; 3
-;ad1d52:
-; 	add	r30, r30
-; 	adc	r31, r31
-; 	dec	r24
-; 	brne	ad1d52 
-; 	subi	r30, 0xE7	; 231
-; 	sbci	r31, 0xFE	; 254
-
-	LDIZ	resis
+	LDIZ	ResistorVal
+        push    r24
 	add	r24, r24	; nrr*2
 	add	r24, r24	; nrr*4
-	add	r24, r24	; nrr*8	 5*8 must fit uint8_t
 	add	r30, r24
 	adc	r31, zero_reg
 
@@ -73,12 +62,21 @@ RvalOut:		; void RvalOut(uint8_t nrr)
  	cpc	r23, r1
  	cpc	r24, r1
  	cpc	r25, r1
- 	brcc	ad1d8e 		; (resis[nrr].rx < 100)
+ 	brcc	ad1d8e 		; (ResistorVal[nrr] < 100)
  	lds	r18, inductor_lpre
  	and	r18, r18
  	brne	ad1d8e 		; (inductor_lpre == 0)
- 	ldd	r24, Z+4	; ra
- 	ldd	r22, Z+5	; rb
+        ldi	r24, TP3	; hipin = TP3
+        ldi     r22, TP1	; lopin = TP1
+	pop	r20		; nrr Parameter
+	cpi	r20,0		; nrr == 0
+        brne    not_zero
+        ldi	r24, TP2	; hipin = TP2
+not_zero:
+        cpi	r20, 2
+	brne	not_two
+	ldi	r22, TP2	; lopin = TP2
+not_two:
  	ACALL	GetESR		; rr = GetESR(resis[nrr].ra,resis[nrr].rb);
  	movw	r22, r24
         ldi	r24, 0
@@ -88,7 +86,7 @@ RvalOut:		; void RvalOut(uint8_t nrr)
  	rjmp	ad1d94		; DisplayValue(rr,-2,LCD_CHAR_OMEGA,3);
 ad1d8e:		; } else {
 #endif
-	; r22-r25 = resis[rr].rx
+	; r22-r25 = ResistorVal[rr]
  	ldi	r20, -1		; 255
  	ldi	r16, 0x04	; DisplayValue(resis[nrr].rx,-1,LCD_CHAR_OMEGA,4);
 ad1d94:

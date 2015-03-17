@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
  int kk;	// loop counter
  int line;	// number of read ascii character bitmap
  int ll;	
+ int hh;
  int height;
  int beg_end;
  int comment_out;
@@ -19,6 +20,10 @@ int main(int argc, char *argv[])
  int bittab1[16][80];	// bits for every line of bitmap
  int bittab2[16][80];	// bits for every line of bitmap
  
+#define vertical_offset 1
+ if (vertical_offset != 0) {
+   fprintf(stderr,"Vertikaler Offset %d\r\n",vertical_offset);
+ }
     
  line = 0;
  height = 0;
@@ -37,12 +42,13 @@ int main(int argc, char *argv[])
           width = kk-1;
        }
        for (kk=1; kk<=width; kk++) {
-          if ((height % 8) == 0) {
-             bittab1[height/8][kk-1] = 0;  // clear all bits
-             bittab2[height/8][kk-1] = 0;  // clear all bits
+          hh = height + vertical_offset;
+          if ((height == 0) || ((hh % 8) == 0)) {
+             bittab1[hh/8][kk-1] = 0;  // clear all bits
+             bittab2[hh/8][kk-1] = 0;  // clear all bits
           }
-          if ((linebuf[kk] == '*') || (linebuf[kk] == ':') || (linebuf[kk] == 'O')) bittab1[height/8][kk-1] |= (1<<(height % 8));
-          if ((linebuf[kk] == '*') || (linebuf[kk] == ' ')) bittab2[height/8][kk-1] |= (1<<(height % 8));
+          if ((linebuf[kk] == '*') || (linebuf[kk] == ':') || (linebuf[kk] == 'O')) bittab1[hh/8][kk-1] |= (1<<(hh % 8));
+          if ((linebuf[kk] == '*') || (linebuf[kk] == ' ')) bittab2[hh/8][kk-1] |= (1<<(hh % 8));
        }
        height++;
     } else {
@@ -74,19 +80,19 @@ int main(int argc, char *argv[])
             if (((kk%8) == 0) && (kk != 0)) fprintf(stdout,"\r\n  ");
             if ((bittab1[ll/8][kk] != bittab2[ll/8][kk]) && (comment_out == 0)) {
                comment_out = 1;
-               fprintf(stdout,"/* ");
+               fprintf(stdout,"/* ");		// Beginn Kommentar
             }
             if ((bittab1[ll/8][kk] == bittab2[ll/8][kk]) && (comment_out != 0)) {
                comment_out = 0;
-               fprintf(stdout,"*/ ");
+               fprintf(stdout,"*/ ");		// Ende Kommentar
             }
-            if (comment_out == 0) {
+            if (comment_out == 0) { // suche Max und Min des unkommentierten Feldes
               if (ll < ll_min) ll_min = ll;
               if (ll > ll_max) ll_max = ll;
               if (kk < kk_min) kk_min = kk;
               if (kk > kk_max) kk_max = kk;
             }
-            fprintf(stdout,"0x%02X",bittab1[ll/8][kk]);
+            fprintf(stdout,"0x%02X",bittab1[ll/8][kk]);		// Ausgabe des Hex-Wertes
             if (((ll+8) < height) || (kk != (width-1))) fprintf(stdout,",");
          }
          fprintf(stdout,"\r\n  ");

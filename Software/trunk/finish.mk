@@ -33,6 +33,9 @@ Calibrate_UR.o: ../Calibrate_UR.c $(MKFILES)
 CheckPins.o: ../CheckPins.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
+GetResistance.o: ../GetResistance.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 GetVloss.o: ../GetVloss.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 

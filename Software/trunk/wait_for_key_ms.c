@@ -227,13 +227,15 @@ void check_rotary(void) {
 
 #ifdef WAIT_LINE2_CLEAR
 /* *********************************************************** */
-/* wait 5 seconds or previous key press, then clear line 2 of LCD and */
-/* set the cursor to the beginning of line 2 */
+/* wait 5 seconds or previous key press, then clear last line  of LCD and */
+/* set the cursor to the beginning of last line */
 /* *********************************************************** */
 void wait_for_key_5s_line2(void) {
+  if (last_line_used != 0) {
   // add a + sign at the last location of screen
   lcd_set_cursor(((LCD_LINES - 1) * ((FONT_HEIGHT + 7) / 8)), (LCD_LINE_LENGTH - 1));
   lcd_data('+');
+  lcd_set_cursor(((LCD_LINES - 1) * ((FONT_HEIGHT + 7) / 8)), (LCD_LINE_LENGTH - 1));
  #ifdef WITH_ROTARY_SWITCH
   do {
      if (wait_for_key_ms(SHORT_WAIT_TIME) > 0) break;
@@ -242,15 +244,10 @@ void wait_for_key_5s_line2(void) {
  #else
   wait_for_key_ms(SHORT_WAIT_TIME);	// wait until time is elapsed or key is pressed
  #endif
- #if (LCD_LINES < 4)
-  lcd_line2(); //2. row 
+  lcd_set_cursor((LCD_LINES-1),0);
   lcd_clear_line();		// clear the whole line
-  lcd_line2(); //2. row 
- #else
-  lcd_line4(); //4. row 
-  lcd_clear_line();		// clear the whole line
-  lcd_line4(); //4. row 
- #endif
+  lcd_set_cursor((LCD_LINES-1),0);
+  }  /* end if last_line_used */
 }  /* end wait_for_key_5s_line2() */
 #endif
 

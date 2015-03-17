@@ -16,14 +16,16 @@
  #define MODE_FGEN 3		/* frequency generator function */
  #define MODE_PWM 4		/* Pulse Width variation function */
  #define MODE_ESR 5		/* ESR measurement in circuit */
- #define MODE_ROTARY 6		/* Test Rotary Switch */
- #define MODE_H_CRYSTAL 7	/* test of high frequency crystal */
- #define MODE_L_CRYSTAL 8	/* test of low frequency crystal */
- #define NNN 8
+ #define MODE_RESIS 6		/* ResistorCheck at TP1:TP3 */
+ #define MODE_CAP13 7		/* Capacitor check at TP1:TP3 */
+ #define MODE_ROTARY 8		/* Test Rotary Switch */
+ #define MODE_H_CRYSTAL 9	/* test of high frequency crystal */
+ #define MODE_L_CRYSTAL 10	/* test of low frequency crystal */
+ #define NNN 10
  #ifdef WITH_SELFTEST
-  #define MODE_SELFTEST 9	/* full selftest function with calibration */
+  #define MODE_SELFTEST 11	/* full selftest function with calibration */
   #undef NNN
-  #define NNN 9
+  #define NNN 11
  #endif
  #ifdef WITH_VEXT
   #define MODE_VEXT NNN+1	/* external voltage measurement and zener voltage */
@@ -43,18 +45,20 @@
   #define MODE_VEXT 66
  #endif		/* end #ifdef WITH_VEXT */
 #else
- /* no PROCESSOR_TYP == 644 , mega8/168/328 */
+ /* no PROCESSOR_TYP == 644 , 328 */
  #define MODE_TRANS 0		/* normal TransistorTester function */
  #define MODE_FREQ 1		/* frequency measurement */
  #define MODE_FGEN 2		/* frequency generator function */
  #define MODE_PWM 3		/* Pulse Width variation function */
  #define MODE_ESR 4		/* ESR measurement in circuit */
- #define MODE_ROTARY 5		/* Test Rotary Switch */
- #define NNN 5
+ #define MODE_RESIS 5		/* ResistorCheck at TP1:TP3 */
+ #define MODE_CAP13 6		/* Capacitor check at TP1:TP3 */
+ #define MODE_ROTARY 7		/* Test Rotary Switch */
+ #define NNN 7
  #ifdef WITH_SELFTEST
-  #define MODE_SELFTEST 6	/* full selftest function with calibration */
+  #define MODE_SELFTEST 8	/* full selftest function with calibration */
   #undef NNN
-  #define NNN 6
+  #define NNN 8
  #endif
  #ifdef WITH_VEXT
   #define MODE_VEXT NNN+1	/* external voltage measurement and zener voltage */
@@ -223,6 +227,12 @@ void function_menu() {
         if (func_number == MODE_ESR) {
            show_C_ESR();		// measure capacity and ESR at TP1 and TP3
         }
+        if (func_number == MODE_RESIS) {
+           show_Resis13();		// measure resistor at TP1 and TP3
+        }
+        if (func_number == MODE_CAP13) {
+           show_Cap13();		// measure capacitor at TP1 and TP3
+        }
         if (func_number == MODE_ROTARY) {
            CheckRotaryEncoder();		// check rotary encoder
         }
@@ -278,6 +288,8 @@ void message2line(uint8_t number) {
      if (number == MODE_FGEN) lcd_MEM2_string(F_GEN_str);
      if (number == MODE_PWM) lcd_MEM2_string(PWM_10bit_str);
      if (number == MODE_ESR) lcd_MEM2_string(C_ESR_str);
+     if (number == MODE_RESIS) lcd_MEM_string(RESIS_13_str);
+     if (number == MODE_CAP13) lcd_MEM_string(CAP_13_str);
      if (number == MODE_ROTARY) lcd_MEM2_string(RotaryEncoder_str);
  #ifdef WITH_SELFTEST
      if (number == MODE_SELFTEST) lcd_MEM2_string(FULLCHECK_str);
@@ -340,6 +352,88 @@ void show_C_ESR() {
 #endif
   }  /* end for times */
 } /* end show_C_ESR() */
+
+/* ****************************************************************** */
+/* show_Resis13 measures the resistance of a part connected to TP1 and TP3 */
+/* ****************************************************************** */
+void show_Resis13(void) {
+  uint8_t key_pressed;
+  message_key_released(RESIS_13_str);
+#ifdef POWER_OFF
+  uint8_t times;
+  for (times=0;times<250;times++) 
+#else
+  while (1)		/* wait endless without the POWER_OFF option */
+#endif
+  {
+        PartFound = PART_NONE;
+        ResistorsFound = 0;
+        ResistorChecked[1] = 0;
+        GetResistance(TP3, TP1);
+        GetResistance(TP1, TP3);
+        lcd_line2();		// clear old Resistance value 
+        if (ResistorsFound != 0) {
+           RvalOut(1);
+           lcd_spaces(8);
+        } else {
+           lcd_data('?');		// too big
+           lcd_spaces(10);
+        }
+     key_pressed = wait_for_key_ms(1000);
+#ifdef WITH_ROTARY_SWITCH
+     if ((key_pressed != 0) || (rotary.incre > 3)) break;
+#else
+     if (key_pressed != 0) break;
+#endif
+  }  /* end for times */
+} /* end show_Resis13() */
+
+/* ****************************************************************** */
+/* show_Resis measures the resistance of a part connected to TP1 and TP3 */
+/* ****************************************************************** */
+void show_Cap13(void) {
+  uint8_t key_pressed;
+  message_key_released(CAP_13_str);
+#ifdef POWER_OFF
+  uint8_t times;
+  for (times=0;times<250;times++) 
+#else
+  while (1)		/* wait endless without the POWER_OFF option */
+#endif
+  {
+     PartFound = PART_NONE;
+     NumOfDiodes = 0;
+     cap.cval_max = 0;
+     cap.cpre_max = -12;	// set to pF unit
+     ReadCapacity(TP3, TP1);
+     lcd_line2();		// overwrite old Capacity value 
+     DisplayValue(cap.cval,cap.cpre,'F',4);
+     PartFound = PART_CAPACITOR;	// GetESR should check the Capacity value
+     cap.esr = GetESR(TP3,TP1);
+     if ( cap.esr < 65530) {
+        lcd_MEM_string(ESR_str);
+        DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
+ #if (LCD_LINES > 2)
+        lcd_set_cursor(0,4);
+        lcd_MEM_string(Resistor_str);   // -[=]-
+        lcd_testpin(TP3);            //Pin number 3
+        lcd_space();
+ #endif
+     } else {		// no ESR known
+        lcd_spaces(13);			// overwrite ESR=...
+        lcd_set_cursor(0,4);		// clear ESR resistor
+        lcd_testpin(TP3);            //Pin number 3
+        lcd_spaces(6);			// overwrite ESR resistor symbol
+     }
+
+     key_pressed = wait_for_key_ms(1000);
+#ifdef WITH_ROTARY_SWITCH
+     if ((key_pressed != 0) || (rotary.incre > 3)) break;
+#else
+     if (key_pressed != 0) break;
+#endif
+  }  /* end for times */
+} /* end show_Cap13() */
 
 /* *************************************************** */
 /* show_vext() read one or two input voltages from     */

@@ -10,6 +10,7 @@
 #include <math.h>
 #include "config.h"
 #include "tt_function.h"
+#include "tt_resistor.h"
 //#include "wait1000ms.h"
 //#include "lcd-routines.h"
 //#include "part_defs.h"
@@ -1151,6 +1152,8 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 #ifdef WITH_MENU
  const unsigned char FatTP2_str[] MEM2_TEXT = "f@TP2";
  const unsigned char C_ESR_str[] MEM2_TEXT = "C+ESR@TP1:3";
+ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1,'1'+TP3,0};
+ const unsigned char CAP_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_CAP, LCD_CHAR_LINE1,'1'+TP3,0};
 #endif
  
 
@@ -1213,23 +1216,23 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 #if LCD_CHAR_U < 8
    const unsigned char CyrillicMuIcon[] MEM_TEXT = {0,17,17,17,19,29,16,16};	//µ
 #endif
-
- const unsigned char PinRLtab[] PROGMEM = { (1<<PIN_RL1),
-				     (1<<PIN_RL2),
-				     (1<<PIN_RL3)};	// Table of commands to switch the  R-L resistors Pin 0,1,2
-#if FLASHEND > 0x3fff
- // Processors with little memory must use one Pin number higher than correspondig Low Resistor
- const unsigned char PinRHtab[] PROGMEM = { (1<<PIN_RH1),
-				     (1<<PIN_RH2),
-				     (1<<PIN_RH3)};	// Table of commands to switch the  R-L resistors Pin 0,1,2
-#endif
-
 		// Table include the predefined value TXD_VAL of other output port(s) of port C.
 		// Every pin, that should be switched permanent to VCC level, should be set to 1 in every tab position.
 		// The predefined value TXD_MSK defines the pin (all pins), that must be switched permanent to output.
  const unsigned char PinADCtab[] PROGMEM = { (1<<TP1)|TXD_VAL,
 				     (1<<TP2)|TXD_VAL,
 				     (1<<TP3)|TXD_VAL};	// Table of commands to switch the ADC-Pins 0,1,2 to output
+
+#if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
+ // Processors with little memory must use one Pin number higher than correspondig Low Resistor
+ const unsigned char PinRHtab[] PROGMEM = { (1<<PIN_RH1),
+				     (1<<PIN_RH2),
+				     (1<<PIN_RH3)};	// Table of commands to switch the  R-L resistors Pin 0,1,2
+#endif
+ const unsigned char PinRLtab[] PROGMEM = { (1<<PIN_RL1),
+				     (1<<PIN_RL2),
+				     (1<<PIN_RL3)};	// Table of commands to switch the  R-L resistors Pin 0,1,2
+
 
  const uint8_t PrefixTab[] MEM_TEXT = { 'p','n',LCD_CHAR_U,'m',0,'k','M'}; // p,n,u,m,-,k,M
 
@@ -1341,6 +1344,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   extern const uint16_t RHtab[];
  #endif
   extern const unsigned char PinRLtab[];
+  extern const unsigned char PinRLRHApAm_tab[] PROGMEM ;
   extern const uint8_t PrefixTab[]; // p,n,u,m,-,k,M
  #if FLASHEND > 0x3fff
   extern const unsigned char PinRHtab[];
@@ -1359,6 +1363,8 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 extern const unsigned char FatTP2_str[];
 extern const unsigned char VERSION_str[];
 extern const unsigned char C_ESR_str[];
+extern const unsigned char RESIS_13_str[];
+extern const unsigned char CAP_13_str[];
 extern const unsigned char REF_C_str[];
 extern const unsigned char REF_R_str[];
 extern const unsigned char R0_str[];
@@ -1374,6 +1380,22 @@ struct Diode_t {
   unsigned int Voltage[6];
 };
 COMMON struct Diode_t diodes;
+
+struct Switch_t {
+
+  union {
+  unsigned long Pw;	// combined Mask
+  uint8_t R[4];	// mask to switch a Pin with R_L,  mask to switch a Pin with R_H
+  } Pin;
+
+#if 0
+  union {
+  unsigned int Aw1;	// combined Mask
+  uint8_t mm[2];	// mask to switch the ADC port Pin, mask to switch the ADC DDR port Pin
+  } ADC;
+
+#endif
+};
 
 COMMON uint8_t NumOfDiodes;
 COMMON uint8_t diode_sequence;
@@ -1401,18 +1423,6 @@ COMMON unsigned int ref_mv_offs;       //Reference-voltage  in mV units with eep
 COMMON unsigned int adc_internal_reference;  //internal reference voltage of ADC in mV units
 COMMON  unsigned int RHmultip;	// Multiplier for capacity measurement with R_H (470KOhm)
 
-COMMON struct resis_t{
-   unsigned long rx;		// value of resistor RX  
-   uint8_t ra,rb;		// Pins of RX
-   uint8_t rt;			// Tristate-Pin (inactive)
-   uint8_t checked;		// marked as 1, if same value in both directions
-} resis[3];
-COMMON  uint8_t ResistorsFound;	//Number of found resistors
-
-#if FLASHEND > 0x1fff
-   unsigned long inductor_lx;	// inductance 10uH or 100uH
-   int8_t inductor_lpre;	// prefix for inductance
-#endif
 #ifdef WITH_MENU
 COMMON union t_frq{
   unsigned long dw;
@@ -1492,7 +1502,8 @@ COMMON uint8_t rotary_switch_present;	// is set to 1, if rotary switch movement 
 // COMMON  const uint8_t EE_RotarySwitch; 	// rotation switch is detected
 #endif
 
-
+COMMON uint8_t lcd_text_line;
+COMMON uint8_t last_line_used;
 //#if POWER_OFF+0 > 1
 COMMON unsigned int display_time;	// display time of measurement in ms units
 //#endif

@@ -21,6 +21,7 @@ void ReadInductance(void) {
   unsigned long dw;     // time_constant
   uint16_t w[2];
   } timeconstant;
+  unsigned long resistor;
   uint16_t per_ref1,per_ref2;	// percentage
   uint8_t LoPinR_L;	// Mask for switching R_L resistor of low pin
   uint8_t HiADC;	// Mask for switching the high pin direct to VCC
@@ -41,19 +42,24 @@ void ReadInductance(void) {
   if (ResistorsFound != 1) {
      return;	// do not search for inductance, more than 1 resistor
   }
-     if (resis[0].rx > 21000) return;
+     resistor = ResistorVal[ResistorList[0]];
+     if (resistor > 21000) return;
 
      // we can check for Inductance, if resistance is below 2100 Ohm
      for (count=0;count<4;count++) {
         // Try four times (different direction and with delayed counter start)
         if (count < 2) {
            // first and second pass, direction 1
-           LowPin = resis[0].ra;
-           HighPin = resis[0].rb;
+           LowPin = pgm_read_byte(&RPinTab[ResistorList[0]]);
+           HighPin = pgm_read_byte(&RPinTab[ResistorList[0]+2]);
+//           LowPin = resis[0].ra;
+//           HighPin = resis[0].rb;
         } else {
            // third and fourth pass, direction 2
-           LowPin = resis[0].rb;
-           HighPin = resis[0].ra;
+           HighPin = pgm_read_byte(&RPinTab[ResistorList[0]]);
+           LowPin = pgm_read_byte(&RPinTab[ResistorList[0]+2]);
+//           LowPin = resis[0].rb;
+//           HighPin = resis[0].ra;
         }
         HiADC = pgm_read_byte(&PinADCtab[HighPin]);	// Table of ADC Pins including | TXD_VAL
         LoPinR_L = pgm_read_byte(&PinRLtab[LowPin]);	//R_L mask for HighPin R_L load
@@ -61,7 +67,7 @@ void ReadInductance(void) {
         // Measurement of Inductance values
         R_PORT = 0;		// switch R port to GND
         ADC_PORT =   TXD_VAL;		// switch ADC-Port to GND
-        if ((resis[0].rx < 240) && ((count & 0x01) == 0)) {
+        if ((resistor < 240) && ((count & 0x01) == 0)) {
            // we can use PinR_L for measurement
            mess_r = RR680MI - R_L_VAL;			// use only pin output resistance
            ADC_DDR = HiADC | (1<<LowPin) | TXD_MSK;	// switch HiADC and Low Pin to GND, 
@@ -150,7 +156,7 @@ void ReadInductance(void) {
 //  #define CNT_ZERO_42 7
 //  #define CNT_ZERO_720 10
 //#endif
-        total_r = (mess_r + resis[0].rx + RRpinMI);
+        total_r = (mess_r + resistor + RRpinMI);
 //        cnt_diff = 0;
 //        if (total_r > 7000) cnt_diff = 1;
 //        if (total_r > 14000) cnt_diff = 2;
@@ -227,7 +233,7 @@ void ReadInductance(void) {
      if (inductance[nr_pol2] < inductance[nr_pol1]) nr_pol1 = nr_pol2;
      inductor_lx = inductance[nr_pol1];
      inductor_lpre = -5;	// 10 uH units
-     if (((nr_pol1 & 1) == 1) || (resis[0].rx >= 240)) {
+     if (((nr_pol1 & 1) == 1) || (resistor >= 240)) {
         // with 680 Ohm resistor total_r is more than 7460
         inductor_lpre = -4;	// 100 uH units
         inductor_lx = (inductor_lx + 5) / 10;

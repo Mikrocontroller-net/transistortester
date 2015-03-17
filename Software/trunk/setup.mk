@@ -308,7 +308,7 @@ OBJECTS += ReadADC.o wait_for_key_ms.o RefVoltage.o
 ifneq ($(PARTNO),m8)
 OBJECTS += get_log.o
 endif
-OBJECTS += main.o CheckPins.o ChargePin10ms.o EntladePins.o
+OBJECTS += main.o CheckPins.o GetResistance.o ChargePin10ms.o EntladePins.o
 OBJECTS +=  ReadCapacity.o GetRLmultip.o Calibrate_UR.o
 ifneq ($(PARTNO),m8)
 OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o GetFrequency.o function_menu.o message_key_released.o ReadBigCap.o

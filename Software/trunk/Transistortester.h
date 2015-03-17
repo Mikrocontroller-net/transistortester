@@ -1152,8 +1152,8 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 #ifdef WITH_MENU
  const unsigned char FatTP2_str[] MEM2_TEXT = "f@TP2";
  const unsigned char C_ESR_str[] MEM2_TEXT = "C+ESR@TP1:3";
- const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1,'1'+TP3,0};
- const unsigned char CAP_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_CAP, LCD_CHAR_LINE1,'1'+TP3,0};
+ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1,'1'+TP3,' ','.','.',0};
+ const unsigned char CAP_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_CAP, LCD_CHAR_LINE1,'1'+TP3,' ','.','.',0};
 #endif
  
 
@@ -1330,6 +1330,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  #if FLASHEND > 0x1fff
   extern uint16_t LogTab[];
   extern const unsigned char ESR_str[];
+  extern const unsigned char VLOSS_str[] MEM_TEXT ;
   extern const unsigned char Inductor_str[];
  #endif
 

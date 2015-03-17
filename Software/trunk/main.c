@@ -445,9 +445,9 @@
      if (cap.v_loss != 0) {
  #if (LCD_LINES > 2)
         lcd_line3();
-        lcd_MEM_string(&VLOSS_str[1]);	// "  Vloss="
+        lcd_MEM_string(&VLOSS_str[1]);	// "Vloss="
  #else
-        lcd_MEM_string(VLOSS_str);	// "  Vloss="
+        lcd_MEM_string(VLOSS_str);	// " Vloss="
  #endif
         DisplayValue(cap.v_loss,-1,'%',2);
      }
@@ -467,8 +467,11 @@
  #endif
      }
 #endif
-#ifdef WITH_GRAPHICS
-//     lcd_big_icon(CAPACITOR);
+#ifdef WITH_MENU
+     if ((cap.ca == TP1) && (cap.cb == TP3)) {
+        show_Cap13();		// automatic capacity measurement
+        goto start;
+     }
 #endif
      goto tt_end;
   } /* end PartFound == PART_CAPACITOR */
@@ -1047,7 +1050,7 @@ resistor_out:
        lcd_testpin(y);		//Pin-number 2
        lcd_MEM_string(Resistor_str);    // -[=]-
        lcd_testpin(z);		//Pin-number 3
-    }
+    }  /* end RegistersFound == 1 */
 #if (LCD_LINES > 3)
     if(PartFound == PART_DIODE) {
        lcd_line4(); //4. row 
@@ -1068,6 +1071,14 @@ resistor_out:
 	  lcd_set_cursor(0,5);
           lcd_MEM_string(Inductor_str);		// -ww-
           lcd_testpin(y);		//Pin-number 2
+#ifdef WITH_MENU
+       } else {
+          if (ResistorList[0] == 1) {
+             // is the TP1:TP3 resistor
+             show_Resis13();		// call of the special resistor measurement
+             goto start;
+          }
+#endif
        }
 #endif
     } else {

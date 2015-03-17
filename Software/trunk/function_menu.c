@@ -358,7 +358,7 @@ void show_C_ESR() {
 /* ****************************************************************** */
 void show_Resis13(void) {
   uint8_t key_pressed;
-  message_key_released(RESIS_13_str);
+  message_key_released(RESIS_13_str);	// "1-|=|-3 .."
 #ifdef POWER_OFF
   uint8_t times;
   for (times=0;times<250;times++) 
@@ -386,6 +386,8 @@ void show_Resis13(void) {
      if (key_pressed != 0) break;
 #endif
   }  /* end for times */
+  lcd_clear();
+  wait_about500ms();
 } /* end show_Resis13() */
 
 /* ****************************************************************** */
@@ -413,18 +415,26 @@ void show_Cap13(void) {
      if ( cap.esr < 65530) {
         lcd_MEM_string(ESR_str);
         DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
- #if (LCD_LINES > 2)
         lcd_set_cursor(0,4);
-        lcd_MEM_string(Resistor_str);   // -[=]-
-        lcd_testpin(TP3);            //Pin number 3
+        lcd_MEM2_string(&RESIS_13_str[1]);   // "-[=]-3 .."
         lcd_space();
- #endif
      } else {		// no ESR known
         lcd_spaces(13);			// overwrite ESR=...
         lcd_set_cursor(0,4);		// clear ESR resistor
         lcd_testpin(TP3);            //Pin number 3
-        lcd_spaces(6);			// overwrite ESR resistor symbol
+        lcd_spaces(9);			// overwrite ESR resistor symbol
      }
+ #if (LCD_LINES > 2)
+     GetVloss();                        // get Voltage loss of capacitor
+     lcd_line3();
+     if (cap.v_loss != 0) {
+        lcd_MEM_string(&VLOSS_str[1]);  // "Vloss="
+        DisplayValue(cap.v_loss,-1,'%',2);
+        lcd_spaces(4);
+     } else {
+        lcd_clear_line();
+     }
+ #endif
 
      key_pressed = wait_for_key_ms(1000);
 #ifdef WITH_ROTARY_SWITCH
@@ -433,6 +443,8 @@ void show_Cap13(void) {
      if (key_pressed != 0) break;
 #endif
   }  /* end for times */
+  lcd_clear();
+  wait_about500ms();
 } /* end show_Cap13() */
 
 /* *************************************************** */

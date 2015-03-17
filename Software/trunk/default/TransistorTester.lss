@@ -23,15 +23,15 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_abbrev 00001722  00000000  00000000  0000b991  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   00001bd8  00000000  00000000  0000d0b3  2**0
+ 10 .debug_line   00001bda  00000000  00000000  0000d0b3  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  00000584  00000000  00000000  0000ec8c  2**2
+ 11 .debug_frame  00000584  00000000  00000000  0000ec90  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000dcb  00000000  00000000  0000f210  2**0
+ 12 .debug_str    00000dcb  00000000  00000000  0000f214  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    00003a46  00000000  00000000  0000ffdb  2**0
+ 13 .debug_loc    00003a46  00000000  00000000  0000ffdf  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000018  00000000  00000000  00013a21  2**0
+ 14 .debug_ranges 00000018  00000000  00000000  00013a25  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -10883,9 +10883,9 @@ TyUfAusgabe:
     357e:	79 f0       	breq	.+30     	; 0x359e <main+0x39a>
  #if (LCD_LINES > 2)
         lcd_line3();
-        lcd_MEM_string(&VLOSS_str[1]);	// "  Vloss="
+        lcd_MEM_string(&VLOSS_str[1]);	// "Vloss="
  #else
-        lcd_MEM_string(VLOSS_str);	// "  Vloss="
+        lcd_MEM_string(VLOSS_str);	// " Vloss="
     3580:	85 e7       	ldi	r24, 0x75	; 117
     3582:	90 e0       	ldi	r25, 0x00	; 0
     3584:	0e 94 a2 01 	call	0x344	; 0x344 <lcd_fix_string>
@@ -12117,6 +12117,7 @@ resistor_out:
     3d34:	8e 2d       	mov	r24, r14
     3d36:	0e 94 db 00 	call	0x1b6	; 0x1b6 <lcd_testpin>
     3d3a:	27 c0       	rjmp	.+78     	; 0x3d8a <main+0xb86>
+#endif
        }
 #endif
     } else {

@@ -89,6 +89,7 @@ if (adcmv[2] >= 90) {
   adcmv[2] = ESR_ZERO;	// set back to default value
 }
 eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (uint8_t)adcmv[2]);	// fix zero offset
+last_line_used = 2;
 wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 
  #ifdef WITH_MENU
@@ -258,6 +259,7 @@ lcd_data('=');
 resis[0].rx = (adcmv[1] * (unsigned long)R_L_VAL) / (adcmv[0] - adcmv[1]);
 DisplayValue(resis[0].rx,-1,LCD_CHAR_OMEGA,3);
 sleep_5ms(210);
+last_line_used = 2;
 wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 // 
 lcd_clear();
@@ -297,6 +299,7 @@ lcd_data('=');
 resis[0].rx = (adcmv[1] * (unsigned long)R_L_VAL) / (adcmv[0] - adcmv[1]);
 DisplayValue(resis[0].rx,-1,LCD_CHAR_OMEGA,3);
 sleep_5ms(210);
+last_line_used = 2;
 wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 //
 lcd_clear();
@@ -335,6 +338,7 @@ lcd_data('=');
 resis[0].rx = (adcmv[1] * (unsigned long)R_L_VAL) / (adcmv[0] - adcmv[1]);
 DisplayValue(resis[0].rx,-1,LCD_CHAR_OMEGA,3);
 sleep_5ms(210);
+last_line_used = 2;
 wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
   #endif	/* PROCESSOR_TYP == 1280 */
 }	/* end if((test_mode & 0x0f) == 1) */
@@ -359,6 +363,7 @@ DisplayValue(RRpinPL,-1,LCD_CHAR_OMEGA,3);
 lcd_line2();
 lcd_MEM_string(RILO);	// "RiLo="
 DisplayValue(RRpinMI,-1,LCD_CHAR_OMEGA,3);
+last_line_used = 2;
 wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 
 //measure Zero offset for Capacity measurement
@@ -404,6 +409,7 @@ lcd_line2();
 lcd_MEM_string(OK_str);		// output "OK"
 no_c0save:
  #endif
+last_line_used = 2;
 wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 
  #ifdef AUTO_CAL
@@ -476,6 +482,7 @@ for (ww=0;ww<64;ww++) {
      lcd_line4();
      adcmv[0] = ReadADC(TP3);
      DisplayValue(adcmv[0],-3,'V',4);
+     last_line_used = 2;
      wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
    }
 //#######################################
@@ -515,6 +522,7 @@ for (ww=0;ww<64;ww++) {
    i2lcd(udiff2);		// output correction voltage
    RefVoltage();			// set new ADCconfig.U_Bandgap
   #endif	/* end AUTOSCALE_ADC */
+     last_line_used = 2;
    wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
    UnCalibrated = 0;		// clear the UnCalibrated Flag
    lcd_cursor_off();		// switch cursor off
@@ -568,6 +576,7 @@ lcd_MEM2_string(VERSION_str);	//"Version ..."
 lcd_line2();
 lcd_MEM_string(ATE);		//"Selftest End"
 PartFound = PART_NONE;
+     last_line_used = 2;
 wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 } /* end AutoCheck */ 
 

@@ -118,10 +118,10 @@ CFLAGS += -DLCD_ST7565_V_FLIP=1
 # choosen. With a font width below 8 more than 16 characters can be shown in one display line.
 #CFLAGS += -DFONT_6X8
 #CFLAGS += -DFONT_8X8
-CFLAGS += -DFONT_7X12
-#CFLAGS += -DFONT_8X12thin
+#CFLAGS += -DFONT_7X12
+CFLAGS += -DFONT_8X12thin
 #CFLAGS += -DFONT_8X14
-#CFLAGS += -DFONT_8x15
+#CFLAGS += -DFONT_8X15
 #CFLAGS += -DFONT_8X16
 #CFLAGS += -DFONT_8X16thin
 
@@ -132,12 +132,6 @@ CFLAGS += -DFONT_7X12
 CFLAGS += -DICON_TYPE=3
 
 # option BIG_TP makes the 123 for the test pins (beside the icon) bigger
-CFLAGS += -DBIG_TP
-# option INVERSE_TP inverse the 123 for the test pins (black on white)
-# the option INVERSE_TP disable the option BIG_TP because a frame is required
-#CFLAGS += -DINVERSE_TP
-
-# option BIG_TP makes the 123 for the test pins bigger
 CFLAGS += -DBIG_TP
 # option INVERSE_TP inverse the 123 for the test pins (black on white)
 # the option INVERSE_TP disable the option BIG_TP because a frame is required

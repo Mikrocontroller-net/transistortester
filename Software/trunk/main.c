@@ -334,7 +334,7 @@
 	    wait_about2s();
 	    AutoCheck(0x11);		// full Selftest with "Short probes" message
 	#endif
-	    goto end;
+	    goto tt_end;
 	  }
 
 	#ifdef WITH_SELFTEST
@@ -470,7 +470,7 @@
 #ifdef WITH_GRAPHICS
 //     lcd_big_icon(CAPACITOR);
 #endif
-     goto end;
+     goto tt_end;
   } /* end PartFound == PART_CAPACITOR */
 
   // ========================================
@@ -797,6 +797,7 @@
     if (vak_diode_nr < 5) {
        lcd_next_line(0);
        wait_for_key_5s_line2();	// wait 5s and clear line 2/4
+       lcd_line4();
        if (an_cat) {
           lcd_testpin(diodes.Anode[vak_diode_nr]);
           lcd_MEM_string(AnKat);	//"->|-"
@@ -811,7 +812,7 @@
        mVAusgabe(ii);
     } /* end if (vak_diode_nr < 5) */
 #endif
-    goto end;
+    goto tt_end;
     // end (PartFound == PART_TRANSISTOR)
 
   // ========================================
@@ -1003,7 +1004,7 @@
 #ifdef WITH_GRAPHICS
     lcd_draw_trans_pins(-7, 16);	// update of pin numbers must be done after diode update
 #endif
-    goto end;
+    goto tt_end;
   }  /* end (PartFound == PART_FET) */
 
 //   if(PartFound == PART_RESISTOR) 
@@ -1084,7 +1085,7 @@ resistor_out:
           RvalOut(1);
        }
     }
-    goto end;
+    goto tt_end;
 
   } // end (PartFound == PART_RESISTOR)
 
@@ -1123,7 +1124,7 @@ TyUfAusgabe:
   DisplayValue(ntrans.uBE,-3,'V',2);
 #endif
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - 
- end:
+ tt_end:
 #if POWER_OFF+0 > 1
   empty_count = 0;		// reset counter, if part is found
   mess_count++;			// count measurements
@@ -1198,7 +1199,7 @@ wait_again:
 
 end3:
   // the diode  is already shown on the LCD
-  if (ResistorsFound == 0) goto end;
+  if (ResistorsFound == 0) goto tt_end;
   ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
   // there is one resistor or more detected
 #if (LCD_LINES > 3)

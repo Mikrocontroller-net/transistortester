@@ -27,8 +27,8 @@ uint8_t HiPinRH;		// mask to switch the HighPin with R_H
 uint8_t LoADCp;			// mask to switch the ADC port LowPin
 uint8_t HiADCp;			// mask to switch the ADC port HighPin
 
-  uint8_t ii;			// temporary variable
 #if FLASHEND > 0x1fff
+  uint8_t ii;			// temporary variable
   int udiff;
 #endif
 
@@ -113,19 +113,6 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
   adc.hp2 = W5msReadADC(HighPin);	// read voltage, should be down
   if (adc.hp2 > (20*U_SCALE)) {
      // if resistor, voltage should be down
-#if DebugOut == 3
-     lcd_line3();
-     lcd_clear_line();
-     lcd_line3();
-     lcd_testpin(LowPin);
-     lcd_data('U');
-     lcd_testpin(HighPin);
-     lcd_data('A');
-     u2lcd(adc.hp1);
-     lcd_data('B');
-     u2lcd(adc.hp2);
-     lcd_space();
-#endif
      goto testend;
   }
   R_PORT = HiPinRH;		//switch R_H for High-Pin to VCC
@@ -160,9 +147,6 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
 		
   if((adc.hp1 < (4400*U_SCALE)) && (adc.hp2 > (97*U_SCALE))) {
      //voltage break down isn't insufficient 
-#if DebugOut == 3
-     lcd_data('F');
-#endif
      goto testend; 
   }
 //    if((adc.hp2 + (adc.hp2 / 61)) < adc.hp1)
@@ -170,7 +154,6 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
      // voltage breaks down with low test current and it is not nearly shorted  => resistor
 //     if (adc.lp1 < 120)  // take measurement with R_H 
      if (adc.lp1 < (169*U_SCALE)) { // take measurement with R_H 
-        ii = 'H';
         if (adc.lp2 < (38*U_SCALE)) {
            // measurement > 60MOhm too big resistance
            goto testend;
@@ -199,7 +182,6 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
         lrx1 *= 100;
         lrx1 += RH_OFFSET;			// add constant for correction of systematic error
      } else {
-        ii = 'L';
         // two measurements with R_L resistors (680) are made:
         // lirx1 (measurement at HighPin)
         if (adc.tp1 > adc.hp1) {
@@ -223,36 +205,6 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
            lrx1 = (lirx1 + lirx2) / 2;		//average of both R_L measurements
         }
      }
-#if DebugOut == 3
-  lcd_line3();
-  lcd_clear_line();
-  lcd_line3();
-  lcd_testpin(LowPin);
-  lcd_data(ii);
-  lcd_testpin(HighPin);
-  lcd_space();
-  if (ii == 'H') {
-     lcd_data('X');
-     DisplayValue(lirx1,1,LCD_CHAR_OMEGA,4);
-     lcd_space();
-     lcd_data('Y');
-     DisplayValue(lirx2,1,LCD_CHAR_OMEGA,4);
-     lcd_space();
-  } else {
-     lcd_data('x');
-     DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,4);
-     lcd_space();
-     lcd_data('y');
-     DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4);
-  }
-  lcd_space();
-  lcd_line4();
-  lcd_clear_line();
-  lcd_line4();
-  DisplayValue(lirx2,-1,LCD_CHAR_OMEGA,4);
-  lcd_space();
-  lcd_line2();
-#endif
      // measurement is finished, lrx1 is the resistance value of one direction
      if(PartFound < PART_TRANSISTOR) {
         if (ResistorChecked[resnum] != 0) {
@@ -261,15 +213,6 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
            lirx1 = (labs((long)lrx1 - (long)ResistorVal[resnum]) * 10) / (lrx1 + ResistorVal[resnum] + 100);
            if (lirx1  > 0) {
               // mismatch of the two measurements
-#if DebugOut == 3
-              lcd_data('R');
-              lcd_data('!');
-              lcd_data('=');
-              DisplayValue(ResistorVal[resnum],-1,LCD_CHAR_OMEGA,3);
-              lcd_space();
-              DisplayValue(lirx1,-1,LCD_CHAR_OMEGA,3);
-              lcd_space();
-#endif
 //              ResistorsFound--;		// this one isn't a resistor
 //              goto testend; // <10% mismatch
            } else {
@@ -288,10 +231,6 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
            ResistorChecked[resnum] = 1;		// is checked in one direction
 
         } // end  ResistorChecked[] != 0
-#if DebugOut == 3
-        lcd_data(ResistorsFound+'0');
-        lcd_data('R');
-#endif
      }	/* end if (PartFound < PART_TRANSISTOR) */
   }
   testend:			// end of resistor measurement

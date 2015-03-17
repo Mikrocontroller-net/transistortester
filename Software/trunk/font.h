@@ -7,7 +7,7 @@
   #define FONT_SELECTED
  #endif
 
- #ifdef FONT_8X16 
+ #if defined(FONT_8X16) || defined(FONT_8x16) 
   #ifdef FONT_SELECTED
    #warning Multiple fonts selected, please select only one!
   #else
@@ -18,7 +18,7 @@
   #endif
  #endif
 
- #ifdef FONT_8X16thin 
+ #if defined(FONT_8X16thin) || defined(FONT_8x16thin) 
   #ifdef FONT_SELECTED
    #warning Multiple fonts selected, please select only one!
   #else
@@ -29,7 +29,7 @@
   #endif
  #endif
 
- #ifdef FONT_8X15 
+ #if defined(FONT_8X15) || defined(FONT_8x15) 
   #ifdef FONT_SELECTED
    #warning Multiple fonts selected, please select only one!
   #else
@@ -40,7 +40,7 @@
   #endif
  #endif
 
- #ifdef FONT_8X14 
+ #if defined(FONT_8X14) || defined(FONT_8x14) 
   #ifdef FONT_SELECTED
    #warning Multiple fonts selected, please select only one!
   #else
@@ -51,7 +51,7 @@
   #endif
  #endif
 
- #ifdef FONT_8X12 
+ #if defined(FONT_8X12) || defined(FONT_8x12) 
   #ifdef FONT_SELECTED
    #warning Multiple fonts selected, please select only one!
   #else
@@ -62,7 +62,7 @@
   #endif
  #endif
 
- #ifdef FONT_8X12thin
+ #if defined(FONT_8X12thin) || defined(FONT_8x12thin) 
   #ifdef FONT_SELECTED
    #warning Multiple fonts selected, please select only one!
   #else
@@ -73,7 +73,7 @@
   #endif
  #endif
 
- #ifdef FONT_7X12 
+ #if defined(FONT_7X12) || defined(FONT_7x12) 
   #ifdef FONT_SELECTED
    #warning Multiple fonts selected, please select only one!
   #else
@@ -84,7 +84,7 @@
   #endif
  #endif
 
- #ifdef FONT_8X8 
+ #if defined(FONT_8X8) || defined(FONT_8x8) 
   #ifdef FONT_SELECTED
    #warning Multiple fonts selected, please select only one!
   #else

@@ -28,7 +28,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      unsigned int rtp;
   }adc;
   uint8_t LoPinRL;		// mask to switch the LowPin with R_L
+#if FLASHEND > 0x1fff
   uint8_t LoPinRH;		// mask to switch the LowPin with R_H
+#endif
   uint8_t TriPinRL;		// mask to switch the TristatePin with R_L
   uint8_t TriPinRH;		// mask to switch the TristatePin with R_H
   uint8_t HiPinRL;		// mask to switch the HighPin with RL
@@ -62,26 +64,23 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     TristatePin remains switched to input , no action required 
   */
   wdt_reset();
-//#ifdef AUTO_CAL
-//  uint16_t resis680pl;
-//  uint16_t resis680mi;
-//  resis680pl = eeprom_read_word(&R680pl);
-//  resis680mi = eeprom_read_word(&R680mi);
-//  #define RR680PL resis680pl
-//  #define RR680MI resis680mi
-//#else
-//  #define RR680PL (R_L_VAL + PIN_RP)
-//  #define RR680MI (R_L_VAL + PIN_RM)
-//#endif
   addr = &PinRLtab[LowPin];
   LoPinRL = pgm_read_byte(addr);		// instruction for LowPin R_L
-#if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
+#if FLASHEND > 0x1fff
+ #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
   addr += 3;			// address of PinRHtab[LowPin]
   LoPinRH = pgm_read_byte(addr);		// instruction for LowPin R_H
-#else
+ #else
   LoPinRH = LoPinRL + LoPinRL;				// instruction for LowPin R_H
-#endif
+ #endif
   addr += 3;			// address of PinADCtab[LowPin]
+#else		// LoPinRH not used for ATmega8
+ #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
+  addr += 6;			// address of PinADCtab[LowPin]
+ #else
+  addr += 3;			// address of PinADCtab[LowPin], table PinRHtab is missing
+ #endif
+#endif
   LoADCp = pgm_read_byte(addr);		// instruction for ADC Low-Pin, including | TXD_VAL
 
   addr = &PinRLtab[TristatePin];

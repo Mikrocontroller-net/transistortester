@@ -21,7 +21,8 @@ void ReadInductance(void) {
   unsigned long dw;     // time_constant
   uint16_t w[2];
   } timeconstant;
-  unsigned long resistor;
+  unsigned int resistor;
+  uint8_t res_num;
   uint16_t per_ref1,per_ref2;	// percentage
   uint8_t LoPinR_L;	// Mask for switching R_L resistor of low pin
   uint8_t HiADC;	// Mask for switching the high pin direct to VCC
@@ -42,22 +43,29 @@ void ReadInductance(void) {
   if (ResistorsFound != 1) {
      return;	// do not search for inductance, more than 1 resistor
   }
-     resistor = ResistorVal[ResistorList[0]];
-     if (resistor > 21000) return;
+     res_num = ResistorList[0];
+     if (ResistorVal[res_num] > 21000) return;
+     resistor = ResistorVal[res_num];
 
      // we can check for Inductance, if resistance is below 2100 Ohm
      for (count=0;count<4;count++) {
         // Try four times (different direction and with delayed counter start)
         if (count < 2) {
            // first and second pass, direction 1
-           LowPin = pgm_read_byte(&RPinTab[ResistorList[0]]);
-           HighPin = pgm_read_byte(&RPinTab[ResistorList[0]+2]);
-//           LowPin = resis[0].ra;
-//           HighPin = resis[0].rb;
+           LowPin = TP1;
+           if (res_num == 2) LowPin = TP2;
+           HighPin = TP3;
+           if (res_num == 0) HighPin = TP2;
+//           LowPin = pgm_read_byte(&RPinTab[res_num]);
+//           HighPin = pgm_read_byte(&RPinTab[res_num+2]);
         } else {
            // third and fourth pass, direction 2
-           HighPin = pgm_read_byte(&RPinTab[ResistorList[0]]);
-           LowPin = pgm_read_byte(&RPinTab[ResistorList[0]+2]);
+	   LowPin = TP3;
+           if (res_num == 0) LowPin = TP2;
+           HighPin = TP1;
+           if (res_num == 2) HighPin = TP2;
+//           HighPin = pgm_read_byte(&RPinTab[res_num]);
+//           LowPin = pgm_read_byte(&RPinTab[res_num+2]);
 //           LowPin = resis[0].rb;
 //           HighPin = resis[0].ra;
         }
@@ -147,7 +155,7 @@ void ReadInductance(void) {
             umax = W10msReadADC(LowPin);
             total_r =  ReadADC(HighPin);
             if ((umax < 2) && (total_r < 2)) break;	// low current detected
-        }
+        }  /* end for ii */
   #define CNT_ZERO_42 6
   #define CNT_ZERO_720 7
 //#if F_CPU == 16000000UL

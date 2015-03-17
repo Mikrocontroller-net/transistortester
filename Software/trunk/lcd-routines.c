@@ -16,6 +16,10 @@
 
  
 uint8_t lcd_text_line;
+uint8_t _lcd_column;
+uint8_t last_text_line;
+uint8_t last_text_column;
+
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7108))
  #define NR_BYTE ((FONT_HEIGHT + 7) / 8)
 uint8_t _page;		// y position of the next character 
@@ -107,7 +111,7 @@ void lcd_line4() {
 /* ******************************************************************************* */
 void lcd_next_line(uint8_t xx) {
 lcd_text_line ++;
-if (lcd_text_line > LCD_LINES)  {
+if (lcd_text_line > (LCD_LINES - 1))  {
    // Limit is reached
    lcd_text_line = (LCD_LINES - 1);
    last_line_used = 1;
@@ -121,6 +125,7 @@ lcd_set_cursor((uint8_t)(lcd_text_line * PAGES_PER_LINE), xx);
 /* The y position is the page address (8 line units).                                     */
 /* For most controllers the y position must be increased by (Height + 7) / 8 for the next text line */
 void lcd_set_cursor(uint8_t y, uint8_t x) {
+ _lcd_column = x;
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
 //  unsigned char xx;
    //move to the specified position (depends on used font)
@@ -140,6 +145,17 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
      lcd_command((uint8_t)(CMD_SetDDRAMAddress + (20*(y/2)) + x));
    }
 #endif
+}
+
+/* ************************************************************************************** */
+uint8_t lcd_save_position(void) {
+ last_text_column = _lcd_column;
+ last_text_line = lcd_text_line;
+ return(last_text_line);
+}
+/* ************************************************************************************** */
+void lcd_restore_position(void) {
+ lcd_set_cursor((uint8_t)last_text_line * PAGES_PER_LINE, (uint8_t)(last_text_column));
 }
 
 /* ******************************************************************************* */

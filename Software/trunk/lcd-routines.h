@@ -24,6 +24,8 @@ void lcd_pgm_string(const unsigned char *data);
 void lcd_fix_customchar(const unsigned char *chardata);
 void lcd_clear_line(void);		// only for DebugOut
 void lcd_set_cursor(unsigned char y, unsigned char x);
+uint8_t lcd_save_position(void);	// save the last Character position (line,column) and returns the line
+void lcd_restore_position(void);	// restore the character position, saved with lcd_save_position()
 void lcd_next_line(uint8_t xx);		// y is incremented by PAGES_PER_LINE
 void lcd_powersave(void);
 void lcd_line1(void);

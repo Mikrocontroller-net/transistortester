@@ -949,19 +949,20 @@
        DisplayValue(_trans->gthvoltage,-3,'V',2);	//Gate-threshold voltage
     }
 #else	/* character display */
-    lcd_line2();			//2. Row
     if((PartMode&D_MODE) != D_MODE) {	//enhancement-MOSFET
 	//Gate capacity
+       lcd_next_line(0);		// line 3, if possible
        ReadCapacity(_trans->b,_trans->e);	//measure capacity
        lcd_show_Cg();	// show Cg=xxxpF
        lcd_MEM_string(vt_str);		// " Vt="
     } else {
  #if FLASHEND > 0x1fff
        if ((PartMode&0x0f)  != PART_MODE_JFET) {     /* kein JFET */
+          lcd_next_line(0);		// line 3, if possible
           ReadCapacity(_trans->b,_trans->e);	//measure capacity
           lcd_show_Cg();	// show Cg=xxxpF
        }
-       lcd_next_line(0);		// line 3, if possible
+       lcd_next_line(0);		// line 2 or 3, if possible
        wait_for_key_5s_line2();		// wait and clear last line
  #endif
        lcd_data('I');			// show I=xmA@Vg=y.yV at line 2 or 3
@@ -973,7 +974,7 @@
        lcd_MEM_string(Vgs_str);		// "@Vg="
     }
     DisplayValue(_trans->gthvoltage,-3,'V',2);	//Gate-threshold voltage
-#endif
+#endif  /* WITH_GRAPHICS or without */
 
 #if FLASHEND > 0x1fff
     if(NumOfDiodes == 1) {

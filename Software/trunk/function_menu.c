@@ -421,8 +421,8 @@ void show_Cap13(void) {
      } else {		// no ESR known
         lcd_spaces(13);			// overwrite ESR=...
         lcd_set_cursor(0,4);		// clear ESR resistor
-        lcd_testpin(TP3);            //Pin number 3
-        lcd_spaces(9);			// overwrite ESR resistor symbol
+        lcd_MEM2_string(&CAP_13_str[4]);
+        lcd_spaces(5);			// overwrite ESR resistor symbol
      }
  #if (LCD_LINES > 2)
      GetVloss();                        // get Voltage loss of capacitor

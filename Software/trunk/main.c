@@ -468,7 +468,7 @@
      }
 #endif
 #ifdef WITH_MENU
-     if ((cap.ca == TP1) && (cap.cb == TP3)) {
+     if ((cap.ca + cap.cb) == (TP1 + TP3)) {
         show_Cap13();		// automatic capacity measurement
         goto start;
      }
@@ -800,7 +800,6 @@
     if (vak_diode_nr < 5) {
        lcd_next_line(0);
        wait_for_key_5s_line2();	// wait 5s and clear line 2/4
-       lcd_line4();
        if (an_cat) {
           lcd_testpin(diodes.Anode[vak_diode_nr]);
           lcd_MEM_string(AnKat);	//"->|-"

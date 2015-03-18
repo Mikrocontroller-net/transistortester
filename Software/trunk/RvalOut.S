@@ -68,11 +68,11 @@ RvalOut:		; void RvalOut(uint8_t nrr)
  	brne	ad1d8e 		; (inductor_lpre == 0)
         ldi	r24, TP3	; hipin = TP3
         ldi     r22, TP1	; lopin = TP1
-	cpi	r16,0		; nrr == 0
+	cpi	r16,0		; if (nrr == 0)
         brne    not_zero
         ldi	r24, TP2	; hipin = TP2
 not_zero:
-        cpi	r20, 2
+        cpi	r16, 2		; if (nrr == 2)
 	brne	not_two
 	ldi	r22, TP2	; lopin = TP2
 not_two:

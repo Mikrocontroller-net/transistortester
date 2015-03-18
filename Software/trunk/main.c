@@ -1060,9 +1060,9 @@ resistor_out:
     lcd_line2(); //2. row 
 #endif
     if (ResistorsFound == 1) {
-       RvalOut(ResistorList[0]);
 #if FLASHEND > 0x1fff
        ReadInductance();		// measure inductance, possible only with single R<2.1k
+       RvalOut(ResistorList[0]);	// RvalOut starts GetESR, if resistance is low and no Inductance
        if (inductor_lpre != 0) {
 	  // resistor have also Inductance
           lcd_MEM_string(Lis_str);	// "L="
@@ -1070,18 +1070,19 @@ resistor_out:
 	  lcd_set_cursor(0,5);
           lcd_MEM_string(Inductor_str);		// -ww-
           lcd_testpin(y);		//Pin-number 2
-#ifdef WITH_MENU
+ #ifdef WITH_MENU
        } else {
           if (ResistorList[0] == 1) {
              // is the TP1:TP3 resistor
              show_Resis13();		// call of the special resistor measurement
              goto start;
           }
-#endif
+ #endif
        }
+#else	/* FLASHEND <= 0x1fff */
+       RvalOut(ResistorList[0]);	// RvalOut starts GetESR, if resistance < 10 Ohm
 #endif
-    } else {
-       // output resistor values in right order
+    } else { // output resistor values in right order
        if (ii == 0) { /* resistor 0 has maximum */
           RvalOut(1);
           RvalOut(2);

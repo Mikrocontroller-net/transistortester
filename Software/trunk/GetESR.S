@@ -364,23 +364,34 @@ ad_35fe:
 					/*  }  */
 
 ad_3604:
-	LDIZ	PinADCtab; 	/* LoADC = pgm_read_byte(&PinADCtab[cap.ca]) | TXD_MSK; */
+#if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
+	LDIZ	PinRLRHADCtab+6; 	/* LoADC = pgm_read_byte((&PinRLRHADCtab[6])+cap.ca) | TXD_MSK; */
+#else
+	LDIZ	PinRLRHADCtab+3; 	/* LoADC = pgm_read_byte((&PinRLRHADCtab[3])+cap.ca) | TXD_MSK; */
+#endif
 	add	r30, SelectLowPin;
 	adc	r31, zero_reg;
 	lpm	r24, Z+;
 	ori	r24, TXD_MSK;
 	std	Y+LoADC, r24;
-	LDIZ	PinADCtab; 	/* HiADC = pgm_read_byte(&PinADCtab[cap.cb]) | TXD_MSK; */
+
+#if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
+	LDIZ	PinRLRHADCtab+6; 	/* HiADC = pgm_read_byte((&PinRLRHADCtab[6])+cap.cb) | TXD_MSK; */
+#else
+	LDIZ	PinRLRHADCtab+3; 	/* HiADC = pgm_read_byte((&PinRLRHADCtab[3])+cap.cb) | TXD_MSK; */
+#endif
 	add	r30, SelectHighPin;
 	adc	r31, zero_reg;
 	lpm	r24, Z+;
 	ori	r24, TXD_MSK;
 	std	Y+HiADC, r24;
-	LDIZ	PinRLtab;	/* LoPinR_L = pgm_read_byte(&PinRLtab[cap.ca]);  //R_L mask for LowPin R_L load */
+
+	LDIZ	PinRLRHADCtab;	/* LoPinR_L = pgm_read_byte(&PinRLRHADCtab[cap.ca]);  //R_L mask for LowPin R_L load */
 	add	r30, SelectLowPin;
 	adc	r31, zero_reg;
 	lpm	LoPinR_L, Z+;
-	LDIZ	PinRLtab;	/* HiPinR_L = pgm_read_byte(&PinRLtab[cap.cb]);	//R_L mask for HighPin R_L load */
+
+	LDIZ	PinRLRHADCtab;	/* HiPinR_L = pgm_read_byte(&PinRLRHADCtab[cap.cb]);	//R_L mask for HighPin R_L load */
 	add	r30, SelectHighPin;
 	adc	r31, zero_reg;
 	lpm	HiPinR_L, Z+;

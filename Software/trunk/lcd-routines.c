@@ -252,6 +252,9 @@ _xpos += FONT_WIDTH;		// move pointer to the next character position
     case LCD_CHAR_RESIS2:
     	uart_putc('R');
     	break;
+    case LCD_CHAR_LINE1:
+        uart_putc('-');
+        break;
 //    case LCD_CHAR_DEGREE:	// degree sign
 //    	uart_putc(0xf8);	// codepage 437 or 850 has degree
 //    	break;

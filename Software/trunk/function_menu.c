@@ -391,7 +391,7 @@ void show_Resis13(void) {
 } /* end show_Resis13() */
 
 /* ****************************************************************** */
-/* show_Resis measures the resistance of a part connected to TP1 and TP3 */
+/* show_Cap13 measures the capacity of a part connected to TP1 and TP3 */
 /* ****************************************************************** */
 void show_Cap13(void) {
   uint8_t key_pressed;
@@ -409,32 +409,41 @@ void show_Cap13(void) {
      cap.cpre_max = -12;	// set to pF unit
      ReadCapacity(TP3, TP1);
      lcd_line2();		// overwrite old Capacity value 
-     DisplayValue(cap.cval,cap.cpre,'F',4);
-     PartFound = PART_CAPACITOR;	// GetESR should check the Capacity value
-     cap.esr = GetESR(TP3,TP1);
-     if ( cap.esr < 65530) {
-        lcd_MEM_string(ESR_str);
-        DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
-        lcd_set_cursor(0,4);
-        lcd_MEM2_string(&RESIS_13_str[1]);   // "-[=]-3 .."
-        lcd_space();
-     } else {		// no ESR known
-        lcd_spaces(13);			// overwrite ESR=...
-        lcd_set_cursor(0,4);		// clear ESR resistor
-        lcd_MEM2_string(&CAP_13_str[4]);
-        lcd_spaces(5);			// overwrite ESR resistor symbol
-     }
+     if (cap.cpre < 0) {
+        DisplayValue(cap.cval,cap.cpre,'F',4);
+        PartFound = PART_CAPACITOR;	// GetESR should check the Capacity value
+        cap.esr = GetESR(TP3,TP1);
+        if ( cap.esr < 65530) {
+           lcd_MEM_string(ESR_str);
+           DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
+           lcd_set_cursor(0,4);
+           lcd_MEM2_string(&RESIS_13_str[1]);   // "-[=]-3 .."
+           lcd_space();
+        } else {		// no ESR known
+           lcd_spaces(13);			// overwrite ESR=...
+           lcd_set_cursor(0,4);		// clear ESR resistor
+           lcd_MEM2_string(&CAP_13_str[4]);
+           lcd_spaces(5);			// overwrite ESR resistor symbol
+        }
  #if (LCD_LINES > 2)
-     GetVloss();                        // get Voltage loss of capacitor
-     lcd_line3();
-     if (cap.v_loss != 0) {
-        lcd_MEM_string(&VLOSS_str[1]);  // "Vloss="
-        DisplayValue(cap.v_loss,-1,'%',2);
-        lcd_spaces(4);
-     } else {
-        lcd_clear_line();
-     }
+        GetVloss();                        // get Voltage loss of capacitor
+        lcd_line3();
+        if (cap.v_loss != 0) {
+           lcd_MEM_string(&VLOSS_str[1]);  // "Vloss="
+           DisplayValue(cap.v_loss,-1,'%',2);
+           lcd_spaces(4);
+        } else {
+           lcd_clear_line();
+        }
  #endif
+     } else { /* no cap detected */
+       lcd_data('?');
+       lcd_spaces(18);
+ #if (LCD_LINES > 2)
+       lcd_line3();
+       lcd_clear_line();
+ #endif
+     }
 
      key_pressed = wait_for_key_ms(1000);
 #ifdef WITH_ROTARY_SWITCH

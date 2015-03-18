@@ -22,8 +22,12 @@ void GetVloss() {
   uint8_t LoADC;
 
   if (cap.v_loss > 0) return;		// Voltage loss is already known
-  LoADC = pgm_read_byte(&PinADCtab[cap.ca]) | TXD_MSK;
-  HiPinR_L = pgm_read_byte(&PinRLtab[cap.cb]);	//R_L mask for HighPin R_L load
+#if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
+  LoADC = pgm_read_byte((&PinRLRHADCtab[6])+cap.ca) | TXD_MSK;
+#else
+  LoADC = pgm_read_byte((&PinRLRHADCtab[3])+cap.ca) | TXD_MSK;
+#endif
+  HiPinR_L = pgm_read_byte(&PinRLRHADCtab[cap.cb]);	//R_L mask for HighPin R_L load
 
   EntladePins();			// discharge capacitor
   ADC_PORT = TXD_VAL;			// switch ADC-Port to GND

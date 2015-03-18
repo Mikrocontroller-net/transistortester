@@ -600,6 +600,8 @@ uint8_t ShortedProbes(uint8_t Probe1, uint8_t Probe2)
   unsigned int      U1;            /* voltage at probe #1 in mV */
   unsigned int      U2;            /* voltage at probe #2 in mV */
   unsigned int      URH;	   /* half of reference voltage */
+  const uint8_t *addr;
+  uint8_t pp;
   /*
    *  Set up a voltage divider between the two probes:
    *  - Probe1: Rl pull-up
@@ -608,8 +610,11 @@ uint8_t ShortedProbes(uint8_t Probe1, uint8_t Probe2)
 
   ADC_DDR =  TXD_MSK;		// all-Pins to Input
   ADC_PORT = TXD_VAL;		// all ADC-Ports to GND
-  R_PORT = pgm_read_byte(&PinRLtab[Probe1]);
-  R_DDR = pgm_read_byte(&PinRLtab[Probe1]) | pgm_read_byte(&PinRLtab[Probe2]);
+  addr = &PinRLRHADCtab[Probe1];
+  pp = pgm_read_byte(addr);
+  R_PORT = pp;
+  addr += (int8_t)(Probe2-Probe1);
+  R_DDR =  pp | pgm_read_byte(addr);	// pgm_read_byte(PinRHtab[Probe1]) | pgm_read_byte(PinRLtab[Probe2]);
 
   /* read voltages */
   U1 = ReadADC(Probe1);

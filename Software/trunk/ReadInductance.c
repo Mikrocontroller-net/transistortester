@@ -56,21 +56,19 @@ void ReadInductance(void) {
            if (res_num == 2) LowPin = TP2;
            HighPin = TP3;
            if (res_num == 0) HighPin = TP2;
-//           LowPin = pgm_read_byte(&RPinTab[res_num]);
-//           HighPin = pgm_read_byte(&RPinTab[res_num+2]);
         } else {
            // third and fourth pass, direction 2
 	   LowPin = TP3;
            if (res_num == 0) LowPin = TP2;
            HighPin = TP1;
            if (res_num == 2) HighPin = TP2;
-//           HighPin = pgm_read_byte(&RPinTab[res_num]);
-//           LowPin = pgm_read_byte(&RPinTab[res_num+2]);
-//           LowPin = resis[0].rb;
-//           HighPin = resis[0].ra;
         }
-        HiADC = pgm_read_byte(&PinADCtab[HighPin]);	// Table of ADC Pins including | TXD_VAL
-        LoPinR_L = pgm_read_byte(&PinRLtab[LowPin]);	//R_L mask for HighPin R_L load
+#if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
+        HiADC = pgm_read_byte((&PinRLRHADCtab[6])+HighPin);	// Table of ADC Pins including | TXD_VAL
+#else
+        HiADC = pgm_read_byte((&PinRLRHADCtab[3])+HighPin);	// Table of ADC Pins including | TXD_VAL
+#endif
+        LoPinR_L = pgm_read_byte(&PinRLRHADCtab[LowPin]);	//R_L mask for HighPin R_L load
         //==================================================================================
         // Measurement of Inductance values
         R_PORT = 0;		// switch R port to GND

@@ -64,7 +64,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     TristatePin remains switched to input , no action required 
   */
   wdt_reset();
-  addr = &PinRLtab[LowPin];
+  addr = &PinRLRHADCtab[LowPin];		// Address of combined RL / RH / ADC pin table
   LoPinRL = pgm_read_byte(addr);		// instruction for LowPin R_L
 #if FLASHEND > 0x1fff
  #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
@@ -83,7 +83,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 #endif
   LoADCp = pgm_read_byte(addr);		// instruction for ADC Low-Pin, including | TXD_VAL
 
-  addr = &PinRLtab[TristatePin];
+  addr = &PinRLRHADCtab[TristatePin];
   TriPinRL = pgm_read_byte(addr);	// instruction for TristatePin R_L
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
   addr += 3;			// address of PinRLtab[TristatePin]
@@ -92,7 +92,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   TriPinRH = TriPinRL + TriPinRL;			// instruction for TristatePin R_H
 #endif
 
-  addr = &PinRLtab[HighPin];
+  addr = &PinRLRHADCtab[HighPin];
   HiPinRL = pgm_read_byte(addr);		// instruction for HighPin R_L
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
   addr += 3;			// address of PinRHtab[HighPin]

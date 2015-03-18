@@ -1216,22 +1216,23 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 #if LCD_CHAR_U < 8
    const unsigned char CyrillicMuIcon[] MEM_TEXT = {0,17,17,17,19,29,16,16};	//µ
 #endif
+
+// The combined Table for switching RL / RH and ADC pins, index is the TP number
+ const unsigned char PinRLRHADCtab[] PROGMEM = { (1<<PIN_RL1),
+				     (1<<PIN_RL2),
+				     (1<<PIN_RL3),	// Table of commands to switch the  R-L resistors Pin 0,1,2
+#if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
+ // Processors with little memory must use one Pin number higher than correspondig Low Resistor
+/* PinRHtab */			     (1<<PIN_RH1),
+				     (1<<PIN_RH2),
+				     (1<<PIN_RH3),	// Table of commands to switch the  R-L resistors Pin 0,1,2
+#endif
 		// Table include the predefined value TXD_VAL of other output port(s) of port C.
 		// Every pin, that should be switched permanent to VCC level, should be set to 1 in every tab position.
 		// The predefined value TXD_MSK defines the pin (all pins), that must be switched permanent to output.
- const unsigned char PinADCtab[] PROGMEM = { (1<<TP1)|TXD_VAL,
+/* PinADCtab */			     (1<<TP1)|TXD_VAL,
 				     (1<<TP2)|TXD_VAL,
 				     (1<<TP3)|TXD_VAL};	// Table of commands to switch the ADC-Pins 0,1,2 to output
-
-#if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
- // Processors with little memory must use one Pin number higher than correspondig Low Resistor
- const unsigned char PinRHtab[] PROGMEM = { (1<<PIN_RH1),
-				     (1<<PIN_RH2),
-				     (1<<PIN_RH3)};	// Table of commands to switch the  R-L resistors Pin 0,1,2
-#endif
- const unsigned char PinRLtab[] PROGMEM = { (1<<PIN_RL1),
-				     (1<<PIN_RL2),
-				     (1<<PIN_RL3)};	// Table of commands to switch the  R-L resistors Pin 0,1,2
 
 
  const uint8_t PrefixTab[] MEM_TEXT = { 'p','n',LCD_CHAR_U,'m',0,'k','M'}; // p,n,u,m,-,k,M
@@ -1344,8 +1345,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  #ifdef AUTO_RH
   extern const uint16_t RHtab[];
  #endif
-  extern const unsigned char PinRLtab[];
-  extern const unsigned char PinRLRHApAm_tab[] PROGMEM ;
+  extern const unsigned char PinRLRHADCtab[] PROGMEM;
   extern const uint8_t PrefixTab[]; // p,n,u,m,-,k,M
  #if FLASHEND > 0x3fff
   extern const unsigned char PinRHtab[];

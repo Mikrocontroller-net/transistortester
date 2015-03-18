@@ -170,10 +170,15 @@ uint16_t GetESR(uint8_t hipin, uint8_t lopin) {
 //        big_cap = 0;
 //     }
   }
-  LoADC = pgm_read_byte(&PinADCtab[lopin]) | TXD_MSK;
-  HiADC = pgm_read_byte(&PinADCtab[hipin]) | TXD_MSK;
-  LoPinR_L = pgm_read_byte(&PinRLtab[lopin]);  //R_L mask for LowPin R_L load
-  HiPinR_L = pgm_read_byte(&PinRLtab[hipin]);	//R_L mask for HighPin R_L load
+#if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
+  LoADC = pgm_read_byte((&PinADCtab[6])+lopin) | TXD_MSK;
+  HiADC = pgm_read_byte((&PinADCtab[6])+hipin) | TXD_MSK;
+#else
+  LoADC = pgm_read_byte((&PinADCtab[3])+lopin) | TXD_MSK;
+  HiADC = pgm_read_byte((&PinADCtab[3])+hipin) | TXD_MSK;
+#endif
+  LoPinR_L = pgm_read_byte(&PinRLRHADCtab[lopin]);  //R_L mask for LowPin R_L load
+  HiPinR_L = pgm_read_byte(&PinRLRHADCtab[hipin]);	//R_L mask for HighPin R_L load
 
 #if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
     /* ATmega640/1280/2560 1.1V Reference with REFS0=0 */

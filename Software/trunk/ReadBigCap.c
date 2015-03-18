@@ -37,8 +37,12 @@ void ReadBigCap(uint8_t HighPin, uint8_t LowPin) {
   pin_combination = (HighPin * 3) + LowPin - 1;	// coded Pin combination for capacity zero offset
 #endif
 
-  LoADC = pgm_read_byte(&PinADCtab[LowPin]) | TXD_MSK;
-  HiPinR_L = pgm_read_byte(&PinRLtab[HighPin]);	//R_L mask for HighPin R_L load
+#if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
+  LoADC = pgm_read_byte((&PinRLRHADCtab[6])+LowPin) | TXD_MSK;
+#else
+  LoADC = pgm_read_byte((&PinRLRHADCtab[3])+LowPin) | TXD_MSK;
+#endif
+  HiPinR_L = pgm_read_byte(&PinRLRHADCtab[HighPin]);	//R_L mask for HighPin R_L load
 
 #if FLASHEND > 0x1fff
   unsigned int vloss;	// lost voltage after load pulse in 0.1% 

@@ -7,15 +7,16 @@
 
 void RvalOut(uint8_t nrr) {	
    // output of resistor value
-   uint8_t lopin, hipin;
+  union {
+  uint16_t pw;          // return value from Rnum2pins()
+  uint8_t pb[2];        // the pin numbers LowPin and HighPin
+  } rpins;      // resistor pin structure to prevent two return parameters
+
 #if FLASHEND > 0x1fff
    uint16_t rr;
    if ((ResistorVal[nrr] < 100) && (inductor_lpre == 0)) {
-      lopin = TP1;
-      hipin = TP3;
-      if (nrr == 0) hipin = TP2;
-      if (nrr == 2) lopin = TP2;
-      rr = GetESR(hipin, lopin);
+      rpins.pw = Rnum2pins(nrr);	// compute the pin numbers for resistor nrr
+      rr = GetESR(rpins.pb[1], rpins.pb[0]);
       DisplayValue(rr,-2,LCD_CHAR_OMEGA,3);
    } else {
       DisplayValue(ResistorVal[nrr],-1,LCD_CHAR_OMEGA,4);

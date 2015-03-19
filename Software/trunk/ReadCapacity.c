@@ -448,7 +448,7 @@ checkDiodes:
    } else {
       PartFound = PART_CAPACITOR;	//capacitor is found
       if ((cap.cpre > cap.cpre_max) || ((cap.cpre == cap.cpre_max) && (cap.cval > cap.cval_max))) {
-         // we have found a greater one
+         // we have found a greater one, overwrite the old values
          cap.cval_max = cap.cval;
          cap.cpre_max = cap.cpre;
 #if FLASHEND > 0x1fff

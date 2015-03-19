@@ -33,6 +33,10 @@
         #if FLASHEND > 0x3fff
           uint8_t vak_diode_nr;		// number of the protection diode of BJT
         #endif
+        union {
+        uint16_t pw;
+        uint8_t pb[2];
+        } rpins;
         uint8_t x, y, z;
 	  //switch on
 	  ON_DDR = (1<<ON_PIN);			// switch to output
@@ -1014,11 +1018,14 @@
 resistor_out:
    if(ResistorsFound != 0) {
     if (ResistorsFound == 1) { // single resistor
-       x = pgm_read_byte(&RPinTab[ResistorList[0]]);
-       y = pgm_read_byte(&RPinTab[ResistorList[0]+2]);
-       lcd_testpin(x);  	//Pin-number 1
+       rpins.pw = Rnum2pins(ResistorList[0]);	// get pin numbers for resistor 1
+//       x = TP1;
+//       y = TP3;
+//       if (ResistorList[0] == 0) y = TP2;
+//       if (ResistorList[0] == 2) x = TP2;
+       lcd_testpin(rpins.pb[0]);  	//Pin-number 1
        lcd_MEM_string(Resistor_str);	// -[=]-
-       lcd_testpin(y);		//Pin-number 2
+       lcd_testpin(rpins.pb[1]);	//Pin-number 2
     } else { // R-Max suchen
        ii = ResistorList[0];	// first resistor in the list with number 0,1,2
        if (ResistorVal[ResistorList[1]] > ResistorVal[ii])
@@ -1070,16 +1077,21 @@ resistor_out:
           DisplayValue(inductor_lx,inductor_lpre,'H',3);	// output inductance
 	  lcd_set_cursor(0,5);
           lcd_MEM_string(Inductor_str);		// -ww-
-          lcd_testpin(y);		//Pin-number 2
+          lcd_testpin(rpins.pb[1]);		//Pin-number 2
  #ifdef WITH_MENU
-       } else {
-          if (ResistorList[0] == 1) {
-             // is the TP1:TP3 resistor
+  #ifdef RMETER_WITH_L
+       }  /* end if inductor_lpre != 0 */
+        {             /* start special R-meter function with R or L */
+  #else
+       } else {		/* only resistor starts special R-meter function */
+  #endif
+          if ((ResistorList[0] == 1) && (NumOfDiodes == 0)) {
+             // is the TP1:TP3 resistor and no additional diode
              show_Resis13();		// call of the special resistor measurement
              goto start;
           }
  #endif
-       }
+       }  /* end if inductor_lpre != 0 */
 #else	/* FLASHEND <= 0x1fff */
        RvalOut(ResistorList[0]);	// RvalOut starts GetESR, if resistance < 10 Ohm
 #endif

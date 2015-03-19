@@ -38,11 +38,9 @@ void GetVloss() {
 // ******** should adcv[0] be measured without current???
   if (cap.cpre_max > -9) return;	// too much capacity
   lval.dw = cap.cval_max;
-//  for (ii=cap.cpre_max+12;ii<5;ii++) {
   for (ii=cap.cpre_max+12;ii<4;ii++) {
      lval.dw = (lval.dw + 5) / 10;
   }
-//  if ((lval.dw == 0) || (lval.dw > 500)) {
   if ((lval.dw == 0) || (lval.dw > 5000)) {
      /* capacity more than 50uF, Voltage loss is already measured  */
      return;

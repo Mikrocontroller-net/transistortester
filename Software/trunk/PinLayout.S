@@ -180,3 +180,20 @@ next_ipp2:
 #endif
 
  .endfunc
+
+ .GLOBAL Rnum2pins
+ .func Rnum2pins
+ Rnum2pins:
+	mov	r22,r24
+	ldi	r24, TP1
+	ldi	r25, TP3
+        and	r22,r22
+        brne    nozero
+        ldi	r25, TP2
+nozero:
+	cpi	r22, 2
+	brne	no_two
+	ldi	r24, TP2
+no_two:
+	ret
+ .endfunc

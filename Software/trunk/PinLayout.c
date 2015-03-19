@@ -38,3 +38,15 @@ void PinLayout(char pin1, char pin2, char pin3) {
  #endif
 #endif
 }
+
+/* ********************************************************** */
+/* Rnum2pins computes two pin numbers for resistor number num */
+uint16_t Rnum2pins(uint8_t num) {
+uint8_t x,y;
+
+  x = TP1;
+  y = TP3;
+  if (num == 0) y = TP2;
+  if (num == 2) x = TP2;
+  return ((uint16_t)(y<<8) | x);
+}

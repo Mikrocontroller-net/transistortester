@@ -359,6 +359,13 @@ void show_C_ESR() {
 void show_Resis13(void) {
   uint8_t key_pressed;
   message_key_released(RESIS_13_str);	// "1-|=|-3 .."
+#ifdef RMETER_WITH_L
+  lcd_set_cursor(0,LCD_LINE_LENGTH-4);
+  lcd_MEM2_string(RLMETER_13_str);	// "[RL]" at the end of line 1
+#else
+  lcd_set_cursor(0,LCD_LINE_LENGTH-3);
+  lcd_MEM2_string(RMETER_13_str);	// "[R]" at the end of line 1
+#endif
 #ifdef POWER_OFF
   uint8_t times;
   for (times=0;times<250;times++) 
@@ -373,11 +380,33 @@ void show_Resis13(void) {
         GetResistance(TP1, TP3);
         lcd_line2();		// clear old Resistance value 
         if (ResistorsFound != 0) {
-           RvalOut(1);
-           lcd_spaces(8);
-        } else {
+#ifdef RMETER_WITH_L
+	   ReadInductance();	// measure inductance, possible only with R<2.1k
+           RvalOut(1);			// show Resistance, probably ESR
+           if (inductor_lpre != 0) {
+	      // resistor has also inductance
+              lcd_MEM_string(Lis_str);		// "L="
+              DisplayValue(inductor_lx,inductor_lpre,'H',3);        // output inductance
+              lcd_set_cursor(0,5);
+              lcd_MEM_string(Inductor_str);	// -ww-
+              lcd_testpin(TP3);
+           } else {
+              lcd_spaces(14);		// clear old L=
+              lcd_set_cursor(0,5);
+              lcd_testpin(TP3);
+              lcd_spaces(4);		// clear ww-3
+           }
+#else		/* without Inductance measurement, only show resistance */
+           RvalOut(1);			// show Resistance, probably ESR
+#endif
+        } else {		/* no resistor found */
            lcd_data('?');		// too big
-           lcd_spaces(10);
+           lcd_spaces(19);
+#ifdef RMETER_WITH_L
+           lcd_set_cursor(0,5);
+           lcd_testpin(TP3);
+           lcd_spaces(4);		// clear ww-3
+#endif
         }
      key_pressed = wait_for_key_ms(1000);
 #ifdef WITH_ROTARY_SWITCH
@@ -387,7 +416,6 @@ void show_Resis13(void) {
 #endif
   }  /* end for times */
   lcd_clear();
-  wait_about500ms();
 } /* end show_Resis13() */
 
 /* ****************************************************************** */
@@ -395,7 +423,9 @@ void show_Resis13(void) {
 /* ****************************************************************** */
 void show_Cap13(void) {
   uint8_t key_pressed;
-  message_key_released(CAP_13_str);
+  message_key_released(CAP_13_str);	// 1-||-3 at the beginning of line 1
+  lcd_set_cursor(0,LCD_LINE_LENGTH-3);
+  lcd_MEM2_string(CMETER_13_str);	// "[C]" at the end of line 1
 #ifdef POWER_OFF
   uint8_t times;
   for (times=0;times<250;times++) 
@@ -405,24 +435,30 @@ void show_Cap13(void) {
   {
      PartFound = PART_NONE;
      NumOfDiodes = 0;
-     cap.cval_max = 0;
+     cap.cval_max = 0;		// clear cval_max for update of vloss
      cap.cpre_max = -12;	// set to pF unit
+     cap.v_loss = 0;		// clear vloss  for low capacity values (<25pF)!
      ReadCapacity(TP3, TP1);
      lcd_line2();		// overwrite old Capacity value 
      if (cap.cpre < 0) {
-        DisplayValue(cap.cval,cap.cpre,'F',4);
+        // a cap is detected
+        DisplayValue(cap.cval,cap.cpre,'F',4);	// display capacity
+        lcd_spaces(2);
+        if (cap.cpre == -12) lcd_spaces(2);  // no decimal point
         PartFound = PART_CAPACITOR;	// GetESR should check the Capacity value
         cap.esr = GetESR(TP3,TP1);
         if ( cap.esr < 65530) {
-           lcd_MEM_string(ESR_str);
-           DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
+           // ESR is measured
+           lcd_set_cursor(1 * PAGES_PER_LINE, 8);	// position behind the capacity
+           lcd_MEM_string(ESR_str);		// show also "ESR="
+           DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2); // and ESR value
            lcd_set_cursor(0,4);
            lcd_MEM2_string(&RESIS_13_str[1]);   // "-[=]-3 .."
-           lcd_space();
         } else {		// no ESR known
-           lcd_spaces(13);			// overwrite ESR=...
+           lcd_set_cursor(1 * PAGES_PER_LINE, 8);	// position behind the capacity
+           lcd_spaces(10);		// clear ESR text and value
            lcd_set_cursor(0,4);		// clear ESR resistor
-           lcd_MEM2_string(&CAP_13_str[4]);
+           lcd_testpin(TP3);		// write the TP3
            lcd_spaces(5);			// overwrite ESR resistor symbol
         }
  #if (LCD_LINES > 2)
@@ -438,10 +474,10 @@ void show_Cap13(void) {
  #endif
      } else { /* no cap detected */
        lcd_data('?');
-       lcd_spaces(18);
+       lcd_spaces(18);		// clear rest of line 2
  #if (LCD_LINES > 2)
-       lcd_line3();
-       lcd_clear_line();
+       lcd_line3();	
+       lcd_clear_line();	// clear old Vloss= message
  #endif
      }
 
@@ -453,7 +489,6 @@ void show_Cap13(void) {
 #endif
   }  /* end for times */
   lcd_clear();
-  wait_about500ms();
 } /* end show_Cap13() */
 
 /* *************************************************** */

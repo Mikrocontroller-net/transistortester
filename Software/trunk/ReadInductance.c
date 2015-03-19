@@ -29,11 +29,13 @@ void ReadInductance(void) {
   uint8_t ii;
   uint8_t count;	// counter for the different measurements
   uint8_t cnt_diff;     // resistance dependent offset
-  uint8_t LowPin;	// number of pin with low voltage
-  uint8_t HighPin;	// number of pin with high voltage 
   int8_t ukorr;		// correction of comparator voltage
   uint8_t nr_pol1;	// number of successfull inductance measurement with polarity 1
   uint8_t nr_pol2;	// number of successfull inductance measurement with polarity 2
+  union {
+  uint16_t pw;		// return value from Rnum2pins()
+  uint8_t pb[2];	// the pin numbers LowPin and HighPin
+  } rpins;	// resistor pin structure to prevent two return parameters
 
 
   inductor_lpre = 0;	// H units, mark inductor as 0
@@ -52,23 +54,28 @@ void ReadInductance(void) {
         // Try four times (different direction and with delayed counter start)
         if (count < 2) {
            // first and second pass, direction 1
-           LowPin = TP1;
-           if (res_num == 2) LowPin = TP2;
-           HighPin = TP3;
-           if (res_num == 0) HighPin = TP2;
+           rpins.pw = Rnum2pins(res_num);	// compute the two pinnumbers for resistor res_num
+//         LowPin = TP1;
+//         if (res_num == 2) LowPin = TP2;
+//         HighPin = TP3;
+//         if (res_num == 0) HighPin = TP2;
         } else {
            // third and fourth pass, direction 2
-	   LowPin = TP3;
-           if (res_num == 0) LowPin = TP2;
-           HighPin = TP1;
-           if (res_num == 2) HighPin = TP2;
+           rpins.pw = Rnum2pins(res_num);	// compute the two pinnumbers for resistor res_num
+           ii = rpins.pb[0];
+           rpins.pb[0] = rpins.pb[1];		// swap the pins LowPin and HighPin
+           rpins.pb[1] = ii;
+//	   LowPin = TP3;
+//         if (res_num == 0) LowPin = TP2;
+//         HighPin = TP1;
+//         if (res_num == 2) HighPin = TP2;
         }
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
-        HiADC = pgm_read_byte((&PinRLRHADCtab[6])+HighPin);	// Table of ADC Pins including | TXD_VAL
+        HiADC = pgm_read_byte((&PinRLRHADCtab[6])+rpins.pb[1]);	// Table of ADC Pins including | TXD_VAL
 #else
-        HiADC = pgm_read_byte((&PinRLRHADCtab[3])+HighPin);	// Table of ADC Pins including | TXD_VAL
+        HiADC = pgm_read_byte((&PinRLRHADCtab[3])+rpins.pb[1]);	// Table of ADC Pins including | TXD_VAL
 #endif
-        LoPinR_L = pgm_read_byte(&PinRLRHADCtab[LowPin]);	//R_L mask for HighPin R_L load
+        LoPinR_L = pgm_read_byte(&PinRLRHADCtab[rpins.pb[0]]);	//R_L mask for HighPin R_L load
         //==================================================================================
         // Measurement of Inductance values
         R_PORT = 0;		// switch R port to GND
@@ -76,7 +83,7 @@ void ReadInductance(void) {
         if ((resistor < 240) && ((count & 0x01) == 0)) {
            // we can use PinR_L for measurement
            mess_r = RR680MI - R_L_VAL;			// use only pin output resistance
-           ADC_DDR = HiADC | (1<<LowPin) | TXD_MSK;	// switch HiADC and Low Pin to GND, 
+           ADC_DDR = HiADC | (1<<rpins.pb[0]) | TXD_MSK;	// switch HiADC and Low Pin to GND, 
         } else {
            R_DDR = LoPinR_L;   		// switch R_L resistor port for LowPin to output (GND)
            ADC_DDR = HiADC | TXD_MSK;	// switch HiADC Pin to GND 
@@ -85,14 +92,14 @@ void ReadInductance(void) {
         // Look, if we can detect any current
         for (ii=0;ii<20;ii++) {
             // wait for current is near zero
-            umax = W10msReadADC(LowPin);
-            total_r =  ReadADC(HighPin);
+            umax = W10msReadADC(rpins.pb[0]);
+            total_r =  ReadADC(rpins.pb[1]);
             if ((umax < 2) && (total_r < 2)) break;	// low current detected
         }
         // setup Analog Comparator
         ADC_COMP_CONTROL = (1<<ACME);			//enable Analog Comparator Multiplexer
         ACSR =  (1<<ACBG) | (1<<ACI)  | (1<<ACIC);	// enable, 1.3V, no Interrupt, Connect to Timer1 
-        ADMUX = (1<<REFS0) | LowPin;			// switch Mux to Low-Pin
+        ADMUX = (1<<REFS0) | rpins.pb[0];			// switch Mux to Low-Pin
         ADCSRA = (1<<ADIF) | AUTO_CLOCK_DIV; //disable ADC
    
       // setup Counter1
@@ -150,8 +157,8 @@ void ReadInductance(void) {
         ADCSRA = (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; //enable ADC
         for (ii=0;ii<20;ii++) {
             // wait for current is near zero
-            umax = W10msReadADC(LowPin);
-            total_r =  ReadADC(HighPin);
+            umax = W10msReadADC(rpins.pb[0]);
+            total_r =  ReadADC(rpins.pb[1]);
             if ((umax < 2) && (total_r < 2)) break;	// low current detected
         }  /* end for ii */
   #define CNT_ZERO_42 6

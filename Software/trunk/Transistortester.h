@@ -844,7 +844,7 @@ End of configuration
 'F','o','r',LCD_CHAR_INSEP,
 'c','a','l','i','b','r','a','t','i','o','n',' ',
 
-'c','l','a','m','b',' ','t','h','e',' ','3',LCD_CHAR_INSEP,'p','i','n','s',' ',
+'c','l','a','m','p',' ','t','h','e',' ','3',LCD_CHAR_INSEP,'p','i','n','s',' ',
 't','o','g','e','t','h','e','r',' ','a','n','d',' ',
 
 's','t','a','r','t',' ','w','i','t','h',' ',
@@ -1152,8 +1152,18 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 #ifdef WITH_MENU
  const unsigned char FatTP2_str[] MEM2_TEXT = "f@TP2";
  const unsigned char C_ESR_str[] MEM2_TEXT = "C+ESR@TP1:3";
- const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1,'1'+TP3,' ','.','.',0};
- const unsigned char CAP_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_CAP, LCD_CHAR_LINE1,'1'+TP3,' ','.','.',0};
+ #ifdef RMETER_WITH_L
+ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1, LCD_CHAR_INDUCTOR1, LCD_CHAR_INDUCTOR2, LCD_CHAR_LINE1, '1'+TP3,' ',0};
+ #else
+ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1,'1'+TP3,' ',0};
+ #endif
+ const unsigned char CAP_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_CAP, LCD_CHAR_LINE1,'1'+TP3,' ',0};
+ #ifdef RMETER_WITH_L
+ const unsigned char RLMETER_13_str[] MEM2_TEXT = {"[RL]"};
+ #else
+ const unsigned char RMETER_13_str[] MEM2_TEXT = {"[R]"};
+ #endif
+ const unsigned char CMETER_13_str[] MEM2_TEXT = {"[C]"};
 #endif
  
 
@@ -1333,6 +1343,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   extern const unsigned char ESR_str[];
   extern const unsigned char VLOSS_str[] MEM_TEXT ;
   extern const unsigned char Inductor_str[];
+  extern const unsigned char Lis_str[];
  #endif
 
  extern const unsigned char AnKat[] MEM_TEXT ;
@@ -1366,6 +1377,9 @@ extern const unsigned char VERSION_str[];
 extern const unsigned char C_ESR_str[];
 extern const unsigned char RESIS_13_str[];
 extern const unsigned char CAP_13_str[];
+extern const unsigned char RMETER_13_str[];
+extern const unsigned char RLMETER_13_str[];
+extern const unsigned char CMETER_13_str[];
 extern const unsigned char REF_C_str[];
 extern const unsigned char REF_R_str[];
 extern const unsigned char R0_str[];

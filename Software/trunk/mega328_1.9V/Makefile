@@ -193,6 +193,13 @@ CFLAGS += -DWITH_UART
 # at pin ADC3 can be enabled separate by setting the WITH_UART option.
 #CFLAGS += -DWITH_VEXT
 
+#
+# If you want to measure Inductors with the resistance meter, you must specify
+# the RMETER_WITH_L  option. The measurement cycle time slow down with this option
+# for resistors below 2.1kOhm. Resistors below 10 Ohm are measured additionally
+# with the ESR measurement methode, which takes also a longer time.
+CFLAGS += -DRMETER_WITH_L
+
 # The CAP_EMPTY_LEVEL  defines the empty voltage level for capacitors in mV.
 # Choose a higher value, if your Tester reports "Cell!" by unloading capacitors.
 CFLAGS += -DCAP_EMPTY_LEVEL=4

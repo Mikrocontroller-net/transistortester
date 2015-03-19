@@ -57,3 +57,4 @@ void CalibrationCap(void);		// read voltage offsets with calibration capacitor
 void set_contrast(void);		// set the contrast value of ST7565 controller
 void ShowData(void);			// show software revision and calibration parameters
 void i2c_init(void);			// init the I2C interface
+uint16_t Rnum2pins(uint8_t num);	// compute Pin-Numbers of the resistor number

@@ -453,7 +453,8 @@ void show_Cap13(void) {
            lcd_MEM_string(ESR_str);		// show also "ESR="
            DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2); // and ESR value
            lcd_set_cursor(0,4);
-           lcd_MEM2_string(&RESIS_13_str[1]);   // "-[=]-3 .."
+           lcd_MEM2_string(Resistor_str);   // "-[=]- .."
+           lcd_testpin(TP3);		// add the TP3
         } else {		// no ESR known
            lcd_set_cursor(1 * PAGES_PER_LINE, 8);	// position behind the capacity
            lcd_spaces(10);		// clear ESR text and value

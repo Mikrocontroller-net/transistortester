@@ -397,7 +397,8 @@ void show_Resis13(void) {
               lcd_spaces(4);		// clear ww-3
            }
 #else		/* without Inductance measurement, only show resistance */
-           RvalOut(1);			// show Resistance, probably ESR
+           inductor_lpre = -1;		// prevent ESR measurement because Inductance is not tested
+           RvalOut(1);			// show Resistance, no ESR
 #endif
         } else {		/* no resistor found */
            lcd_data('?');		// too big

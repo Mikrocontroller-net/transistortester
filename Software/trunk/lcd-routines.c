@@ -40,12 +40,14 @@ void lcd_testpin(unsigned char temp) {
 void lcd_space(void) {
    lcd_data(' ');
 }
+#if FLASHEND > 0x1fff
 void lcd_spaces(uint8_t nn) {
    while (nn != 0) {
      lcd_space();
      nn--;
    }
 }
+#endif
 
 /* ******************************************************************************* */
 //move to the beginning of the 1. row
@@ -109,6 +111,9 @@ void lcd_line4() {
 }
 
 /* ******************************************************************************* */
+// position to next line to column xx
+// Text_line number is incremented by 1, if possible (not yet at the last line).
+// If already at the last line of the display, last_line_used is set to 1 .
 void lcd_next_line(uint8_t xx) {
 lcd_text_line ++;
 if (lcd_text_line > (LCD_LINES - 1))  {
@@ -120,6 +125,7 @@ if (lcd_text_line > (LCD_LINES - 1))  {
 }
 lcd_set_cursor((uint8_t)(lcd_text_line * PAGES_PER_LINE), xx);
 }
+
 /* ************************************************************************************** */
 /* Set the character position to x,y , where x specifies the character number in a text line. */
 /* The y position is the page address (8 line units).                                     */
@@ -147,6 +153,7 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
 #endif
 }
 
+#if FLASHEND > 0x1fff
 /* ************************************************************************************** */
 uint8_t lcd_save_position(void) {
  last_text_column = _lcd_column;
@@ -157,6 +164,7 @@ uint8_t lcd_save_position(void) {
 void lcd_restore_position(void) {
  lcd_set_cursor((uint8_t)last_text_line * PAGES_PER_LINE, (uint8_t)(last_text_column));
 }
+#endif
 
 /* ******************************************************************************* */
 // send a 24x32 icon to one quarter of the screen

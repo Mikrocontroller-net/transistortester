@@ -17,21 +17,21 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY, DEBUGGING
   6 .comment      00000011  00000000  00000000  00004de5  2**0
                   CONTENTS, READONLY
-  7 .debug_aranges 000003f0  00000000  00000000  00004df8  2**3
+  7 .debug_aranges 00000408  00000000  00000000  00004df8  2**3
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_info   00006770  00000000  00000000  000051e8  2**0
+  8 .debug_info   0000681f  00000000  00000000  00005200  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_abbrev 00001749  00000000  00000000  0000b958  2**0
+  9 .debug_abbrev 000017b0  00000000  00000000  0000ba1f  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   00001bde  00000000  00000000  0000d0a1  2**0
+ 10 .debug_line   00001c43  00000000  00000000  0000d1cf  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  00000584  00000000  00000000  0000ec80  2**2
+ 11 .debug_frame  00000584  00000000  00000000  0000ee14  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000dd4  00000000  00000000  0000f204  2**0
+ 12 .debug_str    00000de8  00000000  00000000  0000f398  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    0000396b  00000000  00000000  0000ffd8  2**0
+ 13 .debug_loc    0000396b  00000000  00000000  00010180  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000018  00000000  00000000  00013943  2**0
+ 14 .debug_ranges 00000018  00000000  00000000  00013aeb  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -247,9 +247,9 @@ _lcd_hw_write_exit:
      194:	08 95       	ret
 
 00000196 <lcd_save_position>:
-#endif
 }
 
+#if FLASHEND > 0x1fff
 /* ************************************************************************************** */
 uint8_t lcd_save_position(void) {
  last_text_column = _lcd_column;
@@ -299,6 +299,7 @@ void lcd_space(void) {
 
 000001c6 <lcd_spaces>:
 }
+#if FLASHEND > 0x1fff
 void lcd_spaces(uint8_t nn) {
      1c6:	a1 e0       	ldi	r26, 0x01	; 1
      1c8:	b0 e0       	ldi	r27, 0x00	; 0
@@ -335,7 +336,7 @@ void lcd_command(unsigned char temp1) {
      1f6:	08 95       	ret
 
 000001f8 <lcd_line1>:
-}
+#endif
 
 /* ******************************************************************************* */
 //move to the beginning of the 1. row
@@ -442,10 +443,10 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
      24e:	08 95       	ret
 
 00000250 <lcd_next_line>:
-#endif
-}
-
 /* ******************************************************************************* */
+// position to next line to column xx
+// Text_line number is incremented by 1, if possible (not yet at the last line).
+// If already at the last line of the display, last_line_used is set to 1 .
 void lcd_next_line(uint8_t xx) {
 lcd_text_line ++;
      250:	90 91 0e 01 	lds	r25, 0x010E

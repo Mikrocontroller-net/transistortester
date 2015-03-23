@@ -1152,6 +1152,8 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 #ifdef WITH_MENU
  const unsigned char FatTP2_str[] MEM2_TEXT = "f@TP2";
  const unsigned char C_ESR_str[] MEM2_TEXT = "C+ESR@TP1:3";
+#endif
+#if FLASHEND > 0x3fff
  #ifdef RMETER_WITH_L
  const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1, LCD_CHAR_INDUCTOR1, LCD_CHAR_INDUCTOR2, LCD_CHAR_LINE1, '1'+TP3,' ',0};
  #else
@@ -1375,17 +1377,19 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 extern const unsigned char FatTP2_str[];
 extern const unsigned char VERSION_str[];
 extern const unsigned char C_ESR_str[];
-extern const unsigned char RESIS_13_str[];
-extern const unsigned char CAP_13_str[];
-extern const unsigned char RMETER_13_str[];
-extern const unsigned char RLMETER_13_str[];
-extern const unsigned char CMETER_13_str[];
 extern const unsigned char REF_C_str[];
 extern const unsigned char REF_R_str[];
 extern const unsigned char R0_str[];
 extern const unsigned char C0_str[];
 extern const unsigned char RIHI[];
 extern const unsigned char RILO[];
+#endif
+#if FLASHEND > 0x3fff
+extern const unsigned char RESIS_13_str[];
+extern const unsigned char CAP_13_str[];
+extern const unsigned char RMETER_13_str[];
+extern const unsigned char RLMETER_13_str[];
+extern const unsigned char CMETER_13_str[];
 #endif
 
 

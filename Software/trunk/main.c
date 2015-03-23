@@ -471,7 +471,7 @@
  #endif
      }
 #endif
-#ifdef WITH_MENU
+#if FLASHEND > 0x3fff
      if ((cap.ca + cap.cb) == (TP1 + TP3)) {
         show_Cap13();		// automatic capacity measurement
         goto start;
@@ -1078,7 +1078,7 @@ resistor_out:
 	  lcd_set_cursor(0,5);
           lcd_MEM_string(Inductor_str);		// -ww-
           lcd_testpin(rpins.pb[1]);		//Pin-number 2
- #ifdef WITH_MENU
+ #if FLASHEND > 0x3fff
   #ifdef RMETER_WITH_L
        }  /* end if inductor_lpre != 0 */
         {             /* start special R-meter function with R or L */

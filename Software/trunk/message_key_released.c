@@ -6,7 +6,7 @@
 //=================================================================
 // Clear display, show Message XX_str and wait for key release
 
-#ifdef WITH_MENU
+#if FLASHEND > 0x3fff
 void message_key_released(const unsigned char XX_str[]) {
  
   uint8_t times;

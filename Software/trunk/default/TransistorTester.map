@@ -133,6 +133,7 @@ LOAD ReadBigCap.o
 LOAD CheckRotaryEncoder.o
 LOAD CalibrationCap.o
 LOAD ShowData.o
+LOAD show_Resis_Cap.o
 LOAD EE_check_init.o
 START GROUP
 LOAD /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a
@@ -446,6 +447,7 @@ END GROUP
  .text          0x00000000000031ec        0x0 CheckRotaryEncoder.o
  .text          0x00000000000031ec        0x0 CalibrationCap.o
  .text          0x00000000000031ec        0x0 ShowData.o
+ .text          0x00000000000031ec        0x0 show_Resis_Cap.o
  .text          0x00000000000031ec        0x2 EE_check_init.o
                 0x00000000000031ec                EE_check_init
  .text          0x00000000000031ee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
@@ -715,6 +717,7 @@ END GROUP
  .data          0x0000000000800100        0x0 CheckRotaryEncoder.o
  .data          0x0000000000800100        0x0 CalibrationCap.o
  .data          0x0000000000800100        0x0 ShowData.o
+ .data          0x0000000000800100        0x0 show_Resis_Cap.o
  .data          0x0000000000800100        0x0 EE_check_init.o
  .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
  .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
@@ -777,6 +780,7 @@ END GROUP
  .bss           0x0000000000800100        0x0 CheckRotaryEncoder.o
  .bss           0x0000000000800100        0x0 CalibrationCap.o
  .bss           0x0000000000800100        0x0 ShowData.o
+ .bss           0x0000000000800100        0x0 show_Resis_Cap.o
  .bss           0x0000000000800100        0x0 EE_check_init.o
  .bss           0x0000000000800100        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
  .bss           0x0000000000800100        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
@@ -980,6 +984,7 @@ END GROUP
  .comment       0x0000000000000000       0x12 CheckRotaryEncoder.o
  .comment       0x0000000000000000       0x12 CalibrationCap.o
  .comment       0x0000000000000000       0x12 ShowData.o
+ .comment       0x0000000000000000       0x12 show_Resis_Cap.o
  .comment       0x0000000000000000       0x12 EE_check_init.o
 
 .debug
@@ -994,7 +999,7 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x0000000000000000      0x3f0
+.debug_aranges  0x0000000000000000      0x408
  *(.debug_aranges)
  .debug_aranges
                 0x0000000000000000       0x20 lcd_hw_4_bit.o
@@ -1061,12 +1066,14 @@ END GROUP
  .debug_aranges
                 0x00000000000003b8       0x18 ShowData.o
  .debug_aranges
-                0x00000000000003d0       0x20 EE_check_init.o
+                0x00000000000003d0       0x18 show_Resis_Cap.o
+ .debug_aranges
+                0x00000000000003e8       0x20 EE_check_init.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x6770
+.debug_info     0x0000000000000000     0x681f
  *(.debug_info)
  .debug_info    0x0000000000000000       0x7d lcd_hw_4_bit.o
  .debug_info    0x000000000000007d      0x913 lcd-routines.o
@@ -1100,10 +1107,11 @@ END GROUP
  .debug_info    0x0000000000006496       0xaf CheckRotaryEncoder.o
  .debug_info    0x0000000000006545       0xaf CalibrationCap.o
  .debug_info    0x00000000000065f4       0xaf ShowData.o
- .debug_info    0x00000000000066a3       0xcd EE_check_init.o
+ .debug_info    0x00000000000066a3       0xaf show_Resis_Cap.o
+ .debug_info    0x0000000000006752       0xcd EE_check_init.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x0000000000000000     0x1749
+.debug_abbrev   0x0000000000000000     0x17b0
  *(.debug_abbrev)
  .debug_abbrev  0x0000000000000000       0x14 lcd_hw_4_bit.o
  .debug_abbrev  0x0000000000000014      0x27e lcd-routines.o
@@ -1137,9 +1145,10 @@ END GROUP
  .debug_abbrev  0x0000000000001591       0x67 CheckRotaryEncoder.o
  .debug_abbrev  0x00000000000015f8       0x67 CalibrationCap.o
  .debug_abbrev  0x000000000000165f       0x67 ShowData.o
- .debug_abbrev  0x00000000000016c6       0x83 EE_check_init.o
+ .debug_abbrev  0x00000000000016c6       0x67 show_Resis_Cap.o
+ .debug_abbrev  0x000000000000172d       0x83 EE_check_init.o
 
-.debug_line     0x0000000000000000     0x1bde
+.debug_line     0x0000000000000000     0x1c43
  *(.debug_line)
  .debug_line    0x0000000000000000       0x6c lcd_hw_4_bit.o
  .debug_line    0x000000000000006c      0x178 lcd-routines.o
@@ -1173,7 +1182,8 @@ END GROUP
  .debug_line    0x0000000000001a2a       0x65 CheckRotaryEncoder.o
  .debug_line    0x0000000000001a8f       0x65 CalibrationCap.o
  .debug_line    0x0000000000001af4       0x65 ShowData.o
- .debug_line    0x0000000000001b59       0x85 EE_check_init.o
+ .debug_line    0x0000000000001b59       0x65 show_Resis_Cap.o
+ .debug_line    0x0000000000001bbe       0x85 EE_check_init.o
 
 .debug_frame    0x0000000000000000      0x584
  *(.debug_frame)
@@ -1190,7 +1200,7 @@ END GROUP
  .debug_frame   0x0000000000000520       0x40 GetVloss.o
  .debug_frame   0x0000000000000560       0x24 EE_check_init.o
 
-.debug_str      0x0000000000000000      0xdd4
+.debug_str      0x0000000000000000      0xde8
  *(.debug_str)
  .debug_str     0x0000000000000000      0x351 lcd-routines.o
                                         0x3a0 (size before relaxing)
@@ -1228,7 +1238,9 @@ END GROUP
                                         0x177 (size before relaxing)
  .debug_str     0x0000000000000da5        0xe ShowData.o
                                         0x171 (size before relaxing)
- .debug_str     0x0000000000000db3       0x21 EE_check_init.o
+ .debug_str     0x0000000000000db3       0x14 show_Resis_Cap.o
+                                        0x177 (size before relaxing)
+ .debug_str     0x0000000000000dc7       0x21 EE_check_init.o
                                         0x184 (size before relaxing)
 
 .debug_loc      0x0000000000000000     0x396b

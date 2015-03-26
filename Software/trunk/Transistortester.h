@@ -1314,6 +1314,10 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
  extern const unsigned char CONTRAST_str[] MEM2_TEXT;
  #endif
+ extern const unsigned char Bat_str[];
+ extern const unsigned char BatWeak[];
+ extern const unsigned char BatEmpty[]; 
+ extern const unsigned char OK_str[];
  #ifdef AUTO_CAL
 //  extern uint16_t R680pl;
 //  extern uint16_t R680mi;

@@ -1,5 +1,7 @@
 /* currently only 7 icon elements from total 14 are used */
-#define ICON_ELEMENTS 15
+#ifndef ICON_ELEMENTS
+#define ICON_ELEMENTS 7
+#endif
 #if defined(MAIN_C)
 const unsigned char PROGMEM bigfont[ICON_ELEMENTS][96]= {
 #if (ICON_TYPE == 1) /* code 000 N-P-N thin from Nick */

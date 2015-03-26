@@ -45,6 +45,9 @@ GetFrequency.o: ../GetFrequency.c $(MKFILES)
 CheckRotaryEncoder.o: ../CheckRotaryEncoder.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
+Battery_check.o: ../Battery_check.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 main.o: ../main.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -D$(UI_LANGUAGE) -c  $<
 

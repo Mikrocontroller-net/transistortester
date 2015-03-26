@@ -340,10 +340,17 @@ void show_C_ESR() {
            } else {
               lcd_data('?');		// too big
            }
-        } else {
-           lcd_clear();
+        } else { // no cap found
+           lcd_line1();		// clear old capacity value 
+           lcd_clear_line();
+           lcd_line1();
            lcd_MEM2_string(C_ESR_str);
+           lcd_line2();		// clear old ESR value 
+           lcd_clear_line();
         }
+#if defined(POWER_OFF) && defined(BAT_CHECK)
+     Bat_update(times);
+#endif
      key_pressed = wait_for_key_ms(1000);
 #ifdef WITH_ROTARY_SWITCH
      if ((key_pressed != 0) || (rotary.incre > 3)) break;
@@ -411,6 +418,9 @@ void show_vext() {
      DisplayValue((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);  // Display 3 Digits of this mV units
   #endif
 #endif	/* TPex2 */
+#if defined(POWER_OFF) && defined(BAT_CHECK)
+     Bat_update(times);
+#endif
 
      key_pressed = wait_for_key_ms(1000);
 #ifdef POWER_OFF

@@ -134,7 +134,7 @@ void ShowIcons(void) {
  lcd_data('D');
  lcd_MEM_string(mosfet_str);
  wait_for_key_ms(ShowTime);
-
+#if (ICON_ELEMENTS == 14)
  lcd_clear();
  lcd_big_icon(TRIAC|LCD_UPPER_LEFT);
  lcd_big_icon(THYRISTOR|LCD_UPPER_RIGHT);
@@ -153,6 +153,7 @@ void ShowIcons(void) {
  lcd_big_icon(DIODES_A_C_C_A|LCD_LOWER_LEFT);
  lcd_big_icon(DIODES_C_A_A_C|LCD_LOWER_RIGHT);
  wait_for_key_ms(ShowTime);
+#endif
 
  
  lcd_clear();

@@ -71,12 +71,8 @@ void lcd_line1() {
 #define FONT_V_SPACE (((FONT_HEIGHT + 7) / 8) * 8)
 void lcd_line2() {
    lcd_text_line = 1;
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920))
    lcd_set_cursor(1 * ((FONT_HEIGHT + 7) / 8),0);
-
-#elif (LCD_ST_TYPE == 7920)
-   _page = FONT_V_SPACE * 1;	// _page is the vertical pixel address for ST7920 controller
-   _xpos = 0;			// LCD_ST7565_H_OFFSET is not used for ST7920 controller
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x40));
 #endif
@@ -86,11 +82,8 @@ void lcd_line2() {
 //move to the beginning of the 3. row
 void lcd_line3() {
    lcd_text_line = 2;
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920))
    lcd_set_cursor(2 * ((FONT_HEIGHT + 7) / 8),0);
-#elif (LCD_ST_TYPE == 7920)
-   _page = FONT_V_SPACE * 2;	// _page is the vertical pixel address for ST7920 controller
-   _xpos = 0;			// LCD_ST7565_H_OFFSET is not used for ST7920 controller
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x14));
 #endif
@@ -100,11 +93,8 @@ void lcd_line3() {
 //move to the beginning of the 4. row
 void lcd_line4() {
    lcd_text_line = 3;
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920))
    lcd_set_cursor(3 * ((FONT_HEIGHT + 7) / 8),0);
-#elif (LCD_ST_TYPE == 7920)
-   _page = FONT_V_SPACE * 3;	// _page is the vertical pixel address for ST7920 controller
-   _xpos = 0;			// LCD_ST7565_H_OFFSET is not used for ST7920 controller
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x54));
 #endif
@@ -132,7 +122,7 @@ lcd_set_cursor((uint8_t)(lcd_text_line * PAGES_PER_LINE), xx);
 /* For most controllers the y position must be increased by (Height + 7) / 8 for the next text line */
 void lcd_set_cursor(uint8_t y, uint8_t x) {
  _lcd_column = x;
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920))
 //  unsigned char xx;
    //move to the specified position (depends on used font)
    _page = y;
@@ -140,9 +130,6 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
     // For example the SPL501 controller has 132x65 dot matrix memory
     // LCD_ST7565_H_OFFSET specifies the offset of the 128 pixel of the display window.
    _xpos = (x * FONT_WIDTH);
-   
-#elif (LCD_ST_TYPE == 7920)
-   _page *=  8; 		// _page is the vertical pixel address for ST7920 controller
 #else
    // move to the specified position for character display
    if ((y & 0x01) != 0) {
@@ -230,13 +217,8 @@ void lcd_data(unsigned char temp1) {
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920))
  uint8_t *pfont;
  pfont = (uint8_t *)font + (FONT_WIDTH * NR_BYTE * temp1);	// first byte of character data
-#if (LCD_ST_TYPE == 7920)
- // for ST7920 the _page position is a pixel line.
- lcd_set_pixels( pfont, _xpos, _page, 0, (unsigned char)FONT_WIDTH, (unsigned char)(NR_BYTE*8));
-#else
  // for other controllers like ST7565 the _page specifies the page of the controller (8 lines)
  lcd_set_pixels( pfont, _xpos, _page*8, 0, (unsigned char)FONT_WIDTH, (unsigned char)(NR_BYTE*8));
-#endif
 _xpos += FONT_WIDTH;		// move pointer to the next character position
 #else
  lcd_write_data(temp1);		// set RS to 1

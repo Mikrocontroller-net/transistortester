@@ -59,7 +59,7 @@ void Battery_check(void) {
 	wait_about2s();
 	PORTD = 0;			//switch power off
 	wait_about2s();
-	return 0;
+	return;
      }
      lcd_MEM_string(BatWeak);		//Battery weak
   } else { // Battery-voltage OK

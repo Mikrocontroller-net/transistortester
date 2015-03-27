@@ -630,7 +630,7 @@ void lcd_set_pixels(const unsigned char *pdata, unsigned char x, unsigned char y
 unsigned char options, unsigned char width, unsigned char height) {
 /* ------------------------------------------------------------------------------- */
  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108))
-   if (x >= SCREEN_WIDTH || (y >= SCREEN_HEIGHT))
+   if (x >= (SCREEN_WIDTH - 6) || (y >= (SCREEN_HEIGHT - 8)))
       return;
 
    unsigned char offset;
@@ -725,6 +725,7 @@ unsigned char options, unsigned char width, unsigned char height) {
 //   unsigned char height;
    unsigned char ymem;
 //   const unsigned char *pdata;
+   if ((x > (SCREEN_WIDTH - 6)) || (y > (SCREEN_HEIGHT-8))) return;
    for (ii=0; ii<height; ii++) {
      if (options & OPT_VREVERSE) {
        hh = (height - 1 - ii) / 8;
@@ -763,7 +764,7 @@ unsigned char options, unsigned char width, unsigned char height) {
        }
      } /* end for jj */
    } /* end for ii */
- #endif
+ #endif /* (LCD_ST_TYPE == 7565) ||  == 1306 ||  == 7108  || == 7920 */
 }
 #endif
 /* ******************************************************************************* */

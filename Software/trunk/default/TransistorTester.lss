@@ -714,7 +714,7 @@ void lcd_clear_line(void) {
 
 0000039a <lcd_show_Cg>:
    } /* end for ii */
- #endif
+ #endif /* (LCD_ST_TYPE == 7565) ||  == 1306 ||  == 7108  || == 7920 */
 }
 #endif
 /* ******************************************************************************* */
@@ -3772,7 +3772,7 @@ void Battery_check(void) {
 	wait_about2s();
     1020:	8a ec       	ldi	r24, 0xCA	; 202
     1022:	0e 94 6d 03 	call	0x6da	; 0x6da <sleep_5ms>
-	return 0;
+	return;
     1026:	07 c0       	rjmp	.+14     	; 0x1036 <Battery_check+0x92>
      }
      lcd_MEM_string(BatWeak);		//Battery weak

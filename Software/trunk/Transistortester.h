@@ -1156,15 +1156,14 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 #if FLASHEND > 0x3fff
  #ifdef RMETER_WITH_L
  const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1, LCD_CHAR_INDUCTOR1, LCD_CHAR_INDUCTOR2, LCD_CHAR_LINE1, '1'+TP3,' ',0};
+ const unsigned char RLMETER_13_str[] MEM2_TEXT = {"[RL]"};
+ #define RLMETER_len 4
  #else
  const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1,'1'+TP3,' ',0};
+ const unsigned char RLMETER_13_str[] MEM2_TEXT = {"[R]"};
+ #define RLMETER_len 3
  #endif
  const unsigned char CAP_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_CAP, LCD_CHAR_LINE1,'1'+TP3,' ',0};
- #ifdef RMETER_WITH_L
- const unsigned char RLMETER_13_str[] MEM2_TEXT = {"[RL]"};
- #else
- const unsigned char RMETER_13_str[] MEM2_TEXT = {"[R]"};
- #endif
  const unsigned char CMETER_13_str[] MEM2_TEXT = {"[C]"};
 #endif
  
@@ -1391,8 +1390,12 @@ extern const unsigned char RILO[];
 #if FLASHEND > 0x3fff
 extern const unsigned char RESIS_13_str[];
 extern const unsigned char CAP_13_str[];
-extern const unsigned char RMETER_13_str[];
 extern const unsigned char RLMETER_13_str[];
+ #ifdef RMETER_WITH_L
+  #define RLMETER_len 4
+ #else
+  #define RLMETER_len 3
+ #endif
 extern const unsigned char CMETER_13_str[];
 #endif
 

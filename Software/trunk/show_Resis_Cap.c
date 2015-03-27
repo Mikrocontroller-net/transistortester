@@ -16,13 +16,8 @@
 void show_Resis13(void) {
   uint8_t key_pressed;
   message_key_released(RESIS_13_str);	// "1-|=|-3 .."
-#ifdef RMETER_WITH_L
-  lcd_set_cursor(0,LCD_LINE_LENGTH-4);
+  lcd_set_cursor(0,LCD_LINE_LENGTH-RLMETER_len);
   lcd_MEM2_string(RLMETER_13_str);	// "[RL]" at the end of line 1
-#else
-  lcd_set_cursor(0,LCD_LINE_LENGTH-3);
-  lcd_MEM2_string(RMETER_13_str);	// "[R]" at the end of line 1
-#endif
 #ifdef POWER_OFF
   uint8_t times;
   for (times=0;times<250;times++) 
@@ -108,9 +103,9 @@ void show_Cap13(void) {
      lcd_line2();		// overwrite old Capacity value 
      if (cap.cpre < 0) {
         // a cap is detected
+        lcd_spaces(8);		// clear Capacity value
+        lcd_line2();		// overwrite old Capacity value 
         DisplayValue(cap.cval,cap.cpre,'F',4);	// display capacity
-        lcd_spaces(2);
-        if (cap.cpre == -12) lcd_spaces(2);  // no decimal point
         PartFound = PART_CAPACITOR;	// GetESR should check the Capacity value
         cap.esr = GetESR(TP3,TP1);
         if ( cap.esr < 65530) {

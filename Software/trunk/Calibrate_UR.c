@@ -2,6 +2,7 @@
 void Calibrate_UR(void) {
  // get reference voltage, calibrate VCC with external 2.5V and
  // get the port output resistance
+ // all measurements take  more than 170ms time
 
 #ifdef AUTO_CAL
   uint16_t sum_rm;	// sum of 3 Pin voltages with 680 Ohm load

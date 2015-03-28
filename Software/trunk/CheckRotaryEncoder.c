@@ -124,8 +124,7 @@ void CheckRotaryEncoder(void) {
   }
   if (switch1 == switch2) return;	// no rotary encoder found
   
-  lcd_line2();
-  lcd_clear_line();		// clear line 2 of LCD
+  lcd_clear_line2();		// clear line 2 of LCD
   for (ii=0;ii<120;ii++) {
      lcd_line2();
      lcd_testpin(switch1);

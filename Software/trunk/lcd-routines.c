@@ -580,6 +580,16 @@ void lcd_clear_line(void) {
  // writes 20 spaces to LCD-Display, Cursor must be positioned to first column
     lcd_spaces(20);
 }
+void lcd_clear_line1(void) {
+    lcd_line1();
+    lcd_clear_line();
+    lcd_line1();
+}
+void lcd_clear_line2(void) {
+    lcd_line2();
+    lcd_clear_line();
+    lcd_line2();
+}
 #endif
 
 /* ******************************************************************************* */

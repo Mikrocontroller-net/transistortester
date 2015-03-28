@@ -59,7 +59,11 @@ EntladePins.o: ../EntladePins.c $(MKFILES)
 
 EE_check_init.o: ../EE_check_init.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 ShowData.o: ../ShowData.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+show_Resis_Cap.o: ../show_Resis_Cap.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link

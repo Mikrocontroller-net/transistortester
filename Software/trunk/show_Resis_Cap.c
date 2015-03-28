@@ -25,9 +25,10 @@ void show_Resis13(void) {
   while (1)		/* wait endless without the POWER_OFF option */
 #endif
   {
-        PartFound = PART_NONE;
-        ResistorsFound = 0;
-        ResistorChecked[1] = 0;
+        init_parts();		// set all parts to nothing found 
+//        PartFound = PART_NONE;
+//        ResistorsFound = 0;
+//        ResistorChecked[1] = 0;
         GetResistance(TP3, TP1);
         GetResistance(TP1, TP3);
         lcd_line2();		// clear old Resistance value 
@@ -94,10 +95,11 @@ void show_Cap13(void) {
   while (1)		/* wait endless without the POWER_OFF option */
 #endif
   {
-     PartFound = PART_NONE;
-     NumOfDiodes = 0;
-     cap.cval_max = 0;		// clear cval_max for update of vloss
-     cap.cpre_max = -12;	// set to pF unit
+     init_parts();		// set all parts to nothing found 
+//     PartFound = PART_NONE;
+//     NumOfDiodes = 0;
+//     cap.cval_max = 0;		// clear cval_max for update of vloss
+//     cap.cpre_max = -12;	// set to pF unit
      cap.v_loss = 0;		// clear vloss  for low capacity values (<25pF)!
      ReadCapacity(TP3, TP1);
      lcd_line2();		// overwrite old Capacity value 
@@ -113,6 +115,7 @@ void show_Cap13(void) {
            lcd_set_cursor(1 * PAGES_PER_LINE, 8);	// position behind the capacity
            lcd_MEM_string(&ESR_str[1]);		// show also "ESR="
            DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2); // and ESR value
+           lcd_spaces(2);		// clear old remainder of last ESR message
            lcd_set_cursor(0,4);
            lcd_MEM2_string(Resistor_str);   // "-[=]- .."
            lcd_testpin(TP3);		// add the TP3
@@ -141,9 +144,7 @@ void show_Cap13(void) {
   #else
 //           if (key_pressed != 0) break;
   #endif
-	   lcd_line2();
-           lcd_clear_line();
-	   lcd_line2();
+           lcd_clear_line2();
            lcd_MEM_string(&VLOSS_str[1]);  // "Vloss="
            DisplayValue(cap.v_loss,-1,'%',2);
         }
@@ -179,9 +180,7 @@ void Bat_update(uint8_t tt) {
      Battery_check();
  #else
      wait_about1s();
-     lcd_line2();
-     lcd_clear_line();
-     lcd_line2();
+     lcd_clear_line2();
      Battery_check();
      wait_about2s();
  #endif

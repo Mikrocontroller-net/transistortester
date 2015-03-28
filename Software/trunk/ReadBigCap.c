@@ -45,9 +45,7 @@ void ReadBigCap(uint8_t HighPin, uint8_t LowPin) {
   HiPinR_L = pgm_read_byte(&PinRLRHADCtab[HighPin]);	//R_L mask for HighPin R_L load
 
 #if FLASHEND > 0x1fff
-  unsigned int vloss;	// lost voltage after load pulse in 0.1% 
   cap.esr = 0;				// set ESR of capacitor to zero
-  vloss = 0;				// set lost voltage to zero
 #endif
   cap.cval = 0;				// set capacity value to zero
   cap.cpre = -9;			//default unit is nF
@@ -103,27 +101,11 @@ void ReadBigCap(uint8_t HighPin, uint8_t LowPin) {
   // wait 5ms and read voltage again, does the capacitor keep the voltage?
 //  adcv[1] = W5msReadADC(HighPin) - adcv[0];
 //  wdt_reset();
-#if DebugOut == 10
-  lcd_line3();
-  DisplayValue(ovcnt16,0,' ',4);
-  DisplayValue(adcv[2],-3,'V',4);
-  wait_about1s();
-#endif
   if (adcv[2] <= MIN_VOLTAGE) {
-#if DebugOut == 10
-     lcd_data('K');
-     lcd_space();
-     wait1s();
-#endif
      goto keinC;		// was never charged enough, >20mF or shorted
   }
   //voltage is rised properly and keeps the voltage enough
   if ((ovcnt16 == 1 ) && (adcv[2] > 1300)) {
-#if DebugOut == 10
-     lcd_data('G');
-     lcd_space();
-     wait1s();
-#endif
      goto keinC;		// Voltage of more than 1300mV is reached in one pulse, too fast loaded
   }
   // Capacity is more than about 50µF
@@ -135,19 +117,6 @@ void ReadBigCap(uint8_t HighPin, uint8_t LowPin) {
    // cap.cval for this type is at least 40000nF, so the last digit will be never shown
    cap.cval -= ((cap.cval * C_H_KORR) / 1000);	// correct with C_H_KORR with 0.1% resolution, but prevent overflow
    cap.cval /= 10;
-#if DebugOut == 10
-   lcd_line3();
-   lcd_clear_line();
-   lcd_line3();
-   lcd_testpin(LowPin);
-   lcd_data('C');
-   lcd_testpin(HighPin);
-   lcd_space();
-   DisplayValue(cap.cval,cap.cpre,'F',4);
-   lcd_space();
-   u2lcd(ovcnt16);
-   wait_about3s();
-#endif
 
 //==================================================================================
 
@@ -155,7 +124,7 @@ void ReadBigCap(uint8_t HighPin, uint8_t LowPin) {
       cap.cval_max = cap.cval;
       cap.cpre_max = cap.cpre;
 #if FLASHEND > 0x1fff
-      cap.v_loss = vloss;		// lost voltage in 0.01%
+      cap.v_loss = 0;			// set lost voltage to zero
 #endif
       cap.ca = LowPin;		// save LowPin
       cap.cb = HighPin;		// save HighPin

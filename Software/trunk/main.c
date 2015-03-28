@@ -183,31 +183,17 @@
 	//*****************************************************************
 	//Entry: if start key is pressed before shut down
 	start:
-	  PartFound = PART_NONE;	// no part found
-	  NumOfDiodes = 0;		// Number of diodes = 0
-	  ptrans.count = 0;		// Number of found P type transistors
-	  ntrans.count = 0;		// Number of found N type transistors
-	  PartMode = PART_MODE_NONE;
-	  WithReference = 0;		// no precision reference voltage
 	#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
 	  lcd_command(CMD_DISPLAY_ON);
 	  lcd_command(CMD_SET_ALLPTS_NORMAL);		// 0xa4
 	#endif
 	  lcd_clear();			// clear the LCD
 	  ADC_DDR = TXD_MSK;		// activate Software-UART 
-	  ResistorsFound = 0;		// no resistors found
-          ResistorChecked[0] = 0;
-          ResistorChecked[1] = 0;
-          ResistorChecked[2] = 0;
-	  cap.ca = 0;
-	  cap.cb = 0;
-	#if FLASHEND > 0x1fff
-	  inductor_lpre = 0;		// mark as zero
-	#endif
+          init_parts();			// reset parts info to nothing found
+	  Calibrate_UR();		// get Ref Voltages and Pin resistance
 	#ifdef WITH_UART
 	  uart_newline();		// start of new measurement
 	#endif
-	  Calibrate_UR();		// get Ref Voltages and Pin resistance
 	  lcd_line1();			// Cursor to 1. row, column 1
 	  
 	#ifdef BAT_CHECK
@@ -242,9 +228,7 @@
 	  unsigned int Vext;
 	  // show the external voltage
 	  while (!(RST_PIN_REG & (1<<RST_PIN))) {
-	     lcd_line2();
-	     lcd_clear_line();
-	     lcd_line2();
+	     lcd_clear_line2();
 	     lcd_MEM_string(Vext_str);		// Vext=
 	     ADC_DDR = 0;		//deactivate Software-UART
 	     Vext = W5msReadADC(TPext);	// read external voltage 
@@ -333,8 +317,6 @@
 	#endif
 	     EntladePins();		// discharge capacities
 	     //measurement of capacities in all 3 combinations
-	     cap.cval_max = 0;		// set max to zero
-	     cap.cpre_max = -12;	// set max to pF unit
 	     ReadCapacity(TP3, TP1);
 	#if DebugOut != 10
 	     ReadCapacity(TP3, TP2);
@@ -346,12 +328,8 @@
 
 	#ifdef DebugOut 
 	  // only clear two lines of LCD
-	  lcd_line2();
-	  lcd_clear_line();
-	  lcd_line2();
-	  lcd_line1();
-	  lcd_clear_line();
-	  lcd_line1();
+	  lcd_clear_line2();
+	  lcd_clear_line1();
 	#else
 	  lcd_clear();				// clear total display
 	#endif
@@ -1185,6 +1163,27 @@ end3:
   goto resistor_out;
 
 }   // end main
+
+/* init_parts initialize all parts to nothing found */
+void init_parts(void) {
+  PartFound = PART_NONE;	// no part found
+  NumOfDiodes = 0;		// Number of diodes = 0
+  ptrans.count = 0;		// Number of found P type transistors
+  ntrans.count = 0;		// Number of found N type transistors
+  PartMode = PART_MODE_NONE;
+  WithReference = 0;		// no precision reference voltage
+  ResistorsFound = 0;		// no resistors found
+  ResistorChecked[0] = 0;
+  ResistorChecked[1] = 0;
+  ResistorChecked[2] = 0;
+  cap.ca = 0;
+  cap.cb = 0;
+#if FLASHEND > 0x1fff
+  inductor_lpre = 0;		// mark as zero
+#endif
+  cap.cval_max = 0;		// set max to zero
+  cap.cpre_max = -12;	// set max to pF unit
+}
 
 
 #ifdef WITH_SELFTEST

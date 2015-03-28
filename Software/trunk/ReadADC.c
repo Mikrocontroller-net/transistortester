@@ -23,6 +23,11 @@ extern struct ADCconfig_t{
     sleep_mode();	/* Start ADC, return, if ADC has finished */
 #endif
 
+/***********************************************************************************/
+/* ReadADC takes ADCconfig.Samples ADC reads and build a sum of the data           */
+/* One ADC read take a time period about 112us.                                    */
+/* So 25 ADC reads take more than 2.8ms time.                                      */
+/* for resistor and other measurements 190 ADC reads are done with more than 21ms  */
 
 
 unsigned int ReadADC (uint8_t Probe) {

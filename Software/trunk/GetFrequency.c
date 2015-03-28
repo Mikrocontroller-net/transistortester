@@ -108,13 +108,11 @@ void GetFrequency(uint8_t range) {
      freq_count = ext_freq.dw;	// save the frequency counter
  #endif
  #if (LCD_LINES > 3)
-     lcd_line2();
-     lcd_clear_line();
      lcd_line3();
      lcd_clear_line();
      lcd_line4();
      lcd_clear_line();
-     lcd_line2();
+     lcd_clear_line2();
  #else
      lcd_clear();		// clear total display
  #endif
@@ -177,8 +175,7 @@ void GetFrequency(uint8_t range) {
         PCMSK_FREQ &= ~(1<<PCINT_FREQ);		// stop monitor PD4 PCINT20 or PB0 PCINT8 pin change
         PCICR &= ~(1<<PCI_ENABLE_BIT);	// disable the interrupt
         ext_freq.b[0] = TCNT0;		// add lower 8 bit to get total counts
-//        lcd_line2();
-//        lcd_clear_line();
+//        lcd_clear_line2();
 //        wait50ms();		// let LCD flicker to 
  #if (LCD_LINES > 3)
         lcd_line3();		// use line3 to report the period with 4-line LCD

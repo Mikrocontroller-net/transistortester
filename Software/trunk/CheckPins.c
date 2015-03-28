@@ -174,9 +174,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 //  }
 
 #if DebugOut == 5
-  lcd_line2();
-  lcd_clear_line();
-  lcd_line2();
+  lcd_clear_line2();
 #endif
   update_pins = 1;			// if a part is found, always update the pins
   // the tester will never find more that two transistors

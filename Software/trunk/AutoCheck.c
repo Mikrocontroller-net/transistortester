@@ -101,11 +101,8 @@ if((test_mode & 0x0f) == 1) {  /* full test requested */
 
 for(tt=1;tt<TEST_COUNT;tt++) {		// loop for all Tests
 for(ww=0;ww<MAX_REP;ww++) {	// repeat the test MAX_REP times
-   lcd_line2();			//Cursor to column 1, row 2
-   lcd_clear_line();		// clear total line
-   lcd_line1();			//Cursor to column 1, row 1
-   lcd_clear_line();		// clear total line
-   lcd_line1();			//Cursor to column 1, row 1
+   lcd_clear_line2();		// clear total line 2
+   lcd_clear_line1();		// clear total line 1
    lcd_data('T');			//output the Testmode "T"
    u2lcd(tt);		//lcd_string(utoa(tt, outval, 10));	//output Test number
    lcd_space();
@@ -347,9 +344,7 @@ wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 for (ww=0;ww<120;ww++) {
   // wait up to 1 minute for releasing the probes
   if (AllProbesShorted() == 0) break;
-  lcd_line2();		//Cursor to column 1, row 2
-  lcd_clear_line();		// clear total line
-  lcd_line2();		//Cursor to column 1, row 2
+  lcd_clear_line2();		// clear total line2
   lcd_MEM_string(RELPROBE);	// "Release Probes"
   lcd_refresh();		// write the pixels to display, ST7920 only
   wait_about500ms();

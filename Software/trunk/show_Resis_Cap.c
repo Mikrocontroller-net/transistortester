@@ -44,7 +44,7 @@ void show_Resis13(void) {
               lcd_MEM_string(Inductor_str);	// -ww-
               lcd_testpin(TP3);
            } else {
-              lcd_spaces(14);		// clear old L=
+              lcd_spaces(12);		// clear old L=
               lcd_set_cursor(0,5);
               lcd_testpin(TP3);
               lcd_spaces(4);		// clear ww-3

@@ -389,11 +389,11 @@ void show_vext() {
 
 #ifdef TPex2
      lcd_clear_line2();
-#ifdef WITH_UART
+ #ifdef WITH_UART
      uart_newline();          // start of new measurement
-#endif
+ #endif
      lcd_MEM_string(Vext_str);          // Vext=
-     Vext = W5msReadADC(TPext); // read external voltage 
+     Vext = W5msReadADC(TPex2); // read external voltage 2
   #if EXT_NUMERATOR <= (0xffff/U_VCC)
      DisplayValue(Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3); // Display 3 Digits of this mV units
   #else

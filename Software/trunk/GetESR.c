@@ -144,7 +144,11 @@ uint16_t GetESR(uint8_t hipin, uint8_t lopin) {
          cap_val_nF /= 10;		// reduce value by factor ten
          pp++;		// take next decimal prefix
      }
-     if (cap_val_nF < (1800/18)) return(0xffff);			//capacity lower than 1.8 uF
+#ifdef ESR_LONG_PULSE
+     if (cap_val_nF < (1800/10)) return(0xffff);			//capacity lower than 0.18 uF
+#else
+     if (cap_val_nF < (900/10)) return(0xffff);			//capacity lower than 90 nF
+#endif
      if ((pp > -9) || (cap_val_nF > 32000)) {
         // limit cap_val_nF to prevent overflow
         cap_val_nF = 32000;
@@ -171,11 +175,11 @@ uint16_t GetESR(uint8_t hipin, uint8_t lopin) {
 //     }
   }
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
-  LoADC = pgm_read_byte((&PinADCtab[6])+lopin) | TXD_MSK;
-  HiADC = pgm_read_byte((&PinADCtab[6])+hipin) | TXD_MSK;
+  LoADC = pgm_read_byte((&PinRLRHADCtab[6])+lopin) | TXD_MSK;
+  HiADC = pgm_read_byte((&PinRLRHADCtab[6])+hipin) | TXD_MSK;
 #else
-  LoADC = pgm_read_byte((&PinADCtab[3])+lopin) | TXD_MSK;
-  HiADC = pgm_read_byte((&PinADCtab[3])+hipin) | TXD_MSK;
+  LoADC = pgm_read_byte((&PinRLRHADCtab[3])+lopin) | TXD_MSK;
+  HiADC = pgm_read_byte((&PinRLRHADCtab[3])+hipin) | TXD_MSK;
 #endif
   LoPinR_L = pgm_read_byte(&PinRLRHADCtab[lopin]);  //R_L mask for LowPin R_L load
   HiPinR_L = pgm_read_byte(&PinRLRHADCtab[hipin]);	//R_L mask for HighPin R_L load

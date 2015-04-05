@@ -255,10 +255,19 @@ wait2us:
 ; run directly to wait1us
 
 wait1us:
+ #if defined(__AVR_ATmega2560__)
+ /* for ATmega2560 a rcall/ret takes 9 clock tics */
+ push r1	; 11 tics
+ pop  r1	; 13 tics
+ nop		; 14 tics
+ nop		; 15 tics
+ nop		; 16 tics
+ #else
  rcall wait500ns
 .global wait500ns		; wait 500ns
 wait500ns:
  nop
+ #endif
 #endif
 
  ret

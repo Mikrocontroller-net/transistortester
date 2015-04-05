@@ -239,6 +239,11 @@
 #elif PROCESSOR_TYP == 1280
 /* ------------------------------------------------------------------------- */
 /* define the input pin for frequency measuring and also the pin change monitoring port for measuring the periode */
+ // the PE6 pin is timer input of T3 and INT6 interrupt pin
+ #define FREQINP_DDR DDRE
+ #define FREQINP_PIN PE6
+ #define PCMSK_FREQ EIMSK
+ #define PCINT_FREQ INT6
 /* define both input pins for rotaty encoder */
  #define ROTARY_A_DDR DDRA
  #define ROTARY_B_DDR DDRA
@@ -311,10 +316,15 @@
   #define RST_PIN_REG PINC
   #define RST_PIN PC7     //Pin, is switched to low, if push button is pressed
 #elif PROCESSOR_TYP == 1280
-  // currently no special strip grid layout defined
+ #ifdef STRIP_GRID_BOARD
+  #define RST_PORT PORTA
+  #define RST_PIN_REG PINA
+  #define RST_PIN PA0     //Pin, is switched to low, if push button is pressed
+ #else
   #define RST_PORT PORTA
   #define RST_PIN_REG PINA
   #define RST_PIN PA7     //Pin, is switched to low, if push button is pressed
+ #endif
 #else		/* PROCESSOR_TYP, must be ATmega8|168|328 */
   /* Processor mega8/168/328 , two board layouts defined */
  #ifdef STRIP_GRID_BOARD

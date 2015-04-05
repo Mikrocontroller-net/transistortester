@@ -6,12 +6,15 @@
 
 
 //=================================================================
-// measure frequency at external pin T0 (PD4 or PB0)
+// measure frequency at external pin T0 (PD4@mega328 or PB0@mega644) with Counter 0
+//   for mega1280 or mega2560 the T3 (PE6) is used with Counter 3
 #define FMAX_PERIOD 25050
 #define FMAX_INPUT 2004000
 #define FREQ_DIV 16
 
-#if PROCESSOR_TYP == 644
+#if PROCESSOR_TYP == 1280
+ #define PCINTx_vect INT6_vect
+#elif PROCESSOR_TYP == 644
  /* Pin change interrupt is PCINT8 (PB0) */
  #define PCI_ENABLE_BIT PCIE1
  #define PCI_CLEAR_BIT PCIF1
@@ -77,11 +80,19 @@ void GetFrequency(uint8_t range) {
      // Counter 0 is used to count the external signal connected to T0 (PD4 or PB0)
      FREQINP_DDR &= ~(1<<FREQINP_PIN);	// switch frequency pin to input
      wait1ms();				// let capacitor time to load to 2.4V input
+#if PROCESSOR_TYP == 1280
+     TCCR3A = 0; 			// normal operation, no output
+     TCNT3 = 0;				// set counter 3 to zero
+     ext_freq.dw = 0;			// set external frequency to zero
+     TIFR3 = (1<<TOV3);			// clear OV interrupt of timer 3
+     TIMSK3 = (1<<TOIE3);		// enable OV interrupt of timer 3
+#else
      TCCR0A = 0; 			// normal operation, no output
      TCNT0 = 0;				// set counter to zero
      ext_freq.dw = 0;			// set external frequency to zero
      TIFR0 = (1<<TOV0);			// clear OV interrupt of timer 0
      TIMSK0 = (1<<TOIE0);		// enable OV interrupt of timer 0
+#endif
      // start counter after starting second counter timer 1
 
      // set up counter 1 to measure one second
@@ -99,11 +110,20 @@ void GetFrequency(uint8_t range) {
         wait20ms();			// first count of counter 1 (<32us) has started the counter 0
         wdt_reset();
         if (!(RST_PIN_REG & (1<<RST_PIN))) taste = 1;	// user request stop of operation
-        if (TCCR0B == 0) break;		// timer is stopped by interrupt
+#if PROCESSOR_TYP == 1280
+        if (TCCR3B == 0) break;		// timer 3 is stopped by interrupt
+#else
+        if (TCCR0B == 0) break;		// timer 0 is stopped by interrupt
+#endif
      }
      // one second is counted
+#if PROCESSOR_TYP == 1280
+     TCCR3B = 0;		// stop timer 3, if not stopped by timer 1 compare interrupt
+     ext_freq.w[0] = TCNT3;	// add lower 16 bit to get total counts
+#else
      TCCR0B = 0;		// stop timer 0, if not stopped by timer 1 compare interrupt
      ext_freq.b[0] = TCNT0;	// add lower 8 bit to get total counts
+#endif
  #if PROCESSOR_TYP == 644
      freq_count = ext_freq.dw;	// save the frequency counter
  #endif
@@ -155,7 +175,18 @@ void GetFrequency(uint8_t range) {
         pinchange_max += pinchange_max;	// * 2 for up and down change
         FREQINP_DDR &= ~(1<<FREQINP_PIN);	// switch frequency pin to input
         wait1ms();			// let capacitor time to load to 2.4V input
-        TCNT0 = 0;			// set counter to zero
+#if PROCESSOR_TYP == 1280
+        TCNT3 = 0;			// set counter 3 to zero
+        ext_freq.dw = 0;		// reset counter to zero
+        TIFR3 = (1<<TOV3);		// clear OV interrupt
+        TIMSK3 = (1<<TOIE3);		// enable OV interrupt
+        // counter 3 ist started with first pin change interrupt
+        pinchange_count = 0;
+	EICRB = (0<<ISC61) | (1<<ISC60); // set int6 pin change
+        EIFR  |= (1<<INTF6);		// clear interrupt 6 flag
+        PCMSK_FREQ |= (1<<PCINT_FREQ); // enable int6
+#else
+        TCNT0 = 0;			// set counter 0 to zero
         ext_freq.dw = 0;		// reset counter to zero
         TIFR0 = (1<<TOV0);		// clear OV interrupt
         TIMSK0 = (1<<TOIE0);		// enable OV interrupt
@@ -163,6 +194,7 @@ void GetFrequency(uint8_t range) {
         pinchange_count = 0;
         PCIFR  = (1<<PCI_CLEAR_BIT);		// clear Pin Change Status
         PCICR  |= (1<<PCI_ENABLE_BIT);		// enable pin change interrupt
+#endif
         sei();
         PCMSK_FREQ |= (1<<PCINT_FREQ);	// monitor PD4 PCINT20 or PB0 PCINT8 pin change
         for (ii=0;ii<250;ii++) {
@@ -171,10 +203,16 @@ void GetFrequency(uint8_t range) {
            if (!(RST_PIN_REG & (1<<RST_PIN))) taste = 1;	// user request stop of operation
            if ((PCMSK_FREQ & (1<<PCINT_FREQ)) == 0) break;		// monitoring is disabled by interrupt
         } /* end for ii */
-        TCCR0B = 0;		// stop counter
+#if PROCESSOR_TYP == 1280
+        TCCR3B = 0;		// stop counter 3
+        PCMSK_FREQ &= ~(1<<PCINT_FREQ); // disable int6
+        ext_freq.w[0] = TCNT3;		// add lower 16 bit to get total counts
+#else
+        TCCR0B = 0;		// stop counter 0
         PCMSK_FREQ &= ~(1<<PCINT_FREQ);		// stop monitor PD4 PCINT20 or PB0 PCINT8 pin change
         PCICR &= ~(1<<PCI_ENABLE_BIT);	// disable the interrupt
         ext_freq.b[0] = TCNT0;		// add lower 8 bit to get total counts
+#endif
 //        lcd_clear_line2();
 //        wait50ms();		// let LCD flicker to 
  #if (LCD_LINES > 3)
@@ -184,7 +222,7 @@ void GetFrequency(uint8_t range) {
  #endif
         lcd_data('T');
         lcd_data('=');
-        ext_period = ((unsigned long long)ext_freq.dw * (125*200)) / pinchange_max;
+        ext_period = ((unsigned long long)ext_freq.dw * (200000/MHZ_CPU)) / pinchange_max;
  #if PROCESSOR_TYP == 644
         if ((FDIV_PORT&(1<<FDIV_PIN)) != 0) {
            // frequency divider is activ, period is measured too long
@@ -251,6 +289,18 @@ void GetFrequency(uint8_t range) {
   return;
  } // end GetFrequency()
 
+#if PROCESSOR_TYP == 1280
+/* ************************************************************ */
+/* timer 3 Overflow interrupt                                   */
+/* timer 3 count up to 0xffff, then OV occur. update upper part */
+/* to build the total counts within one second or               */
+/* to build the total counts within the specified pin changes.  */
+/* ************************************************************ */
+ISR(TIMER3_OVF_vect, ISR_BLOCK) {
+  sei();		// set interrupt enable
+  ext_freq.w[1] += 1;	// add 65536 clock tics to the total time
+}
+#else
 /* ************************************************************ */
 /* timer 0 Overflow interrupt                                   */
 /* timer 0 count up to 0xff, then OV occur. update upper part   */
@@ -261,13 +311,18 @@ ISR(TIMER0_OVF_vect, ISR_BLOCK) {
   sei();		// set interrupt enable
   ext_freq.dw += 256;	// add 256 clock tics to the total time
 }
+#endif
 
 /* ************************************************************ */
 /* Timer 1 Compare B interrupts with count 1 to start counter 0 */
 /* This is defined as start of the measurement second.          */
 /* ************************************************************ */
 ISR(TIMER1_COMPB_vect, ISR_BLOCK) {
-  TCCR0B = (1<<CS02) | (1<<CS01);	// now start the counter 0 with external input T0
+#if PROCESSOR_TYP == 1280
+  TCCR3B = (1<<CS32) | (1<<CS31) | (0<<CS30);	// start the counter 3 with external input T3
+#else
+  TCCR0B = (1<<CS02) | (1<<CS01) | (0<<CS00);	// now start the counter 0 with external input T0
+#endif
 }
 
 /* ************************************************************ */
@@ -278,7 +333,11 @@ ISR(TIMER1_COMPA_vect, ISR_BLOCK) {
   // Therefore we stop timer 1 first and ajust to same time with wdt_reset();
   wdt_reset();			// for adjusting to same time as TIMER1_COMPB_vect
   TCCR1B = 0;			// stop counter 1
+#if PROCESSOR_TYP == 1280
+  TCCR3B = 0;			// stop counter 3
+#else
   TCCR0B = 0;			// stop counter 0
+#endif
 }
 
 /* ************************************************************ */
@@ -294,13 +353,22 @@ ISR(TIMER1_COMPA_vect, ISR_BLOCK) {
 ISR(PCINTx_vect, ISR_BLOCK)
 {
   if (pinchange_count == 0) {
-     // start the counter 0
-     TCCR0B = (1<<CS00);	// start the counter with full CPU clock
+#if PROCESSOR_TYP == 1280
+     TCCR3B = (1<<CS30);	// start the counter 3 with full CPU clock
+#else
+     TCCR0B = (1<<CS00);	// start the counter 0 with full CPU clock
+#endif
   }
   if (pinchange_count >= pinchange_max) {
+#if PROCESSOR_TYP == 1280
+     // stop the counter 3, when maximum value has reached.
+     TCCR3B = 0;		// stop counter 3
+     PCMSK_FREQ &= ~(1<<PCINT_FREQ);	// disable int6
+#else
      // stop the counter 0, when maximum value has reached.
-     TCCR0B = 0;		// stop counter
+     TCCR0B = 0;		// stop counter 0
      PCMSK_FREQ &= ~(1<<PCINT_FREQ);	// disable monitoring of PD4 PCINT20 or PB0 PCINT8 pin change
+#endif
 //     PCICR &= ~(1<<PCI_ENABLE_BIT);	// disable the interrupt
   }
   pinchange_count++;

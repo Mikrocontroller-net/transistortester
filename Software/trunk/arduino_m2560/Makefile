@@ -29,7 +29,7 @@ PARTNO = m2560
 # Currently a frequency measurement at ATmega Pin PD4, a frequency generator at TP2 ,
 # the external voltage measurement and C+ESR measurement can be selected. Of course you can also return to
 # the normal transistor tester function and switch off the tester.
-#CFLAGS += -DWITH_MENU
+CFLAGS += -DWITH_MENU
 
 # The menu function can be easier controlled with a incremental encoder (rotary switch).
 # Both switches of the rotary switch can be connected with 1 kOhm resistors to PD1 and PD3.
@@ -150,7 +150,7 @@ CFLAGS += -DWITH_SELFTEST
 # The T1 to T7 tests are usefull to find problems with your tester.
 # You can also disable the extended tests T1 to T7 with the option NO_TEST_T1_T7 to accelerate the calibration
 # for the atmega328 and atmega168.
-CFLAGS += -DNO_TEST_T1_T7
+#CFLAGS += -DNO_TEST_T1_T7
 
 # FREQUENCY_50HZ enables a 50 Hz frequency generator for up to one minute at the end of selftests.
 #CFLAGS += -DFREQUENCY_50HZ
@@ -193,7 +193,7 @@ CFLAGS += -DWITH_UART
 # is not used for serial output (WITH_UART option).
 # For ATmega644/1284 processor the UART has a separate pin.  Therefore the external input
 # at pin ADC3 can be enabled separate by setting the WITH_UART option.
-CFLAGS += -DWITH_VEXT
+#CFLAGS += -DWITH_VEXT
 
 #
 # If you want to measure Inductors with the resistance meter, you must specify
@@ -295,7 +295,7 @@ CFLAGS += -DBAT_POOR=6400
 
 # The sleep mode of the ATmega168 or ATmega328 is normally used by the software to save current.
 # You can inhibit this with the option INHIBIT_SLEEP_MODE .
-INHIBIT_SLEEP_MODE = 0
+INHIBIT_SLEEP_MODE = 1
 
 
 
@@ -315,7 +315,7 @@ INHIBIT_SLEEP_MODE = 0
 # setting for ARDUINO MEGA, requires bootloader
 PROGRAMMER=wiring
 PORT = /dev/ttyACM0
-BitClock=5.0
+BitClock=10.0
 AVRDUDE_BAUD = -b 115200 -D
 # ********************** end of selectable options
 

@@ -31,32 +31,39 @@
 #define zero_reg r1
 //  uint8_t big_cap;
 // #define big_cap 1
+#if defined(__AVR_ATmega2560__)
+ // ATmega2560 uses 3 bytes for return address
+#define RetAdr 3
+#else
+ // normalle 2 bytes are used for the return address
+#define RetAdr 2
+#endif
 
 //  unsigned long sumvolt0,sumvolt1,sumvolt2;	//  3 sums of ADC readings
-#define sumvolt0 2 /* r14-r17 */
-#define sumvolt1 6 /* SP + 6:9 */
-#define sumvolt2 10 /* SP + 10:13 */
+#define sumvolt0 RetAdr /* r14-r17 */
+#define sumvolt1 RetAdr+4 /* SP + 6:9 */
+#define sumvolt2 RetAdr+8 /* SP + 10:13 */
 
 //  uint8_t LoADC;		// used to switch Lowpin directly to GND or VCC
-#define LoADC 14	/* SP + 14 */
+#define LoADC RetAdr+12	/* SP + 14 */
 
 //  uint8_t HiADC;		// used to switch Highpin directly to GND or VCC
-#define HiADC 15	/* SP + 15 */
+#define HiADC RetAdr+13	/* SP + 15 */
 
 //  unsigned int adcv[4];		// array for 4 ADC readings
 // first part adcv0 r2/r3
 // first part adcv1 Y+16/17
-#define adcvv1 16
+#define adcvv1 RetAdr+14
 // first part adcv2 Y+18/19
-#define adcvv2 18
+#define adcvv2 RetAdr+16
 
 // unsigned long cap_val_nF;	// capacity in nF
-#define cap_val_nF 20	/* SP + 20:23 */
+#define cap_val_nF RetAdr+18	/* SP + 20:23 */
 
-#define LowUpCount 24   /* SP + 24 */
-#define HighUpCount 25  /* SP + 25 */
-#define LowTooHigh 26  /* SP + 26 */
-#define HighTooHigh 27  /* SP + 27 */
+#define LowUpCount RetAdr+22   /* SP + 24 */
+#define HighUpCount RetAdr+23  /* SP + 25 */
+#define LowTooHigh RetAdr+24  /* SP + 26 */
+#define HighTooHigh RetAdr+25  /* SP + 27 */
 
 #define adcv0L r2
 #define adcv0H r3
@@ -202,7 +209,7 @@
 	wdr	;		/* 8.625 us */
 	wdr	;		/* 8.75  us */
   #endif /* ESR_LONG_PULSE */
- #endif
+ #endif	/* F_CPU == 8000000UL */
  #if F_CPU == 16000000UL
  	// SH at 2.5 ADC clocks behind start = 20 us
   #ifdef ESR_LONG_PULSE
@@ -225,9 +232,9 @@
 	push    r24;            /* 8.25   us */
 	pop     r24;            /* 8.375  us */
   #endif /* ESR_LONG_PULSE */
- #endif	/* 16 MHz */
+ #endif	/* F_CPU == 16 MHz */
 #endif
- .endm
+ .endm  /* DelayBigCap */
 
 //=================================================================
 

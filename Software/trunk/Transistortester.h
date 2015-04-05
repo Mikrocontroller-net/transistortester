@@ -1452,6 +1452,7 @@ COMMON  unsigned int RHmultip;	// Multiplier for capacity measurement with R_H (
 #ifdef WITH_MENU
 COMMON union t_frq{
   unsigned long dw;
+  uint16_t w[2];
   uint8_t b[4];
 } ext_freq;	// external frequency
 //COMMON unsigned long ext_period; 

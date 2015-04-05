@@ -1822,9 +1822,9 @@ wait2us:
 wait1us:
  nop
      6f2:	00 00       	nop
-.global wait500ns		; wait 500ns
 wait500ns:
  nop
+ #endif
 #endif
 
  ret
@@ -9177,9 +9177,9 @@ void ReadInductance(void) {
     2e5c:	8d e7       	ldi	r24, 0x7D	; 125
   #endif /* ESR_LONG_PULSE */
     2e5e:	38 07       	cpc	r19, r24
- #endif	/* 16 MHz */
+ #endif	/* F_CPU == 16 MHz */
 #endif
- .endm
+ .endm  /* DelayBigCap */
     2e60:	41 05       	cpc	r20, r1
 
 //=================================================================

@@ -450,7 +450,11 @@ void make_frequency() {
 #endif
   ADC_PORT = TXD_VAL;
   ADC_DDR = (1<<TP1) | TXD_MSK;			//connect TP1 to GND
-  DDRB  |= (1<<DDB2);	// set output enable
+#if PROCESSOR_TYP == 1280
+  DDRB  |= (1<<DDB6);	// set output enable for OC1B
+#else
+  DDRB  |= (1<<DDB2);	// set output enable for OC1B
+#endif
   TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (0<<CS11) | (1<<CS10); // no clock divide
   old_freq = 0;
   freq_nr = MAX_FREQ_NR - 1;	// start with 1 MHz
@@ -525,7 +529,11 @@ void make_frequency() {
   TCCR1A = 0;		// stop counter
   ADC_DDR =  TXD_MSK;	// disconnect TP1 
   R_DDR = 0;		// switch resistor ports to Input
+#if PROCESSOR_TYP == 1280
+  DDRB  &= ~(1<<DDB6);	// disable output 
+#else
   DDRB  &= ~(1<<DDB2);	// disable output 
+#endif
 
 } /* end make frequency */
 
@@ -749,7 +757,11 @@ void do_10bit_PWM() {
 #endif
   ADC_PORT = TXD_VAL;
   ADC_DDR = (1<<TP1) | TXD_MSK;			//connect TP1 to GND
+#if PROCESSOR_TYP == 1280
+  DDRB  |= (1<<DDB6);	// set output enable for OC1B
+#else
   DDRB  |= (1<<DDB2);	// set output enable
+#endif
   TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (0<<CS11) | (1<<CS10); // no clock divide
   key_pressed = 0;
   old_perc = 0;
@@ -820,7 +832,11 @@ void do_10bit_PWM() {
   TCCR1B = 0;		// stop counter
   TCCR1A = 0;		// stop counter
   R_DDR = 0;		// switch resistor ports to Input
+#if PROCESSOR_TYP == 1280
+  DDRB  &= ~(1<<DDB6);	// disable output 
+#else
   DDRB  &= ~(1<<DDB2);	// disable output 
+#endif
 } /* end do_10bit_PWM */
 
  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))

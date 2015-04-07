@@ -140,7 +140,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 //  wdt_reset();
 #if DebugOut == 10
   DisplayValue(ovcnt16,0,' ',4);
-  DisplayValue(adcv[2],-3,'V',4);
+  Display_mV(adcv[2],4);
 #endif
   if (adcv[2] <= MIN_VOLTAGE) {
 #if DebugOut == 10

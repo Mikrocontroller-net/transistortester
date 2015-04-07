@@ -1165,6 +1165,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  #endif
  const unsigned char CAP_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_CAP, LCD_CHAR_LINE1,'1'+TP3,' ',0};
  const unsigned char CMETER_13_str[] MEM2_TEXT = {"[C]"};
+ const unsigned char RDS_str[] MEM_TEXT = {"RDS="};
 #endif
  
 
@@ -1391,6 +1392,7 @@ extern const unsigned char RILO[];
 extern const unsigned char RESIS_13_str[];
 extern const unsigned char CAP_13_str[];
 extern const unsigned char RLMETER_13_str[];
+extern const unsigned char RDS_str[];
  #ifdef RMETER_WITH_L
   #define RLMETER_len 4
  #else
@@ -1428,7 +1430,7 @@ COMMON uint8_t diode_sequence;
 
 typedef struct {
   unsigned long hfe;		//current amplification factor 
-  unsigned int uBE;		//B-E-voltage of the Transistor
+  unsigned int uBE;		//B-E-voltage of the Transistor or RDS for E-MOS
   unsigned int current;		// current of Drain in 0.01mA
   				// for bipolar current is ICE0
   unsigned int ice0;		// for BJT ICEO

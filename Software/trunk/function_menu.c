@@ -382,9 +382,9 @@ void show_vext() {
      Vext = W5msReadADC(TPext); // read external voltage 
 //     ADC_DDR = TXD_MSK;               //activate Software-UART 
   #if EXT_NUMERATOR <= (0xffff/U_VCC)
-     DisplayValue(Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3); // Display 3 Digits of this mV units
+     Display_mV(Vext*EXT_NUMERATOR/EXT_DENOMINATOR,3); // Display 3 Digits of this mV units
   #else
-     DisplayValue((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);  // Display 3 Digits of this mV units
+     Display_mV((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,3);  // Display 3 Digits of this mV units
   #endif
 
 #ifdef TPex2
@@ -395,9 +395,9 @@ void show_vext() {
      lcd_MEM_string(Vext_str);          // Vext=
      Vext = W5msReadADC(TPex2); // read external voltage 2
   #if EXT_NUMERATOR <= (0xffff/U_VCC)
-     DisplayValue(Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3); // Display 3 Digits of this mV units
+     Display_mV(Vext*EXT_NUMERATOR/EXT_DENOMINATOR,3); // Display 3 Digits of this mV units
   #else
-     DisplayValue((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);  // Display 3 Digits of this mV units
+     Display_mV((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,3);  // Display 3 Digits of this mV units
   #endif
 #endif	/* TPex2 */
 #if defined(POWER_OFF) && defined(BAT_CHECK)

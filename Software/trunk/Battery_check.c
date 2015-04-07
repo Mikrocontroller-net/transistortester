@@ -25,7 +25,7 @@ void Battery_check(void) {
 	  cap.cval = ((unsigned long)ptrans.uBE*BAT_NUMERATOR)/BAT_DENOMINATOR + BAT_OUT;
    #endif
   #endif
-	  DisplayValue(cap.cval,-3,'V',2);		// Display 2 Digits of this 10mV units
+	  Display_mV(cap.cval,2);		// Display 2 Digits of this 10mV units
 	  lcd_space();
  #endif
  #if (BAT_POOR > 12000)

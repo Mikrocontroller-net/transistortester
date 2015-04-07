@@ -247,3 +247,6 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
   return;
 }
 
+void Display_mV(uint16_t xx, uint8_t ll) {
+ DisplayValue((long)xx,-3,'V',ll);
+}

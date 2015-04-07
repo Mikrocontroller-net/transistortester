@@ -115,6 +115,13 @@ if (lcd_text_line > (LCD_LINES - 1))  {
 }
 lcd_set_cursor((uint8_t)(lcd_text_line * PAGES_PER_LINE), xx);
 }
+/* ******************************************************************************* */
+#ifdef WAIT_LINE2_CLEAR
+void lcd_next_line_wait(uint8_t xx) {
+ lcd_next_line(xx);
+ wait_for_key_5s_line2();		// wait 5s and clear last line
+}
+#endif
 
 /* ************************************************************************************** */
 /* Set the character position to x,y , where x specifies the character number in a text line. */

@@ -110,7 +110,7 @@ for(ww=0;ww<MAX_REP;ww++) {	// repeat the test MAX_REP times
    if (tt == 1) {   // output of reference voltage and factors for capacity measurement
       Calibrate_UR();		// get Reference voltage, Pin resistance
       lcd_MEM2_string(URefT);	//"URef="
-      DisplayValue(ref_mv,-3,'V',4);
+      Display_mV(ref_mv,4);
       lcd_line2();			//Cursor to column 1, row 2
       lcd_MEM2_string(RHfakt);	//"RHf="
       u2lcd(RHmultip);	//lcd_string(utoa(RHmultip, outval, 10));
@@ -467,7 +467,7 @@ for (ww=0;ww<64;ww++) {
      R_PORT = 0;
      adcmv[0] = ReadADC(TP3);
      lcd_line3();
-     DisplayValue(adcmv[0],-3,'V',4);
+     Display_mV(adcmv[0],4);
      R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to GND
      while (1) {
         wdt_reset();
@@ -476,7 +476,7 @@ for (ww=0;ww<64;ww++) {
      R_DDR = 0;		//Pin 3 without current
      lcd_line4();
      adcmv[0] = ReadADC(TP3);
-     DisplayValue(adcmv[0],-3,'V',4);
+     Display_mV(adcmv[0],4);
      last_line_used = 2;
      wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
    }

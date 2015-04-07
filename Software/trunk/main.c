@@ -218,7 +218,7 @@
 		 /* display VCC= only first time */
 		 lcd_line2();
 		 lcd_MEM_string(VCC_str);		// VCC=
-		 DisplayValue(ADCconfig.U_AVCC,-3,'V',3);	// Display 3 Digits of this mV units
+		 Display_mV(ADCconfig.U_AVCC,3);	// Display 3 Digits of this mV units
 		 lcd_refresh();			// write the pixels to display, ST7920 only
 		 wait_about1s();
 	     }
@@ -237,9 +237,9 @@
 	//     uart_newline();		// start of new measurement
 	//#endif
 	 #if EXT_NUMERATOR <= (0xffff/U_VCC)
-	     DisplayValue(Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);	// Display 3 Digits of this mV units
+	     Display_mV(Vext*EXT_NUMERATOR/EXT_DENOMINATOR,3);	// Display 3 Digits of this mV units
 	 #else
-	     DisplayValue((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);	// Display 3 Digits of this mV units
+	     Display_mV((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,3);	// Display 3 Digits of this mV units
 	 #endif
 	     lcd_refresh();			// write the pixels to display, ST7920 only
 	     wait_about300ms();
@@ -255,11 +255,11 @@
 	    lcd_MEM_string(Cell_str);	// display "Cell!"
 	#if FLASHEND > 0x3fff
 	    lcd_line2();		// use LCD line 2
-	    DisplayValue(cell_mv[0],-3,'V',3);
+	    Display_mV(cell_mv[0],3);
 	    lcd_space();
-	    DisplayValue(cell_mv[1],-3,'V',3);
+	    Display_mV(cell_mv[1],3);
 	    lcd_space();
-	    DisplayValue(cell_mv[2],-3,'V',3);
+	    Display_mV(cell_mv[2],3);
 	#endif
 	#ifdef WITH_SELFTEST
 	    lcd_refresh();			// write the pixels to display, ST7920 only
@@ -665,19 +665,17 @@
 
     lcd_next_line(TEXT_RIGHT_TO_ICON); // position behind the icon, Line 4
     lcd_MEM_string(Ube_str);		//"Ube="
-    DisplayValue(_trans->uBE,-3,'V',3);
+    Display_mV(_trans->uBE,3);
     last_line_used = 1;
 
  #ifdef SHOW_ICE
     if (_trans->ice0 > 0) {
-       lcd_next_line(TEXT_RIGHT_TO_ICON-1); // position behind the icon, Line 4
-       wait_for_key_5s_line2();		// wait and clear last line
+       lcd_next_line_wait(TEXT_RIGHT_TO_ICON-1); // position behind the icon, Line 4 & wait and clear last line
        lcd_MEM2_string(ICE0_str);		// "ICE0="
        DisplayValue(_trans->ice0,-6,'A',2);	// display ICEO
     }
     if (_trans->ices > 0) {
-       lcd_next_line(TEXT_RIGHT_TO_ICON-1); // position behind the icon, Line 4
-       wait_for_key_5s_line2();		// wait and clear last line
+       lcd_next_line_wait(TEXT_RIGHT_TO_ICON-1); // position behind the icon, Line 4 & wait and clear last line
        lcd_MEM2_string(ICEs_str);		// "ICEs="
        DisplayValue(_trans->ices,-6,'A',2);	// display ICEs
     }
@@ -703,20 +701,17 @@
 
 
  #if defined(SHOW_ICE)
-    lcd_next_line(0);
-    wait_for_key_5s_line2();		// wait 5s and clear line 2
+    lcd_next_line_wait(0);		// next line, wait 5s and clear line 2
     lcd_MEM_string(Ube_str);		//"Ube=" 
-    DisplayValue(_trans->uBE,-3,'V',3);
+    Display_mV(_trans->uBE,3);
 
     if (_trans->ice0 > 0) {
-       lcd_next_line(0);
-       wait_for_key_5s_line2();		// wait 5s and clear line 2
+       lcd_next_line_wait(0);		// next line, wait 5s and clear line 2
        lcd_MEM2_string(ICE0_str);		// "ICE0="
        DisplayValue(_trans->ice0,-6,'A',3);
     }
     if (_trans->ices > 0) {
-       lcd_next_line(0);
-       wait_for_key_5s_line2();		// wait 5s and clear line 2
+       lcd_next_line_wait(0);		// next line, wait 5s and clear line 2
        lcd_MEM2_string(ICEs_str);		// "ICEs="
        DisplayValue(_trans->ices,-6,'A',3);
     }
@@ -724,8 +719,7 @@
 #endif  /* WITH_GRAPHICS */
 #if FLASHEND > 0x3fff
     if (vak_diode_nr < 5) {
-       lcd_next_line(0);
-       wait_for_key_5s_line2();	// wait 5s and clear line 2/4
+       lcd_next_line_wait(0); 		// next line, wait 5s and clear line 2/4
        if (an_cat) {
           lcd_testpin(diodes.Anode[vak_diode_nr]);
           lcd_MEM_string(AnKat);	//"->|-"
@@ -838,23 +832,34 @@
           lcd_data(LCD_CHAR_DIODE2);	//show Diode symbol |<
        }
  #endif
-
 #endif  /* not WITH_GRAPHICS */
+#ifdef WITH_GRAPHICS
+       options = 0;
+       if (_trans->c != diodes.Anode[0])
+          options |= OPT_VREVERSE;
+       lcd_update_icon_opt(bmp_vakdiode,options);	// update Icon with protection diode
+#endif
+
     } /* end if NumOfDiodes == 1 */
 
 #ifdef WITH_GRAPHICS
+    lcd_draw_trans_pins(-7, 16);	// update of pin numbers must be done after diode update
     lcd_next_line(TEXT_RIGHT_TO_ICON);	// position text behind the icon, Line 2
  #if LCD_LINES > 6
        lcd_next_line(TEXT_RIGHT_TO_ICON);	// double line
  #endif
     if((PartMode&D_MODE) != D_MODE) {	//enhancement-MOSFET
        lcd_MEM_string(vt_str+1);		// "Vt="
-       DisplayValue(_trans->gthvoltage,-3,'V',2);	//Gate-threshold voltage
+       Display_mV(_trans->gthvoltage,2);	//Gate-threshold voltage
 	//Gate capacity
        ReadCapacity(_trans->b,_trans->e);	//measure capacity
        lcd_next_line(TEXT_RIGHT_TO_ICON);	// position text behind the icon, Line 3
        lcd_show_Cg();	// show Cg=xxxpF
-
+ #if FLASHEND > 0x3fff
+       lcd_next_line(TEXT_RIGHT_TO_ICON-1);	// position text behind the icon, Line 4
+       lcd_MEM_string(RDS_str);		// "RDS=
+       DisplayValue(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance
+ #endif
     } else {
 
        if ((PartMode&0x0f)  != PART_MODE_JFET) {     /* kein JFET */
@@ -872,24 +877,29 @@
        lcd_data('=');
        DisplayValue(_trans->current,-6,'A',2);
        lcd_MEM_string(Vgs_str);		// "@Vg="
-       DisplayValue(_trans->gthvoltage,-3,'V',2);	//Gate-threshold voltage
+       Display_mV(_trans->gthvoltage,2);	//Gate-threshold voltage
     }
 #else	/* character display */
     if((PartMode&D_MODE) != D_MODE) {	//enhancement-MOSFET
 	//Gate capacity
-       lcd_next_line(0);		// line 3, if possible
+       lcd_line2();		// line 2
        ReadCapacity(_trans->b,_trans->e);	//measure capacity
        lcd_show_Cg();	// show Cg=xxxpF
        lcd_MEM_string(vt_str);		// " Vt="
+       Display_mV(_trans->gthvoltage,2);	//Gate-threshold voltage
+  #if FLASHEND > 0x3fff
+       lcd_next_line_wait(0);		// line 3, if possible & wait 5s and clear last line 
+       lcd_MEM_string(RDS_str);		// "RDS=
+       DisplayValue(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance
+  #endif
     } else {
  #if FLASHEND > 0x1fff
        if ((PartMode&0x0f)  != PART_MODE_JFET) {     /* kein JFET */
-          lcd_next_line(0);		// line 3, if possible
+          lcd_next_line(0);		// line 2
           ReadCapacity(_trans->b,_trans->e);	//measure capacity
           lcd_show_Cg();	// show Cg=xxxpF
        }
-       lcd_next_line(0);		// line 2 or 3, if possible
-       wait_for_key_5s_line2();		// wait and clear last line
+       lcd_next_line_wait(0);		// line 2 or 3, if possible & wait and clear last line
  #endif
        lcd_data('I');			// show I=xmA@Vg=y.yV at line 2 or 3
  #if (LCD_LINE_LENGTH > 17)
@@ -898,24 +908,17 @@
        lcd_data('=');
        DisplayValue(_trans->current,-6,'A',2);
        lcd_MEM_string(Vgs_str);		// "@Vg="
+       Display_mV(_trans->gthvoltage,2);	//Gate-threshold voltage
     }
-    DisplayValue(_trans->gthvoltage,-3,'V',2);	//Gate-threshold voltage
 #endif  /* WITH_GRAPHICS or without */
 
 #if FLASHEND > 0x1fff
     if(NumOfDiodes == 1) {
        // there is enough space for long form of presenting protection diode
- #ifdef WITH_GRAPHICS
-       options = 0;
-       if (_trans->c != diodes.Anode[0])
-          options |= OPT_VREVERSE;
-       lcd_update_icon_opt(bmp_vakdiode,options);	// update Icon with protection diode
- #endif
  #if LCD_LINES > 6
        lcd_next_line(0);		// line 5 , if possible
  #endif
-       lcd_next_line(0);		// line 4, if possible
-       wait_for_key_5s_line2();		// wait 5s and clear last line 
+       lcd_next_line_wait(0);		// line 4, if possible & wait 5s and clear last line 
        if (an_cat) {
           lcd_testpin(diodes.Anode[0]);
           lcd_MEM_string(AnKat);	//"->|-"
@@ -929,9 +932,6 @@
        lcd_MEM_string(Uf_str);			//"Uf="
        mVAusgabe(0);
     } /* end NumOfDiodes == 1 */
-#endif
-#ifdef WITH_GRAPHICS
-    lcd_draw_trans_pins(-7, 16);	// update of pin numbers must be done after diode update
 #endif
     goto tt_end;
   }  /* end (PartFound == PART_FET) */
@@ -1067,7 +1067,7 @@ TyUfAusgabe:
   lcd_line2(); //2. row 
  #endif
   lcd_MEM_string(Uf_str);		// "Uf="
-  DisplayValue(ntrans.uBE,-3,'V',2);
+  Display_mV(ntrans.uBE,2);
 #endif
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - 
  tt_end:

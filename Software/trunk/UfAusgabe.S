@@ -31,7 +31,6 @@
 
 	 .func mVAusgabe
 	mVAusgabe:
-		push	r16
 	;   if (nn < 3) {
 		cpi	r24, 0x03	; 3
 		brcc	ad1ca4;
@@ -41,17 +40,12 @@
 		adc	r31,zero_reg
 		add	r30,r24
 		adc	r31,zero_reg
-		ld	r22, Z		; diodes.Voltage[nn]
-		ldd	r23, Z+1	; 0x01
-		mov	r24, zero_reg
-		mov	r25, zero_reg
-		ldi	r20, -3;	0xFD
-		ldi	r18, 'V';	0x56
-		ldi	r16, 0x03	; 3
-		RCALL	DisplayValue	; DisplayValue(diodes.Voltage[nn],-3,'V',3);
+		ld	r24, Z		; diodes.Voltage[nn]
+		ldd	r25, Z+1	; 0x01
+		ldi	r22, 0x03	; 3
+		RCALL	Display_mV	; Display_mV(diodes.Voltage[nn],3);
 		RCALL	lcd_space;	; lcd_space();
 	ad1ca4:
-		pop	r16
 		ret
 	 .endfunc
 
@@ -131,28 +125,19 @@ ad1cbe:
 	.func  SerienDiodenAusgabe
 
 SerienDiodenAusgabe:
- 	push	r13
- 	push	r14
- 	push	r15
- 	push	r16
- 	push	r17
  	push	r28
  	push	r29
- 	lds	r13, diode_sequence;	0x0102
- 	mov	r24, r13
+ 	lds	r24, diode_sequence;	0x0102
  	swap	r24
  	andi	r24, 0x0F	; first = diode_sequence >> 4;
  	ldi	r28, lo8(diodes)	;0x80
  	ldi	r29, hi8(diodes)	;0x01
- 	movw	r14, r28
- 	add	r14, r24	; first
- 	adc	r15, zero_reg
- 	movw	r30, r14
- 	ld	r24, Z		;Anode
+ 	add	r28, r24	; first
+ 	adc	r29, zero_reg
+ 	ld	r24, Y		;Anode
  	RCALL	lcd_testpin	; lcd_testpin(diodes.Anode[first]);
- 	ldi	r16, lo8(AnKat)	;0xA3
- 	ldi	r17, hi8(AnKat)	;0x03
- 	movw	r24, r16
+ 	ldi	r24, lo8(AnKat)	;0xA3
+ 	ldi	r25, hi8(AnKat)	;0x03
 #ifdef USE_EEPROM
 	.extern lcd_fix_string
  	RCALL	lcd_fix_string	; lcd_PGM_string(AnKat);	//"->|-"
@@ -160,17 +145,18 @@ SerienDiodenAusgabe:
 	.extern lcd_pgm_string
  	RCALL	lcd_pgm_string	; lcd_PGM_string(AnKat);	//"->|-"
 #endif
- 	movw	r30, r14
- 	ldd	r24, Z+6	; Cathode
+ 	ldd	r24, Y+6	; Cathode
  	RCALL	lcd_testpin	; lcd_testpin(diodes.Cathode[first]);
- 	movw	r24, r16
+ 	ldi	r24, lo8(AnKat)	;0xA3
+ 	ldi	r25, hi8(AnKat)	;0x03
 #ifdef USE_EEPROM
  	RCALL	lcd_fix_string	; lcd_PGM_string(AnKat);	//"->|-"
 #else
  	RCALL	lcd_pgm_string	; lcd_PGM_string(AnKat);	//"->|-"
 #endif
-
- 	mov	r24, r13
+ 	ldi	r28, lo8(diodes)	;0x80
+ 	ldi	r29, hi8(diodes)	;0x01
+ 	lds	r24, diode_sequence;	0x0102
  	andi	r24, 0x03	; second = diode_sequence & 3;
  	add	r28, r24
  	adc	r29, zero_reg
@@ -180,10 +166,5 @@ SerienDiodenAusgabe:
  	rcall	UfAusgabe	; UfAusgabe(diode_sequence);
     	pop	r29
     	pop	r28
-    	pop	r17
-    	pop	r16
-    	pop	r15
-    	pop	r14
-    	pop	r13
     	ret
  .endfunc

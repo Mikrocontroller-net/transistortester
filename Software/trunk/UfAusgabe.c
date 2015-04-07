@@ -37,7 +37,7 @@ void UfAusgabe(uint8_t bcdnum) {
 void mVAusgabe(uint8_t nn) {
    if (nn < 3) {
       // Output in mV units
-      DisplayValue(diodes.Voltage[nn],-3,'V',3);
+      Display_mV(diodes.Voltage[nn],3);
       lcd_space();
    }
 }

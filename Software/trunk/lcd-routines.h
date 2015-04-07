@@ -28,7 +28,8 @@ void lcd_clear_line2(void);		// clear line 2 of display
 void lcd_set_cursor(unsigned char y, unsigned char x);
 uint8_t lcd_save_position(void);	// save the last Character position (line,column) and returns the line
 void lcd_restore_position(void);	// restore the character position, saved with lcd_save_position()
-void lcd_next_line(uint8_t xx);		// y is incremented by PAGES_PER_LINE
+void lcd_next_line(uint8_t xx);		// y is incremented by 1
+void lcd_next_line_wait(uint8_t xx);		// y is incremented by 1 and call wait_for_key_5s_line2
 void lcd_powersave(void);
 void lcd_line1(void);
 void lcd_line2(void);

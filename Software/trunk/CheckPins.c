@@ -874,7 +874,6 @@ checkDiode:
   volt_dif = adc.hp3/8;
   if (volt_dif > 200) volt_dif = 200;
 
-//  if((adc.hp1 > 150) && (adc.hp1 < 4640) && (adc.hp1 > (adc.hp3+(adc.hp3/8))) && (adc.hp3*8 > adc.hp1)) {
   if((adc.hp1 > 150) && (adc.hp1 < 4640) && (adc.hp2 < adc.hp1) && (adc.hp1 > (adc.hp3+volt_dif)) && (adc.hp3 > adc.hp1/16)) {
      //voltage is above 0,15V and below 4,64V => Ok
      // hp2 >= hp1 is only possible with capacitor, not with a diode, hp2 is measured with 470k

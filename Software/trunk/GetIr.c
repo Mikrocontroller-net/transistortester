@@ -6,6 +6,7 @@
 //=================================================================
 void GetIr(uint8_t hipin, uint8_t lopin) {
   unsigned int u_res;	// reverse voltage at 470k
+  unsigned int u_res_old;
   unsigned int ir_nano;
   uint8_t HiADC;
 
@@ -14,7 +15,7 @@ void GetIr(uint8_t hipin, uint8_t lopin) {
   ADC_PORT = HiADC;		 	// switch ADC port to high level
   ADC_DDR = HiADC | TXD_MSK;		// switch High Pin direct to VCC
   R_PORT = 0;				// switch R-Port to GND
-  R_DDR = pgm_read_byte(&PinRHRLADCtab[lopin]);  //R_H mask for LowPin R_H load
+  LoPinR_L = pgm_read_byte(&PinRHRLADCtab[lopin]);  //R_L mask for LowPin R_L load
 #else
   uint8_t LoPinR_L;
   HiADC = pgm_read_byte(&PinRLRHADCtab[hipin]+3);	// Table of ADC pins including | TXD_VAL
@@ -23,9 +24,19 @@ void GetIr(uint8_t hipin, uint8_t lopin) {
   R_PORT = 0;				// switch R-Port to GND
   LoPinR_L = pgm_read_byte(&PinRLRHADCtab[lopin]);  //R_L mask for LowPin R_L load
   // R_H Pin must always be one pin number higher
-  R_DDR = LoPinR_L + LoPinR_L;		// switch R_H port for LowPin to output (GND)
 #endif
-  u_res = W5msReadADC(lopin);		// read voltage
+  R_DDR = LoPinR_L;		// switch R_L port for LowPin to output (GND)
+  u_res = U_VCC;
+  // first load the parallel capacity with 680 Ohm resistor, then measure current with 470k
+  do {
+     u_res_old = u_res;
+     u_res = W20msReadADC(lopin);		// read voltage
+#if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
+     R_DDR = pgm_read_byte(&PinRHRLADCtab[lopin+3]);  //R_H mask for LowPin R_H load
+#else
+     R_DDR = LoPinR_L + LoPinR_L;		// switch R_H port for LowPin to output (GND)
+#endif
+  } while (u_res < u_res_old);
   if (u_res == 0) return;		// no Output, if no current in reverse direction
 #if (LCD_LINES > 3)
  #define IR_DIGITS 3

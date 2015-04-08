@@ -66,22 +66,9 @@ RvalOut:		; void RvalOut(uint8_t nrr)
  	lds	r18, inductor_lpre
  	and	r18, r18
  	brne	ad1d8e 		; (inductor_lpre == 0)
-#if 0
-        ldi	r24, TP3	; hipin = TP3
-        ldi     r22, TP1	; lopin = TP1
-	cpi	r16,0		; if (nrr == 0)
-        brne    not_zero
-        ldi	r24, TP2	; hipin = TP2
-not_zero:
-        cpi	r16, 2		; if (nrr == 2)
-	brne	not_two
-	ldi	r22, TP2	; lopin = TP2
-not_two:
-#else
 	mov	r24,r16
 	ACALL	Rnum2pins;	; pins = Rnum2pins(nrr)
         mov	r22, r25
-#endif
  	ACALL	GetESR		; rr = GetESR(resis[nrr].ra,resis[nrr].rb);
  	movw	r22, r24
         ldi	r24, 0

@@ -1,5 +1,4 @@
 #include <avr/io.h>
-#include "config.h"
 #include <stdlib.h>
 #include "Transistortester.h"
 

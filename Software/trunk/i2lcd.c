@@ -1,10 +1,8 @@
 #include <avr/io.h>
 #include <avr/common.h>
 #include <stdlib.h>
-#include "config.h"
-#include "tt_function.h"
-#include "lcd-routines.h"
 #include "Transistortester.h"
+#include "lcd-routines.h"
 
 void i2lcd(int iw) {
   if (iw < 0) {

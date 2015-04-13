@@ -402,7 +402,27 @@
    #define HW_LCD_B0_PIN          7
 				/* --------------------------------------------- */
  #elif PROCESSOR_TYP == 1280	/* mega1280/2560 with SPI */
-  // currently no difference between normal and strip grid board
+  #ifdef STRIP_GRID_BOARD
+   /* the ST7565 Reset signal */
+   #define HW_LCD_RES_DDR         DDRA
+   #define HW_LCD_RES_PORT        PORTA
+   #define HW_LCD_RES_PIN         4
+
+   /* EN is the serial clock signal SCL */
+   #define HW_LCD_EN_DDR          DDRA
+   #define HW_LCD_EN_PORT         PORTA
+   #define HW_LCD_EN_PIN          2
+
+   /* the data/instruction signal RS */
+   #define HW_LCD_RS_DDR          DDRA
+   #define HW_LCD_RS_PORT         PORTA
+   #define HW_LCD_RS_PIN          3
+
+   /* the data signal SI */
+   #define HW_LCD_B0_DDR          DDRA
+   #define HW_LCD_B0_PORT         PORTA
+   #define HW_LCD_B0_PIN          1
+  #else		/* no STRIP_GRID_BOARD */
    /* the ST7565 Reset signal */
    #define HW_LCD_RES_DDR         DDRA
    #define HW_LCD_RES_PORT        PORTA
@@ -422,6 +442,7 @@
    #define HW_LCD_B0_DDR          DDRA
    #define HW_LCD_B0_PORT         PORTA
    #define HW_LCD_B0_PIN          3
+  #endif
 				/* --------------------------------------------- */
  #else				/* mega8/168/328 with SPI  */
   /* The SPI interface uses four signals  RES, EN, RS and B0 */

@@ -1,9 +1,8 @@
 #include <avr/io.h>
 #include <avr/sleep.h>
 #include <avr/wdt.h>
-#include "config.h"
 #include <stdlib.h>
-#include "config.h"
+#include "Transistortester.h"
 
 /* set the processor to sleep state */
 /* wake up will be done with compare match interrupt of counter 2 */
@@ -25,7 +24,7 @@ if (spause > 200) {
 while (pause > 0)
   {
  #if 3000 > RESTART_DELAY_US
-   if (TCCR1B & ((1<<CS12)|(1<<CS11)|(1<<CS10)) != 0) {
+   if ((TCCR1B & ((1<<CS12)|(1<<CS11)|(1<<CS10))) != 0) {
       // timer 1 is running, don't sleep 
       wait5ms();
       pause -= 1;

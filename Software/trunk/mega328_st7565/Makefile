@@ -113,6 +113,9 @@ CFLAGS += -DLCD_ST7565_H_FLIP=1
 CFLAGS += -DLCD_ST7565_H_OFFSET=4
 # If LCD_ST7565 option is set to 1: Flip the display's vertical direction
 CFLAGS += -DLCD_ST7565_V_FLIP=1
+# The contrast value can be predefined with the constant VOLUME_VALUE
+# for ST7565 controller the value can be between 0 and 63, for the SSD1306 0 to 255 can be selected.
+#CFLAGS += -DVOLUME_VALUE=25
 
 # If option WITH_LCD_ST7565 is present one of the following fonts should be
 # choosen. With a font width below 8 more than 16 characters can be shown in one display line.

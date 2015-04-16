@@ -42,7 +42,9 @@
 #define CMD_SET_RESISTOR_RATIO  0x20
 #define CMD_SET_VOLUME_FIRST    0x81
  #if (LCD_ST_TYPE == 1306)
+  #ifndef VOLUME_VALUE
  #define VOLUME_VALUE   60	/* second byte of CMD_SET_VOLUME == volume value */
+  #endif
  #define CMD_SET_MEMORY_ADDR_MODE 0x20
  #define CMD_SET_ChargePump	0x8D
  #define CMD_SET_MUX_RATIO	0xA8
@@ -52,7 +54,9 @@
  #define CMD_SET_COM_Pins_CONFIG 0xDA
  #define CMD_SET_Vcomh_DESELECT_LEVEL 0xDB
  #else
+  #ifndef VOLUME_VALUE
  #define VOLUME_VALUE   40	/* second byte of CMD_SET_VOLUME == volume value */
+  #endif
  #endif
 #define CMD_SET_STATIC_OFF      0xAC
 #define CMD_SET_STATIC_ON       0xAD
@@ -124,6 +128,9 @@
 #define lcd_write_data(data)                   _lcd_hw_write(0x01, data); wait50us();
 #define lcd_write_init(data_length)            _lcd_hw_write(0x80, CMD_SetIFOptions | (data_length << 4))
 
+ #ifndef VOLUME_VALUE
+#define VOLUME_VALUE   36	/* volume value , default contrast */
+ #endif
 
 
 //LCD-commands

@@ -19,7 +19,7 @@
 #ifdef WITH_ROTARY_SWITCH
 //  const uint8_t EE_RotarySwitch EEMEM = 0;	// rotation switch is not detected
 #endif
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
   const uint8_t EE_Volume_Value EEMEM = VOLUME_VALUE;	// Volume Value for ST7565 controller 
 #endif
 
@@ -172,3 +172,7 @@ COMMON unsigned int display_time;	// display time of measurement in ms units
 #if (LCD_ST_TYPE == 7920)
 COMMON uint8_t lcd_bit_mem[64][16];
 #endif
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
+ COMMON const uint8_t EE_Volume_Value EEMEM;   // Volume Value for ST7565 controller 
+#endif
+

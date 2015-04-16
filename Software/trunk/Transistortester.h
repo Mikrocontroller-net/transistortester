@@ -110,7 +110,7 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF Quarz";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF Quarz";
   #endif
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
   #endif
  #endif
@@ -153,7 +153,7 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF quarzo";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF quarzo";
   #endif
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Contrasto";
   #endif
  #endif
@@ -197,7 +197,7 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kwarc";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF kwarc";
   #endif
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
   #endif
  #endif
@@ -241,7 +241,7 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF Quarz";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF Quarz";
   #endif
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
   #endif
  #endif
@@ -285,7 +285,7 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF krystal";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF krystal";
   #endif
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
   #endif
  #endif
@@ -328,7 +328,7 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kristal";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF kristal";
   #endif
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
   #endif
  #endif
@@ -373,7 +373,7 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kristal";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF kristal";
   #endif
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Contrast";
   #endif
  #endif
@@ -417,7 +417,7 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF cristal";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF cristal";
   #endif
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Contraste";
   #endif
  #endif
@@ -460,7 +460,7 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF cristal";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF cristal";
   #endif
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Contraste";
   #endif
  #endif
@@ -507,7 +507,7 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF Quarz";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF Quarz";
   #endif
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontraszt";
   #endif
  #endif
@@ -551,7 +551,7 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kvarcas";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF kvarcas";
   #endif
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrastas";
   #endif
  #endif
@@ -598,7 +598,7 @@ End of configuration
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF quartz";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF quartz";
   #endif
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Contrast";
   #endif
  #endif
@@ -1293,7 +1293,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  #ifdef WITH_VEXT
  extern const unsigned char Vext_str[] MEM_TEXT ;
  #endif
- #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+ #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
  extern const unsigned char CONTRAST_str[] MEM2_TEXT;
  #endif
  extern const unsigned char Bat_str[];
@@ -1350,9 +1350,6 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   extern const unsigned char PinRHtab[];
  #endif
   extern const unsigned char PinADCtab[];
- #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
-  extern const uint8_t EE_Volume_Value EEMEM;	// Volume Value for ST7565 controller 
- #endif
 #endif /* if defined (MAIN_C) */
 
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7108))

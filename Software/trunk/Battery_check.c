@@ -56,7 +56,7 @@ void Battery_check(void) {
 	//Vcc <6,3V; no proper operation is possible
 	lcd_MEM_string(BatEmpty);	//Battery empty!
 	lcd_refresh();			// write the pixels to display, ST7920 only
-	wait_about2s();
+	wait_about5s();
 	PORTD = 0;			//switch power off
 	wait_about2s();
 	return;

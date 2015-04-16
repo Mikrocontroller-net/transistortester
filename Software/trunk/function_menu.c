@@ -28,19 +28,19 @@
   #define NNN 11
  #endif
  #ifdef WITH_VEXT
-  #define MODE_VEXT NNN+1	/* external voltage measurement and zener voltage */
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
-   #define MODE_CONTRAST NNN+2	/* select contrast */
-   #define MODE_SHOW NNN+3	/* show data function */
+  #define MODE_VEXT (NNN+1)	/* external voltage measurement and zener voltage */
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
+   #define MODE_CONTRAST (NNN+2)	/* select contrast */
+   #define MODE_SHOW (NNN+3)	/* show data function */
   #else
-   #define MODE_SHOW NNN+2	/* show data function */
+   #define MODE_SHOW (NNN+2)	/* show data function */
   #endif
  #else
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
-   #define MODE_CONTRAST NNN+1	/* select contrast */
-   #define MODE_SHOW NNN+2	/* show data function */
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
+   #define MODE_CONTRAST (NNN+1)	/* select contrast */
+   #define MODE_SHOW (NNN+2)	/* show data function */
   #else
-   #define MODE_SHOW NNN+1	/* show data function */
+   #define MODE_SHOW (NNN+1)	/* show data function */
   #endif
   #define MODE_VEXT 66
  #endif		/* end #ifdef WITH_VEXT */
@@ -61,19 +61,19 @@
   #define NNN 8
  #endif
  #ifdef WITH_VEXT
-  #define MODE_VEXT NNN+1	/* external voltage measurement and zener voltage */
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
-   #define MODE_CONTRAST NNN+2	/* select contrast */
-   #define MODE_SHOW NNN+3	/* show data function */
+  #define MODE_VEXT (NNN+1)	/* external voltage measurement and zener voltage */
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
+   #define MODE_CONTRAST (NNN+2)	/* select contrast */
+   #define MODE_SHOW (NNN+3)	/* show data function */
   #else
-   #define MODE_SHOW NNN+2	/* show data function */
+   #define MODE_SHOW (NNN+2)	/* show data function */
   #endif
  #else
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
-   #define MODE_CONTRAST NNN+1	/* select contrast */
-   #define MODE_SHOW NNN+2	/* show data function */
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
+   #define MODE_CONTRAST (NNN+1)	/* select contrast */
+   #define MODE_SHOW (NNN+2)	/* show data function */
   #else
-   #define MODE_SHOW NNN+1	/* show data function */
+   #define MODE_SHOW (NNN+1)	/* show data function */
   #endif
   #define MODE_VEXT 66
  #endif		/* end #ifdef WITH_VEXT */
@@ -235,7 +235,7 @@ void function_menu() {
         if (func_number == MODE_SELFTEST) AutoCheck(0x11);	// Full selftest with calibration
   #endif
         if (func_number == MODE_VEXT) show_vext();
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
         if (func_number == MODE_CONTRAST) set_contrast();
   #endif
         if (func_number == MODE_SHOW) {
@@ -292,7 +292,7 @@ void message2line(uint8_t number) {
  #ifdef WITH_VEXT
      if (number == MODE_VEXT) lcd_MEM_string(VOLTAGE_str); 
  #endif
- #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+ #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
      if (number == MODE_CONTRAST) lcd_MEM_string(CONTRAST_str); 
  #endif
      if (number == MODE_SHOW) {
@@ -839,7 +839,7 @@ void do_10bit_PWM() {
 #endif
 } /* end do_10bit_PWM */
 
- #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+ #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
 /* *************************************************** */
 /* set the contrast value of the ST7565 display */
 /* *************************************************** */
@@ -861,8 +861,13 @@ uint8_t contrast;
   while (1)                     /* wait endless without option POWER_OFF */
   #endif
   {
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
      lcd_command(CMD_SET_VOLUME_FIRST);		// 0x81 set  volume command
      lcd_command(contrast);			// value from 1 to 63 (0x3f) */
+  #else		/* DOGM display */
+     lcd_command(CMD1_PowerControl | ((contrast>>4)&0x03));	// booster off / set contrast C5:C4 
+     lcd_command(CMD1_SetContrast | (contrast&0x0f));	// set contrast C3:0 
+  #endif
      lcd_clear_line2();
      DisplayValue(contrast,0,' ',4);
      key_pressed = wait_for_key_ms(1600);

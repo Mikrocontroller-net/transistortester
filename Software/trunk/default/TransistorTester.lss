@@ -3856,8 +3856,8 @@ void Battery_check(void) {
     1098:	91 e0       	ldi	r25, 0x01	; 1
     109a:	0e 94 a7 01 	call	0x34e	; 0x34e <lcd_fix_string>
 	lcd_refresh();			// write the pixels to display, ST7920 only
-	wait_about2s();
-    109e:	8a ec       	ldi	r24, 0xCA	; 202
+	wait_about5s();
+    109e:	8d ec       	ldi	r24, 0xCD	; 205
     10a0:	0e 94 7a 03 	call	0x6f4	; 0x6f4 <sleep_5ms>
 	PORTD = 0;			//switch power off
     10a4:	1b b8       	out	0x0b, r1	; 11
@@ -9092,142 +9092,142 @@ void ReadInductance(void) {
     2e18:	cf 93       	push	r28
   #else /* no ESR_LONG_PULSE, 16MHz, interrupt mode */
     2e1a:	cd b7       	in	r28, 0x3d	; 61
-   #define EXTRA_DELAY2PULSE wait4us
+   #if PROCESSOR_TYP == 1280
     2e1c:	de b7       	in	r29, 0x3e	; 62
-        /* current begin after last ADCready:  1.125us (wakeup) + 14us + 6tics = 15.5 us  */
+   #define EXTRA_DELAY2PULSE wait4us
     2e1e:	6e 97       	sbiw	r28, 0x1e	; 30
-	/* half puls length = (20us - 15.5 us) = 4.5 us (PL=9.0 us) */
+        /* current begin after last ADCready:  1.25us (wakeup) + 14us + 10tics = 15.875 us  */
     2e20:	0f b6       	in	r0, 0x3f	; 63
- 	call	wait5us
+	/* half puls length = (20us - 15.5 us) = 4.125 us (PL=8.25 us) */
     2e22:	f8 94       	cli
-	call	wait3us; /* pulse length 8us + 3 clock tics (CALL instead of RCALL) = 8.1875 us */
+	/* adjusted for mega2560 */
     2e24:	de bf       	out	0x3e, r29	; 62
-	push    r24;            /* 8.3125 us */
-    2e26:	0f be       	out	0x3f, r0	; 63
-	pop     r24;            /* 8.4375 us */
-    2e28:	cd bf       	out	0x3d, r28	; 61
-	push    r24;            /* 8.5625 us */
-	pop     r24;            /* 8.6875 us */
-	push    r24;            /* 8.8125 us */
-    2e2a:	66 2e       	mov	r6, r22
-	pop     r24;            /* 8.9375 us */
-    2e2c:	b8 2e       	mov	r11, r24
-	wdr	;		/* 9.0    us */
-    2e2e:	86 0f       	add	r24, r22
-  #endif /* ESR_LONG_PULSE */
-    2e30:	89 83       	std	Y+1, r24	; 0x01
- #endif	/* 16 MHz */
-
-    2e32:	20 91 18 01 	lds	r18, 0x0118
-
-    2e36:	27 30       	cpi	r18, 0x07	; 7
-#else /* Polling mode: lds,sbrc,sts and out Instructions are 7 clock tics */
- #if F_CPU == 8000000UL
-    2e38:	41 f5       	brne	.+80     	; 0x2e8a <load_max>
-  #ifdef ESR_LONG_PULSE
-    2e3a:	20 91 77 01 	lds	r18, 0x0177
- 	// SH at 2.5 ADC clocks behind start = 20 us
-    2e3e:	30 91 78 01 	lds	r19, 0x0178
- 	call	wait20us;			// SH at 2.5 ADC clocks behind start = 20 us
-    2e42:	40 91 79 01 	lds	r20, 0x0179
-        /* current begin after last ADCready:  0.875us (loop) + 5us + 5tics = 6.5us  */
-    2e46:	50 91 7a 01 	lds	r21, 0x017A
-	/* half puls length = (20us - 6.5us) = 13.5us  (PL=27us) */
-    2e4a:	10 91 86 01 	lds	r17, 0x0186
  	call	wait5us
+    2e26:	0f be       	out	0x3f, r0	; 63
+	call	wait3us; /* pulse length 8us + 2 clock tics (CALL instead of RCALL) = 8.125 us */
+    2e28:	cd bf       	out	0x3d, r28	; 61
+	wdr	;	/* 8.1875 us */
+	wdr	;	/* 8.25   us */
+	wdr	;	/* 8.3125 us */
+    2e2a:	66 2e       	mov	r6, r22
+   #else
+    2e2c:	b8 2e       	mov	r11, r24
+   #define EXTRA_DELAY2PULSE wait4us
+    2e2e:	86 0f       	add	r24, r22
+        /* current begin after last ADCready:  1.125us (wakeup) + 14us + 6tics = 15.5 us  */
+    2e30:	89 83       	std	Y+1, r24	; 0x01
+	/* half puls length = (20us - 15.5 us) = 4.5 us (PL=9.0 us) */
+ 	call	wait5us
+    2e32:	20 91 18 01 	lds	r18, 0x0118
+	call	wait3us; /* pulse length 8us + 3 clock tics (CALL instead of RCALL) = 8.1875 us */
+    2e36:	27 30       	cpi	r18, 0x07	; 7
+	push    r24;            /* 8.3125 us */
+	pop     r24;            /* 8.4375 us */
+    2e38:	41 f5       	brne	.+80     	; 0x2e8a <load_max>
+	push    r24;            /* 8.5625 us */
+    2e3a:	20 91 77 01 	lds	r18, 0x0177
+	pop     r24;            /* 8.6875 us */
+    2e3e:	30 91 78 01 	lds	r19, 0x0178
+	push    r24;            /* 8.8125 us */
+    2e42:	40 91 79 01 	lds	r20, 0x0179
+	pop     r24;            /* 8.9375 us */
+    2e46:	50 91 7a 01 	lds	r21, 0x017A
+	wdr	;		/* 9.0    us */
+    2e4a:	10 91 86 01 	lds	r17, 0x0186
+   #endif
     2e4e:	09 c0       	rjmp	.+18     	; 0x2e62 <ad_35ba>
 
 00002e50 <ad_35ac>:
-	call	wait1us;
-         /* pulse length 26us + 3 clock tics (CALL instead of RCALL) = 26.375 us @ 8 MHz */
-	push	r24;		/* 26.625 us */
+  #endif /* ESR_LONG_PULSE */
+ #endif	/* 16 MHz */
+
     2e50:	ca 01       	movw	r24, r20
-	pop	r24;            /* 26.875 us */
+
     2e52:	b9 01       	movw	r22, r18
-	wdr	;		/* 27.0   us */
+#else /* Polling mode: lds,sbrc,sts and out Instructions are 7 clock tics */
     2e54:	2a e0       	ldi	r18, 0x0A	; 10
-	wdr	;		/* 27.125 us */
+ #if F_CPU == 8000000UL
     2e56:	31 2d       	mov	r19, r1
-  #else /* no ESR_LONG_PULSE, 8MHz, polling mode */
+  #ifdef ESR_LONG_PULSE
     2e58:	41 2d       	mov	r20, r1
-   #define EXTRA_DELAY2PULSE wait4us
+ 	// SH at 2.5 ADC clocks behind start = 20 us
     2e5a:	51 2d       	mov	r21, r1
-        /* current begin after last ADCready:  0.875us (loop) + 14us + 6tics = 15.625us  */
+ 	call	wait20us;			// SH at 2.5 ADC clocks behind start = 20 us
     2e5c:	0e 94 32 1f 	call	0x3e64	; 0x3e64 <__udivmodsi4>
-	/* half puls length = (20us - 15.625us) = 4.375us  (PL=8.75us) */
+        /* current begin after last ADCready:  0.875us (loop) + 5us + 5tics = 6.5us  */
     2e60:	1f 5f       	subi	r17, 0xFF	; 255
 
 00002e62 <ad_35ba>:
+	/* half puls length = (20us - 6.5us) = 13.5us  (PL=27us) */
+ 	call	wait5us
+	call	wait1us;
+    2e62:	17 3f       	cpi	r17, 0xF7	; 247
+         /* pulse length 26us + 3 clock tics (CALL instead of RCALL) = 26.375 us @ 8 MHz */
+    2e64:	ac f3       	brlt	.-22     	; 0x2e50 <ad_35ac>
+   #define EXTRA_DELAY2PULSE wait4us
+        /* current begin after last ADCready:  0.875us (loop) + 14us + 6tics = 15.625us  */
+	/* half puls length = (20us - 15.625us) = 4.375us  (PL=8.75us) */
  	call	wait5us
 	call	wait3us;
          /* pulse length 8us + 2 clock tics (CALL instead of RCALL) = 8.25 us @ 8 MHz */
-    2e62:	17 3f       	cpi	r17, 0xF7	; 247
-	wdr	;		/* 8.375   us */
-    2e64:	ac f3       	brlt	.-22     	; 0x2e50 <ad_35ac>
- #if F_CPU == 16000000UL
- 	// SH at 2.5 ADC clocks behind start = 20 us
-  #ifdef ESR_LONG_PULSE
- 	call	wait20us;			// SH at 2.5 ADC clocks behind start = 20 us
-        /* current begin after last ADCready:  0.4375us (loop) + 5us + 5tics = 5.75us  */
-	/* half puls length = (20us - 5.75us) = 14.25us (PL=28.5us) */
     2e66:	2a 35       	cpi	r18, 0x5A	; 90
- 	call	wait5us
+	wdr	;		/* 8.375   us */
     2e68:	60 e0       	ldi	r22, 0x00	; 0
- 	call	wait3us;
-	/* pulse length 28us + 3 clock tics (CALL instead of RCALL) = 28.1875 us */
+	wdr	;		/* 8.5   us */
+	wdr	;		/* 8.625 us */
     2e6a:	36 07       	cpc	r19, r22
-	push    r24;            /* 28.3125 us */
+	wdr	;		/* 8.75  us */
     2e6c:	41 05       	cpc	r20, r1
-	pop     r24;            /* 28.4375 us */
+  #endif /* ESR_LONG_PULSE */
     2e6e:	51 05       	cpc	r21, r1
-	wdr     ;               /* 28.50   us */
+ #endif	/* F_CPU == 8000000UL */
     2e70:	18 f4       	brcc	.+6      	; 0x2e78 <ad_35e4>
-  #else /* no ESR_LONG_PULSE, 16Mhz, polling mode */
+ #if F_CPU == 16000000UL
     2e72:	8f ef       	ldi	r24, 0xFF	; 255
-   #define EXTRA_DELAY2PULSE wait5us
+ 	// SH at 2.5 ADC clocks behind start = 20 us
     2e74:	9f ef       	ldi	r25, 0xFF	; 255
-        /* current begin after last ADCready:  0.4375us (loop) + 15us + 6tics = 15.8125us  */
+  #ifdef ESR_LONG_PULSE
     2e76:	82 c1       	rjmp	.+772    	; 0x317c <ad_exit>
 
 00002e78 <ad_35e4>:
-	/* half puls length = (20us - 15.8125us) = 4.1875us (PL=8.375us) */
- 	call	wait5us
+ 	call	wait20us;			// SH at 2.5 ADC clocks behind start = 20 us
+        /* current begin after last ADCready:  0.4375us (loop) + 5us + 5tics = 5.75us  */
     2e78:	17 3f       	cpi	r17, 0xF7	; 247
- 	call	wait3us;
+	/* half puls length = (20us - 5.75us) = 14.25us (PL=28.5us) */
     2e7a:	39 f4       	brne	.+14     	; 0x2e8a <load_max>
-        /* pulse length 8us + 2 clock tics (CALL instead of RCALL) = 8.125 us */
+ 	call	wait5us
     2e7c:	80 e0       	ldi	r24, 0x00	; 0
-	push    r24;            /* 8.25   us */
+ 	call	wait3us;
     2e7e:	28 17       	cp	r18, r24
-	pop     r24;            /* 8.375  us */
+	/* pulse length 28us + 3 clock tics (CALL instead of RCALL) = 28.1875 us */
     2e80:	8d e7       	ldi	r24, 0x7D	; 125
-  #endif /* ESR_LONG_PULSE */
+	push    r24;            /* 28.3125 us */
     2e82:	38 07       	cpc	r19, r24
- #endif	/* F_CPU == 16 MHz */
-#endif
- .endm  /* DelayBigCap */
+	pop     r24;            /* 28.4375 us */
+	wdr     ;               /* 28.50   us */
+  #else /* no ESR_LONG_PULSE, 16Mhz, polling mode */
     2e84:	41 05       	cpc	r20, r1
-
-//=================================================================
-
+   #if PROCESSOR_TYP == 1280
+   /* For the mega2560 processor the call / ret instructions take one cycle more. */
+   /* Additionally the STS instruction is used instead of the out instruction for R_PORT and R_DDR. */
     2e86:	41 05       	cpc	r20, r1
-
+   #define EXTRA_DELAY2PULSE wait5us
     2e88:	10 f0       	brcs	.+4      	; 0x2e8e <store_cvn>
 
 00002e8a <load_max>:
-//=================================================================
-//void GetESR(uint8_t hipin, uint8_t lopin) {
+        /* current begin after last ADCready:  0.4375us (loop) + 15us + 10tics = 16.0625us  */
+	/* half puls length = (20us - 16.0625us) = 3.9375us (PL=7.875us) */
     2e8a:	20 e0       	ldi	r18, 0x00	; 0
- .section .text
+	/* adjusted for mega2560 */
     2e8c:	3d e7       	ldi	r19, 0x7D	; 125
 
 00002e8e <store_cvn>:
-GetESR:
-       	push	r2;
-       	push	r3;
-       	push	r4;
+ 	call	wait5us		/* 5.125 us */
+ 	call	wait2us;	/* 7.25  us */
+	push	r24;		/* 7.375 us */
+	pop	r24;		/* 7.50  us */
     2e8e:	2c 8b       	std	Y+20, r18	; 0x14
-       	push	r5;
+	push	r24;		/* 7.625 us */
     2e90:	3d 8b       	std	Y+21, r19	; 0x15
      /* normal ADC-speed, ADC-Clock 8us */
 	ldi	r25, (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV; /* enable ADC and Interrupt */
@@ -9843,18 +9843,18 @@ ad_3924:
 ;	ldd	r25, Y+cap_val_nF+3;
 	mov	r25, r1			/* upper bits of cap_val_nF are allway zero */
     30d6:	91 2d       	mov	r25, r1
-	movw	r20, r24;
-	call	__mulsi3;		/* (cap_val_nF - 50) * (cap_val_nF - 50) */
-#else
-;#define FAKTOR_ESR (3480000/(PIN_RM+PIN_RP+R_L_VAL))
-#define FAKTOR_ESR (920000/(PIN_RM+PIN_RP+R_L_VAL))
-      	subi	r22, lo8(433200/(PIN_RM+PIN_RP+R_L_VAL)); 0xED; 237
+#define CAP_OFFSET (410400/(PIN_RM+PIN_RP+R_L_VAL))	/* 57 nF */
+ #else
+#define FAKTOR_ESR (920000/(PIN_RM+PIN_RP+R_L_VAL))	/* 127 */
+#define CAP_OFFSET (433200/(PIN_RM+PIN_RP+R_L_VAL))	/* 60 nF */
+ #endif
+      	subi	r22, lo8(CAP_OFFSET); 0xED; 237
     30d8:	6c 53       	subi	r22, 0x3C	; 60
-      	sbci	r23, hi8(433200/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
+      	sbci	r23, hi8(CAP_OFFSET); 0xFF; 255
     30da:	70 40       	sbci	r23, 0x00	; 0
-      	sbci	r24, hlo8(433200/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
+      	sbci	r24, hlo8(CAP_OFFSET); 0xFF; 255
     30dc:	80 40       	sbci	r24, 0x00	; 0
-      	sbci	r25, hhi8(433200/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
+      	sbci	r25, hhi8(CAP_OFFSET); 0xFF; 255
     30de:	90 40       	sbci	r25, 0x00	; 0
 	movw	r18, r22;		/* r18:21 = r22:25 = (cap_val_nF-60); */
     30e0:	9b 01       	movw	r18, r22

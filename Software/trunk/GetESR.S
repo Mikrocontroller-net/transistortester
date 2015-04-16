@@ -127,6 +127,12 @@
 				// With wdt_reset the timing can be fine adjusted.
 				// The middle of current pulse should be at the SH time of ADC.
 				// SH time of next ADC cycle is 20 us after last ADC ready.
+				// The timing of the middle of the load pulse is critical
+				// for capacitors with low capacity value (100 nF).
+				// For resistors or capacitors with big capacity value the
+				// voltage is constant or nearly constant.
+				// For this reason the timing is extremly critical for
+				// capacitors with low capacity value.
 				// Charging of capacitor begins with negative voltage and
 				// should be zero at SH time with a zero ESR capacitor.
  .macro DelayBigCap
@@ -167,6 +173,17 @@
 	push    r24;            /* 26.5625 us */
 	pop     r24;            /* 26.6875 us */
   #else /* no ESR_LONG_PULSE, 16MHz, interrupt mode */
+   #if PROCESSOR_TYP == 1280
+   #define EXTRA_DELAY2PULSE wait4us
+        /* current begin after last ADCready:  1.25us (wakeup) + 14us + 10tics = 15.875 us  */
+	/* half puls length = (20us - 15.5 us) = 4.125 us (PL=8.25 us) */
+	/* adjusted for mega2560 */
+ 	call	wait5us
+	call	wait3us; /* pulse length 8us + 2 clock tics (CALL instead of RCALL) = 8.125 us */
+	wdr	;	/* 8.1875 us */
+	wdr	;	/* 8.25   us */
+	wdr	;	/* 8.3125 us */
+   #else
    #define EXTRA_DELAY2PULSE wait4us
         /* current begin after last ADCready:  1.125us (wakeup) + 14us + 6tics = 15.5 us  */
 	/* half puls length = (20us - 15.5 us) = 4.5 us (PL=9.0 us) */
@@ -179,6 +196,7 @@
 	push    r24;            /* 8.8125 us */
 	pop     r24;            /* 8.9375 us */
 	wdr	;		/* 9.0    us */
+   #endif
   #endif /* ESR_LONG_PULSE */
  #endif	/* 16 MHz */
 
@@ -223,14 +241,31 @@
 	pop     r24;            /* 28.4375 us */
 	wdr     ;               /* 28.50   us */
   #else /* no ESR_LONG_PULSE, 16Mhz, polling mode */
+   #if PROCESSOR_TYP == 1280
+   /* For the mega2560 processor the call / ret instructions take one cycle more. */
+   /* Additionally the STS instruction is used instead of the out instruction for R_PORT and R_DDR. */
+   #define EXTRA_DELAY2PULSE wait5us
+        /* current begin after last ADCready:  0.4375us (loop) + 15us + 10tics = 16.0625us  */
+	/* half puls length = (20us - 16.0625us) = 3.9375us (PL=7.875us) */
+	/* adjusted for mega2560 */
+ 	call	wait5us		/* 5.125 us */
+ 	call	wait2us;	/* 7.25  us */
+	push	r24;		/* 7.375 us */
+	pop	r24;		/* 7.50  us */
+	push	r24;		/* 7.625 us */
+	pop	r24;		/* 7.75  us */
+        wdr	;		/* 7.8125us */
+        wdr	;		/* 7.875 us */
+   #else
    #define EXTRA_DELAY2PULSE wait5us
         /* current begin after last ADCready:  0.4375us (loop) + 15us + 6tics = 15.8125us  */
 	/* half puls length = (20us - 15.8125us) = 4.1875us (PL=8.375us) */
  	call	wait5us
  	call	wait3us;
         /* pulse length 8us + 2 clock tics (CALL instead of RCALL) = 8.125 us */
-	push    r24;            /* 8.25   us */
-	pop     r24;            /* 8.375  us */
+	wdr     ;               /* 8.1875  us */
+;	wdr     ;               /* 8.25   us */
+   #endif
   #endif /* ESR_LONG_PULSE */
  #endif	/* F_CPU == 16 MHz */
 #endif
@@ -709,20 +744,27 @@ ad_3924:
 ; #define FAKTOR_ESR (5256239/(PIN_RM+PIN_RP+R_L_VAL))
 ; #define FAKTOR_ESR (5498588/(PIN_RM+PIN_RP+R_L_VAL))
  #define FAKTOR_ESR (6168770/(PIN_RM+PIN_RP+R_L_VAL))
-       	subi	r22, lo8(361000/(PIN_RM+PIN_RP+R_L_VAL)); 0xED; 237
-       	sbci	r23, hi8(361000/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
-       	sbci	r24, hlo8(361000/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
-       	sbci	r25, hhi8(361000/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
+ #define CAP_OFFSET (361000/(PIN_RM+PIN_RP+R_L_VAL))   /* 50 nF */
+       	subi	r22, lo8(CAP_OFFSET); 0xED; 237
+       	sbci	r23, hi8(CAP_OFFSET); 0xFF; 255
+       	sbci	r24, hlo8(CAP_OFFSET); 0xFF; 255
+       	sbci	r25, hhi8(CAP_OFFSET); 0xFF; 255
 	movw	r18, r22;		/* r18:21 = r22:25 = cap_val_nF; */
 	movw	r20, r24;
 	call	__mulsi3;		/* (cap_val_nF - 50) * (cap_val_nF - 50) */
 #else
 ;#define FAKTOR_ESR (3480000/(PIN_RM+PIN_RP+R_L_VAL))
-#define FAKTOR_ESR (920000/(PIN_RM+PIN_RP+R_L_VAL))
-      	subi	r22, lo8(433200/(PIN_RM+PIN_RP+R_L_VAL)); 0xED; 237
-      	sbci	r23, hi8(433200/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
-      	sbci	r24, hlo8(433200/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
-      	sbci	r25, hhi8(433200/(PIN_RM+PIN_RP+R_L_VAL)); 0xFF; 255
+ #if F_CPU == 16000000UL
+#define FAKTOR_ESR (920000/(PIN_RM+PIN_RP+R_L_VAL))     /* 127 */
+#define CAP_OFFSET (410400/(PIN_RM+PIN_RP+R_L_VAL))	/* 57 nF */
+ #else
+#define FAKTOR_ESR (920000/(PIN_RM+PIN_RP+R_L_VAL))	/* 127 */
+#define CAP_OFFSET (433200/(PIN_RM+PIN_RP+R_L_VAL))	/* 60 nF */
+ #endif
+      	subi	r22, lo8(CAP_OFFSET); 0xED; 237
+      	sbci	r23, hi8(CAP_OFFSET); 0xFF; 255
+      	sbci	r24, hlo8(CAP_OFFSET); 0xFF; 255
+      	sbci	r25, hhi8(CAP_OFFSET); 0xFF; 255
 	movw	r18, r22;		/* r18:21 = r22:25 = (cap_val_nF-60); */
 	movw	r20, r24;
 	call	__mulsi3;		/* (cap_val_nF - 60) * (cap_val_nF - 60) */

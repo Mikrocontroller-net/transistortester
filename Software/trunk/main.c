@@ -731,7 +731,7 @@
        }
        lcd_space();
        lcd_MEM_string(Uf_str);			//"Uf="
-       mVAusgabe(ii);
+       mVAusgabe(vak_diode_nr);
     } /* end if (vak_diode_nr < 5) */
 #endif
     goto tt_end;

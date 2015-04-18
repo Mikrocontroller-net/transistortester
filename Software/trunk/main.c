@@ -615,10 +615,10 @@
        if ((diodes.Anode[ii] == _trans->b) || (diodes.Cathode[ii] == _trans->b)) continue;
        // no side of the diode is connected to the base, this must be the protection diode   
 #ifdef WITH_GRAPHICS
-    options = 0;
-    if (_trans->c != diodes.Anode[ii])
-       options |= OPT_VREVERSE;
-    lcd_update_icon_opt(bmp_vakdiode,options);	// show the protection diode right to the Icon
+       options = 0;
+       if (_trans->c != diodes.Anode[ii])
+          options |= OPT_VREVERSE;
+       lcd_update_icon_opt(bmp_vakdiode,options);	// show the protection diode right to the Icon
 #else    /* only character display, show the diode in correct direction */    
  #ifdef EBC_STYLE
   #if EBC_STYLE == 321

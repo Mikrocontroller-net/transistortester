@@ -31,8 +31,8 @@
 
 	 .func mVAusgabe
 	mVAusgabe:
-	;   if (nn < 3) {
-		cpi	r24, 0x03	; 3
+	;   if (nn < 6) {
+		cpi	r24, 0x06	; 6
 		brcc	ad1ca4;
 	      // Output in mV units
 		LDIZ	diodes+12;

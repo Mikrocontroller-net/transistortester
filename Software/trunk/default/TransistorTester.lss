@@ -1064,9 +1064,9 @@ ad1d94:
 
 	 .func mVAusgabe
 	mVAusgabe:
-	;   if (nn < 3) {
-		cpi	r24, 0x03	; 3
-     4ce:	83 30       	cpi	r24, 0x03	; 3
+	;   if (nn < 6) {
+		cpi	r24, 0x06	; 6
+     4ce:	86 30       	cpi	r24, 0x06	; 6
 		brcc	ad1ca4;
      4d0:	58 f4       	brcc	.+22     	; 0x4e8 <ad1ca4>
 	      // Output in mV units

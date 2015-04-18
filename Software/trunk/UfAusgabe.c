@@ -35,7 +35,7 @@ void UfAusgabe(uint8_t bcdnum) {
    mVAusgabe(bcdnum & 0x0f);
 }
 void mVAusgabe(uint8_t nn) {
-   if (nn < 3) {
+   if (nn < 6) {
       // Output in mV units
       Display_mV(diodes.Voltage[nn],3);
       lcd_space();

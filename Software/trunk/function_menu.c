@@ -844,7 +844,7 @@ void do_10bit_PWM() {
 /* set the contrast value of the ST7565 display */
 /* *************************************************** */
  #if (LCD_ST_TYPE == 1306)
-  #define MAX_CONTRAST 0x7f
+  #define MAX_CONTRAST 0xff
  #else
   #define MAX_CONTRAST 0x3f
  #endif

@@ -1323,7 +1323,6 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 #ifdef WITH_GRAPHICS
   extern const unsigned char Ube_str[] MEM_TEXT;
 #endif
-  extern const uint8_t EE_ESR_ZEROtab[] EEMEM;	// zero offset of ESR measurement
   extern  const uint16_t RLtab[];
 
  #if FLASHEND > 0x1fff

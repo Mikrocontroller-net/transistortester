@@ -296,7 +296,7 @@
 #if PROCESSOR_TYP == 644
  #define ON_DDR DDRB
  #define ON_PORT PORTB
- #define ON_PIN PD1      // This Pin is switched to high to switch power on
+ #define ON_PIN PB1      // This Pin is switched to high to switch power on
 #elif PROCESSOR_TYP == 1280
  #define ON_DDR DDRA
  #define ON_PORT PORTA

@@ -6,28 +6,37 @@
 	  
 #ifdef BAT_CHECK
 void Battery_check(void) {
+ uint16_t bat_voltage;
+ uint16_t bat_adc;
   // Battery check is selected
   ReadADC(TPBAT);	//Dummy-Readout
-  ptrans.uBE = W5msReadADC(TPBAT); 	//with 5V reference
-  lcd_MEM_string(Bat_str);		//output: "Bat. "
+  bat_adc = W5msReadADC(TPBAT); 	//with 5V reference
  #ifdef BAT_OUT
   // display Battery voltage
   // The divisor to get the voltage in 0.01V units is ((10*33)/133) witch is about 2.4812
   // A good result can be get with multiply by 4 and divide by 10 (about 0.75%).
-//  cap.cval = (ptrans.uBE*4)/10+((BAT_OUT+5)/10); // usually output only 2 digits
-//  DisplayValue(cap.cval,-2,'V',2);		// Display 2 Digits of this 10mV units
   #if BAT_NUMERATOR <= (0xffff/U_VCC)
-	  cap.cval = (ptrans.uBE*BAT_NUMERATOR)/BAT_DENOMINATOR + BAT_OUT;
+	  bat_voltage = (bat_adc*BAT_NUMERATOR)/BAT_DENOMINATOR + BAT_OUT;
   #else
    #if (BAT_NUMERATOR == 133) && (BAT_DENOMINATOR == 33)
-	  cap.cval = (ptrans.uBE*4)+BAT_OUT;		// usually output only 2 digits
+	  bat_voltage = (bat_adc*4)+BAT_OUT;		// usually output only 2 digits
    #else
-	  cap.cval = ((unsigned long)ptrans.uBE*BAT_NUMERATOR)/BAT_DENOMINATOR + BAT_OUT;
+	  bat_voltage = ((unsigned long)bat_adc*BAT_NUMERATOR)/BAT_DENOMINATOR + BAT_OUT;
    #endif
   #endif
-	  Display_mV(cap.cval,2);		// Display 2 Digits of this 10mV units
+  #if FLASHEND > 0x1fff
+          if (bat_voltage < 900) {
+             // no battery present, don't check,
+	     lcd_MEM_string(DC_Pwr_Mode_str);	// "DC Pwr Mode"
+             return;
+          }
+  #endif
+          lcd_MEM_string(Bat_str);		//output: "Bat. "
+	  Display_mV(bat_voltage,2);		// Display 2 Digits of this 10mV units
 	  lcd_space();
- #endif
+ #else    /* without battery voltage output */
+    lcd_MEM_string(Bat_str);		//output: "Bat. "
+ #endif  /* BAT_OUT */
  #if (BAT_POOR > 12000)
    #warning "Battery POOR level is set very high!"
  #endif
@@ -50,9 +59,9 @@ void Battery_check(void) {
  #define POOR_LEVEL (((unsigned long)(BAT_POOR)*(unsigned long)BAT_DENOMINATOR)/BAT_NUMERATOR)
 
   // check the battery voltage
-  if (ptrans.uBE <  WARN_LEVEL) {
+  if (bat_adc <  WARN_LEVEL) {
      //Vcc < 7,3V; show Warning 
-     if(ptrans.uBE < POOR_LEVEL) {	
+     if(bat_adc < POOR_LEVEL) {	
 	//Vcc <6,3V; no proper operation is possible
 	lcd_MEM_string(BatEmpty);	//Battery empty!
 	lcd_refresh();			// write the pixels to display, ST7920 only

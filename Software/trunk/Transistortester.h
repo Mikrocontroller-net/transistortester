@@ -607,6 +607,9 @@ End of configuration
 // Strings, which are not dependent of any language
  const unsigned char Bat_str[] MEM_TEXT = "Bat. ";
  const unsigned char OK_str[] MEM_TEXT = "OK";
+#if FLASHEND > 0x1fff
+ const unsigned char DC_Pwr_Mode_str[] MEM_TEXT = "DC Pwr Mode";
+#endif
  const unsigned char mosfet_str[] MEM_TEXT = "-MOS";
  const unsigned char jfet_str[] MEM_TEXT = "JFET";
  const unsigned char igbt_str[] MEM_TEXT = "-IGBT";
@@ -1300,6 +1303,9 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  extern const unsigned char BatWeak[];
  extern const unsigned char BatEmpty[]; 
  extern const unsigned char OK_str[];
+ #if FLASHEND > 0x1fff
+ extern const unsigned char DC_Pwr_Mode_str[];
+ #endif
  #ifdef AUTO_CAL
 //  extern uint16_t R680pl;
 //  extern uint16_t R680mi;

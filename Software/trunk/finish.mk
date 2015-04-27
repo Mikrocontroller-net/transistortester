@@ -129,6 +129,9 @@ eeprom:
 eeread:
 	avrdude -c $(PROGRAMMER) -B $(BitClock) $(AVRDUDE_BAUD) -p $(PARTNO) -P $(PORT) \
 	-U eeprom:r:./TTactual.eep:i
+read:
+	avrdude -c $(PROGRAMMER) -B $(BitClock) $(AVRDUDE_BAUD) -p $(PARTNO) -P $(PORT) \
+	-U flash:r:./TTactual.hex:i
 verify:
 	avrdude -D -c $(PROGRAMMER) -B $(BitClock) $(AVRDUDE_BAUD) -p $(PARTNO) -P $(PORT) -U flash:v:./$(PROJECT).hex:a \
 	-U eeprom:v:./$(PROJECT).eep:a -v

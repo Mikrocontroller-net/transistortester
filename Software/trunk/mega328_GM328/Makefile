@@ -132,12 +132,6 @@ CFLAGS += -DFONT_7X12
 # You can also select two thick layouts for the icons by setting the ICON_TYPE to 2 or 0 (0=old style).
 CFLAGS += -DICON_TYPE=3
 
-# option BIG_TP makes the 123 for the test pins (beside the icon) bigger
-CFLAGS += -DBIG_TP
-# option INVERSE_TP inverse the 123 for the test pins (black on white)
-# the option INVERSE_TP disable the option BIG_TP because a frame is required
-#CFLAGS += -DINVERSE_TP
-
 # option BIG_TP makes the 123 for the test pins bigger
 CFLAGS += -DBIG_TP
 # option INVERSE_TP inverse the 123 for the test pins (black on white)

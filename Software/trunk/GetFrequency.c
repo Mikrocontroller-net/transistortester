@@ -137,7 +137,7 @@ void GetFrequency(uint8_t range) {
      lcd_clear();		// clear total display
  #endif
      lcd_data('f');
-     lcd_data('=');
+     lcd_equal();		// lcd_data('=');
  #if PROCESSOR_TYP == 644
      if ((FDIV_PORT&(1<<FDIV_PIN)) == 0) {
         DisplayValue(ext_freq.dw,0,'H',7);
@@ -221,7 +221,7 @@ void GetFrequency(uint8_t range) {
         lcd_line2();		// report period on line 2 of 2-line LCD
  #endif
         lcd_data('T');
-        lcd_data('=');
+        lcd_equal();		// lcd_data('=');
         ext_period = ((unsigned long long)ext_freq.dw * (200000/MHZ_CPU)) / pinchange_max;
  #if PROCESSOR_TYP == 644
         if ((FDIV_PORT&(1<<FDIV_PIN)) != 0) {
@@ -245,7 +245,7 @@ void GetFrequency(uint8_t range) {
               lcd_line1();		// overwrite line 1 of 2-line LCD to report the computed frequency
  #endif
               lcd_data('f');
-              lcd_data('=');
+              lcd_equal();		// lcd_data('=');
               if (ext_period > 1000000000) {
                  // frequency in 0.000001Hz (1e11*1e6)/(0.01ns count)
                  freq_from_per = (unsigned long long)(100000000000000000) / ext_period;

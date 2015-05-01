@@ -660,7 +660,7 @@
     } else {
        lcd_data('c');
     }
-    lcd_data('=');
+    lcd_equal();			// lcd_data('=');
     DisplayValue(_trans->current,-6,'A',2);	// display Ic or Ie current
 
     lcd_next_line(TEXT_RIGHT_TO_ICON); // position behind the icon, Line 4
@@ -695,7 +695,7 @@
     } else {
        lcd_data('c');
     }
-    lcd_data('=');
+    lcd_equal();			// lcd_data('=');
     DisplayValue(_trans->current,-6,'A',2);	// display Ic or Ie current
  #endif
 
@@ -733,6 +733,9 @@
        lcd_MEM_string(Uf_str);			//"Uf="
        mVAusgabe(vak_diode_nr);
     } /* end if (vak_diode_nr < 5) */
+#endif
+#ifdef WITH_GRAPHICS
+    PinLayoutLine('E','B','C'); 		//  Pin 1=E ...
 #endif
     goto tt_end;
     // end (PartFound == PART_TRANSISTOR)
@@ -874,7 +877,7 @@
  #if (LCD_LINE_LENGTH > 17)
        lcd_data('d');
  #endif
-       lcd_data('=');
+       lcd_equal();			// lcd_data('=');
        DisplayValue(_trans->current,-6,'A',2);
        lcd_MEM_string(Vgs_str);		// "@Vg="
        Display_mV(_trans->gthvoltage,2);	//Gate-threshold voltage
@@ -905,7 +908,7 @@
  #if (LCD_LINE_LENGTH > 17)
        lcd_data('d');
  #endif
-       lcd_data('=');
+       lcd_equal();			// lcd_data('=');
        DisplayValue(_trans->current,-6,'A',2);
        lcd_MEM_string(Vgs_str);		// "@Vg="
        Display_mV(_trans->gthvoltage,2);	//Gate-threshold voltage
@@ -932,6 +935,13 @@
        lcd_MEM_string(Uf_str);			//"Uf="
        mVAusgabe(0);
     } /* end NumOfDiodes == 1 */
+#endif
+#ifdef WITH_GRAPHICS
+    if (tmp == PART_MODE_IGBT) {
+       PinLayoutLine('E','G','C'); 		//  Pin 1=...
+    } else {
+       PinLayoutLine('S','G','D'); 		//  Pin 1=...
+    }
 #endif
     goto tt_end;
   }  /* end (PartFound == PART_FET) */

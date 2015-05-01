@@ -48,6 +48,10 @@ void lcd_spaces(uint8_t nn) {
    }
 }
 #endif
+// send equal character to LCD
+void lcd_equal(void) {
+   lcd_data('=');
+}
 
 /* ******************************************************************************* */
 //move to the beginning of the 1. row

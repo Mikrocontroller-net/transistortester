@@ -321,7 +321,7 @@ void show_C_ESR() {
         if (PartFound == PART_CAPACITOR) {
            lcd_clear_line1(); 	// clear old capacity value 
            lcd_data('C');
-           lcd_data('=');
+           lcd_equal();		// lcd_data('=');
            DisplayValue(cap.cval_max,cap.cpre_max,'F',3);
            cap.esr = GetESR(cap.cb,cap.ca);
            lcd_clear_line2();	// clear old ESR value 

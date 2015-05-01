@@ -629,6 +629,9 @@ End of configuration
  const unsigned char PNP_str[] MEM_TEXT = "PNP";
 #endif
 
+#ifdef WITH_GRAPHICS
+ const unsigned char Pin_str[] MEM_TEXT = "Pin ";
+#endif
 #ifndef EBC_STYLE
  // default is the 123= style
  const unsigned char N123_str[] MEM_TEXT = {' ','1'+TP_OFFSET,'2'+TP_OFFSET,'3'+TP_OFFSET,'=',0};
@@ -1313,10 +1316,12 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   extern uint16_t ref_offset;
   extern uint8_t c_zero_tab[];
  #endif
+ #ifdef WITH_GRAPHICS
+ extern const unsigned char Pin_str[] MEM_TEXT;
+ #endif
  #ifndef EBC_STYLE
  // default is the 123= style
  extern const unsigned char N123_str[] MEM_TEXT;
-// const unsigned char N123_str[] MEM_TEXT = " Pin=";
  #else
   #if EBC_STYLE == 321
   extern const unsigned char N321_str[] MEM_TEXT;

@@ -14,6 +14,7 @@ void lcd_big_icon(unsigned char temp1);
 void lcd_update_icon(const unsigned char * ubitmap);
 void lcd_update_icon_opt(const unsigned char * ubitmap, unsigned char options);
 void lcd_space(void);			// clear one character
+void lcd_equal(void);			// send = character to display
 void lcd_spaces(uint8_t number);	// clear number characters
 void lcd_command(unsigned char temp1);
 void lcd_string(char *data);

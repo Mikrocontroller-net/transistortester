@@ -110,12 +110,13 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 // The polarity of residual voltage of the capacitor depends on the measurement
 // history. For the normal test cycle the residual voltage is negative
 // at the HighPin. Because the ADC can not measure a negative Voltage,
-// the HighPin is grounded and the voltage is measured at the Lowpin to
-// detect a negative voltage of the Highpin
+// the LowPin voltage is shifted to 139mV with the R_L resistor.
+// The voltage of the capacitor is build as difference between HighPin and LowPin voltage.
   ADC_DDR = LoADC;			// switch Low-Pin to output (GND)
   R_DDR = LoPinR_L;			// switch R_L Port of LoPin to VCC
   R_PORT = LoPinR_L;			// switch R_L Port of LoPin to VCC
   residual_voltage = ReadADC(HighPin) - ReadADC(LowPin); // voltage at HighPin before any load 
+  R_DDR = 0;				// switch all R_L ports to input
   cap_voltage1 = 0;			// preset to prevent compiler warning
 #define MAX_LOAD_TIME 500
 #define MIN_VOLTAGE 300

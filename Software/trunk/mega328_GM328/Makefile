@@ -286,6 +286,14 @@ CFLAGS += -DBAT_OUT=150
 # because this increase the danger for deep discharge!!
 CFLAGS += -DBAT_POOR=6400
 
+# You can set a upper battery voltage limit in mV units for battery operation mode.
+# The operation time of additional functions is limited with the battery operation mode. 
+# Above the voltage limit "DC_PWR" the tester changes the operation mode to the
+# "DC_Pwr_Mode", where time limits of the additional functions are switched off.
+# The "DC_Pwr_Mode" is also started, if the battery voltage is detected below 0.9V
+# regardless to the state of the DC_PWR option.
+# CFLAGS += -DDC_PWR=9500
+
 # Voltage divider for battery voltage measurement  10k / 3.3k = 133/33
 CFLAGS += -DBAT_NUMERATOR=133
 CFLAGS += -DBAT_DENOMINATOR=33

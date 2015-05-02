@@ -163,6 +163,9 @@ COMMON struct Rotary_t rotary;
 COMMON uint8_t rotary_switch_present;	// is set to 1, if rotary switch movement is detected
 // COMMON  const uint8_t EE_RotarySwitch; 	// rotation switch is detected
 #endif
+#if FLASHEND > 0x1fff
+COMMON uint8_t DC_Pwr_mode;
+#endif
 
 COMMON uint8_t lcd_text_line;
 COMMON uint8_t last_line_used;

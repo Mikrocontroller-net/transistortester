@@ -71,6 +71,9 @@ void show_Resis13(void) {
 #else
      if (key_pressed != 0) break;
 #endif
+#ifdef POWER_OFF
+     if (DC_Pwr_mode == 1) times = 0;	// no time limit with DC_Pwr_mode
+#endif
   }  /* end for times */
   lcd_clear();
 } /* end show_Resis13() */
@@ -165,6 +168,9 @@ void show_Cap13(void) {
      if ((key_pressed != 0) || (rotary.incre > 3)) break;
 #else
      if (key_pressed != 0) break;
+#endif
+#ifdef POWER_OFF
+     if (DC_Pwr_mode == 1) times = 0;	// no time limit with DC_Pwr_mode
 #endif
   }  /* end for times */
   lcd_clear();

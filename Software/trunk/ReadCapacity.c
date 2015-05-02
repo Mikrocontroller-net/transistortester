@@ -35,11 +35,15 @@
 void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   // check if capacitor and measure the capacity value
   unsigned int tmpint;
-  unsigned int adcv[4];
+//  unsigned int adcv[4];
+  int residual_voltage;
+  int cap_voltage1;
+  int cap_voltage2;
 #ifdef INHIBIT_SLEEP_MODE
   unsigned int ovcnt16;
 #endif
   uint8_t HiPinR_L, HiPinR_H;
+  uint8_t LoPinR_L;
   uint8_t LoADC;
   uint8_t ii;
 
@@ -50,7 +54,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      ADC_DDR = (1<<TestCapPin) | TXD_MSK;	// switch capacitor-Pin to output (GND)
      wait_about20ms();
      ADC_DDR = TXD_MSK;			// switch all ADC to input 
-     adcv[0] = ReadADC(HighPin);		// voltage before any load 
+     residual_voltage = ReadADC(HighPin);		// voltage before any load 
   }
 #endif
 
@@ -59,6 +63,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 #endif
 
   HiPinR_L = pgm_read_byte(&PinRLRHADCtab[HighPin]);	//R_L mask for HighPin R_L load
+  LoPinR_L = pgm_read_byte(&PinRLRHADCtab[LowPin]);	//R_L mask for LowPin R_L load
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
   HiPinR_H = pgm_read_byte((&PinRLRHADCtab[3])+HighPin);	//R_H mask for HighPin R_H load
   LoADC = pgm_read_byte((&PinRLRHADCtab[6])+LowPin) | TXD_MSK;
@@ -102,13 +107,16 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   cap.cpre = 0;			// mark for no cap
   EntladePins();			// discharge capacitor
   ADC_PORT = TXD_VAL;			// switch ADC-Port to GND
-  R_PORT = 0;				// switch R-Port to GND
+// The polarity of residual voltage of the capacitor depends on the measurement
+// history. For the normal test cycle the residual voltage is negative
+// at the HighPin. Because the ADC can not measure a negative Voltage,
+// the HighPin is grounded and the voltage is measured at the Lowpin to
+// detect a negative voltage of the Highpin
   ADC_DDR = LoADC;			// switch Low-Pin to output (GND)
-//  R_DDR = HiPinR_L;			// switch R_L port for HighPin to output (GND)
-  R_DDR = 0;				// set all R Ports to input (no current)
-  adcv[0] = ReadADC(HighPin);		// voltage before any load 
-// ******** should adcv[0] be measured without current???
-  adcv[2] = adcv[0];			// preset to prevent compiler warning
+  R_DDR = LoPinR_L;			// switch R_L Port of LoPin to VCC
+  R_PORT = LoPinR_L;			// switch R_L Port of LoPin to VCC
+  residual_voltage = ReadADC(HighPin) - ReadADC(LowPin); // voltage at HighPin before any load 
+  cap_voltage1 = 0;			// preset to prevent compiler warning
 #define MAX_LOAD_TIME 500
 #define MIN_VOLTAGE 300
   for (ovcnt16=0;ovcnt16<MAX_LOAD_TIME;ovcnt16++) {
@@ -120,29 +128,22 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      wait500us();			//wait a little time
      wdt_reset();
      // read voltage without current, is already charged enough?
-     adcv[2] = ReadADC(HighPin);
-     if (adcv[2] > adcv[0]) {
-        adcv[2] -= adcv[0];		//difference to beginning voltage
-     } else {
-        adcv[2] = 0;			// voltage is lower or same as beginning voltage
-     }
-     if ((ovcnt16 > (MAX_LOAD_TIME/4)) && (adcv[2] < (MIN_VOLTAGE/4))) {
+     cap_voltage1 = ReadADC(HighPin) - residual_voltage; // voltage of capacitor
+     if ((ovcnt16 > (MAX_LOAD_TIME/4)) && (cap_voltage1 < (MIN_VOLTAGE/4))) {
         // 300mV can not be reached well-timed 
         break;		// don't try to load any more
      }
      // probably 100mF can be charged well-timed 
-     if (adcv[2] > MIN_VOLTAGE) {
+     if (cap_voltage1 > MIN_VOLTAGE) {
         break;		// lowest voltage to get capacity from load time is reached
      }
-  }
+  }  /* end for ovcnt16 */
   // wait 5ms and read voltage again, does the capacitor keep the voltage?
-//  adcv[1] = W5msReadADC(HighPin) - adcv[0];
-//  wdt_reset();
 #if DebugOut == 10
   DisplayValue(ovcnt16,0,' ',4);
-  Display_mV(adcv[2],4);
+  Display_mV(cap_voltage1,4);
 #endif
-  if (adcv[2] <= MIN_VOLTAGE) {
+  if (cap_voltage1 <= MIN_VOLTAGE) {
 #if DebugOut == 10
      lcd_data('K');
      lcd_space();
@@ -152,27 +153,22 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      goto keinC;		// was never charged enough, >100mF or shorted
   }
   //voltage is rised properly and keeps the voltage enough
-  if ((ovcnt16 == 0 ) && (adcv[2] > 1300)) {
+  if ((ovcnt16 == 0 ) && (cap_voltage1 > 1300)) {
      goto messe_mit_rh;		// Voltage of more than 1300mV is reached in one pulse, too fast loaded
   }
   // Capacity is more than about 50µF
 #ifdef NO_CAP_HOLD_TIME
   ChargePin10ms(HiPinR_H,0);		//switch HighPin with R_H 10ms auf GND, then currentless
-  adcv[3] = ReadADC(HighPin) - adcv[0]; // read voltage again, is discharged only a little bit ?
-  if (adcv[3] > adcv[0]) {
-     adcv[3] -= adcv[0];		// difference to beginning voltage
-  } else {
-     adcv[3] = 0;			// voltage is lower to beginning voltage
-  }
+  cap_voltage2 = ReadADC(HighPin) - residual_voltage;	// read voltage again, is discharged only a little bit ?
  #if DebugOut == 10
   lcd_data('U');
   lcd_data('3');
   lcd_data(':');
-  u2lcd(adcv[3]);
+  u2lcd(cap_voltage2);
   lcd_space();
   wait_about2s();
  #endif
-  if ((adcv[3] + adcv[3]) < adcv[2]) {
+  if ((cap_voltage2 + cap_voltage2) < cap_voltage1) {
  #if DebugOut == 10
      lcd_data('H');
      lcd_space();
@@ -184,35 +180,25 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      goto keinC; //implausible, not yet the half voltage
   }
   cap.cval_uncorrected.dw = ovcnt16 + 1;
-  cap.cval_uncorrected.dw *= GetRLmultip(adcv[2]);		// get factor to convert time to capacity from table
+  cap.cval_uncorrected.dw *= GetRLmultip(cap_voltage1);		// get factor to convert time to capacity from table
 #else
   // wait the half the time which was required for loading
-  adcv[3] = adcv[2];			// preset to prevent compiler warning
+  cap_voltage2 = cap_voltage1;			// preset to prevent compiler warning
   for (tmpint=0;tmpint<=ovcnt16;tmpint++) {
      wait5ms();
-     adcv[3] = ReadADC(HighPin);	// read voltage again, is discharged only a little bit ?
+     cap_voltage2 = ReadADC(HighPin) - residual_voltage;	// read voltage again, is discharged only a little bit ?
      wdt_reset();
   }
-  if (adcv[3] > adcv[0]) {
-     adcv[3] -= adcv[0];		// difference to beginning voltage
-  } else {
-     adcv[3] = 0;			// voltage is lower or same as beginning voltage
-  }
-  if (adcv[2] > adcv[3]) {
-     // build difference to load voltage
-     adcv[3] = adcv[2] - adcv[3];	// lost voltage during load time wait
-  } else {
-     adcv[3] = 0;			// no lost voltage
-  }
+     cap_voltage2 = cap_voltage1 - cap_voltage2; 	// lost voltage during load time wait
 #if FLASHEND > 0x1fff
   // compute equivalent parallel resistance from voltage drop
-  if (adcv[3] > 0) {
-     // there is any voltage drop (adcv[3]) !
-     // adcv[2] is the loaded voltage.
-     vloss = (unsigned long)(adcv[3] * 1000UL) / adcv[2];
+  if (cap_voltage2 > 0) {
+     // there is any voltage drop !
+     // cap_voltage1 is the loaded voltage.
+     vloss = (unsigned long)(cap_voltage2 * 1000UL) / cap_voltage1;
   }
 #endif
-  if (adcv[3] > 200) {
+  if (cap_voltage2 > 200) {
      // more than 200mV is lost during load time
  #if DebugOut == 10
      lcd_data('L');
@@ -226,7 +212,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   }
   cap.cval_uncorrected.dw = ovcnt16 + 1;
   // compute factor with load voltage + lost voltage during the voltage load time
-  cap.cval_uncorrected.dw *= GetRLmultip(adcv[2]+adcv[3]);	// get factor to convert time to capacity from table
+  cap.cval_uncorrected.dw *= GetRLmultip(cap_voltage1+cap_voltage2);	// get factor to convert time to capacity from table
 #endif
    cap.cval = cap.cval_uncorrected.dw;	// set result to uncorrected
    cap.cpre = -9;		// switch units to nF 
@@ -348,8 +334,7 @@ messe_mit_rh:
   ADCSRA = (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; //enable ADC
   R_DDR = 0;			// switch R_H resistor port for input
   R_PORT = 0;			// switch R_H resistor port pull up for HighPin off
-  adcv[2] = ReadADC(HighPin);   // get loaded voltage
-  load_diff = adcv[2] + REF_C_KORR - ref_mv;	// build difference of capacitor voltage to Reference Voltage
+  load_diff = ReadADC(HighPin) + REF_C_KORR - ref_mv;	// build difference of capacitor voltage to Reference Voltage
 //############################################################
   if (ovcnt16 >= (F_CPU/10000)) {
 #if DebugOut == 10

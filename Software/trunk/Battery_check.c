@@ -25,9 +25,16 @@ void Battery_check(void) {
    #endif
   #endif
   #if FLASHEND > 0x1fff
-          if (bat_voltage < 900) {
+          DC_Pwr_mode = 0;
+   #ifdef DC_PWR
+          if ((bat_voltage < 900) || (bat_voltage > DC_PWR))
+   #else
+          if (bat_voltage < 900) 
+   #endif
+          {
              // no battery present, don't check,
 	     lcd_MEM_string(DC_Pwr_Mode_str);	// "DC Pwr Mode"
+             DC_Pwr_mode = 1;
              return;
           }
   #endif

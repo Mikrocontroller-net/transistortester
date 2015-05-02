@@ -196,6 +196,7 @@ void function_menu() {
 #ifdef POWER_OFF
      ii = wait_for_key_ms(SHORT_WAIT_TIME);	// wait about 5 seconds
      if (ii > 0) ll = 0;			// reset timer, operator present
+     if (DC_Pwr_mode == 1) ll = 0;
 #else
      ii = wait_for_key_ms(0);			// wait endless
 #endif
@@ -345,6 +346,9 @@ void show_C_ESR() {
 #else
      if (key_pressed != 0) break;
 #endif
+#ifdef POWER_OFF
+     if (DC_Pwr_mode == 1) times = 0;	// no time limit with DC_Pwr_mode
+#endif
   }  /* end for times */
 } /* end show_C_ESR() */
 
@@ -418,6 +422,9 @@ void show_vext() {
      }
      if (key_pressed == 0) key_long_pressed = 0; //reset the key long pressed counter
      if (key_long_pressed > 4) break;	// five seconds end the loop
+#ifdef POWER_OFF
+     if (DC_Pwr_mode == 1) times = 0;	// no time limit with DC_Pwr_mode
+#endif
   }  /* end for times */
  #endif  /* WITH_VEXT */
 } /* end show_vext() */
@@ -524,6 +531,9 @@ void make_frequency() {
 #endif
      if (key_pressed > KEYPRESS_LENGTH_10ms) freq_nr++; // longer key press select next frequency
      if(key_pressed >= 80) break;	// more than 0.8 seconds
+#ifdef POWER_OFF
+     if (DC_Pwr_mode == 1) times = 0;	// no time limit with DC_Pwr_mode
+#endif
   } /* end for times */
   TCCR1B = 0;		// stop counter
   TCCR1A = 0;		// stop counter
@@ -826,6 +836,9 @@ void do_10bit_PWM() {
      if (key_pressed > 0) times = 0;		//reset the loop counter, operator is active
  #endif
 #endif
+#ifdef POWER_OFF
+     if (DC_Pwr_mode == 1) times = 0;	// no time limit with DC_Pwr_mode
+#endif
   } /* end for times */
 
   ADC_DDR =  TXD_MSK;	// disconnect TP1 
@@ -895,6 +908,9 @@ uint8_t contrast;
         }
      }
      contrast &= MAX_CONTRAST;
+#ifdef POWER_OFF
+     if (DC_Pwr_mode == 1) times = 0;	// no time limit with DC_Pwr_mode
+#endif
   } /* end for times */
 
   eeprom_write_byte((uint8_t *)(&EE_Volume_Value), (int8_t)contrast);	// save contrast value

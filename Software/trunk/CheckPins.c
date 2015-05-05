@@ -347,9 +347,15 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         R_DDR = 0;
         wait_about5ms();		// clear TRIAC and Thyristor
         //compute current amplification factor in both directions
+#if FLASHEND > 0x1fff
+        R_DDR = LoPinRL | TriPinRL;	//switch R_L port for Tristate-Pin (Base) to output (GND)
+        wait_about5ms();		// load gate capacitor
         R_DDR = LoPinRL | TriPinRH;	//switch R_H port for Tristate-Pin (Base) to output (GND)
-
         adc.lp1 = W5msReadADC(LowPin);	//measure voltage at LowPin (assumed Collector)
+#else
+        R_DDR = LoPinRL | TriPinRH;	//switch R_H port for Tristate-Pin (Base) to output (GND)
+        adc.lp1 = W10msReadADC(LowPin);	//measure voltage at LowPin (assumed Collector)
+#endif
         adc.tp2 = ReadADC(TristatePin);	//measure voltage at TristatePin (Base) 
         adc.hp2 = ReadADC(HighPin);	//measure voltage at HighPin (assumed Emitter)
 
@@ -599,9 +605,17 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         }
       //Test if NPN Transistor or MOSFET
       // ADC_DDR = LoADCm;	//Low-Pin to output 0V
+ #if FLASHEND > 0x1fff
+      R_DDR = HiPinRL | TriPinRL;	//R_L port of Tristate-Pin (Basis) to output
+      R_PORT = HiPinRL | TriPinRL;	//R_L port of Tristate-Pin (Basis) to VCC
+      wait_about5ms();			// load gate capacitor
       R_DDR = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to output
       R_PORT = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to VCC
+      adc.hp2 = W5msReadADC(HighPin);	//measure the voltage at the collector  
+ #else
+      R_PORT = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to VCC
       adc.hp2 = W20msReadADC(HighPin);	//measure the voltage at the collector  
+ #endif
       adc.rhp = ADCconfig.U_AVCC - adc.hp2;	// voltage at the collector resistor
       adc.tp2 = ReadADC(TristatePin);	//measure the voltage at the base 
       adc.rtp = ADCconfig.U_AVCC - adc.tp2;	// voltage at the base resistor

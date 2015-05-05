@@ -232,7 +232,7 @@ CFLAGS += -DANZ_MESS=44
 # but successfull measurements are allowed double of the specified number.
 #  You can specify up to 255 empty measurements (CFLAGS += -DPOWER_OFF=255).
 #CFLAGS += -DPOWER_OFF=5
-#CFLAGS += -DPOWER_OFF
+CFLAGS += -DPOWER_OFF
 
 # Option BAT_CHECK enables the Battery Voltage Check, otherwise the SW Version is displayed instead of Bat.
 # BAT_CHECK should be set for battery powered tester version.
@@ -242,7 +242,7 @@ CFLAGS += -DBAT_CHECK
 # If your 9V supply has a diode installed, use the BAT_OUT=600 form to specify the
 # threshold voltage of your diode to adjust the output value.
 # This threshold level is added to LCD-output and does not affect the voltage checking levels.
-#CFLAGS += -DBAT_OUT=150
+CFLAGS += -DBAT_OUT=150
 
 # To adjust the warning-level and poor-level of battery check to the capability of a
 # low drop voltage regulator, you can specify the Option BAT_POOR=5400 .

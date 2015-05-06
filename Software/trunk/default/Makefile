@@ -296,7 +296,7 @@ swuart.o: ../swuart.S $(MKFILES)
 GetESR.o: ../GetESR.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-########### Compile C or Assembler , Assembler saves more than 400 bytes flash
+########### Compile C or Assembler , Assembler saves more than 300 bytes flash
 GetRLmultip.o: ../GetRLmultip.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 

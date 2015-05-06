@@ -35,6 +35,7 @@ void PinLayout(char pin1, char pin2, char pin3) {
    lcd_testpin(_trans->e);
    lcd_testpin(_trans->b);
    lcd_testpin(_trans->c);
+ #endif
 #endif
 }
 
@@ -87,8 +88,8 @@ void PinLayoutLine(char pin1, char pin2, char pin3) {
    lcd_testpin(_trans->c);
   #endif
  #endif
-#endif
 }
+#endif
 
 /* ********************************************************** */
 /* Rnum2pins computes two pin numbers for resistor number num */

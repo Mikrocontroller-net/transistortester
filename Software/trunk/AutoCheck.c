@@ -13,7 +13,9 @@ void AutoCheck(uint8_t test_mode) {
   uint8_t tt;		// number of running test
   uint8_t taste;	// ist key pressed? 0 = no
  #else
- #warning "Selftest without extended tests T1 to T7!"
+  #ifndef NO_TEST_T1_T7
+  #warning "Selftest without extended tests T1 to T7!"
+  #endif
  #endif
 
  #ifdef FREQUENCY_50HZ

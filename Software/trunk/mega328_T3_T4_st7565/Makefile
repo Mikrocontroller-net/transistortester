@@ -78,6 +78,7 @@ CFLAGS += -DFOUR_LINE_LCD
 # Without the PAGE_MODE option, the line cursor is fixed to line 3 and the text moves.
 #CFLAGS += -DPAGE_MODE
 
+
 # The LCD_ST7565 option must be set to support a 128x64 LCD graphics display
 # with ST7565 controller. It is controlled with a 1-bit interface (SPI or I2C)
 # The normal ST7565 controller will be supported by setting the WITH_LCD_ST7565 to 1 or 7565.
@@ -105,7 +106,7 @@ WITH_LCD_ST7565 = 1
 LCD_ST7565_RESISTOR_RATIO = 4
 
 # If LCD_ST7565 option is set to 1: Flip the display's horizontal direction.
-CFLAGS += -DLCD_ST7565_H_FLIP=1
+#CFLAGS += -DLCD_ST7565_H_FLIP=1
 # With LCD_ST7565_H_OFFSET you can specify a horizontal pixel offset to the display window.
 # The controller knows 132 horizontal pixel, the window shows only 128 pixel.
 # OFFSET values can vary for the connected display type to 0, 2 or 4.
@@ -120,10 +121,10 @@ CFLAGS += -DLCD_ST7565_H_OFFSET=0
 # choosen. With a font width below 8 more than 16 characters can be shown in one display line.
 #CFLAGS += -DFONT_6X8
 #CFLAGS += -DFONT_8X8
-CFLAGS += -DFONT_7X12
+#CFLAGS += -DFONT_7X12
 #CFLAGS += -DFONT_8X12thin
 #CFLAGS += -DFONT_8X14
-#CFLAGS += -DFONT_8x15
+CFLAGS += -DFONT_8X15
 #CFLAGS += -DFONT_8X16
 #CFLAGS += -DFONT_8X16thin
 
@@ -137,17 +138,11 @@ CFLAGS += -DICON_TYPE=3
 CFLAGS += -DBIG_TP
 # option INVERSE_TP inverse the 123 for the test pins (black on white)
 # the option INVERSE_TP disable the option BIG_TP because a frame is required
-#CFLAGS += -DINVERSE_TP
-
-# option BIG_TP makes the 123 for the test pins bigger
-CFLAGS += -DBIG_TP
-# option INVERSE_TP inverse the 123 for the test pins (black on white)
-# the option INVERSE_TP disable the option BIG_TP because a frame is required
-#CFLAGS += -DINVERSE_TP
+CFLAGS += -DINVERSE_TP
 
 # Option STRIP_GRID_BOARD selects different board-layout, do not set for standard board!
 # The connection of LCD is totally different for both versions.
-#CFLAGS += -DSTRIP_GRID_BOARD
+CFLAGS += -DSTRIP_GRID_BOARD
 
 # The WITH_SELFTEST option enables selftest function (only for mega168 or mega328) including the calibration.
 # Normally the mega168 uses selftest without T1 to T7 to enable both hFE measurements.
@@ -183,10 +178,11 @@ CFLAGS += -DREF_L_KORR=40
 # Positive values will reduce measurement results.
 CFLAGS += -DC_H_KORR=0
 
+
 # The WITH_UART option enables the software UART  (TTL level output at Pin PC3, 26).
 # If the option is deselected, PC3 can be used as external voltage input with a
 # 10:1 resistor divider.
-CFLAGS += -DWITH_UART
+#CFLAGS += -DWITH_UART
 
 # With option TQFP_ADC6 or/and TQFP_ADC7 you can use the additional pins of the TQFP or
 # the QFN package for external analog input. You should install a 10:1 voltage dividers
@@ -199,7 +195,7 @@ CFLAGS += -DWITH_UART
 # is not used for serial output (WITH_UART option).
 # For ATmega644/1284 processor the UART has a separate pin.  Therefore the external input
 # at pin ADC3 can be enabled separate by setting the WITH_UART option.
-#CFLAGS += -DWITH_VEXT
+CFLAGS += -DWITH_VEXT
 
 #
 # If you want to measure Inductors with the resistance meter, you must specify
@@ -301,9 +297,7 @@ CFLAGS += -DBAT_POOR=6400
 # CFLAGS += -DDC_PWR=9500
 
 # Voltage divider for battery voltage measurement  10k / 3.3k = 133/33
-#CFLAGS += -DBAT_NUMERATOR=133
-#CFLAGS += -DBAT_DENOMINATOR=33
-CFLAGS += -DBAT_NUMERATOR=66
+CFLAGS += -DBAT_NUMERATOR=133
 CFLAGS += -DBAT_DENOMINATOR=33
 # Voltage divider for the external zener voltage measurement 180k / 20k = 10/1
 #CFLAGS += -DEXT_NUMERATOR=10

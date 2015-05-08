@@ -17,7 +17,7 @@ void Calibrate_UR(void) {
 #if FLASHEND > 0x1fff
   uint16_t mv2500;
   ADC_PORT = TXD_VAL;                   // switch to 0V
-  ADC_DDR = (1<<TPREF) | TXD_MSK;       // switch pin with 2.5V reference to GND
+  ADC_DDR = (1<<TPRELAY) | TXD_MSK;       // switch pin with 2.5V reference to GND
   wait20us();			// switch only short time, so that the relais do not really switch
   ADC_DDR =  TXD_MSK;		// switch pin with reference back to input
   mv2500 = W5msReadADC(TPREF); // read voltage of 2.5V precision reference

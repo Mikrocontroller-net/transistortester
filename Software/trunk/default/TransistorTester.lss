@@ -23,7 +23,7 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_abbrev 00001819  00000000  00000000  0000bc31  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   00001d9a  00000000  00000000  0000d44a  2**0
+ 10 .debug_line   00001d98  00000000  00000000  0000d44a  2**0
                   CONTENTS, READONLY, DEBUGGING
  11 .debug_frame  00000660  00000000  00000000  0000f1e4  2**2
                   CONTENTS, READONLY, DEBUGGING
@@ -7892,7 +7892,7 @@ void Calibrate_UR(void) {
   uint16_t mv2500;
   ADC_PORT = TXD_VAL;                   // switch to 0V
     2692:	18 b8       	out	0x08, r1	; 8
-  ADC_DDR = (1<<TPREF) | TXD_MSK;       // switch pin with 2.5V reference to GND
+  ADC_DDR = (1<<TPRELAY) | TXD_MSK;       // switch pin with 2.5V reference to GND
     2694:	80 e1       	ldi	r24, 0x10	; 16
     2696:	87 b9       	out	0x07, r24	; 7
   wait20us();			// switch only short time, so that the relais do not really switch
@@ -10278,7 +10278,7 @@ void EE_check_init(void) {
 	  UCSR0C = (1<<USBS0) | (3<<UCSZ00);	// 2 stop bits, 8-bit
 	  while (!(UCSR0A & (1<<UDRE0))) { };	// wait for send data port ready 
 	#endif
-	  tmp = (WDRF_HOME & (1<<WDRF));	// save Watch Dog Flag
+	  tmp = (WDRF_HOME & ((1<<WDRF)));	// save Watch Dog Flag
     3186:	84 b7       	in	r24, 0x34	; 52
 	  WDRF_HOME &= ~(1<<WDRF);	 	//reset Watch Dog flag
     3188:	87 7f       	andi	r24, 0xF7	; 247
@@ -10639,7 +10639,7 @@ void EE_check_init(void) {
     334a:	81 11       	cpse	r24, r1
     334c:	11 c0       	rjmp	.+34     	; 0x3370 <main+0x202>
     334e:	83 e4       	ldi	r24, 0x43	; 67
-#endif
+
 	  
 	  // Capacity measurement is only possible correctly with two Pins connected.
 	  // A third connected pin will increase the capacity value!
@@ -10648,12 +10648,10 @@ void EE_check_init(void) {
     3350:	0e 94 d3 00 	call	0x1a6	; 0x1a6 <lcd_data>
     3354:	0e 94 52 0f 	call	0x1ea4	; 0x1ea4 <EntladePins>
 	     // If no part is found yet, check separate if is is a capacitor
-	#if FLASHEND > 0x1fff
 	     lcd_data('C');
     3358:	60 e0       	ldi	r22, 0x00	; 0
     335a:	82 e0       	ldi	r24, 0x02	; 2
     335c:	0e 94 11 10 	call	0x2022	; 0x2022 <ReadCapacity>
-	#endif
 	     EntladePins();		// discharge capacities
     3360:	61 e0       	ldi	r22, 0x01	; 1
 	     //measurement of capacities in all 3 combinations
@@ -11721,7 +11719,7 @@ end3:
     3a20:	80 91 10 01 	lds	r24, 0x0110
     3a24:	90 91 11 01 	lds	r25, 0x0111
     3a28:	0e 94 c3 03 	call	0x786	; 0x786 <wait_for_key_ms>
-  ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
+  ADC_DDR = (1<<TPRELAY) | TXD_MSK; 	// switch pin with reference to GND, release relay
     3a2c:	17 b8       	out	0x07, r1	; 7
   // there is one resistor or more detected
 #if (LCD_LINES > 3)
@@ -12055,7 +12053,7 @@ resistor_out:
     3be2:	18 2f       	mov	r17, r24
 
  end2:
-  ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
+  ADC_DDR = (1<<TPRELAY) | TXD_MSK; 	// switch pin with reference to GND, release relay
     3be4:	81 11       	cpse	r24, r1
     3be6:	3a cb       	rjmp	.-2444   	; 0x325c <main+0xee>
   lcd_refresh();			// write the pixels to display, ST7920 only
@@ -12099,7 +12097,7 @@ wait_again:
 	     // can happen, if any loop in the Program doen't finish.
 	     lcd_line1();
     3c02:	0e 94 2f 03 	call	0x65e	; 0x65e <sleep_5ms>
-	     lcd_MEM_string(TestTimedOut);	//Output Timeout
+             lcd_MEM_string(TestTimedOut);	//Output Timeout
     3c06:	5e 98       	cbi	0x0b, 6	; 11
     3c08:	80 e0       	ldi	r24, 0x00	; 0
     3c0a:	90 e0       	ldi	r25, 0x00	; 0

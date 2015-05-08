@@ -65,7 +65,7 @@
 	  UCSR0C = (1<<USBS0) | (3<<UCSZ00);	// 2 stop bits, 8-bit
 	  while (!(UCSR0A & (1<<UDRE0))) { };	// wait for send data port ready 
 	#endif
-	  tmp = (WDRF_HOME & (1<<WDRF));	// save Watch Dog Flag
+	  tmp = (WDRF_HOME & ((1<<WDRF)));	// save Watch Dog Flag
 	  WDRF_HOME &= ~(1<<WDRF);	 	//reset Watch Dog flag
 	  wdt_disable();			// disable Watch Dog
 	#ifndef INHIBIT_SLEEP_MODE
@@ -93,7 +93,7 @@
 	     // this happens, if the Watchdog is not reset for 2s
 	     // can happen, if any loop in the Program doen't finish.
 	     lcd_line1();
-	     lcd_MEM_string(TestTimedOut);	//Output Timeout
+             lcd_MEM_string(TestTimedOut);	//Output Timeout
 	     wait_about3s();				//wait for 3 s
 	#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
 	     lcd_powersave();			// set graphical display to power save mode
@@ -299,22 +299,13 @@
 	  CheckPins(TP2, TP3, TP1);
 	  CheckPins(TP3, TP2, TP1);
 
-#if 0
-	  if (ResistorsFound != 0) {
-	     if (resis[ResistorsFound-1].checked  == 0) {
-		ResistorsFound--;	// last resistor is not checked in both directions
-	     }
-	  }
-#endif
 	  
 	  // Capacity measurement is only possible correctly with two Pins connected.
 	  // A third connected pin will increase the capacity value!
 	//  if(((PartFound == PART_NONE) || (PartFound == PART_RESISTOR) || (PartFound == PART_DIODE)) ) {
 	  if(PartFound == PART_NONE) {
 	     // If no part is found yet, check separate if is is a capacitor
-	#if FLASHEND > 0x1fff
 	     lcd_data('C');
-	#endif
 	     EntladePins();		// discharge capacities
 	     //measurement of capacities in all 3 combinations
 	     ReadCapacity(TP3, TP1);
@@ -1088,7 +1079,7 @@ TyUfAusgabe:
   max_time = display_time;	// full specified wait time
 
  end2:
-  ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
+  ADC_DDR = (1<<TPRELAY) | TXD_MSK; 	// switch pin with reference to GND, release relay
   lcd_refresh();			// write the pixels to display, ST7920 only
   while(!(RST_PIN_REG & (1<<RST_PIN)));	//wait ,until button is released
 #ifdef WITH_ROTARY_SWITCH
@@ -1156,7 +1147,7 @@ wait_again:
 end3:
   // the diode  is already shown on the LCD
   if (ResistorsFound == 0) goto tt_end;
-  ADC_DDR = (1<<TPREF) | TXD_MSK; 	// switch pin with reference to GND, release relay
+  ADC_DDR = (1<<TPRELAY) | TXD_MSK; 	// switch pin with reference to GND, release relay
   // there is one resistor or more detected
 #if (LCD_LINES > 3)
   ADC_DDR =  TXD_MSK; 	// switch pin with reference to input, activate relay

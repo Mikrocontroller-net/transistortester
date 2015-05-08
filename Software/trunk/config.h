@@ -82,6 +82,7 @@
  #define TPext PA3
  // Port pin for 2.5V precision reference used for VCC check (optional)
  #define TPREF PA4
+ #define TPRELAY PA4
  // Port pin for Battery voltage measuring
  #define TPBAT PA5
  // Port pin with >100nF capacitor for calibration, -1 for none
@@ -99,6 +100,7 @@
  #define TPext PF3
  // Port pin for 2.5V precision reference used for VCC check (optional)
  #define TPREF PF4
+ #define TPRELAY PF4
  // Port pin for Battery voltage measuring
  #define TPBAT PF5
  #define TPCAP -1
@@ -114,6 +116,7 @@
  #define TPext ((1<<MUX1) | (1<<MUX0))
  // Port pin for 2.5V precision reference used for VCC check (optional) PC4
  #define TPREF (1<<MUX2) 
+ #define TPRELAY PC4
  // Port pin for Battery voltage measuring PC5
  #define TPBAT ((1<<MUX2) | (1<<MUX0))
  // option WITH_VEXT can be set automatically, if WITH_UART is unset

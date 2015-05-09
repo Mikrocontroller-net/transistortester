@@ -429,7 +429,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
            if (adc.hp2 > (adc.lp1+250)) {
               //Drain-Source Voltage to high, must be a IGBT
               PartMode = PART_MODE_IGBT|P_CHANNEL|E_MODE;
-#if FLASHEND > 0x3fff
+#ifdef SHOW_R_DS
            } else {
               if (adc.hp2 > adc.lp1) {
                   ptrans.uBE = RR680MI * (unsigned long)(adc.hp2 - adc.lp1) / adc.lp1; // DS resistance in 0.1 OHm
@@ -692,7 +692,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
          if (adc.hp2 > (250+adc.lp2)) {
             // Drain-Source Voltage is too high for N_E_MOS
             PartMode = PART_MODE_IGBT|N_CHANNEL|E_MODE;
-#if FLASHEND > 0x3fff
+#ifdef SHOW_R_DS
          } else {
             if (adc.hp2 > adc.lp2) {
                 ntrans.uBE = RR680PL * (unsigned long)(adc.hp2 - adc.lp2) / adc.rhp; // DS resistance in 0.1 OHm

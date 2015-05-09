@@ -1172,6 +1172,8 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  #endif
  const unsigned char CAP_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_CAP, LCD_CHAR_LINE1,'1'+TP3,' ',0};
  const unsigned char CMETER_13_str[] MEM2_TEXT = {"[C]"};
+#endif
+#ifdef SHOW_R_DS
  const unsigned char RDS_str[] MEM_TEXT = {"RDS="};
 #endif
  

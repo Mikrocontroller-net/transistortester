@@ -849,7 +849,7 @@
        ReadCapacity(_trans->b,_trans->e);	//measure capacity
        lcd_next_line(TEXT_RIGHT_TO_ICON);	// position text behind the icon, Line 3
        lcd_show_Cg();	// show Cg=xxxpF
- #if FLASHEND > 0x3fff
+ #ifdef SHOW_R_DS
        lcd_next_line(TEXT_RIGHT_TO_ICON-1);	// position text behind the icon, Line 4
        lcd_MEM_string(RDS_str);		// "RDS=
        DisplayValue(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance
@@ -881,7 +881,7 @@
        lcd_show_Cg();	// show Cg=xxxpF
        lcd_MEM_string(vt_str);		// " Vt="
        Display_mV(_trans->gthvoltage,2);	//Gate-threshold voltage
-  #if FLASHEND > 0x3fff
+  #ifdef SHOW_R_DS
        lcd_next_line_wait(0);		// line 3, if possible & wait 5s and clear last line 
        lcd_MEM_string(RDS_str);		// "RDS=
        DisplayValue(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance

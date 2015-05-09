@@ -30,7 +30,7 @@
 	#ifdef WITH_GRAPHICS
 	  unsigned char options;
 	#endif
-        #if FLASHEND > 0x3fff
+        #ifdef SHOW_VAKDIODE
           uint8_t vak_diode_nr;		// number of the protection diode of BJT
         #endif
         union {
@@ -598,7 +598,7 @@
 #endif
 
     // show the protection diode of the BJT
-#if FLASHEND > 0x3fff
+#ifdef SHOW_VAKDIODE
     vak_diode_nr = 20;
 #endif
     an_cat = 0;
@@ -631,7 +631,7 @@
           lcd_MEM_string(KatAn);	//"-|<-"
        }
 #endif    /* !WITH_GRAPHICS */
-#if FLASHEND > 0x3fff
+#ifdef SHOW_VAKDIODE
        vak_diode_nr = ii;	// save number of protection diode for Uf=
 #endif
        break;		// there is only one protection diode, is found
@@ -708,7 +708,7 @@
     }
  #endif
 #endif  /* WITH_GRAPHICS */
-#if FLASHEND > 0x3fff
+#ifdef SHOW_VAKDIODE
     if (vak_diode_nr < 5) {
        lcd_next_line_wait(0); 		// next line, wait 5s and clear line 2/4
        if (an_cat) {

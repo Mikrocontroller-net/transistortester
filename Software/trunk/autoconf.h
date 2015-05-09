@@ -564,8 +564,13 @@
  // You can save about 328 bytes of Flash, if you don't show the ICE0 and ICEs Collector cutoff current.
  // Only enabled for mega328, but you can also enable it for mega168, if you deselect other functions.
  // You can save about 250 bytes flash, if you deselect the WITH_UART option.
- #define SHOW_ICE
  #define SHOW_R_DS
+ #if defined(NO_COMMON_EMITTER_HFE) && !defined(NO_TEST_T1_T7)
+  #warning  Uf parameter of VAKDiode and ICE can not be shown with full selftest
+ #else
+  #define SHOW_VAKDIODE
+  #define SHOW_ICE
+ #endif
 #endif
 
 // COMMON_COLLECTOR activates measurement of current amplification factor in common collector circuit  (Emitter follower)

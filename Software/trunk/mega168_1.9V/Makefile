@@ -208,6 +208,10 @@ CFLAGS += -DUSE_EEPROM
 # Setting of NO_NANO avoids the use of n as prefix for Farad (nF), the mikro prefix is used instead (uF).
 # CFLAGS += -DNO_NANO
 
+# With graphical displays the layout of pins is usually shown in long style " Pin  1=E 2=B 3=C"
+# With the NO_LONG_PINLAYOUT option the short style "Pin 123=EBC" is used
+#CFLAGS += -DNO_LONG_PINLAYOUT
+
 # The PULLUP_DISABLE option disable the pull-up Resistors of IO-Ports.
 # To use this option a external pull-up Resistor (10k to 30k)
 # from Pin 13 to VCC must be installed!

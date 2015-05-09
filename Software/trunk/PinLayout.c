@@ -41,12 +41,17 @@ void PinLayout(char pin1, char pin2, char pin3) {
 
 #ifdef WITH_GRAPHICS
 void PinLayoutLine(char pin1, char pin2, char pin3) {
+   lcd_next_line_wait(0);
+ #ifdef NO_LONG_PINLAYOUT
+   lcd_space();
+   lcd_MEM_string(Pin_str);		//"Pin "
+   PinLayout(pin1, pin2, pin3);		// short form of Layout
+ #else
+   lcd_MEM_string(Pin_str);		//"Pin "
 // pin1-3 is EBC or SGD or CGA
- #ifndef EBC_STYLE
+  #ifndef EBC_STYLE
    // Layout with 1=  2=  3=  style
    uint8_t ipp;
-   lcd_next_line_wait(0);
-   lcd_MEM_string(Pin_str);		//"Pin "
    for (ipp=0;ipp<3;ipp++) {
       lcd_testpin(ipp);
       lcd_equal();		// lcd_data('=');
@@ -55,12 +60,10 @@ void PinLayoutLine(char pin1, char pin2, char pin3) {
       if (ipp == _trans->c)  lcd_data(pin3);
       lcd_space();
    }
- #else	/* EBC_STYLE is defined */
-  #if EBC_STYLE == 321
+  #else	/* EBC_STYLE is defined */
+   #if EBC_STYLE == 321
    // Layout with 3=  2=  1=  style
    uint8_t ipp;
-   lcd_next_line_wait(0);
-   lcd_MEM_string(Pin_str);		//"Pin "
    ipp = 3;
    while (ipp != 0) {
        ipp--;
@@ -71,10 +74,8 @@ void PinLayoutLine(char pin1, char pin2, char pin3) {
        if (ipp == _trans->c)  lcd_data(pin3);
        lcd_space();
    }
-  #else 
+   #else 
    // Layout with E=  B=  C=  style
-   lcd_next_line_wait(0);
-   lcd_MEM_string(Pin_str);		//"Pin "
    lcd_data(pin1);
    lcd_equal();		// lcd_data('=');
    lcd_testpin(_trans->e);
@@ -86,10 +87,11 @@ void PinLayoutLine(char pin1, char pin2, char pin3) {
    lcd_data(pin3);
    lcd_equal();		// lcd_data('=');
    lcd_testpin(_trans->c);
+   #endif
   #endif
- #endif
+ #endif  /* NO_LONG_PINLAYOUT */
 }
-#endif
+#endif  /* WITH_GRAPHICS */
 
 /* ********************************************************** */
 /* Rnum2pins computes two pin numbers for resistor number num */

@@ -184,9 +184,6 @@ next_ipp2:
  .func PinLayoutLine
 
 PinLayoutLine:
-
- #ifndef EBC_STYLE 
-;   // Layout with 1= 2= 3= style
  	push	r14
  	push	r15
  	push	r16
@@ -197,13 +194,30 @@ PinLayoutLine:
  	mov	r15, r20		; Pin3
 	ldi	r24, 0
 	call	lcd_next_line_wait		; lcd_next_line_wait(0);
+ #ifdef NO_LONG_PINLAYOUT
+	RCALL	lcd_space		; lcd_space()
  	ldi	r24, lo8(Pin_str)	; 
  	ldi	r25, hi8(Pin_str)	; 	
   #ifdef USE_EEPROM
- 	RCALL	lcd_fix_string	; lcd_MEM_string(Pin_str);		//" Pin "
+ 	RCALL	lcd_fix_string		; lcd_MEM_string(Pin_str);	//"Pin "
   #else
- 	RCALL	lcd_pgm_string	; lcd_MEM_string(Pin_str);		//" Pin "
+ 	RCALL	lcd_pgm_string		; lcd_MEM_string(Pin_str);	//"Pin "
   #endif
+ 	mov	r20, r15
+	mov	r22, r16
+	mov	r24, r17
+	RCALL	PinLayout		; PinLayout(Pin1, Pin2, Pin3)
+ #else
+
+ 	ldi	r24, lo8(Pin_str)	; 
+ 	ldi	r25, hi8(Pin_str)	; 	
+  #ifdef USE_EEPROM
+ 	RCALL	lcd_fix_string		; lcd_MEM_string(Pin_str);	//"Pin "
+  #else
+ 	RCALL	lcd_pgm_string		; lcd_MEM_string(Pin_str);	//"Pin "
+  #endif
+  #ifndef EBC_STYLE 
+;   // Layout with 1= 2= 3= style
  	eor	r14, r14	; for (ipp=0;
 lloop1:
         mov	r24, r14
@@ -236,30 +250,9 @@ lnext_ipp:
  	cpi	r24, 0x03	;  for (     ;ipp<3;ipp++) {
  	brne	lloop1 
 
- 	pop	r17
- 	pop	r16
- 	pop	r15
- 	pop	r14
- 	ret
- #else
-  #if EBC_STYLE == 321 
+  #else
+   #if EBC_STYLE == 321 
 ; // Layout with 3= 2= 1= style
- 	push	r14
- 	push	r15
- 	push	r16
- 	push	r17
- 	mov	r17, r24		; Pin1
- 	mov	r16, r22		; Pin2
- 	mov	r15, r20		; Pin3
-	ldi	r24, 0
-	call	lcd_next_line_wait		; lcd_next_line_wait(0);
- 	ldi	r24, lo8(Pin_str)	; 
- 	ldi	r25, hi8(Pin_str)	; 	
-   #ifdef USE_EEPROM
- 	RCALL	lcd_fix_string		; lcd_MEM_string(Pin_str);	//"Pin "
-   #else
- 	RCALL	lcd_pgm_string		; lcd_MEM_string(Pin_str);	//"Pin "
-   #endif
  	ldi	r24, 0x03	; 3
  	mov	r14, r24	; ipp = 3;
 lloop2:
@@ -294,29 +287,8 @@ lnext_ipp2:
  	and	r14, r14	; while (ipp != 0) 
  	brne	 lloop2 
 
- 	pop	r17
- 	pop	r16
- 	pop	r15
- 	pop	r14
- 	ret
-
- #else 
+   #else 
 ; // Layout with E= B= C= style 
- 	push	r15
- 	push	r16
- 	push	r17
- 	mov	r17, r24		; Pin1
- 	mov	r16, r22		; Pin2
- 	mov	r15, r20		; Pin3
-	ldi	r24, 0
-	call	lcd_next_line_wait		; lcd_next_line(0);
- 	ldi	r24, lo8(Pin_str)	; 
- 	ldi	r25, hi8(Pin_str)	; 	
-   #ifdef USE_EEPROM
- 	RCALL	lcd_fix_string		; lcd_MEM_string(Pin_str);	//"Pin "
-   #else
- 	RCALL	lcd_pgm_string		; lcd_MEM_string(Pin_str);	//"Pin "
-   #endif
 	mov	r24, r17	; Pin1
  	RCALL	lcd_data	; lcd_data(pin1);
 	RCALL	lcd_equal	; lcd_data('=')
@@ -341,12 +313,14 @@ lnext_ipp2:
  	ldd	r24, Z+OFFS_c	; _trans->c
  	RCALL	lcd_testpin	; lcd_testpin(_trans->c);
 
- 	pop	r17
+   #endif /* =321 */
+  #endif  /* EBC_STYLE */
+ #endif  /* NO_LONG_PINLAYOUT */
+ 	pop	r17		; restore registers and return
  	pop	r16
  	pop	r15
+ 	pop	r14
  	ret
- #endif
-#endif
 
  .endfunc
 #endif     /* WITH_GRAPHICS */

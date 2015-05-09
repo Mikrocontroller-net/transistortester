@@ -9,6 +9,7 @@
 #define RCALL rcall
 
 #define MAX_CS 150
+#define incre 6
 
 .GLOBAL wait_for_key_ms
 #if INHIBIT_SLEEP_MODE
@@ -117,6 +118,7 @@ to_ret:
 ; /* set the cursor to the beginning of line 2 */
 ; void wait_for_key_5s_line2(void) 
 wait_for_key_5s_line2:
+#if 0
 	ldi	r24, '+'
 	RCALL	lcd_data		; lcd_data('+');
  	ldi	r24, lo8(SHORT_WAIT_TIME)	; 0x88
@@ -130,6 +132,54 @@ wait_for_key_5s_line2:
  	RCALL	lcd_line4	;              //4. row 
  	RCALL	lcd_clear_line	; lcd_clear_line();	// clear the whole line
  	RCALL	lcd_line4	;              //4. row 
+#endif
+#else
+	push	r28
+	RCALL	lcd_save_position
+	mov	r28, r24		; current_line = lcd_save_position()
+	lds	r24, last_line_used
+	and	r24, r24
+	breq	x83c			; if (current_line != 0)
+	cpi	r28, (LCD_LINES-1)
+	brne	x822			; if (current_line == (LCD_LINES-1))
+	ldi	r22, (LCD_LINE_LENGTH -1)
+	ldi	r24, ((LCD_LINES - 1) * PAGES_PER_LINE)
+	rcall	lcd_set_cursor		; lcd_set_cursor(((LCD_LINES - 1) * PAGES_PER_LINE), (LCD_LINE_LENGTH - 1))
+	ldi	r24, '+'		; // add a + sign at the last location of screen
+	rcall	lcd_data		; lcd_data('+')
+	ldi	r22, (LCD_LINE_LENGTH -1)
+	ldi	r24, ((LCD_LINES - 1) * PAGES_PER_LINE)
+	rcall	lcd_set_cursor		; lcd_set_cursor(((LCD_LINES - 1) * PAGES_PER_LINE), (LCD_LINE_LENGTH - 1))
+x822:
+#ifdef WITH_ROTARY_SWITCH
+ 	ldi	r24, lo8(SHORT_WAIT_TIME)	; 0x88
+ 	ldi	r25, hi8(SHORT_WAIT_TIME)	; 0x13
+        rcall   wait_for_key_ms		;wait_for_key_ms(SHORT_WAIT_TIME);     // wait until time is elapsed or key is pressed
+	cpse	r24, r1
+	rjmp	x855
+	lds	r24, rotary+incre
+	cpse	r24, r1
+	rjmp	x822
+#else
+ 	ldi	r24, lo8(SHORT_WAIT_TIME)	; 0x88
+ 	ldi	r25, hi8(SHORT_WAIT_TIME)	; 0x13
+        rcall   wait_for_key_ms		;wait_for_key_ms(SHORT_WAIT_TIME);     // wait until time is elapsed or key is pressed
+#endif
+x855:
+	cpi	r28, (LCD_LINES - 1)       ; (current_line == (LCD_LINES - 1))
+	brne	x83a 
+	lds	r24, last_line_used
+	cpi	r24, 1
+	brne	x83a			; if ((current_line == (LCD_LINES - 1)) && (last_line_used == 1)) 
+        ldi	r24, (LCD_LINES - 1)
+	ldi	r22, 0x00       ; 0
+        rcall   lcd_set_cursor		; lcd_set_cursor((LCD_LINES-1) * PAGES_PER_LINE,0)
+	rcall	lcd_clear_line
+x83a:
+	rcall   lcd_restore_position
+x83c:
+	pop	r28
+
 #endif
  	ret
  .endfunc

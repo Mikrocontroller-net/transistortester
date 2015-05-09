@@ -144,9 +144,9 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
 #else
    // move to the specified position for character display
    if ((y & 0x01) != 0) {
-     lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x40 + (20*(y/2)) + x));
+     lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x40 + (LCD_LINE_LENGTH*(y/2)) + x));
    } else {
-     lcd_command((uint8_t)(CMD_SetDDRAMAddress + (20*(y/2)) + x));
+     lcd_command((uint8_t)(CMD_SetDDRAMAddress + (LCD_LINE_LENGTH*(y/2)) + x));
    }
 #endif
 }

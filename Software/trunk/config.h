@@ -319,7 +319,7 @@
   #define RST_PIN_REG PINC
   #define RST_PIN PC7     //Pin, is switched to low, if push button is pressed
 #elif PROCESSOR_TYP == 1280
- #ifdef STRIP_GRID_BOARD
+ #if STRIP_GRID_BOARD == 1
   #define RST_PORT PORTA
   #define RST_PIN_REG PINA
   #define RST_PIN PA0     //Pin, is switched to low, if push button is pressed
@@ -330,7 +330,7 @@
  #endif
 #else		/* PROCESSOR_TYP, must be ATmega8|168|328 */
   /* Processor mega8/168/328 , two board layouts defined */
- #ifdef STRIP_GRID_BOARD
+ #if STRIP_GRID_BOARD == 1
  // Strip Grid board version
   #define RST_PORT PORTD
   #define RST_PIN_REG PIND
@@ -450,6 +450,28 @@
  #else				/* mega8/168/328 with SPI  */
   /* The SPI interface uses four signals  RES, EN, RS and B0 */
   #ifdef STRIP_GRID_BOARD
+   #if STRIP_GRID_BOARD == 5
+   // alternative connection of graphical LCD for the chinese T5 board
+   /* the Reset Pin, 0 = Reset */
+   #define HW_LCD_RES_DDR         DDRD
+   #define HW_LCD_RES_PORT        PORTD
+   #define HW_LCD_RES_PIN         2
+
+   /* serial clock input  (SCL) */
+   #define HW_LCD_EN_DDR          DDRD
+   #define HW_LCD_EN_PORT         PORTD
+   #define HW_LCD_EN_PIN          3
+
+   /* command / data switch  0=command 1=data */
+   #define HW_LCD_RS_DDR          DDRD
+   #define HW_LCD_RS_PORT         PORTD
+   #define HW_LCD_RS_PIN          1
+
+   /* serial data input SI | SDA */
+   #define HW_LCD_B0_DDR          DDRD
+   #define HW_LCD_B0_PORT         PORTD
+   #define HW_LCD_B0_PIN          4
+   #else
    // alternative connection of graphical LCD 
    /* the Reset Pin, 0 = Reset */
    #define HW_LCD_RES_DDR         DDRD
@@ -470,6 +492,7 @@
    #define HW_LCD_B0_DDR          DDRD
    #define HW_LCD_B0_PORT         PORTD
    #define HW_LCD_B0_PIN          1
+   #endif
   #else		/* no STRIP_GRID_BOARD */
    // the default connection of LCD for chinese version from Fish8840, weiweitm
    /* the Reset Pin, 0 = Reset */

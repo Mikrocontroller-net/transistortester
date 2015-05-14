@@ -23,7 +23,7 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_abbrev 00001819  00000000  00000000  0000bf3d  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   00001dca  00000000  00000000  0000d756  2**0
+ 10 .debug_line   00001dc8  00000000  00000000  0000d756  2**0
                   CONTENTS, READONLY, DEBUGGING
  11 .debug_frame  00000660  00000000  00000000  0000f520  2**2
                   CONTENTS, READONLY, DEBUGGING
@@ -8301,9 +8301,6 @@ void ReadInductance(void) {
     2912:	b8 2e       	mov	r11, r24
     2914:	a9 2e       	mov	r10, r25
     2916:	03 c0       	rjmp	.+6      	; 0x291e <ReadInductance+0x68>
-//         if (res_num == 2) LowPin = TP2;
-//         HighPin = TP3;
-//         if (res_num == 0) HighPin = TP2;
         } else {
            // third and fourth pass, direction 2
            rpins.pw = Rnum2pins(res_num);	// compute the two pinnumbers for resistor res_num
@@ -8312,7 +8309,6 @@ void ReadInductance(void) {
            rpins.pb[0] = rpins.pb[1];		// swap the pins LowPin and HighPin
            rpins.pb[1] = ii;
     291c:	5c 01       	movw	r10, r24
-//         if (res_num == 2) HighPin = TP2;
         }
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
         HiADC = pgm_read_byte((&PinRLRHADCtab[6])+rpins.pb[1]);	// Table of ADC Pins including | TXD_VAL
@@ -8392,12 +8388,12 @@ void ReadInductance(void) {
             total_r =  ReadADC(rpins.pb[1]);
     2982:	8a 2d       	mov	r24, r10
     2984:	0e 94 65 03 	call	0x6ca	; 0x6ca <ReadADC>
-            if ((umax < 2) && (total_r < 2)) break;	// low current detected
-    2988:	32 e0       	ldi	r19, 0x02	; 2
+            if ((umax < CAP_EMPTY_LEVEL) && (total_r < CAP_EMPTY_LEVEL)) break;	// low current detected
+    2988:	34 e0       	ldi	r19, 0x04	; 4
     298a:	83 16       	cp	r8, r19
     298c:	91 04       	cpc	r9, r1
     298e:	10 f4       	brcc	.+4      	; 0x2994 <ReadInductance+0xde>
-    2990:	02 97       	sbiw	r24, 0x02	; 2
+    2990:	04 97       	sbiw	r24, 0x04	; 4
     2992:	10 f0       	brcs	.+4      	; 0x2998 <ReadInductance+0xe2>
     2994:	6a 94       	dec	r6
            R_DDR = LoPinR_L;   		// switch R_L resistor port for LowPin to output (GND)
@@ -8409,7 +8405,7 @@ void ReadInductance(void) {
     2996:	89 f7       	brne	.-30     	; 0x297a <ReadInductance+0xc4>
             umax = W10msReadADC(rpins.pb[0]);
             total_r =  ReadADC(rpins.pb[1]);
-            if ((umax < 2) && (total_r < 2)) break;	// low current detected
+            if ((umax < CAP_EMPTY_LEVEL) && (total_r < CAP_EMPTY_LEVEL)) break;	// low current detected
         }
         // setup Analog Comparator
         ADC_COMP_CONTROL = (1<<ACME);			//enable Analog Comparator Multiplexer
@@ -8481,71 +8477,72 @@ void ReadInductance(void) {
     29ec:	46 b3       	in	r20, 0x16	; 22
            if (ii & (1<<ICF1))  {
     29ee:	45 ff       	sbrs	r20, 5
-    29f0:	11 c0       	rjmp	.+34     	; 0x2a14 <ReadInductance+0x15e>
+    29f0:	12 c0       	rjmp	.+36     	; 0x2a16 <ReadInductance+0x160>
               if(timeconstant.w[1] == (F_CPU/100000UL)) {
                  break; 	//Timeout for Charging, above 0.13 s
               }
            }
         }
+        ADC_PORT = TXD_VAL;		// switch ADC-Port to GND
+    29f2:	18 b8       	out	0x08, r1	; 8
         TCCR1B = (0<<ICNC1) | (0<<ICES1) | (0<<CS10);  // stop counter
-    29f2:	10 92 81 00 	sts	0x0081, r1
+    29f4:	10 92 81 00 	sts	0x0081, r1
         TI1_INT_FLAGS = (1<<ICF1);			// Reset Input Capture
-    29f6:	80 e2       	ldi	r24, 0x20	; 32
-    29f8:	86 bb       	out	0x16, r24	; 22
+    29f8:	80 e2       	ldi	r24, 0x20	; 32
+    29fa:	86 bb       	out	0x16, r24	; 22
         timeconstant.w[0] = ICR1;		// get previous Input Capture Counter flag
-    29fa:	80 91 86 00 	lds	r24, 0x0086
-    29fe:	90 91 87 00 	lds	r25, 0x0087
-    2a02:	6c 01       	movw	r12, r24
+    29fc:	80 91 86 00 	lds	r24, 0x0086
+    2a00:	90 91 87 00 	lds	r25, 0x0087
+    2a04:	6c 01       	movw	r12, r24
       // check actual counter, if an additional overflow must be added
         if((TCNT1 > timeconstant.w[0]) && (ii & (1<<TOV1))) {
-    2a04:	20 91 84 00 	lds	r18, 0x0084
-    2a08:	30 91 85 00 	lds	r19, 0x0085
-    2a0c:	82 17       	cp	r24, r18
-    2a0e:	93 07       	cpc	r25, r19
-    2a10:	68 f0       	brcs	.+26     	; 0x2a2c <ReadInductance+0x176>
-    2a12:	13 c0       	rjmp	.+38     	; 0x2a3a <ReadInductance+0x184>
+    2a06:	20 91 84 00 	lds	r18, 0x0084
+    2a0a:	30 91 85 00 	lds	r19, 0x0085
+    2a0e:	82 17       	cp	r24, r18
+    2a10:	93 07       	cpc	r25, r19
+    2a12:	68 f0       	brcs	.+26     	; 0x2a2e <ReadInductance+0x178>
+    2a14:	13 c0       	rjmp	.+38     	; 0x2a3c <ReadInductance+0x186>
            // Wait, until  Input Capture is set
            ii = TI1_INT_FLAGS;		//read Timer flags
            if (ii & (1<<ICF1))  {
               break;
            }
            if((ii & (1<<TOV1))) {		// counter overflow, 65.536 ms @ 1MHz, 8.192ms @ 8MHz
-    2a14:	40 ff       	sbrs	r20, 0
-    2a16:	ea cf       	rjmp	.-44     	; 0x29ec <ReadInductance+0x136>
+    2a16:	40 ff       	sbrs	r20, 0
+    2a18:	e9 cf       	rjmp	.-46     	; 0x29ec <ReadInductance+0x136>
               TI1_INT_FLAGS = (1<<TOV1);	// Reset OV Flag
-    2a18:	31 e0       	ldi	r19, 0x01	; 1
-    2a1a:	36 bb       	out	0x16, r19	; 22
+    2a1a:	31 e0       	ldi	r19, 0x01	; 1
+    2a1c:	36 bb       	out	0x16, r19	; 22
               wdt_reset();
-    2a1c:	a8 95       	wdr
+    2a1e:	a8 95       	wdr
               timeconstant.w[1]++;		// count one OV
-    2a1e:	c7 01       	movw	r24, r14
-    2a20:	01 96       	adiw	r24, 0x01	; 1
-    2a22:	7c 01       	movw	r14, r24
+    2a20:	c7 01       	movw	r24, r14
+    2a22:	01 96       	adiw	r24, 0x01	; 1
+    2a24:	7c 01       	movw	r14, r24
               if(timeconstant.w[1] == (F_CPU/100000UL)) {
-    2a24:	80 35       	cpi	r24, 0x50	; 80
-    2a26:	91 05       	cpc	r25, r1
-    2a28:	09 f7       	brne	.-62     	; 0x29ec <ReadInductance+0x136>
-    2a2a:	e3 cf       	rjmp	.-58     	; 0x29f2 <ReadInductance+0x13c>
-        }
+    2a26:	80 35       	cpi	r24, 0x50	; 80
+    2a28:	91 05       	cpc	r25, r1
+    2a2a:	01 f7       	brne	.-64     	; 0x29ec <ReadInductance+0x136>
+    2a2c:	e2 cf       	rjmp	.-60     	; 0x29f2 <ReadInductance+0x13c>
+        ADC_PORT = TXD_VAL;		// switch ADC-Port to GND
         TCCR1B = (0<<ICNC1) | (0<<ICES1) | (0<<CS10);  // stop counter
         TI1_INT_FLAGS = (1<<ICF1);			// Reset Input Capture
         timeconstant.w[0] = ICR1;		// get previous Input Capture Counter flag
       // check actual counter, if an additional overflow must be added
         if((TCNT1 > timeconstant.w[0]) && (ii & (1<<TOV1))) {
-    2a2c:	40 ff       	sbrs	r20, 0
-    2a2e:	05 c0       	rjmp	.+10     	; 0x2a3a <ReadInductance+0x184>
+    2a2e:	40 ff       	sbrs	r20, 0
+    2a30:	05 c0       	rjmp	.+10     	; 0x2a3c <ReadInductance+0x186>
            // this OV was not counted, but was before the Input Capture
            TI1_INT_FLAGS = (1<<TOV1);		// Reset OV Flag
-    2a30:	61 e0       	ldi	r22, 0x01	; 1
-    2a32:	66 bb       	out	0x16, r22	; 22
+    2a32:	61 e0       	ldi	r22, 0x01	; 1
+    2a34:	66 bb       	out	0x16, r22	; 22
            timeconstant.w[1]++;			// count one additional OV
-    2a34:	8f ef       	ldi	r24, 0xFF	; 255
-    2a36:	e8 1a       	sub	r14, r24
-    2a38:	f8 0a       	sbc	r15, r24
+    2a36:	8f ef       	ldi	r24, 0xFF	; 255
+    2a38:	e8 1a       	sub	r14, r24
+    2a3a:	f8 0a       	sbc	r15, r24
         }
 
-        ADC_PORT = TXD_VAL;		// switch ADC-Port to GND
-    2a3a:	18 b8       	out	0x08, r1	; 8
+//        ADC_PORT = TXD_VAL;		// switch ADC-Port to GND
         ADCSRA = (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; //enable ADC
     2a3c:	86 e9       	ldi	r24, 0x96	; 150
     2a3e:	80 93 7a 00 	sts	0x007A, r24
@@ -8560,18 +8557,18 @@ void ReadInductance(void) {
             total_r =  ReadADC(rpins.pb[1]);
     2a4e:	8a 2d       	mov	r24, r10
     2a50:	0e 94 65 03 	call	0x6ca	; 0x6ca <ReadADC>
-            if ((umax < 2) && (total_r < 2)) break;	// low current detected
-    2a54:	22 e0       	ldi	r18, 0x02	; 2
+            if ((umax < CAP_EMPTY_LEVEL) && (total_r < CAP_EMPTY_LEVEL)) break;	// low current detected
+    2a54:	24 e0       	ldi	r18, 0x04	; 4
     2a56:	82 16       	cp	r8, r18
     2a58:	91 04       	cpc	r9, r1
     2a5a:	10 f4       	brcc	.+4      	; 0x2a60 <ReadInductance+0x1aa>
-    2a5c:	02 97       	sbiw	r24, 0x02	; 2
+    2a5c:	04 97       	sbiw	r24, 0x04	; 4
     2a5e:	10 f0       	brcs	.+4      	; 0x2a64 <ReadInductance+0x1ae>
     2a60:	7a 94       	dec	r7
            timeconstant.w[1]++;			// count one additional OV
         }
 
-        ADC_PORT = TXD_VAL;		// switch ADC-Port to GND
+//        ADC_PORT = TXD_VAL;		// switch ADC-Port to GND
         ADCSRA = (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; //enable ADC
         for (ii=0;ii<20;ii++) {
     2a62:	89 f7       	brne	.-30     	; 0x2a46 <ReadInductance+0x190>

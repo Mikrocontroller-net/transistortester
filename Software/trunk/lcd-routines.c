@@ -306,7 +306,15 @@ void lcd_init(void) {
    HW_LCD_B0_DDR   |= _BV(HW_LCD_B0_PIN);  // LCD SI is Output
 
    wait_about100ms(); // Set LCD for 100 ms into RESET
-   HW_LCD_RES_PORT |= _BV(HW_LCD_RES_PIN);
+  #ifdef LCD_SPI_OPEN_COL
+   #ifdef PULLUP_DISABLE
+    MCUCR = (0<<PUD);             // enable Pull-Up Resistors mega168 family
+   #endif
+   HW_LCD_RES_DDR &= ~_BV(HW_LCD_RES_PIN);	// switch RES to input
+   HW_LCD_RES_PORT |= _BV(HW_LCD_RES_PIN);	// enable PullUp RES 
+  #else
+   HW_LCD_RES_PORT |= _BV(HW_LCD_RES_PIN);	// switch RES to VCC
+  #endif
    wait_about30ms();  // Wait for 30 ms after RESET
  #endif
  #if (LCD_INTERFACE_MODE == MODE_I2C)

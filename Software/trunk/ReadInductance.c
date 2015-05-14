@@ -55,20 +55,12 @@ void ReadInductance(void) {
         if (count < 2) {
            // first and second pass, direction 1
            rpins.pw = Rnum2pins(res_num);	// compute the two pinnumbers for resistor res_num
-//         LowPin = TP1;
-//         if (res_num == 2) LowPin = TP2;
-//         HighPin = TP3;
-//         if (res_num == 0) HighPin = TP2;
         } else {
            // third and fourth pass, direction 2
            rpins.pw = Rnum2pins(res_num);	// compute the two pinnumbers for resistor res_num
            ii = rpins.pb[0];
            rpins.pb[0] = rpins.pb[1];		// swap the pins LowPin and HighPin
            rpins.pb[1] = ii;
-//	   LowPin = TP3;
-//         if (res_num == 0) LowPin = TP2;
-//         HighPin = TP1;
-//         if (res_num == 2) HighPin = TP2;
         }
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
         HiADC = pgm_read_byte((&PinRLRHADCtab[6])+rpins.pb[1]);	// Table of ADC Pins including | TXD_VAL
@@ -94,7 +86,7 @@ void ReadInductance(void) {
             // wait for current is near zero
             umax = W10msReadADC(rpins.pb[0]);
             total_r =  ReadADC(rpins.pb[1]);
-            if ((umax < 2) && (total_r < 2)) break;	// low current detected
+            if ((umax < CAP_EMPTY_LEVEL) && (total_r < CAP_EMPTY_LEVEL)) break;	// low current detected
         }
         // setup Analog Comparator
         ADC_COMP_CONTROL = (1<<ACME);			//enable Analog Comparator Multiplexer
@@ -143,6 +135,7 @@ void ReadInductance(void) {
               }
            }
         }
+        ADC_PORT = TXD_VAL;		// switch ADC-Port to GND
         TCCR1B = (0<<ICNC1) | (0<<ICES1) | (0<<CS10);  // stop counter
         TI1_INT_FLAGS = (1<<ICF1);			// Reset Input Capture
         timeconstant.w[0] = ICR1;		// get previous Input Capture Counter flag
@@ -153,13 +146,13 @@ void ReadInductance(void) {
            timeconstant.w[1]++;			// count one additional OV
         }
 
-        ADC_PORT = TXD_VAL;		// switch ADC-Port to GND
+//        ADC_PORT = TXD_VAL;		// switch ADC-Port to GND
         ADCSRA = (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; //enable ADC
         for (ii=0;ii<20;ii++) {
             // wait for current is near zero
             umax = W10msReadADC(rpins.pb[0]);
             total_r =  ReadADC(rpins.pb[1]);
-            if ((umax < 2) && (total_r < 2)) break;	// low current detected
+            if ((umax < CAP_EMPTY_LEVEL) && (total_r < CAP_EMPTY_LEVEL)) break;	// low current detected
         }  /* end for ii */
   #define CNT_ZERO_42 6
   #define CNT_ZERO_720 7

@@ -102,6 +102,13 @@ CFLAGS += -DLCD_LINE_LENGTH=20
 # ST7920-RW <--> PB3 , ST7920-E <--> PB4 , ST7920-PSB <--> GND , ST7920-RS <--> VCC , ST7920-RST <--> VCC
 #CFLAGS += -DLCD_INTERFACE_MODE=2
 
+# With the option LCD_SPI_OPEN_COL the data signals of the SPI interface are not switched to VCC.
+# With option LCD_SPI_OPEN_COL the signals are switched to GND only, for high signals the pullup resistors
+# of the ATmega are used. For the RESET signal a external pull-up resistor is required, if the
+# option PULLUP_DISABLE is set. For the other signals the internal pullup resistors of the ATmega
+# are temporary used, even if option PULLUP_DISABLE is set.
+#CFLAGS += -DLCD_SPI_OPEN_COL
+
 # The I2C Address can be preset to a address of 0x3d instead of 0x3c by setting the constant LCD_I2C_ADDR.
 #CFLAGS += -DLCD_I2C_ADDR=0x3d
 

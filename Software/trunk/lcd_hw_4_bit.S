@@ -7,6 +7,7 @@
 #include "config.h"
 
 ;#define FAST_SERIAL_OUT
+#define FAST_SPI_OUTPUT
        .section .text
 
 ;----------------------------------------------------------------------
@@ -20,16 +21,19 @@
 #define set_en_low             cbi             _SFR_IO_ADDR(HW_LCD_EN_PORT), HW_LCD_EN_PIN
 #define set_en_high            sbi             _SFR_IO_ADDR(HW_LCD_EN_PORT), HW_LCD_EN_PIN
 #define set_en_output          sbi             (_SFR_IO_ADDR(HW_LCD_EN_PORT) - 1), HW_LCD_EN_PIN
+#define set_en_input           cbi             (_SFR_IO_ADDR(HW_LCD_EN_PORT) - 1), HW_LCD_EN_PIN
 
 ; Register select (0  = Command, 1 = Data)
 #define set_rs_low             cbi             _SFR_IO_ADDR(HW_LCD_RS_PORT), HW_LCD_RS_PIN
 #define set_rs_high            sbi             _SFR_IO_ADDR(HW_LCD_RS_PORT), HW_LCD_RS_PIN
 #define set_rs_output          sbi             (_SFR_IO_ADDR(HW_LCD_RS_PORT) - 1), HW_LCD_RS_PIN
+#define set_rs_input           cbi             (_SFR_IO_ADDR(HW_LCD_RS_PORT) - 1), HW_LCD_RS_PIN
 
 ; for ST7565 controller: Serial data input (SI)
 #define set_b0_low       cbi       _SFR_IO_ADDR(HW_LCD_B0_PORT), HW_LCD_B0_PIN
 #define set_b0_high      sbi       _SFR_IO_ADDR(HW_LCD_B0_PORT), HW_LCD_B0_PIN
 #define set_b0_output          sbi             (_SFR_IO_ADDR(HW_LCD_B0_PORT) - 1), HW_LCD_B0_PIN
+#define set_b0_input           cbi             (_SFR_IO_ADDR(HW_LCD_B0_PORT) - 1), HW_LCD_B0_PIN
 
 #define set_b4_low             cbi             _SFR_IO_ADDR(HW_LCD_B4_PORT), HW_LCD_B4_PIN
 #define set_b4_high            sbi             _SFR_IO_ADDR(HW_LCD_B4_PORT), HW_LCD_B4_PIN
@@ -99,6 +103,74 @@
 ;---------------------------------------------------------------------------------
 ; serial output for ST7565 controller, 4-Bit SPI
 _lcd_hw_write:
+ #ifdef LCD_SPI_OPEN_COL
+	set_en_low
+	set_en_output
+  #ifdef PULLUP_DISABLE
+	AOUT	MCUCR, r1		; MCUCR = 0;	//enable pull up resistors
+  #endif
+	; Set RS (0=Cmd, 1=Char)	
+	sbrc    preg_1, 0
+	rjmp	set_rs
+	set_rs_low
+	set_rs_output;		// set B0 for RS to GND
+        rjmp	fini_rs
+set_rs:
+	set_rs_input;		// set B0 to input
+	set_rs_high;		// enable B0 pullup
+fini_rs:
+	rcall	wait1us
+
+	; Send bit-7
+        ROL	preg_2		// shift B7 to carry
+        rcall	shift_out
+	; Send bit-6
+        ROL	preg_2		// shift B6 to carry
+        rcall	shift_out
+	; Send bit-5
+        ROL	preg_2		// shift B5 to carry
+        rcall	shift_out
+	; Send bit-4
+        ROL	preg_2		// shift B4 to carry
+        rcall	shift_out
+	; Send bit-3
+        ROL	preg_2		// shift B3 to carry
+        rcall	shift_out
+	; Send bit-2
+        ROL	preg_2		// shift B2 to carry
+        rcall	shift_out
+	; Send bit-1
+        ROL	preg_2		// shift B1 to carry
+        rcall	shift_out
+	; Send bit-0
+        ROL	preg_2		// shift B0 to carry
+        rcall	shift_out
+	set_en_low;
+	set_en_output;		// set en to GND
+
+  #ifdef PULLUP_DISABLE
+	ldi	r25, (1<<PUD)		;
+	AOUT	MCUCR, r25		; MCUCR = (1<<PUD);	//disable pull up resistors
+  #endif
+	ret
+
+shift_out:
+	set_en_low;
+	set_en_output;		// set en to GND
+        brcs	set_bit
+	set_b0_low
+	set_b0_output;		// set B0 for Bx to GND
+	rjmp	fini_bit
+set_bit:
+	set_b0_input;		// set B0 to input
+	set_b0_high;		// enable B0 pullup
+fini_bit:
+	set_en_input;
+	set_en_high;		// enable en pullup
+	rcall	wait1us
+	ret
+ #else /* no LCD_SPI_OPEN_COL */
+  #ifdef FAST_SPI_OUTPUT
                ; Set RS (0=Cmd, 1=Char)
                sbrc    preg_1, 0
                        set_rs_high
@@ -170,6 +242,53 @@ _lcd_hw_write:
                        set_b0_low
                set_en_high              ; force data read from LCD controller
 	ret
+  #else /* no FAST_SPI_OUTPUT */
+               ; Set RS (0=Cmd, 1=Char)
+               sbrc    preg_1, 0
+                       set_rs_high
+               sbrs    preg_1, 0
+                       set_rs_low
+               set_rs_output;		//init hardware
+               set_b0_output		; wait for address setup, set B0 to output
+	; Send bit-7
+        ROL	preg_2		// shift B7 to carry
+        rcall	shift_out2
+	; Send bit-6
+        ROL	preg_2		// shift B6 to carry
+        rcall	shift_out2
+	; Send bit-5
+        ROL	preg_2		// shift B5 to carry
+        rcall	shift_out2
+	; Send bit-4
+        ROL	preg_2		// shift B4 to carry
+        rcall	shift_out2
+	; Send bit-3
+        ROL	preg_2		// shift B3 to carry
+        rcall	shift_out2
+	; Send bit-2
+        ROL	preg_2		// shift B2 to carry
+        rcall	shift_out2
+	; Send bit-1
+        ROL	preg_2		// shift B1 to carry
+        rcall	shift_out2
+	; Send bit-0
+        ROL	preg_2		// shift B0 to carry
+        rcall	shift_out2
+	ret
+
+shift_out2:
+	set_en_low;
+        brcs	set_bit
+	set_b0_low
+	rjmp	fini_bit
+set_bit:
+	set_b0_high;		// enable B0 pullup
+fini_bit:
+	set_b0_output;		// set B0 to output mode
+	set_en_high;		// set en up
+	ret
+  #endif	/* FAST_SPI_OUTPUT */
+ #endif  /* LCD_SPI_OPEN_COL */
 	.endfunc
 
 #elif (LCD_INTERFACE_MODE == MODE_7920_SERIAL)

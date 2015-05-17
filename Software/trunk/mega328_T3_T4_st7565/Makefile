@@ -102,7 +102,7 @@ WITH_LCD_ST7565 = 1
 # of the ATmega are used. For the RESET signal a external pull-up resistor is required, if the
 # option PULLUP_DISABLE is set. For the other signals the internal pullup resistors of the ATmega
 # are temporary used, even if option PULLUP_DISABLE is set.
-#CFLAGS += -DLCD_SPI_OPEN_COL
+CFLAGS += -DLCD_SPI_OPEN_COL
 
 # The I2C Address can be preset to a address of 0x3d instead of 0x3c by setting the constant LCD_I2C_ADDR.
 #CFLAGS += -DLCD_I2C_ADDR=0x3d
@@ -122,7 +122,7 @@ CFLAGS += -DLCD_ST7565_H_OFFSET=0
 #CFLAGS += -DLCD_ST7565_V_FLIP=1
 # The contrast value can be predefined with the constant VOLUME_VALUE
 # for ST7565 controller the value can be between 0 and 63, for the SSD1306 0 to 255 can be selected.
-#CFLAGS += -DVOLUME_VALUE=25
+CFLAGS += -DVOLUME_VALUE=48
 
 # If option WITH_LCD_ST7565 is present one of the following fonts should be
 # choosen. With a font width below 8 more than 16 characters can be shown in one display line.
@@ -202,7 +202,7 @@ CFLAGS += -DC_H_KORR=0
 # is not used for serial output (WITH_UART option).
 # For ATmega644/1284 processor the UART has a separate pin.  Therefore the external input
 # at pin ADC3 can be enabled separate by setting the WITH_UART option.
-CFLAGS += -DWITH_VEXT
+#CFLAGS += -DWITH_VEXT
 
 #
 # If you want to measure Inductors with the resistance meter, you must specify
@@ -257,7 +257,7 @@ OP_MHZ = 8
 # The PULLUP_DISABLE option disable the pull-up Resistors of IO-Ports.
 # To use this option a external pull-up Resistor (10k to 30k)
 # from Pin 13 to VCC must be installed!
-CFLAGS += -DPULLUP_DISABLE
+#CFLAGS += -DPULLUP_DISABLE
 
 # The ANZ_MESS option specifies, how often an ADC value is read and accumulated.
 # Possible values of ANZ_MESS are 5 to 200 .

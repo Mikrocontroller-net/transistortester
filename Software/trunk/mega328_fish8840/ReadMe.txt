@@ -13,7 +13,15 @@ data lines of the ATmega (PD0-PD3) to prevent this irregular voltage enhancement
 Usually only 6 pins (11-16) of the 16 pin female header of the LCD is installed,
 but also pin 1-6 is connected at the main board.
 
-So you can also use a character display (16x2) with this printed board,
+You can also use a special mode for SPI signal output with the option LCD_SPI_OPEN_COL
+in the Makefile instead of installing serial resistors.
+With this option set you must install a pull-up resistor to the
+SPI-Reset signal (PD0 or LCD-pin 11) or you must unset the Makefile option PULLUP_DISABLE.
+With the configuration Makefile_oc this options are set and the files FishTesterOC.hex
+and FishTesterOC.eep are generated (make -f Makefile_oc).
+With this setting (no PULLUP_DISABLE) you need no modification of the LDC connections.
+
+You can also use a character display (16x2) with this printed board,
 if you install a additional female header (1-6) and update the processor
 with a program version for character display. But you should notice,
 that there is no current limiting resistor at pin 15 of the femal header

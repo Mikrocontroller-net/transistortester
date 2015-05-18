@@ -234,7 +234,7 @@ void wait_for_key_5s_line2(void) {
   uint8_t current_line;
   current_line = lcd_save_position();
   if (last_line_used != 0) {
-  if (current_line == (LCD_LINES-1)) {
+  if ((last_line_used == 1) && (current_line == (LCD_LINES-1))) {
      // add a + sign at the last location of screen
      lcd_set_cursor(((LCD_LINES - 1) * PAGES_PER_LINE), (LCD_LINE_LENGTH - 1));
      lcd_data('+');

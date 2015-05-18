@@ -139,9 +139,11 @@ wait_for_key_5s_line2:
 	mov	r28, r24		; current_line = lcd_save_position()
 	lds	r24, last_line_used
 	and	r24, r24
-	breq	x83c			; if (current_line != 0)
+	breq	x83c			; if (last_line_used != 0)
+	cpi	r24, 1
+        brne	x822
 	cpi	r28, (LCD_LINES-1)
-	brne	x822			; if (current_line == (LCD_LINES-1))
+	brne	x822			; if ((last_line_used == 1) &&(current_line == (LCD_LINES-1)))
 	ldi	r22, (LCD_LINE_LENGTH -1)
 	ldi	r24, ((LCD_LINES - 1) * PAGES_PER_LINE)
 	rcall	lcd_set_cursor		; lcd_set_cursor(((LCD_LINES - 1) * PAGES_PER_LINE), (LCD_LINE_LENGTH - 1))

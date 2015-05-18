@@ -519,7 +519,7 @@ for (ww=0;ww<64;ww++) {
    i2lcd(udiff2);		// output correction voltage
    RefVoltage();			// set new ADCconfig.U_Bandgap
   #endif	/* end AUTOSCALE_ADC */
-     last_line_used = 2;
+   last_line_used = 2;
    wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
    UnCalibrated = 0;		// clear the UnCalibrated Flag
    lcd_cursor_off();		// switch cursor off

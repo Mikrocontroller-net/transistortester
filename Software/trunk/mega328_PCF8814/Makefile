@@ -23,7 +23,7 @@ CFLAGS = -Wall
 # atmega328: m328 or m328p
 # atmega1280: m1280	// see config.h for different port setting
 # atmega2560: m2560	// see config.h for different port setting
-PARTNO = m328
+PARTNO = m328p
 
 # The WITH_MENU option enables a dialog to choose some additional functions.
 # Currently a frequency measurement at ATmega Pin PD4, a frequency generator at TP2 ,
@@ -46,7 +46,7 @@ CFLAGS += -DWITH_MENU
 # WITH_ROTARY_COUNT to 5 for getting the best resolution.
 # You can also use two separate push-buttons for Up and Down instead ot the rotary encoder.
 # You must set the WITH_ROTARY_SWITCH to 4 for the UP/DOWN push-buttons.
-#CFLAGS += -DWITH_ROTARY_SWITCH=2
+CFLAGS += -DWITH_ROTARY_SWITCH=2
 # the option CHANGE_ROTARY_DIRECTION changes the rotary direction by swap of switches
 #CFLAGS += -DCHANGE_ROTARY_DIRECTION
 # The best solution for connecting the rotary switch is PD1 and PD3, because this setting can be used
@@ -57,7 +57,7 @@ CFLAGS += -DWITH_MENU
 # Select your language:
 # Available languages are: LANG_BRASIL, LANG_CZECH, LANG_DUTCH, LANG_ENGLISH, LANG_GERMAN, LANG_HUNGARIAN, LANG_ITALIAN,
 #                          LANG_LITHUANIAN, LANG_POLISH, LANG_RUSSIAN , LANG_SLOVAK, LANG_SLOVENE, LANG_SPANISH, LANG_UKRAINIAN
-UI_LANGUAGE = LANG_GERMAN
+UI_LANGUAGE = LANG_ENGLISH
 
 # The LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset.
 # This lcd-display don't have a character for Ohm and for µ (micro).
@@ -70,7 +70,7 @@ UI_LANGUAGE = LANG_GERMAN
 
 # Can be used with a 4x20 character display for better using the additional space.
 # Additional parameters, which are shown only short in row 2, will be shown in row 3 and 4 with this option.
-#CFLAGS += -DFOUR_LINE_LCD
+CFLAGS += -DFOUR_LINE_LCD
 #CFLAGS += -DLCD_LINE_LENGTH=20
 
 # The PAGE_MODE activates a moving line cursor for menu function selection together with FOUR_LINE_LCD
@@ -84,7 +84,7 @@ UI_LANGUAGE = LANG_GERMAN
 # The normal ST7565 controller will be supported by setting the WITH_LCD_ST7565 to 1 or 7565.
 # The special action for a simular SSD1306 controller can be activated by
 # setting the WITH_LCD_ST7565 variable to 1306.
-#WITH_LCD_ST7565 = 1
+WITH_LCD_ST7565 = 8814
 #WITH_LCD_ST7565 = 1306
 
 # Normally the ST7565 controller is connected with a SPI 4-wire interface, but
@@ -97,14 +97,14 @@ UI_LANGUAGE = LANG_GERMAN
 # ST7920-RW <--> PD2 , ST7920-E <--> PD5 , ST7920-PSB <--> GND , ST7920-RS <--> VCC , ST7920-RST <--> VCC
 # For the PDF8814 controller you can also select a 3 for the 3-line serial interface with RS (D/C) as first bit.
 # The RS (data/command) signal at PD1 is used as chip enable SCE.
-#CFLAGS += -DLCD_INTERFACE_MODE=2
+CFLAGS += -DLCD_INTERFACE_MODE=3
 
 # With the option LCD_SPI_OPEN_COL the data signals of the SPI interface are not switched to VCC.
 # With option LCD_SPI_OPEN_COL the signals are switched to GND only, for high signals the pullup resistors
 # of the ATmega are used. For the RESET signal a external pull-up resistor is required, if the
 # option PULLUP_DISABLE is set. For the other signals the internal pullup resistors of the ATmega
 # are temporary used, even if option PULLUP_DISABLE is set.
-#CFLAGS += -DLCD_SPI_OPEN_COL
+CFLAGS += -DLCD_SPI_OPEN_COL
 
 # The I2C Address can be preset to a address of 0x3d instead of 0x3c by setting the constant LCD_I2C_ADDR.
 #CFLAGS += -DLCD_I2C_ADDR=0x3d
@@ -115,25 +115,25 @@ UI_LANGUAGE = LANG_GERMAN
 LCD_ST7565_RESISTOR_RATIO = 4
 
 # If LCD_ST7565 option is set to 1: Flip the display's horizontal direction.
-CFLAGS += -DLCD_ST7565_H_FLIP=1
+CFLAGS += -DLCD_ST7565_H_FLIP=0
 # With LCD_ST7565_H_OFFSET you can specify a horizontal pixel offset to the display window.
 # The controller knows 132 horizontal pixel, the window shows only 128 pixel.
 # OFFSET values can vary for the connected display type to 0, 2 or 4.
-CFLAGS += -DLCD_ST7565_H_OFFSET=4
+#CFLAGS += -DLCD_ST7565_H_OFFSET=4
 # If LCD_ST7565 option is set to 1: Flip the display's vertical direction
 CFLAGS += -DLCD_ST7565_V_FLIP=0
 # The contrast value can be predefined with the constant VOLUME_VALUE
 # for ST7565 controller the value can be between 0 and 63, for the SSD1306 0 to 255 can be selected.
-#CFLAGS += -DVOLUME_VALUE=25
+CFLAGS += -DVOLUME_VALUE=16
 
 # If option WITH_LCD_ST7565 is present one of the following fonts should be
 # choosen. With a font width below 8 more than 16 characters can be shown in one display line.
-#CFLAGS += -DFONT_6X8
+CFLAGS += -DFONT_6X8
 #CFLAGS += -DFONT_8X8
-CFLAGS += -DFONT_7X12
+#CFLAGS += -DFONT_7X12
 #CFLAGS += -DFONT_8X12thin
 #CFLAGS += -DFONT_8X14
-#CFLAGS += -DFONT_8x15
+#CFLAGS += -DFONT_8X15
 #CFLAGS += -DFONT_8X16
 #CFLAGS += -DFONT_8X16thin
 
@@ -186,6 +186,7 @@ CFLAGS += -DREF_L_KORR=40
 # C_H_KORR defines a correction of 0.1% units for big capacitor measurement.
 # Positive values will reduce measurement results.
 CFLAGS += -DC_H_KORR=0
+
 
 # The WITH_UART option enables the software UART  (TTL level output at Pin PC3, 26).
 # If the option is deselected, PC3 can be used as external voltage input with a
@@ -258,7 +259,7 @@ OP_MHZ = 8
 # The PULLUP_DISABLE option disable the pull-up Resistors of IO-Ports.
 # To use this option a external pull-up Resistor (10k to 30k)
 # from Pin 13 to VCC must be installed!
-CFLAGS += -DPULLUP_DISABLE
+#CFLAGS += -DPULLUP_DISABLE
 
 # The ANZ_MESS option specifies, how often an ADC value is read and accumulated.
 # Possible values of ANZ_MESS are 5 to 200 .
@@ -287,7 +288,7 @@ CFLAGS += -DBAT_CHECK
 # If your 9V supply has a diode installed, use the BAT_OUT=600 form to specify the
 # threshold voltage of your diode to adjust the output value.
 # This threshold level is added to LCD-output and does not affect the voltage checking levels.
-CFLAGS += -DBAT_OUT=0
+CFLAGS += -DBAT_OUT=150
 
 # To adjust the warning-level and poor-level of battery check to the capability of a
 # low drop voltage regulator, you can specify the Option BAT_POOR=5400 .
@@ -298,7 +299,7 @@ CFLAGS += -DBAT_OUT=0
 # The warning level is 0.1V higher than the specified poor level (<=1.3V).
 # Setting the poor level to low values is not recommended for rechargeable Batteries,
 # because this increase the danger for deep discharge!!
-CFLAGS += -DBAT_POOR=3300
+CFLAGS += -DBAT_POOR=6400
 
 # You can set a upper battery voltage limit in mV units for battery operation mode.
 # The operation time of additional functions is limited with the battery operation mode. 
@@ -306,11 +307,11 @@ CFLAGS += -DBAT_POOR=3300
 # "DC_Pwr_Mode", where time limits of the additional functions are switched off.
 # The "DC_Pwr_Mode" is also started, if the battery voltage is detected below 0.9V
 # regardless to the state of the DC_PWR option.
-# CFLAGS += -DDC_PWR=4500
+# CFLAGS += -DDC_PWR=9500
 
 # Voltage divider for battery voltage measurement  10k / 3.3k = 133/33
-#CFLAGS += -DBAT_NUMERATOR=133
-#CFLAGS += -DBAT_DENOMINATOR=33
+CFLAGS += -DBAT_NUMERATOR=133
+CFLAGS += -DBAT_DENOMINATOR=33
 # Voltage divider for the external zener voltage measurement 180k / 20k = 10/1
 #CFLAGS += -DEXT_NUMERATOR=10
 #CFLAGS += -DEXT_DENOMINATOR=1
@@ -321,13 +322,10 @@ INHIBIT_SLEEP_MODE = 0
 
 
 # Select your programmer type, speed and port, if you wish to use avrdude.
-PROGRAMMER=ft232r
-BitClock=5.0
-PORT=ft0
 # setting for DIAMEX ALL_AVR, Atmel AVRISP-mkII
-#PROGRAMMER=avrisp2
-#BitClock=5.0
-#PORT=usb
+PROGRAMMER=avrispmkII
+BitClock=1.0
+PORT=usb
 # setting for USBasp
 #PROGRAMMER=usbasp
 #BitClock=20
@@ -387,4 +385,3 @@ get_log.o: ../get_log.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 include ../finish.mk
-

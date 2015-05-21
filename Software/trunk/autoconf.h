@@ -12,6 +12,22 @@
  #undef LCD_LINE_LENGTH
  #define LCD_LINE_LENGTH (SCREEN_WIDTH / FONT_WIDTH)
  #define TEXT_RIGHT_TO_ICON ((ICON_WIDTH + 16 + 5 + 7) / FONT_WIDTH)
+#elif (LCD_ST_TYPE == 8812)
+ /* defines for PCF8812 */
+ #undef WITH_GRAPHICS
+ #define PAGES_PER_LINE ((FONT_HEIGHT + 7) / 8)
+ #define LCD_LINES ((SCREEN_HEIGHT/8) / PAGES_PER_LINE)
+ #undef LCD_LINE_LENGTH
+ #define LCD_LINE_LENGTH (SCREEN_WIDTH / FONT_WIDTH)
+ #define TEXT_RIGHT_TO_ICON ((ICON_WIDTH + 16 + 5 + 7) / FONT_WIDTH)
+#elif (LCD_ST_TYPE == 8814)
+ /* defines for PCF8814 */
+ #undef WITH_GRAPHICS
+ #define PAGES_PER_LINE ((FONT_HEIGHT + 7) / 8)
+ #define LCD_LINES ((SCREEN_HEIGHT/8) / PAGES_PER_LINE)
+ #undef LCD_LINE_LENGTH
+ #define LCD_LINE_LENGTH (SCREEN_WIDTH / FONT_WIDTH)
+ #define TEXT_RIGHT_TO_ICON ((ICON_WIDTH + 16 + 5 + 7) / FONT_WIDTH)
 #else  /* no ST7565 or SSD1306 graphic controller */
  #ifdef FOUR_LINE_LCD
   #define LCD_LINES 4
@@ -526,7 +542,7 @@
 #define LCD_CHAR_INDUCTOR1 'w'		// use ww for inductor symbol
 #define LCD_CHAR_INDUCTOR2 'w'		// use ww for inductor symbol
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE ==8812) || (LCD_ST_TYPE == 8814))
 // redefine the special symbols for software character set used with graphical display
         #undef LCD_CHAR_DEGREE
         #define LCD_CHAR_DEGREE 0xf8	// Character for degree

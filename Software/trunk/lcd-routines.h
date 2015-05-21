@@ -38,7 +38,6 @@ void lcd_line3(void);
 void lcd_line4(void);
 unsigned char reverse_byte(unsigned char);
 void lcd_show_Cg(void);		// show Cg=xxxpF
-#ifdef WITH_GRAPHICS
 // Graphics display only: Some drawing functions for graphics LCD
 void lcd_pgm_bitmap(const unsigned char * pbitmap,
                     unsigned char x, unsigned char y,
@@ -47,6 +46,7 @@ void lcd_set_pixels(const unsigned char * pdata,
                     unsigned char x, unsigned char y,
                     unsigned char options,
                     unsigned char width, unsigned char height);
+#ifdef WITH_GRAPHICS
 void ShowIcons(void);		/* show the different Icons */
 void lcd_draw_pin(unsigned char index, char dx, char dy);
 void lcd_draw_trans_pins( char dxb, char dyb);

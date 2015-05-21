@@ -79,7 +79,7 @@
 #define lcd_cursor_off() // ignored
 
 /* *********************************************************************************************************** */
-#elif (LCD_ST_TYPE == 7108) 	/* not ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306)) */
+#elif (LCD_ST_TYPE == 7108) 	/* not (LCD_ST_TYPE == 7565 || 1306) */
 #define CMD_DISPLAY_OFF	0x3e
 #define CMD_DISPLAY_ON	0x3f
 #define CMD_SET_COLUMN_ADDR	0x40
@@ -93,7 +93,7 @@
 #define lcd_cursor_off() // ignored
 
 /* *********************************************************************************************************** */
-#elif (LCD_ST_TYPE == 7920) 	/* not ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108)) */
+#elif (LCD_ST_TYPE == 7920) 	/* not (LCD_ST_TYPE == 7565 || 1306 || == 7108) */
 #define lcd_write_init(data_length)            _lcd_hw_write(0x80, CMD_SetIFOptions | (data_length << 4))
 #define lcd_cursor_on()  // ignored
 #define lcd_cursor_off() // ignored
@@ -122,7 +122,51 @@
 #define lcd_cursor_off() // ignored
 
 /* *********************************************************************************************************** */
-#else /* not ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7108)) */
+#elif (LCD_ST_TYPE == 8812) 	/* not (LCD_ST_TYPE == 7565 || 1306 || 7108 || 7920)) */
+ // support for PCF8812
+#undef SCREEN_WIDTH
+#define SCREEN_WIDTH  102
+#define CMD_SET_EXTENDED_INSTRUCTION 0x21	/* Function set with H */
+#define CMD_SET_NORMAL_INSTRUCTION 0x20	/* Function set  */
+#define ECMD_SET_HV_STAGES 0x08		/* set multiplication of HV-gen  (0 <= m <= 3) */
+#define ECMD_SET_TEMP_COEF 0x04		/* set temperature coefficient   (0 <= T <= 3) */
+#define ECMD_SET_BIAS 0x10		/* set bias system  (0 <= B <= 7) */
+#define ECMD_SET_CONTRAST 0x80		/* set Vop  value   (0 <= V <= 127) */
+#define CMD_SET_DISPLAY_INVERS  0x0D	/* D and E bit set */
+#define CMD_SET_DISPLAY_NORMAL  0x0C	/* D bit set */
+#define CMD_SET_DISPLAY_WHITE   0x09	/* E bit set */
+#define CMD_SET_DISPLAY_BLACK   0x80	/* no bit set */
+#define CMD_SET_PAGE		0x40		/* set Y address of RAM (0 <= Y <= 8) */
+
+#define CMD_SET_COLUMN		0x80		/* set X address of RAM (0 <= X < 102) */
+//Makros for LCD
+#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
+#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
+#define lcd_cursor_on()  // ignored
+#define lcd_cursor_off() // ignored
+/* *********************************************************************************************************** */
+#elif (LCD_ST_TYPE == 8814) 	/* not ((LCD_ST_TYPE == 7565 || 1306 || 7108 || 7920 || 8812) */
+ // support for PCF8814 , used for Nokia 1100
+#undef SCREEN_WIDTH
+#define SCREEN_WIDTH  96
+#define CMD_SET_VOP_UPPER 0x20		/* upper 3 bits of Vop */
+#define CMD_SET_VOP_LOWER 0x80		/* lower 5 bits of Vop */
+#define CMD_SET_ALLPTS_NORMAL   0xA4
+#define CMD_SET_POWER_CONTROL   0x28
+#define CMD_SET_COM_NORMAL      0xC0
+#define CMD_SET_COM_REVERSE     0xC8
+#define CMD_DISPLAY_OFF         0xAE
+#define CMD_DISPLAY_ON          0xAF
+#define CMD_SET_PAGE            0xB0
+#define CMD_SET_COLUMN_UPPER    0x10
+#define CMD_SET_COLUMN_LOWER    0x00
+//Makros for LCD
+#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
+#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
+#define lcd_cursor_on()  // ignored
+#define lcd_cursor_off() // ignored
+/* *********************************************************************************************************** */
+#else /* not ((LCD_ST_TYPE == 7565 || 1306 || 7920 || 7108 || 8812 || 8814) */
 /* must be a character display! */
 #define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd); wait50us();
 #define lcd_write_data(data)                   _lcd_hw_write(0x01, data); wait50us();
@@ -158,7 +202,7 @@
 #endif
 
 //defines for the cyrillic character set
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7108))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814))
  #define GR_OFFSET1 0x20	/* shift 0xa0 to 0x80, direct behind ASCII table, to save place in font table */
  #define GR_OFFSET2 0xd0	/* shift 0xe0 to 0x10, before the ASCII table */  
 #else

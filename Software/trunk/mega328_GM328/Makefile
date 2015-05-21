@@ -93,6 +93,10 @@ WITH_LCD_ST7565 = 1
 # The SCL signal is available at PD5 (LCD-E, LCD-6), the SDA signal at PD2 (LCD-D6, LCD-13).
 # A pull up resistor of about 4.7k is required for both signals to 3.3V.
 # Please check, if your display module can also tolerate a 5V signal level.
+# For the ST7920 controller you can select the serial interface by setting the LCD_INTERFACE_MODE to 5 . 
+# ST7920-RW <--> PD2 , ST7920-E <--> PD5 , ST7920-PSB <--> GND , ST7920-RS <--> VCC , ST7920-RST <--> VCC
+# For the PDF8814 controller you can also select a 3 for the 3-line serial interface with RS (D/C) as first bit.
+# The RS (data/command) signal at PD1 is used as chip enable SCE.
 #CFLAGS += -DLCD_INTERFACE_MODE=2
 
 # With the option LCD_SPI_OPEN_COL the data signals of the SPI interface are not switched to VCC.

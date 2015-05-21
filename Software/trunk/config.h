@@ -15,6 +15,7 @@
 // defines for LCD_INTERFACE_MODE
 #define MODE_PARALLEL 1		/* default 4-Bit parallel mode for character LCD */
 #define MODE_I2C 2		/* I2C interface for SSD1306 */
+#define MODE_3LINE 3		/* special 3 line serial output with Data/Command as first data bit  PCF8814 */
 #define MODE_SPI 4		/* 4 bit SPI interface for ST7565 or SSD1306 */
 #define MODE_7920_SERIAL 5		/* serial interface for ST7920 */
 #define MODE_7108_SERIAL 6		/* serial interface for ST7108 with shift register 74HC164 */
@@ -354,7 +355,7 @@
 /* Port(s) / Pins for LCD						     */
 /* ************************************************************************* */
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814))
  /* set the default INTERFACE_MODE for the ST7565 controller */
  #ifndef LCD_INTERFACE_MODE
   #define LCD_INTERFACE_MODE MODE_SPI
@@ -377,7 +378,7 @@
 #endif
 
 /* ----------------------------------------------------------------------------- */
-#if (LCD_INTERFACE_MODE == MODE_SPI)
+#if (LCD_INTERFACE_MODE == MODE_SPI) || (LCD_INTERFACE_MODE == MODE_3LINE)
  // SPI-mode is used for the 128x64 pixel graphics LCD with ST7565 controller
  // LCD-P/S = low, LCD-CS1 = low, LCD-CS2 = high
  // LCD_B0_xxx=SI, LCD_EN_xxx=SCL, LCD_RS_xxx=A0, LCD_RES_xxx=RST, (CS-GND)

@@ -19,7 +19,7 @@
 #ifdef WITH_ROTARY_SWITCH
 //  const uint8_t EE_RotarySwitch EEMEM = 0;	// rotation switch is not detected
 #endif
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
   const uint8_t EE_Volume_Value EEMEM = VOLUME_VALUE;	// Volume Value for ST7565 controller 
 #endif
 
@@ -36,7 +36,7 @@
  #endif
   extern const uint8_t EE_ESR_ZEROtab[] EEMEM;	// zero offset of ESR measurement
 
- #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+ #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
   extern const uint8_t EE_Volume_Value EEMEM;	// Volume Value for ST7565 controller 
  #endif
 #endif /* if defined (MAIN_C) */

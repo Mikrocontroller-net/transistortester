@@ -62,14 +62,14 @@
  #endif
  #ifdef WITH_VEXT
   #define MODE_VEXT (NNN+1)	/* external voltage measurement and zener voltage */
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
    #define MODE_CONTRAST (NNN+2)	/* select contrast */
    #define MODE_SHOW (NNN+3)	/* show data function */
   #else
    #define MODE_SHOW (NNN+2)	/* show data function */
   #endif
  #else
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
    #define MODE_CONTRAST (NNN+1)	/* select contrast */
    #define MODE_SHOW (NNN+2)	/* show data function */
   #else
@@ -236,7 +236,7 @@ void function_menu() {
         if (func_number == MODE_SELFTEST) AutoCheck(0x11);	// Full selftest with calibration
   #endif
         if (func_number == MODE_VEXT) show_vext();
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
+  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
         if (func_number == MODE_CONTRAST) set_contrast();
   #endif
         if (func_number == MODE_SHOW) {
@@ -852,11 +852,15 @@ void do_10bit_PWM() {
 #endif
 } /* end do_10bit_PWM */
 
- #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
+ #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
 /* *************************************************** */
 /* set the contrast value of the ST7565 display */
 /* *************************************************** */
  #if (LCD_ST_TYPE == 1306)
+  #define MAX_CONTRAST 0xff
+ #elif (LCD_ST_TYPE == 8812)
+  #define MAX_CONTRAST 0x7f
+ #elif (LCD_ST_TYPE == 8814)
   #define MAX_CONTRAST 0xff
  #else
   #define MAX_CONTRAST 0x3f
@@ -877,6 +881,13 @@ uint8_t contrast;
   #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
      lcd_command(CMD_SET_VOLUME_FIRST);		// 0x81 set  volume command
      lcd_command(contrast);			// value from 1 to 63 (0x3f) */
+  #elif (LCD_ST_TYPE == 8812)	/* PCF8812 controller */
+     lcd_command(CMD_SET_EXTENDED_INSTRUCTION);		// set extended instruction mode
+     lcd_command(ECMD_SET_CONTRAST | (contrast & 0x7f));	// set the contrast value
+     lcd_command(CMD_SET_NORMAL_INSTRUCTION);		// return to normal instruction mode
+  #elif (LCD_ST_TYPE == 8814)	/* PCF8814 controller */
+   lcd_command(CMD_SET_VOP_UPPER | ((contrast >> 5) & 0x07));      // set upper Vop
+   lcd_command(CMD_SET_VOP_LOWER | (contrast & 0x1f));    // set lower Vop
   #else		/* DOGM display */
      lcd_command(CMD1_PowerControl | ((contrast>>4)&0x03));	// booster off / set contrast C5:C4 
      lcd_command(CMD1_SetContrast | (contrast&0x0f));	// set contrast C3:0 

@@ -1,4 +1,4 @@
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7108))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814))
 
  #if defined(FONT_6X8) || defined (FONT_6x8)
   #define FONT_WIDTH 6
@@ -103,7 +103,9 @@
    #define FONT_SELECTED
  #endif
 
+ #if (LCD_ST_TYPE != 8812)
  #include "fonts/24x32_vertical_LSB.h"
+ #endif
 
 #endif /* LCD_ST_TYPE... */
 

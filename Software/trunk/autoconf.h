@@ -50,6 +50,13 @@
  #define LCD_ST7565_H_OFFSET 0	/* default horizontal offset of the display window */
 #endif
 
+#ifndef LCD_ST7565_Y_START
+ #define LCD_ST7565_Y_START  0
+#endif
+#if LCD_ST7565_Y_START >= SCREEN_HEIGHT
+ #warning LCD_ST7565_Y_START is set higher than SCREEN_HEIGHT!
+#endif
+
 #ifndef LCD_LINE_LENGTH
  // if line length is not specified otherwise, use 16 characters
  #define LCD_LINE_LENGTH 16

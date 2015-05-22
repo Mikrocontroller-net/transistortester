@@ -356,8 +356,6 @@ void lcd_init(void) {
 
 //##   lcd_command(CMD_RMW);			// 0xe0 , set Read Modify Write mode
 
-   //Center the two lines
-   //lcd_command(CMD_SET_DISP_START_LINE | (0x3f & 40));
   #endif
   #if (LCD_ST_TYPE == 1306)
 
@@ -389,7 +387,7 @@ void lcd_init(void) {
 //   lcd_command(0x40);
 //##   lcd_command(CMD_RMW);			// 0xe0 , set Read Modify Write mode
   #endif
-   lcd_command(CMD_SET_DISP_START_LINE | 0);	// 0x40
+   lcd_command(CMD_SET_DISP_START_LINE | (LCD_ST7565_Y_START & 0x3f));	// 0x40
    lcd_command(CMD_SET_ALLPTS_NORMAL);		// 0xa4
    lcd_command(CMD_SET_DISP_NORMAL);		// 0xa6 not reverse
 
@@ -398,7 +396,7 @@ void lcd_init(void) {
    lcd_command(CMD_DISPLAY_ON);			// 0xaf
 
    lcd_set_cursor(0,0);
- #endif    /*  (LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) */
+ #endif    /*  (LCD_ST_TYPE == 7565 || 1306) */
  #if (LCD_ST_TYPE == 8812) 
    lcd_command(CMD_SET_EXTENDED_INSTRUCTION);		// switch power on, extended instruction
    lcd_command(ECMD_SET_HV_STAGES | (LCD_ST7565_RESISTOR_RATIO / 2)); // set charge pump stages
@@ -469,7 +467,7 @@ void lcd_init(void) {
 void lcd_init(void) {
    wait_about50ms();
    _lcd_hw_select(3);		// select both controllers
-   lcd_command(CMD_SET_START_LINE);	// set the start line 0
+   lcd_command(CMD_SET_START_LINE | (LCD_ST7565_Y_START & 0x3f));	// set the start line 0
    lcd_clear();
    lcd_command(CMD_DISPLAY_ON);
    wait_about50ms();
@@ -893,14 +891,15 @@ void lcd_show_Cg(void) {
 /* usually the refresh is done after the display data are finished before waiting */
 void lcd_refresh(void) {
   unsigned char xx;
-  unsigned char yy;
+  unsigned char yy, yyo;
   for (yy=0; yy<SCREEN_HEIGHT; yy++) {
-    if (yy < 32) {
-      lcd_command(CMD_SET_GDRAM_ADDRESS|yy);	/* set vertical start address */
+    yyo = (yy + LCD_ST7565_Y_START) & 0x3f;	/* the y-address with offset */
+    if (yyo < 32) {
+      lcd_command(CMD_SET_GDRAM_ADDRESS|yyo);	/* set vertical start address */
       lcd_command(CMD_SET_GDRAM_ADDRESS|0);	/* horizontal address starts with 0 */
     } else {
       // the second half of display is located at GDRAM address 128..255 ((8..15) x 16 pixel)
-      lcd_command(CMD_SET_GDRAM_ADDRESS|(yy-32));	/* set vertical start address */
+      lcd_command(CMD_SET_GDRAM_ADDRESS|(yyo-32));	/* set vertical start address */
       lcd_command(CMD_SET_GDRAM_ADDRESS|(SCREEN_WIDTH / 16));	/* horizontal address starts with 0 (128)*/
     }
     for (xx=0; xx<(SCREEN_WIDTH / 8); xx++) {

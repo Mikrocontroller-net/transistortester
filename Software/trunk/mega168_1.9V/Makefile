@@ -85,6 +85,10 @@ CFLAGS += -DLCD_ST7565_V_FLIP=0
 # for ST7565 controller the value can be between 0 and 63, for the SSD1306 0 to 255 can be selected.
 #CFLAGS += -DVOLUME_VALUE=25
 
+# You can specify a Y start line (vertical address) for the display output with the option LCD_ST7565_Y_START.
+# If your output start in the middle of the display, you can specify a Y_START of 32
+#CFLAGS += -DLCD_ST7565_Y_START=32
+
 # If option WITH_LCD_ST7565 is present one of the following fonts should be
 # choosen. With a font width below 8 more than 16 characters can be shown in one display line.
 #CFLAGS += -DFONT_6X8

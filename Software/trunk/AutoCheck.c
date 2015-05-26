@@ -10,12 +10,14 @@ void AutoCheck(uint8_t test_mode) {
  int  adcmv[7];
  #ifdef EXTENDED_TESTS
   uint16_t u680;	// 3 * (Voltage at 680 Ohm)
-  uint8_t tt;		// number of running test
   uint8_t taste;	// ist key pressed? 0 = no
  #else
   #ifndef NO_TEST_T1_T7
   #warning "Selftest without extended tests T1 to T7!"
   #endif
+ #endif
+ #if defined(EXTENDED_TESTS) || defined(WITH_MENU)
+  uint8_t tt;		// number of running test
  #endif
 
  #ifdef FREQUENCY_50HZ

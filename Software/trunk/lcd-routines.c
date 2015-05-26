@@ -398,10 +398,10 @@ void lcd_init(void) {
    lcd_set_cursor(0,0);
  #endif    /*  (LCD_ST_TYPE == 7565 || 1306) */
  #if (LCD_ST_TYPE == 8812) 
-   lcd_command(CMD_SET_EXTENDED_INSTRUCTION);		// switch power on, extended instruction
-   lcd_command(ECMD_SET_HV_STAGES | (LCD_ST7565_RESISTOR_RATIO / 2)); // set charge pump stages
-   lcd_command(ECMD_SET_BIAS | 3);			// set bias system to 3
-   lcd_command(ECMD_SET_TEMP_COEF | 2);			// set temperature coefficient to 2
+   lcd_command(CMD_SET_EXTENDED_INSTRUCTION);		// 0x21 switch power on, extended instruction
+   lcd_command(ECMD_SET_HV_STAGES | (LCD_ST7565_RESISTOR_RATIO / 2)); // 0x08|0x02 set charge pump stages
+   lcd_command(ECMD_SET_BIAS | 3);			// 0x13 set bias system to 3
+   lcd_command(ECMD_SET_TEMP_COEF | 2);			// 0x06 set temperature coefficient to 2
    lcd_command(ECMD_SET_CONTRAST | (eeprom_read_byte(&EE_Volume_Value) & 0x7f));	//set volume value of EEprom
    lcd_command(CMD_SET_NORMAL_INSTRUCTION);		// switch power on, normal instruction
    lcd_clear();			// clear display

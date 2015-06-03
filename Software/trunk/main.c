@@ -102,32 +102,6 @@
 	//     ON_DDR = (1<<ON_PIN);		//switch to GND
 	     return 0;
 	  }
-	#if (LCD_ST_TYPE == 0)
-	  LCDLoadCustomChar(LCD_CHAR_DIODE1);	//Custom-Character Diode symbol
-	  lcd_fix_customchar(DiodeIcon1);	//load Character  >|
-	  LCDLoadCustomChar(LCD_CHAR_DIODE2);	//Custom-Character 
-	  lcd_fix_customchar(DiodeIcon2);	//load Character  |<
-	  LCDLoadCustomChar(LCD_CHAR_CAP);	//Custom-Character  Capacitor symbol
-	  lcd_fix_customchar(CapIcon);		//load Character  ||
-	  LCDLoadCustomChar(LCD_CHAR_RESIS1);	//Custom-Character Resistor symbol
-	  lcd_fix_customchar(ResIcon1);		//load Character  [
-	  LCDLoadCustomChar(LCD_CHAR_RESIS2);	//Custom-Character 
-	  lcd_fix_customchar(ResIcon2);		//load Character  ]
-	  
-	  //if kyrillish LCD-Characterset is defined, load  Omega- and µ-Character
-	 #if LCD_CHAR_OMEGA < 8
-	  LCDLoadCustomChar(LCD_CHAR_OMEGA);	//load omega as Custom-Character
-	  lcd_fix_customchar(CyrillicOmegaIcon);
-	 #endif
-	 #if LCD_CHAR_U < 8
-	  LCDLoadCustomChar(LCD_CHAR_U);	//load mu as Custom-Character
-	  lcd_fix_customchar(CyrillicMuIcon);
-	 #endif
-	 #if LCD_CHAR_RESIS3 != 'R'
-	  LCDLoadCustomChar(LCD_CHAR_RESIS3);	//load Resistor symbol as Custom-Character
-	  lcd_fix_customchar(ResIcon3);		// load character ||
-	 #endif
-	#endif /* LCD_ST_TYPE == 0 */
 
 	#ifdef PULLUP_DISABLE
 	 #ifdef __AVR_ATmega8__

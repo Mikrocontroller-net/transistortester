@@ -623,13 +623,15 @@ uint8_t ShortedProbes(uint8_t Probe1, uint8_t Probe2)
    *  We expect both probe voltages to be about the same and
    *  to be half of Vcc (allowed difference +/- 20mV).
    */
+ #ifndef MAX_UH_DIFF
   #define MAX_UH_DIFF 30
+ #endif
 
   URH = ADCconfig.U_AVCC / 2;
   URH -= ((long)U_VCC * (long)(PIN_RP-PIN_RM)) / (4*(unsigned long)(R_L_VAL+PIN_RM));			// differenz of Pin resistance high (22) and low (20)
-  if ((U1 > (URH - MAX_UH_DIFF)) && (U1 < (URH + MAX_UH_DIFF)))
+  if (((U1 + MAX_UH_DIFF) > URH ) && (U1 < (URH + MAX_UH_DIFF)))
   {
-    if ((U2 > (URH - MAX_UH_DIFF)) && (U2 < (URH + MAX_UH_DIFF)))
+    if (((U2 + MAX_UH_DIFF) > URH) && (U2 < (URH + MAX_UH_DIFF)))
     {
       Flag1 = 1;
     }

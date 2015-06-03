@@ -13,201 +13,215 @@
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
 
 //LCD-commands
-#define CMD_DISPLAY_OFF         0xAE
-#define CMD_DISPLAY_ON          0xAF
+	#define CMD_DISPLAY_OFF         0xAE
+	#define CMD_DISPLAY_ON          0xAF
 
-#define CMD_SET_DISP_START_LINE 0x40
-#define CMD_SET_PAGE            0xB0
+	#define CMD_SET_DISP_START_LINE 0x40
+	#define CMD_SET_PAGE            0xB0
 
-#define CMD_SET_COLUMN_UPPER    0x10
-#define CMD_SET_COLUMN_LOWER    0x00
+	#define CMD_SET_COLUMN_UPPER    0x10
+	#define CMD_SET_COLUMN_LOWER    0x00
 
-#define CMD_SET_ADC_NORMAL      0xA0
-#define CMD_SET_ADC_REVERSE     0xA1
+	#define CMD_SET_ADC_NORMAL      0xA0
+	#define CMD_SET_ADC_REVERSE     0xA1
 
-#define CMD_SET_DISP_NORMAL     0xA6
-#define CMD_SET_DISP_REVERSE    0xA7
+	#define CMD_SET_DISP_NORMAL     0xA6
+	#define CMD_SET_DISP_REVERSE    0xA7
 
-#define CMD_SET_ALLPTS_NORMAL   0xA4
-#define CMD_SET_ALLPTS_ON       0xA5
-#define CMD_SET_BIAS_9          0xA2 
-#define CMD_SET_BIAS_7          0xA3
+	#define CMD_SET_ALLPTS_NORMAL   0xA4
+	#define CMD_SET_ALLPTS_ON       0xA5
+	#define CMD_SET_BIAS_9          0xA2 
+	#define CMD_SET_BIAS_7          0xA3
 
-#define CMD_RMW                 0xE0
-#define CMD_RMW_CLEAR           0xEE
-#define CMD_INTERNAL_RESET      0xE2
-#define CMD_SET_COM_NORMAL      0xC0
-#define CMD_SET_COM_REVERSE     0xC8
-#define CMD_SET_POWER_CONTROL   0x28
-#define CMD_SET_RESISTOR_RATIO  0x20
-#define CMD_SET_VOLUME_FIRST    0x81
+	#define CMD_RMW                 0xE0
+	#define CMD_RMW_CLEAR           0xEE
+	#define CMD_INTERNAL_RESET      0xE2
+	#define CMD_SET_COM_NORMAL      0xC0
+	#define CMD_SET_COM_REVERSE     0xC8
+	#define CMD_SET_POWER_CONTROL   0x28
+	#define CMD_SET_RESISTOR_RATIO  0x20
+	#define CMD_SET_VOLUME_FIRST    0x81
  #if (LCD_ST_TYPE == 1306)
   #ifndef VOLUME_VALUE
- #define VOLUME_VALUE   60	/* second byte of CMD_SET_VOLUME == volume value */
+ 	#define VOLUME_VALUE   60	/* second byte of CMD_SET_VOLUME == volume value */
   #endif
- #define CMD_SET_MEMORY_ADDR_MODE 0x20
- #define CMD_SET_ChargePump	0x8D
- #define CMD_SET_MUX_RATIO	0xA8
- #define CMD_SET_DISPLAY_OFFSET	0xD3
- #define CMD_SET_DIVIDE_RATIO	0xD5
- #define CMD_SET_PreCharge_PERIOD 0xD9
- #define CMD_SET_COM_Pins_CONFIG 0xDA
- #define CMD_SET_Vcomh_DESELECT_LEVEL 0xDB
+ 	#define CMD_SET_MEMORY_ADDR_MODE 0x20
+ 	#define CMD_SET_ChargePump	0x8D
+ 	#define CMD_SET_MUX_RATIO	0xA8
+ 	#define CMD_SET_DISPLAY_OFFSET	0xD3
+ 	#define CMD_SET_DIVIDE_RATIO	0xD5
+ 	#define CMD_SET_PreCharge_PERIOD 0xD9
+ 	#define CMD_SET_COM_Pins_CONFIG 0xDA
+ 	#define CMD_SET_Vcomh_DESELECT_LEVEL 0xDB
  #else
   #ifndef VOLUME_VALUE
- #define VOLUME_VALUE   40	/* second byte of CMD_SET_VOLUME == volume value */
+ 	#define VOLUME_VALUE   40	/* second byte of CMD_SET_VOLUME == volume value */
   #endif
  #endif
-#define CMD_SET_STATIC_OFF      0xAC
-#define CMD_SET_STATIC_ON       0xAD
-#define CMD_SET_STATIC_REG      0x0
-#define CMD_SET_BOOSTER_FIRST   0xF8
-#define CMD_SET_BOOSTER_234     0
-#define CMD_SET_BOOSTER_5       1
-#define CMD_SET_BOOSTER_6       3
-#define CMD_NOP                 0xE3
-#define CMD_TEST                0xF0
+	#define CMD_SET_STATIC_OFF      0xAC
+	#define CMD_SET_STATIC_ON       0xAD
+	#define CMD_SET_STATIC_REG      0x0
+	#define CMD_SET_BOOSTER_FIRST   0xF8
+	#define CMD_SET_BOOSTER_234     0
+	#define CMD_SET_BOOSTER_5       1
+	#define CMD_SET_BOOSTER_6       3
+	#define CMD_NOP                 0xE3
+	#define CMD_TEST                0xF0
 
 //Makros for LCD
-#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
-#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
-#define lcd_shift_right() // ignored
-#define lcd_shift_left()  // ignored
+	#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
+	#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
+	#define lcd_shift_right() // ignored
+	#define lcd_shift_left()  // ignored
 
-#define LCDLoadCustomChar(addr) //load Custom-character (ignored)
-#define lcd_cursor_on()  // ignored
-#define lcd_cursor_off() // ignored
+	#define LCDLoadCustomChar(addr) //load Custom-character (ignored)
+	#define lcd_cursor_on()  // ignored
+	#define lcd_cursor_off() // ignored
 
 /* *********************************************************************************************************** */
 #elif (LCD_ST_TYPE == 7108) 	/* not (LCD_ST_TYPE == 7565 || 1306) */
-#define CMD_DISPLAY_OFF	0x3e
-#define CMD_DISPLAY_ON	0x3f
-#define CMD_SET_COLUMN_ADDR	0x40
-#define CMD_SET_PAGE		0xb8
-#define CMD_SET_START_LINE	0xC0		/* set the start line for ST7108, Z address */
+	#define CMD_DISPLAY_OFF	0x3e
+	#define CMD_DISPLAY_ON	0x3f
+	#define CMD_SET_COLUMN_ADDR	0x40
+	#define CMD_SET_PAGE		0xb8
+	#define CMD_SET_START_LINE	0xC0		/* set the start line for ST7108, Z address */
 
 //Makros for LCD
-#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
-#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
-#define lcd_cursor_on()  // ignored
-#define lcd_cursor_off() // ignored
+	#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
+	#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
+	#define lcd_cursor_on()  // ignored
+	#define lcd_cursor_off() // ignored
 
 /* *********************************************************************************************************** */
 #elif (LCD_ST_TYPE == 7920) 	/* not (LCD_ST_TYPE == 7565 || 1306 || == 7108) */
-#define lcd_write_init(data_length)            _lcd_hw_write(0x80, CMD_SetIFOptions | (data_length << 4))
-#define lcd_cursor_on()  // ignored
-#define lcd_cursor_off() // ignored
-#define CMD_CLEAR	0x01		/* clear display, basic Instruction */
-#define CMD_CGRAM_SELECT 0x02		/* SR=0, enable CGRAM address */
-#define CMD_SET_ENTRY_MODE 0x04		/* set cursor posistion and shift for read/write */
- #define MODE_RIGHT_MOVE 0x02
-#define CMD_DISPLAY_CONTROL	0x08	/* display control, basic Instruction */
- #define DISPLAY_ON 0x4
- #define CURSOR_ON 0x02
- #define BLINK_ON 0x01
-#define CMD_DISPLAY_ON	(CMD_DISPLAY_CONTROL | DISPLAY_ON)
-#define CMD_DISPLAY_OFF	CMD_DISPLAY_CONTROL
-#define CMD_CURSOR_DISPLAY_CONTROL 0x10
-#define CMD_SET_FUNCTION 0x20		/* basic + extended Instruction */
- #define MODE_8_BIT 0x10		/* Bit 4 is 8 bit mode */
- #define MODE_EXTENDED 0x04		/* Bit 2 is used for extended Intruction */
- #define GRAPHIC_DISPLAY_ON 0x02	/* Bit 1 is used for graphic display on, only extended Instruction */
-#define CMD_SET_GDRAM_ADDRESS 0x80	/* set graphic display RAM address ,extended Instruction */
+	#define lcd_write_init(data_length)            _lcd_hw_write(0x80, CMD_SetIFOptions | (data_length << 4))
+	#define lcd_cursor_on()  // ignored
+	#define lcd_cursor_off() // ignored
+	#define CMD_CLEAR	0x01		/* clear display, basic Instruction */
+	#define CMD_CGRAM_SELECT 0x02		/* SR=0, enable CGRAM address */
+	#define CMD_SET_ENTRY_MODE 0x04		/* set cursor posistion and shift for read/write */
+ 	#define MODE_RIGHT_MOVE 0x02
+	#define CMD_DISPLAY_CONTROL	0x08	/* display control, basic Instruction */
+ 	#define DISPLAY_ON 0x4
+ 	#define CURSOR_ON 0x02
+ 	#define BLINK_ON 0x01
+	#define CMD_DISPLAY_ON	(CMD_DISPLAY_CONTROL | DISPLAY_ON)
+	#define CMD_DISPLAY_OFF	CMD_DISPLAY_CONTROL
+	#define CMD_CURSOR_DISPLAY_CONTROL 0x10
+	#define CMD_SET_FUNCTION 0x20		/* basic + extended Instruction */
+ 	#define MODE_8_BIT 0x10		/* Bit 4 is 8 bit mode */
+ 	#define MODE_EXTENDED 0x04		/* Bit 2 is used for extended Intruction */
+ 	#define GRAPHIC_DISPLAY_ON 0x02	/* Bit 1 is used for graphic display on, only extended Instruction */
+	#define CMD_SET_GDRAM_ADDRESS 0x80	/* set graphic display RAM address ,extended Instruction */
 					/* 2x, first vertical address 5:0, second horizontal address 3:0 */
 					/* followed by pairs of horizontal data (16-bit) */
 //Makros for LCD
-#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
-#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
-#define lcd_cursor_on()  // ignored
-#define lcd_cursor_off() // ignored
+	#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
+	#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
+	#define lcd_cursor_on()  // ignored
+	#define lcd_cursor_off() // ignored
 
 /* *********************************************************************************************************** */
 #elif (LCD_ST_TYPE == 8812) 	/* not (LCD_ST_TYPE == 7565 || 1306 || 7108 || 7920)) */
  // support for PCF8812
-#undef SCREEN_WIDTH
-#define SCREEN_WIDTH  102
-#define CMD_SET_EXTENDED_INSTRUCTION 0x21	/* Function set with H */
-#define CMD_SET_NORMAL_INSTRUCTION 0x20	/* Function set  */
-#define ECMD_SET_HV_STAGES 0x08		/* set multiplication of HV-gen  (0 <= m <= 3) */
-#define ECMD_SET_TEMP_COEF 0x04		/* set temperature coefficient   (0 <= T <= 3) */
-#define ECMD_SET_BIAS 0x10		/* set bias system  (0 <= B <= 7) */
-#define ECMD_SET_CONTRAST 0x80		/* set Vop  value   (0 <= V <= 127) */
-#define CMD_SET_DISPLAY_INVERS  0x0D	/* D and E bit set */
-#define CMD_SET_DISPLAY_NORMAL  0x0C	/* D bit set */
-#define CMD_SET_DISPLAY_WHITE   0x09	/* E bit set */
-#define CMD_SET_DISPLAY_BLACK   0x80	/* no bit set */
-#define CMD_SET_PAGE		0x40		/* set Y address of RAM (0 <= Y <= 8) */
+	#undef SCREEN_WIDTH
+	#define SCREEN_WIDTH  102
+	#define CMD_SET_EXTENDED_INSTRUCTION 0x21	/* Function set with H */
+	#define CMD_SET_NORMAL_INSTRUCTION 0x20	/* Function set  */
+	#define ECMD_SET_HV_STAGES 0x08		/* set multiplication of HV-gen  (0 <= m <= 3) */
+	#define ECMD_SET_TEMP_COEF 0x04		/* set temperature coefficient   (0 <= T <= 3) */
+	#define ECMD_SET_BIAS 0x10		/* set bias system  (0 <= B <= 7) */
+	#define ECMD_SET_CONTRAST 0x80		/* set Vop  value   (0 <= V <= 127) */
+	#define CMD_SET_DISPLAY_INVERS  0x0D	/* D and E bit set */
+	#define CMD_SET_DISPLAY_NORMAL  0x0C	/* D bit set */
+	#define CMD_SET_DISPLAY_WHITE   0x09	/* E bit set */
+	#define CMD_SET_DISPLAY_BLACK   0x80	/* no bit set */
+	#define CMD_SET_PAGE		0x40		/* set Y address of RAM (0 <= Y <= 8) */
 
-#define CMD_SET_COLUMN		0x80		/* set X address of RAM (0 <= X < 102) */
+	#define CMD_SET_COLUMN		0x80		/* set X address of RAM (0 <= X < 102) */
 //Makros for LCD
-#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
-#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
-#define lcd_cursor_on()  // ignored
-#define lcd_cursor_off() // ignored
+	#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
+	#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
+	#define lcd_cursor_on()  // ignored
+	#define lcd_cursor_off() // ignored
 /* *********************************************************************************************************** */
 #elif (LCD_ST_TYPE == 8814) 	/* not ((LCD_ST_TYPE == 7565 || 1306 || 7108 || 7920 || 8812) */
  // support for PCF8814 , used for Nokia 1100
-#undef SCREEN_WIDTH
-#define SCREEN_WIDTH  96
-#define CMD_SET_VOP_UPPER 0x20		/* upper 3 bits of Vop */
-#define CMD_SET_VOP_LOWER 0x80		/* lower 5 bits of Vop */
-#define CMD_SET_ALLPTS_NORMAL   0xA4
-#define CMD_SET_POWER_CONTROL   0x28
-#define CMD_SET_COM_NORMAL      0xC0
-#define CMD_SET_COM_REVERSE     0xC8
-#define CMD_DISPLAY_OFF         0xAE
-#define CMD_DISPLAY_ON          0xAF
-#define CMD_SET_PAGE            0xB0
-#define CMD_SET_COLUMN_UPPER    0x10
-#define CMD_SET_COLUMN_LOWER    0x00
+	#undef SCREEN_WIDTH
+	#define SCREEN_WIDTH  96
+	#define CMD_SET_VOP_UPPER 0x20		/* upper 3 bits of Vop */
+	#define CMD_SET_VOP_LOWER 0x80		/* lower 5 bits of Vop */
+	#define CMD_SET_ALLPTS_NORMAL   0xA4
+	#define CMD_SET_POWER_CONTROL   0x28
+	#define CMD_SET_COM_NORMAL      0xC0
+	#define CMD_SET_COM_REVERSE     0xC8
+	#define CMD_DISPLAY_OFF         0xAE
+	#define CMD_DISPLAY_ON          0xAF
+	#define CMD_SET_PAGE            0xB0
+	#define CMD_SET_COLUMN_UPPER    0x10
+	#define CMD_SET_COLUMN_LOWER    0x00
 //Makros for LCD
-#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
-#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
-#define lcd_cursor_on()  // ignored
-#define lcd_cursor_off() // ignored
+	#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
+	#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
+	#define lcd_cursor_on()  // ignored
+	#define lcd_cursor_off() // ignored
+/* *********************************************************************************************************** */
+#elif (LCD_ST_TYPE == 7735)
+	#undef SCREEN_HEIGHT
+        #define SCREEN_HEIGHT 160
+//	#undef SCREEN_WIDTH
+//	#define SCREEN_WIDTH 128
+ 	#define CMD_CASET  0x2b
+ 	#define CMD_RASET  0x2c
+ 	#define CMD_RAMWR  0x2d
+//Makros for LCD
+	#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd);
+	#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
+	#define lcd_cursor_on()  // ignored
+	#define lcd_cursor_off() // ignored
 /* *********************************************************************************************************** */
 #else /* not ((LCD_ST_TYPE == 7565 || 1306 || 7920 || 7108 || 8812 || 8814) */
 /* must be a character display! */
-#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd); wait50us();
-#define lcd_write_data(data)                   _lcd_hw_write(0x01, data); wait50us();
-#define lcd_write_init(data_length)            _lcd_hw_write(0x80, CMD_SetIFOptions | (data_length << 4))
+	#define lcd_write_cmd(cmd)                     _lcd_hw_write(0x00, cmd); wait50us();
+	#define lcd_write_data(data)                   _lcd_hw_write(0x01, data); wait50us();
+	#define lcd_write_init(data_length)            _lcd_hw_write(0x80, CMD_SetIFOptions | (data_length << 4))
 
  #ifndef VOLUME_VALUE
-#define VOLUME_VALUE   36	/* volume value , default contrast */
+	#define VOLUME_VALUE   36	/* volume value , default contrast */
  #endif
 
 
 //LCD-commands
-#define CLEAR_DISPLAY 0x01
-#define CMD_SetEntryMode         0x04
-#define CMD_SetDisplayAndCursor  0x08
-#define CMD_SetIFOptions         0x20
-#define CMD_SetCGRAMAddress      0x40    // for Custom character
-#define CMD_SetDDRAMAddress      0x80    // set Cursor 
-#define CMD1_SetBias             0x10	// set Bias (instruction table 1, DOGM)
-#define CMD1_PowerControl        0x50	// Power Control, set Contrast C5:C4 (instruction table 1, DOGM)
-#define CMD1_FollowerControl     0x60	// Follower Control, amplified ratio (instruction table 1, DOGM)
-#define CMD1_SetContrast         0x70	// set Contrast C3:C0 (instruction table 1, DOGM)
-#define CMD_DISPLAY_OFF          0x08
-#define CMD_DISPLAY_ON           0x0c
+	#define CLEAR_DISPLAY 0x01
+	#define CMD_SetEntryMode         0x04
+	#define CMD_SetDisplayAndCursor  0x08
+	#define CMD_SetIFOptions         0x20
+	#define CMD_SetCGRAMAddress      0x40    // for Custom character
+	#define CMD_SetDDRAMAddress      0x80    // set Cursor 
+	#define CMD1_SetBias             0x10	// set Bias (instruction table 1, DOGM)
+	#define CMD1_PowerControl        0x50	// Power Control, set Contrast C5:C4 (instruction table 1, DOGM)
+	#define CMD1_FollowerControl     0x60	// Follower Control, amplified ratio (instruction table 1, DOGM)
+	#define CMD1_SetContrast         0x70	// set Contrast C3:C0 (instruction table 1, DOGM)
+	#define CMD_DISPLAY_OFF          0x08
+	#define CMD_DISPLAY_ON           0x0c
 
 //Makros for LCD
-#define lcd_shift_right() lcd_command(0x1c)
-#define lcd_shift_left() lcd_command(0x18)
+	#define lcd_shift_right() lcd_command(0x1c)
+	#define lcd_shift_left() lcd_command(0x18)
 
-#define LCDLoadCustomChar(addr) lcd_command(CMD_SetCGRAMAddress | (addr<<3))	//load Custom-character
-#define lcd_cursor_on()  lcd_command(CMD_SetDisplayAndCursor | 0x06)
-#define lcd_cursor_off() lcd_command(CMD_SetDisplayAndCursor | 0x04)
+	#define LCDLoadCustomChar(addr) lcd_command(CMD_SetCGRAMAddress | (addr<<3))	//load Custom-character
+	#define lcd_cursor_on()  lcd_command(CMD_SetDisplayAndCursor | 0x06)
+	#define lcd_cursor_off() lcd_command(CMD_SetDisplayAndCursor | 0x04)
 
 #endif
 
 //defines for the cyrillic character set
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814))
- #define GR_OFFSET1 0x20	/* shift 0xa0 to 0x80, direct behind ASCII table, to save place in font table */
- #define GR_OFFSET2 0xd0	/* shift 0xe0 to 0x10, before the ASCII table */  
+ 	#define GR_OFFSET1 0x20	/* shift 0xa0 to 0x80, direct behind ASCII table, to save place in font table */
+ 	#define GR_OFFSET2 0xd0	/* shift 0xe0 to 0x10, before the ASCII table */  
 #else
- #define GR_OFFSET1 0
- #define GR_OFFSET2 0
+ 	#define GR_OFFSET1 0
+ 	#define GR_OFFSET2 0
 #endif
 
 #define Cyr_B	(0xa0 - GR_OFFSET1)

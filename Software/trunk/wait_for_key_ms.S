@@ -5,6 +5,10 @@
 #include <stdlib.h>
 #include "config.h"
 #include "lcd_defines.h"
+#ifdef WITH_ROTARY_SWITCH
+ #warning Please use the C-version of this program, if you use the Rotary Switch!
+ #error Modify your Makefile!
+#endif
 
 #define RCALL rcall
 

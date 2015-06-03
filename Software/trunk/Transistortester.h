@@ -1327,7 +1327,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   extern const unsigned char PinADCtab[];
 #endif /* if defined (MAIN_C) */
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7108))
+#ifdef WITH_GRAPHICS
  #include "bitmaps.h"
 #endif
 
@@ -1353,6 +1353,24 @@ extern const unsigned char RDS_str[];
   #define RLMETER_len 3
  #endif
 extern const unsigned char CMETER_13_str[];
+#endif
+
+extern const unsigned char CapIcon[] MEM_TEXT;	// Capacitor Icon
+extern const unsigned char DiodeIcon1[] MEM_TEXT;	// Diode-Icon Anode left
+
+extern const unsigned char DiodeIcon2[] MEM_TEXT;	// Diode-Icon Anode right
+extern const unsigned char ResIcon1[] MEM_TEXT;	// Resistor Icon1
+extern const unsigned char ResIcon2[] MEM_TEXT;	// Resistor Icon2
+#if LCD_CHAR_RESIS3 !=  'R'
+extern const unsigned char ResIcon3[] MEM_TEXT;	// Resistor Icon2
+#endif
+
+//generate Omega- and µ-character as Custom-character, if these characters has a number of loadable type
+#if LCD_CHAR_OMEGA < 8
+extern const unsigned char CyrillicOmegaIcon[] MEM_TEXT;	//Omega
+#endif
+#if LCD_CHAR_U < 8
+extern const unsigned char CyrillicMuIcon[] MEM_TEXT;	//µ
 #endif
 
 

@@ -34,6 +34,11 @@
 #define set_b0_high      sbi       _SFR_IO_ADDR(HW_LCD_B0_PORT), HW_LCD_B0_PIN
 #define set_b0_output          sbi             (_SFR_IO_ADDR(HW_LCD_B0_PORT) - 1), HW_LCD_B0_PIN
 #define set_b0_input           cbi             (_SFR_IO_ADDR(HW_LCD_B0_PORT) - 1), HW_LCD_B0_PIN
+; for ST7565 controller: Chip Enable 
+#define set_ce_low       cbi       _SFR_IO_ADDR(HW_LCD_CE_PORT), HW_LCD_CE_PIN
+#define set_ce_high      sbi       _SFR_IO_ADDR(HW_LCD_CE_PORT), HW_LCD_CE_PIN
+#define set_ce_output          sbi             (_SFR_IO_ADDR(HW_LCD_CE_PORT) - 1), HW_LCD_CE_PIN
+#define set_ce_input           cbi             (_SFR_IO_ADDR(HW_LCD_CE_PORT) - 1), HW_LCD_CE_PIN
 
 #define set_b4_low             cbi             _SFR_IO_ADDR(HW_LCD_B4_PORT), HW_LCD_B4_PIN
 #define set_b4_high            sbi             _SFR_IO_ADDR(HW_LCD_B4_PORT), HW_LCD_B4_PIN
@@ -109,6 +114,8 @@ _lcd_hw_write:
   #ifdef PULLUP_DISABLE
 	AOUT	MCUCR, r1		; MCUCR = 0;	//enable pull up resistors
   #endif
+	set_ce_low
+	set_ce_output		// enable chip
 	; Set RS (0=Cmd, 1=Char)	
   #if (LCD_INTERFACE_MODE == MODE_3LINE)
 	sbrc    preg_1, 0
@@ -171,12 +178,16 @@ fini_rs:
 	set_rs_input		// SCE to  high
 	set_rs_high		// enable pullup
   #endif
+	set_ce_input
+        set_ce_high		// disable chip
 
   #ifdef PULLUP_DISABLE
 	ldi	r25, (1<<PUD)		;
 	AOUT	MCUCR, r25		; MCUCR = (1<<PUD);	//disable pull up resistors
   #endif
-	ret
+	set_en_low
+	set_en_output		// en/CLK to GND
+	ret		// return _lcd_hw_write
 
 // sub-function shift_out: send 1, if carry is set, send 0, if carry is reset
 shift_out:
@@ -197,6 +208,8 @@ fini_bit:
  #else /* no LCD_SPI_OPEN_COL */
   #ifdef FAST_SPI_OUTPUT
                ; Set RS (0=Cmd, 1=Char)
+	set_ce_low
+	set_ce_output		// enable chip
    #if (LCD_INTERFACE_MODE == MODE_3LINE)
                set_en_low
                sbrc    preg_1, 0
@@ -281,9 +294,13 @@ fini_bit:
    #if (LCD_INTERFACE_MODE == MODE_3LINE)
                set_rs_high		; SCE to VCC
    #endif
-	ret
+        set_ce_high		// disable chip
+	set_en_low
+	ret		// return _lcd_hw_write
   #else /* no FAST_SPI_OUTPUT */
                ; Set RS (0=Cmd, 1=Char)
+        set_ce_low		// enable chip
+	set_ce_output
    #if (LCD_INTERFACE_MODE == MODE_3LINE)
                set_en_low
                set_rs_low
@@ -330,7 +347,9 @@ fini_bit:
    #if (LCD_INTERFACE_MODE == MODE_3LINE)
         set_rs_high		; SCE to VCC
    #endif
-	ret
+        set_ce_high		// disable chip
+	set_en_low
+	ret		// return _lcd_hw_write
 
 shift_out2:
 	set_en_low;
@@ -418,7 +437,7 @@ _lcd_hw_write:
 				; the lower 4-bit are followed by 4 x 0
 	RCALL	wait50us
 	RCALL	wait30us	; at least 72 us delay
-	ret
+	ret		// return _lcd_hw_write
 	.endfunc
 
 /* output 4 times the same bit */
@@ -460,7 +479,7 @@ _lcd_hw_write:
 	rcall	WAIT_I2C
 	release_sda		; pullup move the sda signal to high, STOP
 	rcall	WAIT_I2C
-	ret
+	ret		// return _lcd_hw_write
 ;
 ;===================================================
 i2c_send:

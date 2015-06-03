@@ -104,7 +104,7 @@ WITH_LCD_ST7565 = 8812
 # of the ATmega are used. For the RESET signal a external pull-up resistor is required, if the
 # option PULLUP_DISABLE is set. For the other signals the internal pullup resistors of the ATmega
 # are temporary used, even if option PULLUP_DISABLE is set.
-CFLAGS += -DLCD_SPI_OPEN_COL
+#CFLAGS += -DLCD_SPI_OPEN_COL
 
 # The I2C Address can be preset to a address of 0x3d instead of 0x3c by setting the constant LCD_I2C_ADDR.
 #CFLAGS += -DLCD_I2C_ADDR=0x3d
@@ -112,19 +112,19 @@ CFLAGS += -DLCD_SPI_OPEN_COL
 # If LCD_ST7565 option is used: Set the resitor ratio for the internal
 # voltage regulator. Supported value range: 0..7.
 # Good values are e.g. 4 or 7. If unsure just have a try.
-LCD_ST7565_RESISTOR_RATIO = 4
+LCD_ST7565_RESISTOR_RATIO = 6
 
 # If LCD_ST7565 option is set to 1: Flip the display's horizontal direction.
-CFLAGS += -DLCD_ST7565_H_FLIP=1
+#CFLAGS += -DLCD_ST7565_H_FLIP=1
 # With LCD_ST7565_H_OFFSET you can specify a horizontal pixel offset to the display window.
 # The controller knows 132 horizontal pixel, the window shows only 128 pixel.
 # OFFSET values can vary for the connected display type to 0, 2 or 4.
-CFLAGS += -DLCD_ST7565_H_OFFSET=4
+#CFLAGS += -DLCD_ST7565_H_OFFSET=4
 # If LCD_ST7565 option is set to 1: Flip the display's vertical direction
-CFLAGS += -DLCD_ST7565_V_FLIP=1
+#CFLAGS += -DLCD_ST7565_V_FLIP=1
 # The contrast value can be predefined with the constant VOLUME_VALUE
 # for ST7565 controller the value can be between 0 and 63, for the SSD1306 0 to 255 can be selected.
-CFLAGS += -DVOLUME_VALUE=28
+CFLAGS += -DVOLUME_VALUE=78
 
 # You can specify a Y start line (vertical address) for the display output with the option LCD_ST7565_Y_START.
 # If your output start in the middle of the display, you can specify a Y_START of 32

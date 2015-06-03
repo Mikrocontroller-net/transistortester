@@ -3,10 +3,10 @@
        Automatic Configuration
 */
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7735))
 /* Define under which conditions a graphical display is supported. */
 /* The graphical display should at least support 128x64 pixels. */
- #define WITH_GRAPHICS
+ #define WITH_GRAPHICS 1
  #define PAGES_PER_LINE ((FONT_HEIGHT + 7) / 8)
  #define LCD_LINES ((SCREEN_HEIGHT/8) / PAGES_PER_LINE)
  #undef LCD_LINE_LENGTH

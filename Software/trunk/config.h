@@ -3,9 +3,15 @@
         Configuration
 */
 #ifndef ADC_PORT
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735))
+  #define LCD_GRAPHIC_TYPE 1
+#elif (LCD_ST_TYPE == 7920)
+  #define LCD_GRAPHIC_TYPE 2
+#else
+  #define LCD_GRAPHIC_TYPE 0
+#endif
 #include "part_defs.h"
 #include "lcd_defines.h"
-#include "font.h"
 //#define DebugOut 3		// if set, output of voltages of resistor measurements in row 2,3,4
 //#define DebugOut 4		// if set, output of voltages of Diode measurement in row 3+4
 //#define DebugOut 5		// if set, output of Transistor checks in row 2+3
@@ -382,6 +388,7 @@
  // SPI-mode is used for the 128x64 pixel graphics LCD with ST7565 controller
  // LCD-P/S = low, LCD-CS1 = low, LCD-CS2 = high
  // LCD_B0_xxx=SI, LCD_EN_xxx=SCL, LCD_RS_xxx=A0, LCD_RES_xxx=RST, (CS-GND)
+  /* additional Chip Enable CE is defined */
 				/* --------------------------------------------- */
  #if PROCESSOR_TYP == 644	/* mega324/644/1284 with SPI */
   // currently no difference between normal and strip grid board
@@ -404,6 +411,11 @@
    #define HW_LCD_B0_DDR          DDRB
    #define HW_LCD_B0_PORT         PORTB
    #define HW_LCD_B0_PIN          7
+
+   /* Chip Enable input */
+   #define HW_LCD_CE_DDR          DDRB
+   #define HW_LCD_CE_PORT         PORTB
+   #define HW_LCD_CE_PIN          3
 				/* --------------------------------------------- */
  #elif PROCESSOR_TYP == 1280	/* mega1280/2560 with SPI */
   #ifdef STRIP_GRID_BOARD
@@ -426,6 +438,11 @@
    #define HW_LCD_B0_DDR          DDRA
    #define HW_LCD_B0_PORT         PORTA
    #define HW_LCD_B0_PIN          1
+
+   /* Chip Enable input */
+   #define HW_LCD_CE_DDR          DDRA
+   #define HW_LCD_CE_PORT         PORTA
+   #define HW_LCD_CE_PIN          5
   #else		/* no STRIP_GRID_BOARD */
    /* the ST7565 Reset signal */
    #define HW_LCD_RES_DDR         DDRA
@@ -446,10 +463,16 @@
    #define HW_LCD_B0_DDR          DDRA
    #define HW_LCD_B0_PORT         PORTA
    #define HW_LCD_B0_PIN          3
+
+   /* Chip Enable input */
+   #define HW_LCD_CE_DDR          DDRA
+   #define HW_LCD_CE_PORT         PORTA
+   #define HW_LCD_CE_PIN          4
   #endif
 				/* --------------------------------------------- */
  #else				/* mega8/168/328 with SPI  */
   /* The SPI interface uses four signals  RES, EN, RS and B0 */
+  /* additional Chip Enable CE is defined */
   #ifdef STRIP_GRID_BOARD
    #if STRIP_GRID_BOARD == 5
    // alternative connection of graphical LCD for the chinese T5 board
@@ -472,6 +495,11 @@
    #define HW_LCD_B0_DDR          DDRD
    #define HW_LCD_B0_PORT         PORTD
    #define HW_LCD_B0_PIN          4
+
+   /* Chip Enable input */
+   #define HW_LCD_CE_DDR          DDRD
+   #define HW_LCD_CE_PORT         PORTD
+   #define HW_LCD_CE_PIN          5
    #else
    // alternative connection of graphical LCD 
    /* the Reset Pin, 0 = Reset */
@@ -493,6 +521,11 @@
    #define HW_LCD_B0_DDR          DDRD
    #define HW_LCD_B0_PORT         PORTD
    #define HW_LCD_B0_PIN          1
+
+   /* Chip Enable input */
+   #define HW_LCD_CE_DDR          DDRD
+   #define HW_LCD_CE_PORT         PORTD
+   #define HW_LCD_CE_PIN          5
    #endif
   #else		/* no STRIP_GRID_BOARD */
    // the default connection of LCD for chinese version from Fish8840, weiweitm
@@ -515,6 +548,11 @@
    #define HW_LCD_B0_DDR          DDRD
    #define HW_LCD_B0_PORT         PORTD
    #define HW_LCD_B0_PIN          3
+
+   /* Chip Enable input */
+   #define HW_LCD_CE_DDR          DDRD
+   #define HW_LCD_CE_PORT         PORTD
+   #define HW_LCD_CE_PIN          5
   #endif
  #endif	/* PROCESSOR_TYP for SPI Interface*/
  
@@ -907,5 +945,6 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 End of configuration 
 */
 // #undef WITH_VEXT   /* disable the external voltage measurement */
+#include "font.h"
 #include "autoconf.h"
 #endif /* not defined ADC_PORT */

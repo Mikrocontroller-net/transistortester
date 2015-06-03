@@ -1,8 +1,9 @@
-#include "Transistortester.h"
-#include "bitmaps.h"
+// file lcd-draw.c
 
+#include "Transistortester.h"
 
 #ifdef WITH_GRAPHICS
+//#include "bitmaps.h"
 extern const unsigned char bmp_one_data[] PROGMEM;
 extern const unsigned char bmp_two_data[] PROGMEM;
 extern const unsigned char bmp_three_data[] PROGMEM;
@@ -134,7 +135,7 @@ void ShowIcons(void) {
  lcd_data('D');
  lcd_MEM_string(mosfet_str);
  wait_for_key_ms(ShowTime);
-#if (ICON_ELEMENTS == 14)
+ #if (ICON_ELEMENTS == 14)
  lcd_clear();
  lcd_big_icon(TRIAC|LCD_UPPER_LEFT);
  lcd_big_icon(THYRISTOR|LCD_UPPER_RIGHT);
@@ -153,7 +154,7 @@ void ShowIcons(void) {
  lcd_big_icon(DIODES_A_C_C_A|LCD_LOWER_LEFT);
  lcd_big_icon(DIODES_C_A_A_C|LCD_LOWER_RIGHT);
  wait_for_key_ms(ShowTime);
-#endif
+ #endif
 
  
  lcd_clear();
@@ -184,7 +185,7 @@ void ShowIcons(void) {
  wait_for_key_ms(ShowTime);
 
  lcd_clear();
-#ifdef LCD_CYRILLIC
+ #ifdef LCD_CYRILLIC
  for (cc=0;cc<((Cyr_ja+1-Cyr_B)+(Cyr_schtsch+1-Cyr_D));cc++) {
    if ((cc%16) == 0) {
      // begin new line
@@ -200,7 +201,7 @@ void ShowIcons(void) {
  wait_for_key_ms(ShowTime);
 
  lcd_clear();
-#endif
+ #endif
 
 }
 #endif

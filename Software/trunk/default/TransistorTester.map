@@ -233,7 +233,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x0000000000000000     0x3f68
+.text           0x0000000000000000     0x3f6c
  *(.vectors)
  .vectors       0x0000000000000000       0x68 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/crtm168.o
                 0x0000000000000000                __vectors
@@ -322,7 +322,7 @@ END GROUP
                 0x0000000000000136                __vector_20
  .text          0x0000000000000138       0x5c lcd_hw_4_bit.o
                 0x0000000000000138                _lcd_hw_write
- .text          0x0000000000000194      0x1e0 lcd-routines.o
+ .text          0x0000000000000194      0x21c lcd-routines.o
                 0x0000000000000194                lcd_save_position
                 0x00000000000001a6                lcd_data
                 0x00000000000001ae                lcd_testpin
@@ -339,338 +339,338 @@ END GROUP
                 0x000000000000024e                lcd_next_line_wait
                 0x0000000000000252                lcd_restore_position
                 0x000000000000025c                lcd_clear
-                0x000000000000026c                lcd_init
-                0x00000000000002b6                lcd_string
-                0x00000000000002cc                lcd_pgm_string
-                0x00000000000002e8                lcd_fix_string
-                0x0000000000000306                lcd_fix_customchar
-                0x0000000000000332                lcd_clear_line
-                0x0000000000000336                lcd_clear_line1
-                0x000000000000033c                lcd_clear_line2
-                0x0000000000000342                lcd_set_pixels
-                0x0000000000000344                lcd_show_Cg
- .text          0x0000000000000374       0x24 i2lcd.o
-                0x0000000000000374                i2lcd
-                0x000000000000038a                u2lcd
- .text          0x0000000000000398       0x62 PinLayout.o
-                0x0000000000000398                PinLayout
-                0x00000000000003e6                Rnum2pins
- .text          0x00000000000003fa       0x4e RvalOut.o
-                0x00000000000003fa                RvalOut
- .text          0x0000000000000448       0x8e UfAusgabe.o
-                0x0000000000000448                mVAusgabe
-                0x0000000000000464                UfAusgabe
-                0x0000000000000490                SerienDiodenAusgabe
- .text          0x00000000000004d6      0x13e DisplayValue.o
-                0x00000000000004d6                DisplayValue
-                0x0000000000000600                Display_mV
- .text          0x0000000000000614        0x2 swuart.o
-                0x0000000000000614                uart_putc
- .text          0x0000000000000616       0x4a wait1000ms.o
-                0x0000000000000616                wait5s
-                0x0000000000000618                wait4s
-                0x000000000000061a                wait3s
-                0x000000000000061c                wait2s
-                0x000000000000061e                wait1000ms
-                0x000000000000061e                wait1s
-                0x0000000000000620                wait500ms
-                0x0000000000000622                wait400ms
-                0x0000000000000624                wait300ms
-                0x0000000000000626                wait200ms
-                0x0000000000000628                wait100ms
-                0x000000000000062c                wait50ms
-                0x000000000000062e                wait40ms
-                0x0000000000000630                wait30ms
-                0x0000000000000632                wait20ms
-                0x0000000000000634                wait10ms
-                0x0000000000000636                wait5ms
-                0x0000000000000638                wait4ms
-                0x000000000000063a                wait3ms
-                0x000000000000063c                wait2ms
-                0x000000000000063e                wait1ms
-                0x0000000000000640                wait500us
-                0x0000000000000642                wait400us
-                0x0000000000000644                wait300us
-                0x0000000000000646                wait200us
-                0x0000000000000648                wait100us
-                0x000000000000064a                wait50us
-                0x000000000000064c                wait40us
-                0x000000000000064e                wait30us
-                0x0000000000000650                wait20us
-                0x0000000000000652                wait10us
-                0x0000000000000654                wait5us
-                0x0000000000000656                wait4us
-                0x0000000000000658                wait3us
-                0x000000000000065a                wait2us
-                0x000000000000065c                wait1us
- .text          0x0000000000000660       0x54 sleep_5ms.o
-                0x0000000000000660                sleep_5ms
- .text          0x00000000000006b4       0xd4 ReadADC.o
-                0x00000000000006b4                W20msReadADC
-                0x00000000000006bc                W10msReadADC
-                0x00000000000006c4                W5msReadADC
-                0x00000000000006cc                ReadADC
- .text          0x0000000000000788       0xb4 wait_for_key_ms.o
-                0x0000000000000788                wait_for_key_ms
-                0x00000000000007f6                wait_for_key_5s_line2
- .text          0x000000000000083c       0xb0 RefVoltage.o
-                0x000000000000083c                RefVoltage
- .text          0x00000000000008ec       0x3e get_log.o
-                0x00000000000008ec                get_log
- .text          0x000000000000092a      0x61c main.o
-                0x000000000000092a                __vector_7
-                0x000000000000092c                __vector_21
-                0x000000000000092e                init_parts
-                0x000000000000097a                ShortedProbes
-                0x00000000000009f2                AllProbesShorted
-                0x0000000000000a10                AutoCheck
-                0x0000000000000e88                mark_as_uncalibrated
-                0x0000000000000eac                GetIr
- .text          0x0000000000000f46       0x7e Battery_check.o
-                0x0000000000000f46                Battery_check
- .text          0x0000000000000fc4      0xb9a CheckPins.o
-                0x0000000000000fc4                CheckPins
- .text          0x0000000000001b5e      0x3d0 GetResistance.o
-                0x0000000000001b5e                GetResistance
- .text          0x0000000000001f2e       0x30 ChargePin10ms.o
-                0x0000000000001f2e                ChargePin10ms
- .text          0x0000000000001f5e       0xfe EntladePins.o
-                0x0000000000001f5e                EntladePins
- .text          0x000000000000205c      0x654 ReadCapacity.o
-                0x000000000000205c                Scale_C_with_vcc
-                0x00000000000020dc                ReadCapacity
-                0x0000000000002620                __vector_13
-                0x000000000000266c                __vector_10
- .text          0x00000000000026b0       0x7e GetRLmultip.o
-                0x00000000000026b0                GetRLmultip
- .text          0x000000000000272e      0x18e Calibrate_UR.o
-                0x000000000000272e                Calibrate_UR
- .text          0x00000000000028bc      0x45a ReadInductance.o
-                0x00000000000028bc                ReadInductance
- .text          0x0000000000002d16      0x3aa GetESR.o
-                0x0000000000002d16                GetESR
- .text          0x00000000000030c0      0x14e GetVloss.o
-                0x00000000000030c0                GetVloss
- .text          0x000000000000320e        0x0 GetFrequency.o
- .text          0x000000000000320e        0x0 function_menu.o
- .text          0x000000000000320e        0x0 message_key_released.o
- .text          0x000000000000320e        0x0 ReadBigCap.o
- .text          0x000000000000320e        0x0 CheckRotaryEncoder.o
- .text          0x000000000000320e        0x0 CalibrationCap.o
- .text          0x000000000000320e        0x0 ShowData.o
- .text          0x000000000000320e       0x1a show_Resis_Cap.o
-                0x000000000000320e                Bat_update
- .text          0x0000000000003228        0x2 EE_check_init.o
-                0x0000000000003228                EE_check_init
- .text          0x000000000000322a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
- .text          0x000000000000322a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
- .text          0x000000000000322a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_muluhisi3.o)
- .text          0x000000000000322a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_mulsi3.o)
- .text          0x000000000000322a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodhi4.o)
- .text          0x000000000000322a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodsi4.o)
- .text          0x000000000000322a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_divmodsi4.o)
- .text          0x000000000000322a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_negsi2.o)
- .text          0x000000000000322a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_prologue.o)
- .text          0x000000000000322a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_epilogue.o)
- .text          0x000000000000322a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
- .text          0x000000000000322a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_clear_bss.o)
- .text          0x000000000000322a        0x0 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(utoa.o)
- .text          0x000000000000322a        0x0 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(eerd_byte_atmega168.o)
- .text          0x000000000000322a        0x0 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(eewr_byte_atmega168.o)
- .text          0x000000000000322a        0x0 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(eewr_word_atmega168.o)
- .text          0x000000000000322a        0x0 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(strrev.o)
-                0x000000000000322a                . = ALIGN (0x2)
+                0x000000000000026c                lcd_string
+                0x0000000000000282                lcd_pgm_string
+                0x000000000000029e                lcd_fix_string
+                0x00000000000002bc                lcd_fix_customchar
+                0x00000000000002e8                lcd_init
+                0x000000000000036e                lcd_clear_line
+                0x0000000000000372                lcd_clear_line1
+                0x0000000000000378                lcd_clear_line2
+                0x000000000000037e                lcd_set_pixels
+                0x0000000000000380                lcd_show_Cg
+ .text          0x00000000000003b0       0x24 i2lcd.o
+                0x00000000000003b0                i2lcd
+                0x00000000000003c6                u2lcd
+ .text          0x00000000000003d4       0x62 PinLayout.o
+                0x00000000000003d4                PinLayout
+                0x0000000000000422                Rnum2pins
+ .text          0x0000000000000436       0x4e RvalOut.o
+                0x0000000000000436                RvalOut
+ .text          0x0000000000000484       0x8e UfAusgabe.o
+                0x0000000000000484                mVAusgabe
+                0x00000000000004a0                UfAusgabe
+                0x00000000000004cc                SerienDiodenAusgabe
+ .text          0x0000000000000512      0x13e DisplayValue.o
+                0x0000000000000512                DisplayValue
+                0x000000000000063c                Display_mV
+ .text          0x0000000000000650        0x2 swuart.o
+                0x0000000000000650                uart_putc
+ .text          0x0000000000000652       0x4a wait1000ms.o
+                0x0000000000000652                wait5s
+                0x0000000000000654                wait4s
+                0x0000000000000656                wait3s
+                0x0000000000000658                wait2s
+                0x000000000000065a                wait1000ms
+                0x000000000000065a                wait1s
+                0x000000000000065c                wait500ms
+                0x000000000000065e                wait400ms
+                0x0000000000000660                wait300ms
+                0x0000000000000662                wait200ms
+                0x0000000000000664                wait100ms
+                0x0000000000000668                wait50ms
+                0x000000000000066a                wait40ms
+                0x000000000000066c                wait30ms
+                0x000000000000066e                wait20ms
+                0x0000000000000670                wait10ms
+                0x0000000000000672                wait5ms
+                0x0000000000000674                wait4ms
+                0x0000000000000676                wait3ms
+                0x0000000000000678                wait2ms
+                0x000000000000067a                wait1ms
+                0x000000000000067c                wait500us
+                0x000000000000067e                wait400us
+                0x0000000000000680                wait300us
+                0x0000000000000682                wait200us
+                0x0000000000000684                wait100us
+                0x0000000000000686                wait50us
+                0x0000000000000688                wait40us
+                0x000000000000068a                wait30us
+                0x000000000000068c                wait20us
+                0x000000000000068e                wait10us
+                0x0000000000000690                wait5us
+                0x0000000000000692                wait4us
+                0x0000000000000694                wait3us
+                0x0000000000000696                wait2us
+                0x0000000000000698                wait1us
+ .text          0x000000000000069c       0x54 sleep_5ms.o
+                0x000000000000069c                sleep_5ms
+ .text          0x00000000000006f0       0xd4 ReadADC.o
+                0x00000000000006f0                W20msReadADC
+                0x00000000000006f8                W10msReadADC
+                0x0000000000000700                W5msReadADC
+                0x0000000000000708                ReadADC
+ .text          0x00000000000007c4       0xb4 wait_for_key_ms.o
+                0x00000000000007c4                wait_for_key_ms
+                0x0000000000000832                wait_for_key_5s_line2
+ .text          0x0000000000000878       0xb0 RefVoltage.o
+                0x0000000000000878                RefVoltage
+ .text          0x0000000000000928       0x3e get_log.o
+                0x0000000000000928                get_log
+ .text          0x0000000000000966      0x628 main.o
+                0x0000000000000966                __vector_7
+                0x0000000000000968                __vector_21
+                0x000000000000096a                init_parts
+                0x00000000000009b6                ShortedProbes
+                0x0000000000000a3a                AllProbesShorted
+                0x0000000000000a58                AutoCheck
+                0x0000000000000ed0                mark_as_uncalibrated
+                0x0000000000000ef4                GetIr
+ .text          0x0000000000000f8e       0x7e Battery_check.o
+                0x0000000000000f8e                Battery_check
+ .text          0x000000000000100c      0xb9c CheckPins.o
+                0x000000000000100c                CheckPins
+ .text          0x0000000000001ba8      0x3d0 GetResistance.o
+                0x0000000000001ba8                GetResistance
+ .text          0x0000000000001f78       0x30 ChargePin10ms.o
+                0x0000000000001f78                ChargePin10ms
+ .text          0x0000000000001fa8       0xfe EntladePins.o
+                0x0000000000001fa8                EntladePins
+ .text          0x00000000000020a6      0x654 ReadCapacity.o
+                0x00000000000020a6                Scale_C_with_vcc
+                0x0000000000002126                ReadCapacity
+                0x000000000000266a                __vector_13
+                0x00000000000026b6                __vector_10
+ .text          0x00000000000026fa       0x7e GetRLmultip.o
+                0x00000000000026fa                GetRLmultip
+ .text          0x0000000000002778      0x18e Calibrate_UR.o
+                0x0000000000002778                Calibrate_UR
+ .text          0x0000000000002906      0x45a ReadInductance.o
+                0x0000000000002906                ReadInductance
+ .text          0x0000000000002d60      0x3aa GetESR.o
+                0x0000000000002d60                GetESR
+ .text          0x000000000000310a      0x14e GetVloss.o
+                0x000000000000310a                GetVloss
+ .text          0x0000000000003258        0x0 GetFrequency.o
+ .text          0x0000000000003258        0x0 function_menu.o
+ .text          0x0000000000003258        0x0 message_key_released.o
+ .text          0x0000000000003258        0x0 ReadBigCap.o
+ .text          0x0000000000003258        0x0 CheckRotaryEncoder.o
+ .text          0x0000000000003258        0x0 CalibrationCap.o
+ .text          0x0000000000003258        0x0 ShowData.o
+ .text          0x0000000000003258       0x1a show_Resis_Cap.o
+                0x0000000000003258                Bat_update
+ .text          0x0000000000003272        0x2 EE_check_init.o
+                0x0000000000003272                EE_check_init
+ .text          0x0000000000003274        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
+ .text          0x0000000000003274        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
+ .text          0x0000000000003274        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_muluhisi3.o)
+ .text          0x0000000000003274        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_mulsi3.o)
+ .text          0x0000000000003274        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodhi4.o)
+ .text          0x0000000000003274        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodsi4.o)
+ .text          0x0000000000003274        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_divmodsi4.o)
+ .text          0x0000000000003274        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_negsi2.o)
+ .text          0x0000000000003274        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_prologue.o)
+ .text          0x0000000000003274        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_epilogue.o)
+ .text          0x0000000000003274        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
+ .text          0x0000000000003274        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_clear_bss.o)
+ .text          0x0000000000003274        0x0 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(utoa.o)
+ .text          0x0000000000003274        0x0 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(eerd_byte_atmega168.o)
+ .text          0x0000000000003274        0x0 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(eewr_byte_atmega168.o)
+ .text          0x0000000000003274        0x0 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(eewr_word_atmega168.o)
+ .text          0x0000000000003274        0x0 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(strrev.o)
+                0x0000000000003274                . = ALIGN (0x2)
  *(.text.*)
- .text.startup  0x000000000000322a      0xb52 main.o
-                0x000000000000322a                main
+ .text.startup  0x0000000000003274      0xb0c main.o
+                0x0000000000003274                main
  .text.libgcc.mul
-                0x0000000000003d7c       0x1e /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
-                0x0000000000003d7c                __umulhisi3
+                0x0000000000003d80       0x1e /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
+                0x0000000000003d80                __umulhisi3
  .text.libgcc.div
-                0x0000000000003d9a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
- .text.libgcc   0x0000000000003d9a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
+                0x0000000000003d9e        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
+ .text.libgcc   0x0000000000003d9e        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
  .text.libgcc.prologue
-                0x0000000000003d9a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
+                0x0000000000003d9e        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
  .text.libgcc.builtins
-                0x0000000000003d9a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
+                0x0000000000003d9e        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
  .text.libgcc.fmul
-                0x0000000000003d9a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
+                0x0000000000003d9e        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
  .text.libgcc.fixed
-                0x0000000000003d9a        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
+                0x0000000000003d9e        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
  .text.libgcc.mul
-                0x0000000000003d9a        0xc /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
-                0x0000000000003d9a                __usmulhisi3
-                0x0000000000003d9c                __usmulhisi3_tail
+                0x0000000000003d9e        0xc /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
+                0x0000000000003d9e                __usmulhisi3
+                0x0000000000003da0                __usmulhisi3_tail
  .text.libgcc.div
-                0x0000000000003da6        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
- .text.libgcc   0x0000000000003da6        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
+                0x0000000000003daa        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
+ .text.libgcc   0x0000000000003daa        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
  .text.libgcc.prologue
-                0x0000000000003da6        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
+                0x0000000000003daa        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
  .text.libgcc.builtins
-                0x0000000000003da6        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
+                0x0000000000003daa        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
  .text.libgcc.fmul
-                0x0000000000003da6        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
+                0x0000000000003daa        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
  .text.libgcc.fixed
-                0x0000000000003da6        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
+                0x0000000000003daa        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
  .text.libgcc.mul
-                0x0000000000003da6       0x14 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_muluhisi3.o)
-                0x0000000000003da6                __muluhisi3
+                0x0000000000003daa       0x14 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_muluhisi3.o)
+                0x0000000000003daa                __muluhisi3
  .text.libgcc.div
-                0x0000000000003dba        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_muluhisi3.o)
- .text.libgcc   0x0000000000003dba        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_muluhisi3.o)
+                0x0000000000003dbe        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_muluhisi3.o)
+ .text.libgcc   0x0000000000003dbe        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_muluhisi3.o)
  .text.libgcc.prologue
-                0x0000000000003dba        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_muluhisi3.o)
+                0x0000000000003dbe        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_muluhisi3.o)
  .text.libgcc.builtins
-                0x0000000000003dba        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_muluhisi3.o)
+                0x0000000000003dbe        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_muluhisi3.o)
  .text.libgcc.fmul
-                0x0000000000003dba        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_muluhisi3.o)
+                0x0000000000003dbe        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_muluhisi3.o)
  .text.libgcc.fixed
-                0x0000000000003dba        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_muluhisi3.o)
+                0x0000000000003dbe        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_muluhisi3.o)
  .text.libgcc.mul
-                0x0000000000003dba       0x1e /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_mulsi3.o)
-                0x0000000000003dba                __mulsi3
+                0x0000000000003dbe       0x1e /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_mulsi3.o)
+                0x0000000000003dbe                __mulsi3
  .text.libgcc.div
-                0x0000000000003dd8        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_mulsi3.o)
- .text.libgcc   0x0000000000003dd8        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_mulsi3.o)
+                0x0000000000003ddc        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_mulsi3.o)
+ .text.libgcc   0x0000000000003ddc        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_mulsi3.o)
  .text.libgcc.prologue
-                0x0000000000003dd8        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_mulsi3.o)
+                0x0000000000003ddc        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_mulsi3.o)
  .text.libgcc.builtins
-                0x0000000000003dd8        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_mulsi3.o)
+                0x0000000000003ddc        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_mulsi3.o)
  .text.libgcc.fmul
-                0x0000000000003dd8        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_mulsi3.o)
+                0x0000000000003ddc        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_mulsi3.o)
  .text.libgcc.fixed
-                0x0000000000003dd8        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_mulsi3.o)
+                0x0000000000003ddc        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_mulsi3.o)
  .text.libgcc.mul
-                0x0000000000003dd8        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodhi4.o)
+                0x0000000000003ddc        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodhi4.o)
  .text.libgcc.div
-                0x0000000000003dd8       0x28 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodhi4.o)
-                0x0000000000003dd8                __udivmodhi4
- .text.libgcc   0x0000000000003e00        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodhi4.o)
+                0x0000000000003ddc       0x28 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodhi4.o)
+                0x0000000000003ddc                __udivmodhi4
+ .text.libgcc   0x0000000000003e04        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodhi4.o)
  .text.libgcc.prologue
-                0x0000000000003e00        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodhi4.o)
+                0x0000000000003e04        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodhi4.o)
  .text.libgcc.builtins
-                0x0000000000003e00        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodhi4.o)
+                0x0000000000003e04        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodhi4.o)
  .text.libgcc.fmul
-                0x0000000000003e00        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodhi4.o)
+                0x0000000000003e04        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodhi4.o)
  .text.libgcc.fixed
-                0x0000000000003e00        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodhi4.o)
+                0x0000000000003e04        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodhi4.o)
  .text.libgcc.mul
-                0x0000000000003e00        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodsi4.o)
+                0x0000000000003e04        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodsi4.o)
  .text.libgcc.div
-                0x0000000000003e00       0x44 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodsi4.o)
-                0x0000000000003e00                __udivmodsi4
- .text.libgcc   0x0000000000003e44        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodsi4.o)
+                0x0000000000003e04       0x44 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodsi4.o)
+                0x0000000000003e04                __udivmodsi4
+ .text.libgcc   0x0000000000003e48        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodsi4.o)
  .text.libgcc.prologue
-                0x0000000000003e44        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodsi4.o)
+                0x0000000000003e48        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodsi4.o)
  .text.libgcc.builtins
-                0x0000000000003e44        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodsi4.o)
+                0x0000000000003e48        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodsi4.o)
  .text.libgcc.fmul
-                0x0000000000003e44        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodsi4.o)
+                0x0000000000003e48        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodsi4.o)
  .text.libgcc.fixed
-                0x0000000000003e44        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodsi4.o)
+                0x0000000000003e48        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_udivmodsi4.o)
  .text.libgcc.mul
-                0x0000000000003e44        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_divmodsi4.o)
+                0x0000000000003e48        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_divmodsi4.o)
  .text.libgcc.div
-                0x0000000000003e44       0x28 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_divmodsi4.o)
-                0x0000000000003e44                __divmodsi4
- .text.libgcc   0x0000000000003e6c        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_divmodsi4.o)
+                0x0000000000003e48       0x28 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_divmodsi4.o)
+                0x0000000000003e48                __divmodsi4
+ .text.libgcc   0x0000000000003e70        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_divmodsi4.o)
  .text.libgcc.prologue
-                0x0000000000003e6c        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_divmodsi4.o)
+                0x0000000000003e70        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_divmodsi4.o)
  .text.libgcc.builtins
-                0x0000000000003e6c        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_divmodsi4.o)
+                0x0000000000003e70        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_divmodsi4.o)
  .text.libgcc.fmul
-                0x0000000000003e6c        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_divmodsi4.o)
+                0x0000000000003e70        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_divmodsi4.o)
  .text.libgcc.fixed
-                0x0000000000003e6c        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_divmodsi4.o)
+                0x0000000000003e70        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_divmodsi4.o)
  .text.libgcc.mul
-                0x0000000000003e6c        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_negsi2.o)
+                0x0000000000003e70        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_negsi2.o)
  .text.libgcc.div
-                0x0000000000003e6c       0x10 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_negsi2.o)
-                0x0000000000003e6c                __negsi2
- .text.libgcc   0x0000000000003e7c        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_negsi2.o)
+                0x0000000000003e70       0x10 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_negsi2.o)
+                0x0000000000003e70                __negsi2
+ .text.libgcc   0x0000000000003e80        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_negsi2.o)
  .text.libgcc.prologue
-                0x0000000000003e7c        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_negsi2.o)
+                0x0000000000003e80        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_negsi2.o)
  .text.libgcc.builtins
-                0x0000000000003e7c        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_negsi2.o)
+                0x0000000000003e80        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_negsi2.o)
  .text.libgcc.fmul
-                0x0000000000003e7c        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_negsi2.o)
+                0x0000000000003e80        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_negsi2.o)
  .text.libgcc.fixed
-                0x0000000000003e7c        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_negsi2.o)
+                0x0000000000003e80        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_negsi2.o)
  .text.libgcc.mul
-                0x0000000000003e7c        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_prologue.o)
+                0x0000000000003e80        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_prologue.o)
  .text.libgcc.div
-                0x0000000000003e7c        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_prologue.o)
- .text.libgcc   0x0000000000003e7c        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_prologue.o)
+                0x0000000000003e80        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_prologue.o)
+ .text.libgcc   0x0000000000003e80        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_prologue.o)
  .text.libgcc.prologue
-                0x0000000000003e7c       0x38 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_prologue.o)
-                0x0000000000003e7c                __prologue_saves__
+                0x0000000000003e80       0x38 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_prologue.o)
+                0x0000000000003e80                __prologue_saves__
  .text.libgcc.builtins
-                0x0000000000003eb4        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_prologue.o)
+                0x0000000000003eb8        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_prologue.o)
  .text.libgcc.fmul
-                0x0000000000003eb4        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_prologue.o)
+                0x0000000000003eb8        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_prologue.o)
  .text.libgcc.fixed
-                0x0000000000003eb4        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_prologue.o)
+                0x0000000000003eb8        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_prologue.o)
  .text.libgcc.mul
-                0x0000000000003eb4        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_epilogue.o)
+                0x0000000000003eb8        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_epilogue.o)
  .text.libgcc.div
-                0x0000000000003eb4        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_epilogue.o)
- .text.libgcc   0x0000000000003eb4        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_epilogue.o)
+                0x0000000000003eb8        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_epilogue.o)
+ .text.libgcc   0x0000000000003eb8        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_epilogue.o)
  .text.libgcc.prologue
-                0x0000000000003eb4       0x36 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_epilogue.o)
-                0x0000000000003eb4                __epilogue_restores__
+                0x0000000000003eb8       0x36 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_epilogue.o)
+                0x0000000000003eb8                __epilogue_restores__
  .text.libgcc.builtins
-                0x0000000000003eea        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_epilogue.o)
+                0x0000000000003eee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_epilogue.o)
  .text.libgcc.fmul
-                0x0000000000003eea        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_epilogue.o)
+                0x0000000000003eee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_epilogue.o)
  .text.libgcc.fixed
-                0x0000000000003eea        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_epilogue.o)
+                0x0000000000003eee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_epilogue.o)
  .text.libgcc.mul
-                0x0000000000003eea        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
+                0x0000000000003eee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
  .text.libgcc.div
-                0x0000000000003eea        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
- .text.libgcc   0x0000000000003eea        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
+                0x0000000000003eee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
+ .text.libgcc   0x0000000000003eee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
  .text.libgcc.prologue
-                0x0000000000003eea        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
+                0x0000000000003eee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
  .text.libgcc.builtins
-                0x0000000000003eea        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
+                0x0000000000003eee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
  .text.libgcc.fmul
-                0x0000000000003eea        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
+                0x0000000000003eee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
  .text.libgcc.fixed
-                0x0000000000003eea        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
+                0x0000000000003eee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
  .text.libgcc.mul
-                0x0000000000003eea        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_clear_bss.o)
+                0x0000000000003eee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_clear_bss.o)
  .text.libgcc.div
-                0x0000000000003eea        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_clear_bss.o)
- .text.libgcc   0x0000000000003eea        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_clear_bss.o)
+                0x0000000000003eee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_clear_bss.o)
+ .text.libgcc   0x0000000000003eee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_clear_bss.o)
  .text.libgcc.prologue
-                0x0000000000003eea        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_clear_bss.o)
+                0x0000000000003eee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_clear_bss.o)
  .text.libgcc.builtins
-                0x0000000000003eea        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_clear_bss.o)
+                0x0000000000003eee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_clear_bss.o)
  .text.libgcc.fmul
-                0x0000000000003eea        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_clear_bss.o)
+                0x0000000000003eee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_clear_bss.o)
  .text.libgcc.fixed
-                0x0000000000003eea        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_clear_bss.o)
+                0x0000000000003eee        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_clear_bss.o)
  .text.avr-libc
-                0x0000000000003eea       0x28 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(utoa.o)
-                0x0000000000003eea                utoa
+                0x0000000000003eee       0x28 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(utoa.o)
+                0x0000000000003eee                utoa
  .text.avr-libc
-                0x0000000000003f12       0x10 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(eerd_byte_atmega168.o)
-                0x0000000000003f12                __eerd_byte_m168
+                0x0000000000003f16       0x10 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(eerd_byte_atmega168.o)
+                0x0000000000003f16                __eerd_byte_m168
  .text.avr-libc
-                0x0000000000003f22       0x1c /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(eewr_byte_atmega168.o)
-                0x0000000000003f22                __eewr_byte_m168
-                0x0000000000003f24                __eewr_r18_m168
+                0x0000000000003f26       0x1c /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(eewr_byte_atmega168.o)
+                0x0000000000003f26                __eewr_byte_m168
+                0x0000000000003f28                __eewr_r18_m168
  .text.avr-libc
-                0x0000000000003f3e        0x6 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(eewr_word_atmega168.o)
-                0x0000000000003f3e                __eewr_word_m168
+                0x0000000000003f42        0x6 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(eewr_word_atmega168.o)
+                0x0000000000003f42                __eewr_word_m168
  .text.avr-libc
-                0x0000000000003f44       0x20 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(strrev.o)
-                0x0000000000003f44                strrev
-                0x0000000000003f64                . = ALIGN (0x2)
+                0x0000000000003f48       0x20 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/libc.a(strrev.o)
+                0x0000000000003f48                strrev
+                0x0000000000003f68                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000000000003f64        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
-                0x0000000000003f64                exit
-                0x0000000000003f64                _exit
+ .fini9         0x0000000000003f68        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
+                0x0000000000003f68                exit
+                0x0000000000003f68                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -689,11 +689,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000000000003f64        0x4 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
+ .fini0         0x0000000000003f68        0x4 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_exit.o)
  *(.fini0)
-                0x0000000000003f68                _etext = .
+                0x0000000000003f6c                _etext = .
 
-.data           0x0000000000800100        0x0 load address 0x0000000000003f68
+.data           0x0000000000800100        0x0 load address 0x0000000000003f6c
                 0x0000000000800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr5/crtm168.o
@@ -862,8 +862,8 @@ END GROUP
                 0x000000000080018a                diodes
                 0x00000000008001a2                ResistorVal
                 0x00000000008001ae                PROVIDE (__bss_end, .)
-                0x0000000000003f68                __data_load_start = LOADADDR (.data)
-                0x0000000000003f68                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000000000003f6c                __data_load_start = LOADADDR (.data)
+                0x0000000000003f6c                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00000000008001ae        0x0
                 0x00000000008001ae                PROVIDE (__noinit_start, .)
@@ -1093,43 +1093,43 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x6dae
+.debug_info     0x0000000000000000     0x6dd9
  *(.debug_info)
  .debug_info    0x0000000000000000       0x7d lcd_hw_4_bit.o
- .debug_info    0x000000000000007d      0xa5e lcd-routines.o
- .debug_info    0x0000000000000adb       0x76 i2lcd.o
- .debug_info    0x0000000000000b51       0x7a PinLayout.o
- .debug_info    0x0000000000000bcb       0x78 RvalOut.o
- .debug_info    0x0000000000000c43       0x7a UfAusgabe.o
- .debug_info    0x0000000000000cbd      0x2e8 DisplayValue.o
- .debug_info    0x0000000000000fa5       0x77 swuart.o
- .debug_info    0x000000000000101c       0x7b wait1000ms.o
- .debug_info    0x0000000000001097       0x7a sleep_5ms.o
- .debug_info    0x0000000000001111       0x78 ReadADC.o
- .debug_info    0x0000000000001189       0x80 wait_for_key_ms.o
- .debug_info    0x0000000000001209       0x7b RefVoltage.o
- .debug_info    0x0000000000001284       0x78 get_log.o
- .debug_info    0x00000000000012fc     0x2b8f main.o
- .debug_info    0x0000000000003e8b      0x297 Battery_check.o
- .debug_info    0x0000000000004122      0xb7e CheckPins.o
- .debug_info    0x0000000000004ca0      0x547 GetResistance.o
- .debug_info    0x00000000000051e7      0x119 ChargePin10ms.o
- .debug_info    0x0000000000005300      0x1f2 EntladePins.o
- .debug_info    0x00000000000054f2      0x607 ReadCapacity.o
- .debug_info    0x0000000000005af9       0x7c GetRLmultip.o
- .debug_info    0x0000000000005b75      0x2c2 Calibrate_UR.o
- .debug_info    0x0000000000005e37      0x4cd ReadInductance.o
- .debug_info    0x0000000000006304       0x77 GetESR.o
- .debug_info    0x000000000000637b      0x35d GetVloss.o
- .debug_info    0x00000000000066d8       0xae GetFrequency.o
- .debug_info    0x0000000000006786       0xae function_menu.o
- .debug_info    0x0000000000006834       0xae message_key_released.o
- .debug_info    0x00000000000068e2       0xae ReadBigCap.o
- .debug_info    0x0000000000006990       0xae CheckRotaryEncoder.o
- .debug_info    0x0000000000006a3e       0xae CalibrationCap.o
- .debug_info    0x0000000000006aec       0xae ShowData.o
- .debug_info    0x0000000000006b9a      0x148 show_Resis_Cap.o
- .debug_info    0x0000000000006ce2       0xcc EE_check_init.o
+ .debug_info    0x000000000000007d      0xb8d lcd-routines.o
+ .debug_info    0x0000000000000c0a       0x76 i2lcd.o
+ .debug_info    0x0000000000000c80       0x7a PinLayout.o
+ .debug_info    0x0000000000000cfa       0x78 RvalOut.o
+ .debug_info    0x0000000000000d72       0x7a UfAusgabe.o
+ .debug_info    0x0000000000000dec      0x2e8 DisplayValue.o
+ .debug_info    0x00000000000010d4       0x77 swuart.o
+ .debug_info    0x000000000000114b       0x7b wait1000ms.o
+ .debug_info    0x00000000000011c6       0x7a sleep_5ms.o
+ .debug_info    0x0000000000001240       0x78 ReadADC.o
+ .debug_info    0x00000000000012b8       0x80 wait_for_key_ms.o
+ .debug_info    0x0000000000001338       0x7b RefVoltage.o
+ .debug_info    0x00000000000013b3       0x78 get_log.o
+ .debug_info    0x000000000000142b     0x2a8b main.o
+ .debug_info    0x0000000000003eb6      0x297 Battery_check.o
+ .debug_info    0x000000000000414d      0xb7e CheckPins.o
+ .debug_info    0x0000000000004ccb      0x547 GetResistance.o
+ .debug_info    0x0000000000005212      0x119 ChargePin10ms.o
+ .debug_info    0x000000000000532b      0x1f2 EntladePins.o
+ .debug_info    0x000000000000551d      0x607 ReadCapacity.o
+ .debug_info    0x0000000000005b24       0x7c GetRLmultip.o
+ .debug_info    0x0000000000005ba0      0x2c2 Calibrate_UR.o
+ .debug_info    0x0000000000005e62      0x4cd ReadInductance.o
+ .debug_info    0x000000000000632f       0x77 GetESR.o
+ .debug_info    0x00000000000063a6      0x35d GetVloss.o
+ .debug_info    0x0000000000006703       0xae GetFrequency.o
+ .debug_info    0x00000000000067b1       0xae function_menu.o
+ .debug_info    0x000000000000685f       0xae message_key_released.o
+ .debug_info    0x000000000000690d       0xae ReadBigCap.o
+ .debug_info    0x00000000000069bb       0xae CheckRotaryEncoder.o
+ .debug_info    0x0000000000006a69       0xae CalibrationCap.o
+ .debug_info    0x0000000000006b17       0xae ShowData.o
+ .debug_info    0x0000000000006bc5      0x148 show_Resis_Cap.o
+ .debug_info    0x0000000000006d0d       0xcc EE_check_init.o
  *(.gnu.linkonce.wi.*)
 
 .debug_abbrev   0x0000000000000000     0x1837
@@ -1170,43 +1170,43 @@ END GROUP
  .debug_abbrev  0x00000000000016e8       0xdd show_Resis_Cap.o
  .debug_abbrev  0x00000000000017c5       0x72 EE_check_init.o
 
-.debug_line     0x0000000000000000     0x1dce
+.debug_line     0x0000000000000000     0x1dda
  *(.debug_line)
  .debug_line    0x0000000000000000       0x6c lcd_hw_4_bit.o
- .debug_line    0x000000000000006c      0x199 lcd-routines.o
- .debug_line    0x0000000000000205       0x48 i2lcd.o
- .debug_line    0x000000000000024d       0x6c PinLayout.o
- .debug_line    0x00000000000002b9       0x5c RvalOut.o
- .debug_line    0x0000000000000315       0x80 UfAusgabe.o
- .debug_line    0x0000000000000395      0x12d DisplayValue.o
- .debug_line    0x00000000000004c2       0x39 swuart.o
- .debug_line    0x00000000000004fb       0x64 wait1000ms.o
- .debug_line    0x000000000000055f       0x60 sleep_5ms.o
- .debug_line    0x00000000000005bf       0x88 ReadADC.o
- .debug_line    0x0000000000000647       0x9c wait_for_key_ms.o
- .debug_line    0x00000000000006e3       0x83 RefVoltage.o
- .debug_line    0x0000000000000766       0x54 get_log.o
- .debug_line    0x00000000000007ba      0x450 main.o
- .debug_line    0x0000000000000c0a       0xd1 Battery_check.o
- .debug_line    0x0000000000000cdb      0x2bc CheckPins.o
- .debug_line    0x0000000000000f97      0x130 GetResistance.o
- .debug_line    0x00000000000010c7       0x99 ChargePin10ms.o
- .debug_line    0x0000000000001160       0xf4 EntladePins.o
- .debug_line    0x0000000000001254      0x1f7 ReadCapacity.o
- .debug_line    0x000000000000144b       0x76 GetRLmultip.o
- .debug_line    0x00000000000014c1       0xd4 Calibrate_UR.o
- .debug_line    0x0000000000001595      0x18c ReadInductance.o
- .debug_line    0x0000000000001721      0x1d4 GetESR.o
- .debug_line    0x00000000000018f5      0x116 GetVloss.o
- .debug_line    0x0000000000001a0b       0x5f GetFrequency.o
- .debug_line    0x0000000000001a6a       0x5f function_menu.o
- .debug_line    0x0000000000001ac9       0x5f message_key_released.o
- .debug_line    0x0000000000001b28       0x5f ReadBigCap.o
- .debug_line    0x0000000000001b87       0x5f CheckRotaryEncoder.o
- .debug_line    0x0000000000001be6       0x5f CalibrationCap.o
- .debug_line    0x0000000000001c45       0x5f ShowData.o
- .debug_line    0x0000000000001ca4       0xab show_Resis_Cap.o
- .debug_line    0x0000000000001d4f       0x7f EE_check_init.o
+ .debug_line    0x000000000000006c      0x1ae lcd-routines.o
+ .debug_line    0x000000000000021a       0x48 i2lcd.o
+ .debug_line    0x0000000000000262       0x6c PinLayout.o
+ .debug_line    0x00000000000002ce       0x5c RvalOut.o
+ .debug_line    0x000000000000032a       0x80 UfAusgabe.o
+ .debug_line    0x00000000000003aa      0x12d DisplayValue.o
+ .debug_line    0x00000000000004d7       0x39 swuart.o
+ .debug_line    0x0000000000000510       0x64 wait1000ms.o
+ .debug_line    0x0000000000000574       0x60 sleep_5ms.o
+ .debug_line    0x00000000000005d4       0x88 ReadADC.o
+ .debug_line    0x000000000000065c       0x9c wait_for_key_ms.o
+ .debug_line    0x00000000000006f8       0x83 RefVoltage.o
+ .debug_line    0x000000000000077b       0x54 get_log.o
+ .debug_line    0x00000000000007cf      0x447 main.o
+ .debug_line    0x0000000000000c16       0xd1 Battery_check.o
+ .debug_line    0x0000000000000ce7      0x2bc CheckPins.o
+ .debug_line    0x0000000000000fa3      0x130 GetResistance.o
+ .debug_line    0x00000000000010d3       0x99 ChargePin10ms.o
+ .debug_line    0x000000000000116c       0xf4 EntladePins.o
+ .debug_line    0x0000000000001260      0x1f7 ReadCapacity.o
+ .debug_line    0x0000000000001457       0x76 GetRLmultip.o
+ .debug_line    0x00000000000014cd       0xd4 Calibrate_UR.o
+ .debug_line    0x00000000000015a1      0x18c ReadInductance.o
+ .debug_line    0x000000000000172d      0x1d4 GetESR.o
+ .debug_line    0x0000000000001901      0x116 GetVloss.o
+ .debug_line    0x0000000000001a17       0x5f GetFrequency.o
+ .debug_line    0x0000000000001a76       0x5f function_menu.o
+ .debug_line    0x0000000000001ad5       0x5f message_key_released.o
+ .debug_line    0x0000000000001b34       0x5f ReadBigCap.o
+ .debug_line    0x0000000000001b93       0x5f CheckRotaryEncoder.o
+ .debug_line    0x0000000000001bf2       0x5f CalibrationCap.o
+ .debug_line    0x0000000000001c51       0x5f ShowData.o
+ .debug_line    0x0000000000001cb0       0xab show_Resis_Cap.o
+ .debug_line    0x0000000000001d5b       0x7f EE_check_init.o
 
 .debug_frame    0x0000000000000000      0x670
  *(.debug_frame)
@@ -1225,66 +1225,66 @@ END GROUP
  .debug_frame   0x0000000000000628       0x24 show_Resis_Cap.o
  .debug_frame   0x000000000000064c       0x24 EE_check_init.o
 
-.debug_str      0x0000000000000000      0xf0b
+.debug_str      0x0000000000000000      0xf14
  *(.debug_str)
- .debug_str     0x0000000000000000      0x3ce lcd-routines.o
-                                        0x41d (size before relaxing)
- .debug_str     0x00000000000003ce       0x6c DisplayValue.o
+ .debug_str     0x0000000000000000      0x407 lcd-routines.o
+                                        0x456 (size before relaxing)
+ .debug_str     0x0000000000000407       0x6c DisplayValue.o
                                         0x212 (size before relaxing)
- .debug_str     0x000000000000043a      0x677 main.o
-                                        0x9d3 (size before relaxing)
- .debug_str     0x0000000000000ab1       0x33 Battery_check.o
+ .debug_str     0x0000000000000473      0x647 main.o
+                                        0x9c0 (size before relaxing)
+ .debug_str     0x0000000000000aba       0x33 Battery_check.o
                                         0x227 (size before relaxing)
- .debug_str     0x0000000000000ae4      0x119 CheckPins.o
+ .debug_str     0x0000000000000aed      0x119 CheckPins.o
                                         0x39f (size before relaxing)
- .debug_str     0x0000000000000bfd       0x33 GetResistance.o
+ .debug_str     0x0000000000000c06       0x33 GetResistance.o
                                         0x30b (size before relaxing)
- .debug_str     0x0000000000000c30       0x2f ChargePin10ms.o
+ .debug_str     0x0000000000000c39       0x2f ChargePin10ms.o
                                         0x1b2 (size before relaxing)
- .debug_str     0x0000000000000c5f       0x29 EntladePins.o
+ .debug_str     0x0000000000000c68       0x29 EntladePins.o
                                         0x1d9 (size before relaxing)
- .debug_str     0x0000000000000c88       0xd3 ReadCapacity.o
+ .debug_str     0x0000000000000c91       0xd3 ReadCapacity.o
                                         0x3bd (size before relaxing)
- .debug_str     0x0000000000000d5b       0x35 Calibrate_UR.o
+ .debug_str     0x0000000000000d64       0x35 Calibrate_UR.o
                                         0x247 (size before relaxing)
- .debug_str     0x0000000000000d90       0x92 ReadInductance.o
+ .debug_str     0x0000000000000d99       0x92 ReadInductance.o
                                         0x31a (size before relaxing)
- .debug_str     0x0000000000000e22       0x20 GetVloss.o
+ .debug_str     0x0000000000000e2b       0x20 GetVloss.o
                                         0x260 (size before relaxing)
- .debug_str     0x0000000000000e42       0x12 GetFrequency.o
+ .debug_str     0x0000000000000e4b       0x12 GetFrequency.o
                                         0x175 (size before relaxing)
- .debug_str     0x0000000000000e54       0x13 function_menu.o
+ .debug_str     0x0000000000000e5d       0x13 function_menu.o
                                         0x176 (size before relaxing)
- .debug_str     0x0000000000000e67       0x1a message_key_released.o
+ .debug_str     0x0000000000000e70       0x1a message_key_released.o
                                         0x17d (size before relaxing)
- .debug_str     0x0000000000000e81       0x10 ReadBigCap.o
+ .debug_str     0x0000000000000e8a       0x10 ReadBigCap.o
                                         0x173 (size before relaxing)
- .debug_str     0x0000000000000e91       0x18 CheckRotaryEncoder.o
+ .debug_str     0x0000000000000e9a       0x18 CheckRotaryEncoder.o
                                         0x17b (size before relaxing)
- .debug_str     0x0000000000000ea9       0x14 CalibrationCap.o
+ .debug_str     0x0000000000000eb2       0x14 CalibrationCap.o
                                         0x177 (size before relaxing)
- .debug_str     0x0000000000000ebd        0xe ShowData.o
+ .debug_str     0x0000000000000ec6        0xe ShowData.o
                                         0x171 (size before relaxing)
- .debug_str     0x0000000000000ecb       0x1f show_Resis_Cap.o
+ .debug_str     0x0000000000000ed4       0x1f show_Resis_Cap.o
                                         0x1b2 (size before relaxing)
- .debug_str     0x0000000000000eea       0x21 EE_check_init.o
+ .debug_str     0x0000000000000ef3       0x21 EE_check_init.o
                                         0x184 (size before relaxing)
 
-.debug_loc      0x0000000000000000     0x398f
+.debug_loc      0x0000000000000000     0x39a2
  *(.debug_loc)
  .debug_loc     0x0000000000000000      0x415 lcd-routines.o
  .debug_loc     0x0000000000000415      0x255 DisplayValue.o
- .debug_loc     0x000000000000066a      0x834 main.o
- .debug_loc     0x0000000000000e9e       0x89 Battery_check.o
- .debug_loc     0x0000000000000f27     0x1591 CheckPins.o
- .debug_loc     0x00000000000024b8      0x7e6 GetResistance.o
- .debug_loc     0x0000000000002c9e       0x72 ChargePin10ms.o
- .debug_loc     0x0000000000002d10      0x19f EntladePins.o
- .debug_loc     0x0000000000002eaf      0x39f ReadCapacity.o
- .debug_loc     0x000000000000324e       0x88 Calibrate_UR.o
- .debug_loc     0x00000000000032d6      0x45d ReadInductance.o
- .debug_loc     0x0000000000003733      0x23b GetVloss.o
- .debug_loc     0x000000000000396e       0x21 show_Resis_Cap.o
+ .debug_loc     0x000000000000066a      0x847 main.o
+ .debug_loc     0x0000000000000eb1       0x89 Battery_check.o
+ .debug_loc     0x0000000000000f3a     0x1591 CheckPins.o
+ .debug_loc     0x00000000000024cb      0x7e6 GetResistance.o
+ .debug_loc     0x0000000000002cb1       0x72 ChargePin10ms.o
+ .debug_loc     0x0000000000002d23      0x19f EntladePins.o
+ .debug_loc     0x0000000000002ec2      0x39f ReadCapacity.o
+ .debug_loc     0x0000000000003261       0x88 Calibrate_UR.o
+ .debug_loc     0x00000000000032e9      0x45d ReadInductance.o
+ .debug_loc     0x0000000000003746      0x23b GetVloss.o
+ .debug_loc     0x0000000000003981       0x21 show_Resis_Cap.o
 
 .debug_macinfo
  *(.debug_macinfo)

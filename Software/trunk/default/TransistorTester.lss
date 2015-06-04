@@ -722,6 +722,7 @@ void lcd_fix_customchar(const unsigned char *chardata) {
      342:	90 e0       	ldi	r25, 0x00	; 0
      344:	bb df       	rcall	.-138    	; 0x2bc <lcd_fix_customchar>
      346:	80 e5       	ldi	r24, 0x50	; 80
+ #if  !defined(LCD_INTERFACE_MODE)  || (LCD_INTERFACE_MODE == 1)
    // to initialise, send 3 times to be shure to be in 8 Bit mode
    lcd_write_init(1);
      348:	49 df       	rcall	.-366    	; 0x1dc <lcd_command>
@@ -760,6 +761,7 @@ void lcd_fix_customchar(const unsigned char *chardata) {
 00000372 <lcd_clear_line1>:
      372:	38 df       	rcall	.-400    	; 0x1e4 <lcd_line1>
      374:	fc df       	rcall	.-8      	; 0x36e <lcd_clear_line>
+ #endif
    wait_about10ms();
      376:	36 cf       	rjmp	.-404    	; 0x1e4 <lcd_line1>
 

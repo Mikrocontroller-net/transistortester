@@ -353,9 +353,11 @@ void lcd_init(void) {
    wait50ms();		// wait after power up reset
 #elif (LCD_INTERFACE_MODE == MODE_PARALLEL) /* ! MODE_SPI || MODE_3LINE || MODE_I2C || MODE_7920_SERIAL */
  /* ! MODE_SPI || MODE_3LINE || MODE_I2C || MODE_7920_SERIAL */
+ #ifdef LCD_ST_TYPE
    wait50ms();		// wait after power up reset
-   lcd_command(0x22); // set to 4-bit mode
+   lcd_command(0x22); // set to 4-bit mode for graphic display
    lcd_command(0x22 ); // set to 4-bit mode
+ #endif
 #endif
 
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))

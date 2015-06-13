@@ -366,7 +366,7 @@ fini_bit:
  #endif  /* LCD_SPI_OPEN_COL */
 	.endfunc
 
-#elif (LCD_INTERFACE_MODE == MODE_7920_SERIAL)
+#elif (LCD_INTERFACE_MODE == MODE_7920_SERIAL) || (LCD_INTERFACE_MODE == MODE_1308_SERIAL)
 ;---------------------------------------------------------------------------------
 _lcd_hw_write:
 ; 1-bit interface for ST7920 controller
@@ -390,6 +390,8 @@ _lcd_hw_write:
 	set_b0_low
 	RCALL	toggle_en	; set en high and low
 				; first 8 bit transfer finished
+ #if (LCD_INTERFACE_MODE == MODE_7920_SERIAL)
+  ; output highest bit first
         sbrc    preg_2, 7
 	 set_b0_high		; bit 7 == 1
 	RCALL	toggle_en	; set en high and low
@@ -435,6 +437,55 @@ _lcd_hw_write:
 	set_b0_low
 	RCALL	four_bits	; output 4 times 0
 				; the lower 4-bit are followed by 4 x 0
+ #else		/* (LCD_INTERFACE_MODE == MODE_1308_SERIAL) */
+  ; output lowest bit first
+        sbrc    preg_2, 0
+	 set_b0_high		; bit 0 == 1
+	RCALL	toggle_en	; set en high and low
+
+	set_b0_low
+        sbrc    preg_2, 1
+	 set_b0_high		; bit 1 == 1
+	RCALL	toggle_en	; set en high and low
+
+	set_b0_low
+        sbrc    preg_2, 2
+	 set_b0_high		; bit 2 == 1
+	RCALL	toggle_en	; set en high and low
+				; the upper 4-bit are followed by 4 x 0
+	set_b0_low
+        sbrc    preg_2, 3
+	 set_b0_high		; bit 3 == 1
+	RCALL	toggle_en	; set en high and low
+
+	set_b0_low
+	RCALL	four_bits	; output 4 times 0
+				; the lower 4-bit are followed by 4 x 0
+
+	set_b0_low
+        sbrc    preg_2, 4
+	 set_b0_high		; bit 4 == 1
+	RCALL	toggle_en	; set en high and low
+
+	set_b0_low
+        sbrc    preg_2, 5
+	 set_b0_high		; bit 5 == 1
+	RCALL	toggle_en	; set en high and low
+
+	set_b0_low
+        sbrc    preg_2, 6
+	 set_b0_high		; bit 6 == 1
+	RCALL	toggle_en	; set en high and low
+
+	set_b0_low
+        sbrc    preg_2, 7
+	 set_b0_high		; bit 7 == 1
+	RCALL	toggle_en	; set en high and low
+
+	set_b0_low
+	RCALL	four_bits	; output 4 times 0
+				; the upper 4-bit are followed by 4 x 0
+ #endif
 	RCALL	wait50us
 	RCALL	wait30us	; at least 72 us delay
 	ret		// return _lcd_hw_write

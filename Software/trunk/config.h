@@ -25,7 +25,7 @@
 #define MODE_SPI 4		/* 4 bit SPI interface for ST7565 or SSD1306 */
 #define MODE_7920_SERIAL 5		/* serial interface for ST7920 */
 #define MODE_7108_SERIAL 6		/* serial interface for ST7108 with shift register 74HC164 */
-#define MODE_1308_SERIAL 7		/* serial interface for SSD1308 */
+#define MODE_1803_SERIAL 7		/* serial interface for SSD1803 */
 
 // select the right Processor Typ
 #if defined(__AVR_ATmega48__)
@@ -586,7 +586,7 @@
    #define HW_LCD_SDA_PIN          2
  #endif	/* PROCESSOR_TYP for the I2C Interface */
 /* ----------------------------------------------------------------------------- */
-#elif (LCD_INTERFACE_MODE == MODE_7920_SERIAL) || (LCD_INTERFACE_MODE == MODE_1308_SERIAL)
+#elif (LCD_INTERFACE_MODE == MODE_7920_SERIAL) || (LCD_INTERFACE_MODE == MODE_1803_SERIAL)
  /* only two wires are required for the serial interface of the ST7920: RW and E */
  /* PSB must be connected to GND and RS(CS) and RESET must be connected to 1. */
 				/* --------------------------------------------- */

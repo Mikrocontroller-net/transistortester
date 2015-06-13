@@ -366,7 +366,7 @@ fini_bit:
  #endif  /* LCD_SPI_OPEN_COL */
 	.endfunc
 
-#elif (LCD_INTERFACE_MODE == MODE_7920_SERIAL) || (LCD_INTERFACE_MODE == MODE_1308_SERIAL)
+#elif (LCD_INTERFACE_MODE == MODE_7920_SERIAL) || (LCD_INTERFACE_MODE == MODE_1803_SERIAL)
 ;---------------------------------------------------------------------------------
 _lcd_hw_write:
 ; 1-bit interface for ST7920 controller
@@ -437,7 +437,7 @@ _lcd_hw_write:
 	set_b0_low
 	RCALL	four_bits	; output 4 times 0
 				; the lower 4-bit are followed by 4 x 0
- #else		/* (LCD_INTERFACE_MODE == MODE_1308_SERIAL) */
+ #else		/* (LCD_INTERFACE_MODE == MODE_1803_SERIAL) */
   ; output lowest bit first
         sbrc    preg_2, 0
 	 set_b0_high		; bit 0 == 1

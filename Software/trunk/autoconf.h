@@ -735,4 +735,10 @@
 #ifndef TP_OFFSET
  #define TP_OFFSET 0
 #endif
+#if  !defined(LCD_INTERFACE_MODE)  || (LCD_INTERFACE_MODE == MODE_PARALLEL)
+ #define MODE_8BIT 0x00         /* 4-bit Mode */
+#else
+ #define MODE_8BIT 0x10
+#endif
+
 

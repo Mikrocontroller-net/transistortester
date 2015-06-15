@@ -706,7 +706,6 @@ void lcd_fix_customchar(const unsigned char *chardata) {
      332:	88 e4       	ldi	r24, 0x48	; 72
      334:	53 df       	rcall	.-346    	; 0x1dc <lcd_command>
      336:	8f e1       	ldi	r24, 0x1F	; 31
- #if  !defined(LCD_INTERFACE_MODE)  || (LCD_INTERFACE_MODE == 1)
    // to initialise, send 3 times to be shure to be in 8 Bit mode
    lcd_write_init(1);
      338:	90 e0       	ldi	r25, 0x00	; 0
@@ -743,25 +742,24 @@ void lcd_fix_customchar(const unsigned char *chardata) {
 
 00000364 <lcd_clear_line>:
      364:	84 e1       	ldi	r24, 0x14	; 20
- #endif
    wait_about10ms();
      366:	27 cf       	rjmp	.-434    	; 0x1b6 <lcd_spaces>
 
 00000368 <lcd_clear_line1>:
      368:	3d df       	rcall	.-390    	; 0x1e4 <lcd_line1>
      36a:	fc df       	rcall	.-8      	; 0x364 <lcd_clear_line>
-
+   lcd_command(CMD_DISPLAY_ON);			// Display on, no Cursor, No blink
    lcd_command(CMD_SetEntryMode | 0x02);	// increment / no Scroll    
    lcd_clear();
  #else
    // initialize sequence with OLED display
-   lcd_command(CMD_SetIFOptions);		// Add for OLED
+   lcd_command(CMD_SetIFOptions | MODE_8BIT);		// Add for OLED
      36c:	3b cf       	rjmp	.-394    	; 0x1e4 <lcd_line1>
 
 0000036e <lcd_clear_line2>:
      36e:	3e df       	rcall	.-388    	; 0x1ec <lcd_line2>
      370:	f9 df       	rcall	.-14     	; 0x364 <lcd_clear_line>
-   lcd_command(CMD_SetIFOptions);		// Add for OLED
+   lcd_command(CMD_SetIFOptions | MODE_8BIT);		// Add for OLED
      372:	3c cf       	rjmp	.-392    	; 0x1ec <lcd_line2>
 
 00000374 <lcd_set_pixels>:
@@ -770,7 +768,7 @@ void lcd_fix_customchar(const unsigned char *chardata) {
 00000376 <lcd_show_Cg>:
      376:	0f 93       	push	r16
 
-   lcd_command(CMD_SetIFOptions| 0x0A);		// 4Bit / 2 rows / 5x7 / table3 / Add for OLED
+   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x0A);	// 4Bit / 2 rows / 5x7 / table3 / Add for OLED
      378:	8d ea       	ldi	r24, 0xAD	; 173
      37a:	90 e0       	ldi	r25, 0x00	; 0
      37c:	90 df       	rcall	.-224    	; 0x29e <lcd_fix_string>

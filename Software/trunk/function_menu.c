@@ -863,7 +863,8 @@ void do_10bit_PWM() {
  #elif (LCD_ST_TYPE == 8814)
   #define MAX_CONTRAST 0xff
  #else
-  #define MAX_CONTRAST 0x3f
+  /* for DOG-M the upper bit of contrast value is BOOSTER 0x40 */
+  #define MAX_CONTRAST 0x7f
  #endif
 void set_contrast(void) {
 uint8_t key_pressed;
@@ -889,8 +890,10 @@ uint8_t contrast;
    lcd_command(CMD_SET_VOP_UPPER | ((contrast >> 5) & 0x07));      // set upper Vop
    lcd_command(CMD_SET_VOP_LOWER | (contrast & 0x1f));    // set lower Vop
   #else		/* DOGM display */
-     lcd_command(CMD1_PowerControl | ((contrast>>4)&0x03));	// booster off / set contrast C5:C4 
+     lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x09);	// 2-line / IS=1
+     lcd_command(CMD1_PowerControl | ((contrast>>4)&0x07));	// booster on,off / set contrast C5:C4 
      lcd_command(CMD1_SetContrast | (contrast&0x0f));	// set contrast C3:0 
+     lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x08);	// 2-line / IS=0
   #endif
      lcd_clear_line2();
      DisplayValue(contrast,0,' ',4);

@@ -20,12 +20,19 @@
 
 // defines for LCD_INTERFACE_MODE
 #define MODE_PARALLEL 1		/* default 4-Bit parallel mode for character LCD */
+				/* EN + RS + B4 + B5 + B6 + B7 */
 #define MODE_I2C 2		/* I2C interface for SSD1306 */
+				/* SCL + SDA */
 #define MODE_3LINE 3		/* special 3 line serial output with Data/Command as first data bit  PCF8814 */
+				/* RES + EN + B0 (+ CE) */
 #define MODE_SPI 4		/* 4 bit SPI interface for ST7565 or SSD1306 */
+				/* RES + EN + RS + B0 (+ CE) */
 #define MODE_7920_SERIAL 5		/* serial interface for ST7920 */
+				/* EN + B0 (+ RESET) */
 #define MODE_7108_SERIAL 6		/* serial interface for ST7108 with shift register 74HC164 */
+				/* EN + [RS B0] + CS1 + CS2 + CLK (+ PCLK) */
 #define MODE_1803_SERIAL 7		/* serial interface for SSD1803 */
+				/* EN + B0 (+ RESET) */
 
 // select the right Processor Typ
 #if defined(__AVR_ATmega48__)
@@ -591,6 +598,19 @@
  /* PSB must be connected to GND and RS(CS) and RESET must be connected to 1. */
 				/* --------------------------------------------- */
  #if PROCESSOR_TYP == 644	/* mega324/644/1284 with serial ST7920 interface */
+  #ifdef STRIP_GRID_BOARD
+   #define HW_LCD_EN_PORT         PORTB
+   #define HW_LCD_EN_DDR          DDRB
+   #define HW_LCD_EN_PIN          6
+
+   #define HW_LCD_B0_PORT         PORTB
+   #define HW_LCD_B0_DDR          DDRB
+   #define HW_LCD_B0_PIN          7
+
+   #define HW_LCD_RESET_PORT      PORTB
+   #define HW_LCD_RESET_DDR       DDRB
+   #define HW_LCD_RESET_PIN       4
+  #else
    #define HW_LCD_EN_PORT         PORTB
    #define HW_LCD_EN_DDR          DDRB
    #define HW_LCD_EN_PIN          3
@@ -602,6 +622,7 @@
    #define HW_LCD_RESET_PORT      PORTB
    #define HW_LCD_RESET_DDR       DDRB
    #define HW_LCD_RESET_PIN       2
+  #endif
 				/* --------------------------------------------- */
  #elif PROCESSOR_TYP == 1280	/* mega1280/2560 with serial ST7920 interface */
    #define HW_LCD_EN_PORT         PORTA

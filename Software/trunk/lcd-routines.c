@@ -506,7 +506,6 @@ void lcd_init(void) {
 #else    /* !(LCD_ST_TYPE == 7565 | 1306) | 7108 | 7920 | 7108 | 8812 | 8814) */
 /* must be a character display */
    wait_about30ms();
- #if  !defined(LCD_INTERFACE_MODE)  || (LCD_INTERFACE_MODE == 1)
    // to initialise, send 3 times to be shure to be in 8 Bit mode
    lcd_write_init(1);
    wait_about5ms();
@@ -518,27 +517,56 @@ void lcd_init(void) {
    wait1ms();
 
    lcd_write_init(0);		// switch to 4 Bit mode
- #endif
    wait_about10ms();
  #ifdef LCD_DOGM
-   lcd_command(CMD_SetIFOptions | 0x09);	// 4Bit / 2 rows / 5x7 / Instr. table 1
+   uint8_t contrast;
+   contrast = eeprom_read_byte(&EE_Volume_Value);
+  #if LCD_ST7565_V_FLIP
+   #define MODE_BDC 0x02
+  #else
+   #define MODE_BDC 0x00
+  #endif
+  #if LCD_ST7565_H_FLIP
+   #define MODE_BDS 0x01
+  #else
+   #define MODE_BDS 0x00
+  #endif
+   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x0a);	// 8Bit / 2 rows /RE=1
+  #ifdef FOUR_LINE_LCD
+   lcd_command(0x09);				// 5-dot font, 4 line display NW=1
+  #else
+   lcd_command(0x08);				// 5-dot font, 2 line display NW=0
+  #endif
+   lcd_command(0x04 | MODE_BDC | MODE_BDS);	// BDC=1, bottom view
+   lcd_command(CMD1_SetBias | 0x0e);		// BS1:0=11, BS1=1
+
+   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x09);	// 4Bit / 2 rows / 5x7 / Instr. table 1
+//   lcd_command(CMD1_SetBias | 0x0b);		// BS0=1 / F2:0 = 3, Bias = 1/6
    lcd_command(CMD1_SetBias | 0x0c);		// 1/4 bias     (5V)
-   lcd_command(CMD1_PowerControl | 0x02);	// booster off / set contrast C5:C4 = 2
-   lcd_command(CMD1_FollowerControl | 0x09);	// Follower on / Rab2:0 = 1
-   lcd_command(CMD1_SetContrast | 0x04);	// set contrast C3:0 = 4
+
+  #ifdef LCD_ST7565_RESISTOR_RATIO
+   lcd_command(CMD1_FollowerControl | 0x08 | LCD_ST7565_RESISTOR_RATIO);	// Follower on / Rab2:0 = RATIO
+  #else
+   lcd_command(CMD1_FollowerControl | 0x0e);	// Follower on / Rab2:0 = 6
+  #endif
+
+
+//   lcd_command(CMD1_PowerControl | 0x02);	// booster off / set contrast C5:C4 = 2
+   lcd_command(CMD1_PowerControl | ((contrast>>4)&0x03));     // booster on / set contrast C5:C4 
+//   lcd_command(CMD1_SetContrast | 0x04);	// set contrast C3:0 = 4
+   lcd_command(CMD1_SetContrast | (contrast&0x0f));   // set contrast C3:0 
+
    // old initialize without OLED display
-   lcd_command(CMD_SetIFOptions | 0x08);	// 4Bit / 2 rows / 5x7
-
-   lcd_command(CMD_SetDisplayAndCursor | 0x04); // Display on / Cursor off / no Blinking
-
+   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x08);	// 4Bit / 2 rows / 5x7
+   lcd_command(CMD_DISPLAY_ON);			// Display on, no Cursor, No blink
    lcd_command(CMD_SetEntryMode | 0x02);	// increment / no Scroll    
    lcd_clear();
  #else
    // initialize sequence with OLED display
-   lcd_command(CMD_SetIFOptions);		// Add for OLED
-   lcd_command(CMD_SetIFOptions);		// Add for OLED
+   lcd_command(CMD_SetIFOptions | MODE_8BIT);		// Add for OLED
+   lcd_command(CMD_SetIFOptions | MODE_8BIT);		// Add for OLED
 
-   lcd_command(CMD_SetIFOptions| 0x0A);		// 4Bit / 2 rows / 5x7 / table3 / Add for OLED
+   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x0A);	// 4Bit / 2 rows / 5x7 / table3 / Add for OLED
    lcd_command(CMD_SetDisplayAndCursor);	// Display off / no Blinking  / Add for OLED
    lcd_clear();
    lcd_command(CMD_SetEntryMode | 0x02);	// increment / no Scroll

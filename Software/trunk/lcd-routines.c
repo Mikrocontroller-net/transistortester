@@ -63,7 +63,7 @@ void lcd_line1() {
    _page = 0;			// _page is the vertical pixel address for ST7920 controller
    _xpos = 0;			// LCD_ST7565_H_OFFSET is not used for ST7920 controller
 #else
-   lcd_command((uint8_t)(CMD_SetDDRAMAddress));
+   lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row1));
 #endif
 }
 
@@ -78,7 +78,7 @@ void lcd_line2() {
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(1 * ((FONT_HEIGHT + 7) / 8),0);
 #else
-   lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x40));
+   lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row2));
 #endif
 }
 
@@ -89,7 +89,7 @@ void lcd_line3() {
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(2 * ((FONT_HEIGHT + 7) / 8),0);
 #else
-   lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x14));
+   lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row3));
 #endif
 }
 
@@ -100,7 +100,7 @@ void lcd_line4() {
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(3 * ((FONT_HEIGHT + 7) / 8),0);
 #else
-   lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x54));
+   lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row4));
 #endif
 }
 
@@ -143,10 +143,16 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
    _xpos = (x * FONT_WIDTH);
 #else
    // move to the specified position for character display
-   if ((y & 0x01) != 0) {
-     lcd_command((uint8_t)(CMD_SetDDRAMAddress + 0x40 + (LCD_LINE_LENGTH*(y/2)) + x));
+   if (y == 1) {
+     lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row2 + x));
+ #if (LCD_LINES > 2)
+   } else if (y == 2) {
+     lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row3 + x));
+   } else if (y == 3) {
+     lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row4 + x));
+ #endif
    } else {
-     lcd_command((uint8_t)(CMD_SetDDRAMAddress + (LCD_LINE_LENGTH*(y/2)) + x));
+     lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row1 + x));
    }
 #endif
 }
@@ -277,7 +283,13 @@ _xpos += FONT_WIDTH;		// move pointer to the next character position
 // sends a command to the LCD
  
 void lcd_command(unsigned char temp1) {
-        lcd_write_cmd(temp1);		// set RS to 0
+	_lcd_hw_write(0x00,temp1);
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735))
+ ;
+#else
+	wait50us();
+#endif
+//	wait1ms();
 #ifdef WITH_UART
 	if((temp1 == 0x80) || (temp1 == 0xC0)) {
 		uart_newline();
@@ -337,10 +349,10 @@ void lcd_init(void) {
  #else
    HW_LCD_RES_PORT |= _BV(HW_LCD_RES_PIN);	// switch RES to VCC
  #endif  /* LCD_SPI_OPEN_COL */
-   wait_about30ms();  // Wait for 30 ms after RESET
+   wait_about100ms();  // Wait for 100 ms after RESET
 #elif (LCD_INTERFACE_MODE == MODE_I2C)   /* ! MODE_SPI || MODE_3LINE */
    i2c_init();		// init the I2C interface
-   wait_about30ms();	// Set LCD for 100 ms into RESET
+   wait_about100ms();	// Set LCD for 100 ms into RESET
 #elif (LCD_INTERFACE_MODE == MODE_7920_SERIAL) /* ! MODE_SPI || MODE_3LINE || MODE_I2C */
    HW_LCD_B0_PORT  &= ~_BV(HW_LCD_B0_PIN); // LCD B0 = 0
    HW_LCD_B0_DDR   |= _BV(HW_LCD_B0_PIN);  // LCD SI is Output
@@ -350,11 +362,11 @@ void lcd_init(void) {
 //   HW_LCD_RESET_DDR  |= _BV(HW_LCD_RESET_PIN); // LCD RESET is Output
 //   wait1ms();
 //   HW_LCD_RESET_PORT |= _BV(HW_LCD_RESET_PIN); // set reset high
-   wait50ms();		// wait after power up reset
+   wait100ms();		// wait after power up reset
 #elif (LCD_INTERFACE_MODE == MODE_PARALLEL) /* ! MODE_SPI || MODE_3LINE || MODE_I2C || MODE_7920_SERIAL */
  /* ! MODE_SPI || MODE_3LINE || MODE_I2C || MODE_7920_SERIAL */
  #ifdef LCD_ST_TYPE
-   wait50ms();		// wait after power up reset
+   wait100ms();		// wait after power up reset
    lcd_command(0x22); // set to 4-bit mode for graphic display
    lcd_command(0x22 ); // set to 4-bit mode
  #endif
@@ -505,18 +517,15 @@ void lcd_init(void) {
 /* -------------------------------------------------------------------------- */
 #else    /* !(LCD_ST_TYPE == 7565 | 1306) | 7108 | 7920 | 7108 | 8812 | 8814) */
 /* must be a character display */
-   wait_about30ms();
+   wait_about100ms();
    // to initialise, send 3 times to be shure to be in 8 Bit mode
-   lcd_write_init(1);
-   wait_about5ms();
-   
-   lcd_write_init(1);
-   wait1ms();
 
-   lcd_write_init(1);
-   wait1ms();
-
-   lcd_write_init(0);		// switch to 4 Bit mode
+ #if LCD_INTERFACE_MODE == MODE_PARALLEL
+   lcd_command(0x33);			// switch to 8-bit
+   lcd_command(0x32);			// switch to 4-bit
+ #else
+   lcd_command(0x3a);			// switch to 8-bit for I2C or SPI
+ #endif
    wait_about10ms();
  #ifdef LCD_DOGM
    uint8_t contrast;
@@ -538,29 +547,28 @@ void lcd_init(void) {
    lcd_command(0x08);				// 5-dot font, 2 line display NW=0
   #endif
    lcd_command(0x04 | MODE_BDC | MODE_BDS);	// BDC=1, bottom view
-   lcd_command(CMD1_SetBias | 0x0e);		// BS1:0=11, BS1=1
+   lcd_command(CMD1_SetBias | 0x0e);		// 0x1e BS1:0=11, BS1=1
 
    lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x09);	// 4Bit / 2 rows / 5x7 / Instr. table 1
-//   lcd_command(CMD1_SetBias | 0x0b);		// BS0=1 / F2:0 = 3, Bias = 1/6
-   lcd_command(CMD1_SetBias | 0x0c);		// 1/4 bias     (5V)
+//   lcd_command(CMD1_SetBias | 0x0b);		// 0x1b BS0=1 / F2:0 = 3, Bias = 1/6
+   lcd_command(CMD1_SetBias | 0x0c);		// 0x1c 1/4 bias     (5V)
 
   #ifdef LCD_ST7565_RESISTOR_RATIO
-   lcd_command(CMD1_FollowerControl | 0x08 | LCD_ST7565_RESISTOR_RATIO);	// Follower on / Rab2:0 = RATIO
+   lcd_command(CMD1_FollowerControl | 0x08 | LCD_ST7565_RESISTOR_RATIO);	// 0x6e Follower on / Rab2:0 = RATIO
   #else
-   lcd_command(CMD1_FollowerControl | 0x0e);	// Follower on / Rab2:0 = 6
+   lcd_command(CMD1_FollowerControl | 0x0e);	// 0x6e Follower on / Rab2:0 = 6
   #endif
 
-
-//   lcd_command(CMD1_PowerControl | 0x02);	// booster off / set contrast C5:C4 = 2
-   lcd_command(CMD1_PowerControl | ((contrast>>4)&0x03));     // booster on / set contrast C5:C4 
-//   lcd_command(CMD1_SetContrast | 0x04);	// set contrast C3:0 = 4
-   lcd_command(CMD1_SetContrast | (contrast&0x0f));   // set contrast C3:0 
+//   lcd_command(CMD1_PowerControl | 0x02);	// 0x52 booster off / set contrast C5:C4 = 2
+   lcd_command(CMD1_PowerControl | ((contrast>>4)&0x07));     // 0x5x booster on / set contrast C5:C4 
+//   lcd_command(CMD1_SetContrast | 0x04);	// 0x74 set contrast C3:0 = 4
+   lcd_command(CMD1_SetContrast | (contrast&0x0f));   // 0x7x set contrast C3:0 
 
    // old initialize without OLED display
    lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x08);	// 4Bit / 2 rows / 5x7
-   lcd_command(CMD_DISPLAY_ON);			// Display on, no Cursor, No blink
-   lcd_command(CMD_SetEntryMode | 0x02);	// increment / no Scroll    
    lcd_clear();
+   lcd_command(CMD_DISPLAY_ON);			// 0x08 Display on, no Cursor, No blink
+   lcd_command(CMD_SetEntryMode | 0x02);	// 0x06 increment / no Scroll    
  #else
    // initialize sequence with OLED display
    lcd_command(CMD_SetIFOptions | MODE_8BIT);		// Add for OLED
@@ -568,9 +576,9 @@ void lcd_init(void) {
 
    lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x0A);	// 4Bit / 2 rows / 5x7 / table3 / Add for OLED
    lcd_command(CMD_SetDisplayAndCursor);	// Display off / no Blinking  / Add for OLED
-   lcd_clear();
    lcd_command(CMD_SetEntryMode | 0x02);	// increment / no Scroll
-   lcd_command(2);				// Home Command  // Add for OLED
+   lcd_command(CMD_CURSOR_HOME);		// Home Command  // Add for OLED
+   lcd_clear();
    wait_about5ms();
    lcd_command(CMD_SetDisplayAndCursor | 0x04);	// Display on / Cursor off / no Blinking
  #endif
@@ -695,7 +703,7 @@ void lcd_clear(void) {
      }
    }
 #else
-   lcd_command(CLEAR_DISPLAY);
+   lcd_command(CMD_CLEAR_DISPLAY);
    wait_about10ms();
 #endif
 #ifdef WITH_UART

@@ -46,7 +46,7 @@ CFLAGS += -DWITH_MENU
 # WITH_ROTARY_COUNT to 5 for getting the best resolution.
 # You can also use two separate push-buttons for Up and Down instead ot the rotary encoder.
 # You must set the WITH_ROTARY_SWITCH to 4 for the UP/DOWN push-buttons.
-# CFLAGS += -DWITH_ROTARY_SWITCH=2
+#CFLAGS += -DWITH_ROTARY_SWITCH=2
 # the option CHANGE_ROTARY_DIRECTION changes the rotary direction by swap of switches
 #CFLAGS += -DCHANGE_ROTARY_DIRECTION
 # The best solution for connecting the rotary switch is PD1 and PD3, because this setting can be used
@@ -121,7 +121,7 @@ LCD_ST7565_RESISTOR_RATIO = 4
 # OFFSET values can vary for the connected display type to 0, 2 or 4.
 CFLAGS += -DLCD_ST7565_H_OFFSET=2
 # If LCD_ST7565 option is set to 1: Flip the display's vertical direction
-# CFLAGS += -DLCD_ST7565_V_FLIP=1
+#CFLAGS += -DLCD_ST7565_V_FLIP=1
 # The contrast value can be predefined with the constant VOLUME_VALUE
 # for ST7565 controller the value can be between 0 and 63, for the SSD1306 0 to 255 can be selected.
 #CFLAGS += -DVOLUME_VALUE=25

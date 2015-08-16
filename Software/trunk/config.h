@@ -369,7 +369,7 @@
 /* Port(s) / Pins for LCD						     */
 /* ************************************************************************* */
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735))
  /* set the default INTERFACE_MODE for the ST7565 controller */
  #ifndef LCD_INTERFACE_MODE
   #define LCD_INTERFACE_MODE MODE_SPI

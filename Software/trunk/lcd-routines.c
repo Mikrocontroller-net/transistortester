@@ -515,7 +515,7 @@ void lcd_init(void) {
 //   lcd_command(0x2c);		// RAMWR
    wait_about50ms();
 /* -------------------------------------------------------------------------- */
-#else    /* !(LCD_ST_TYPE == 7565 | 1306) | 7108 | 7920 | 7108 | 8812 | 8814) */
+#else    /* !(LCD_ST_TYPE == 7565 | 1306) | 7108 | 7920 | 7108 | 8812 | 8814 | 7735) */
 /* must be a character display */
    wait_about100ms();
    // to initialise, send 3 times to be shure to be in 8 Bit mode

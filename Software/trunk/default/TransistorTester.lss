@@ -376,7 +376,7 @@ void lcd_command(unsigned char temp1) {
 
 000001f6 <lcd_line3>:
      1f6:	82 e0       	ldi	r24, 0x02	; 2
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163))
  ;
 #else
 	wait50us();
@@ -545,8 +545,8 @@ void lcd_restore_position(void) {
      286:	8f df       	rcall	.-226    	; 0x1a6 <lcd_data>
      288:	21 96       	adiw	r28, 0x01	; 1
      28a:	f8 cf       	rjmp	.-16     	; 0x27c <lcd_pgm_string+0x6>
-       lcd_write_data(0);	// clear green color
-       lcd_write_data(0);	// clear blue color
+       lcd_write_data(LCD_BG_COLOR >> 8);	// clear 5 red / 3 green pixels
+       lcd_write_data(LCD_BG_COLOR & 0xff);	// clear 3 green / 5 blue pixels
      }
    }
 #else
@@ -702,7 +702,7 @@ void lcd_fix_customchar(const unsigned char *chardata) {
 //   lcd_command(0x2c);		// RAMWR
    wait_about50ms();
 /* -------------------------------------------------------------------------- */
-#else    /* !(LCD_ST_TYPE == 7565 | 1306) | 7108 | 7920 | 7108 | 8812 | 8814) */
+#else    /* !(LCD_ST_TYPE == 7565 | 1306) | 7108 | 7920 | 7108 | 8812 | 8814 | 7735 | 9163) */
 /* must be a character display */
    wait_about100ms();
      326:	87 e2       	ldi	r24, 0x27	; 39

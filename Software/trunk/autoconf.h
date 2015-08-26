@@ -3,7 +3,7 @@
        Automatic Configuration
 */
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7735))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163))
 /* Define under which conditions a graphical display is supported. */
 /* The graphical display should at least support 128x64 pixels. */
  #define WITH_GRAPHICS 1
@@ -30,10 +30,18 @@
  #define TEXT_RIGHT_TO_ICON ((ICON_WIDTH + 16 + 5 + 7) / FONT_WIDTH)
 #else  /* no ST7565 or SSD1306 graphic controller */
  #ifdef FOUR_LINE_LCD
-  #define LCD_LINES 4
-  #define PAGES_PER_LINE 1
-  #ifndef LCD_LINE_LENGTH
-   #define LCD_LINE_LENGTH 20	/* usually a 20 character line */
+  #if FOUR_LINE_LCD == 3
+   #define LCD_LINES 3
+   #define PAGES_PER_LINE 1
+   #ifndef LCD_LINE_LENGTH
+    #define LCD_LINE_LENGTH 16	/* usually a 16 character line */
+   #endif
+  #else
+   #define LCD_LINES 4
+   #define PAGES_PER_LINE 1
+   #ifndef LCD_LINE_LENGTH
+    #define LCD_LINE_LENGTH 20	/* usually a 20 character line */
+   #endif
   #endif
  #else	/* no FOUR_LINE_LCD */
    #define PAGES_PER_LINE 1
@@ -549,7 +557,7 @@
 #define LCD_CHAR_INDUCTOR1 'w'		// use ww for inductor symbol
 #define LCD_CHAR_INDUCTOR2 'w'		// use ww for inductor symbol
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE ==8812) || (LCD_ST_TYPE == 8814))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE ==8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163))
 // redefine the special symbols for software character set used with graphical display
         #undef LCD_CHAR_DEGREE
         #define LCD_CHAR_DEGREE 0xf8	// Character for degree

@@ -162,19 +162,77 @@
 	#define lcd_cursor_off() // ignored
 /* *********************************************************************************************************** */
 #elif (LCD_ST_TYPE == 7735)
+	#define CMD_EXIT_SLEEP 0x11
+	#define CMD_SET_GAMMA 0x26
+	#define CMD_DISPLAY_ON 0x29
+ 	#define CMD_CASET  0x2a
+ 	#define CMD_RASET  0x2b
+ 	#define CMD_RAMWR  0x2c
+	#define CMD_MEMORY_ADDRESS_CONTROL 0x36
+	#define CMD_SET_COLOR_FORMAT 0x3a
+	#define CMD_FRAME_RATE_CONTROL 0xb1
+	#define CMD_INVERSION_CONTROL 0xb4
+	#define CMD_POWER_CONTROL1 0xc0
+	#define CMD_POWER_CONTROL2 0xc1
+	#define CMD_VCOM_CONTROL1 0xc5
 	#undef SCREEN_HEIGHT
         #define SCREEN_HEIGHT 160
 //	#undef SCREEN_WIDTH
 //	#define SCREEN_WIDTH 128
- 	#define CMD_CASET  0x2b
- 	#define CMD_RASET  0x2c
- 	#define CMD_RAMWR  0x2d
 //Makros for LCD
 	#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
 	#define lcd_cursor_on()  // ignored
 	#define lcd_cursor_off() // ignored
+ #ifndef LCD_ST7565_V_OFFSET
+	#define LCD_ST7565_V_OFFSET 0
+ #endif
+ #ifndef LCD_BG_COLOR
+	#define LCD_BG_COLOR 0x0000	/* 5 bit read, 6 bit green, 5 bit blue */
+ #endif
+ #ifndef LCD_FG_COLOR
+	#define LCD_FG_COLOR 0xffff	/* 5 bit read, 6 bit green, 5 bit blue */
+ #endif
+	#define ST_DIVA 14
+	#define ST_VPA 20
+        
 /* *********************************************************************************************************** */
-#else /* not ((LCD_ST_TYPE == 7565 || 1306 || 7920 || 7108 || 8812 || 8814) */
+#elif (LCD_ST_TYPE == 9163)
+	#define CMD_EXIT_SLEEP 0x11
+	#define CMD_SET_GAMMA 0x26
+	#define CMD_DISPLAY_ON 0x29
+ 	#define CMD_CASET  0x2a
+ 	#define CMD_RASET  0x2b
+ 	#define CMD_RAMWR  0x2c
+	#define CMD_MEMORY_ADDRESS_CONTROL 0x36
+	#define CMD_SET_COLOR_FORMAT 0x3a
+	#define CMD_FRAME_RATE_CONTROL 0xb1
+	#define CMD_INVERSION_CONTROL 0xb4
+	#define CMD_POWER_CONTROL1 0xc0
+	#define CMD_POWER_CONTROL2 0xc1
+	#define CMD_VCOM_CONTROL1 0xc5
+//Makros for LCD
+	#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
+	#define lcd_cursor_on()  // ignored
+	#define lcd_cursor_off() // ignored
+
+	#undef SCREEN_HEIGHT
+        #define SCREEN_HEIGHT 128
+//	#undef SCREEN_WIDTH
+//	#define SCREEN_WIDTH 128
+ #ifndef LCD_ST7565_V_OFFSET
+	#define LCD_ST7565_V_OFFSET 32	/* 160 - 128 */
+ #endif
+ #ifndef LCD_BG_COLOR
+	#define LCD_BG_COLOR 0x0000	/* 5 bit read, 6 bit green, 5 bit blue */
+ #endif
+ #ifndef LCD_FG_COLOR
+	#define LCD_FG_COLOR 0xffff	/* 5 bit read, 6 bit green, 5 bit blue */
+ #endif
+	#define ST_DIVA 17
+	#define ST_VPA 20
+
+/* *********************************************************************************************************** */
+#else /* not ((LCD_ST_TYPE == 7565 || 1306 || 7920 || 7108 || 8812 || 8814 || 7735 || 9163) */
 /* must be a character display! */
 	#define lcd_write_data(data)                   _lcd_hw_write(0x01, data); wait50us();
 	#define lcd_write_init(data_length)            _lcd_hw_write(0x80, CMD_SetIFOptions | (data_length << 4))
@@ -209,11 +267,18 @@
 
 //Addresses of lines
  #if defined(LCD_DOGM) && defined(FOUR_LINE_LCD)
+  #if FOUR_LINE_LCD == 3
+        /* lines for a ST7036 controller, 3 lines */
+    	#define LCD_Row1	0x00
+	#define LCD_Row2	0x10
+	#define LCD_Row3	0x20
+  #else
         /* lines for a SSD1803 controller */
     	#define LCD_Row1	0x00
 	#define LCD_Row2	0x20
 	#define LCD_Row3	0x40
 	#define LCD_Row4	0x60
+  #endif
  #else
     	#define LCD_Row1	0x00
 	#define LCD_Row2	0x40

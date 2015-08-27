@@ -381,7 +381,7 @@ void lcd_command(unsigned char temp1) {
 #else
 	wait50us();
      1f8:	80 93 0e 01 	sts	0x010E, r24
-     1fc:	84 e9       	ldi	r24, 0x94	; 148
+     1fc:	80 e9       	ldi	r24, 0x90	; 144
 }
 
 /* ******************************************************************************* */
@@ -399,7 +399,7 @@ void lcd_line1() {
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row1));
      202:	80 93 0e 01 	sts	0x010E, r24
-     206:	84 ed       	ldi	r24, 0xD4	; 212
+     206:	80 ed       	ldi	r24, 0xD0	; 208
      208:	e9 cf       	rjmp	.-46     	; 0x1dc <lcd_command>
 
 0000020a <lcd_set_cursor>:
@@ -745,7 +745,11 @@ void lcd_fix_customchar(const unsigned char *chardata) {
      348:	4d cf       	rjmp	.-358    	; 0x1e4 <lcd_line1>
 
 0000034a <lcd_clear_line2>:
-
+  #if defined(FOUR_LINE_LCD) && (FOUR_LINE_LCD != 3)             
+   // for KS0073 controller  set the 4-line mode with extended instruction
+   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x40 | 0x08); //enter extended instruction
+   lcd_command(CMD_SetDisplayAndCursor | 0x01);	// enable 4-line mode
+  #endif
    lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x0A);	// 4Bit / 2 rows / 5x7 / table3 / Add for OLED
      34a:	50 df       	rcall	.-352    	; 0x1ec <lcd_line2>
      34c:	f9 df       	rcall	.-14     	; 0x340 <lcd_clear_line>

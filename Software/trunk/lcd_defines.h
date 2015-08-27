@@ -280,10 +280,17 @@
 	#define LCD_Row4	0x60
   #endif
  #else
+  #if LCD_LINE_LENGTH == 20
     	#define LCD_Row1	0x00
 	#define LCD_Row2	0x40
 	#define LCD_Row3	0x14
 	#define LCD_Row4	0x54
+  #else
+    	#define LCD_Row1	0x00
+	#define LCD_Row2	0x40
+	#define LCD_Row3	0x10
+	#define LCD_Row4	0x50
+  #endif
  #endif
 
 #endif

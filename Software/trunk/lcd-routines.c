@@ -541,7 +541,8 @@ void lcd_init(void) {
   #else
    #define MODE_BDS 0x00
   #endif
-   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x0a);	// 8Bit / 2 rows /RE=1
+   // enter 4-line mode for ssd1803a controller
+   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x0a);	// 0x2a|0x3a 8Bit / 2 rows /RE=1
   #ifdef FOUR_LINE_LCD
    lcd_command(0x09);				// 5-dot font, 4 line display NW=1
   #else
@@ -550,7 +551,7 @@ void lcd_init(void) {
    lcd_command(0x04 | MODE_BDC | MODE_BDS);	// BDC=1, bottom view
    lcd_command(CMD1_SetBias | 0x0e);		// 0x1e BS1:0=11, BS1=1
 
-   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x09);	// 4Bit / 2 rows / 5x7 / Instr. table 1
+   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x09);	// 0x29 4Bit / 2 rows / 5x7 / Instr. table 1
 //   lcd_command(CMD1_SetBias | 0x0b);		// 0x1b BS0=1 / F2:0 = 3, Bias = 1/6
    lcd_command(CMD1_SetBias | 0x0c);		// 0x1c 1/4 bias     (5V)
 
@@ -575,6 +576,11 @@ void lcd_init(void) {
    lcd_command(CMD_SetIFOptions | MODE_8BIT);		// Add for OLED
    lcd_command(CMD_SetIFOptions | MODE_8BIT);		// Add for OLED
 
+  #if defined(FOUR_LINE_LCD) && (FOUR_LINE_LCD != 3)             
+   // for KS0073 controller  set the 4-line mode with extended instruction
+   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x40 | 0x08); //enter extended instruction
+   lcd_command(CMD_SetDisplayAndCursor | 0x01);	// enable 4-line mode
+  #endif
    lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x0A);	// 4Bit / 2 rows / 5x7 / table3 / Add for OLED
    lcd_command(CMD_SetDisplayAndCursor);	// Display off / no Blinking  / Add for OLED
    lcd_command(CMD_SetEntryMode | 0x02);	// increment / no Scroll

@@ -272,6 +272,7 @@
     	#define LCD_Row1	0x00
 	#define LCD_Row2	0x10
 	#define LCD_Row3	0x20
+	#define LCD_Row4	0x30
   #else
         /* lines for a SSD1803 controller */
     	#define LCD_Row1	0x00

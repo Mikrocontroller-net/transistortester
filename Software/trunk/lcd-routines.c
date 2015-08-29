@@ -56,6 +56,9 @@ void lcd_equal(void) {
 /* ******************************************************************************* */
 //move to the beginning of the 1. row
 void lcd_line1() {
+#ifdef WITH_UART
+   uart_newline();		// start of new measurement
+#endif
    lcd_text_line = 0;
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(0 * ((FONT_HEIGHT + 7) / 8),0);
@@ -74,6 +77,9 @@ void lcd_line1() {
 // or you can select a 8-line rounding of the positioning of the lines with: 
 #define FONT_V_SPACE (((FONT_HEIGHT + 7) / 8) * 8)
 void lcd_line2() {
+#ifdef WITH_UART
+   uart_putc(' ');		// start of new line
+#endif
    lcd_text_line = 1;
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(1 * ((FONT_HEIGHT + 7) / 8),0);
@@ -85,6 +91,9 @@ void lcd_line2() {
 /* ******************************************************************************* */
 //move to the beginning of the 3. row
 void lcd_line3() {
+#ifdef WITH_UART
+   uart_putc(' ');		// start of new line
+#endif
    lcd_text_line = 2;
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(2 * ((FONT_HEIGHT + 7) / 8),0);
@@ -96,6 +105,9 @@ void lcd_line3() {
 /* ******************************************************************************* */
 //move to the beginning of the 4. row
 void lcd_line4() {
+#ifdef WITH_UART
+   uart_putc(' ');		// start of new line
+#endif
    lcd_text_line = 3;
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(3 * ((FONT_HEIGHT + 7) / 8),0);
@@ -109,21 +121,24 @@ void lcd_line4() {
 // Text_line number is incremented by 1, if possible (not yet at the last line).
 // If already at the last line of the display, last_line_used is set to 1 .
 void lcd_next_line(uint8_t xx) {
-lcd_text_line ++;
-if (lcd_text_line > (LCD_LINES - 1))  {
-   // Limit is reached
-   lcd_text_line = (LCD_LINES - 1);
-   last_line_used = 1;
-} else {
-   last_line_used = 0;
-}
-lcd_set_cursor((uint8_t)(lcd_text_line * PAGES_PER_LINE), xx);
+#ifdef WITH_UART
+   uart_putc(' ');
+#endif
+   lcd_text_line ++;
+   if (lcd_text_line > (LCD_LINES - 1))  {
+      // Limit is reached
+      lcd_text_line = (LCD_LINES - 1);
+      last_line_used = 1;
+   } else {
+      last_line_used = 0;
+   }
+   lcd_set_cursor((uint8_t)(lcd_text_line * PAGES_PER_LINE), xx);
 }
 /* ******************************************************************************* */
 #ifdef WAIT_LINE2_CLEAR
 void lcd_next_line_wait(uint8_t xx) {
- lcd_next_line(xx);
- wait_for_key_5s_line2();		// wait 5s and clear last line
+   lcd_next_line(xx);
+   wait_for_key_5s_line2();		// wait 5s and clear last line
 }
 #endif
 
@@ -718,7 +733,7 @@ void lcd_clear(void) {
 #endif
    lcd_line1();			// set cursor to Line1 Column 1, (only for OLED-Display)
    lcd_text_line = 0;
-}
+}  /* end lcd_clear() */
 
 
 #ifdef WITH_UART

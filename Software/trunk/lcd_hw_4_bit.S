@@ -187,6 +187,8 @@ fini_rs:
   #endif
 	set_en_low
 	set_en_output		// en/CLK to GND
+	set_b0_low		// ## reset b0 to GND to prevent incorrect detection of rotary encoder movement
+	set_b0_output		// ##
 	ret		// return _lcd_hw_write
 
 // sub-function shift_out: send 1, if carry is set, send 0, if carry is reset
@@ -296,6 +298,7 @@ fini_bit:
    #endif
         set_ce_high		// disable chip
 	set_en_low
+	set_b0_low		// ## reset b0 to GND to prevent incorrect detection of rotary encoder movement
 	ret		// return _lcd_hw_write
   #else /* no FAST_SPI_OUTPUT */
                ; Set RS (0=Cmd, 1=Char)
@@ -349,6 +352,7 @@ fini_bit:
    #endif
         set_ce_high		// disable chip
 	set_en_low
+	set_b0_low		// ## reset b0 to GND to prevent incorrect detection of rotary encoder movement
 	ret		// return _lcd_hw_write
 
 shift_out2:

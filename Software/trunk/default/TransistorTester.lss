@@ -382,11 +382,11 @@ void lcd_command(unsigned char temp1) {
 	wait50us();
      1f8:	80 93 0e 01 	sts	0x010E, r24
      1fc:	80 e9       	ldi	r24, 0x90	; 144
-}
-
-/* ******************************************************************************* */
 //move to the beginning of the 1. row
 void lcd_line1() {
+#ifdef WITH_UART
+   uart_newline();		// start of new measurement
+#endif
    lcd_text_line = 0;
      1fe:	ee cf       	rjmp	.-36     	; 0x1dc <lcd_command>
 
@@ -403,11 +403,11 @@ void lcd_line1() {
      208:	e9 cf       	rjmp	.-46     	; 0x1dc <lcd_command>
 
 0000020a <lcd_set_cursor>:
-// for the ST7920 you can select a accurate vertical pixel positioning of line with:
-// #define FONT_V_SPACE FONT_HEIGHT
-// or you can select a 8-line rounding of the positioning of the lines with: 
 #define FONT_V_SPACE (((FONT_HEIGHT + 7) / 8) * 8)
 void lcd_line2() {
+#ifdef WITH_UART
+   uart_putc(' ');		// start of new line
+#endif
    lcd_text_line = 1;
      20a:	60 93 03 01 	sts	0x0103, r22
      20e:	81 30       	cpi	r24, 0x01	; 1
@@ -419,11 +419,11 @@ void lcd_line2() {
      212:	80 ec       	ldi	r24, 0xC0	; 192
      214:	01 c0       	rjmp	.+2      	; 0x218 <lcd_set_cursor+0xe>
      216:	80 e8       	ldi	r24, 0x80	; 128
-}
-
-/* ******************************************************************************* */
 //move to the beginning of the 3. row
 void lcd_line3() {
+#ifdef WITH_UART
+   uart_putc(' ');		// start of new line
+#endif
    lcd_text_line = 2;
      218:	86 0f       	add	r24, r22
      21a:	e0 cf       	rjmp	.-64     	; 0x1dc <lcd_command>
@@ -436,11 +436,11 @@ void lcd_line3() {
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row3));
      220:	9f 5f       	subi	r25, 0xFF	; 255
      222:	90 93 0e 01 	sts	0x010E, r25
-}
-
-/* ******************************************************************************* */
 //move to the beginning of the 4. row
 void lcd_line4() {
+#ifdef WITH_UART
+   uart_putc(' ');		// start of new line
+#endif
    lcd_text_line = 3;
      226:	92 30       	cpi	r25, 0x02	; 2
      228:	30 f0       	brcs	.+12     	; 0x236 <lcd_next_line+0x1a>
@@ -482,37 +482,37 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
 
 00000246 <lcd_restore_position>:
      246:	60 91 00 01 	lds	r22, 0x0100
-/* ******************************************************************************* */
-// position to next line to column xx
-// Text_line number is incremented by 1, if possible (not yet at the last line).
 // If already at the last line of the display, last_line_used is set to 1 .
 void lcd_next_line(uint8_t xx) {
-lcd_text_line ++;
+#ifdef WITH_UART
+   uart_putc(' ');
+#endif
+   lcd_text_line ++;
      24a:	80 91 02 01 	lds	r24, 0x0102
      24e:	dd cf       	rjmp	.-70     	; 0x20a <lcd_set_cursor>
 
 00000250 <lcd_clear>:
      250:	81 e0       	ldi	r24, 0x01	; 1
      252:	c4 df       	rcall	.-120    	; 0x1dc <lcd_command>
-if (lcd_text_line > (LCD_LINES - 1))  {
+   if (lcd_text_line > (LCD_LINES - 1))  {
      254:	82 e0       	ldi	r24, 0x02	; 2
      256:	0b d2       	rcall	.+1046   	; 0x66e <sleep_5ms>
-   // Limit is reached
-   lcd_text_line = (LCD_LINES - 1);
+      // Limit is reached
+      lcd_text_line = (LCD_LINES - 1);
      258:	c5 df       	rcall	.-118    	; 0x1e4 <lcd_line1>
      25a:	10 92 0e 01 	sts	0x010E, r1
-   last_line_used = 1;
+      last_line_used = 1;
      25e:	08 95       	ret
 
 00000260 <lcd_string>:
      260:	cf 93       	push	r28
      262:	df 93       	push	r29
-} else {
-   last_line_used = 0;
+   } else {
+      last_line_used = 0;
      264:	ec 01       	movw	r28, r24
      266:	89 91       	ld	r24, Y+
-}
-lcd_set_cursor((uint8_t)(lcd_text_line * PAGES_PER_LINE), xx);
+   }
+   lcd_set_cursor((uint8_t)(lcd_text_line * PAGES_PER_LINE), xx);
      268:	88 23       	and	r24, r24
      26a:	11 f0       	breq	.+4      	; 0x270 <lcd_string+0x10>
      26c:	9c df       	rcall	.-200    	; 0x1a6 <lcd_data>
@@ -523,12 +523,12 @@ lcd_set_cursor((uint8_t)(lcd_text_line * PAGES_PER_LINE), xx);
 /* ******************************************************************************* */
 #ifdef WAIT_LINE2_CLEAR
 void lcd_next_line_wait(uint8_t xx) {
- lcd_next_line(xx);
+   lcd_next_line(xx);
      274:	08 95       	ret
 
 00000276 <lcd_pgm_string>:
      276:	cf 93       	push	r28
- wait_for_key_5s_line2();		// wait 5s and clear last line
+   wait_for_key_5s_line2();		// wait 5s and clear last line
      278:	df 93       	push	r29
      27a:	ec 01       	movw	r28, r24
      27c:	fe 01       	movw	r30, r28
@@ -10588,9 +10588,6 @@ end3:
     32f6:	0e 94 f2 00 	call	0x1e4	; 0x1e4 <lcd_line1>
 	  Calibrate_UR();		// get Ref Voltages and Pin resistance
     32fa:	0e 94 b0 07 	call	0xf60	; 0xf60 <Battery_check>
-	#ifdef WITH_UART
-	  uart_newline();		// start of new measurement
-	#endif
 	  lcd_line1();			// Cursor to 1. row, column 1
     32fe:	0f b6       	in	r0, 0x3f	; 63
 	  

@@ -165,9 +165,6 @@
 	  ADC_DDR = TXD_MSK;		// activate Software-UART 
           init_parts();			// reset parts info to nothing found
 	  Calibrate_UR();		// get Ref Voltages and Pin resistance
-	#ifdef WITH_UART
-	  uart_newline();		// start of new measurement
-	#endif
 	  lcd_line1();			// Cursor to 1. row, column 1
 	  
 	#ifdef BAT_CHECK
@@ -207,9 +204,9 @@
 	     ADC_DDR = 0;		//deactivate Software-UART
 	     Vext = W5msReadADC(TPext);	// read external voltage 
 	//     ADC_DDR = TXD_MSK;		//activate Software-UART 
-	//#ifdef WITH_UART
-	//     uart_newline();		// start of new measurement
-	//#endif
+	 #ifdef WITH_UART
+	     uart_putc(' ');		// start of new measurement
+	 #endif
 	 #if EXT_NUMERATOR <= (0xffff/U_VCC)
 	     Display_mV(Vext*EXT_NUMERATOR/EXT_DENOMINATOR,3);	// Display 3 Digits of this mV units
 	 #else

@@ -100,13 +100,13 @@ steril:
 # device programming
 # make fuses  call if you don't have installed a crystal
 fuses:
-	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT)  $(FUSES_INT)
+	avrdude -c $(PROGRAMMER) -B $(BitClock) $(AVRDUDE_BAUD) -p $(PARTNO) -P $(PORT)  $(FUSES_INT)
 
 # fuses-crytal can only used if a 8MHz Crytal is installed (between Pin 9 and 10)
 fuses-crystal:
-	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT)  $(FUSES_CRY)
+	avrdude -c $(PROGRAMMER) -B $(BitClock) $(AVRDUDE_BAUD) -p $(PARTNO) -P $(PORT)  $(FUSES_CRY)
 fuses-crystal-lp:
-	avrdude -c $(PROGRAMMER) -B $(BitClock) -p $(PARTNO) -P $(PORT)  $(FUSES_CRY_L)
+	avrdude -c $(PROGRAMMER) -B $(BitClock) $(AVRDUDE_BAUD) -p $(PARTNO) -P $(PORT)  $(FUSES_CRY_L)
 
 # erases the FLASH ROM, EEPROM and clears all lock bits 
 erase:

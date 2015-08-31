@@ -34,13 +34,14 @@ void Battery_check(void) {
           {
              // no battery present, don't check,
 	     lcd_MEM_string(DC_Pwr_Mode_str);	// "DC Pwr Mode"
+             lcd_clear_line();			// clear to end of line
              DC_Pwr_mode = 1;
              return;
           }
   #endif
           lcd_MEM_string(Bat_str);		//output: "Bat. "
 	  Display_mV(bat_voltage,2);		// Display 2 Digits of this 10mV units
-	  lcd_space();
+          lcd_space();
  #else    /* without battery voltage output */
     lcd_MEM_string(Bat_str);		//output: "Bat. "
  #endif  /* BAT_OUT */
@@ -71,6 +72,7 @@ void Battery_check(void) {
      if(bat_adc < POOR_LEVEL) {	
 	//Vcc <6,3V; no proper operation is possible
 	lcd_MEM_string(BatEmpty);	//Battery empty!
+        lcd_clear_line();			// clear to end of line
 	lcd_refresh();			// write the pixels to display, ST7920 only
 	wait_about5s();
 	PORTD = 0;			//switch power off
@@ -81,5 +83,6 @@ void Battery_check(void) {
   } else { // Battery-voltage OK
      lcd_MEM_string(OK_str); 		// "OK"
   }
+  lcd_clear_line();			// clear to end of line
 };
 #endif	/* BAT_CHECK */

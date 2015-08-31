@@ -107,13 +107,13 @@ void function_menu() {
   func_number = 0;
  #ifdef POWER_OFF
   uint8_t ll;
+  message_key_released(SELECTION_str);
   for (ll=0;ll<((MODE_LAST+1)*10);ll++) 
  #else
   while (1)		/* without end, if no power off specified */
  #endif
   {
      if (func_number > MODE_LAST) func_number -= (MODE_LAST + 1);
-     message_key_released(SELECTION_str);
 #if (LCD_LINES > 3)
  #ifdef PAGE_MODE
      ff = 0;
@@ -138,9 +138,6 @@ void function_menu() {
   #endif
      }
      
-     if (ff == 0) {
-        lcd_clear_line2();			// clear line 2
-     }
      lcd_line2();				// reset cursor to begin of line 2
      if (func_number == page_nr) {
         lcd_data('>');
@@ -148,10 +145,6 @@ void function_menu() {
         lcd_space();				// put a blank to 1. row of line 2
      }
      message2line(page_nr);			// show first page function
-     if (ff == 0) {
-        lcd_line3();
-        lcd_clear_line();			// clear line 3
-     }
      lcd_line3();				// reset cursor to begin of line 3
      p_nr = page_nr + 1;
      if (p_nr > MODE_LAST) p_nr -= (MODE_LAST + 1);
@@ -161,10 +154,6 @@ void function_menu() {
         lcd_space();				// put a blank to 1. row of line 3
      }
      message2line(p_nr);			// show 2. page function
-     if (ff == 0) {
-        lcd_line4();
-        lcd_clear_line();			// clear line 4
-     }
      lcd_line4();				// reset cursor to begin of line 4
      p_nr = page_nr + 2;
      if (p_nr > MODE_LAST) p_nr -= (MODE_LAST + 1);
@@ -175,22 +164,18 @@ void function_menu() {
      }
      message2line(p_nr);			// show 3. page function
  #else	/* no PAGE_MODE */
-     lcd_clear_line2();				// clear line 2
+     lcd_line2();				// clear line 2
      lcd_space();				// put a blank to 1. row of line 2
      message2line(func_number + MODE_LAST);	// show lower (previous) function
-     lcd_line3();
-     lcd_clear_line();				// clear line 3
      lcd_line3();				// reset cursor to begin of line 3
      lcd_data('>');				// put a '>' marker to row 1 of line 3
      message2line(func_number);			// show selectable function
-     lcd_line4();
-     lcd_clear_line();				// clear line 4
      lcd_line4();				// reset cursor to begin of line 4
      lcd_space();				// put a blank to 1. row of line 4
      message2line(func_number + 1);		// show higher (next) function
  #endif         /* PAGE_MODE */
 #else	/* not LCD_LINES > 3 */
-     lcd_clear_line2();				// clear line 2
+     lcd_line2();
      message2line(func_number);
 #endif /* (LCD_LINES > 3) */
 #ifdef POWER_OFF
@@ -252,6 +237,7 @@ void function_menu() {
         rotary.incre = 0;	// reset all rotary information
         rotary.count = 0;
 #endif
+        message_key_released(SELECTION_str);	//write Line 1 with Selection:
      } /* end if (ii >= MIN_SELECT_TIME) */
 #ifdef WITH_ROTARY_SWITCH
      if (rotary.incre >= FAST_ROTATION) break; // to much rotation
@@ -302,6 +288,9 @@ void message2line(uint8_t number) {
      if (number == MODE_OFF) {
         lcd_MEM2_string(OFF_str);
      }
+     while (_lcd_column<LCD_LINE_LENGTH) {
+        lcd_space();
+     }
 }
 
 /* ****************************************************************** */
@@ -320,12 +309,21 @@ void show_C_ESR() {
         PartFound = PART_NONE;
         ReadBigCap(TP3,TP1);
         if (PartFound == PART_CAPACITOR) {
-           lcd_clear_line1(); 	// clear old capacity value 
+#if LCD_LINES > 2
+           lcd_line2(); 	// set to line1 
+#else
+           lcd_line1(); 	// set to line1 
+#endif
            lcd_data('C');
            lcd_equal();		// lcd_data('=');
            DisplayValue(cap.cval_max,cap.cpre_max,'F',3);
+           lcd_clear_line();	// clear to end of line 1
            cap.esr = GetESR(cap.cb,cap.ca);
-           lcd_clear_line2();	// clear old ESR value 
+#if LCD_LINES > 2
+	   lcd_line3();		// use line 3 
+#else
+           lcd_line2();		// use line 2 
+#endif
            lcd_MEM_string(&ESR_str[1]);
            if (cap.esr < 65530) {
               DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
@@ -333,9 +331,16 @@ void show_C_ESR() {
               lcd_data('?');		// too big
            }
         } else { // no cap found
-           lcd_clear_line1();	// clear old capacity value 
+#if LCD_LINES > 2
+           lcd_clear_line2(); 	// clear C value 
+           lcd_line3();
+	   lcd_clear_line();	// clear old ESR value
+#else
+           lcd_line1();	//  
            lcd_MEM2_string(C_ESR_str);
+           lcd_clear_line();
            lcd_clear_line2(); 	// clear old ESR value 
+#endif
         }
 #if defined(POWER_OFF) && defined(BAT_CHECK)
      Bat_update(times);
@@ -480,12 +485,13 @@ void make_frequency() {
      new_points = (times+10) / 30;
      if (new_points != shown_points) {
         // count of points has changed, build LCD line1 new
-        lcd_clear_line1();	// clear line 1 
+        lcd_line1();	// position to line 1 
         lcd_MEM2_string(F_GEN_str);	// display f-Generator
         shown_points = new_points;
         for (new_points=0; new_points<shown_points ;new_points++) {
            lcd_data('.');		// show elapsed time, one point is 30 seconds
         }
+        lcd_clear_line();	// clear remainder of line1
      }
 #undef KEYPRESS_LENGTH_10ms 
 #define KEYPRESS_LENGTH_10ms 20		/* change frequency only with >200ms key press */
@@ -495,22 +501,22 @@ void make_frequency() {
        if (freq_nr > MAX_FREQ_NR) freq_nr -= (MAX_FREQ_NR + 1);
        old_freq = freq_nr;	// update the last active frequency number
 #if (LCD_LINES > 3)
-       lcd_clear_line2();	// clear line 2 for previous frequency
+       lcd_line2();	// position to line 2 for previous frequency
        lcd_space();		// add a space to row 1 of line2
        switch_frequency(freq_nr + MAX_FREQ_NR);
-       lcd_line4();
-       lcd_clear_line();	// clear line 4 for next frequency
+       lcd_clear_line();		// clear remainder of line2
        lcd_line4();
        lcd_space();		// add a space to row 1 of line4
        switch_frequency(freq_nr + 1);
-       lcd_line3();
-       lcd_clear_line();	// clear line 3 for new frequency
+       lcd_clear_line();	// clear remainder of line4
        lcd_line3();
        lcd_data('>');
        switch_frequency(freq_nr);
+       lcd_clear_line();	// clear remainder of line3
 #else
-       lcd_clear_line2();	// clear line 2 for next frequency
+       lcd_line2();	// position to line 2 for next frequency
        switch_frequency(freq_nr);
+       lcd_clear_line();	// clear remainder of line2
 #endif
      } /* end if (old_freq != freq_nr) */
      key_pressed = wait_for_key_ms(1000);
@@ -790,8 +796,9 @@ void do_10bit_PWM() {
         }
         pwm_flip = (((unsigned long)0x3ff * percent) + 50) / 100;
         OCR1B = pwm_flip;		// new percentage
-        lcd_clear_line2();	// clear line 2
+        lcd_line2();		// goto line 2
         DisplayValue((((unsigned long)pwm_flip * 1000) + 0x1ff) / 0x3ff,-1,'%',5);
+        lcd_clear_line();
 #if 0
         lcd_space();
         if (rotary.count >= 0) {	// actual count for debugging
@@ -895,8 +902,9 @@ uint8_t contrast;
      lcd_command(CMD1_SetContrast | (contrast&0x0f));	// set contrast C3:0 
      lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x08);	// 2-line / IS=0
   #endif
-     lcd_clear_line2();
+     lcd_line2();
      DisplayValue(contrast,0,' ',4);
+     lcd_clear_line();		// clear to end of line
      key_pressed = wait_for_key_ms(1600);
 #ifdef POWER_OFF
  #ifdef WITH_ROTARY_SWITCH

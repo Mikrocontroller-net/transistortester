@@ -1,4 +1,4 @@
-/* tt_globals.h defines global variables in RAM ans EEprom */
+/* tt_globals.h defines global variables in RAM and EEprom */
 
 
 #if defined (MAIN_C)
@@ -168,6 +168,8 @@ COMMON uint8_t DC_Pwr_mode;
 #endif
 
 COMMON uint8_t lcd_text_line;
+COMMON uint8_t _lcd_column;
+
 COMMON uint8_t last_line_used;
 //#if POWER_OFF+0 > 1
 COMMON unsigned int display_time;	// display time of measurement in ms units

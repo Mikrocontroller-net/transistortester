@@ -15,13 +15,12 @@
 
 
  
-uint8_t lcd_text_line;
-uint8_t _lcd_column;
+//uint8_t lcd_text_line;
+//uint8_t _lcd_column;
 uint8_t last_text_line;
 uint8_t last_text_column;
 
 #if (LCD_GRAPHIC_TYPE != 0)
- #define NR_BYTE ((FONT_HEIGHT + 7) / 8)
 uint8_t _page;		// y position of the next character 
 uint8_t _xpos;		// x position of the next character
 uint8_t icon_xx;	// x position of the last loaded big 24x32 icon
@@ -40,14 +39,12 @@ void lcd_testpin(unsigned char temp) {
 void lcd_space(void) {
    lcd_data(' ');
 }
-#if FLASHEND > 0x1fff
 void lcd_spaces(uint8_t nn) {
-   while (nn != 0) {
+   while ((nn != 0) && (nn < 128)) {
      lcd_space();
      nn--;
    }
 }
-#endif
 // send equal character to LCD
 void lcd_equal(void) {
    lcd_data('=');
@@ -61,30 +58,31 @@ void lcd_line1() {
 #endif
    lcd_text_line = 0;
 #if (LCD_GRAPHIC_TYPE != 0)
-   lcd_set_cursor(0 * ((FONT_HEIGHT + 7) / 8),0);
+   lcd_set_cursor(0 * PAGES_PER_LINE,0);
 #elif (LCD_ST_TYPE == 7920)
    _page = 0;			// _page is the vertical pixel address for ST7920 controller
    _xpos = 0;			// LCD_ST7565_H_OFFSET is not used for ST7920 controller
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row1));
+   _lcd_column = 0;
 #endif
 }
 
 /* ******************************************************************************* */
 //move to the beginning of the 2. row
 // for the ST7920 you can select a accurate vertical pixel positioning of line with:
-// #define FONT_V_SPACE FONT_HEIGHT
 // or you can select a 8-line rounding of the positioning of the lines with: 
-#define FONT_V_SPACE (((FONT_HEIGHT + 7) / 8) * 8)
+//#define FONT_V_SPACE (((FONT_HEIGHT + 7) / 8) * 8)
 void lcd_line2() {
 #ifdef WITH_UART
    uart_putc(' ');		// start of new line
 #endif
    lcd_text_line = 1;
 #if (LCD_GRAPHIC_TYPE != 0)
-   lcd_set_cursor(1 * ((FONT_HEIGHT + 7) / 8),0);
+   lcd_set_cursor(1 * PAGES_PER_LINE,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row2));
+   _lcd_column = 0;
 #endif
 }
 
@@ -96,9 +94,10 @@ void lcd_line3() {
 #endif
    lcd_text_line = 2;
 #if (LCD_GRAPHIC_TYPE != 0)
-   lcd_set_cursor(2 * ((FONT_HEIGHT + 7) / 8),0);
+   lcd_set_cursor(2 * PAGES_PER_LINE,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row3));
+   _lcd_column = 0;
 #endif
 }
 
@@ -110,9 +109,10 @@ void lcd_line4() {
 #endif
    lcd_text_line = 3;
 #if (LCD_GRAPHIC_TYPE != 0)
-   lcd_set_cursor(3 * ((FONT_HEIGHT + 7) / 8),0);
+   lcd_set_cursor(3 * PAGES_PER_LINE,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row4));
+   _lcd_column = 0;
 #endif
 }
 
@@ -147,9 +147,8 @@ void lcd_next_line_wait(uint8_t xx) {
 /* The y position is the page address (8 line units).                                     */
 /* For most controllers the y position must be increased by (Height + 7) / 8 for the next text line */
 void lcd_set_cursor(uint8_t y, uint8_t x) {
- _lcd_column = x;
+    _lcd_column = x;
 #if (LCD_GRAPHIC_TYPE != 0)
-//  unsigned char xx;
    //move to the specified position (depends on used font)
    _page = y;
     // The pixel memory is greater as the display window.
@@ -246,11 +245,12 @@ void lcd_update_icon_opt(const unsigned char *ubitmap, unsigned char options) {
 void lcd_data(unsigned char temp1) {
 /* -------------------------------------------------------------------------- */
 
+_lcd_column++;
 #if (LCD_GRAPHIC_TYPE != 0)
  uint8_t *pfont;
- pfont = (uint8_t *)font + (FONT_WIDTH * NR_BYTE * temp1);	// first byte of character data
+ pfont = (uint8_t *)font + (FONT_WIDTH * PAGES_PER_LINE * temp1);	// first byte of character data
  // for other controllers like ST7565 the _page specifies the page of the controller (8 lines)
- lcd_set_pixels( pfont, _xpos, _page*8, 0, (unsigned char)FONT_WIDTH, (unsigned char)(NR_BYTE*8));
+ lcd_set_pixels( pfont, _xpos, _page*8, 0, (unsigned char)FONT_WIDTH, (unsigned char)(PAGES_PER_LINE*8));
 _xpos += FONT_WIDTH;		// move pointer to the next character position
 #else
  lcd_write_data(temp1);		// set RS to 1
@@ -302,13 +302,7 @@ void lcd_command(unsigned char temp1) {
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163))
  ;
 #else
-	wait50us();
-#endif
-//	wait1ms();
-#ifdef WITH_UART
-	if((temp1 == 0x80) || (temp1 == 0xC0)) {
-		uart_newline();
-	}
+	wait50us();		// wait at least 50us after every instruction for character LCD
 #endif
 }
  
@@ -544,6 +538,7 @@ void lcd_init(void) {
  #endif
    wait_about10ms();
  #ifdef LCD_DOGM
+// - - - - - - - - - - - - - - - - 
    uint8_t contrast;
    contrast = eeprom_read_byte(&EE_Volume_Value);
   #if LCD_ST7565_V_FLIP
@@ -556,36 +551,48 @@ void lcd_init(void) {
   #else
    #define MODE_BDS 0x00
   #endif
+  #ifdef FOUR_LINE_LCD
+   #if (FOUR_LINE_LCD != 3)
    // enter 4-line mode for ssd1803a controller
    lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x0a);	// 0x2a|0x3a 8Bit / 2 rows /RE=1
-  #ifdef FOUR_LINE_LCD
+   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x0a);	// 0x2a|0x3a 8Bit / 2 rows /RE=1
    lcd_command(0x09);				// 5-dot font, 4 line display NW=1
-  #else
-   lcd_command(0x08);				// 5-dot font, 2 line display NW=0
-  #endif
    lcd_command(0x04 | MODE_BDC | MODE_BDS);	// BDC=1, bottom view
    lcd_command(CMD1_SetBias | 0x0e);		// 0x1e BS1:0=11, BS1=1
-
    lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x09);	// 0x29 4Bit / 2 rows / 5x7 / Instr. table 1
-//   lcd_command(CMD1_SetBias | 0x0b);		// 0x1b BS0=1 / F2:0 = 3, Bias = 1/6
+   lcd_command(CMD1_SetBias | 0x0b);		// 0x1b BS0=1 / F2:0 = 3, Bias = 1/6
+   #define DEFAULT_RATIO 0x0e
+   #else
+   // 3-line display  dogm163
+   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x09);	// 0x29 4Bit / 2 rows / 5x7 / Instr. table 1
+   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x09);	// 0x29 4Bit / 2 rows / 5x7 / Instr. table 1
+   lcd_command(CMD1_SetBias | 0x0d);		// 0x1d 1/4 bias, 3-lines     (5V)
+   #define DEFAULT_RATIO 0x0c
+   #endif
+  #else
+   // 2-line display dogm162
+   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x09);	// 0x29 4Bit / 2 rows / 5x7 / Instr. table 1
+   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x09);	// 0x29 4Bit / 2 rows / 5x7 / Instr. table 1
    lcd_command(CMD1_SetBias | 0x0c);		// 0x1c 1/4 bias     (5V)
+   #define DEFAULT_RATIO 0x0e
+  #endif
 
+
+   lcd_command(CMD1_PowerControl | ((contrast>>4)&0x07));     // 0x5x booster on,off / set contrast C5:C4 
   #ifdef LCD_ST7565_RESISTOR_RATIO
    lcd_command(CMD1_FollowerControl | 0x08 | LCD_ST7565_RESISTOR_RATIO);	// 0x6e Follower on / Rab2:0 = RATIO
   #else
-   lcd_command(CMD1_FollowerControl | 0x0e);	// 0x6e Follower on / Rab2:0 = 6
+   lcd_command(CMD1_FollowerControl | DEFAULT_RATIO);	// 0x6e Follower on / Rab2:0 = 6
   #endif
 
-//   lcd_command(CMD1_PowerControl | 0x02);	// 0x52 booster off / set contrast C5:C4 = 2
-   lcd_command(CMD1_PowerControl | ((contrast>>4)&0x07));     // 0x5x booster on / set contrast C5:C4 
-//   lcd_command(CMD1_SetContrast | 0x04);	// 0x74 set contrast C3:0 = 4
    lcd_command(CMD1_SetContrast | (contrast&0x0f));   // 0x7x set contrast C3:0 
 
    // old initialize without OLED display
-   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x08);	// 4Bit / 2 rows / 5x7
+   lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x08);	// 4Bit / 2 rows / 5x7 / Instruction Table 0
    lcd_clear();
    lcd_command(CMD_DISPLAY_ON);			// 0x08 Display on, no Cursor, No blink
    lcd_command(CMD_SetEntryMode | 0x02);	// 0x06 increment / no Scroll    
+// - - - - - - - - - - - - - - - - 
  #else
    // initialize sequence with OLED display
    lcd_command(CMD_SetIFOptions | MODE_8BIT);		// Add for OLED
@@ -604,6 +611,7 @@ void lcd_init(void) {
    wait_about5ms();
    lcd_command(CMD_SetDisplayAndCursor | 0x04);	// Display on / Cursor off / no Blinking
  #endif
+// - - - - - - - - - - - - - - - - 
 
    LCDLoadCustomChar(LCD_CHAR_DIODE1);	//Custom-Character Diode symbol
    lcd_fix_customchar(DiodeIcon1);	//load Character  >|
@@ -728,11 +736,7 @@ void lcd_clear(void) {
    lcd_command(CMD_CLEAR_DISPLAY);
    wait_about10ms();
 #endif
-#ifdef WITH_UART
-   uart_newline();
-#endif
    lcd_line1();			// set cursor to Line1 Column 1, (only for OLED-Display)
-   lcd_text_line = 0;
 }  /* end lcd_clear() */
 
 
@@ -797,11 +801,12 @@ void lcd_fix_customchar(const unsigned char *chardata) {
 }
 
 /* ******************************************************************************* */
-#ifdef LCD_CLEAR
 void lcd_clear_line(void) {
- // writes 20 spaces to LCD-Display, Cursor must be positioned to first column
-    lcd_spaces(20);
+ // writes spaces up to LCD_LINE_LENGTH to LCD-Display, Cursor can be positioned to any column
+    lcd_spaces(LCD_LINE_LENGTH - _lcd_column);
 }
+
+#ifdef LCD_CLEAR
 void lcd_clear_line1(void) {
     lcd_line1();
     lcd_clear_line();

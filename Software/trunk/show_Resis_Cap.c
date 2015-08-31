@@ -1,4 +1,4 @@
-// new code by K.-H. Kübbeler
+// show_Resis_Cap.c , new code by K.-H. Kübbeler
 
 #include <avr/io.h>
 #include <stdlib.h>
@@ -26,9 +26,6 @@ void show_Resis13(void) {
 #endif
   {
         init_parts();		// set all parts to nothing found 
-//        PartFound = PART_NONE;
-//        ResistorsFound = 0;
-//        ResistorChecked[1] = 0;
         GetResistance(TP3, TP1);
         GetResistance(TP1, TP3);
         lcd_line2();		// clear old Resistance value 
@@ -44,7 +41,7 @@ void show_Resis13(void) {
               lcd_MEM_string(Inductor_str);	// -ww-
               lcd_testpin(TP3);
            } else {
-              lcd_spaces(12);		// clear old L=
+	      lcd_clear_line();		// clear to end of line
               lcd_set_cursor(0,5);
               lcd_testpin(TP3);
               lcd_spaces(4);		// clear ww-3
@@ -55,7 +52,7 @@ void show_Resis13(void) {
 #endif
         } else {		/* no resistor found */
            lcd_data('?');		// too big
-           lcd_spaces(19);
+           lcd_clear_line();		// clear to end of line
 #ifdef RMETER_WITH_L
            lcd_set_cursor(0,5);
            lcd_testpin(TP3);
@@ -108,23 +105,20 @@ void show_Cap13(void) {
      lcd_line2();		// overwrite old Capacity value 
      if (cap.cpre < 0) {
         // a cap is detected
-        lcd_spaces(8);		// clear Capacity value
-        lcd_line2();		// overwrite old Capacity value 
         DisplayValue(cap.cval,cap.cpre,'F',4);	// display capacity
+        lcd_spaces(8 - _lcd_column);
         PartFound = PART_CAPACITOR;	// GetESR should check the Capacity value
         cap.esr = GetESR(TP3,TP1);
         if ( cap.esr < 65530) {
            // ESR is measured
-           lcd_set_cursor(1 * PAGES_PER_LINE, 8);	// position behind the capacity
            lcd_MEM_string(&ESR_str[1]);		// show also "ESR="
            DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2); // and ESR value
-           lcd_spaces(2);		// clear old remainder of last ESR message
+	   lcd_clear_line();		// clear to end of line
            lcd_set_cursor(0,4);
            lcd_MEM2_string(Resistor_str);   // "-[=]- .."
            lcd_testpin(TP3);		// add the TP3
         } else {		// no ESR known
-           lcd_set_cursor(1 * PAGES_PER_LINE, 8);	// position behind the capacity
-           lcd_spaces(10);		// clear ESR text and value
+	   lcd_clear_line();		// clear to end of line, overwrite old ESR
            lcd_set_cursor(0,4);		// clear ESR resistor
            lcd_testpin(TP3);		// write the TP3
            lcd_spaces(5);			// overwrite ESR resistor symbol
@@ -135,10 +129,8 @@ void show_Cap13(void) {
         if (cap.v_loss != 0) {
            lcd_MEM_string(&VLOSS_str[1]);  // "Vloss="
            DisplayValue(cap.v_loss,-1,'%',2);
-           lcd_spaces(4);
-        } else {
-           lcd_clear_line();
         }
+        lcd_clear_line();		// clear to end of line
  #else
         if (cap.v_loss != 0) {
            key_pressed = wait_for_key_ms(SCREEN_TIME);
@@ -147,14 +139,15 @@ void show_Cap13(void) {
   #else
 //           if (key_pressed != 0) break;
   #endif
-           lcd_clear_line2();
+           lcd_line2();
            lcd_MEM_string(&VLOSS_str[1]);  // "Vloss="
            DisplayValue(cap.v_loss,-1,'%',2);
+           lcd_clear_line();		// clear to end of line
         }
  #endif
      } else { /* no cap detected */
        lcd_data('?');
-       lcd_spaces(18);		// clear rest of line 2
+       lcd_clear_line();
  #if (LCD_LINES > 2)
        lcd_line3();	
        lcd_clear_line();	// clear old Vloss= message
@@ -173,7 +166,7 @@ void show_Cap13(void) {
      if (DC_Pwr_mode == 1) times = 0;	// no time limit with DC_Pwr_mode
 #endif
   }  /* end for times */
-  lcd_clear();
+  lcd_clear();		// clear to end of line
 } /* end show_Cap13() */
 #endif
 
@@ -186,7 +179,7 @@ void Bat_update(uint8_t tt) {
      Battery_check();
  #else
      wait_about1s();
-     lcd_clear_line2();
+     lcd_line2();
      Battery_check();
      wait_about2s();
  #endif

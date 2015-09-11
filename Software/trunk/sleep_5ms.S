@@ -43,9 +43,9 @@ sleep_5ms:
 wloop:
  	sbiw	r24, 0x00	; 0 while (pause > 0)
  	brne	check_remain 
-#if 3000 <= RESTART_DELAY_US
- 	sts	TIMSK2, r1	; TIMSK2 = (0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2); /* disable output compare match A interrupt */ 
-#endif
+;#if 3000 <= RESTART_DELAY_US
+; 	sts	TIMSK2, r1	; TIMSK2 = (0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2); /* disable output compare match A interrupt */ 
+;#endif
  	ret
 
 check_remain:
@@ -86,6 +86,7 @@ set_cntr:
 ; // wake up after output compare match interrupt
 	ldi	r18, (1 << SM1) | (1 << SM0) | (0 << SE);
 	out	_SFR_IO_ADDR(SMCR), r18;        /*  SMCR = (1 << SM0) | (0 << SE); */
+ 	sts	TIMSK2, r1	; TIMSK2 = (0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2); /* disable output compare match A interrupt */ 
 
 #else
 ;    // restart delay ist too long, use normal delay of 5ms

@@ -37,11 +37,12 @@ void show_Resis13(void) {
 	      // resistor has also inductance
               lcd_MEM_string(Lis_str);		// "L="
               DisplayValue(inductor_lx,inductor_lpre,'H',3);        // output inductance
+	      lcd_clear_line();		// clear to end of line 2
               lcd_set_cursor(0,5);
               lcd_MEM_string(Inductor_str);	// -ww-
               lcd_testpin(TP3);
            } else {
-	      lcd_clear_line();		// clear to end of line
+	      lcd_clear_line();		// clear to end of line 2
               lcd_set_cursor(0,5);
               lcd_testpin(TP3);
               lcd_spaces(4);		// clear ww-3
@@ -52,7 +53,7 @@ void show_Resis13(void) {
 #endif
         } else {		/* no resistor found */
            lcd_data('?');		// too big
-           lcd_clear_line();		// clear to end of line
+           lcd_clear_line();		// clear to end of line 2
 #ifdef RMETER_WITH_L
            lcd_set_cursor(0,5);
            lcd_testpin(TP3);
@@ -113,7 +114,7 @@ void show_Cap13(void) {
            // ESR is measured
            lcd_MEM_string(&ESR_str[1]);		// show also "ESR="
            DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2); // and ESR value
-	   lcd_clear_line();		// clear to end of line
+	   lcd_clear_line();		// clear to end of line 2
            lcd_set_cursor(0,4);
            lcd_MEM2_string(Resistor_str);   // "-[=]- .."
            lcd_testpin(TP3);		// add the TP3
@@ -147,7 +148,7 @@ void show_Cap13(void) {
  #endif
      } else { /* no cap detected */
        lcd_data('?');
-       lcd_clear_line();
+       lcd_clear_line();		// clear to end of line 2
  #if (LCD_LINES > 2)
        lcd_line3();	
        lcd_clear_line();	// clear old Vloss= message

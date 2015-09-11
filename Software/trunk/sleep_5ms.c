@@ -43,6 +43,7 @@ while (pause > 0)
    set_sleep_mode(SLEEP_MODE_PWR_SAVE);
    sleep_mode();
 // wake up after output compare match interrupt
+   TIMSK2 = (0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2); /* disable output compare match A interrupt */ 
   }
  #else
    // Startup time is too long with 1MHz Clock!!!!
@@ -52,5 +53,4 @@ while (pause > 0)
  #endif
    wdt_reset();
   }
-TIMSK2 = (0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2); /* disable output compare match A interrupt */ 
 }

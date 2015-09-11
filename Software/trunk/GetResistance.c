@@ -44,7 +44,7 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
     TristatePin remains switched to input , no action required 
   */
   wdt_reset();
-  addr = &PinRLRHADCtab[LowPin];		// address of the combined RL / RH / ADC pin table
+  addr = &PinRLRHADCtab[LowPin-TP1];		// address of the combined RL / RH / ADC pin table
   LoPinRL = pgm_read_byte(addr);		// instruction for LowPin R_L
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
   addr += 3;			// address of PinRHtab[LowPin]
@@ -55,7 +55,7 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
   addr += 3;			// address of PinADCtab[LowPin]
   LoADCp = pgm_read_byte(addr);		// instruction for ADC Low-Pin, including | TXD_VAL
 
-  addr = &PinRLRHADCtab[HighPin];
+  addr = &PinRLRHADCtab[HighPin-TP1];
   HiPinRL = pgm_read_byte(addr);		// instruction for HighPin R_L
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
   addr += 3;			// address of PinRLtab[HighPin]
@@ -72,7 +72,7 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
   if ((ptrans.count  + ntrans.count) > 0) {
      return;	// no resistors are searched, if transistors are detected
   }
-  resnum = (LowPin + HighPin -1);	// resistor-Number 0:1 = 0, 0:2 = 1, 1:2 = 2
+  resnum = (LowPin - TP1 + HighPin - TP1 - 1);	// resistor-Number 0:1 = 0, 0:2 = 1, 1:2 = 2
   // resistor measurement
   wdt_reset();
 // U_SCALE can be set to 4 for better resolution of ReadADC result

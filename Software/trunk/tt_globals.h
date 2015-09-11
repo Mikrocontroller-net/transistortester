@@ -64,11 +64,10 @@ COMMON uint8_t diode_sequence;
 typedef struct {
   unsigned long hfe;		//current amplification factor 
   unsigned int uBE;		//B-E-voltage of the Transistor or RDS for E-MOS
-  unsigned int current;		// current of Drain in 0.01mA
-  				// for bipolar current is ICE0
-  unsigned int ice0;		// for BJT ICEO
+  unsigned int current;		// current of Drain in 1uA
+  unsigned int ice0;		// for BJT ICEO in 1uA
   unsigned int gthvoltage;	//Gate-threshold voltage 
-  				// for bipolar gthvoltage is ICEs in 0.01mA
+  				// for bipolar gthvoltage is ICEs in 1uA
  #define ices gthvoltage
   uint8_t b,c,e;		//pins of the Transistor
   uint8_t count;

@@ -411,7 +411,13 @@ ad_3604:
 #else
 	LDIZ	PinRLRHADCtab+3; 	/* LoADC = pgm_read_byte((&PinRLRHADCtab[3])+cap.ca) | TXD_MSK; */
 #endif
+#if TP1 == 0
 	add	r30, SelectLowPin;
+#else
+	ldi	r24, -TP1;
+	add	r24, SelectLowPin;
+	add	r30, r24;	
+#endif
 	adc	r31, zero_reg;
 	lpm	r24, Z+;
 	ori	r24, TXD_MSK;
@@ -422,7 +428,13 @@ ad_3604:
 #else
 	LDIZ	PinRLRHADCtab+3; 	/* HiADC = pgm_read_byte((&PinRLRHADCtab[3])+cap.cb) | TXD_MSK; */
 #endif
+#if TP1 == 0
 	add	r30, SelectHighPin;
+#else
+	ldi	r24, -TP1;
+	add	r24, SelectHighPin;
+	add	r30, r24;	
+#endif
 	adc	r31, zero_reg;
 	lpm	r24, Z+;
 	ori	r24, TXD_MSK;

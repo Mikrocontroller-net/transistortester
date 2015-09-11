@@ -330,6 +330,7 @@ void show_C_ESR() {
            } else {
               lcd_data('?');		// too big
            }
+           lcd_clear_line();		// clear to end of line
         } else { // no cap found
 #if LCD_LINES > 2
            lcd_clear_line2(); 	// clear C value 

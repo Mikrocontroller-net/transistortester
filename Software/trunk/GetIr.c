@@ -11,18 +11,18 @@ void GetIr(uint8_t hipin, uint8_t lopin) {
   uint8_t HiADC;
 
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
-  HiADC = pgm_read_byte(&PinRLRHADCtab[hipin]+6);	// Table of ADC pins including | TXD_VAL
+  HiADC = pgm_read_byte(&PinRLRHADCtab[hipin-TP1]+6);	// Table of ADC pins including | TXD_VAL
   ADC_PORT = HiADC;		 	// switch ADC port to high level
   ADC_DDR = HiADC | TXD_MSK;		// switch High Pin direct to VCC
   R_PORT = 0;				// switch R-Port to GND
-  LoPinR_L = pgm_read_byte(&PinRHRLADCtab[lopin]);  //R_L mask for LowPin R_L load
+  LoPinR_L = pgm_read_byte(&PinRHRLADCtab[lopin-TP1]);  //R_L mask for LowPin R_L load
 #else
   uint8_t LoPinR_L;
-  HiADC = pgm_read_byte(&PinRLRHADCtab[hipin]+3);	// Table of ADC pins including | TXD_VAL
+  HiADC = pgm_read_byte(&PinRLRHADCtab[hipin-TP1]+3);	// Table of ADC pins including | TXD_VAL
   ADC_PORT = HiADC;		 	// switch ADC port to high level
   ADC_DDR = HiADC | TXD_MSK;		// switch High Pin direct to VCC
   R_PORT = 0;				// switch R-Port to GND
-  LoPinR_L = pgm_read_byte(&PinRLRHADCtab[lopin]);  //R_L mask for LowPin R_L load
+  LoPinR_L = pgm_read_byte(&PinRLRHADCtab[lopin-TP1]);  //R_L mask for LowPin R_L load
   // R_H Pin must always be one pin number higher
 #endif
   R_DDR = LoPinR_L;		// switch R_L port for LowPin to output (GND)
@@ -32,7 +32,7 @@ void GetIr(uint8_t hipin, uint8_t lopin) {
      u_res_old = u_res;
      u_res = W20msReadADC(lopin);		// read voltage
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
-     R_DDR = pgm_read_byte(&PinRHRLADCtab[lopin+3]);  //R_H mask for LowPin R_H load
+     R_DDR = pgm_read_byte(&PinRHRLADCtab[lopin-TP1+3]);  //R_H mask for LowPin R_H load
 #else
      R_DDR = LoPinR_L + LoPinR_L;		// switch R_H port for LowPin to output (GND)
 #endif

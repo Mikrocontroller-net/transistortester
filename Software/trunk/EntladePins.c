@@ -19,9 +19,9 @@ void EntladePins() {
      R_PORT = 0;			// R-outputs auf 0
 //     R_DDR = (1<<PIN_RH3) | (1<<PIN_RH2) | (1<<PIN_RH1); // R_H for all Pins to GND
      R_DDR = (1<<PIN_RH3) | (1<<PIN_RL3) | (1<<PIN_RH2) | (1<<PIN_RL2) | (1<<PIN_RH1) | (1<<PIN_RL1); // R_H and R_L for all Pins to GND
-     adcmv[0] = W5msReadADC(PC0);	// which voltage has Pin 1?
-     adcmv[1] = ReadADC(PC1);	// which voltage has Pin 2?
-     adcmv[2] = ReadADC(PC2);	// which voltage has Pin 3?
+     adcmv[0] = W5msReadADC(TP1);	// which voltage has Pin 1?
+     adcmv[1] = ReadADC(TP2);	// which voltage has Pin 2?
+     adcmv[2] = ReadADC(TP3);	// which voltage has Pin 3?
      if ((PartFound == PART_CELL) || (adcmv[0] < CAP_EMPTY_LEVEL) & (adcmv[1] < CAP_EMPTY_LEVEL) & (adcmv[2] < CAP_EMPTY_LEVEL)) {
         ADC_DDR = TXD_MSK;		// switch all ADC-Pins to input
         R_DDR = 0;			// switch all R_L Ports (and R_H) to input
@@ -34,13 +34,13 @@ void EntladePins() {
      }
      // all Pins with voltage lower than 1V can be connected directly to GND (ADC-Port)
      if (adcmv[0] < 1000) {
-        adc_gnd |= (1<<PC0);	//Pin 1 directly to GND
+        adc_gnd |= (1<<TP1);	//Pin 1 directly to GND
      }
      if (adcmv[1] < 1000) {
-        adc_gnd |= (1<<PC1);	//Pin 2 directly to GND
+        adc_gnd |= (1<<TP2);	//Pin 2 directly to GND
      }
      if (adcmv[2] < 1000) {
-        adc_gnd |= (1<<PC2);	//Pin 3 directly to  GND
+        adc_gnd |= (1<<TP3);	//Pin 3 directly to  GND
      }
      ADC_DDR = adc_gnd;		// switch all selected ADC-Ports at the same time
 
@@ -50,17 +50,17 @@ void EntladePins() {
 //     R_DDR = (1<<PIN_RL3) | (1<<PIN_RL2) | (1<<PIN_RL1);	// Pins across R_L resistors to GND
      for(clr_cnt=0;clr_cnt<MAX_ENTLADE_ZEIT;clr_cnt++) {
         wdt_reset();
-        adcmv[0] = W20msReadADC(PC0);	// which voltage has Pin 1?
-        adcmv[1] = ReadADC(PC1);	// which voltage has Pin 2?
-        adcmv[2] = ReadADC(PC2);	// which voltage has Pin 3?
+        adcmv[0] = W20msReadADC(TP1);	// which voltage has Pin 1?
+        adcmv[1] = ReadADC(TP2);	// which voltage has Pin 2?
+        adcmv[2] = ReadADC(TP3);	// which voltage has Pin 3?
         if (adcmv[0] < 1300) {
-           ADC_DDR |= (1<<PC0);	// below 1.3V , switch directly with ADC-Port to GND
+           ADC_DDR |= (1<<TP1);	// below 1.3V , switch directly with ADC-Port to GND
         }
         if (adcmv[1] < 1300) {
-           ADC_DDR |= (1<<PC1);	// below 1.3V, switch directly with ADC-Port to GND
+           ADC_DDR |= (1<<TP2);	// below 1.3V, switch directly with ADC-Port to GND
         }
         if (adcmv[2] < 1300) {
-           ADC_DDR |= (1<<PC2);	// below 1.3V, switch directly with ADC-Port to GND
+           ADC_DDR |= (1<<TP3);	// below 1.3V, switch directly with ADC-Port to GND
         }
         if ((adcmv[0] < (CAP_EMPTY_LEVEL+2)) && (adcmv[1] < (CAP_EMPTY_LEVEL+2)) && (adcmv[2] < (CAP_EMPTY_LEVEL+2))) {
            break;

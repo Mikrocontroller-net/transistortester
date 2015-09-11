@@ -31,7 +31,7 @@ uint8_t icon_yy;	// y position of the last loaded big 24x32 icon
 // sends numeric character (Pin Number) to the LCD 
 // from binary 0 we send ASCII 1 ....
 void lcd_testpin(unsigned char temp) {
-   lcd_data(temp + '1' + TP_OFFSET);
+   lcd_data(temp + '1' + TP_OFFSET - TP1);
 }
 
 /* ******************************************************************************* */

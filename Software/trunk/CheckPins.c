@@ -64,7 +64,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     TristatePin remains switched to input , no action required 
   */
   wdt_reset();
-  addr = &PinRLRHADCtab[LowPin];		// Address of combined RL / RH / ADC pin table
+  addr = &PinRLRHADCtab[LowPin-TP1];		// Address of combined RL / RH / ADC pin table
   LoPinRL = pgm_read_byte(addr);		// instruction for LowPin R_L
 #if FLASHEND > 0x1fff
  #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
@@ -83,7 +83,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 #endif
   LoADCp = pgm_read_byte(addr);		// instruction for ADC Low-Pin, including | TXD_VAL
 
-  addr = &PinRLRHADCtab[TristatePin];
+  addr = &PinRLRHADCtab[TristatePin-TP1];
   TriPinRL = pgm_read_byte(addr);	// instruction for TristatePin R_L
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
   addr += 3;			// address of PinRLtab[TristatePin]
@@ -92,7 +92,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   TriPinRH = TriPinRL + TriPinRL;			// instruction for TristatePin R_H
 #endif
 
-  addr = &PinRLRHADCtab[HighPin];
+  addr = &PinRLRHADCtab[HighPin-TP1];
   HiPinRL = pgm_read_byte(addr);		// instruction for HighPin R_L
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
   addr += 3;			// address of PinRHtab[HighPin]
@@ -414,8 +414,8 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 #ifdef SHOW_ICE
            if (update_pins != 0) {
 	      // update residual collector current without base current
-              ptrans.ice0 = (unsigned int)(((unsigned long)adc.lp_otr * 10000) / RR680MI); // ICE0 0.01mA
-              ptrans.ices = (unsigned int)(((unsigned long)adc.vCEs * 10000) / RR680MI); // ICEs 0.01mA
+              ptrans.ice0 = (unsigned int)(((unsigned long)adc.lp_otr * 10000) / RR680MI); // ICE0 1uA
+              ptrans.ices = (unsigned int)(((unsigned long)adc.vCEs * 10000) / RR680MI); // ICEs 1uA
            }
 #endif
            goto savePresult;		// marke P type, save Pins and exit

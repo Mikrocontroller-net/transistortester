@@ -4,7 +4,7 @@
 #include "Transistortester.h"
 
 
-// get_log interpolate a table with the function -log(1 - (permil/1000))
+// get_log interpolate a table with the function -1000*log(1 - (permil/1000))
 uint16_t get_log(uint16_t permil) {
 // for remember:
 // uint16_t LogTab[] PROGMEM = {0, 20, 41, 62, 83, 105, 128, 151, 174, 198, 223, 248, 274, 301, 329, 357, 386, 416, 446, 478, 511, 545, 580, 616, 654, 693, 734, 777, 821, 868, 916, 968, 1022, 1079, 1139, 1204, 1273, 1347, 1427, 1514, 1609, 1715, 1833, 1966, 2120, 2303, 2526 };

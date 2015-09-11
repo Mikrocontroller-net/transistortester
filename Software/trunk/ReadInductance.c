@@ -63,11 +63,11 @@ void ReadInductance(void) {
            rpins.pb[1] = ii;
         }
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
-        HiADC = pgm_read_byte((&PinRLRHADCtab[6])+rpins.pb[1]);	// Table of ADC Pins including | TXD_VAL
+        HiADC = pgm_read_byte((&PinRLRHADCtab[6])+rpins.pb[1]-TP1);	// Table of ADC Pins including | TXD_VAL
 #else
-        HiADC = pgm_read_byte((&PinRLRHADCtab[3])+rpins.pb[1]);	// Table of ADC Pins including | TXD_VAL
+        HiADC = pgm_read_byte((&PinRLRHADCtab[3])+rpins.pb[1]-TP1);	// Table of ADC Pins including | TXD_VAL
 #endif
-        LoPinR_L = pgm_read_byte(&PinRLRHADCtab[rpins.pb[0]]);	//R_L mask for HighPin R_L load
+        LoPinR_L = pgm_read_byte(&PinRLRHADCtab[rpins.pb[0]]-TP1);	//R_L mask for HighPin R_L load
         //==================================================================================
         // Measurement of Inductance values
         R_PORT = 0;		// switch R port to GND
@@ -131,7 +131,7 @@ void ReadInductance(void) {
               wdt_reset();
               timeconstant.w[1]++;		// count one OV
               if(timeconstant.w[1] == (F_CPU/100000UL)) {
-                 break; 	//Timeout for Charging, above 0.13 s
+                 break; 	//Timeout for Charging, above 0.65 s
               }
            }
         }
@@ -198,7 +198,7 @@ void ReadInductance(void) {
         umax = ((unsigned long)mess_r * (unsigned long)ADCconfig.U_AVCC) / total_r;
         per_ref1 = ((unsigned long)tmpint * 1000) / umax;
 //        per_ref2 = (uint8_t)MEM2_read_byte(&LogTab[per_ref1]);	// -log(1 - per_ref1/100)
-        per_ref2 = get_log(per_ref1);		// -log(1 - per_ref1/1000)
+        per_ref2 = get_log(per_ref1);		// -1000*log(1 - per_ref1/1000)
 /* ********************************************************* */
 #if 0
           if (count == 0) {

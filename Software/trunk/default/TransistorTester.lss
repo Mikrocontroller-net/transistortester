@@ -318,7 +318,7 @@ _xpos += FONT_WIDTH;		// move pointer to the next character position
 // sends numeric character (Pin Number) to the LCD 
 // from binary 0 we send ASCII 1 ....
 void lcd_testpin(unsigned char temp) {
-   lcd_data(temp + '1' + TP_OFFSET);
+   lcd_data(temp + '1' + TP_OFFSET - TP1);
      1be:	f3 cf       	rjmp	.-26     	; 0x1a6 <lcd_data>
 
 000001c0 <lcd_spaces>:
@@ -2639,7 +2639,7 @@ ad2120:
 0000091c <get_log>:
  .section .text
 
-; // get_log interpolate a table with the function -log(1 - (permil/1000))
+; // get_log interpolate a table with the function -1000*log(1 - (permil/1000))
 ; uint16_t get_log(uint16_t permil) {
 get_log:
  	push	r28
@@ -3803,10 +3803,10 @@ void GetIr(uint8_t hipin, uint8_t lopin) {
      f7e:	cf 90       	pop	r12
   ADC_DDR = HiADC | TXD_MSK;		// switch High Pin direct to VCC
   R_PORT = 0;				// switch R-Port to GND
-  LoPinR_L = pgm_read_byte(&PinRHRLADCtab[lopin]);  //R_L mask for LowPin R_L load
+  LoPinR_L = pgm_read_byte(&PinRHRLADCtab[lopin-TP1]);  //R_L mask for LowPin R_L load
 #else
   uint8_t LoPinR_L;
-  HiADC = pgm_read_byte(&PinRLRHADCtab[hipin]+3);	// Table of ADC pins including | TXD_VAL
+  HiADC = pgm_read_byte(&PinRLRHADCtab[hipin-TP1]+3);	// Table of ADC pins including | TXD_VAL
      f80:	08 95       	ret
 
 00000f82 <Battery_check>:
@@ -3954,7 +3954,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   */
   wdt_reset();
     1018:	a8 95       	wdr
-  addr = &PinRLRHADCtab[LowPin];		// Address of combined RL / RH / ADC pin table
+  addr = &PinRLRHADCtab[LowPin-TP1];		// Address of combined RL / RH / ADC pin table
     101a:	e6 2f       	mov	r30, r22
     101c:	f0 e0       	ldi	r31, 0x00	; 0
     101e:	e2 58       	subi	r30, 0x82	; 130
@@ -3976,7 +3976,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   LoADCp = pgm_read_byte(addr);		// instruction for ADC Low-Pin, including | TXD_VAL
     1026:	e4 90       	lpm	r14, Z
 
-  addr = &PinRLRHADCtab[TristatePin];
+  addr = &PinRLRHADCtab[TristatePin-TP1];
     1028:	e4 2f       	mov	r30, r20
     102a:	f0 e0       	ldi	r31, 0x00	; 0
     102c:	e2 58       	subi	r30, 0x82	; 130
@@ -3988,7 +3988,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   TriPinRH = TriPinRL + TriPinRL;			// instruction for TristatePin R_H
 #endif
 
-  addr = &PinRLRHADCtab[HighPin];
+  addr = &PinRLRHADCtab[HighPin-TP1];
     1032:	e8 2f       	mov	r30, r24
     1034:	f0 e0       	ldi	r31, 0x00	; 0
     1036:	e2 58       	subi	r30, 0x82	; 130
@@ -4758,7 +4758,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     14a2:	30 93 68 01 	sts	0x0168, r19
     14a6:	20 93 67 01 	sts	0x0167, r18
 	      // update residual collector current without base current
-              ptrans.ice0 = (unsigned int)(((unsigned long)adc.lp_otr * 10000) / RR680MI); // ICE0 0.01mA
+              ptrans.ice0 = (unsigned int)(((unsigned long)adc.lp_otr * 10000) / RR680MI); // ICE0 1uA
     14aa:	21 e0       	ldi	r18, 0x01	; 1
     14ac:	5e c3       	rjmp	.+1724   	; 0x1b6a <CheckPins+0xb64>
     14ae:	71 e6       	ldi	r23, 0x61	; 97
@@ -4771,7 +4771,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     14bc:	87 e0       	ldi	r24, 0x07	; 7
     14be:	d8 06       	cpc	r13, r24
     14c0:	08 f4       	brcc	.+2      	; 0x14c4 <CheckPins+0x4be>
-              ptrans.ices = (unsigned int)(((unsigned long)adc.vCEs * 10000) / RR680MI); // ICEs 0.01mA
+              ptrans.ices = (unsigned int)(((unsigned long)adc.vCEs * 10000) / RR680MI); // ICEs 1uA
     14c2:	6a c0       	rjmp	.+212    	; 0x1598 <CheckPins+0x592>
     14c4:	84 e0       	ldi	r24, 0x04	; 4
     14c6:	80 93 16 01 	sts	0x0116, r24
@@ -5971,7 +5971,7 @@ void GetResistance(uint8_t HighPin, uint8_t LowPin)
   */
   wdt_reset();
     1bb4:	a8 95       	wdr
-  addr = &PinRLRHADCtab[LowPin];		// address of the combined RL / RH / ADC pin table
+  addr = &PinRLRHADCtab[LowPin-TP1];		// address of the combined RL / RH / ADC pin table
     1bb6:	e6 2f       	mov	r30, r22
     1bb8:	f0 e0       	ldi	r31, 0x00	; 0
     1bba:	e2 58       	subi	r30, 0x82	; 130
@@ -5988,7 +5988,7 @@ void GetResistance(uint8_t HighPin, uint8_t LowPin)
   LoADCp = pgm_read_byte(addr);		// instruction for ADC Low-Pin, including | TXD_VAL
     1bc2:	24 91       	lpm	r18, Z
 
-  addr = &PinRLRHADCtab[HighPin];
+  addr = &PinRLRHADCtab[HighPin-TP1];
     1bc4:	e8 2f       	mov	r30, r24
     1bc6:	f0 e0       	ldi	r31, 0x00	; 0
     1bc8:	e2 58       	subi	r30, 0x82	; 130
@@ -6019,7 +6019,7 @@ void GetResistance(uint8_t HighPin, uint8_t LowPin)
     1be4:	c2 c1       	rjmp	.+900    	; 0x1f6a <GetResistance+0x3c6>
      return;	// no resistors are searched, if transistors are detected
   }
-  resnum = (LowPin + HighPin -1);	// resistor-Number 0:1 = 0, 0:2 = 1, 1:2 = 2
+  resnum = (LowPin - TP1 + HighPin - TP1 - 1);	// resistor-Number 0:1 = 0, 0:2 = 1, 1:2 = 2
   // resistor measurement
   wdt_reset();
     1be6:	a8 95       	wdr
@@ -6521,7 +6521,7 @@ void GetResistance(uint8_t HighPin, uint8_t LowPin)
   if ((ptrans.count  + ntrans.count) > 0) {
      return;	// no resistors are searched, if transistors are detected
   }
-  resnum = (LowPin + HighPin -1);	// resistor-Number 0:1 = 0, 0:2 = 1, 1:2 = 2
+  resnum = (LowPin - TP1 + HighPin - TP1 - 1);	// resistor-Number 0:1 = 0, 0:2 = 1, 1:2 = 2
     1ec6:	9a 94       	dec	r9
     1ec8:	98 0c       	add	r9, r8
            lrx1 = (lirx1 + lirx2) / 2;		//average of both R_L measurements
@@ -6743,15 +6743,15 @@ void EntladePins() {
 //     R_DDR = (1<<PIN_RH3) | (1<<PIN_RH2) | (1<<PIN_RH1); // R_H for all Pins to GND
      R_DDR = (1<<PIN_RH3) | (1<<PIN_RL3) | (1<<PIN_RH2) | (1<<PIN_RL2) | (1<<PIN_RH1) | (1<<PIN_RL1); // R_H and R_L for all Pins to GND
     1fc2:	b4 b8       	out	0x04, r11	; 4
-     adcmv[0] = W5msReadADC(PC0);	// which voltage has Pin 1?
+     adcmv[0] = W5msReadADC(TP1);	// which voltage has Pin 1?
     1fc4:	80 e0       	ldi	r24, 0x00	; 0
     1fc6:	0e 94 7a 03 	call	0x6f4	; 0x6f4 <W5msReadADC>
     1fca:	8c 01       	movw	r16, r24
-     adcmv[1] = ReadADC(PC1);	// which voltage has Pin 2?
+     adcmv[1] = ReadADC(TP2);	// which voltage has Pin 2?
     1fcc:	81 e0       	ldi	r24, 0x01	; 1
     1fce:	0e 94 7e 03 	call	0x6fc	; 0x6fc <ReadADC>
     1fd2:	ec 01       	movw	r28, r24
-     adcmv[2] = ReadADC(PC2);	// which voltage has Pin 3?
+     adcmv[2] = ReadADC(TP3);	// which voltage has Pin 3?
     1fd4:	82 e0       	ldi	r24, 0x02	; 2
     1fd6:	0e 94 7e 03 	call	0x6fc	; 0x6fc <ReadADC>
      if ((PartFound == PART_CELL) || (adcmv[0] < CAP_EMPTY_LEVEL) & (adcmv[1] < CAP_EMPTY_LEVEL) & (adcmv[2] < CAP_EMPTY_LEVEL)) {
@@ -6789,20 +6789,20 @@ void EntladePins() {
     200a:	13 40       	sbci	r17, 0x03	; 3
     200c:	08 f0       	brcs	.+2      	; 0x2010 <EntladePins+0x6c>
     200e:	20 e0       	ldi	r18, 0x00	; 0
-        adc_gnd |= (1<<PC0);	//Pin 1 directly to GND
+        adc_gnd |= (1<<TP1);	//Pin 1 directly to GND
      }
      if (adcmv[1] < 1000) {
     2010:	c8 3e       	cpi	r28, 0xE8	; 232
     2012:	d3 40       	sbci	r29, 0x03	; 3
     2014:	08 f4       	brcc	.+2      	; 0x2018 <EntladePins+0x74>
-        adc_gnd |= (1<<PC1);	//Pin 2 directly to GND
+        adc_gnd |= (1<<TP2);	//Pin 2 directly to GND
     2016:	22 60       	ori	r18, 0x02	; 2
      }
      if (adcmv[2] < 1000) {
     2018:	88 3e       	cpi	r24, 0xE8	; 232
     201a:	93 40       	sbci	r25, 0x03	; 3
     201c:	08 f4       	brcc	.+2      	; 0x2020 <EntladePins+0x7c>
-        adc_gnd |= (1<<PC2);	//Pin 3 directly to  GND
+        adc_gnd |= (1<<TP3);	//Pin 3 directly to  GND
     201e:	24 60       	ori	r18, 0x04	; 4
      }
      ADC_DDR = adc_gnd;		// switch all selected ADC-Ports at the same time
@@ -6817,15 +6817,15 @@ void EntladePins() {
     2024:	d0 e0       	ldi	r29, 0x00	; 0
         wdt_reset();
     2026:	a8 95       	wdr
-        adcmv[0] = W20msReadADC(PC0);	// which voltage has Pin 1?
+        adcmv[0] = W20msReadADC(TP1);	// which voltage has Pin 1?
     2028:	80 e0       	ldi	r24, 0x00	; 0
     202a:	0e 94 72 03 	call	0x6e4	; 0x6e4 <W20msReadADC>
     202e:	7c 01       	movw	r14, r24
-        adcmv[1] = ReadADC(PC1);	// which voltage has Pin 2?
+        adcmv[1] = ReadADC(TP2);	// which voltage has Pin 2?
     2030:	81 e0       	ldi	r24, 0x01	; 1
     2032:	0e 94 7e 03 	call	0x6fc	; 0x6fc <ReadADC>
     2036:	8c 01       	movw	r16, r24
-        adcmv[2] = ReadADC(PC2);	// which voltage has Pin 3?
+        adcmv[2] = ReadADC(TP3);	// which voltage has Pin 3?
     2038:	82 e0       	ldi	r24, 0x02	; 2
     203a:	0e 94 7e 03 	call	0x6fc	; 0x6fc <ReadADC>
         if (adcmv[0] < 1300) {
@@ -6834,7 +6834,7 @@ void EntladePins() {
     2042:	25 e0       	ldi	r18, 0x05	; 5
     2044:	f2 06       	cpc	r15, r18
     2046:	08 f4       	brcc	.+2      	; 0x204a <EntladePins+0xa6>
-           ADC_DDR |= (1<<PC0);	// below 1.3V , switch directly with ADC-Port to GND
+           ADC_DDR |= (1<<TP1);	// below 1.3V , switch directly with ADC-Port to GND
     2048:	38 9a       	sbi	0x07, 0	; 7
         }
         if (adcmv[1] < 1300) {
@@ -6842,7 +6842,7 @@ void EntladePins() {
     204c:	35 e0       	ldi	r19, 0x05	; 5
     204e:	13 07       	cpc	r17, r19
     2050:	08 f4       	brcc	.+2      	; 0x2054 <EntladePins+0xb0>
-           ADC_DDR |= (1<<PC1);	// below 1.3V, switch directly with ADC-Port to GND
+           ADC_DDR |= (1<<TP2);	// below 1.3V, switch directly with ADC-Port to GND
     2052:	39 9a       	sbi	0x07, 1	; 7
         }
         if (adcmv[2] < 1300) {
@@ -6850,7 +6850,7 @@ void EntladePins() {
     2056:	25 e0       	ldi	r18, 0x05	; 5
     2058:	92 07       	cpc	r25, r18
     205a:	08 f4       	brcc	.+2      	; 0x205e <EntladePins+0xba>
-           ADC_DDR |= (1<<PC2);	// below 1.3V, switch directly with ADC-Port to GND
+           ADC_DDR |= (1<<TP3);	// below 1.3V, switch directly with ADC-Port to GND
     205c:	3a 9a       	sbi	0x07, 2	; 7
         }
         if ((adcmv[0] < (CAP_EMPTY_LEVEL+2)) && (adcmv[1] < (CAP_EMPTY_LEVEL+2)) && (adcmv[2] < (CAP_EMPTY_LEVEL+2))) {
@@ -7014,7 +7014,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 #endif
 
 #ifdef AUTO_CAL
-  pin_combination = (HighPin * 3) + LowPin - 1;	// coded Pin combination for capacity zero offset
+  pin_combination = ((HighPin - TP1) * 3) + LowPin - TP1 - 1;	// coded Pin combination for capacity zero offset
     2132:	8f ef       	ldi	r24, 0xFF	; 255
     2134:	86 0f       	add	r24, r22
     2136:	9c 2f       	mov	r25, r28
@@ -7024,13 +7024,13 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     213e:	80 93 54 01 	sts	0x0154, r24
 #endif
 
-  HiPinR_L = pgm_read_byte(&PinRLRHADCtab[HighPin]);	//R_L mask for HighPin R_L load
+  HiPinR_L = pgm_read_byte(&PinRLRHADCtab[HighPin - TP1]);	//R_L mask for HighPin R_L load
     2142:	ec 2f       	mov	r30, r28
     2144:	f0 e0       	ldi	r31, 0x00	; 0
     2146:	e2 58       	subi	r30, 0x82	; 130
     2148:	ff 4f       	sbci	r31, 0xFF	; 255
     214a:	14 91       	lpm	r17, Z
-  LoPinR_L = pgm_read_byte(&PinRLRHADCtab[LowPin]);	//R_L mask for LowPin R_L load
+  LoPinR_L = pgm_read_byte(&PinRLRHADCtab[LowPin - TP1]);	//R_L mask for LowPin R_L load
     214c:	86 2f       	mov	r24, r22
     214e:	90 e0       	ldi	r25, 0x00	; 0
     2150:	fc 01       	movw	r30, r24
@@ -7038,11 +7038,11 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     2154:	ff 4f       	sbci	r31, 0xFF	; 255
     2156:	f4 90       	lpm	r15, Z
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
-  HiPinR_H = pgm_read_byte((&PinRLRHADCtab[3])+HighPin);	//R_H mask for HighPin R_H load
-  LoADC = pgm_read_byte((&PinRLRHADCtab[6])+LowPin) | TXD_MSK;
+  HiPinR_H = pgm_read_byte((&PinRLRHADCtab[3])+HighPin-TP1);	//R_H mask for HighPin R_H load
+  LoADC = pgm_read_byte((&PinRLRHADCtab[6])+LowPin-TP1) | TXD_MSK;
 #else
   HiPinR_H = HiPinR_L + HiPinR_L;	//double for HighPin R_H load
-  LoADC = pgm_read_byte((&PinRLRHADCtab[3])+LowPin) | TXD_MSK;
+  LoADC = pgm_read_byte((&PinRLRHADCtab[3])+LowPin-TP1) | TXD_MSK;
     2158:	fc 01       	movw	r30, r24
     215a:	ef 57       	subi	r30, 0x7F	; 127
     215c:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -8385,16 +8385,16 @@ void ReadInductance(void) {
     2968:	5c 01       	movw	r10, r24
         }
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
-        HiADC = pgm_read_byte((&PinRLRHADCtab[6])+rpins.pb[1]);	// Table of ADC Pins including | TXD_VAL
+        HiADC = pgm_read_byte((&PinRLRHADCtab[6])+rpins.pb[1]-TP1);	// Table of ADC Pins including | TXD_VAL
 #else
-        HiADC = pgm_read_byte((&PinRLRHADCtab[3])+rpins.pb[1]);	// Table of ADC Pins including | TXD_VAL
+        HiADC = pgm_read_byte((&PinRLRHADCtab[3])+rpins.pb[1]-TP1);	// Table of ADC Pins including | TXD_VAL
     296a:	ea 2d       	mov	r30, r10
     296c:	f0 e0       	ldi	r31, 0x00	; 0
     296e:	ef 57       	subi	r30, 0x7F	; 127
     2970:	ff 4f       	sbci	r31, 0xFF	; 255
     2972:	74 90       	lpm	r7, Z
 #endif
-        LoPinR_L = pgm_read_byte(&PinRLRHADCtab[rpins.pb[0]]);	//R_L mask for HighPin R_L load
+        LoPinR_L = pgm_read_byte(&PinRLRHADCtab[rpins.pb[0]]-TP1);	//R_L mask for HighPin R_L load
     2974:	8b 2d       	mov	r24, r11
     2976:	90 e0       	ldi	r25, 0x00	; 0
     2978:	fc 01       	movw	r30, r24
@@ -8553,7 +8553,7 @@ void ReadInductance(void) {
     2a3a:	45 ff       	sbrs	r20, 5
     2a3c:	12 c0       	rjmp	.+36     	; 0x2a62 <ReadInductance+0x160>
               if(timeconstant.w[1] == (F_CPU/100000UL)) {
-                 break; 	//Timeout for Charging, above 0.13 s
+                 break; 	//Timeout for Charging, above 0.65 s
               }
            }
         }
@@ -8813,7 +8813,7 @@ void ReadInductance(void) {
     2b94:	b2 01       	movw	r22, r4
     2b96:	0e 94 00 1f 	call	0x3e00	; 0x3e00 <__udivmodsi4>
 //        per_ref2 = (uint8_t)MEM2_read_byte(&LogTab[per_ref1]);	// -log(1 - per_ref1/100)
-        per_ref2 = get_log(per_ref1);		// -log(1 - per_ref1/1000)
+        per_ref2 = get_log(per_ref1);		// -1000*log(1 - per_ref1/1000)
     2b9a:	c9 01       	movw	r24, r18
     2b9c:	0e 94 8e 04 	call	0x91c	; 0x91c <get_log>
     2ba0:	fc 01       	movw	r30, r24
@@ -9309,8 +9309,14 @@ ad_3604:
     2e02:	e1 e8       	ldi	r30, 0x81	; 129
     2e04:	f0 e0       	ldi	r31, 0x00	; 0
 #endif
+#if TP1 == 0
 	add	r30, SelectLowPin;
     2e06:	e6 0d       	add	r30, r6
+#else
+	ldi	r24, -TP1;
+	add	r24, SelectLowPin;
+	add	r30, r24;	
+#endif
 	adc	r31, zero_reg;
     2e08:	f1 1d       	adc	r31, r1
 	lpm	r24, Z+;
@@ -9327,8 +9333,14 @@ ad_3604:
     2e10:	e1 e8       	ldi	r30, 0x81	; 129
     2e12:	f0 e0       	ldi	r31, 0x00	; 0
 #endif
+#if TP1 == 0
 	add	r30, SelectHighPin;
     2e14:	eb 0d       	add	r30, r11
+#else
+	ldi	r24, -TP1;
+	add	r24, SelectHighPin;
+	add	r30, r24;	
+#endif
 	adc	r31, zero_reg;
     2e16:	f1 1d       	adc	r31, r1
 	lpm	r24, Z+;
@@ -10152,16 +10164,16 @@ void GetVloss() {
     311c:	97 c0       	rjmp	.+302    	; 0x324c <GetVloss+0x146>
     311e:	e0 91 83 01 	lds	r30, 0x0183
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
-  LoADC = pgm_read_byte((&PinRLRHADCtab[6])+cap.ca) | TXD_MSK;
+  LoADC = pgm_read_byte((&PinRLRHADCtab[6])+cap.ca-TP1) | TXD_MSK;
 #else
-  LoADC = pgm_read_byte((&PinRLRHADCtab[3])+cap.ca) | TXD_MSK;
+  LoADC = pgm_read_byte((&PinRLRHADCtab[3])+cap.ca-TP1) | TXD_MSK;
     3122:	f0 e0       	ldi	r31, 0x00	; 0
     3124:	ef 57       	subi	r30, 0x7F	; 127
     3126:	ff 4f       	sbci	r31, 0xFF	; 255
     3128:	c4 91       	lpm	r28, Z
     312a:	e0 91 84 01 	lds	r30, 0x0184
 #endif
-  HiPinR_L = pgm_read_byte(&PinRLRHADCtab[cap.cb]);	//R_L mask for HighPin R_L load
+  HiPinR_L = pgm_read_byte(&PinRLRHADCtab[cap.cb-TP1]);	//R_L mask for HighPin R_L load
     312e:	f0 e0       	ldi	r31, 0x00	; 0
     3130:	e2 58       	subi	r30, 0x82	; 130
     3132:	ff 4f       	sbci	r31, 0xFF	; 255

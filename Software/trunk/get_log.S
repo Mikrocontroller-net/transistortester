@@ -15,7 +15,7 @@
 
  .section .text
 
-; // get_log interpolate a table with the function -log(1 - (permil/1000))
+; // get_log interpolate a table with the function -1000*log(1 - (permil/1000))
 ; uint16_t get_log(uint16_t permil) {
 get_log:
  	push	r28

@@ -340,6 +340,7 @@ endif
 ifndef USE_EEPROM
 OBJECTS +=  EE_check_init.o
 endif
+OBJECTS += samplingADC.o sampling_cap.o
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 

@@ -103,6 +103,13 @@ void show_Cap13(void) {
 //     cap.cpre_max = -12;	// set to pF unit
      cap.v_loss = 0;		// clear vloss  for low capacity values (<25pF)!
      ReadCapacity(TP3, TP1);
+#ifdef SamplingADC
+     if (cap.cpre==-12 && cap.cval<100) {
+        // if below 100 pF, try the alternative measuring method for small capacitors
+        cap.cval=sampling_cap(TP3,TP1,0);
+        cap.cpre=sampling_cap_pre;
+     }
+#endif
      lcd_line2();		// overwrite old Capacity value 
      if (cap.cpre < 0) {
         // a cap is detected

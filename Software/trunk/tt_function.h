@@ -63,3 +63,22 @@ void Bat_update(uint8_t tt);		// Update Battery voltage
 void init_parts(void);			// initialize all parts to nothing found
 void i2c_init(void);			// init the I2C interface
 uint16_t Rnum2pins(uint8_t num);	// compute Pin-Numbers of the resistor number
+
+#ifdef SamplingADC
+extern uint16_t samplingADC(   // code is in sampling_ADC.S
+   uint16_t what, 	// what to measure? see samplingADC_... defs below
+   uint16_t *ptr,       // output pointer (note: ptr[0] will contain incorrect data; ptr[1]...ptr[n-1] will be valid)
+   uint8_t n,              // number of samples (n=0 for 256)
+   uint8_t Rport_1,	// port value for active part of step / inactive part of impulse
+   uint8_t Rddr_1,		// ddr value for same
+   uint8_t Rport_0,	// port values for inactive part of step / active part of impulse; note that for impulse response, Rport_1 must equal Rport_0 (we don't have enough time to toggle both port and ddr between impulses)
+   uint8_t Rddr_0          // ddr value for same
+   );
+#define samplingADC_step      (1<<0)   // do step response, not impulse
+#define samplingADC_slow4     (1<<1)   // only take a sample every 4 clockcycles
+#define samplingADC_slow16    (1<<4)   // only take a sample every 16 clockcycles
+#define samplingADC_cumul     (1<<2)   // don't overwrite, but add the samples to the array
+#define samplingADC_twopulses (1<<3)   // send 2 impulses rather than one; inter-pulse time is in the upper 8 bits, should be in the range 4..15
+extern uint16_t sampling_cap(uint8_t HighPin, uint8_t LowPin, uint8_t hivolt);   // returns measured capacitance in 0.01 pF units; hivolt flag demands measurement at 5 V rather than at 0 V
+#define sampling_cap_pre -14
+#endif

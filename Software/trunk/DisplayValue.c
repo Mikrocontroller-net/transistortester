@@ -81,6 +81,7 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
   {
 
     Value += 5;				/* for automatic rounding */
+    // perhaps TODO: the above is not really correct, can do double rounding (2000.45 -> 2000.5 -> 2001)
 
     Value = Value / 10;			/* scale down by 10^1 */
 
@@ -98,6 +99,7 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
 
    */
 
+#if 0
   Length = Exponent + 12;
 
   if ((int8_t)Length <  0) Length = 0;		/* Limit to minimum prefix */
@@ -117,6 +119,12 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
       Offset = 3 - Offset;		/* reverse value (1 or 2) */
 
     }
+#endif
+  // the following is much more concise
+  // also removes the limits checking, since limit errors should never happen, and if they do, they'd show _incorrect_ results;
+  // showing a garbage prefix character seems preferable to something correct-looking but off by some power of 10
+  Index = ((uint8_t)(Exponent+14))/3;
+  Offset = ((uint8_t)(6-Exponent))%3;
 
   /* convert value into string */
 

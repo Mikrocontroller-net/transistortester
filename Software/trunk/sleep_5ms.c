@@ -40,10 +40,12 @@ while (pause > 0)
    
    OCR2A = TCNT2 + t2_offset;	/* set the compare value */
    TIMSK2 = (0<<OCIE2B) | (1<<OCIE2A) | (0<<TOIE2); /* enable output compare match A interrupt */ 
+// TIMSK2 |= (1<<OCIE2A); /* enable output compare match A interrupt */ 
    set_sleep_mode(SLEEP_MODE_PWR_SAVE);
    sleep_mode();
 // wake up after output compare match interrupt
    TIMSK2 = (0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2); /* disable output compare match A interrupt */ 
+// TIMSK2 &= ~(1<<OCIE2A); /* disable output compare match A interrupt */ 
   }
  #else
    // Startup time is too long with 1MHz Clock!!!!

@@ -66,6 +66,14 @@ ShowData.o: ../ShowData.c $(MKFILES)
 show_Resis_Cap.o: ../show_Resis_Cap.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
+sampling_cap.o: ../sampling_cap.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
+########### Compile assembler source only 
+
+samplingADC.o: ../samplingADC.S $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 ##Link
 $(TARGET): $(OBJECTS)
 	 $(CC) $(LDFLAGS) $(OBJECTS) $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $(TARGET)

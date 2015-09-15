@@ -7338,9 +7338,12 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
    cap.cpre = -9;		// switch units to nF 
     231c:	b9 de       	rcall	.-654    	; 0x2090 <Scale_C_with_vcc>
     231e:	20 91 73 01 	lds	r18, 0x0173
-   Scale_C_with_vcc();
+   Scale_C_with_vcc();		// value is below 100000 after this call, cpre is changed
     2322:	30 91 74 01 	lds	r19, 0x0174
    // cap.cval for this type is at least 40000nF, so the last digit will be never shown
+#if WITH_MENU
+   cap.cval *= (1000 - (int8_t)eeprom_read_byte((uint8_t *)&big_cap_corr));	// correct with C_H_KORR with 0.1% resolution, but prevent overflow
+#else
    cap.cval *= (1000 - C_H_KORR);	// correct with C_H_KORR with 0.1% resolution, but prevent overflow
     2326:	40 91 75 01 	lds	r20, 0x0175
     232a:	50 91 76 01 	lds	r21, 0x0176
@@ -7350,7 +7353,8 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     2336:	24 e6       	ldi	r18, 0x64	; 100
     2338:	30 e0       	ldi	r19, 0x00	; 0
     233a:	40 e0       	ldi	r20, 0x00	; 0
-   cap.cval /= 100;
+#endif
+   cap.cval /= 100;		// was multiplied with 1000, now divided by 100
     233c:	50 e0       	ldi	r21, 0x00	; 0
     233e:	0e 94 03 1f 	call	0x3e06	; 0x3e06 <__udivmodsi4>
     2342:	20 93 73 01 	sts	0x0173, r18

@@ -217,10 +217,14 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 #endif
    cap.cval = cap.cval_uncorrected.dw;	// set result to uncorrected
    cap.cpre = -9;		// switch units to nF 
-   Scale_C_with_vcc();
+   Scale_C_with_vcc();		// value is below 100000 after this call, cpre is changed
    // cap.cval for this type is at least 40000nF, so the last digit will be never shown
+#if WITH_MENU
+   cap.cval *= (1000 - (int8_t)eeprom_read_byte((uint8_t *)&big_cap_corr));	// correct with C_H_KORR with 0.1% resolution, but prevent overflow
+#else
    cap.cval *= (1000 - C_H_KORR);	// correct with C_H_KORR with 0.1% resolution, but prevent overflow
-   cap.cval /= 100;
+#endif
+   cap.cval /= 100;		// was multiplied with 1000, now divided by 100
 #if DebugOut == 10
    lcd_line3();
    lcd_clear_line();

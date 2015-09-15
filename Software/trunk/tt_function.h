@@ -44,6 +44,7 @@ void EE_check_init(void);		// check calibration values and init the values if un
 void GetFrequency(uint8_t range);	// measure Frequency and display 
 void function_menu();			// menu for selecting extra function
 void show_vext();			// show external voltage (zener) 
+void set_big_cap_corr();		// set the correction value for big capacitor measurement
 void message_key_released(const unsigned char XX_str[]); // clear display, show message XX_str and wait for released key
 void make_frequency(void);		// start counter 1 to make frequency at middle pin
 void do_10bit_PWM(void);		// start counter 1 to make fixed frequency with PWM

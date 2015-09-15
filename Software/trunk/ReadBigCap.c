@@ -119,8 +119,14 @@ void ReadBigCap(uint8_t HighPin, uint8_t LowPin) {
    cap.cval = cap.cval_uncorrected.dw;	// set result to uncorrected
    Scale_C_with_vcc();
    // cap.cval for this type is at least 40000nF, so the last digit will be never shown
-   cap.cval -= ((cap.cval * C_H_KORR) / 1000);	// correct with C_H_KORR with 0.1% resolution, but prevent overflow
-   cap.cval /= 10;
+//   cap.cval -= ((cap.cval * C_H_KORR) / 1000);	// correct with C_H_KORR with 0.1% resolution, but prevent overflow
+//   cap.cval /= 10;
+#ifdef WITH_MENU
+   cap.cval *= (1000 - (int8_t)eeprom_read_byte((uint8_t *)&big_cap_corr));	// correct with actual big_cap_korr at 0.1% resolution
+#else
+   cap.cval *= (1000 - C_H_KORR);	// correct with C_H_KORR at 0.1% resolution
+#endif
+   cap.cval /= 10000;
 
 //==================================================================================
 

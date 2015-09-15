@@ -19,13 +19,14 @@
  #define MODE_RESIS 6		/* ResistorCheck at TP1:TP3 */
  #define MODE_CAP13 7		/* Capacitor check at TP1:TP3 */
  #define MODE_ROTARY 8		/* Test Rotary Switch */
- #define MODE_H_CRYSTAL 9	/* test of high frequency crystal */
- #define MODE_L_CRYSTAL 10	/* test of low frequency crystal */
- #define NNN 10
+ #define MODE_BIG_CAP_CORR 9	/* Correction for big caps */
+ #define MODE_H_CRYSTAL 10	/* test of high frequency crystal */
+ #define MODE_L_CRYSTAL 11	/* test of low frequency crystal */
+ #define NNN 11
  #ifdef WITH_SELFTEST
-  #define MODE_SELFTEST 11	/* full selftest function with calibration */
+  #define MODE_SELFTEST 12	/* full selftest function with calibration */
   #undef NNN
-  #define NNN 11
+  #define NNN 12
  #endif
  #ifdef WITH_VEXT
   #define MODE_VEXT (NNN+1)	/* external voltage measurement and zener voltage */
@@ -54,11 +55,12 @@
  #define MODE_RESIS 5		/* ResistorCheck at TP1:TP3 */
  #define MODE_CAP13 6		/* Capacitor check at TP1:TP3 */
  #define MODE_ROTARY 7		/* Test Rotary Switch */
- #define NNN 7
+ #define MODE_BIG_CAP_CORR 8	/* Correction for big caps */
+ #define NNN 8
  #ifdef WITH_SELFTEST
-  #define MODE_SELFTEST 8	/* full selftest function with calibration */
+  #define MODE_SELFTEST 9	/* full selftest function with calibration */
   #undef NNN
-  #define NNN 8
+  #define NNN 9
  #endif
  #ifdef WITH_VEXT
   #define MODE_VEXT (NNN+1)	/* external voltage measurement and zener voltage */
@@ -217,6 +219,9 @@ void function_menu() {
         if (func_number == MODE_ROTARY) {
            CheckRotaryEncoder();		// check rotary encoder
         }
+        if (func_number == MODE_BIG_CAP_CORR) {
+           set_big_cap_corr();
+        }
   #ifdef WITH_SELFTEST
         if (func_number == MODE_SELFTEST) AutoCheck(0x11);	// Full selftest with calibration
   #endif
@@ -273,6 +278,7 @@ void message2line(uint8_t number) {
      if (number == MODE_RESIS) lcd_MEM_string(RESIS_13_str);
      if (number == MODE_CAP13) lcd_MEM_string(CAP_13_str);
      if (number == MODE_ROTARY) lcd_MEM2_string(RotaryEncoder_str);
+     if (number == MODE_BIG_CAP_CORR) lcd_MEM2_string(SetCapCorr_str);
  #ifdef WITH_SELFTEST
      if (number == MODE_SELFTEST) lcd_MEM2_string(FULLCHECK_str);
  #endif
@@ -939,4 +945,63 @@ uint8_t contrast;
   eeprom_write_byte((uint8_t *)(&EE_Volume_Value), (int8_t)contrast);	// save contrast value
 }
  #endif /* LCD_ST_TYPE == 7565 */
+/* *************************************************** */
+/* set the correction value for big capacitor measurement */
+/* *************************************************** */
+#define MIN_KORR (-20)
+#define MAX_KORR 80
+void set_big_cap_corr(void) {
+uint8_t key_pressed;
+int8_t korr;
+  // set the contrast value
+  message_key_released(SetCapCorr_str);	// display Capacity correction and wait for key released
+  korr = eeprom_read_byte(&big_cap_corr);
+  #ifdef POWER_OFF
+  uint8_t times;
+  for (times=0;times<240;times++)
+  #else
+  while (1)                     /* wait endless without option POWER_OFF */
+  #endif
+  {
+     lcd_line2();
+     if (korr < 0) {
+       lcd_data('-');
+       DisplayValue(-korr,-1,'%',3);
+     } else {
+       DisplayValue(korr,-1,'%',3);
+     }
+     lcd_clear_line();		// clear to end of line
+     key_pressed = wait_for_key_ms(1600);
+#ifdef POWER_OFF
+ #ifdef WITH_ROTARY_SWITCH
+     if ((key_pressed != 0) || (rotary.incre > 0)) times = 0;	// reset counter, operator is active
+ #else
+     if (key_pressed != 0)  times = 0;	// reset counter, operator is active
+ #endif
+#endif
+     if(key_pressed >= 130) break;	// more than 1.3 seconds
+#ifdef WITH_ROTARY_SWITCH
+     if (rotary.incre > FAST_ROTATION) break;		// fast rotation ends setting of korr
+     if (rotary.count >= 0) {
+        korr += rotary.count;		// increase the korr by rotary.count
+     } else {
+        korr -= rotary.count;	// decrease the korr by rotary.count
+     }
+#endif
+     if (key_pressed > 0) {
+        if (key_pressed > 40) {
+           korr++; // longer key press select higher korr value
+        } else {
+           korr--;	// decrease the korr 
+        }
+     }
+     if (korr > MAX_KORR) korr -= (MIN_KORR - MAX_KORR);
+     if (korr < MIN_KORR) korr += (MAX_KORR - MIN_KORR);
+#ifdef POWER_OFF
+     if (DC_Pwr_mode == 1) times = 0;	// no time limit with DC_Pwr_mode
+#endif
+  } /* end for times */
+
+  eeprom_write_byte((uint8_t *)(&big_cap_corr), (int8_t)korr);	// save korr value
+}
 #endif  /* WITH_MENU */

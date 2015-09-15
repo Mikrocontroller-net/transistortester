@@ -25,7 +25,7 @@ unsigned int GetRLmultip(unsigned int cvolt);  // get C-Multiplikator for voltag
 void Scale_C_with_vcc(void);		// scale capacity value for different VCC Voltages
 void scale_intref_adc(void);		// get scale factors for ReadADC with internal reference
 //uint8_t value_out(unsigned long vval,uint8_t pp);    // output 4 digits with (pp-1) digits after point
-void DisplayValue(unsigned long vval,int8_t Expo,unsigned char Unit, unsigned char Digits); //output Digits characters with exponent and unit
+void DisplayValue(signed long vval,int8_t Expo,unsigned char Unit, unsigned char Digits); //output Digits characters with exponent and unit
 void Display_mV(uint16_t val, uint8_t dd);		// show mV with dd digits
 unsigned int compute_hfe(unsigned int lpx, unsigned int tpy);
 void sleep_5ms(uint8_t xxx);		// set processor to sleep state for xxx times 5ms, xxx>200  (xxx-200)*100  
@@ -80,6 +80,6 @@ extern uint16_t samplingADC(   // code is in sampling_ADC.S
 #define samplingADC_slow16    (1<<4)   // only take a sample every 16 clockcycles
 #define samplingADC_cumul     (1<<2)   // don't overwrite, but add the samples to the array
 #define samplingADC_twopulses (1<<3)   // send 2 impulses rather than one; inter-pulse time is in the upper 8 bits, should be in the range 4..15
-extern uint16_t sampling_cap(uint8_t HighPin, uint8_t LowPin, uint8_t hivolt);   // returns measured capacitance in 0.01 pF units; hivolt flag demands measurement at 5 V rather than at 0 V
+extern int32_t sampling_cap(uint8_t HighPin, uint8_t LowPin, uint8_t hivolt);   // returns measured capacitance in 0.01 pF units; hivolt flag demands measurement at 5 V rather than at 0 V
 #define sampling_cap_pre -14
 #endif

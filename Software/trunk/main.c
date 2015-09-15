@@ -404,6 +404,7 @@
 	GetIr(diodes.Cathode[0],diodes.Anode[0]);	// measure and output Ir=x.xuA
 #endif
         UfAusgabe(0x70);		// mark for additional resistor and output Uf= in line 2
+#ifndef SamplingADC
         /* load current of capacity is (5V-1.1V)/(470000 Ohm) = 8298nA */
         ReadCapacity(diodes.Cathode[0],diodes.Anode[0]);	// Capacity opposite flow direction
         if (cap.cpre < -3) {	/* capacity is measured */
@@ -417,6 +418,16 @@
            DisplayValue(cap.cval,cap.cpre,'F',2);
 #endif
         }
+#else  // SamplingADC
+        cap.cpre=sampling_cap_pre;
+        cap.cval=sampling_cap(diodes.Cathode[0],diodes.Anode[0],0);   // at low voltage
+        lcd_line3();		// output Capacity in line 3
+        DisplayValue(cap.cval,cap.cpre,'F',2);
+        lcd_data('-');
+        cap.cval=sampling_cap(diodes.Cathode[0],diodes.Anode[0],1);   // at high voltage
+        DisplayValue(cap.cval,cap.cpre,'F',2);
+        lcd_MEM_string(AT05volt);
+#endif
         goto end3;
      } else if(NumOfDiodes == 2) { // double diode
         lcd_data('2');

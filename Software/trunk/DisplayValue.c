@@ -41,7 +41,7 @@
 
  */
 
-void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsigned char digits)
+void DisplayValue(signed long signedValue, int8_t Exponent, unsigned char Unit, unsigned char digits)
 
 {
 
@@ -62,8 +62,12 @@ void DisplayValue(unsigned long Value, int8_t Exponent, unsigned char Unit, unsi
   uint8_t           Length;		/* string length */
 
 
+  unsigned long Value=signedValue;
 
-
+  if (signedValue<0) {
+     lcd_data('-');
+     Value=-signedValue;
+  }
 
   Limit = 100;				/* scale value down to 2 digits */
 

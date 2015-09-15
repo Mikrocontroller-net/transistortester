@@ -48,6 +48,7 @@
 #endif /* if defined (MAIN_C) */
 
 
+
 struct Diode_t {
   uint8_t Anode[6];
   uint8_t Cathode[6];

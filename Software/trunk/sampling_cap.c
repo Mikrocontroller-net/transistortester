@@ -7,12 +7,17 @@
 #include <stdlib.h>
 #include "Transistortester.h"
 
+
 typedef uint8_t byte;
+
+const uint16_t c_zero_tab2_lo[] EEMEM = { 0,0,0,0,0,0,0 };   // zero offsets for SamplingADC capacitance measurement, in 0.01 pF, lo voltage
+const uint16_t c_zero_tab2_hi[] EEMEM = { 0,0,0,0,0,0,0 };   // same, hi voltage
+
 
 
 
 // calculate -32768*ln(1-y/32768)
-unsigned int mylog(unsigned int y)
+static unsigned int mylog(unsigned int y)
 {
    unsigned long int a,b;
    b=y;
@@ -60,7 +65,7 @@ unsigned int mylog(unsigned int y)
 }
 
 
-uint16_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cal)
+static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte calibrating)
 {
   EntladePins();
 
@@ -111,7 +116,8 @@ uint16_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cal)
 
    R_DDR = 0;			
 
-   // cf. https://en.wikipedia.org/wiki/Ordinary_least_squares
+   // we use the least-squares algorithm to find the slope
+   // cf. e.g. https://en.wikipedia.org/wiki/Ordinary_least_squares
    unsigned long sumy, sumxy;
    sumy=sumxy=0;
    for (i=N1;i<=N2;i++) {
@@ -150,25 +156,24 @@ uint16_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cal)
    c3 = sumxx*((uint32_t)(((20480000000./R_H_VAL)+4)/8))/sumxy;  // units of 0.01 pF
    // the /8 is to make the (...) factor (about 435745) fit in 16 bits
    // note that the /8 is compensated for by the different bitshifts of sumxx and sumxy, and the +4 rounds this number properly
-   if (!cal) {
+   if (!calibrating) {
       byte k = ((HighPin - TP1)*3) + LowPin - TP1 -1;
-      c3 -= (eeprom_read_byte(&c_zero_tab[k]) -(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)) - 1) * 100; // try zero offset
-//      if (hivolt) c3-= eeprom_read_word(c_zero_tab2_hi+k);
-//      else c3-= eeprom_read_word(c_zero_tab2_lo+k);
-      if (c3&0x80000000l) c3=0;     // set negative outcome to zero
+      if (hivolt) c3-= eeprom_read_word(c_zero_tab2_hi+k);
+      else c3-= eeprom_read_word(c_zero_tab2_lo+k);
    }
    return c3;
 }
 
 
 
-uint16_t sampling_cap(byte HighPin, byte LowPin, byte hivolt)
+int32_t sampling_cap(byte HighPin, byte LowPin, byte hivolt)
 {
    return sampling_cap_do(HighPin,LowPin, hivolt, 0);
 }
 
 
-/*
+
+
 void sampling_cap_calibrate()
 {
    // measure capacitance of all combinations without anything connected
@@ -176,27 +181,26 @@ void sampling_cap_calibrate()
    for (i=0;i<=2;i++)
       for (j=0;j<=2;j++)
          if (i!=j) {
-            unsigned int c=0;
-            unsigned int d=0;
+            unsigned int c;
+            unsigned int d;
             unsigned int v;
-            v=newcapdo(i,j,0,1);
+            c=sampling_cap_do(i,j,0,1);
             lcd_clear();
+            lcd_MEM_string(C0_str);			//output "C0 "
+            lcd_data(' ');
             lcd_testpin(i);
             lcd_data(' ');
             lcd_testpin(j);
             lcd_data(' ');
             lcd_line2();
-            c+=v;
-            DisplayValue(v,-2,' ',4);
-            v=newcapdo(i,j,1,1);
-            d+=v;
-            DisplayValue(v,-14,'F',4);
-            k=3*i+j-1;
+            DisplayValue(c,-2,' ',4);
+            d=sampling_cap_do(i,j,1,1);
+            DisplayValue(d,-14,'F',4);
+            byte k=3*i+j-1;
             eeprom_write_word((void*)(c_zero_tab2_lo+k),c);
             eeprom_write_word((void*)(c_zero_tab2_hi+k),d);
          }
 }
-*/
 
 
 #endif   // SamplingADC

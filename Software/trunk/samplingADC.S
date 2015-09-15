@@ -10,9 +10,6 @@
 
 .GLOBAL samplingADC
 .func samplingADC
-.extern wait100us
-.extern wait5ms
-.extern wait10ms
 
 
 

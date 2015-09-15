@@ -411,6 +411,10 @@ no_c0save:
 last_line_used = 2;
 wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 
+#ifdef SamplingADC
+  sampling_cap_calibrate();
+#endif
+
  #ifdef AUTO_CAL
   #ifdef WITH_MENU
 if (((test_mode & 0x0f) == 1) || (UnCalibrated == 2))

@@ -151,7 +151,8 @@ uint16_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cal)
    // the /8 is to make the (...) factor (about 435745) fit in 16 bits
    // note that the /8 is compensated for by the different bitshifts of sumxx and sumxy, and the +4 rounds this number properly
    if (!cal) {
-      byte k=HighPin*3+LowPin-1;
+      byte k = ((HighPin - TP1)*3) + LowPin - TP1 -1;
+      c3 -= (eeprom_read_byte(&c_zero_tab[k]) -(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)) - 1) * 100; // try zero offset
 //      if (hivolt) c3-= eeprom_read_word(c_zero_tab2_hi+k);
 //      else c3-= eeprom_read_word(c_zero_tab2_lo+k);
       if (c3&0x80000000l) c3=0;     // set negative outcome to zero

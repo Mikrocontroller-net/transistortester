@@ -193,6 +193,8 @@ void Bat_update(uint8_t tt) {
  #endif
   }
 };	/* end Bat_update() */
+#endif
+#if defined(POWER_OFF) 
 uint8_t Pwr_mode_check(uint8_t tt) {
  if ((tt == 15) && (DC_Pwr_mode == 1)) return(0);  // when DC_Mode, next cycle start with 0
  return(tt + 1);	// otherwise increase

@@ -14,6 +14,10 @@
    const uint8_t c_zero_tab[] EEMEM = { C_NULL,C_NULL,C_NULL+TP2_CAP_OFFSET,C_NULL+2,C_NULL+TP2_CAP_OFFSET,C_NULL,C_NULL }; //table of zero offsets
    // if the marker position of c_zero_tab is not equal the first position, the calibration has not run before
 #endif
+#ifdef SamplingADC
+   const uint16_t c_zero_tab2_lo[] EEMEM = { C_NULL*100,C_NULL*100,C_NULL*100,C_NULL*100,C_NULL*100,C_NULL*100,C_NULL*100 };   // zero offsets for SamplingADC capacitance measurement, in 0.01 pF, lo voltage
+   const uint16_t c_zero_tab2_hi[] EEMEM = { C_NULL*100,C_NULL*100,C_NULL*100,C_NULL*100,C_NULL*100,C_NULL*100,C_NULL*100 };   // same, hi voltage
+#endif
 #ifdef WITH_MENU
    const int8_t big_cap_corr EEMEM = C_H_KORR;	// default correction for big capacity measurement
 #endif
@@ -37,6 +41,10 @@
   extern uint16_t ref_offset;
   extern uint8_t c_zero_tab[];
  #endif
+#ifdef SamplingADC
+  extern const uint16_t c_zero_tab2_lo[] EEMEM ;   // zero offsets for SamplingADC capacitance measurement, in 0.01 pF, lo voltage
+  extern const uint16_t c_zero_tab2_hi[] EEMEM ;   // same, hi voltage
+#endif
  #ifdef WITH_MENU
   extern int8_t big_cap_corr EEMEM;	// default correction for big capacity measurement
  #endif

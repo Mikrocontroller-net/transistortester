@@ -10,8 +10,8 @@
 
 typedef uint8_t byte;
 
-const uint16_t c_zero_tab2_lo[] EEMEM = { 100*C_NULL,100*C_NULL,100*(C_NULL+TP2_CAP_OFFSET),100*(C_NULL+2),100*(C_NULL+TP2_CAP_OFFSET),100*C_NULL,100*C_NULL };   // zero offsets for SamplingADC capacitance measurement, in 0.01 pF, lo voltage
-const uint16_t c_zero_tab2_hi[] EEMEM = { 100*C_NULL,100*C_NULL,100*(C_NULL+TP2_CAP_OFFSET),100*(C_NULL+2),100*(C_NULL+TP2_CAP_OFFSET),100*C_NULL,100*C_NULL };   // same, hi voltage
+//const uint16_t c_zero_tab2_lo[] EEMEM = { 0,0,0,0,0,0,0 };   // zero offsets for SamplingADC capacitance measurement, in 0.01 pF, lo voltage
+//const uint16_t c_zero_tab2_hi[] EEMEM = { 0,0,0,0,0,0,0 };   // same, hi voltage
 
 
 
@@ -187,11 +187,11 @@ void sampling_cap_calibrate()
             c=sampling_cap_do(i,j,0,1);
             lcd_clear();
             lcd_MEM_string(C0_str);			//output "C0 "
-            lcd_data(' ');
+            lcd_space();				// lcd_data(' ');
             lcd_testpin(i);
             lcd_data(' ');
             lcd_testpin(j);
-            lcd_data(' ');
+            lcd_space();				//lcd_data(' ');
             lcd_line2();
             DisplayValue(c,-2,' ',4);
             d=sampling_cap_do(i,j,1,1);

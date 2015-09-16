@@ -10428,9 +10428,10 @@ void Bat_update(uint8_t tt) {
     3272:	08 95       	ret
 
 00003274 <Pwr_mode_check>:
- #endif
   }
 };	/* end Bat_update() */
+#endif
+#if defined(POWER_OFF) 
 uint8_t Pwr_mode_check(uint8_t tt) {
  if ((tt == 15) && (DC_Pwr_mode == 1)) return(0);  // when DC_Mode, next cycle start with 0
     3274:	8f 30       	cpi	r24, 0x0F	; 15
@@ -10441,10 +10442,10 @@ uint8_t Pwr_mode_check(uint8_t tt) {
  return(tt + 1);	// otherwise increase
     3280:	8f 5f       	subi	r24, 0xFF	; 255
     3282:	08 95       	ret
-     wait_about2s();
- #endif
   }
 };	/* end Bat_update() */
+#endif
+#if defined(POWER_OFF) 
 uint8_t Pwr_mode_check(uint8_t tt) {
  if ((tt == 15) && (DC_Pwr_mode == 1)) return(0);  // when DC_Mode, next cycle start with 0
     3284:	80 e0       	ldi	r24, 0x00	; 0

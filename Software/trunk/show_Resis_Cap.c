@@ -20,7 +20,7 @@ void show_Resis13(void) {
   lcd_MEM2_string(RLMETER_13_str);	// "[RL]" at the end of line 1
 #ifdef POWER_OFF
   uint8_t times;
-  for (times=0;times<250;times++) 
+  for (times=0;times<250;) 
 #else
   while (1)		/* wait endless without the POWER_OFF option */
 #endif
@@ -69,7 +69,7 @@ void show_Resis13(void) {
 #else
      if (key_pressed != 0) break;
 #endif
-#if defined(POWER_OFF) && defined(BAT_CHECK)
+#if defined(POWER_OFF)
      times = Pwr_mode_check(times);	// no time limit with DC_Pwr_mode
 #endif
   }  /* end for times */
@@ -170,7 +170,7 @@ void show_Cap13(void) {
 #else
      if (key_pressed != 0) break;
 #endif
-#if defined(POWER_OFF) && defined(BAT_CHECK)
+#if defined(POWER_OFF)
      times = Pwr_mode_check(times);	// no time limit with DC_Pwr_mode
 #endif
   }  /* end for times */

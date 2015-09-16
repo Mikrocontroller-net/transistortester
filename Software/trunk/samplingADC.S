@@ -19,7 +19,8 @@
 // we _could_ do this differently, and run a conversion in 832 cycles at 8 MHz
 // but then lots of timing stuff in this routine will have to change, and possibly also in its callers
 
-#define AUTO_CLOCK_DIV (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0)
+#undef AUTO_CLOCK_DIV
+#define AUTO_CLOCK_DIV (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0)	/* divide clock by 128 */
 
 
  .section .text

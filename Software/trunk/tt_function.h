@@ -60,6 +60,7 @@ void CalibrationCap(void);		// read voltage offsets with calibration capacitor
 void set_contrast(void);		// set the contrast value of ST7565 controller
 void ShowData(void);			// show software revision and calibration parameters
 void Battery_check(void);		// check and report the battery state
+uint8_t Pwr_mode_check(uint8_t ll);	// give next counter state depending on DC_Pwr_mode
 void Bat_update(uint8_t tt);		// Update Battery voltage
 void init_parts(void);			// initialize all parts to nothing found
 void i2c_init(void);			// init the I2C interface

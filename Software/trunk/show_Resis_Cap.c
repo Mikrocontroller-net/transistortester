@@ -70,7 +70,7 @@ void show_Resis13(void) {
      if (key_pressed != 0) break;
 #endif
 #ifdef POWER_OFF
-     if (DC_Pwr_mode == 1) times = 0;	// no time limit with DC_Pwr_mode
+     times = Pwr_mode_check(times);	// no time limit with DC_Pwr_mode
 #endif
   }  /* end for times */
   lcd_clear();
@@ -91,7 +91,7 @@ void show_Cap13(void) {
   lcd_MEM2_string(CMETER_13_str);	// "[C]" at the end of line 1
 #ifdef POWER_OFF
   uint8_t times;
-  for (times=0;times<250;times++) 
+  for (times=0;times<250;) 
 #else
   while (1)		/* wait endless without the POWER_OFF option */
 #endif
@@ -171,7 +171,7 @@ void show_Cap13(void) {
      if (key_pressed != 0) break;
 #endif
 #ifdef POWER_OFF
-     if (DC_Pwr_mode == 1) times = 0;	// no time limit with DC_Pwr_mode
+     times = Pwr_mode_check(times);	// no time limit with DC_Pwr_mode
 #endif
   }  /* end for times */
   lcd_clear();		// clear to end of line
@@ -193,4 +193,8 @@ void Bat_update(uint8_t tt) {
  #endif
   }
 };	/* end Bat_update() */
+uint8_t Pwr_mode_check(uint8_t tt) {
+ if ((tt == 15) && (DC_Pwr_mode == 1)) return(0);  // when DC_Mode, next cycle start with 0
+ return(tt + 1);	// otherwise increase
+};
 #endif

@@ -307,7 +307,7 @@ void show_C_ESR() {
   message_key_released(C_ESR_str);
 #ifdef POWER_OFF
   uint8_t times;
-  for (times=0;times<250;times++) 
+  for (times=0;times<250;) 
 #else
   while (1)		/* wait endless without the POWER_OFF option */
 #endif
@@ -359,7 +359,7 @@ void show_C_ESR() {
      if (key_pressed != 0) break;
 #endif
 #ifdef POWER_OFF
-     if (DC_Pwr_mode == 1) times = 0;	// no time limit with DC_Pwr_mode
+     times = Pwr_mode_check(times);	// no time limit with DC_Pwr_mode
 #endif
   }  /* end for times */
 } /* end show_C_ESR() */
@@ -380,7 +380,7 @@ void show_vext() {
   key_long_pressed = 0;
 #ifdef POWER_OFF
   uint8_t times;
-  for (times=0;times<240;times++) 
+  for (times=0;times<240;) 
 #else
   while (1)			/* wait endless without option POWER_OFF */
 #endif
@@ -435,7 +435,7 @@ void show_vext() {
      if (key_pressed == 0) key_long_pressed = 0; //reset the key long pressed counter
      if (key_long_pressed > 4) break;	// five seconds end the loop
 #ifdef POWER_OFF
-     if (DC_Pwr_mode == 1) times = 0;	// no time limit with DC_Pwr_mode
+     times = Pwr_mode_check(times);	// no time limit with DC_Pwr_mode
 #endif
   }  /* end for times */
  #endif  /* WITH_VEXT */
@@ -482,7 +482,7 @@ void make_frequency() {
   uint8_t shown_points;		// one point for every 30 seconds wait time
   uint8_t times;		// total wait time
   shown_points = 0;
-  for (times=0; times<240; times++) 
+  for (times=0; times<240;) 
 #else
   while (1)			/* wait endless without option POWER_OFF */
 #endif
@@ -545,7 +545,7 @@ void make_frequency() {
      if (key_pressed > KEYPRESS_LENGTH_10ms) freq_nr++; // longer key press select next frequency
      if(key_pressed >= 80) break;	// more than 0.8 seconds
 #ifdef POWER_OFF
-     if (DC_Pwr_mode == 1) times = 0;	// no time limit with DC_Pwr_mode
+     times = Pwr_mode_check(times);	// no time limit with DC_Pwr_mode
 #endif
   } /* end for times */
   TCCR1B = 0;		// stop counter
@@ -791,7 +791,7 @@ void do_10bit_PWM() {
   percent = 10;
 #ifdef POWER_OFF
   uint8_t times;		// time limit
-  for (times=0; times<240; times++) 
+  for (times=0; times<240; ) 
 #else
   while (1)			/* wait endless without option POWER_OFF */
 #endif
@@ -851,7 +851,7 @@ void do_10bit_PWM() {
  #endif
 #endif
 #ifdef POWER_OFF
-     if (DC_Pwr_mode == 1) times = 0;	// no time limit with DC_Pwr_mode
+     times = Pwr_mode_check(times);	// no time limit with DC_Pwr_mode
 #endif
   } /* end for times */
 
@@ -888,7 +888,7 @@ uint8_t contrast;
   contrast = eeprom_read_byte(&EE_Volume_Value);
   #ifdef POWER_OFF
   uint8_t times;
-  for (times=0;times<240;times++)
+  for (times=0;times<240;)
   #else
   while (1)                     /* wait endless without option POWER_OFF */
   #endif
@@ -938,7 +938,7 @@ uint8_t contrast;
      }
      contrast &= MAX_CONTRAST;
 #ifdef POWER_OFF
-     if (DC_Pwr_mode == 1) times = 0;	// no time limit with DC_Pwr_mode
+     times = Pwr_mode_check(times);	// no time limit with DC_Pwr_mode
 #endif
   } /* end for times */
 
@@ -958,7 +958,7 @@ int8_t korr;
   korr = eeprom_read_byte((uint8_t *)&big_cap_corr);
   #ifdef POWER_OFF
   uint8_t times;
-  for (times=0;times<240;times++)
+  for (times=0;times<240;)
   #else
   while (1)                     /* wait endless without option POWER_OFF */
   #endif
@@ -998,7 +998,7 @@ int8_t korr;
      if (korr > MAX_KORR) korr -= (MIN_KORR - MAX_KORR);
      if (korr < MIN_KORR) korr += (MAX_KORR - MIN_KORR);
 #ifdef POWER_OFF
-     if (DC_Pwr_mode == 1) times = 0;	// no time limit with DC_Pwr_mode
+     times = Pwr_mode_check(times);	// no time limit with DC_Pwr_mode
 #endif
   } /* end for times */
 

@@ -183,7 +183,7 @@ void sampling_cap_calibrate()
          if (i!=j) {
             unsigned int c;
             unsigned int d;
-            unsigned int v;
+//            unsigned int v;
             c=sampling_cap_do(i,j,0,1);
             lcd_clear();
             lcd_MEM_string(C0_str);			//output "C0 "

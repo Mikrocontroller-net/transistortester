@@ -69,7 +69,7 @@ void show_Resis13(void) {
 #else
      if (key_pressed != 0) break;
 #endif
-#ifdef POWER_OFF
+#if defined(POWER_OFF) && defined(BAT_CHECK)
      times = Pwr_mode_check(times);	// no time limit with DC_Pwr_mode
 #endif
   }  /* end for times */
@@ -170,7 +170,7 @@ void show_Cap13(void) {
 #else
      if (key_pressed != 0) break;
 #endif
-#ifdef POWER_OFF
+#if defined(POWER_OFF) && defined(BAT_CHECK)
      times = Pwr_mode_check(times);	// no time limit with DC_Pwr_mode
 #endif
   }  /* end for times */

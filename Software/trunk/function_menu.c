@@ -955,7 +955,7 @@ uint8_t key_pressed;
 int8_t korr;
   // set the contrast value
   message_key_released(SetCapCorr_str);	// display Capacity correction and wait for key released
-  korr = eeprom_read_byte(&big_cap_corr);
+  korr = eeprom_read_byte((uint8_t *)&big_cap_corr);
   #ifdef POWER_OFF
   uint8_t times;
   for (times=0;times<240;times++)

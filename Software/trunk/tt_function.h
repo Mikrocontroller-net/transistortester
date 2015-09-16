@@ -82,4 +82,5 @@ extern uint16_t samplingADC(   // code is in sampling_ADC.S
 #define samplingADC_twopulses (1<<3)   // send 2 impulses rather than one; inter-pulse time is in the upper 8 bits, should be in the range 4..15
 extern int32_t sampling_cap(uint8_t HighPin, uint8_t LowPin, uint8_t hivolt);   // returns measured capacitance in 0.01 pF units; hivolt flag demands measurement at 5 V rather than at 0 V
 #define sampling_cap_pre -14
+void sampling_cap_calibrate(void);	// calibrate the sampling cap method
 #endif

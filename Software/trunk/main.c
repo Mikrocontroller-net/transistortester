@@ -408,24 +408,23 @@
         /* load current of capacity is (5V-1.1V)/(470000 Ohm) = 8298nA */
         ReadCapacity(diodes.Cathode[0],diodes.Anode[0]);	// Capacity opposite flow direction
         if (cap.cpre < -3) {	/* capacity is measured */
-#if (LCD_LINES > 3)
+ #if (LCD_LINES > 2)
            lcd_line3();		// output Capacity in line 3
-#endif
+ #endif
            lcd_MEM_string(Cap_str);	//"C="
-#if LCD_LINE_LENGTH > 16
+ #if LCD_LINE_LENGTH > 16
            DisplayValue(cap.cval,cap.cpre,'F',3);
-#else
+ #else
            DisplayValue(cap.cval,cap.cpre,'F',2);
-#endif
+ #endif
         }
 #else  // SamplingADC
-        cap.cpre=sampling_cap_pre;
         cap.cval=sampling_cap(diodes.Cathode[0],diodes.Anode[0],0);   // at low voltage
-        lcd_line3();		// output Capacity in line 3
-        DisplayValue(cap.cval,cap.cpre,'F',2);
+        lcd_next_line_wait(0);		// next line, wait 5s and clear line 2
+        DisplayValue(cap.cval,sampling_cap_pre,'F',2);
         lcd_data('-');
         cap.cval=sampling_cap(diodes.Cathode[0],diodes.Anode[0],1);   // at high voltage
-        DisplayValue(cap.cval,cap.cpre,'F',2);
+        DisplayValue(cap.cval,sampling_cap_pre,'F',2);
         lcd_MEM_string(AT05volt);
 #endif
         goto end3;

@@ -102,7 +102,7 @@ End of configuration
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Impulsdrehgeber";
-   const unsigned char SetCapCorr_str[] MEM2_TEXT = "Kapazitätskorr.";
+   const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','K','o','r','r','e','k','t','u','r',0};
    const unsigned char TURN_str[] MEM2_TEXT = "drehen!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Selbsttest";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "Verbinde Pins!";
@@ -146,7 +146,7 @@ End of configuration
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generatore";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "encoder rotativo";
-   const unsigned char SetCapCorr_str[] MEM2_TEXT = "Cap correction";
+   const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','C','o','r','r','e','c','t','i','o','n',0};
    const unsigned char TURN_str[] MEM2_TEXT = "turno!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Autotest";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "Pin collegare!";
@@ -191,7 +191,7 @@ End of configuration
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Enkoder obrotowy";
-   const unsigned char SetCapCorr_str[] MEM2_TEXT = "Cap corekta";
+   const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','c','o','r','e','c','t','a',0};
    const unsigned char TURN_str[] MEM2_TEXT = "Pokrec!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Auto-test";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "Polacz Piny!";
@@ -236,7 +236,7 @@ End of configuration
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotacni koder";
-   const unsigned char SetCapCorr_str[] MEM2_TEXT = "Cap korektura";
+   const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','k','o','r','e','c','t','u','r','a',0};
    const unsigned char TURN_str[] MEM2_TEXT = "otocte!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Autotest";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "propoj sondy!";
@@ -281,7 +281,7 @@ End of configuration
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Rotacny koder";
-   const unsigned char SetCapCorr_str[] MEM2_TEXT = "Cap korektura";
+   const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','k','o','r','e','c','t','u','r','a',0};
    const unsigned char TURN_str[] MEM2_TEXT = "Krut!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Plna kalibracia";	//"Samotestovanie";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "Prepoj sondy!";
@@ -325,7 +325,7 @@ End of configuration
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotary encoder";
-   const unsigned char SetCapCorr_str[] MEM2_TEXT = "Cap korekcija";
+   const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','k','o','r','r','e','k','c','i','j','a',0};
    const unsigned char TURN_str[] MEM2_TEXT = "turn!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Selftest";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "short Probes!";
@@ -371,7 +371,7 @@ End of configuration
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Rotary encoder";
-   const unsigned char SetCapCorr_str[] MEM2_TEXT = "Cap correctie";
+   const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','c','o','r','r','e','c','t','i','e',0};
    const unsigned char TURN_str[] MEM2_TEXT = "rotaren!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Zelftest";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "verbind Pinnen!";
@@ -416,7 +416,7 @@ End of configuration
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "encoder rotativo";
-   const unsigned char SetCapCorr_str[] MEM2_TEXT = "Cap Correction";
+   const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','C','o','r','r','e','c','t','i','o','n',0};
    const unsigned char TURN_str[] MEM2_TEXT = "rodar!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Autoteste";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "conecte Pontas!";
@@ -460,7 +460,7 @@ End of configuration
    const unsigned char F_GEN_str[] MEM2_TEXT = "F-Generador";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "encoder rotativo";
-   const unsigned char SetCapCorr_str[] MEM2_TEXT = "Cap correccion";
+   const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','C','o','r','r','e','c','c','i','o','n',0};
    const unsigned char TURN_str[] MEM2_TEXT = "rotar!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Calibracion...";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "Cortocircuite las puntas!";
@@ -508,7 +508,7 @@ End of configuration
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Rotary encoder";
-   const unsigned char SetCapCorr_str[] MEM2_TEXT = "Cap Correction";
+   const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','C','o','r','r','e','c','t','i','o','n',0};
    const unsigned char TURN_str[] MEM2_TEXT = "forgat!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "On-teszt mod";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "short Probes!";	// ???
@@ -552,7 +552,7 @@ End of configuration
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotary encoder";
-   const unsigned char SetCapCorr_str[] MEM2_TEXT = "Cap korekcija";
+   const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','k','o','r','e','k','c','i','j','a',0};
    const unsigned char TURN_str[] MEM2_TEXT = "turn!";      //???
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Testuoju";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "short Probes!";	// ???
@@ -601,7 +601,7 @@ End of configuration
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotary encoder";
-   const unsigned char SetCapCorr_str[] MEM2_TEXT = "Cap correction";
+   const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','c','o','r','r','e','c','t','i','o','n',0};
    const unsigned char TURN_str[] MEM2_TEXT = "turn!";	
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Selftest";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "short Probes!";

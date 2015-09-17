@@ -995,8 +995,8 @@ int8_t korr;
            korr--;	// decrease the korr 
         }
      }
-     if (korr > MAX_KORR) korr -= (MIN_KORR - MAX_KORR);
-     if (korr < MIN_KORR) korr += (MAX_KORR - MIN_KORR);
+     if (korr > MAX_KORR) korr -= (MAX_KORR - MIN_KORR + 1);
+     if (korr < MIN_KORR) korr += (MAX_KORR - MIN_KORR + 1);
 #ifdef POWER_OFF
      times = Pwr_mode_check(times);	// no time limit with DC_Pwr_mode
 #endif

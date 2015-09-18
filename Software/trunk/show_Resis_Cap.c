@@ -64,10 +64,14 @@ void show_Resis13(void) {
 	   ReadInductance();	// measure inductance, possible only with R<2.1k
  #ifdef SamplingADC
            sampling_lc(0,2);
- #endif
            lcd_clear();
            if (inductor_lpre != 0 || lc_lx!=0) lcd_MEM_string(RESIS_13_str_RL);
-           else lcd_MEM_string(RESIS_13_str_RL);
+           else lcd_MEM_string(RESIS_13_str_R);
+ #else
+           lcd_clear();
+           if (inductor_lpre != 0) lcd_MEM_string(RESIS_13_str_RL);
+           else lcd_MEM_string(RESIS_13_str_R);
+ #endif
  #ifdef SamplingADC
            if (lc_lx==0) {
  #endif

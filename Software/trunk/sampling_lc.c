@@ -112,7 +112,7 @@ skip:
 
 void sampling_lc(byte LowPin, byte HighPin)
 {
-   lc_cpar=eeprom_read_word(&lc_cpar_ee);
+   lc_cpar=eeprom_read_word((uint16_t *)&lc_cpar_ee);
 //   byte LowPin=pb[0];
 //   byte HighPin=pb[1];
    byte HiPinR_L, LoADC;
@@ -262,7 +262,7 @@ void sampling_lc_calibrate()
       if (lc_cpartmp<1000) i=0;
    } while (i<4);
    lc_cpar=lc_cpartmp;
-   eeprom_write_word(&lc_cpar_ee,lc_cpar);
+   eeprom_write_word((uint16_t *)&lc_cpar_ee,lc_cpar);
 }
 
 

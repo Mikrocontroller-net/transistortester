@@ -413,6 +413,7 @@ wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 
 #ifdef SamplingADC
   sampling_cap_calibrate();
+  sampling_lc_calibrate();
 #endif
 
  #ifdef AUTO_CAL

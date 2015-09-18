@@ -13,11 +13,16 @@
 /* show_Resis13 measures the resistance of a part connected to TP1 and TP3 */
 /* if RMETER_WITH_L is configured, inductance is also measured */
 /* ****************************************************************** */
+
+#if 1
+
+const unsigned char str_RL[] MEM2_TEXT = {"1-==-ww-3   [RL]"};
+const unsigned char str_R[] MEM2_TEXT =  {"1-==-3      [RL]"};
+
+
 void show_Resis13(void) {
   uint8_t key_pressed;
-  message_key_released(RESIS_13_str);	// "1-|=|-3 .."
-  lcd_set_cursor(0,LCD_LINE_LENGTH-RLMETER_len);
-  lcd_MEM2_string(RLMETER_13_str);	// "[RL]" at the end of line 1
+  message_key_released(str_RL);	// "1-|=|-3 .."
 #ifdef POWER_OFF
   uint8_t times;
   for (times=0;times<250;) 
@@ -28,37 +33,83 @@ void show_Resis13(void) {
         init_parts();		// set all parts to nothing found 
         GetResistance(TP3, TP1);
         GetResistance(TP1, TP3);
-        lcd_line2();		// clear old Resistance value 
+
+// display formats:
+// |....|....|....|
+
+// nothing found:
+// 1-RR-3      [RL]
+// ?
+
+// only resistance:
+// 1-RR-3      [RL]
+// 12.34kO
+
+// resistance and inductance
+// 1-RR-LL-3   [RL]
+// 12.34kO L=12.3uH
+// 334.5 kHz Q=12.3    <--- only  if resonance detected
+
+// resistance and inductance measured through resonance, rather tight format to fit on 3 lines
+// 1-RR-LL-3 12.3kO
+// 12.3uH if 22.0nF
+// 334.5 kHz Q=12.3
+
+// same case but on bigger screens:  <---- not yet implemented!
+// 1-RR-LL-3
+// 12.34kO
+// 12.3uH if 22.0nF
+// 334.5 kHz Q=12.3
+
         if (ResistorsFound != 0) {
 #ifdef RMETER_WITH_L
 	   ReadInductance();	// measure inductance, possible only with R<2.1k
-           RvalOut(1);			// show Resistance, probably ESR
+ #ifdef SamplingADC
+           sampling_lc(0,2);
+ #endif
+           lcd_clear();
+           if (inductor_lpre != 0 || lc_lx!=0) lcd_MEM_string(RESIS_13_str_RL);
+           else lcd_MEM_string(RESIS_13_str_RL);
+ #ifdef SamplingADC
+           if (lc_lx==0) {
+ #endif
+              lcd_line2();
+              RvalOut(1);		// show Resistance, probably ESR
+ #ifdef SamplingADC
+           } else {
+              lcd_set_cursor(0,10);
+              RvalOut(1);		// show Resistance, probably ESR
+              lcd_line2();
+              DisplayValue(lc_lx,lc_lpre,'H',3);	// output inductance
+              lcd_string(" if ");
+              DisplayValue(lc_cpar,-12,'F',3);	        // show parallel capacitance
+              goto skip_inductor;
+           }
            if (inductor_lpre != 0) {
-	      // resistor has also inductance
+              // resistor has also inductance
               lcd_MEM_string(Lis_str);		// "L="
               DisplayValue(inductor_lx,inductor_lpre,'H',3);        // output inductance
-	      lcd_clear_line();		// clear to end of line 2
-              lcd_set_cursor(0,5);
-              lcd_MEM_string(Inductor_str);	// -ww-
-              lcd_testpin(TP3);
-           } else {
-	      lcd_clear_line();		// clear to end of line 2
-              lcd_set_cursor(0,5);
-              lcd_testpin(TP3);
-              lcd_spaces(4);		// clear ww-3
            }
+           if (lc_fx) {
+skip_inductor:
+              lcd_next_line_wait(0);
+              DisplayValue(lc_fx,lc_fpre,'H',4);
+              lcd_string("z Q=");
+              DisplayValue(lc_qx, lc_qpre,' ',3);
+           }
+ #endif
 #else		/* without Inductance measurement, only show resistance */
+           lcd_line2();
            inductor_lpre = -1;		// prevent ESR measurement because Inductance is not tested
            RvalOut(1);			// show Resistance, no ESR
 #endif
         } else {		/* no resistor found */
-           lcd_data('?');		// too big
-           lcd_clear_line();		// clear to end of line 2
 #ifdef RMETER_WITH_L
-           lcd_set_cursor(0,5);
-           lcd_testpin(TP3);
-           lcd_spaces(4);		// clear ww-3
+           lcd_clear();
+           lcd_MEM_string(RESIS_13_str_R);
 #endif
+           lcd_line2();
+           lcd_data('?');		// too big
         }
 #if defined(POWER_OFF) && defined(BAT_CHECK)
      Bat_update(times);
@@ -75,6 +126,8 @@ void show_Resis13(void) {
   }  /* end for times */
   lcd_clear();
 } /* end show_Resis13() */
+
+#endif
 
 /* ****************************************************************** */
 /* show_Cap13 measures the capacity of a part connected to TP1 and TP3 */

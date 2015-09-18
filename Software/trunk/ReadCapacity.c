@@ -368,6 +368,11 @@ messe_mit_rh:
         cap.cval += (COMP_SLEW1 / (cap.cval+COMP_SLEW2 ));
      }
 #endif
+#ifdef SamplingADC
+     // store as reference for inductance measurement
+     // note that we store this before subtracting cap_null, since for inductance measurement that cap. also contributes
+     lc_cpartmp=cap.cval;
+#endif SamplingADC
 #ifdef AUTO_CAL
      // auto calibration mode, cap_null can be updated in selftest section
      tmpint = eeprom_read_byte(&c_zero_tab[pin_combination]);	// read zero offset

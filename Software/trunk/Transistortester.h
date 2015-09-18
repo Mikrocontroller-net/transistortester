@@ -616,6 +616,7 @@ End of configuration
  #endif
 #endif
 
+
 // Strings, which are not dependent of any language
  const unsigned char Bat_str[] MEM_TEXT = "Bat. ";
  const unsigned char OK_str[] MEM_TEXT = "OK";
@@ -640,6 +641,7 @@ End of configuration
  const unsigned char NPN_str[] MEM_TEXT = "NPN";
  const unsigned char PNP_str[] MEM_TEXT = "PNP";
 #endif
+ const unsigned char str_cap_for_l_meas[] MEM2_TEXT = "Cap for L meas?";    // for now placed here, should be translated at some point
 
 #ifdef WITH_GRAPHICS
  const unsigned char Pin_str[] MEM_TEXT = "Pin ";
@@ -1140,14 +1142,9 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 #endif
 #if FLASHEND > 0x3fff
  #ifdef RMETER_WITH_L
- const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1, LCD_CHAR_INDUCTOR1, LCD_CHAR_INDUCTOR2, LCD_CHAR_LINE1, '1'+TP3,' ',0};
- const unsigned char RLMETER_13_str[] MEM2_TEXT = {"[RL]"};
- #define RLMETER_len 4
- #else
- const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1,'1'+TP3,' ',0};
- const unsigned char RLMETER_13_str[] MEM2_TEXT = {"[R]"};
- #define RLMETER_len 3
+ const unsigned char RESIS_13_str_RL[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1, LCD_CHAR_INDUCTOR1, LCD_CHAR_INDUCTOR2, LCD_CHAR_LINE1, '1'+TP3,' ',' ',' ',' ','[','R','L',']',0};
  #endif
+ const unsigned char RESIS_13_str_R[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1, '1'+TP3,' ',' ',' ',' ',' ',' ',' ',' ','[','R',']',0};
  const unsigned char CAP_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_CAP, LCD_CHAR_LINE1,'1'+TP3,' ',0};
  const unsigned char CMETER_13_str[] MEM2_TEXT = {"[C]"};
 #endif
@@ -1256,6 +1253,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  extern unsigned char mosfet_str[];
  extern unsigned char jfet_str[];
  extern unsigned char igbt_str[];
+ extern unsigned char str_cap_for_l_meas[];
  #endif
  #ifdef WITH_MENU
   extern const unsigned char SELECTION_str[] MEM2_TEXT ;
@@ -1362,9 +1360,9 @@ extern const unsigned char RILO[];
 #endif
 extern const unsigned char C0_str[];
 #if FLASHEND > 0x3fff
-extern const unsigned char RESIS_13_str[];
+extern const unsigned char RESIS_13_str_RL[];
+extern const unsigned char RESIS_13_str_R[];
 extern const unsigned char CAP_13_str[];
-extern const unsigned char RLMETER_13_str[];
 extern const unsigned char RDS_str[];
  #ifdef RMETER_WITH_L
   #define RLMETER_len 4

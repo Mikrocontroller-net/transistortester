@@ -16,13 +16,11 @@
 
 #if 1
 
-const unsigned char str_RL[] MEM2_TEXT = {"1-==-ww-3   [RL]"};
-const unsigned char str_R[] MEM2_TEXT =  {"1-==-3      [RL]"};
 
 
 void show_Resis13(void) {
   uint8_t key_pressed;
-  message_key_released(str_RL);	// "1-|=|-3 .."
+  message_key_released(RESIS_13_str_RL);	// "1-|=|-3 .."
 #ifdef POWER_OFF
   uint8_t times;
   for (times=0;times<250;) 

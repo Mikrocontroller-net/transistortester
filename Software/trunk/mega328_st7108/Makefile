@@ -183,6 +183,11 @@ CFLAGS += -DWITH_SELFTEST
 # The AUTO_CAL option is only selectable for mega168 and mega328.
 CFLAGS += -DAUTO_CAL
 
+# You can extend the measurement feature by use of a sampling mode for the ADC converter
+# to extend the resolution of capacity measurement to about 0.01pF.
+# Setting the WITH_SamplinADC to 1 enables this feature for capacity values below 100pF.
+#WITH_SamplingADC = 1
+
 
 # The WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring.
 CFLAGS += -DWITH_AUTO_REF

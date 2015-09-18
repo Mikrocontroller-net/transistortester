@@ -88,7 +88,7 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
    R_DDR = HiPinR_L;			
    wait100us();
 
-   ADMUX=HighPin|(1<<REFS0);
+   ADMUX = HighPin|(1<<REFS0);	// switch Multiplexer to Highpin and use 5V reference voltage
    memset(uu,0,sizeof(uu));
 
    // we'll sum over N1..N2 (inclusive), excluding N3..(N4-1)
@@ -110,11 +110,22 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
    #define N (N2-N1+1-(N4-N3))
    #define sumx (unsigned long)((N2*(N2+1l)/2)-(N4*(N4-1l)/2)+(N3*(N3-1l)/2)-(N1*(N1-1l)/2))
    unsigned long sumxx=(unsigned long)((N2*(N2+1l)*(2*N2+1l)/6)-(N4*(N4-1l)*(2*N4-1l)/6)+(N3*(N3-1l)*(2*N3-1l)/6)-(N1*(N1-1l)*(2*N1-1l)/6));
-   byte par=samplingADC_step|samplingADC_cumul;
    byte d=( hivolt ? HiPinR_L : HiPinR_H );
-   for (i=0;i<32;i++) samplingADC(par, uu, N2+1, d, HiPinR_H, d, HiPinR_L);
+   for (i=0;i<32;i++) samplingADC(samplingADC_step|samplingADC_cumul, uu, N2+1, d, HiPinR_H, d, HiPinR_L);
 
    R_DDR = 0;			
+#if 0
+   uint16_t kk;
+   for (kk=1; kk<N2; kk+=2) {
+     lcd_next_line_wait(0);
+     DisplayValue(kk,0,' ',4);
+     lcd_string(utoa(uu[kk], outval, 10));
+     lcd_data(';');
+     DisplayValue(kk+1,0,' ',4);
+     lcd_string(utoa(uu[kk+1], outval, 10));
+     lcd_space();
+   }
+#endif
 
    // we use the least-squares algorithm to find the slope
    // cf. e.g. https://en.wikipedia.org/wiki/Ordinary_least_squares

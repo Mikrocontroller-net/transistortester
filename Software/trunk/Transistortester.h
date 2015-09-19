@@ -1141,14 +1141,23 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  const unsigned char C_ESR_str[] MEM2_TEXT = "C+ESR@TP1:3";
 #endif
 #if FLASHEND > 0x3fff
- #ifdef RMETER_WITH_L
-const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1, LCD_CHAR_INDUCTOR1, LCD_CHAR_INDUCTOR2, LCD_CHAR_LINE1, '1'+TP3,' ',0};
- const unsigned char RESIS_13_str_RL[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1, LCD_CHAR_INDUCTOR1, LCD_CHAR_INDUCTOR2, LCD_CHAR_LINE1, '1'+TP3,' ',' ',' ','[','R','L',']',0};
+ // EXTRASPACES contains any extra spaces needed to fill out the line if wider than 16 characters, i.e., LCD_LINE_LENGTH-16 spaces
+ #if LCD_LINE_LENGTH==16
+  #define EXTRASPACES
+ #elif LCD_LINE_LENGTH==20
+  #define EXTRASPACES ' ',' ',' ',' ',
  #else
+  #error Please add support for your LCD_LINE_LENGTH
+ #endif
+ #ifdef RMETER_WITH_L
+ const unsigned char RESIS_13_str_RL[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1, LCD_CHAR_INDUCTOR1, LCD_CHAR_INDUCTOR2, LCD_CHAR_LINE1, '1'+TP3,' ',' ',EXTRASPACES ' ','[','R','L',']',0};
+ const unsigned char RESIS_13_str_R[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1, '1'+TP3,' ',' ',' ',' ',' ',' ',EXTRASPACES '[','R','L',']',0};
+const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1, LCD_CHAR_INDUCTOR1, LCD_CHAR_INDUCTOR2, LCD_CHAR_LINE1, '1'+TP3,' ',0};
+ #else
+ const unsigned char RESIS_13_str_R[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1, '1'+TP3,' ',' ',' ',' ',' ',' ',' ',EXTRASPACES '[','R',']',0};
 const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2, LCD_CHAR_LINE1, '1'+TP3,' ',0};
  #endif
 
- const unsigned char RESIS_13_str_R[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1, '1'+TP3,' ',' ',' ',' ',' ',' ',' ',' ','[','R',']',0};
  const unsigned char CAP_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_CAP, LCD_CHAR_LINE1,'1'+TP3,' ',0};
  const unsigned char CMETER_13_str[] MEM2_TEXT = {"[C]"};
 #endif

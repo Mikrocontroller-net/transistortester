@@ -19,8 +19,8 @@
 // we _could_ do this differently, and run a conversion in 832 cycles at 8 MHz
 // but then lots of timing stuff in this routine will have to change, and possibly also in its callers
 
-//#undef AUTO_CLOCK_DIV
-//#define AUTO_CLOCK_DIV (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0)	/* divide clock by 128 */
+#undef AUTO_CLOCK_DIV
+#define AUTO_CLOCK_DIV (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0)	/* divide clock by 128 */
 
 
  .section .text
@@ -60,7 +60,8 @@ samplingADC:
 					; so we still need to way 192-19-5=168 cycles until sample is taken
 					; the code applying the impulse or step signal takes 30 more cycles
 					; so need to waste 138 cycles, in theory
-#if MHZ_CPU == 16
+; #if MHZ_CPU == 16
+#if 1
 ;=======================================================
 	; Measurement with 16 MHz Clock
 	ldi r19,(138/3)

@@ -69,6 +69,7 @@ void show_Resis13(void) {
            else lcd_MEM_string(RESIS_13_str_R);
  #else
            lcd_clear();
+           int ss = strlen(RESIS_13_str);
            if (inductor_lpre != 0) lcd_MEM_string(RESIS_13_str_RL);
            else lcd_MEM_string(RESIS_13_str_R);
  #endif

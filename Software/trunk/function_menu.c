@@ -316,7 +316,7 @@ void show_C_ESR() {
         ReadBigCap(TP3,TP1);
         if (PartFound == PART_CAPACITOR) {
 #if LCD_LINES > 2
-           lcd_line2(); 	// set to line1 
+           lcd_line2(); 	// set to line2 
 #else
            lcd_line1(); 	// set to line1 
 #endif
@@ -982,11 +982,7 @@ int8_t korr;
      if(key_pressed >= 130) break;	// more than 1.3 seconds
 #ifdef WITH_ROTARY_SWITCH
      if (rotary.incre > FAST_ROTATION) break;		// fast rotation ends setting of korr
-     if (rotary.count >= 0) {
-        korr += rotary.count;		// increase the korr by rotary.count
-     } else {
-        korr -= rotary.count;	// decrease the korr by rotary.count
-     }
+     korr += rotary.count;		// increase or decrease the korr by rotary.count
 #endif
      if (key_pressed > 0) {
         if (key_pressed > 40) {

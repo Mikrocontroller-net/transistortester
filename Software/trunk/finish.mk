@@ -69,6 +69,9 @@ show_Resis_Cap.o: ../show_Resis_Cap.c $(MKFILES)
 sampling_cap.o: ../sampling_cap.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
+sampling_lc.o: ../sampling_lc.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 ########### Compile assembler source only 
 
 samplingADC.o: ../samplingADC.S $(MKFILES)

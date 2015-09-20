@@ -52,6 +52,7 @@ COMMON const uint16_t LogTab[] PROGMEM = {0, 20, 41, 62, 83, 105, 128, 151, 174,
 
 #ifdef AUTO_RH
 
+/*
  #if R_H_VAL == 10000
 // resistor  100000 Ohm             1000 1050 1100 1150 1200 1250 1300 1350 1400  mV
  const uint16_t RHtab[] PROGMEM = {4483,4244,4026,3827,3645,3477,3322,3178,3045};
@@ -59,6 +60,23 @@ COMMON const uint16_t LogTab[] PROGMEM = {0, 20, 41, 62, 83, 105, 128, 151, 174,
 // resistor  470000 Ohm            1000 1050 1100 1150 1200 1250 1300 1350 1400  mV
  const uint16_t RHtab[] PROGMEM = { 954, 903, 856, 814, 775, 740, 707, 676, 648};
  #endif
+*/
+
+const uint16_t RHtab[] PROGMEM = { 
+  44814201./R_H_VAL+0.5,   // 1000 mV
+  42422794./R_H_VAL+0.5,   // 1050 mV
+  40247707./R_H_VAL+0.5,   // 1100 mV
+  38260704./R_H_VAL+0.5,   // 1150 mV
+  36438256./R_H_VAL+0.5,   // 1200 mV
+  34760595./R_H_VAL+0.5,   // 1250 mV
+  33210996./R_H_VAL+0.5,   // 1300 mV
+  31775210./R_H_VAL+0.5,   // 1350 mV
+  30441023./R_H_VAL+0.5    // 1400 mV
+  };
+ // these values are 1e7/R_H_VAL/-ln(1-ref/5000)   (note that R_H_VAL is in multiples of 10 ohm)
+ // the +0.5 is for rounding
+
+
 
 #endif
 

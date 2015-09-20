@@ -69,7 +69,7 @@ void show_Resis13(void) {
            else lcd_MEM_string(RESIS_13_str_R);
  #else
            lcd_clear();
-           int ss = strlen(RESIS_13_str);
+//           int ss = strlen(RESIS_13_str);
            if (inductor_lpre != 0) lcd_MEM_string(RESIS_13_str_RL);
            else lcd_MEM_string(RESIS_13_str_R);
  #endif
@@ -84,7 +84,7 @@ void show_Resis13(void) {
               RvalOut(1);		// show Resistance, probably ESR
               lcd_line2();
               DisplayValue(lc_lx,lc_lpre,'H',3);	// output inductance
-              lcd_string(" if ");
+              lcd_MEM2_string(iF_str);		// " iF "
               DisplayValue(lc_cpar,-12,'F',3);	        // show parallel capacitance
               goto skip_inductor;
            }
@@ -97,7 +97,7 @@ void show_Resis13(void) {
 skip_inductor:
               lcd_next_line_wait(0);
               DisplayValue(lc_fx,lc_fpre,'H',4);
-              lcd_string("z Q=");
+              lcd_MEM2_string(zQ_str);		// "z Q="
               DisplayValue(lc_qx, lc_qpre,' ',3);
            }
  #endif

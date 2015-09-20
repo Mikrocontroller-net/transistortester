@@ -281,7 +281,7 @@ End of configuration
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Rotacny koder";
-   const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','k','o','r','e','c','t','u','r','a',0};
+   const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','K','o','r','e','k','c','i','a',0};
    const unsigned char TURN_str[] MEM2_TEXT = "Krut!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Plna kalibracia";	//"Samotestovanie";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "Prepoj sondy!";
@@ -641,7 +641,6 @@ End of configuration
  const unsigned char NPN_str[] MEM_TEXT = "NPN";
  const unsigned char PNP_str[] MEM_TEXT = "PNP";
 #endif
- const unsigned char str_cap_for_l_meas[] MEM2_TEXT = "Cap for L meas?";    // for now placed here, should be translated at some point
 
 #ifdef WITH_GRAPHICS
  const unsigned char Pin_str[] MEM_TEXT = "Pin ";
@@ -1104,7 +1103,10 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  const unsigned char AnKat[] MEM_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_DIODE1, LCD_CHAR_LINE1,0};
  const unsigned char KatAn[] MEM_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_DIODE2, LCD_CHAR_LINE1,0};
 #ifdef SamplingADC
+ const unsigned char str_cap_for_l_meas[] MEM2_TEXT = "Cap for L meas?";    // for now placed here, should be translated at some point
  const unsigned char AT05volt[] MEM_TEXT = " @0-5V";
+ const unsigned char iF_str[] MEM2_TEXT = " if ";
+ const unsigned char zQ_str[] MEM2_TEXT = "z Q=";
 #endif
  const unsigned char Dioden[] MEM_TEXT = {'*',LCD_CHAR_DIODE1, ' ', ' ',0};
  const unsigned char Resistor_str[] MEM_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1,0};
@@ -1136,18 +1138,23 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  const unsigned char C0_str[] MEM_TEXT = "C0 ";
  const unsigned char T50HZ[] MEM_TEXT = " 50Hz";
 #endif
+
 #ifdef WITH_MENU
  const unsigned char FatTP2_str[] MEM2_TEXT = "f@TP2";
  const unsigned char C_ESR_str[] MEM2_TEXT = "C+ESR@TP1:3";
 #endif
+
 #if FLASHEND > 0x3fff
  // EXTRASPACES contains any extra spaces needed to fill out the line if wider than 16 characters, i.e., LCD_LINE_LENGTH-16 spaces
  #if LCD_LINE_LENGTH==16
   #define EXTRASPACES
+ #elif LCD_LINE_LENGTH==17
+  #define EXTRASPACES ' ',
  #elif LCD_LINE_LENGTH==20
   #define EXTRASPACES ' ',' ',' ',' ',
  #else
-  #error Please add support for your LCD_LINE_LENGTH
+  #warning Please add support for your LCD_LINE_LENGTH
+  #define EXTRASPACES
  #endif
  #ifdef RMETER_WITH_L
  const unsigned char RESIS_13_str_RL[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1, LCD_CHAR_INDUCTOR1, LCD_CHAR_INDUCTOR2, LCD_CHAR_LINE1, '1'+TP3,' ',' ',EXTRASPACES ' ','[','R','L',']',0};
@@ -1161,6 +1168,7 @@ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR
  const unsigned char CAP_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_CAP, LCD_CHAR_LINE1,'1'+TP3,' ',0};
  const unsigned char CMETER_13_str[] MEM2_TEXT = {"[C]"};
 #endif
+
 #ifdef SHOW_R_DS
  const unsigned char RDS_str[] MEM_TEXT = {"RDS="};
 #endif
@@ -1266,7 +1274,6 @@ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR
  extern unsigned char mosfet_str[];
  extern unsigned char jfet_str[];
  extern unsigned char igbt_str[];
- extern unsigned char str_cap_for_l_meas[];
  #endif
  #ifdef WITH_MENU
   extern const unsigned char SELECTION_str[] MEM2_TEXT ;
@@ -1288,9 +1295,11 @@ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR
   extern const unsigned char L_CRYSTAL_str[] MEM2_TEXT ;
   #endif
  #endif
+
  #ifdef WITH_VEXT
  extern const unsigned char Vext_str[] MEM_TEXT ;
  #endif
+
  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
  extern const unsigned char CONTRAST_str[] MEM2_TEXT;
  #endif
@@ -1298,9 +1307,11 @@ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR
  extern const unsigned char BatWeak[];
  extern const unsigned char BatEmpty[]; 
  extern const unsigned char OK_str[];
+
  #if FLASHEND > 0x1fff
  extern const unsigned char DC_Pwr_Mode_str[];
  #endif
+
  #ifdef AUTO_CAL
 //  extern uint16_t R680pl;
 //  extern uint16_t R680mi;
@@ -1339,7 +1350,10 @@ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR
  extern const unsigned char AnKat[] MEM_TEXT ;
  extern const unsigned char KatAn[] MEM_TEXT ;
 #ifdef SamplingADC
+ extern const unsigned char str_cap_for_l_meas[] MEM2_TEXT;
  extern const unsigned char AT05volt[] MEM_TEXT;
+ extern const unsigned char iF_str[] MEM2_TEXT ;
+ extern const unsigned char zQ_str[] MEM2_TEXT ;
 #endif
  extern const unsigned char Resistor_str[] MEM_TEXT ;
  extern const unsigned char CapZeich[] MEM_TEXT ;

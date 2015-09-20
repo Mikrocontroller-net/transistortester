@@ -75,7 +75,7 @@ void Battery_check(void) {
         lcd_clear_line();			// clear to end of line
 	lcd_refresh();			// write the pixels to display, ST7920 only
 	wait_about5s();
-	PORTD = 0;			//switch power off
+        ON_PORT &= ~(1<<ON_PIN);	// switch power off
 	wait_about2s();
 	return;
      }

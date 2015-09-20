@@ -3899,7 +3899,7 @@ void Battery_check(void) {
      if(bat_adc < POOR_LEVEL) {	
      fe8:	8d ec       	ldi	r24, 0xCD	; 205
      fea:	53 db       	rcall	.-2394   	; 0x692 <sleep_5ms>
-     fec:	1b b8       	out	0x0b, r1	; 11
+     fec:	5e 98       	cbi	0x0b, 6	; 11
 	//Vcc <6,3V; no proper operation is possible
 	lcd_MEM_string(BatEmpty);	//Battery empty!
      fee:	8a ec       	ldi	r24, 0xCA	; 202
@@ -3914,7 +3914,7 @@ void Battery_check(void) {
      ffa:	8f ec       	ldi	r24, 0xCF	; 207
      ffc:	90 e0       	ldi	r25, 0x00	; 0
      ffe:	57 d9       	rcall	.-3410   	; 0x2ae <lcd_fix_string>
-	PORTD = 0;			//switch power off
+        ON_PORT &= ~(1<<ON_PIN);	// switch power off
     1000:	ad d9       	rcall	.-3238   	; 0x35c <lcd_clear_line>
 	wait_about2s();
     1002:	df 91       	pop	r29

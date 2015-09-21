@@ -205,7 +205,7 @@
 	     Vext = W5msReadADC(TPext);	// read external voltage 
 	//     ADC_DDR = TXD_MSK;		//activate Software-UART 
 	 #ifdef WITH_UART
-	     uart_putc(' ');		// start of new measurement
+	     uart_putc(' ');		// start of next value
 	 #endif
 	 #if EXT_NUMERATOR <= (0xffff/U_VCC)
 	     Display_mV(Vext*EXT_NUMERATOR/EXT_DENOMINATOR,3);	// Display 3 Digits of this mV units
@@ -258,6 +258,9 @@
 	  lcd_line2();			//LCD position row2, column 1
 	  lcd_MEM_string(TestRunning);		//String: testing...
 	  lcd_refresh();			// write the pixels to display, ST7920 only
+	 #ifdef WITH_UART
+	     uart_putc(0x03);		// ETX, start of new measurement
+	 #endif
 	     
 	  // check all 6 combinations for the 3 pins 
 	//         High  Low  Tri

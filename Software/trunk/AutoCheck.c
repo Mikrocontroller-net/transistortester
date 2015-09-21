@@ -447,7 +447,7 @@ for (ww=0;ww<64;ww++) {
    cap.cpre++;
    cap.cval /= 10;
   }
-  if ((cap.cpre == -9) && (cap.cval > 95) && (cap.cval < 22000) &&
+  if ((cap.cpre == -9) && (cap.cval > 9) && (cap.cval < 22000) &&
     (load_diff > -150) && (load_diff < 150)) {
    cap_found++;
   } else {

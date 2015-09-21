@@ -122,7 +122,7 @@
 #elif (LCD_ST_TYPE == 8812) 	/* not (LCD_ST_TYPE == 7565 || 1306 || 7108 || 7920)) */
  // support for PCF8812
 	#undef SCREEN_WIDTH
-	#define SCREEN_WIDTH  102
+	#define SCREEN_WIDTH  102	/* for ST8812 */
 	#define CMD_SET_EXTENDED_INSTRUCTION 0x21	/* Function set with H */
 	#define CMD_SET_NORMAL_INSTRUCTION 0x20	/* Function set  */
 	#define ECMD_SET_HV_STAGES 0x08		/* set multiplication of HV-gen  (0 <= m <= 3) */
@@ -143,8 +143,8 @@
 /* *********************************************************************************************************** */
 #elif (LCD_ST_TYPE == 8814) 	/* not ((LCD_ST_TYPE == 7565 || 1306 || 7108 || 7920 || 8812) */
  // support for PCF8814 , used for Nokia 1100
-	#undef SCREEN_WIDTH
-	#define SCREEN_WIDTH  96
+	#undef SCREEN_WIDTH		
+	#define SCREEN_WIDTH  96		/* for ST8814 */
 	#define CMD_SET_VOP_UPPER 0x20		/* upper 3 bits of Vop */
 	#define CMD_SET_VOP_LOWER 0x80		/* lower 5 bits of Vop */
 	#define CMD_SET_ALLPTS_NORMAL   0xA4

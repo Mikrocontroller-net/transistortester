@@ -371,7 +371,8 @@ messe_mit_rh:
 #ifdef SamplingADC
      // store as reference for inductance measurement
      // note that we store this before subtracting cap_null, since for inductance measurement that cap. also contributes
-     lc_cpartmp=cap.cval;
+     if ( cap.cval < 65768) lc_cpartmp=cap.cval; /* prevent wrong value */
+     else                   lc_cpartmp = 1;	/* set to 1pF, if too big */
 #endif /* SamplingADC */
 #ifdef AUTO_CAL
      // auto calibration mode, cap_null can be updated in selftest section
@@ -379,21 +380,21 @@ messe_mit_rh:
      if (cap.cval > tmpint) {
          cap.cval -= tmpint;		//subtract zero offset (pF)
      } else {
-#if FLASHEND > 0x3fff
+ #if FLASHEND > 0x3fff
        if ((cap.cval+C_LIMIT_TO_UNCALIBRATED) < tmpint) {
          mark_as_uncalibrated();	// set in EEprom to uncalibrated
-#if DebugOut == 11
+  #if DebugOut == 11
          lcd_line3();
          lcd_testpin(LowPin);
          lcd_data('y');
          lcd_testpin(HighPin);
          lcd_space();
-#endif
+  #endif
        }
-#endif
+ #endif
          cap.cval = 0;			//unsigned long may not reach negativ value
      }
-#else
+#else  /* no AUTO_CAL */
      if (HighPin == TP2) cap.cval += TP2_CAP_OFFSET;	// measurements with TP2 have 2pF less capacity
      if (cap.cval > C_NULL) {
          cap.cval -= C_NULL;		//subtract constant offset (pF)
@@ -401,7 +402,7 @@ messe_mit_rh:
          cap.cval = 0;			//unsigned long may not reach negativ value
      }
 #endif
-  }
+  } /* end if (cap.cpre == -12) */
 
 #if DebugOut == 10
   R_DDR = 0;			// switch all resistor ports to input

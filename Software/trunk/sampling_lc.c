@@ -12,7 +12,6 @@ typedef uint8_t byte;
 uint32_t lc_fx;      // measured resonant frequency (in Hz)
 uint16_t lc_qx;      // measured resonance Q (in units of 0.1)
 uint32_t lc_lx;      // measured inductance using the samplingADC method (in nH)
-uint16_t lc_cpar;    // value of parallel capacitor used for calculating inductance, in pF
 uint16_t lc_cpartmp; 
 const uint16_t lc_cpar_ee EEMEM;         // place for lc_cpar as calibration constant in eeprom
 
@@ -112,6 +111,7 @@ skip:
 
 void sampling_lc(byte LowPin, byte HighPin)
 {
+uint16_t lc_cpar;    // value of parallel capacitor used for calculating inductance, in pF
    lc_cpar=eeprom_read_word((uint16_t *)&lc_cpar_ee);
 //   byte LowPin=pb[0];
 //   byte HighPin=pb[1];
@@ -241,6 +241,8 @@ ret:
       lc_lx=0;
       lc_fx=0;
       lc_qx=0;
+   } else {
+      if (inductor_lpre == 0) inductor_lpre = -1; 	/* no ESR measurement! */
    }
 }
 
@@ -261,8 +263,7 @@ void sampling_lc_calibrate()
       i++;
       if (lc_cpartmp<1000) i=0;
    } while (i<4);
-   lc_cpar=lc_cpartmp;
-   eeprom_write_word((uint16_t *)&lc_cpar_ee,lc_cpar);
+   eeprom_write_word((uint16_t *)&lc_cpar_ee,lc_cpartmp);
 }
 
 

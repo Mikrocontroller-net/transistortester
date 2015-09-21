@@ -20,7 +20,11 @@
 
 void show_Resis13(void) {
   uint8_t key_pressed;
-  message_key_released(RESIS_13_str_RL);	// "1-|=|-3 .."
+#ifdef RMETER_WITH_L
+  uint8_t is_coil;
+  uint8_t is_samp_coil;
+#endif
+  message_key_released(RESIS_13_str_R);	// "1-|=|-3 .."
 #ifdef POWER_OFF
   uint8_t times;
   for (times=0;times<250;) 
@@ -63,56 +67,65 @@ void show_Resis13(void) {
 #ifdef RMETER_WITH_L
 	   ReadInductance();	// measure inductance, possible only with R<2.1k
  #ifdef SamplingADC
-           sampling_lc(0,2);
-           lcd_clear();
-           if (inductor_lpre != 0 || lc_lx!=0) lcd_MEM_string(RESIS_13_str_RL);
-           else lcd_MEM_string(RESIS_13_str_R);
+           sampling_lc(0,2);	// detect coil with samplingADC
+	   is_samp_coil = lc_lx != 0;
+           is_coil = (inductor_lpre != 0) || (is_samp_coil!=0);
  #else
-           lcd_clear();
 //           int ss = strlen(RESIS_13_str);
-           if (inductor_lpre != 0) lcd_MEM_string(RESIS_13_str_RL);
-           else lcd_MEM_string(RESIS_13_str_R);
+           is_coil = (inductor_lpre != 0);
  #endif
- #ifdef SamplingADC
-           if (lc_lx==0) {
- #endif
-              lcd_line2();
-              RvalOut(1);		// show Resistance, probably ESR
- #ifdef SamplingADC
-           } else {
-              lcd_set_cursor(0,10);
-              RvalOut(1);		// show Resistance, probably ESR
-              lcd_line2();
-              DisplayValue(lc_lx,lc_lpre,'H',3);	// output inductance
-              lcd_MEM2_string(iF_str);		// " iF "
-              DisplayValue(lc_cpar,-12,'F',3);	        // show parallel capacitance
-              goto skip_inductor;
-           }
+	   lcd_set_cursor(0,5);
+	   if (is_coil) lcd_MEM_string(Coil3_str);	// "ww-3 "
+           else lcd_MEM_string(Non3_str); 		// "3    "
+           lcd_line2();
+           RvalOut(1);		// show Resistance, probably ESR
            if (inductor_lpre != 0) {
               // resistor has also inductance
               lcd_MEM_string(Lis_str);		// "L="
               DisplayValue(inductor_lx,inductor_lpre,'H',3);        // output inductance
            }
-           if (lc_fx) {
-skip_inductor:
+	   lcd_clear_line();
+
+ #ifdef SamplingADC
+   uint16_t lc_cpar;    // value of parallel capacitor used for calculating inductance, in pF
+	   if (is_samp_coil) {
               lcd_next_line_wait(0);
-              DisplayValue(lc_fx,lc_fpre,'H',4);
+              DisplayValue(lc_lx,lc_lpre,'H',3);	// output inductance
+              lcd_MEM2_string(iF_str);		// " iF "
+              lc_cpar=eeprom_read_word((uint16_t *)&lc_cpar_ee);
+              DisplayValue(lc_cpar,-12,'F',3);	        // show parallel capacitance
+	      lcd_clear_line();
+           }          
+//           goto skip_inductor;
+           if (lc_fx) {
+//skip_inductor:
+              lcd_next_line_wait(0);
+              DisplayValue(lc_fx,lc_fpre,'H',4);  // 123.1kH
               lcd_MEM2_string(zQ_str);		// "z Q="
               DisplayValue(lc_qx, lc_qpre,' ',3);
+	      lcd_clear_line();
            }
  #endif
 #else		/* without Inductance measurement, only show resistance */
            lcd_line2();
            inductor_lpre = -1;		// prevent ESR measurement because Inductance is not tested
            RvalOut(1);			// show Resistance, no ESR
+	   lcd_clear_line();
 #endif
         } else {		/* no resistor found */
-#ifdef RMETER_WITH_L
-           lcd_clear();
+	   lcd_line1();
            lcd_MEM_string(RESIS_13_str_R);
-#endif
            lcd_line2();
            lcd_data('?');		// too big
+           lcd_clear_line();		// clear rest of line
+#if (LCD_LINES > 2)
+	   lcd_line3();
+           lcd_clear_line();		// clear rest of line
+#endif
+#if (LCD_LINES > 3)
+	   lcd_line4();
+           lcd_clear_line();		// clear rest of line
+#endif
         }
 #if defined(POWER_OFF) && defined(BAT_CHECK)
      Bat_update(times);

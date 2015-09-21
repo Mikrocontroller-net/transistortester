@@ -371,7 +371,7 @@ messe_mit_rh:
 #ifdef SamplingADC
      // store as reference for inductance measurement
      // note that we store this before subtracting cap_null, since for inductance measurement that cap. also contributes
-     if ( cap.cval < 65768) lc_cpartmp=cap.cval; /* prevent wrong value */
+     if ( cap.cval < 65536) lc_cpartmp=cap.cval; /* prevent wrong value */
      else                   lc_cpartmp = 1;	/* set to 1pF, if too big */
 #endif /* SamplingADC */
 #ifdef AUTO_CAL

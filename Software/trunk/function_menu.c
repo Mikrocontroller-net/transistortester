@@ -332,7 +332,7 @@ void show_C_ESR() {
 #endif
            lcd_MEM_string(&ESR_str[1]);
            if (cap.esr < 65530) {
-              DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
+              DisplayValue16(cap.esr,-2,LCD_CHAR_OMEGA,2);
            } else {
               lcd_data('?');		// too big
            }
@@ -804,7 +804,7 @@ void do_10bit_PWM() {
         pwm_flip = (((unsigned long)0x3ff * percent) + 50) / 100;
         OCR1B = pwm_flip;		// new percentage
         lcd_line2();		// goto line 2
-        DisplayValue((((unsigned long)pwm_flip * 1000) + 0x1ff) / 0x3ff,-1,'%',5);
+        DisplayValue16((((unsigned long)pwm_flip * 1000) + 0x1ff) / 0x3ff,-1,'%',5);
         lcd_clear_line();
 #if 0
         lcd_space();
@@ -910,7 +910,7 @@ uint8_t contrast;
      lcd_command(CMD_SetIFOptions | MODE_8BIT | 0x08);	// 2-line / IS=0
   #endif
      lcd_line2();
-     DisplayValue(contrast,0,' ',4);
+     DisplayValue16(contrast,0,' ',4);
      lcd_clear_line();		// clear to end of line
      key_pressed = wait_for_key_ms(1600);
 #ifdef POWER_OFF
@@ -966,9 +966,9 @@ int8_t korr;
      lcd_line2();
      if (korr < 0) {
        lcd_data('-');
-       DisplayValue(-korr,-1,'%',3);
+       DisplayValue16(-korr,-1,'%',3);
      } else {
-       DisplayValue(korr,-1,'%',3);
+       DisplayValue16(korr,-1,'%',3);
      }
      lcd_clear_line();		// clear to end of line
      key_pressed = wait_for_key_ms(1600);

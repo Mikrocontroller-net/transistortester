@@ -10,9 +10,9 @@ show_page_1:
   lcd_MEM2_string(VERSION_str);	// "Version x.xxk"
   lcd_line2();
   lcd_MEM2_string(R0_str);	// "R0="
-  DisplayValue(eeprom_read_byte(&EE_ESR_ZEROtab[2]),-2,' ',3);
-  DisplayValue(eeprom_read_byte(&EE_ESR_ZEROtab[3]),-2,' ',3);
-  DisplayValue(eeprom_read_byte(&EE_ESR_ZEROtab[1]),-2,LCD_CHAR_OMEGA,3);
+  DisplayValue16(eeprom_read_byte(&EE_ESR_ZEROtab[2]),-2,' ',3);
+  DisplayValue16(eeprom_read_byte(&EE_ESR_ZEROtab[3]),-2,' ',3);
+  DisplayValue16(eeprom_read_byte(&EE_ESR_ZEROtab[1]),-2,LCD_CHAR_OMEGA,3);
 #if (LCD_LINES > 3)
   lcd_line3();
 #else
@@ -26,7 +26,7 @@ show_page_2:
 #endif
   /* output line 3 */
   lcd_MEM_string(RIHI); // "RiHi="
-  DisplayValue(RRpinPL,-1,LCD_CHAR_OMEGA,3);
+  DisplayValue16(RRpinPL,-1,LCD_CHAR_OMEGA,3);
 #if (LCD_LINES > 3)
   lcd_line4();
 #else
@@ -34,7 +34,7 @@ show_page_2:
 #endif
   /* output line 4 */
   lcd_MEM_string(RILO); // "RiLo="
-  DisplayValue(RRpinMI,-1,LCD_CHAR_OMEGA,3);
+  DisplayValue16(RRpinMI,-1,LCD_CHAR_OMEGA,3);
 
   wait_for_key_ms(MIDDLE_WAIT_TIME);
 #ifdef WITH_ROTARY_SWITCH
@@ -49,14 +49,14 @@ show_page_3:
 #endif
   lcd_clear();
   lcd_MEM_string(C0_str);                       //output "C0 "
-  DisplayValue(eeprom_read_byte(&c_zero_tab[5]) -(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)) ,0,' ',3);		//output cap0 1:3
-  DisplayValue(eeprom_read_byte(&c_zero_tab[6]) -(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)) ,0,' ',3);		//output cap0 2:3
-  DisplayValue(eeprom_read_byte(&c_zero_tab[2]) -(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)) ,-12,'F',3);		//output cap0 1:2
+  u2lcd_space(eeprom_read_byte(&c_zero_tab[5]) -(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)));		//output cap0 1:3
+  u2lcd_space(eeprom_read_byte(&c_zero_tab[6]) -(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)));		//output cap0 2:3
+  DisplayValue16(eeprom_read_byte(&c_zero_tab[2]) -(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)) ,-12,'F',3);		//output cap0 1:2
   lcd_line2();
   lcd_spaces(3);
-  DisplayValue(eeprom_read_byte(&c_zero_tab[1]) -(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)) ,0,' ',3);		//output cap0 3:1
-  DisplayValue(eeprom_read_byte(&c_zero_tab[4]) -(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)) ,0,' ',3);		//output cap0 3:2
-  DisplayValue(eeprom_read_byte(&c_zero_tab[0]) -(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)) ,-12,'F',3);		//output cap0 2:1
+  u2lcd_space(eeprom_read_byte(&c_zero_tab[1]) -(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)));		//output cap0 3:1
+  u2lcd_space(eeprom_read_byte(&c_zero_tab[4]) -(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)));		//output cap0 3:2
+  DisplayValue16(eeprom_read_byte(&c_zero_tab[0]) -(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)) ,-12,'F',3);		//output cap0 2:1
 #if (LCD_LINES > 3)
   lcd_line3();
 #else

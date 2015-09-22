@@ -87,7 +87,7 @@ void show_Resis13(void) {
               DisplayValue(lc_lx,lc_lpre,'H',3);	// output inductance
               lcd_MEM2_string(iF_str);		// " iF "
               lc_cpar=eeprom_read_word((uint16_t *)&lc_cpar_ee);
-              DisplayValue(lc_cpar,-12,'F',3);	        // show parallel capacitance
+              DisplayValue16(lc_cpar,-12,'F',3);	        // show parallel capacitance
               goto skip_inductor;
            }
            if (inductor_lpre != 0) {
@@ -100,7 +100,7 @@ skip_inductor:
               lcd_next_line_wait(0);
               DisplayValue(lc_fx,lc_fpre,'H',4);
               lcd_MEM2_string(zQ_str);		// "z Q="
-              DisplayValue(lc_qx, lc_qpre,' ',3);
+              DisplayValue16(lc_qx, lc_qpre,' ',3);
            }
  #endif
 #else		/* without Inductance measurement, only show resistance */
@@ -178,7 +178,7 @@ void show_Cap13(void) {
         if ( cap.esr < 65530) {
            // ESR is measured
            lcd_MEM_string(&ESR_str[1]);		// show also "ESR="
-           DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2); // and ESR value
+           DisplayValue16(cap.esr,-2,LCD_CHAR_OMEGA,2); // and ESR value
 	   lcd_clear_line();		// clear to end of line 2
            lcd_set_cursor(0,4);
            lcd_MEM2_string(Resistor_str);   // "-[=]- .."
@@ -194,7 +194,7 @@ void show_Cap13(void) {
         lcd_line3();
         if (cap.v_loss != 0) {
            lcd_MEM_string(&VLOSS_str[1]);  // "Vloss="
-           DisplayValue(cap.v_loss,-1,'%',2);
+           DisplayValue16(cap.v_loss,-1,'%',2);
         }
         lcd_clear_line();		// clear to end of line
  #else
@@ -207,7 +207,7 @@ void show_Cap13(void) {
   #endif
            lcd_line2();
            lcd_MEM_string(&VLOSS_str[1]);  // "Vloss="
-           DisplayValue(cap.v_loss,-1,'%',2);
+           DisplayValue16(cap.v_loss,-1,'%',2);
            lcd_clear_line();		// clear to end of line
         }
  #endif

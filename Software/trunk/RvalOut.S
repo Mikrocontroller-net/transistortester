@@ -70,20 +70,26 @@ RvalOut:		; void RvalOut(uint8_t nrr)
 	ACALL	Rnum2pins;	; pins = Rnum2pins(nrr)
         mov	r22, r25
  	ACALL	GetESR		; rr = GetESR(resis[nrr].ra,resis[nrr].rb);
- 	movw	r22, r24
-        ldi	r24, 0
-        ldi	r25, 0
- 	ldi	r20, -2		; 254
- 	ldi	r16, 0x03	; 3
- 	rjmp	ad1d94		; DisplayValue(rr,-2,LCD_CHAR_OMEGA,3);
+; 	movw	r22, r24
+;        ldi	r24, 0
+;        ldi	r25, 0
+; 	ldi	r20, -2		; 254
+; 	ldi	r16, 0x03	; 3
+; 	rjmp	ad1d94		; DisplayValue(rr,-2,LCD_CHAR_OMEGA,3);
+	ldi	r22, -2
+	ldi	r18, 3
+	ldi	r20, LCD_CHAR_OMEGA
+	RCALL	DisplayValue16	; DisplayValue16(rr,-2,LCD_OMEGA,3);
+	rjmp	ret_with_space
 ad1d8e:		; } else {
 #endif
 	; r22-r25 = ResistorVal[rr]
  	ldi	r20, -1		; 255
  	ldi	r16, 0x04	; DisplayValue(resis[nrr].rx,-1,LCD_CHAR_OMEGA,4);
-ad1d94:
+;ad1d94:
  	ldi	r18, LCD_CHAR_OMEGA	; 244
  	RCALL	DisplayValue
+ret_with_space:
  	RCALL	lcd_space	; lcd_space();
  	pop	r16
  	ret

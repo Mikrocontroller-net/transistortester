@@ -259,7 +259,7 @@ void sampling_lc_calibrate()
       wait_about100ms();
       ReadCapacity(TP1,TP3);
       lcd_line2();
-      DisplayValue(lc_cpartmp,-12,'F',4);
+      DisplayValue16(lc_cpartmp,-12,'F',4);
       i++;
       if (lc_cpartmp<1000) i=0;
    } while (i<4);

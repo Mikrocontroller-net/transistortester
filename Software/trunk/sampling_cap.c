@@ -118,11 +118,11 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
    uint16_t kk;
    for (kk=1; kk<N2; kk+=2) {
      lcd_next_line_wait(0);
-     DisplayValue(kk,0,' ',4);
-     lcd_string(utoa(uu[kk], outval, 10));
+     DisplayValue16(kk,0,' ',4);
+     u2lcd(uu[kk]);
      lcd_data(';');
-     DisplayValue(kk+1,0,' ',4);
-     lcd_string(utoa(uu[kk+1], outval, 10));
+     DisplayValue16(kk+1,0,' ',4);
+     u2lcd(uu[kk+1]);
      lcd_space();
    }
 #endif
@@ -204,9 +204,9 @@ void sampling_cap_calibrate()
             lcd_testpin(j);
             lcd_space();				//lcd_data(' ');
             lcd_line2();
-            DisplayValue(c,-2,' ',4);
+            DisplayValue16(c,-2,' ',4);
             d=sampling_cap_do(i,j,1,1);
-            DisplayValue(d,-14,'F',4);
+            DisplayValue16(d,-14,'F',4);
             byte k=3*i+j-1;
             eeprom_write_word((void*)(c_zero_tab2_lo+k),c);
             eeprom_write_word((void*)(c_zero_tab2_hi+k),d);

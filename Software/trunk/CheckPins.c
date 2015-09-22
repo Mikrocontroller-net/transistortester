@@ -217,8 +217,8 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      lcd_data('f');
      lcd_testpin(HighPin);
      lcd_space();
-     DisplayValue(adc.lp2,-3,' ',3);
-     DisplayValue(adc.lp1,-3,' ',3);
+     DisplayValue16(adc.lp2,-3,' ',3);
+     DisplayValue16(adc.lp1,-3,' ',3);
 #endif
      //If it is a self-conducting MOSFET or JFET, then must be: adc.lp2 > adc.lp1 
      if(adc.lp2>(adc.lp1+599)) {
@@ -752,7 +752,7 @@ checkDiode:
   lcd_data('D');
   lcd_testpin(LowPin);
   lcd_space();
-  DisplayValue(adc.lp_otr,-3,' ',3);
+  DisplayValue16(adc.lp_otr,-3,' ',3);
   lcd_data('<');
 #endif
      goto widmes;
@@ -879,11 +879,11 @@ checkDiode:
   lcd_testpin(LowPin);
   lcd_space();
   lcd_data('h');
-  DisplayValue(adc.hp3,-3,' ',2);
+  DisplayValue16(adc.hp3,-3,' ',2);
   lcd_data('L');
-  DisplayValue(adc.hp1,-3,' ',2);
+  DisplayValue16(adc.hp1,-3,' ',2);
   lcd_data('H');
-  DisplayValue(adc.hp2,-3,' ',2);
+  DisplayValue16(adc.hp2,-3,' ',2);
 #endif
   volt_dif = adc.hp3/8;
   if (volt_dif > 200) volt_dif = 200;

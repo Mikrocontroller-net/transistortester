@@ -141,7 +141,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   }  /* end for ovcnt16 */
   // wait 5ms and read voltage again, does the capacitor keep the voltage?
 #if DebugOut == 10
-  DisplayValue(ovcnt16,0,' ',4);
+  DisplayValue16(ovcnt16,0,' ',4);
   Display_mV(cap_voltage1,4);
 #endif
   if (cap_voltage1 <= MIN_VOLTAGE) {
@@ -165,8 +165,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   lcd_data('U');
   lcd_data('3');
   lcd_data(':');
-  u2lcd(cap_voltage2);
-  lcd_space();
+  u2lcd_space(cap_voltage2);
   wait_about2s();
  #endif
   if ((cap_voltage2 + cap_voltage2) < cap_voltage1) {
@@ -329,7 +328,7 @@ messe_mit_rh:
     lcd_clear_line();
     lcd_line3();
     if (ovcnt16 != 0) {
-      DisplayValue(ovcnt16,0,',',4);
+      DisplayValue16(ovcnt16,0,',',4);
     }
     u2lcd(tmpint);
   }

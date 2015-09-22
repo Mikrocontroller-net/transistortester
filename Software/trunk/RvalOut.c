@@ -17,7 +17,7 @@ void RvalOut(uint8_t nrr) {
    if ((ResistorVal[nrr] < 100) && (inductor_lpre == 0)) {
       rpins.pw = Rnum2pins(nrr);	// compute the pin numbers for resistor nrr
       rr = GetESR(rpins.pb[1], rpins.pb[0]);
-      DisplayValue(rr,-2,LCD_CHAR_OMEGA,3);
+      DisplayValue16(rr,-2,LCD_CHAR_OMEGA,3);
    } else {
       DisplayValue(ResistorVal[nrr],-1,LCD_CHAR_OMEGA,4);
    }

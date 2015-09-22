@@ -26,6 +26,7 @@ void Scale_C_with_vcc(void);		// scale capacity value for different VCC Voltages
 void scale_intref_adc(void);		// get scale factors for ReadADC with internal reference
 //uint8_t value_out(unsigned long vval,uint8_t pp);    // output 4 digits with (pp-1) digits after point
 void DisplayValue(signed long vval,int8_t Expo,unsigned char Unit, unsigned char Digits); //output Digits characters with exponent and unit
+void DisplayValue16(uint16_t vval,int8_t Expo,unsigned char Unit, unsigned char Digits); //output Digits characters with exponent and unit
 void Display_mV(uint16_t val, uint8_t dd);		// show mV with dd digits
 unsigned int compute_hfe(unsigned int lpx, unsigned int tpy);
 void sleep_5ms(uint8_t xxx);		// set processor to sleep state for xxx times 5ms, xxx>200  (xxx-200)*100  
@@ -40,6 +41,8 @@ uint8_t wait_for_key_ms(int max_time); // wait max_time ms units for key is pres
 void wait_for_key_5s_line2(void);	// wait 5 seconds and clear line 2
 void i2lcd(int iw);			// output integer value to LCD
 void u2lcd(uint16_t iw);		// output unsigned integer value to LCD
+void i2lcd_space(int iw);		// output integer value to LCD and ' '
+void u2lcd_space(uint16_t iw);		// output unsigned integer value to LCD and ' '
 void EE_check_init(void);		// check calibration values and init the values if unset
 void GetFrequency(uint8_t range);	// measure Frequency and display 
 void function_menu();			// menu for selecting extra function

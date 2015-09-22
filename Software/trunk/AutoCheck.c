@@ -78,9 +78,9 @@ eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[1]), (uint8_t)0);	// clear zero of
 adcmv[0] = GetESR(TP3, TP1);
 adcmv[1] = GetESR(TP3, TP2);
 adcmv[2] = GetESR(TP2, TP1);
-DisplayValue(adcmv[0],-2,' ',3);
-DisplayValue(adcmv[1],-2,' ',3);
-DisplayValue(adcmv[2],-2,LCD_CHAR_OMEGA,3);
+DisplayValue16(adcmv[0],-2,' ',3);
+DisplayValue16(adcmv[1],-2,' ',3);
+DisplayValue16(adcmv[2],-2,LCD_CHAR_OMEGA,3);
 if (adcmv[0] >= 90) {
   adcmv[0] = ESR_ZERO;	// set back to default value
 }
@@ -358,10 +358,10 @@ for (ww=0;ww<120;ww++) {
 
 lcd_clear();
 lcd_MEM_string(RIHI);	// "RiHi="
-DisplayValue(RRpinPL,-1,LCD_CHAR_OMEGA,3);
+DisplayValue16(RRpinPL,-1,LCD_CHAR_OMEGA,3);
 lcd_line2();
 lcd_MEM_string(RILO);	// "RiLo="
-DisplayValue(RRpinMI,-1,LCD_CHAR_OMEGA,3);
+DisplayValue16(RRpinMI,-1,LCD_CHAR_OMEGA,3);
 last_line_used = 2;
 wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 
@@ -393,8 +393,8 @@ if (UnCalibrated == 2)
   UnCalibrated = 0;			// clear the UnCalibrated Flag
   lcd_cursor_off();			// switch cursor off
 }
-DisplayValue(adcmv[5],0,' ',3);		//output cap0 1:3
-DisplayValue(adcmv[6],0,' ',3);		//output cap0 2:3
+u2lcd_space(adcmv[5]);	//DisplayValue(adcmv[5],0,' ',3);		//output cap0 1:3
+u2lcd_space(adcmv[6]);	//DisplayValue(adcmv[6],0,' ',3);		//output cap0 2:3
 DisplayValue(adcmv[2],-12,'F',3);		//output cap0 1:2
  #ifdef AUTO_CAL
 for (ww=0;ww<7;ww++) {			//checking loop

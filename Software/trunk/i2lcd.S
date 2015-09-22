@@ -6,10 +6,11 @@
 #include "config.h"
 
 .GLOBAL u2lcd
-.GLOBAL i2lcd
+.GLOBAL u2lcd_space
 
  .extern lcd_data
  .extern lcd_string
+ .extern lcd_space
 
  .func i2lcd
 
@@ -18,7 +19,11 @@
 
 
  .section .text
+.GLOBAL i2lcd
+
 i2lcd:			;	void i2lcd(int iw)
+
+#if FLASHEND > 0x1fff
 
 ;;  	movw	r20, r24
  	sbrs	r25, 7
@@ -33,6 +38,7 @@ i2lcd:			;	void i2lcd(int iw)
         com	r25
 	neg	r24
         sbci	r25,-1		; iw = - iw
+#endif
 
 u2lcd:			;	void i2lcd(uint16_t iw)
 to_lcd:			;	void i2lcd(uint16_t iw)
@@ -44,4 +50,17 @@ to_lcd:			;	void i2lcd(uint16_t iw)
  	RCALL	lcd_string	;lcd_string(utoa(iw, outval, 10));	//output correction voltage
 
  	ret
+
+#if FLASHEND > 0x1fff
+.GLOBAL i2lcd_space
+i2lcd_space:
+	RCALL	i2lcd
+	rjmp	space_ret	; use return from u2lcd_space
+
+u2lcd_space:
+	RCALL	i2lcd
+space_ret:
+	RCALL    lcd_space
+	ret
+#endif
  .endfunc

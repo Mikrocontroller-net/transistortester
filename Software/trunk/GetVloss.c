@@ -90,10 +90,10 @@ void GetVloss() {
   }
 #if 0
   lcd_line3();
-  DisplayValue(adcv[2],0,' ',4);
-  DisplayValue(adcv[1],0,' ',4);
+  DisplayValue16(adcv[2],0,' ',4);
+  DisplayValue16(adcv[1],0,' ',4);
   lcd_line4();
-  DisplayValue(lval.w[0],0,'x',4);
+  DisplayValue16(lval.w[0],0,'x',4);
 #endif
 
   // discharge capacitor again

@@ -64,10 +64,12 @@ void DisplayValue(signed long signedValue, int8_t Exponent, unsigned char Unit, 
 
   unsigned long Value=signedValue;
 
+#if FLASHEND > 0x1fff
   if (signedValue<0) {
      lcd_data('-');
      Value=-signedValue;
   }
+#endif
 
   Limit = 100;				/* scale value down to 2 digits */
 
@@ -257,6 +259,10 @@ void DisplayValue(signed long signedValue, int8_t Exponent, unsigned char Unit, 
       lcd_data(Unit);
   }
   return;
+}
+void DisplayValue16(uint16_t Value, int8_t Exponent, unsigned char Unit, unsigned char digits)
+{
+ DisplayValue((signed long)Value, Exponent, Unit, digits);
 }
 
 void Display_mV(uint16_t xx, uint8_t ll) {

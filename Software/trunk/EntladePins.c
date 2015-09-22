@@ -72,10 +72,8 @@ void EntladePins() {
      }
 #if DebugOut == 99
         lcd_line4();
-        u2lcd(adcmv[0];		// lcd_string(utoa(adcmv[0], outval, 10));
-        lcd_space();
-        u2lcd(adcmv[1];		// lcd_string(utoa(adcmv[1], outval, 10));
-        lcd_space();
+        u2lcd_space(adcmv[0];	// lcd_string(utoa(adcmv[0], outval, 10)); lcd_space();
+        u2lcd_space(adcmv[1];	// lcd_string(utoa(adcmv[1], outval, 10)); lcd_space();
         u2lcd(adcmv[2];		// lcd_string(utoa(adcmv[2], outval, 10));
 #endif
      for(adcmv[0]=0;adcmv[0]<clr_cnt;adcmv[0]++) {

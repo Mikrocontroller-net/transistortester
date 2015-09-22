@@ -340,7 +340,7 @@
  #else
         lcd_MEM_string(VLOSS_str);	// " Vloss="
  #endif
-        DisplayValue(cap.v_loss,-1,'%',2);
+        DisplayValue16(cap.v_loss,-1,'%',2);
      }
 #endif
      lcd_line2(); 			//2. row 
@@ -349,7 +349,7 @@
      cap.esr = GetESR(cap.cb, cap.ca);		// get ESR of capacitor
      if ( cap.esr < 65530) {
         lcd_MEM_string(ESR_str);	// " ESR="
-        DisplayValue(cap.esr,-2,LCD_CHAR_OMEGA,2);
+        DisplayValue16(cap.esr,-2,LCD_CHAR_OMEGA,2);
  #if (LCD_LINES > 2)
         lcd_set_cursor(0,4);
         lcd_MEM_string(Resistor_str);	// -[=]-
@@ -636,7 +636,7 @@
        lcd_data('c');
     }
     lcd_equal();			// lcd_data('=');
-    DisplayValue(_trans->current,-6,'A',2);	// display Ic or Ie current
+    DisplayValue16(_trans->current,-6,'A',2);	// display Ic or Ie current
 
     lcd_next_line(TEXT_RIGHT_TO_ICON); // position behind the icon, Line 4
     lcd_MEM_string(Ube_str);		//"Ube="
@@ -647,12 +647,12 @@
     if (_trans->ice0 > 0) {
        lcd_next_line_wait(TEXT_RIGHT_TO_ICON-1); // position behind the icon, Line 4 & wait and clear last line
        lcd_MEM2_string(ICE0_str);		// "ICE0="
-       DisplayValue(_trans->ice0,-6,'A',2);	// display ICEO
+       DisplayValue16(_trans->ice0,-6,'A',2);	// display ICEO
     }
     if (_trans->ices > 0) {
        lcd_next_line_wait(TEXT_RIGHT_TO_ICON-1); // position behind the icon, Line 4 & wait and clear last line
        lcd_MEM2_string(ICEs_str);		// "ICEs="
-       DisplayValue(_trans->ices,-6,'A',2);	// display ICEs
+       DisplayValue16(_trans->ices,-6,'A',2);	// display ICEs
     }
  #endif
 #else		/* character display */
@@ -671,7 +671,7 @@
        lcd_data('c');
     }
     lcd_equal();			// lcd_data('=');
-    DisplayValue(_trans->current,-6,'A',2);	// display Ic or Ie current
+    DisplayValue16(_trans->current,-6,'A',2);	// display Ic or Ie current
  #endif
 
 
@@ -683,12 +683,12 @@
     if (_trans->ice0 > 0) {
        lcd_next_line_wait(0);		// next line, wait 5s and clear line 2
        lcd_MEM2_string(ICE0_str);		// "ICE0="
-       DisplayValue(_trans->ice0,-6,'A',3);
+       DisplayValue16(_trans->ice0,-6,'A',3);
     }
     if (_trans->ices > 0) {
        lcd_next_line_wait(0);		// next line, wait 5s and clear line 2
        lcd_MEM2_string(ICEs_str);		// "ICEs="
-       DisplayValue(_trans->ices,-6,'A',3);
+       DisplayValue16(_trans->ices,-6,'A',3);
     }
  #endif
 #endif  /* WITH_GRAPHICS */
@@ -836,7 +836,7 @@
  #ifdef SHOW_R_DS
        lcd_next_line(TEXT_RIGHT_TO_ICON-1);	// position text behind the icon, Line 4
        lcd_MEM_string(RDS_str);		// "RDS=
-       DisplayValue(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance
+       DisplayValue16(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance
  #endif
     } else {
 
@@ -853,7 +853,7 @@
        lcd_data('d');
  #endif
        lcd_equal();			// lcd_data('=');
-       DisplayValue(_trans->current,-6,'A',2);
+       DisplayValue16(_trans->current,-6,'A',2);
        lcd_MEM_string(Vgs_str);		// "@Vg="
        Display_mV(_trans->gthvoltage,2);	//Gate-threshold voltage
     }
@@ -868,7 +868,7 @@
   #ifdef SHOW_R_DS
        lcd_next_line_wait(0);		// line 3, if possible & wait 5s and clear last line 
        lcd_MEM_string(RDS_str);		// "RDS=
-       DisplayValue(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance
+       DisplayValue16(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance
   #endif
     } else {
  #if FLASHEND > 0x1fff
@@ -884,7 +884,7 @@
        lcd_data('d');
  #endif
        lcd_equal();			// lcd_data('=');
-       DisplayValue(_trans->current,-6,'A',2);
+       DisplayValue16(_trans->current,-6,'A',2);
        lcd_MEM_string(Vgs_str);		// "@Vg="
        Display_mV(_trans->gthvoltage,2);	//Gate-threshold voltage
     }

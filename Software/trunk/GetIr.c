@@ -52,7 +52,7 @@ void GetIr(uint8_t hipin, uint8_t lopin) {
 #endif
      /* R_H_VAL has units of 10 Ohm, u_res has units of mV, ir_nano has units of nA */
      ir_nano = (unsigned long)(u_res * 100000UL) / R_H_VAL;
-     DisplayValue(ir_nano,-9,'A',2);	// output two digits of current with nA units
+     DisplayValue16(ir_nano,-9,'A',2);	// output two digits of current with nA units
 #ifdef WITH_IRMICRO
   } else {
      R_DDR = LoPinR_L;			// switch R_L port for LowPin to output (GND)
@@ -60,7 +60,7 @@ void GetIr(uint8_t hipin, uint8_t lopin) {
      ir_nano = 0xffff;			// set to max
      /* RR680MI has units of 0.1 Ohm, u_res has units of mV, ir_micro has units of uA */
      ir_micro = (unsigned long)(u_res * 10000UL) / RR680MI;
-     DisplayValue(ir_micro,-6,'A',IR_DIGITS);	// output 2 or 3 digits of current in uA units
+     DisplayValue16(ir_micro,-6,'A',IR_DIGITS);	// output 2 or 3 digits of current in uA units
   }
 #endif
   ADC_DDR = TXD_MSK;			// switch off

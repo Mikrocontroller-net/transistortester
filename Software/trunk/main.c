@@ -59,11 +59,17 @@
 	#endif
 	#if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
 	 #define BAUD_RATE 9600
-	  UBRR0H = (F_CPU / 16 / BAUD_RATE - 1) >> 8;
-	  UBRR0L = (F_CPU / 16 / BAUD_RATE - 1) & 0xff;
-	  UCSR0B = (1<<TXEN0);
-	  UCSR0C = (1<<USBS0) | (3<<UCSZ00);	// 2 stop bits, 8-bit
-	  while (!(UCSR0A & (1<<UDRE0))) { };	// wait for send data port ready 
+//	  UBRR0H = (F_CPU / 16 / BAUD_RATE - 1) >> 8;
+//	  UBRR0L = (F_CPU / 16 / BAUD_RATE - 1) & 0xff;
+//	  UCSR0B = (1<<TXEN0);
+//	  UCSR0C = (1<<USBS0) | (3<<UCSZ00);	// 2 stop bits, 8-bit
+//	  while (!(UCSR0A & (1<<UDRE0))) { };	// wait for send data port ready 
+         #ifdef SWUART_INVERT
+	  SERIAL_PORT &= ~(1<<SERIAL_BIT);
+         #else
+	  SERIAL_PORT |= (1<<SERIAL_BIT);
+         #endif
+          SERIAL_DDR |= (1<<SERIAL_BIT);
 	#endif
 	  tmp = (WDRF_HOME & ((1<<WDRF)));	// save Watch Dog Flag
 	  WDRF_HOME &= ~(1<<WDRF);	 	//reset Watch Dog flag
@@ -79,7 +85,8 @@
 	 #else
 	  PRR = (1<<PRTWI) | (1<<PRSPI) | (1<<PRUSART0);
 	 #endif
-	  DIDR0 = (1<<ADC5D) | (1<<ADC4D) | (1<<ADC3D);	
+//	disable digital inputs of Analog pins, but TP1-3 digital inputs must be left enabled for VGS measurement
+	  DIDR0 = ((1<<ADC5D) | (1<<ADC4D) | (1<<ADC3D) | (1<<ADC2D) | (1<<ADC1D) | (1<<ADC0D)) & ~((1<<TP3) | (1<<TP2) | (1<<TP1));	
 	  TCCR2A = (0<<WGM21) | (0<<WGM20);		// Counter 2 normal mode
 	  TCCR2B = CNTR2_PRESCALER;	//prescaler set in autoconf
 	  sei();				// enable interrupts

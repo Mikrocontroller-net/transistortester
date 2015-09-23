@@ -68,21 +68,20 @@ void show_resis(byte pin1, byte pin2, byte how)
  #endif
 
            // draw first line: the pin numbers, RR and possibly LL symbol, and possibly [R] or [RL]
+           lcd_line1();
            lcd_testpin(pin1);
  #ifdef SamplingADC
            byte lclx0=(lc_lx==0);
            if (inductor_lpre != 0 || !lclx0) 
+  #define AND_lclx0 && lclx0
  #else 
            if (inductor_lpre != 0)
+  #define AND_lclx0
  #endif
            {
               lcd_MEM_string(RESIS_str_RL1);            // "-RR-LL-"
               lcd_testpin(pin2);
-              if (how 
- #ifdef SamplingADC
-                 && lclx0
- #endif
-              ) lcd_MEM_string(RESIS_str_R2+3);  // the +3 skips 3 spaces because the RESIS_str_RL1 is 3 characters longer than RESIS_str_R1
+              if (how AND_lclx0) lcd_MEM_string(RESIS_str_R2+3);  // the +3 skips 3 spaces because the RESIS_str_RL1 is 3 characters longer than RESIS_str_R1
            } else {
               lcd_MEM_string(RESIS_str_R1);             // "-RR-"
               lcd_testpin(pin2);
@@ -92,18 +91,18 @@ void show_resis(byte pin1, byte pin2, byte how)
            // second line: measured R value (but that goes on first line if lc_lx!=0), and measured inductance, if applicable
 
  #ifdef SamplingADC
-           if (!lclx0) {
+           if (!lclx0) {  /* Frequency found */
               uint16_t lc_cpar;    // value of parallel capacitor used for calculating inductance, in pF
-              lcd_data(' ');
+              lcd_space();
               RvalOut(ResistorList[0]);		// show Resistance, probably ESR, still on first line
               lcd_next_line(0);
               DisplayValue(lc_lx,lc_lpre,'H',3);	// output inductance
               lcd_MEM2_string(iF_str);		// " if "
               lc_cpar=eeprom_read_word((uint16_t *)&lc_cpar_ee);
-  #if LCD_LINES>2
-              DisplayValue16(lc_cpar,-12,'F',3);	        // show parallel capacitance
-  #else
+  #if (LCD_LINES<3) && (LCD_LINE_LENGTH<17)
               DisplayValue16(lc_cpar,-12,'F',2);	        // on 2-line dispaly show parallel capacitance with only 2 digits to make room for the '+' sign at the end of the line
+  #else
+              DisplayValue16(lc_cpar,-12,'F',3);	        // show parallel capacitance
   #endif
            } else 
  #endif

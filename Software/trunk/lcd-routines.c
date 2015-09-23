@@ -121,6 +121,7 @@ void lcd_line4() {
 // Text_line number is incremented by 1, if possible (not yet at the last line).
 // If already at the last line of the display, last_line_used is set to 1 .
 void lcd_next_line(uint8_t xx) {
+   lcd_clear_line();
 #ifdef WITH_UART
    uart_putc(' ');
 #endif

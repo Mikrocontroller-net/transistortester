@@ -925,15 +925,27 @@
 resistor_out:
    if(ResistorsFound != 0) {
     if (ResistorsFound == 1) { // single resistor
+
        rpins.pw = Rnum2pins(ResistorList[0]);	// get pin numbers for resistor 1
-//       x = TP1;
-//       y = TP3;
-//       if (ResistorList[0] == 0) y = TP2;
-//       if (ResistorList[0] == 2) x = TP2;
+#if FLASHEND <= 0x1fff
        lcd_testpin(rpins.pb[0]);  	//Pin-number 1
        lcd_MEM_string(Resistor_str);	// -[=]-
        lcd_testpin(rpins.pb[1]);	//Pin-number 2
-    } else { // R-Max suchen
+       lcd_line2(); //2. row 
+       RvalOut(ResistorList[0]);
+#else
+ #if FLASHEND > 0x3fff
+       if ((ResistorList[0] == 1) && (NumOfDiodes == 0)) {
+          // is the TP1:TP3 resistor and no additional diode
+          show_Resis13();		// call of the special resistor measurement
+          goto start;
+       }
+ #endif
+       show_resis(rpins.pb[0],rpins.pb[1],0);
+#endif
+
+    } else { // multiple resistors found, R-Max suchen
+
        ii = ResistorList[0];	// first resistor in the list with number 0,1,2
        if (ResistorVal[ResistorList[1]] > ResistorVal[ii])
           ii = ResistorList[1]; // second resistor in the list with number 0,1,2
@@ -964,45 +976,9 @@ resistor_out:
        lcd_testpin(y);		//Pin-number 2
        lcd_MEM_string(Resistor_str);    // -[=]-
        lcd_testpin(z);		//Pin-number 3
-    }  /* end RegistersFound == 1 */
-#if (LCD_LINES > 3)
-    if(PartFound == PART_DIODE) {
-       lcd_line4(); //4. row 
-    } else {
-       lcd_line2(); //2. row 
-    }
-#else
-    lcd_line2(); //2. row 
-#endif
-    if (ResistorsFound == 1) {
-#if FLASHEND > 0x1fff
-       ReadInductance();		// measure inductance, possible only with single R<2.1k
-       RvalOut(ResistorList[0]);	// RvalOut starts GetESR, if resistance is low and no Inductance
-       if (inductor_lpre != 0) {
-	  // resistor have also Inductance
-          lcd_MEM_string(Lis_str);	// "L="
-          DisplayValue(inductor_lx,inductor_lpre,'H',3);	// output inductance
-	  lcd_set_cursor(0,5);
-          lcd_MEM_string(Inductor_str);		// -ww-
-          lcd_testpin(rpins.pb[1]);		//Pin-number 2
- #if FLASHEND > 0x3fff
-  #ifdef RMETER_WITH_L
-       }  /* end if inductor_lpre != 0 */
-        {             /* start special R-meter function with R or L */
-  #else
-       } else {		/* only resistor starts special R-meter function */
-  #endif
-          if ((ResistorList[0] == 1) && (NumOfDiodes == 0)) {
-             // is the TP1:TP3 resistor and no additional diode
-             show_Resis13();		// call of the special resistor measurement
-             goto start;
-          }
- #endif
-       }  /* end if inductor_lpre != 0 */
-#else	/* FLASHEND <= 0x1fff */
-       RvalOut(ResistorList[0]);	// RvalOut starts GetESR, if resistance < 10 Ohm
-#endif
-    } else { // output resistor values in right order
+
+       lcd_next_line(0);
+       // output resistor values in right order
        if (ii == 0) { /* resistor 0 has maximum */
           RvalOut(1);
           RvalOut(2);
@@ -1015,7 +991,7 @@ resistor_out:
           RvalOut(0);
           RvalOut(1);
        }
-    }
+    }  // end ResistorsFound==1
     goto tt_end;
 
   } // end (PartFound == PART_RESISTOR)

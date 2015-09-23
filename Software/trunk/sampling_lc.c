@@ -126,6 +126,7 @@ uint16_t lc_cpar;    // value of parallel capacitor used for calculating inducta
    lc_fx=0;
    lc_qx=0;
    lc_lx=0;
+   if (PartFound != PART_RESISTOR) return;   // can happen if we're invoke when there's both a diode and a resistor; don't try to measure inductance then
 
    byte i=0;
 

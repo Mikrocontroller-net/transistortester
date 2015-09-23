@@ -5,35 +5,14 @@
 #include "Transistortester.h"
 
 
-#if FLASHEND > 0x3fff
-//=================================================================
-// selection of different functions
 
-/* ****************************************************************** */
-/* show_Resis13 measures the resistance of a part connected to TP1 and TP3 */
-/* if RMETER_WITH_L is configured, inductance is also measured */
-/* ****************************************************************** */
+#if FLASHEND > 0x1fff
 
-#if 1
+typedef uint8_t byte;
 
 
-
-void show_Resis13(void) {
-  uint8_t key_pressed;
-  message_key_released(RESIS_13_str_RL);	// "1-|=|-3 .."
-#ifdef POWER_OFF
-  uint8_t times;
-  for (times=0;times<250;) 
-#else
-  while (1)		/* wait endless without the POWER_OFF option */
-#endif
-  {
-        init_parts();		// set all parts to nothing found 
-        GetResistance(TP3, TP1);
-        GetResistance(TP1, TP3);
-
-// display formats:
-// |....|....|....|
+// display formats for R, L, and resonance measurement:
+// |....|....|....|   (16 characters line length)
 
 // nothing found:
 // 1-RR-3      [RL]
@@ -46,75 +25,161 @@ void show_Resis13(void) {
 // resistance and inductance
 // 1-RR-LL-3   [RL]
 // 12.34kO L=12.3uH
-// 334.5 kHz Q=12.3    <--- only  if resonance detected
+// 334.5kHz Q=12.3    <--- only  if resonance detected
 
 // resistance and inductance measured through resonance, rather tight format to fit on 3 lines
-// 1-RR-LL-3 12.3kO
+// 1-RR-LL-3 12.34kO   (the ohm sign doesn't fit this way, but most likely, there's no 'k' sign since coils tend to not have that much resistance)
 // 12.3uH if 22.0nF
-// 334.5 kHz Q=12.3
+// 334.5kHz Q=12.3
 
 // same case but on bigger screens:  <---- not yet implemented!
 // 1-RR-LL-3
 // 12.34kO
 // 12.3uH if 22.0nF
-// 334.5 kHz Q=12.3
+// 334.5kHz Q=12.3
 
-        if (ResistorsFound != 0) {
+
+
+ // EXTRASPACES contains any extra spaces needed to fill out the line if wider than 16 characters, i.e., LCD_LINE_LENGTH-16 spaces
+#if LCD_LINE_LENGTH==16
+ #define EXTRASPACES
+#elif LCD_LINE_LENGTH==20
+ #define EXTRASPACES ' ',' ',' ',' ',
+#else
+ #warning Please add support for your LCD_LINE_LENGTH
+ #define EXTRASPACES
+#endif
+
+const unsigned char RESIS_str_RL1[] MEM2_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1, LCD_CHAR_INDUCTOR1, LCD_CHAR_INDUCTOR2, LCD_CHAR_LINE1,0};
+const unsigned char RESIS_str_R1[] MEM2_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1,0 };
+const unsigned char RESIS_str_R2[] MEM2_TEXT = {' ',' ',' ',' ',' ',EXTRASPACES ' ','[','R','L',']',0};
+
+
+void show_resis(byte pin1, byte pin2, byte how)
+// can be invoked both from main() and from show_Resis13()
+// pin1 and pin2 are resistor's pin numbers, but ResistorList[0] should also be correctly filled
+// assumes resistance has already been measured, but will do inductance measurements as appropriate
+// "how" flag tells how to show the results: if set [R] or [RL] will be shown in top right corner
+{
 #ifdef RMETER_WITH_L
 	   ReadInductance();	// measure inductance, possible only with R<2.1k
  #ifdef SamplingADC
-           sampling_lc(0,2);
-           lcd_clear();
-           if (inductor_lpre != 0 || lc_lx!=0) lcd_MEM_string(RESIS_13_str_RL);
-           else lcd_MEM_string(RESIS_13_str_R);
- #else
-           lcd_clear();
-//           int ss = strlen(RESIS_13_str);
-           if (inductor_lpre != 0) lcd_MEM_string(RESIS_13_str_RL);
-           else lcd_MEM_string(RESIS_13_str_R);
+           sampling_lc(pin1,pin2);    // measure inductance using resonance method
  #endif
+
+           // draw first line: the pin numbers, RR and possibly LL symbol, and possibly [R] or [RL]
+           lcd_testpin(pin1);
  #ifdef SamplingADC
-           if (lc_lx==0) {
+           byte lclx0=(lc_lx==0);
+           if (inductor_lpre != 0 || !lclx0) 
+ #else 
+           if (inductor_lpre != 0)
  #endif
-              lcd_line2();
-              RvalOut(1);		// show Resistance, probably ESR
+           {
+              lcd_MEM_string(RESIS_str_RL1);            // "-RR-LL-"
+              lcd_testpin(pin2);
+              if (how 
  #ifdef SamplingADC
+                 && lclx0
+ #endif
+              ) lcd_MEM_string(RESIS_str_R2+3);  // the +3 skips 3 spaces because the RESIS_str_RL1 is 3 characters longer than RESIS_str_R1
            } else {
-    uint16_t lc_cpar;    // value of parallel capacitor used for calculating inductance, in pF
-              lcd_set_cursor(0,10);
-              RvalOut(1);		// show Resistance, probably ESR
-              lcd_line2();
+              lcd_MEM_string(RESIS_str_R1);             // "-RR-"
+              lcd_testpin(pin2);
+              if (how) lcd_MEM_string(RESIS_str_R2);    // "    [R]" or "    [RL]"
+           }
+
+           // second line: measured R value (but that goes on first line if lc_lx!=0), and measured inductance, if applicable
+
+ #ifdef SamplingADC
+           if (!lclx0) {
+              uint16_t lc_cpar;    // value of parallel capacitor used for calculating inductance, in pF
+              lcd_data(' ');
+              RvalOut(ResistorList[0]);		// show Resistance, probably ESR, still on first line
+              lcd_next_line(0);
               DisplayValue(lc_lx,lc_lpre,'H',3);	// output inductance
-              lcd_MEM2_string(iF_str);		// " iF "
+              lcd_MEM2_string(iF_str);		// " if "
               lc_cpar=eeprom_read_word((uint16_t *)&lc_cpar_ee);
+  #if LCD_LINES>2
               DisplayValue16(lc_cpar,-12,'F',3);	        // show parallel capacitance
-              goto skip_inductor;
+  #else
+              DisplayValue16(lc_cpar,-12,'F',2);	        // on 2-line dispaly show parallel capacitance with only 2 digits to make room for the '+' sign at the end of the line
+  #endif
+           } else 
+ #endif
+           {
+              lcd_next_line(0);
+              RvalOut(ResistorList[0]);		// show Resistance, probably ESR
+
+              if (inductor_lpre != 0) {
+                 // resistor has also inductance
+                 lcd_MEM_string(Lis_str);		// "L="
+                 DisplayValue(inductor_lx,inductor_lpre,'H',3);        // output inductance
+              }
+
            }
-           if (inductor_lpre != 0) {
-              // resistor has also inductance
-              lcd_MEM_string(Lis_str);		// "L="
-              DisplayValue(inductor_lx,inductor_lpre,'H',3);        // output inductance
-           }
+           // third line: measured resonance frequency and Q, if applicable
+
+ #ifdef SamplingADC
            if (lc_fx) {
-skip_inductor:
               lcd_next_line_wait(0);
               DisplayValue(lc_fx,lc_fpre,'H',4);
               lcd_MEM2_string(zQ_str);		// "z Q="
               DisplayValue16(lc_qx, lc_qpre,' ',3);
+           } else {
+  #if LCD_LINES>2
+              // make sure we clean the third line, but only if the display actually has a 3rd line
+              lcd_next_line(0);
+  #endif
            }
  #endif
+           lcd_clear_line();
 #else		/* without Inductance measurement, only show resistance */
            lcd_line2();
            inductor_lpre = -1;		// prevent ESR measurement because Inductance is not tested
-           RvalOut(1);			// show Resistance, no ESR
+           RvalOut(ResistorList[0]);	// show Resistance, no ESR
 #endif
+}
+
+#endif //   FLASHEND > 0x1fff
+
+
+#if FLASHEND > 0x3fff
+//=================================================================
+// selection of different functions
+
+/* ****************************************************************** */
+/* show_Resis13 measures the resistance of a part connected to TP1 and TP3 */
+/* if RMETER_WITH_L is configured, inductance is also measured */
+/* ****************************************************************** */
+
+void show_Resis13(void) {
+  uint8_t key_pressed;
+  message_key_released(RESIS_13_str);	// "1-|=|-3 .."
+#ifdef POWER_OFF
+  uint8_t times;
+  for (times=0;times<250;) 
+#else
+  while (1)		/* wait endless without the POWER_OFF option */
+#endif
+  {
+        init_parts();		// set all parts to nothing found 
+        GetResistance(TP3, TP1);
+        GetResistance(TP1, TP3);
+        lcd_set_cursor(0,0);
+        if (ResistorsFound != 0) {
+           show_resis(TP1,TP3,1+4);
         } else {		/* no resistor found */
 #ifdef RMETER_WITH_L
-           lcd_clear();
-           lcd_MEM_string(RESIS_13_str_R);
+           lcd_MEM_string(RESIS_13_str);
+           lcd_MEM_string(RESIS_str_R2+4);    // "   [RL]"
 #endif
            lcd_line2();
            lcd_data('?');		// too big
+#if LCD_LINES>2
+           lcd_next_line(0);
+#endif
+           lcd_clear_line();
         }
 #if defined(POWER_OFF) && defined(BAT_CHECK)
      Bat_update(times);
@@ -132,7 +197,6 @@ skip_inductor:
   lcd_clear();
 } /* end show_Resis13() */
 
-#endif
 
 /* ****************************************************************** */
 /* show_Cap13 measures the capacity of a part connected to TP1 and TP3 */

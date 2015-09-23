@@ -940,8 +940,8 @@ resistor_out:
           show_Resis13();		// call of the special resistor measurement
           goto start;
        }
- #endif
        show_resis(rpins.pb[0],rpins.pb[1],0);
+ #endif
 #endif
 
     } else { // multiple resistors found, R-Max suchen
@@ -957,20 +957,28 @@ resistor_out:
           }
        }
        // ResistorVal[0] TP1:TP2, [1] TP1:TP3, [2] TP2:TP3
-       x = TP1;
-       y = TP3;
-       z = TP2;
-   
-       if (ii == 1) {	/* TP1:TP3 is maximum */
-          x = TP1;
-          y = TP2;
-          z = TP3;
-       }
-       if (ii == 2) {	/* TP2:TP3 is maximum */
-          x = TP2;
-          y = TP1;
-          z = TP3;
-       }
+
+
+    //   x = TP1;
+    //   y = TP3;
+    //   z = TP2;
+    //   if (ii == 1) {	/* TP1:TP3 is maximum */
+    //      x = TP1;
+    //      y = TP2;
+    //      z = TP3;
+    //   }
+    //   if (ii == 2) {	/* TP2:TP3 is maximum */
+    //      x = TP2;
+    //      y = TP1;
+    //      z = TP3;
+    //   }
+    // the following does the same as the above, but more cryptically (and in fewer instructions)
+       #if (TP2!=TP1+1 || TP3!=TP2+1)
+       #error code assumes TP1,2,3 are consecutive integers
+       #endif
+       x = TP1+(ii>>1);
+       y = TP3-ii;
+       z = TP2+(ii>0);
        lcd_testpin(x);  	//Pin-number 1
        lcd_MEM_string(Resistor_str);    // -[=]-
        lcd_testpin(y);		//Pin-number 2
@@ -979,18 +987,21 @@ resistor_out:
 
        lcd_next_line(0);
        // output resistor values in right order
-       if (ii == 0) { /* resistor 0 has maximum */
-          RvalOut(1);
-          RvalOut(2);
-       }
-       if (ii == 1) { /* resistor 1 has maximum */
-          RvalOut(0);
-          RvalOut(2);
-       }
-       if (ii == 2) { /* resistor 2 has maximum */
-          RvalOut(0);
-          RvalOut(1);
-       }
+    //  if (ii == 0) { /* resistor 0 has maximum */
+    //     RvalOut(1);
+    //     RvalOut(2);
+    //  }
+    //  if (ii == 1) { /* resistor 1 has maximum */
+    //     RvalOut(0);
+    //     RvalOut(2);
+    //  }
+    //  if (ii == 2) { /* resistor 2 has maximum */
+    //     RvalOut(0);
+    //     RvalOut(1);
+    //  }
+    // again a shorter but cryptical equivalent:
+       RvalOut(ii==0);
+       RvalOut(2-(ii>>1));
     }  // end ResistorsFound==1
     goto tt_end;
 

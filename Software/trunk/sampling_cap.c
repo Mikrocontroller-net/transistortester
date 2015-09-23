@@ -207,6 +207,8 @@ void sampling_cap_calibrate()
             DisplayValue16(c,-2,' ',4);
             d=sampling_cap_do(i,j,1,1);
             DisplayValue16(d,-14,'F',4);
+            lcd_clear_line();
+            lcd_refresh();
             byte k=3*i+j-1;
             eeprom_write_word((void*)(c_zero_tab2_lo+k),c);
             eeprom_write_word((void*)(c_zero_tab2_hi+k),d);

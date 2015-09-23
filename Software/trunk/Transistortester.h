@@ -1168,6 +1168,10 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
   #define EXTRASPACES
  #elif LCD_LINE_LENGTH==17
   #define EXTRASPACES ' ',
+ #elif LCD_LINE_LENGTH==18
+  #define EXTRASPACES ' ',' ',
+ #elif LCD_LINE_LENGTH==19
+  #define EXTRASPACES ' ',' ',' ',
  #elif LCD_LINE_LENGTH==20
   #define EXTRASPACES ' ',' ',' ',' ',
  #else

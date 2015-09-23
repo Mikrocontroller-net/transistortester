@@ -260,10 +260,16 @@ void sampling_lc_calibrate()
       ReadCapacity(TP1,TP3);
       lcd_line2();
       DisplayValue16(lc_cpartmp,-12,'F',4);
+      lcd_clear_line();
+      lcd_refresh();
       i++;
       if (lc_cpartmp<1000) i=0;
    } while (i<4);
    eeprom_write_word((uint16_t *)&lc_cpar_ee,lc_cpartmp);
+   lcd_line2();
+   lcd_MEM_string(OK_str);	// Output "OK"
+   lcd_clear_line();
+   wait_for_key_5s_line2();
 }
 
 

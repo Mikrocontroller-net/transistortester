@@ -43,15 +43,21 @@ typedef uint8_t byte;
  // EXTRASPACES contains any extra spaces needed to fill out the line if wider than 16 characters, i.e., LCD_LINE_LENGTH-16 spaces
 #if LCD_LINE_LENGTH==16
  #define EXTRASPACES
+#elif LCD_LINE_LENGTH==17
+ #define EXTRASPACES ' ',
+#elif LCD_LINE_LENGTH==18
+ #define EXTRASPACES ' ',' ',
+#elif LCD_LINE_LENGTH==19
+ #define EXTRASPACES ' ',' ',' ',
 #elif LCD_LINE_LENGTH==20
  #define EXTRASPACES ' ',' ',' ',' ',
+#elif LCD_LINE_LENGTH==21
+ #define EXTRASPACES ' ',' ',' ',' ',' ',
 #else
  #warning Please add support for your LCD_LINE_LENGTH
  #define EXTRASPACES
 #endif
 
-const unsigned char RESIS_str_RL1[] MEM2_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1, LCD_CHAR_INDUCTOR1, LCD_CHAR_INDUCTOR2, LCD_CHAR_LINE1,0};
-const unsigned char RESIS_str_R1[] MEM2_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1,0 };
 const unsigned char RESIS_str_R2[] MEM2_TEXT = {' ',' ',' ',' ',' ',EXTRASPACES ' ','[','R','L',']',0};
 
 
@@ -70,22 +76,24 @@ void show_resis(byte pin1, byte pin2, byte how)
            // draw first line: the pin numbers, RR and possibly LL symbol, and possibly [R] or [RL]
            lcd_line1();
            lcd_testpin(pin1);
+           lcd_MEM_string(Resistor_str);	// -[==]-
  #ifdef SamplingADC
            byte lclx0=(lc_lx==0);
            if (inductor_lpre != 0 || !lclx0) 
-  #define AND_lclx0 && lclx0
  #else 
            if (inductor_lpre != 0)
-  #define AND_lclx0
  #endif
            {
-              lcd_MEM_string(RESIS_str_RL1);            // "-RR-LL-"
+              lcd_MEM_string(Inductor_str+1);            // "LL-"
               lcd_testpin(pin2);
-              if (how AND_lclx0) lcd_MEM_string(RESIS_str_R2+3);  // the +3 skips 3 spaces because the RESIS_str_RL1 is 3 characters longer than RESIS_str_R1
            } else {
-              lcd_MEM_string(RESIS_str_R1);             // "-RR-"
               lcd_testpin(pin2);
-              if (how) lcd_MEM_string(RESIS_str_R2);    // "    [R]" or "    [RL]"
+           }
+           if (how) {
+              lcd_spaces(LCD_LINE_LENGTH - 4 - _lcd_column);
+	      lcd_MEM_string(RL_METER_str);	// " [R]" or "[RL]"
+//           } else {
+//            lcd_clear_line();
            }
 
            // second line: measured R value (but that goes on first line if lc_lx!=0), and measured inductance, if applicable
@@ -165,13 +173,15 @@ void show_Resis13(void) {
         init_parts();		// set all parts to nothing found 
         GetResistance(TP3, TP1);
         GetResistance(TP1, TP3);
-        lcd_set_cursor(0,0);
+	lcd_line1();		// lcd_set_cursor(0,0);
         if (ResistorsFound != 0) {
            show_resis(TP1,TP3,1+4);
         } else {		/* no resistor found */
 #ifdef RMETER_WITH_L
            lcd_MEM_string(RESIS_13_str);
            lcd_MEM_string(RESIS_str_R2+4);    // "   [RL]"
+//           lcd_spaces(LCD_LINE_LENGTH - 4 - _lcd_column);
+//           lcd_MEM_string(RL_METER_str);	// " [R]" or "[RL]"
 #endif
            lcd_line2();
            lcd_data('?');		// too big
@@ -244,7 +254,7 @@ void show_Cap13(void) {
            DisplayValue16(cap.esr,-2,LCD_CHAR_OMEGA,2); // and ESR value
 	   lcd_clear_line();		// clear to end of line 2
            lcd_set_cursor(0,4);
-           lcd_MEM2_string(Resistor_str);   // "-[=]- .."
+           lcd_MEM_string(Resistor_str);   // "-[=]- .."
            lcd_testpin(TP3);		// add the TP3
         } else {		// no ESR known
 	   lcd_clear_line();		// clear to end of line, overwrite old ESR

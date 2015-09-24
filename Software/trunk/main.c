@@ -947,8 +947,8 @@ resistor_out:
           show_Resis13();		// call of the special resistor measurement
           goto start;
        }
-       show_resis(rpins.pb[0],rpins.pb[1],0);
  #endif
+       show_resis(rpins.pb[0],rpins.pb[1],0);
 #endif
 
     } else { // multiple resistors found, R-Max suchen

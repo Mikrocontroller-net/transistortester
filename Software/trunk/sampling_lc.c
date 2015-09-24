@@ -255,22 +255,31 @@ void sampling_lc_calibrate()
    lcd_clear();
    lcd_MEM2_string(str_cap_for_l_meas);
    byte i=0;
-   do {
+   byte ww=0;
+   do { 
       lc_cpartmp=0;
       wait_about100ms();
       ReadCapacity(TP1,TP3);
       lcd_line2();
       DisplayValue16(lc_cpartmp,-12,'F',4);
+      i++;
+      if (lc_cpartmp<9500) i=0;		// unstable or not connected
+      if (i > 4) {	// Cx measurement was stable
+         eeprom_write_word((uint16_t *)&lc_cpar_ee,lc_cpartmp);
+	 lcd_space();
+         lcd_MEM_string(OK_str);	// Output "OK"
+         break;
+      }
       lcd_clear_line();
       lcd_refresh();
-      i++;
-      if (lc_cpartmp<1000) i=0;
-   } while (i<4);
-   eeprom_write_word((uint16_t *)&lc_cpar_ee,lc_cpartmp);
-   lcd_line2();
-   lcd_MEM_string(OK_str);	// Output "OK"
-   lcd_clear_line();
-   wait_for_key_5s_line2();
+   } while (++ww != 0);
+//   if (i <= 4) {
+//      lcd_line2();
+//      lcd_MEM2_string(NotFound_str);		// "Not found!"
+//      lcd_clear_line();
+//      wait_about1s();
+//   }
+//   wait_for_key_5s_line2();
 }
 
 

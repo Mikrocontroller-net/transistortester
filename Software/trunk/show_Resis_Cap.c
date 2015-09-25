@@ -69,15 +69,13 @@ void show_resis(byte pin1, byte pin2, byte how)
 {
 #ifdef RMETER_WITH_L
 	   ReadInductance();	// measure inductance, possible only with R<2.1k
- #ifdef SamplingADC
-           sampling_lc(pin1,pin2);    // measure inductance using resonance method
- #endif
-
-           // draw first line: the pin numbers, RR and possibly LL symbol, and possibly [R] or [RL]
-           lcd_line1();
            lcd_testpin(pin1);
            lcd_MEM_string(Resistor_str);	// -[==]-
+           lcd_refresh();
  #ifdef SamplingADC
+           sampling_lc(pin1,pin2);    // measure inductance using resonance method
+
+           // draw first line: the pin numbers, RR and possibly LL symbol, and possibly [R] or [RL]
            byte lclx0=(lc_lx==0);
            if (inductor_lpre != 0 || !lclx0) 
  #else 
@@ -85,24 +83,24 @@ void show_resis(byte pin1, byte pin2, byte how)
  #endif
            {
               lcd_MEM_string(Inductor_str+1);            // "LL-"
-              lcd_testpin(pin2);
-           } else {
-              lcd_testpin(pin2);
            }
-           if (how) {
-              lcd_spaces(LCD_LINE_LENGTH - 4 - _lcd_column);
-	      lcd_MEM_string(RL_METER_str);	// " [R]" or "[RL]"
-//           } else {
-//            lcd_clear_line();
-           }
+              lcd_testpin(pin2);
 
            // second line: measured R value (but that goes on first line if lc_lx!=0), and measured inductance, if applicable
 
  #ifdef SamplingADC
            if (!lclx0) {  /* Frequency found */
-              uint16_t lc_cpar;    // value of parallel capacitor used for calculating inductance, in pF
               lcd_space();
               RvalOut(ResistorList[0]);		// show Resistance, probably ESR, still on first line
+           }
+ #endif
+           if (how) {
+              lcd_spaces(LCD_LINE_LENGTH - 4 - _lcd_column);
+	      lcd_MEM_string(RL_METER_str);	// " [R]" or "[RL]"
+           }
+ #ifdef SamplingADC
+              uint16_t lc_cpar;    // value of parallel capacitor used for calculating inductance, in pF
+           if (!lclx0) {  /* Frequency found */
               lcd_next_line(0);
               DisplayValue(lc_lx,lc_lpre,'H',3);	// output inductance
               lcd_MEM2_string(iF_str);		// " if "
@@ -115,7 +113,7 @@ void show_resis(byte pin1, byte pin2, byte how)
            } else 
  #endif
            {
-              lcd_next_line(0);
+              lcd_next_line_wait(0);
               RvalOut(ResistorList[0]);		// show Resistance, probably ESR
 
               if (inductor_lpre != 0) {
@@ -133,14 +131,18 @@ void show_resis(byte pin1, byte pin2, byte how)
               DisplayValue(lc_fx,lc_fpre,'H',4);
               lcd_MEM2_string(zQ_str);		// "z Q="
               DisplayValue16(lc_qx, lc_qpre,' ',3);
+              lcd_clear_line();
            } else {
-  #if LCD_LINES>2
-              // make sure we clean the third line, but only if the display actually has a 3rd line
+//  #if LCD_LINES>2
+//              // make sure we clean the third line, but only if the display actually has a 3rd line
+//              lcd_next_line(0);
+//  #endif
               lcd_next_line(0);
-  #endif
+	      if (last_line_used == 0) {
+                 lcd_clear_line();
+              }
            }
  #endif
-           lcd_clear_line();
 #else		/* without Inductance measurement, only show resistance */
            lcd_line2();
            inductor_lpre = -1;		// prevent ESR measurement because Inductance is not tested

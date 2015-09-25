@@ -110,9 +110,9 @@ ad1cbe:
 /*    first = diode_sequence >> 4; */
 /*    second = diode_sequence & 3; */
 /*    lcd_testpin(diodes.Anode[first]); */
-/*    lcd_PGM_string(AnKat);	//"->|-" */
+/*    lcd_PGM_string(AnKat_str);	//"->|-" */
 /*    lcd_testpin(diodes.Cathode[first]); */
-/*    lcd_PGM_string(AnKat);	//"->|-" */
+/*    lcd_PGM_string(AnKat_str);	//"->|-" */
 /*    lcd_testpin(diodes.Cathode[second]); */
 /*    UfAusgabe(diode_sequence); */
 /* } */
@@ -120,7 +120,7 @@ ad1cbe:
 	.extern lcd_testpin
 	.extern UfAusgabe
 
-	.extern AnKat
+	.extern AnKat_str
 
 	.func  SerienDiodenAusgabe
 
@@ -136,23 +136,23 @@ SerienDiodenAusgabe:
  	adc	r29, zero_reg
  	ld	r24, Y		;Anode
  	RCALL	lcd_testpin	; lcd_testpin(diodes.Anode[first]);
- 	ldi	r24, lo8(AnKat)	;0xA3
- 	ldi	r25, hi8(AnKat)	;0x03
+ 	ldi	r24, lo8(AnKat_str)	;0xA3
+ 	ldi	r25, hi8(AnKat_str)	;0x03
 #ifdef USE_EEPROM
 	.extern lcd_fix_string
- 	RCALL	lcd_fix_string	; lcd_PGM_string(AnKat);	//"->|-"
+ 	RCALL	lcd_fix_string	; lcd_PGM_string(AnKat_str);	//"->|-"
 #else
 	.extern lcd_pgm_string
- 	RCALL	lcd_pgm_string	; lcd_PGM_string(AnKat);	//"->|-"
+ 	RCALL	lcd_pgm_string	; lcd_PGM_string(AnKat_str);	//"->|-"
 #endif
  	ldd	r24, Y+6	; Cathode
  	RCALL	lcd_testpin	; lcd_testpin(diodes.Cathode[first]);
- 	ldi	r24, lo8(AnKat)	;0xA3
- 	ldi	r25, hi8(AnKat)	;0x03
+ 	ldi	r24, lo8(AnKat_str)	;0xA3
+ 	ldi	r25, hi8(AnKat_str)	;0x03
 #ifdef USE_EEPROM
- 	RCALL	lcd_fix_string	; lcd_PGM_string(AnKat);	//"->|-"
+ 	RCALL	lcd_fix_string	; lcd_PGM_string(AnKat_str);	//"->|-"
 #else
- 	RCALL	lcd_pgm_string	; lcd_PGM_string(AnKat);	//"->|-"
+ 	RCALL	lcd_pgm_string	; lcd_PGM_string(AnKat_str);	//"->|-"
 #endif
  	ldi	r28, lo8(diodes)	;0x80
  	ldi	r29, hi8(diodes)	;0x01

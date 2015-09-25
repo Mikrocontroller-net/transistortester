@@ -385,29 +385,29 @@
         // the higher test pin number is left side
         if (diodes.Anode[0] > diodes.Cathode[0]) {
            lcd_testpin(diodes.Anode[0]);
-           lcd_MEM_string(AnKat);	//"->|-"
+           lcd_MEM_string(AnKat_str);	//"->|-"
            lcd_testpin(diodes.Cathode[0]);
         } else {
            lcd_testpin(diodes.Cathode[0]);
-           lcd_MEM_string(KatAn);	//"-|<-"
+           lcd_MEM_string(KatAn_str);	//"-|<-"
            lcd_testpin(diodes.Anode[0]);
         }
  #else
         // the higher test pin number is right side
         if (diodes.Anode[0] < diodes.Cathode[0]) {
            lcd_testpin(diodes.Anode[0]);
-           lcd_MEM_string(AnKat);	//"->|-"
+           lcd_MEM_string(AnKat_str);	//"->|-"
            lcd_testpin(diodes.Cathode[0]);
         } else {
            lcd_testpin(diodes.Cathode[0]);
-           lcd_MEM_string(KatAn);	//"-|<-"
+           lcd_MEM_string(KatAn_str);	//"-|<-"
            lcd_testpin(diodes.Anode[0]);
         }
  #endif
 #else
         // too less memory to sort the pins
         lcd_testpin(diodes.Anode[0]);
-        lcd_MEM_string(AnKat);		//"->|-"
+        lcd_MEM_string(AnKat_str);		//"->|-"
         lcd_testpin(diodes.Cathode[0]);
 #endif
 #if FLASHEND > 0x1fff
@@ -443,18 +443,18 @@
         lcd_MEM_string(Dioden);		//"diodes "
         if(diodes.Anode[0] == diodes.Anode[1]) { //Common Anode
            lcd_testpin(diodes.Cathode[0]);
-           lcd_MEM_string(KatAn);	//"-|<-"
+           lcd_MEM_string(KatAn_str);	//"-|<-"
            lcd_testpin(diodes.Anode[0]);
-           lcd_MEM_string(AnKat);	//"->|-"
+           lcd_MEM_string(AnKat_str);	//"->|-"
            lcd_testpin(diodes.Cathode[1]);
            UfAusgabe(0x01);
            goto end3;
         } 
         if(diodes.Cathode[0] == diodes.Cathode[1]) { //Common Cathode
            lcd_testpin(diodes.Anode[0]);
-           lcd_MEM_string(AnKat);	//"->|-"
+           lcd_MEM_string(AnKat_str);	//"->|-"
 	   lcd_testpin(diodes.Cathode[0]);
-           lcd_MEM_string(KatAn);	//"-|<-"
+           lcd_MEM_string(KatAn_str);	//"-|<-"
            lcd_testpin(diodes.Anode[1]);
            UfAusgabe(0x01);
            goto end3;
@@ -517,7 +517,7 @@
      lcd_line2(); //2. row 
      lcd_MEM_string(OrBroken); 		//"oder defekt "
      lcd_data(NumOfDiodes + '0');
-     lcd_MEM_string(AnKat);		//"->|-"
+     lcd_MEM_string(AnKat_str);		//"->|-"
      goto not_known;
      // end (PartFound == PART_DIODE)
   // ========================================
@@ -617,9 +617,9 @@
                  ((PartMode != PART_MODE_NPN) && (ptrans.c < ptrans.e)));
  #endif
        if (an_cat) {
-          lcd_MEM_string(AnKat);	//"->|-"
+          lcd_MEM_string(AnKat_str);	//"->|-"
        } else {
-          lcd_MEM_string(KatAn);	//"-|<-"
+          lcd_MEM_string(KatAn_str);	//"-|<-"
        }
 #endif    /* !WITH_GRAPHICS */
 #ifdef SHOW_VAKDIODE
@@ -704,11 +704,11 @@
        lcd_next_line_wait(0); 		// next line, wait 5s and clear line 2/4
        if (an_cat) {
           lcd_testpin(diodes.Anode[vak_diode_nr]);
-          lcd_MEM_string(AnKat);	//"->|-"
+          lcd_MEM_string(AnKat_str);	//"->|-"
           lcd_testpin(diodes.Cathode[vak_diode_nr]);
        } else {
           lcd_testpin(diodes.Cathode[vak_diode_nr]);
-          lcd_MEM_string(KatAn);	//"-|<-"
+          lcd_MEM_string(KatAn_str);	//"-|<-"
           lcd_testpin(diodes.Anode[vak_diode_nr]);
        }
        lcd_space();
@@ -906,11 +906,11 @@
        lcd_next_line_wait(0);		// line 4, if possible & wait 5s and clear last line 
        if (an_cat) {
           lcd_testpin(diodes.Anode[0]);
-          lcd_MEM_string(AnKat);	//"->|-"
+          lcd_MEM_string(AnKat_str);	//"->|-"
           lcd_testpin(diodes.Cathode[0]);
        } else {
           lcd_testpin(diodes.Cathode[0]);
-          lcd_MEM_string(KatAn);	//"-|<-"
+          lcd_MEM_string(KatAn_str);	//"-|<-"
           lcd_testpin(diodes.Anode[0]);
        }
        lcd_space();

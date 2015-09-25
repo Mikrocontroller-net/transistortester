@@ -644,7 +644,7 @@ End of configuration
  const unsigned char mosfet_str[] MEM_TEXT = "-MOS";
  const unsigned char jfet_str[] MEM_TEXT = "JFET";
  const unsigned char igbt_str[] MEM_TEXT = "-IGBT";
-#if ((LCD_LINE_LENGTH > 19) || defined(WITH_GRAPHICS))
+#if ((LCD_LINE_LENGTH > 17) || defined(WITH_GRAPHICS))
  const unsigned char hfe_str[] MEM_TEXT ="hFE=";
  const unsigned char GateCap_str[] MEM_TEXT = "Cg=";
 #else
@@ -1118,8 +1118,8 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  #endif
 #endif
 
- const unsigned char AnKat[] MEM_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_DIODE1, LCD_CHAR_LINE1,0};
- const unsigned char KatAn[] MEM_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_DIODE2, LCD_CHAR_LINE1,0};
+ const unsigned char AnKat_str[] MEM_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_DIODE1, LCD_CHAR_LINE1,0};
+ const unsigned char KatAn_str[] MEM_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_DIODE2, LCD_CHAR_LINE1,0};
 #ifdef SamplingADC
  const unsigned char str_cap_for_l_meas[] MEM2_TEXT = "Cap for L meas?";    // for now placed here, should be translated at some point
  const unsigned char AT05volt[] MEM_TEXT = " @0-5V";
@@ -1142,18 +1142,21 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 
 #ifdef WITH_SELFTEST
  #ifdef EXTENDED_TESTS
- const unsigned char URefT[] MEM2_TEXT = "Ref=";
- const unsigned char RHfakt[] MEM2_TEXT = "RHf=";
- const unsigned char RH1L[] MEM_TEXT = "RH-";
- const unsigned char RH1H[] MEM_TEXT = "RH+";
- const unsigned char RLRL[] MEM_TEXT = "+RL- 12 13 23";
- const unsigned char RHRH[] MEM_TEXT = "+RH- 12 13 23";
- const unsigned char RHRL[] MEM_TEXT = "RH/RL";
+ const unsigned char URef_str[] MEM2_TEXT = "Ref=";
+ const unsigned char RHfakt_str[] MEM2_TEXT = "RHf=";
+ const unsigned char RH1L_str[] MEM_TEXT = "RH-";
+ const unsigned char RH1H_str[] MEM_TEXT = "RH+";
+ const unsigned char RLRL_str[] MEM_TEXT = "+RL- 12 13 23";
+ const unsigned char RHRH_str[] MEM_TEXT = "+RH- 12 13 23";
+ const unsigned char RHRL_str[] MEM_TEXT = "RH/RL";
  #endif
  const unsigned char R0_str[] MEM2_TEXT = "R0=";
- const unsigned char RIHI[] MEM_TEXT = "Ri_Hi=";
- const unsigned char RILO[] MEM_TEXT = "Ri_Lo=";
+ const unsigned char RIHI_str[] MEM_TEXT = "Ri_Hi=";
+ const unsigned char RILO_str[] MEM_TEXT = "Ri_Lo=";
  const unsigned char C0_str[] MEM_TEXT = "C0 ";
+ #ifdef SamplingADC
+ const unsigned char Csamp0_str[] MEM2_TEXT = "Csamp0 ";
+ #endif
  const unsigned char T50HZ[] MEM_TEXT = " 50Hz";
 #endif
 
@@ -1355,8 +1358,8 @@ const unsigned char RL_METER_str[] MEM2_TEXT = {' ','[','R',']',0};
   extern const unsigned char Lis_str[];
  #endif
 
- extern const unsigned char AnKat[] MEM_TEXT ;
- extern const unsigned char KatAn[] MEM_TEXT ;
+ extern const unsigned char AnKat_str[] MEM_TEXT ;
+ extern const unsigned char KatAn_str[] MEM_TEXT ;
 #ifdef SamplingADC
  extern const unsigned char str_cap_for_l_meas[] MEM2_TEXT;
  extern const unsigned char AT05volt[] MEM_TEXT;
@@ -1390,10 +1393,11 @@ extern const unsigned char C_ESR_str[];
 extern const unsigned char REF_C_str[];
 extern const unsigned char REF_R_str[];
 extern const unsigned char R0_str[];
-extern const unsigned char RIHI[];
-extern const unsigned char RILO[];
+extern const unsigned char RIHI_str[];
+extern const unsigned char RILO_str[];
 #endif
 extern const unsigned char C0_str[];
+extern const unsigned char Csamp0_str[] MEM2_TEXT;
 #if FLASHEND > 0x1fff
 extern const unsigned char CAP_13_str[] MEM2_TEXT;
 extern const unsigned char RDS_str[] MEM_TEXT;

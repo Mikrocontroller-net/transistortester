@@ -13,7 +13,10 @@ uint32_t lc_fx;      // measured resonant frequency (in Hz)
 uint16_t lc_qx;      // measured resonance Q (in units of 0.1)
 uint32_t lc_lx;      // measured inductance using the samplingADC method (in nH)
 uint16_t lc_cpartmp; 
-const uint16_t lc_cpar_ee EEMEM;         // place for lc_cpar as calibration constant in eeprom
+#ifndef CxL 
+ #define CxL 15000			//default value for parallel capacitor for inductance measurement
+#endif
+const uint16_t lc_cpar_ee EEMEM = CxL;         // place for lc_cpar as calibration constant in eeprom
 
 
 

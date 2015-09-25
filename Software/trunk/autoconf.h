@@ -7,7 +7,9 @@
 /* Define under which conditions a graphical display is supported. */
 /* The graphical display should at least support 128x64 pixels. */
  #define WITH_GRAPHICS 1
+ #undef PAGES_PER_LINE
  #define PAGES_PER_LINE ((FONT_HEIGHT + 7) / 8)
+ #undef LCD_LINES
  #define LCD_LINES ((SCREEN_HEIGHT/8) / PAGES_PER_LINE)
  #undef LCD_LINE_LENGTH
  #define LCD_LINE_LENGTH (SCREEN_WIDTH / FONT_WIDTH)
@@ -15,7 +17,9 @@
 #elif (LCD_ST_TYPE == 8812)
  /* defines for PCF8812 */
  #undef WITH_GRAPHICS
+ #undef PAGES_PER_LINE
  #define PAGES_PER_LINE ((FONT_HEIGHT + 7) / 8)
+ #undef LCD_LINES
  #define LCD_LINES ((SCREEN_HEIGHT/8) / PAGES_PER_LINE)
  #undef LCD_LINE_LENGTH
  #define LCD_LINE_LENGTH (SCREEN_WIDTH / FONT_WIDTH)
@@ -23,31 +27,33 @@
 #elif (LCD_ST_TYPE == 8814)
  /* defines for PCF8814 */
  #undef WITH_GRAPHICS
+ #undef PAGES_PER_LINE
  #define PAGES_PER_LINE ((FONT_HEIGHT + 7) / 8)
+ #undef LCD_LINES
  #define LCD_LINES ((SCREEN_HEIGHT/8) / PAGES_PER_LINE)
  #undef LCD_LINE_LENGTH
  #define LCD_LINE_LENGTH (SCREEN_WIDTH / FONT_WIDTH)
  #define TEXT_RIGHT_TO_ICON ((ICON_WIDTH + 16 + 5 + 7) / FONT_WIDTH)
 #else  /* no ST7565 or SSD1306 graphic controller */
- #ifdef FOUR_LINE_LCD
-  #if FOUR_LINE_LCD == 3
-   #define LCD_LINES 3
-   #define PAGES_PER_LINE 1
-   #ifndef LCD_LINE_LENGTH
-    #define LCD_LINE_LENGTH 16	/* usually a 16 character line */
-   #endif
-  #else
-   #define LCD_LINES 4
-   #define PAGES_PER_LINE 1
-   #ifndef LCD_LINE_LENGTH
-    #define LCD_LINE_LENGTH 20	/* usually a 20 character line */
-   #endif
-  #endif
- #else	/* no FOUR_LINE_LCD */
-   #define PAGES_PER_LINE 1
-   #define LCD_LINES 2
-   #define LCD_LINE_LENGTH 16
- #endif
+// #ifdef FOUR_LINE_LCD
+//  #if FOUR_LINE_LCD == 3
+//   #define LCD_LINES 3
+//   #define PAGES_PER_LINE 1
+//   #ifndef LCD_LINE_LENGTH
+//    #define LCD_LINE_LENGTH 16	/* usually a 16 character line */
+//   #endif
+//  #else
+//   #define LCD_LINES 4
+//   #define PAGES_PER_LINE 1
+//   #ifndef LCD_LINE_LENGTH
+//    #define LCD_LINE_LENGTH 20	/* usually a 20 character line */
+//   #endif
+//  #endif
+// #else	/* no FOUR_LINE_LCD */
+//   #define PAGES_PER_LINE 1
+//   #define LCD_LINES 2
+//   #define LCD_LINE_LENGTH 16
+// #endif
  #define TEXT_RIGHT_TO_ICON 0
  #ifndef FONT_HEIGHT
   #define FONT_HEIGHT 8

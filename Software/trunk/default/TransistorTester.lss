@@ -27,11 +27,11 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY, DEBUGGING
  11 .debug_frame  000006c8  00000000  00000000  0000f90c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000f91  00000000  00000000  0000ffd4  2**0
+ 12 .debug_str    00000fa1  00000000  00000000  0000ffd4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    00003a9e  00000000  00000000  00010f65  2**0
+ 13 .debug_loc    00003a9e  00000000  00000000  00010f75  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000018  00000000  00000000  00014a03  2**0
+ 14 .debug_ranges 00000018  00000000  00000000  00014a13  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -1228,7 +1228,7 @@ ad1cbe:
      504:	08 95       	ret
 
 00000506 <SerienDiodenAusgabe>:
-	.extern AnKat
+	.extern AnKat_str
 
 	.func  SerienDiodenAusgabe
 
@@ -1255,31 +1255,31 @@ SerienDiodenAusgabe:
      51a:	88 81       	ld	r24, Y
  	RCALL	lcd_testpin	; lcd_testpin(diodes.Anode[first]);
      51c:	60 de       	rcall	.-832    	; 0x1de <lcd_testpin>
- 	ldi	r24, lo8(AnKat)	;0xA3
+ 	ldi	r24, lo8(AnKat_str)	;0xA3
      51e:	8f e5       	ldi	r24, 0x5F	; 95
- 	ldi	r25, hi8(AnKat)	;0x03
+ 	ldi	r25, hi8(AnKat_str)	;0x03
      520:	90 e0       	ldi	r25, 0x00	; 0
 #ifdef USE_EEPROM
 	.extern lcd_fix_string
- 	RCALL	lcd_fix_string	; lcd_PGM_string(AnKat);	//"->|-"
+ 	RCALL	lcd_fix_string	; lcd_PGM_string(AnKat_str);	//"->|-"
      522:	c3 de       	rcall	.-634    	; 0x2aa <lcd_fix_string>
 #else
 	.extern lcd_pgm_string
- 	RCALL	lcd_pgm_string	; lcd_PGM_string(AnKat);	//"->|-"
+ 	RCALL	lcd_pgm_string	; lcd_PGM_string(AnKat_str);	//"->|-"
 #endif
  	ldd	r24, Y+6	; Cathode
      524:	8e 81       	ldd	r24, Y+6	; 0x06
  	RCALL	lcd_testpin	; lcd_testpin(diodes.Cathode[first]);
      526:	5b de       	rcall	.-842    	; 0x1de <lcd_testpin>
- 	ldi	r24, lo8(AnKat)	;0xA3
+ 	ldi	r24, lo8(AnKat_str)	;0xA3
      528:	8f e5       	ldi	r24, 0x5F	; 95
- 	ldi	r25, hi8(AnKat)	;0x03
+ 	ldi	r25, hi8(AnKat_str)	;0x03
      52a:	90 e0       	ldi	r25, 0x00	; 0
 #ifdef USE_EEPROM
- 	RCALL	lcd_fix_string	; lcd_PGM_string(AnKat);	//"->|-"
+ 	RCALL	lcd_fix_string	; lcd_PGM_string(AnKat_str);	//"->|-"
      52c:	be de       	rcall	.-644    	; 0x2aa <lcd_fix_string>
 #else
- 	RCALL	lcd_pgm_string	; lcd_PGM_string(AnKat);	//"->|-"
+ 	RCALL	lcd_pgm_string	; lcd_PGM_string(AnKat_str);	//"->|-"
 #endif
  	ldi	r28, lo8(diodes)	;0x80
      52e:	c9 e8       	ldi	r28, 0x89	; 137
@@ -3188,7 +3188,7 @@ for (ww=0;ww<120;ww++) {
 
 lcd_clear();
      be0:	90 91 3d 01 	lds	r25, 0x013D
-lcd_MEM_string(RIHI);	// "RiHi="
+lcd_MEM_string(RIHI_str);	// "RiHi="
      be4:	49 dd       	rcall	.-1390   	; 0x678 <DisplayValue16>
      be6:	82 e0       	ldi	r24, 0x02	; 2
      be8:	80 93 42 01 	sts	0x0142, r24
@@ -3203,7 +3203,7 @@ DisplayValue16(RRpinPL,-1,LCD_CHAR_OMEGA,3);
 lcd_line2();
      bfc:	82 e0       	ldi	r24, 0x02	; 2
      bfe:	0e 94 ad 10 	call	0x215a	; 0x215a <ReadCapacity>
-lcd_MEM_string(RILO);	// "RiLo="
+lcd_MEM_string(RILO_str);	// "RiLo="
      c02:	80 90 7b 01 	lds	r8, 0x017B
      c06:	90 90 7c 01 	lds	r9, 0x017C
 DisplayValue16(RRpinMI,-1,LCD_CHAR_OMEGA,3);
@@ -11170,7 +11170,7 @@ TyUfAusgabe:
     3610:	98 17       	cp	r25, r24
     3612:	50 f4       	brcc	.+20     	; 0x3628 <main+0x2de>
     3614:	89 2f       	mov	r24, r25
-           lcd_MEM_string(KatAn);	//"-|<-"
+           lcd_MEM_string(KatAn_str);	//"-|<-"
            lcd_testpin(diodes.Anode[0]);
         }
  #else
@@ -11183,7 +11183,7 @@ TyUfAusgabe:
            lcd_testpin(diodes.Anode[0]);
     3622:	80 91 8f 01 	lds	r24, 0x018F
     3626:	08 c0       	rjmp	.+16     	; 0x3638 <main+0x2ee>
-           lcd_MEM_string(AnKat);	//"->|-"
+           lcd_MEM_string(AnKat_str);	//"->|-"
     3628:	0e 94 ef 00 	call	0x1de	; 0x1de <lcd_testpin>
     362c:	8b e5       	ldi	r24, 0x5B	; 91
     362e:	90 e0       	ldi	r25, 0x00	; 0
@@ -11193,14 +11193,14 @@ TyUfAusgabe:
         } else {
            lcd_testpin(diodes.Cathode[0]);
     3638:	0e 94 ef 00 	call	0x1de	; 0x1de <lcd_testpin>
-           lcd_MEM_string(KatAn);	//"-|<-"
+           lcd_MEM_string(KatAn_str);	//"-|<-"
     363c:	60 91 89 01 	lds	r22, 0x0189
     3640:	80 91 8f 01 	lds	r24, 0x018F
            lcd_testpin(diodes.Anode[0]);
     3644:	0e 94 95 07 	call	0xf2a	; 0xf2a <GetIr>
     3648:	80 e7       	ldi	r24, 0x70	; 112
         lcd_testpin(diodes.Anode[0]);
-        lcd_MEM_string(AnKat);		//"->|-"
+        lcd_MEM_string(AnKat_str);		//"->|-"
         lcd_testpin(diodes.Cathode[0]);
 #endif
 #if FLASHEND > 0x1fff
@@ -11268,14 +11268,14 @@ TyUfAusgabe:
            lcd_testpin(diodes.Cathode[0]);
     36ba:	80 91 89 01 	lds	r24, 0x0189
     36be:	0e 94 ef 00 	call	0x1de	; 0x1de <lcd_testpin>
-           lcd_MEM_string(KatAn);	//"-|<-"
+           lcd_MEM_string(KatAn_str);	//"-|<-"
     36c2:	8f e5       	ldi	r24, 0x5F	; 95
     36c4:	90 e0       	ldi	r25, 0x00	; 0
     36c6:	0e 94 55 01 	call	0x2aa	; 0x2aa <lcd_fix_string>
            lcd_testpin(diodes.Anode[0]);
     36ca:	80 91 90 01 	lds	r24, 0x0190
     36ce:	16 c0       	rjmp	.+44     	; 0x36fc <main+0x3b2>
-           lcd_MEM_string(AnKat);	//"->|-"
+           lcd_MEM_string(AnKat_str);	//"->|-"
     36d0:	30 91 8f 01 	lds	r19, 0x018F
     36d4:	90 91 90 01 	lds	r25, 0x0190
            lcd_testpin(diodes.Cathode[1]);
@@ -11292,14 +11292,14 @@ TyUfAusgabe:
     36e8:	80 91 8f 01 	lds	r24, 0x018F
            lcd_testpin(diodes.Anode[0]);
     36ec:	0e 94 ef 00 	call	0x1de	; 0x1de <lcd_testpin>
-           lcd_MEM_string(AnKat);	//"->|-"
+           lcd_MEM_string(AnKat_str);	//"->|-"
     36f0:	8b e5       	ldi	r24, 0x5B	; 91
     36f2:	90 e0       	ldi	r25, 0x00	; 0
     36f4:	0e 94 55 01 	call	0x2aa	; 0x2aa <lcd_fix_string>
 	   lcd_testpin(diodes.Cathode[0]);
     36f8:	80 91 8a 01 	lds	r24, 0x018A
     36fc:	0e 94 ef 00 	call	0x1de	; 0x1de <lcd_testpin>
-           lcd_MEM_string(KatAn);	//"-|<-"
+           lcd_MEM_string(KatAn_str);	//"-|<-"
     3700:	81 e0       	ldi	r24, 0x01	; 1
     3702:	0e 94 6d 02 	call	0x4da	; 0x4da <UfAusgabe>
            lcd_testpin(diodes.Anode[1]);
@@ -11436,7 +11436,7 @@ TyUfAusgabe:
     37c2:	09 f0       	breq	.+2      	; 0x37c6 <main+0x47c>
     37c4:	5e c1       	rjmp	.+700    	; 0x3a82 <main+0x738>
     37c6:	80 91 6c 01 	lds	r24, 0x016C
-     lcd_MEM_string(AnKat);		//"->|-"
+     lcd_MEM_string(AnKat_str);		//"->|-"
     37ca:	88 23       	and	r24, r24
     37cc:	a1 f1       	breq	.+104    	; 0x3836 <main+0x4ec>
      goto not_known;
@@ -11632,14 +11632,14 @@ TyUfAusgabe:
        if (an_cat) {
     3900:	08 c0       	rjmp	.+16     	; 0x3912 <main+0x5c8>
     3902:	8b e5       	ldi	r24, 0x5B	; 91
-          lcd_MEM_string(AnKat);	//"->|-"
+          lcd_MEM_string(AnKat_str);	//"->|-"
     3904:	90 e0       	ldi	r25, 0x00	; 0
     3906:	0e 94 55 01 	call	0x2aa	; 0x2aa <lcd_fix_string>
     390a:	03 c0       	rjmp	.+6      	; 0x3912 <main+0x5c8>
     390c:	a4 e1       	ldi	r26, 0x14	; 20
     390e:	9a 2e       	mov	r9, r26
        } else {
-          lcd_MEM_string(KatAn);	//"-|<-"
+          lcd_MEM_string(KatAn_str);	//"-|<-"
     3910:	10 e0       	ldi	r17, 0x00	; 0
     3912:	43 e4       	ldi	r20, 0x43	; 67
     3914:	62 e4       	ldi	r22, 0x42	; 66
@@ -11814,7 +11814,7 @@ TyUfAusgabe:
     3a4e:	f8 01       	movw	r30, r16
     3a50:	86 81       	ldd	r24, Z+6	; 0x06
     3a52:	0d c0       	rjmp	.+26     	; 0x3a6e <main+0x724>
-          lcd_MEM_string(AnKat);	//"->|-"
+          lcd_MEM_string(AnKat_str);	//"->|-"
     3a54:	8c 01       	movw	r16, r24
     3a56:	07 57       	subi	r16, 0x77	; 119
     3a58:	1e 4f       	sbci	r17, 0xFE	; 254
@@ -11830,7 +11830,7 @@ TyUfAusgabe:
     3a6a:	f8 01       	movw	r30, r16
     3a6c:	80 81       	ld	r24, Z
     3a6e:	0e 94 ef 00 	call	0x1de	; 0x1de <lcd_testpin>
-          lcd_MEM_string(KatAn);	//"-|<-"
+          lcd_MEM_string(KatAn_str);	//"-|<-"
     3a72:	0e 94 f1 00 	call	0x1e2	; 0x1e2 <lcd_space>
     3a76:	83 e9       	ldi	r24, 0x93	; 147
           lcd_testpin(diodes.Anode[vak_diode_nr]);
@@ -12106,7 +12106,7 @@ TyUfAusgabe:
           lcd_testpin(diodes.Anode[0]);
     3c06:	80 91 8f 01 	lds	r24, 0x018F
     3c0a:	0a c0       	rjmp	.+20     	; 0x3c20 <main+0x8d6>
-          lcd_MEM_string(AnKat);	//"->|-"
+          lcd_MEM_string(AnKat_str);	//"->|-"
     3c0c:	80 91 8f 01 	lds	r24, 0x018F
     3c10:	0e 94 ef 00 	call	0x1de	; 0x1de <lcd_testpin>
           lcd_testpin(diodes.Cathode[0]);
@@ -12117,7 +12117,7 @@ TyUfAusgabe:
           lcd_testpin(diodes.Cathode[0]);
     3c1c:	80 91 89 01 	lds	r24, 0x0189
     3c20:	0e 94 ef 00 	call	0x1de	; 0x1de <lcd_testpin>
-          lcd_MEM_string(KatAn);	//"-|<-"
+          lcd_MEM_string(KatAn_str);	//"-|<-"
     3c24:	0e 94 f1 00 	call	0x1e2	; 0x1e2 <lcd_space>
     3c28:	83 e9       	ldi	r24, 0x93	; 147
           lcd_testpin(diodes.Anode[0]);

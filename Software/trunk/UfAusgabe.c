@@ -10,9 +10,9 @@ void SerienDiodenAusgabe() {
    first = diode_sequence >> 4;
    second = diode_sequence & 3;
    lcd_testpin(diodes.Anode[first]);
-   lcd_MEM_string(AnKat);	//"->|-"
+   lcd_MEM_string(AnKat_str);	//"->|-"
    lcd_testpin(diodes.Cathode[first]);
-   lcd_MEM_string(AnKat);	//"->|-"
+   lcd_MEM_string(AnKat_str);	//"->|-"
    lcd_testpin(diodes.Cathode[second]);
    UfAusgabe(diode_sequence);
 }

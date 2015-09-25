@@ -165,9 +165,9 @@ void ShowIcons(void) {
  lcd_line3();
  lcd_MEM_string(CapZeich);          // capacitor sign
  lcd_line4();
- lcd_MEM_string(AnKat);       //"->|-"
+ lcd_MEM_string(AnKat_str);       //"->|-"
  lcd_space();
- lcd_MEM_string(KatAn);       //"-|<-"
+ lcd_MEM_string(KatAn_str);       //"-|<-"
 
 
 // show character set

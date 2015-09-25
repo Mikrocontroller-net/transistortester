@@ -3,6 +3,11 @@
 /*  the calibration data at the 2-line or 4-line LCD */
 #ifdef WITH_MENU
 void ShowData(void) {
+#ifdef SamplingADC
+  uint8_t ii,jj,kk;
+  uint16_t cc,dd;
+#endif
+
 #ifdef WITH_ROTARY_SWITCH
 show_page_1:
 #endif
@@ -25,7 +30,7 @@ show_page_2:
   lcd_clear();
 #endif
   /* output line 3 */
-  lcd_MEM_string(RIHI); // "RiHi="
+  lcd_MEM_string(RIHI_str); // "RiHi="
   DisplayValue16(RRpinPL,-1,LCD_CHAR_OMEGA,3);
 #if (LCD_LINES > 3)
   lcd_line4();
@@ -33,7 +38,7 @@ show_page_2:
   lcd_line2();
 #endif
   /* output line 4 */
-  lcd_MEM_string(RILO); // "RiLo="
+  lcd_MEM_string(RILO_str); // "RiLo="
   DisplayValue16(RRpinMI,-1,LCD_CHAR_OMEGA,3);
 
   wait_for_key_ms(MIDDLE_WAIT_TIME);
@@ -81,8 +86,8 @@ show_page_4:
   /* output line 8 */
   lcd_MEM2_string(REF_R_str);  // "REF_R="
   i2lcd((int8_t)eeprom_read_byte((uint8_t *)(&RefDiff)));
-  wait_for_key_ms(MIDDLE_WAIT_TIME);
 #ifdef WITH_ROTARY_SWITCH
+  wait_for_key_ms(MIDDLE_WAIT_TIME);
   if (rotary.incre > FAST_ROTATION) return;	// fast rotation ends the function
  #if (LCD_LINES > 3)
   if (rotary.count < -1) goto show_page_1;
@@ -93,7 +98,52 @@ show_page_4:
   if (rotary.count < -1) goto show_page_3;
   if (rotary.count < 0) goto show_page_4;
  #endif
+ #if defined(SamplingADC) && (LCD_LINES < 4)
+show_page_5:
+ #endif
+#else
+  wait_for_key_ms(MIDDLE_WAIT_TIME);
 #endif
+
+#ifdef SamplingADC
+  /* modified output from sampling_cap_calibrate */
+  lcd_set_cursor((LCD_LINES-1),0);      // set for initial clear screen
+  for (ii=0;ii<=2;ii++)
+    for (jj=0;jj<=2;jj++)
+       if (ii != jj) {
+          kk = (ii * 3) + jj - 1;
+          cc = eeprom_read_word((void *)(c_zero_tab2_lo+kk));
+          dd = eeprom_read_word((void *)(c_zero_tab2_hi+kk));
+          if (lcd_text_line > (LCD_LINES - 2)) {
+             wait_for_key_ms(MIDDLE_WAIT_TIME);
+ #ifdef WITH_ROTARY_SWITCH
+             if (rotary.incre > FAST_ROTATION) return;	// fast rotation ends the function
+  #if (LCD_LINES > 3)
+             if (rotary.count < -1) goto show_page_1;
+             if (rotary.count < 0) goto show_page_3;
+  #else
+             if (rotary.count < -4) goto show_page_1;
+             if (rotary.count < -3) goto show_page_2;
+             if (rotary.count < -2) goto show_page_3;
+             if (rotary.count < -1) goto show_page_4;
+             if (rotary.count < 0) goto show_page_5;
+  #endif
+ #endif  /* WITH_ROTARY_SWITCH */
+             lcd_clear();
+          } else {  
+	     lcd_next_line(0);
+          }
+          lcd_MEM_string(Csamp0_str);	// "Csamp0 "
+	  lcd_testpin(ii);
+	  lcd_space();
+          lcd_testpin(jj);
+	  lcd_next_line(0);
+	  DisplayValue16(cc,-2,' ',3);
+	  DisplayValue16(dd,-12-2,'F',3);
+       }
+  wait_for_key_ms(MIDDLE_WAIT_TIME);
+
+#endif  /* SamplingADC */
 #ifdef WITH_GRAPHICS
  ShowIcons();		// show all Icons
 #endif

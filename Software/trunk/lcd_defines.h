@@ -8,6 +8,27 @@
 #define SCREEN_WIDTH  128
 #define SCREEN_HEIGHT  64
 
+// configure the LINE_LENGTH and LCD_LINES for character Display
+#ifdef FOUR_LINE_LCD
+ #if FOUR_LINE_LCD == 3
+  #define LCD_LINES 3
+  #define PAGES_PER_LINE 1
+  #ifndef LCD_LINE_LENGTH
+   #define LCD_LINE_LENGTH 16  /* usually a 16 character line */
+  #endif
+ #else
+  #define LCD_LINES 4
+  #define PAGES_PER_LINE 1
+  #ifndef LCD_LINE_LENGTH
+   #define LCD_LINE_LENGTH 20  /* usually a 20 character line */
+  #endif
+ #endif
+#else  /* no FOUR_LINE_LCD */
+  #define PAGES_PER_LINE 1
+  #define LCD_LINES 2
+  #define LCD_LINE_LENGTH 16
+#endif
+
 
 /* *********************************************************************************************************** */
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
@@ -266,7 +287,7 @@
 	#define lcd_cursor_off() lcd_command(CMD_SetDisplayAndCursor | 0x04)
 
 //Addresses of lines
- #if defined(LCD_DOGM) && defined(FOUR_LINE_LCD)
+ #if (defined(LCD_DOGM) && defined(FOUR_LINE_LCD))
   #if FOUR_LINE_LCD == 3
         /* lines for a ST7036 controller, 3 lines */
     	#define LCD_Row1	0x00
@@ -287,6 +308,9 @@
 	#define LCD_Row3	0x14
 	#define LCD_Row4	0x54
   #else
+   #if LCD_LINE_LENGTH < 16
+    #warning LCD_LINE_LENGTH not correctly set!
+   #endif
     	#define LCD_Row1	0x00
 	#define LCD_Row2	0x40
 	#define LCD_Row3	0x10

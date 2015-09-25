@@ -113,10 +113,10 @@ for(ww=0;ww<MAX_REP;ww++) {	// repeat the test MAX_REP times
 				//############################################
    if (tt == 1) {   // output of reference voltage and factors for capacity measurement
       Calibrate_UR();		// get Reference voltage, Pin resistance
-      lcd_MEM2_string(URefT);	//"URef="
+      lcd_MEM2_string(URef_str);	//"URef="
       Display_mV(ref_mv,4);
       lcd_line2();			//Cursor to column 1, row 2
-      lcd_MEM2_string(RHfakt);	//"RHf="
+      lcd_MEM2_string(RHfakt_str);	//"RHf="
       u2lcd(RHmultip);	//lcd_string(utoa(RHmultip, outval, 10));
       ADCconfig.Samples = R_ANZ_MESS;	// set number of ADC reads near to maximum
    }
@@ -134,7 +134,7 @@ for(ww=0;ww<MAX_REP;ww++) {	// repeat the test MAX_REP times
       R_DDR = (1<<PIN_RL2) | (1<<PIN_RL3);	//RL3 to -
       adcmv[2] = W20msReadADC(TP2);
       adcmv[2] -= u680;
-      lcd_MEM_string(RLRL);	// "RLRL"
+      lcd_MEM_string(RLRL_str);	// "RLRL"
    }
 				//############################################
    if (tt == 3) { // how equal are the RH resistors
@@ -150,7 +150,7 @@ for(ww=0;ww<MAX_REP;ww++) {	// repeat the test MAX_REP times
       R_DDR = (1<<PIN_RH2) | (1<<PIN_RH3);	//RH3 to -
       adcmv[2] = W20msReadADC(TP2);
       adcmv[2] -= adcmv[3];
-      lcd_MEM_string(RHRH);	// "RHRH"
+      lcd_MEM_string(RHRH_str);	// "RHRH"
    }
 				//############################################
    if (tt == 4) { // Text release probes
@@ -168,7 +168,7 @@ for(ww=0;ww<MAX_REP;ww++) {	// repeat the test MAX_REP times
 
       R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to GND
       adcmv[2] = W20msReadADC(TP3);
-      lcd_MEM_string(RH1L);	// "RH_Lo="
+      lcd_MEM_string(RH1L_str);	// "RH_Lo="
    }
 				//############################################
    if (tt == 6) { // can we switch the ADC pins to VCC across the R_H resistor?
@@ -181,7 +181,7 @@ for(ww=0;ww<MAX_REP;ww++) {	// repeat the test MAX_REP times
       R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to VCC
       R_PORT = 1<<PIN_RH3;
       adcmv[2] = W20msReadADC(TP3) - ADCconfig.U_AVCC;
-      lcd_MEM_string(RH1H);	// "RH_Hi="
+      lcd_MEM_string(RH1H_str);	// "RH_Hi="
    }
    if (tt == 7) { // is the voltage of all R_H / R_L dividers correct?
       u680 = ((long)ADCconfig.U_AVCC * (PIN_RM + R_L_VAL) / (PIN_RM + R_L_VAL + (unsigned long)R_H_VAL*100));
@@ -197,7 +197,7 @@ for(ww=0;ww<MAX_REP;ww++) {	// repeat the test MAX_REP times
       R_DDR = (1<<PIN_RH3) | (1<<PIN_RL3);	//RH3 to +, RL3 to -
       adcmv[2] = W20msReadADC(TP3);
       adcmv[2] -= u680;
-      lcd_MEM_string(RHRL);	// "RH/RL"
+      lcd_MEM_string(RHRL_str);	// "RH/RL"
    }
 				//############################################
    if (tt > 1) {	// output 3 voltages 
@@ -357,10 +357,10 @@ for (ww=0;ww<120;ww++) {
 
 
 lcd_clear();
-lcd_MEM_string(RIHI);	// "RiHi="
+lcd_MEM_string(RIHI_str);	// "RiHi="
 DisplayValue16(RRpinPL,-1,LCD_CHAR_OMEGA,3);
 lcd_line2();
-lcd_MEM_string(RILO);	// "RiLo="
+lcd_MEM_string(RILO_str);	// "RiLo="
 DisplayValue16(RRpinMI,-1,LCD_CHAR_OMEGA,3);
 last_line_used = 2;
 wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2

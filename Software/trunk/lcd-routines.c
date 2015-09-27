@@ -39,9 +39,9 @@ void lcd_testpin(unsigned char temp) {
 void lcd_space(void) {
    lcd_data(' ');	// output one space to LCD and UART
 }
-void lcd_spaces(uint8_t nn) {
-   // nn >= 128 is caused by overflow!
-   while ((nn != 0) && (nn < 128)) {
+
+void lcd_spaces(int8_t nn) {
+   while (nn > 0) {
      lcd_space();	// output one space to LCD and UART
      nn--;
    }

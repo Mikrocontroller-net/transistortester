@@ -58,8 +58,14 @@ typedef uint8_t byte;
  #define EXTRASPACES
 #endif
 
-const unsigned char RESIS_str_R2[] MEM2_TEXT = {' ',' ',' ',' ',' ',EXTRASPACES ' ','[','R','L',']',0};
-
+// strings to fill out the topline with "[RL]" or "[ R]"
+// they include precisely enough extra space to start from the 7th position on the line
+// if already k characters more have been written, just add k to the starting address
+#ifdef RMETER_WITH_L
+const unsigned char RL_METER_str[] MEM2_TEXT = {' ',' ',' ',' ',' ',EXTRASPACES ' ','[','R','L',']',0};
+#else
+const unsigned char RL_METER_str[] MEM2_TEXT = {' ',' ',' ',' ',' ',EXTRASPACES ' ',' ','[','R',']',0};
+#endif
 
 void show_resis(byte pin1, byte pin2, byte how)
 // can be invoked both from main() and from show_Resis13()
@@ -84,26 +90,26 @@ void show_resis(byte pin1, byte pin2, byte how)
            {
               lcd_MEM_string(Inductor_str+1);            // "LL-"
            }
-              lcd_testpin(pin2);
+           lcd_testpin(pin2);
 
            // second line: measured R value (but that goes on first line if lc_lx!=0), and measured inductance, if applicable
 
  #ifdef SamplingADC
-           if (!lclx0) {  /* Frequency found */
+           if (!lclx0) {  /* inductance measured by sampling method */
               lcd_space();
               RvalOut(ResistorList[0]);		// show Resistance, probably ESR, still on first line
            }
  #endif
            if (how) {
-              lcd_spaces(LCD_LINE_LENGTH - 4 - _lcd_column);
-	      lcd_MEM_string(RL_METER_str);	// " [R]" or "[RL]"
+              // still need to write "[RL]" or "[R]" at the end of first line
+              lcd_MEM_string(RL_METER_str+(_lcd_column-6));	// " [R]" or "[RL]"
            }
  #ifdef SamplingADC
-              uint16_t lc_cpar;    // value of parallel capacitor used for calculating inductance, in pF
            if (!lclx0) {  /* Frequency found */
               lcd_next_line(0);
               DisplayValue(lc_lx,lc_lpre,'H',3);	// output inductance
               lcd_MEM2_string(iF_str);		// " if "
+              uint16_t lc_cpar;    // value of parallel capacitor used for calculating inductance, in pF
               lc_cpar=eeprom_read_word((uint16_t *)&lc_cpar_ee);
   #if (LCD_LINES<3) && (LCD_LINE_LENGTH<17)
               DisplayValue16(lc_cpar,-12,'F',2);	        // on 2-line dispaly show parallel capacitance with only 2 digits to make room for the '+' sign at the end of the line
@@ -165,6 +171,10 @@ void show_resis(byte pin1, byte pin2, byte how)
 void show_Resis13(void) {
   uint8_t key_pressed;
   message_key_released(RESIS_13_str);	// "1-|=|-3 .."
+#ifndef RMETER_WITH_L
+  lcd_set_cursor(0,6);
+  lcd_MEM_string(RL_METER_str);	// " [R]" or "[RL]"
+#endif
 #ifdef POWER_OFF
   uint8_t times;
   for (times=0;times<250;) 
@@ -177,13 +187,11 @@ void show_Resis13(void) {
         GetResistance(TP1, TP3);
 	lcd_line1();		// lcd_set_cursor(0,0);
         if (ResistorsFound != 0) {
-           show_resis(TP1,TP3,1+4);
+           show_resis(TP1,TP3,1);
         } else {		/* no resistor found */
 #ifdef RMETER_WITH_L
            lcd_MEM_string(RESIS_13_str);
-           lcd_MEM_string(RESIS_str_R2+4);    // "   [RL]"
-//           lcd_spaces(LCD_LINE_LENGTH - 4 - _lcd_column);
-//           lcd_MEM_string(RL_METER_str);	// " [R]" or "[RL]"
+           lcd_MEM_string(RL_METER_str+4);	// " [R]" or "[RL]"
 #endif
            lcd_line2();
            lcd_data('?');		// too big

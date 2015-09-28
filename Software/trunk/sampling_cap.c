@@ -197,7 +197,7 @@ void sampling_cap_calibrate()
 //            unsigned int v;
             c=sampling_cap_do(i,j,0,1);
             lcd_clear();
-            lcd_MEM2_string(Csamp0_str);			//output "Csamp0 "
+            lcd_MEM2_string(C0samp_str);			//output "C0samp "
             lcd_space();				// lcd_data(' ');
             lcd_testpin(i);
             lcd_data(' ');

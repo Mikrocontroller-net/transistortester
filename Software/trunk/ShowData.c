@@ -133,7 +133,7 @@ show_page_5:
           } else {  
 	     lcd_next_line(0);
           }
-          lcd_MEM_string(Csamp0_str);	// "Csamp0 "
+          lcd_MEM_string(C0samp_str);	// "C0samp "
 	  lcd_testpin(ii);
 	  lcd_space();
           lcd_testpin(jj);

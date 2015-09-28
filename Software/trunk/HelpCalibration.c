@@ -2,16 +2,17 @@
 // Check is direct included in the main source of the TransistorTester
 // a function with a call from main will use additional 38 bytes of flash
   // define additional variables , ii is already defined in main
+ #define TIME_TO_READ 10000
+  if (UnCalibrated) {
+#ifndef SHORT_UNCAL_MSG
   unsigned int jj;
   char zeich;
   uint8_t space_pos;
   uint8_t line_nr;
   uint8_t sub_line;
- #define TIME_TO_READ 10000
-  jj = 0;
-  if (UnCalibrated) {
     // Output the help text for calibration.
     // The text is formatted for two 16 character display lines.
+    jj = 0;
     zeich = ' ';		// initial value for while loop
     line_nr = LCD_LINES;		// begin with the first LCD line, but don't wait
     while (zeich != (char)0) {	// zero is end of text
@@ -41,6 +42,10 @@
        jj += space_pos;		// start position of line 2
        if((pgm_read_byte(&HelpCalibration_str[jj])) == ' ') jj++; // no space at begin of line
     }  /* end while */
+#else
+    lcd_clear();
+    lcd_MEM_string(HelpCalibration_str);	// only short message!
+#endif
     wait_for_key_ms(TIME_TO_READ);	// key pressed
   }
 #endif

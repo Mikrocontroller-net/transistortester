@@ -706,7 +706,9 @@ End of configuration
 // to different rows, you can hide the ' ' with LCD_CHAR_INSEP.
 // Notice, that the LCD has only 16 character in each line!
  #if defined(LANG_GERMAN)		//deutsch
- const unsigned char HelpCalibration_str[] PROGMEM = {'U','n','k','a','l','i','b','r','i','e','r','t','!',' ',
+ const unsigned char HelpCalibration_str[] PROGMEM = {'U','n','k','a','l','i','b','r','i','e','r','t','!'
+  #ifndef SHORT_UNCAL_MSG
+,' ',
 'Z','u','m',LCD_CHAR_INSEP,
 'K','a','l','i','b','r','i','e','r','e','n',' ',
 
@@ -749,12 +751,16 @@ End of configuration
 'm','i','k','r','o','c','o','n','t','r','o','l','l','e','r','.',' ',
 'n','e','t','/','t','r','a','n','s','i','s','t','o','r',' ',
 
-'t','e','s','t','e','r',' ',0};
+'t','e','s','t','e','r',' '
+  #endif   /* SHORT_UNCAL_MSG */
+,0};
  #define HelpTXT
  #endif
 
  #if defined(LANG_CZECH)	//Tschechisch
- const unsigned char HelpCalibration_str[] PROGMEM = {'N','e','z','k','a','l','i','b','r','o','v','a','n','o','!',' ',
+ const unsigned char HelpCalibration_str[] PROGMEM = {'N','e','z','k','a','l','i','b','r','o','v','a','n','o','!'
+  #ifndef SHORT_UNCAL_MSG
+,' ',
 'P','r','o',LCD_CHAR_INSEP, 'K','a','l','i','b','r','a','c','i',' ',
 
 'z','k','r','a','t','u','j',' ','v','s','e','c','h','n','y',' ',
@@ -797,12 +803,16 @@ End of configuration
 'm','i','k','r','o','c','o','n','t','r','o','l','l','e','r','.',' ',
 
 'n','e','t','/','t','r','a','n','s','i','s','t','o','r',' ',
-'t','e','s','t','e','r',' ',0};
+'t','e','s','t','e','r',' '
+  #endif   /* SHORT_UNCAL_MSG */
+,0};
  #define HelpTXT
  #endif
 
 #if defined(LANG_SLOVAK)	//Slowakisch
- const unsigned char HelpCalibration_str[] PROGMEM = {'>','N','e','k','a','l','i','b','r','o','v','a','n','y','!','<',' ',
+ const unsigned char HelpCalibration_str[] PROGMEM = {'>','N','e','k','a','l','i','b','r','o','v','a','n','y','!','<'
+  #ifndef SHORT_UNCAL_MSG
+,' ',
 'P','r','e',' ','k','a','l','i','b','r','o','v','a','n','i','e',' ',
 
 's','p','o','j',' ','v','s','e','t','k','y',' ','3',' ',
@@ -836,12 +846,16 @@ End of configuration
 'm','i','k','r','o','c','o','n','t','r','o','l','l','e','r','.',' ',
 
 'n','e','t','/','t','r','a','n','s','i','s','t','o','r',' ',
-'t','e','s','t','e','r',' ',0};
+'t','e','s','t','e','r',' '
+  #endif  /* SHORT_UNCAL_MSG */
+,0};
  #define HelpTXT
  #endif
 
  #if defined(LANG_HUNGARIAN)      //Hungarian
- const unsigned char HelpCalibration_str[] PROGMEM = {'N','o','t',' ','c','a','l','i','b','r','a','t','e','d','!',' ',
+ const unsigned char HelpCalibration_str[] PROGMEM = {'N','o','t',' ','c','a','l','i','b','r','a','t','e','d','!'
+  #ifndef SHORT_UNCAL_MSG
+,' ',
 'F','o','r',LCD_CHAR_INSEP,
 'c','a','l','i','b','r','a','t','i','o','n',' ',
 
@@ -884,15 +898,17 @@ End of configuration
 'm','i','k','r','o','c','o','n','t','r','o','l','l','e','r','.',' ',
 
 'n','e','t','/','t','r','a','n','s','i','s','t','o','r',' ',
-'t','e','s','t','e','r',' ',0};
+'t','e','s','t','e','r',' '
+  #endif  /* SHORT_UNCAL_MSG */
+,0};
  #define HelpTXT
  #endif
 
  #if defined(LANG_RUSSIAN)		//russian
 
- const unsigned char HelpCalibration_str[] PROGMEM = {'H','e',LCD_CHAR_INSEP,'o',Cyr_t,Cyr_k,'a',Cyr_l,Cyr_i,Cyr_b,'p','o',Cyr_v,'a',Cyr_n,'!',
-
-Cyr_D,Cyr_l,Cyr_ja,LCD_CHAR_INSEP,Cyr_z,'a',Cyr_p,'y','c',Cyr_k,'a',' ',
+ const unsigned char HelpCalibration_str[] PROGMEM = {'H','e',LCD_CHAR_INSEP,'o',Cyr_t,Cyr_k,'a',Cyr_l,Cyr_i,Cyr_b,'p','o',Cyr_v,'a',Cyr_n,'!'
+  #ifndef SHORT_UNCAL_MSG
+,Cyr_D,Cyr_l,Cyr_ja,LCD_CHAR_INSEP,Cyr_z,'a',Cyr_p,'y','c',Cyr_k,'a',' ',
 
 Cyr_k,'a',Cyr_l,Cyr_i,Cyr_b,'p','o',Cyr_v,Cyr_k,Cyr_i,' ',
 
@@ -970,7 +986,9 @@ Cyr_d,'o',Cyr_k,'y',Cyr_m,'e',Cyr_n,Cyr_t,'a',Cyr_c,Cyr_i,Cyr_ju,' ',
 
 
 
-'t','e','s','t','e','r',' ',0};
+'t','e','s','t','e','r',' '
+  #endif  /* SHORT_UNCAL_MSG */
+,0};
 
  #define HelpTXT
 
@@ -979,7 +997,9 @@ Cyr_d,'o',Cyr_k,'y',Cyr_m,'e',Cyr_n,Cyr_t,'a',Cyr_c,Cyr_i,Cyr_ju,' ',
 
  #if defined(LANG_UKRAINIAN)		//ukrainian
 
- const unsigned char HelpCalibration_str[] PROGMEM = {'B','i',Cyr_d,Cyr_k,'a',Cyr_l,'i',Cyr_b,'p','y',Cyr_j,Cyr_t,'e','!',' ',
+ const unsigned char HelpCalibration_str[] PROGMEM = {'B','i',Cyr_d,Cyr_k,'a',Cyr_l,'i',Cyr_b,'p','y',Cyr_j,Cyr_t,'e','!'
+  #ifndef SHORT_UNCAL_MSG
+,' ',
 
 Cyr_Schtsch,'o',Cyr_b,Cyr_i,LCD_CHAR_INSEP,Cyr_z,'a',Cyr_p,'y','c',Cyr_t,Cyr_i,Cyr_t,Cyr_i,' ', 
 
@@ -1059,14 +1079,18 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 
 'n','e','t','/','t','r','a','n','s','i','s','t','o','r',' ',
 
-'t','e','s','t','e','r',' ',0};
+'t','e','s','t','e','r',' '
+  #endif  /* SHORT_UNCAL_MSG */
+,0};
 
  #define HelpTXT
  #endif
 
  #ifndef HelpTXT
  //default language english
- const unsigned char HelpCalibration_str[] PROGMEM = {'N','o','t',' ','c','a','l','i','b','r','a','t','e','d','!',' ',
+ const unsigned char HelpCalibration_str[] PROGMEM = {'N','o','t',' ','c','a','l','i','b','r','a','t','e','d','!'
+  #ifndef SHORT_UNCAL_MSG
+,' ',
 'F','o','r',LCD_CHAR_INSEP,
 'c','a','l','i','b','r','a','t','i','o','n',' ',
 
@@ -1114,7 +1138,9 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
 'm','i','k','r','o','c','o','n','t','r','o','l','l','e','r','.',' ',
 
 'n','e','t','/','t','r','a','n','s','i','s','t','o','r',' ',
-'t','e','s','t','e','r',' ',0};
+'t','e','s','t','e','r',' '
+  #endif  /* SHORT_UNCAL_MSG */
+,0};
  #endif
 #endif
 
@@ -1132,7 +1158,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  const unsigned char Inductor_str[] MEM_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_INDUCTOR1, LCD_CHAR_INDUCTOR2,LCD_CHAR_LINE1,0};
 #endif
 #if defined (WITH_SELFTEST) || !defined (BAT_CHECK)
- const unsigned char VERSION_str[] MEM2_TEXT = "Version 1.12k";
+ const unsigned char VERSION_str[] MEM_TEXT = "Version 1.12k";
 #endif
 #ifdef SHOW_ICE
  const unsigned char ICE0_str[] MEM2_TEXT = "ICE0=";
@@ -1155,7 +1181,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  const unsigned char RILO_str[] MEM_TEXT = "Ri_Lo=";
  const unsigned char C0_str[] MEM_TEXT = "C0 ";
  #ifdef SamplingADC
- const unsigned char Csamp0_str[] MEM2_TEXT = "Csamp0 ";
+ const unsigned char C0samp_str[] MEM2_TEXT = "C0samp ";
  #endif
  const unsigned char T50HZ[] MEM_TEXT = " 50Hz";
 #endif
@@ -1165,7 +1191,7 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  const unsigned char C_ESR_str[] MEM2_TEXT = "C+ESR@TP1:3";
 #endif
 
-#if FLASHEND > 0x1fff
+#if FLASHEND > 0x3fff
  #ifdef RMETER_WITH_L
 const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_RESIS1, LCD_CHAR_RESIS2,LCD_CHAR_LINE1, LCD_CHAR_INDUCTOR1, LCD_CHAR_INDUCTOR2, LCD_CHAR_LINE1, '1'+TP3,' ',0};
  #else
@@ -1174,7 +1200,7 @@ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR
 
  const unsigned char CAP_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR_CAP, LCD_CHAR_LINE1,'1'+TP3,' ',0};
  const unsigned char CMETER_13_str[] MEM2_TEXT = {"[C]"};
-#endif
+#endif  /* FLASHEND > 0x3fff */
 
 #ifdef SHOW_R_DS
  const unsigned char RDS_str[] MEM_TEXT = {"RDS="};
@@ -1348,10 +1374,10 @@ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR
 
  #if FLASHEND > 0x1fff
   extern uint16_t LogTab[];
-  extern const unsigned char ESR_str[];
+  extern const unsigned char ESR_str[] MEM_TEXT;
   extern const unsigned char VLOSS_str[] MEM_TEXT ;
-  extern const unsigned char Inductor_str[];
-  extern const unsigned char Lis_str[];
+  extern const unsigned char Inductor_str[] MEM_TEXT;
+  extern const unsigned char Lis_str[] MEM_TEXT;
  #endif
 
  extern const unsigned char AnKat_str[] MEM_TEXT ;
@@ -1383,17 +1409,17 @@ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR
 #endif
 
 #ifdef WITH_MENU
-extern const unsigned char FatTP2_str[];
-extern const unsigned char VERSION_str[];
-extern const unsigned char C_ESR_str[];
-extern const unsigned char REF_C_str[];
-extern const unsigned char REF_R_str[];
-extern const unsigned char R0_str[];
-extern const unsigned char RIHI_str[];
-extern const unsigned char RILO_str[];
+extern const unsigned char FatTP2_str[] MEM2_TEXT;
+extern const unsigned char VERSION_str[] MEM_TEXT;
+extern const unsigned char C_ESR_str[] MEM2_TEXT;
+extern const unsigned char REF_C_str[] MEM2_TEXT;
+extern const unsigned char REF_R_str[] MEM2_TEXT;
+extern const unsigned char R0_str[] MEM2_TEXT;
+extern const unsigned char RIHI_str[] MEM_TEXT;
+extern const unsigned char RILO_str[] MEM_TEXT;
 #endif
-extern const unsigned char C0_str[];
-extern const unsigned char Csamp0_str[] MEM2_TEXT;
+extern const unsigned char C0_str[] MEM_TEXT;
+extern const unsigned char C0samp_str[] MEM2_TEXT;
 #if FLASHEND > 0x1fff
 extern const unsigned char CAP_13_str[] MEM2_TEXT;
 extern const unsigned char RDS_str[] MEM_TEXT;

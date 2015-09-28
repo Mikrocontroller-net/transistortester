@@ -101,8 +101,10 @@ void show_resis(byte pin1, byte pin2, byte how)
            }
  #endif
            if (how) {
-              // still need to write "[RL]" or "[R]" at the end of first line
-              lcd_MEM_string(RL_METER_str+(_lcd_column-6));	// " [R]" or "[RL]"
+              // still need to write "[RL]" or "[R]" at the end of first line, if it fits
+              if (_lcd_column<=LCD_LINE_LENGTH-4) {
+                 lcd_MEM_string(RL_METER_str+(_lcd_column-6));	// " [R]" or "[RL]"
+              }
            }
  #ifdef SamplingADC
            if (!lclx0) {  /* Frequency found */

@@ -107,7 +107,7 @@ skip:
    ipk--;
 //         if (d>=1) { wdt_reset(); uart_newline();uart_putc('i'); uart_int(ipk); uart_int(prevpeakx); uart_int(firstpeakx); uart_newline();}
    return (prevpeakx-firstpeakx+(ipk>>1))/ipk;
-}
+}  /* end of peaksearch */
 
 
 
@@ -129,7 +129,12 @@ uint16_t lc_cpar;    // value of parallel capacitor used for calculating inducta
    lc_fx=0;
    lc_qx=0;
    lc_lx=0;
-   if (PartFound != PART_RESISTOR) return;   // can happen if we're invoke when there's both a diode and a resistor; don't try to measure inductance then
+   if ((PartFound != PART_RESISTOR) || (inductor_lpre > 0)) {
+      // can happen if we're invoke when there's both a diode and a resistor;
+      // don't try to measure inductance then
+      // the other reason is a too big resistance, 2100 Ohm is found by ReadInductance
+      return;
+   }
 
    byte i=0;
 
@@ -139,7 +144,19 @@ uint16_t lc_cpar;    // value of parallel capacitor used for calculating inducta
 
 
    // first, acquire data at maximum speed:
-   ADMUX=HighPin|(1<<REFS0)|(1<<REFS1);   // use built-in reference, about 1.1 V; that's enough, because peaks more than about 0.6 V are not of interest (because the negative peak would be chopped by the protection diodes)
+#if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
+   ADMUX=HighPin|(0<<REFS0)|(1<<REFS1);   // use built-in reference, about 1.1 V;
+#else
+   ADMUX=HighPin|(1<<REFS0)|(1<<REFS1);   // use built-in reference, about 1.1 V;
+   // that's enough, because peaks more than about 0.6 V are not of interest
+   // (because the negative peak would be chopped by the protection diodes)
+#endif
+#ifdef NO_AREF_CAP
+    wait100us(); /* time for voltage stabilization */
+#else
+    wait_about10ms(); /* time for voltage stabilization */
+#endif
+
    samplingADC(0, uu, 0, HiPinR_L, 0, HiPinR_L, HiPinR_L);     // floats the HiPin during measurement, thus not loading the tuned circuit
 //   uart_newline(); for (i=0;i<255;i++) { uart_putc('A'); uart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
 
@@ -147,7 +164,13 @@ uint16_t lc_cpar;    // value of parallel capacitor used for calculating inducta
    unsigned shift=0;
    // check how long until signal reaches 0: that gives us a first guess of 1/4 of the resonance period (because we apply an impulse, so we start at the maximum of the sinewave)
    for (d=2;d<250;d++) if (uu[d]==0) break;
-   if (d==250) goto ret;  // no zero crossing found, give up
+   if (d==250) {
+      // no periodicity seen, so no valid results
+//      lc_lx=0;
+//      lc_fx=0;
+//      lc_qx=0;
+      return;
+   }
 
    d--;                 // improves estimate slightly (experimentally)
    uint16_t par=samplingADC_twopulses|(4<<8);   // default: two pulses at minimal distance
@@ -228,6 +251,12 @@ noavg:;
 
 
    // check whether this estimate is plausible
+   // probably inductor_lpre should be checked:
+   // inductor_lpre = 0, no Inductor found 
+   // unductor_lpre = 1,  rx is above 2100 Ohm
+   // inductor_lpre = -5, Inductance searched without 680 Ohm, rx is below 24 Ohm
+   // inductor_lpre = -4,  Inductance is searched with 680i Ohm, 24 < rx < 2100
+   // probably search of 
    if (inductor_lx>2) {
       // if traditional measurement gave some meaningful-looking value ( > 20 uH, but that's rather arbitrary)
       // discard the new one, it's probably self-resonance
@@ -236,19 +265,17 @@ noavg:;
    }
 
    // freq/Hz = F_CPU/d
+   if (period==0) {
+      lc_qx = 0;
+      lc_lx = 0;
+      return;
+   }
    v= (unsigned long)period<<1;
    lc_fx=((F_CPU<<(7-shift))/v);
 
-   if (period==0) {
-ret:
-      // no periodicity seen, so no valid results
-      lc_lx=0;
-      lc_fx=0;
-      lc_qx=0;
-   } else {
-      if (inductor_lpre == 0) inductor_lpre = -1; 	/* no ESR measurement! */
-   }
-}
+   if (inductor_lpre >= 0) inductor_lpre = -1; 	/* no ESR measurement! */
+   return;
+} /* end of sampling_lc() */
 
 
 
@@ -280,7 +307,7 @@ void sampling_lc_calibrate()
 //      lcd_line2();
 //      lcd_MEM2_string(NotFound_str);		// "Not found!"
 //      lcd_clear_line();
-//      wait_about1s();
+//      wait_about1s();			// time to read the Not found message
 //   }
 //   wait_for_key_5s_line2();
 }

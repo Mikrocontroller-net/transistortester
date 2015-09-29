@@ -21,7 +21,9 @@ void GetVloss() {
   uint8_t HiPinR_L;
   uint8_t LoADC;
 
-  if (cap.v_loss > 0) return;		// Voltage loss is already known
+  if (cap.v_loss > 0) {
+     return;		// Voltage loss is already known (big Capacitor)
+  }
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
   LoADC = pgm_read_byte((&PinRLRHADCtab[6])+cap.ca-TP1) | TXD_MSK;
 #else
@@ -36,15 +38,16 @@ void GetVloss() {
   R_DDR = HiPinR_L;			// switch R_L port for HighPin to output (GND)
   adcv[0] = ReadADC(cap.cb);		// voltage before any load 
 // ******** should adcv[0] be measured without current???
-  if (cap.cpre_max > -9) return;	// too much capacity
+  if ((cap.cpre_max > -9) || (cap.cpre_max < -12)) return;	// too much or too less capacity
   lval.dw = cap.cval_max;
-  for (ii=cap.cpre_max+12;ii<4;ii++) {
+  for (ii=cap.cpre_max+15;ii<7;ii++) {
      lval.dw = (lval.dw + 5) / 10;
   }
-  if ((lval.dw == 0) || (lval.dw > 5000)) {
+  if (lval.dw > 5000) {
      /* capacity more than 50uF, Voltage loss is already measured  */
      return;
   }
+  if (lval.w[0] < 5) return;		// Capacity below 5nF
   R_PORT = HiPinR_L;			//R_L to 1 (VCC) 
   R_DDR = HiPinR_L;			//switch Pin to output, across R to GND or VCC
   for (tmpint=0;tmpint<lval.w[0];tmpint+=2) {

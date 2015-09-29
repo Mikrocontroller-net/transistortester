@@ -325,7 +325,7 @@ RefVoltage.o: ../RefVoltage.S $(MKFILES)
 i2lcd.o: ../i2lcd.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-ReadADC.o: ../ReadADC.S $(MKFILES)
+ReadADC.o: ../ReadADC.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 sleep_5ms.o: ../sleep_5ms.S $(MKFILES)

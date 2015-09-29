@@ -274,7 +274,6 @@ void GetFrequency(uint8_t range) {
            FDIV_PORT &= ~(1<<FDIV_PIN);			// switch off the 16:1 divider
         }
      }
-//     wait_about2s();
  #endif
 //     taste += wait_for_key_ms(SHORT_WAIT_TIME/2);
      TIMSK0 = 0;		// disable all timer 0 interrupts

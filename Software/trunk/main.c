@@ -101,7 +101,7 @@
 	     // can happen, if any loop in the Program doen't finish.
 	     lcd_line1();
              lcd_MEM_string(TestTimedOut);	//Output Timeout
-	     wait_about3s();				//wait for 3 s
+	     wait_about3s();			// time to read the Timeout message
 	#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
 	     lcd_powersave();			// set graphical display to power save mode
 	#endif
@@ -155,6 +155,9 @@
 	#endif
 	  ADCconfig.RefFlag = 0;
 	  Calibrate_UR();		// get Ref Voltages and Pin resistance
+	#ifdef WDT_enabled
+	  wdt_enable(WDTO_2S);		//Watchdog on
+	#endif
 	#ifdef WITH_MENU
 	  if (ii >= 60) {
 	     function_menu();		// selection of function
@@ -163,7 +166,7 @@
 
 	//*****************************************************************
 	//Entry: if start key is pressed before shut down
-	start:
+	loop_start:
 	#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
 	  lcd_command(CMD_DISPLAY_ON);
 	  lcd_command(CMD_SET_ALLPTS_NORMAL);		// 0xa4
@@ -178,13 +181,9 @@
 	  // Battery check is selected
         Battery_check();
 	#else
-	  lcd_MEM2_string(VERSION_str);		// if no Battery check, Version .. in row 1
+	  lcd_MEM_string(VERSION_str);		// if no Battery check, Version .. in row 1
 	#endif	/* BAT_CHECK */
-	#ifdef WDT_enabled
-	  wdt_enable(WDTO_2S);		//Watchdog on
-	#endif
 
-	//  wait_about1s();			// add more time for reading batterie voltage
 	  // begin tests
 	#if FLASHEND > 0x1fff
 	  if (WithReference) {
@@ -198,7 +197,7 @@
 		 lcd_MEM_string(VCC_str);		// VCC=
 		 Display_mV(ADCconfig.U_AVCC,3);	// Display 3 Digits of this mV units
 		 lcd_refresh();			// write the pixels to display, ST7920 only
-		 wait_about1s();
+		 wait_about1s();		// time to read the VCC= message
 	     }
 	  }
 	#endif
@@ -219,8 +218,8 @@
 	 #else
 	     Display_mV((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,3);	// Display 3 Digits of this mV units
 	 #endif
-	     lcd_refresh();			// write the pixels to display, ST7920 only
-	     wait_about300ms();
+	     lcd_refresh();		// write the pixels to display, ST7920 only
+	     wait_about300ms();		// delay to read the Vext= message
 	  }
 	#endif /* WITH_VEXT */
 
@@ -334,6 +333,7 @@
   }
 
   if (PartFound == PART_CAPACITOR) {
+#if 0
 //     lcd_MEM_string(Capacitor);
      lcd_testpin(cap.ca);		//Pin number 1
      lcd_MEM_string(CapZeich);		// capacitor sign
@@ -368,10 +368,22 @@
 #if FLASHEND > 0x3fff
      if ((cap.ca + cap.cb) == (TP1 + TP3)) {
         show_Cap13();		// automatic capacity measurement
-        goto start;
+        goto loop_start;
      }
 #endif
      goto tt_end;
+#else
+ #if FLASHEND > 0x3fff
+     if ((cap.ca + cap.cb) == (TP1 + TP3)) {
+        show_Cap13();		// repeated capacity measurement
+        goto loop_start;
+     }
+     show_cap(0);		// show capacity in normal way and measure additional parameters
+ #else
+     show_cap_simple();		// show capacity in normal way and measure additional parameters
+ #endif
+     goto tt_end;
+#endif
   } /* end PartFound == PART_CAPACITOR */
 
   // ========================================
@@ -945,7 +957,7 @@ resistor_out:
        if ((ResistorList[0] == 1) && (NumOfDiodes == 0)) {
           // is the TP1:TP3 resistor and no additional diode
           show_Resis13();		// call of the special resistor measurement
-          goto start;
+          goto loop_start;			// key is pressed!
        }
  #endif
        show_resis(rpins.pb[0],rpins.pb[1],0);
@@ -1084,10 +1096,10 @@ wait_again:
   {
      // menu selected by long key press or rotary switch
      function_menu();		// start the function menu
-     goto start;
+     goto loop_start;
   }
 #endif
-  if (ii != 0 ) goto start;	// key is pressed again, repeat measurement
+  if (ii != 0 ) goto loop_start;	// key is pressed again, repeat measurement
 #ifdef WITH_ROTARY_SWITCH
   if (rotary.incre > 0) goto wait_again;
 #endif
@@ -1099,7 +1111,7 @@ wait_again:
  #endif
  #if POWER_OFF+0 > 1
   if ((empty_count < POWER_OFF) && (mess_count < POWER2_OFF)) {
-     goto start;			// repeat measurement POWER_OFF times
+     goto loop_start;			// repeat measurement POWER_OFF times
   }
  #endif
   // only one Measurement requested, shut off
@@ -1119,7 +1131,7 @@ wait_again:
   lcd_cursor_off();
   #include "HelpCalibration.c"
 #endif
-  goto start;	// POWER_OFF not selected, repeat measurement
+  goto loop_start;	// POWER_OFF not selected, repeat measurement
 //  return 0;
 
 end3:
@@ -1155,13 +1167,14 @@ void init_parts(void) {
   ResistorChecked[0] = 0;
   ResistorChecked[1] = 0;
   ResistorChecked[2] = 0;
-  cap.ca = 0;
-  cap.cb = 0;
+  cap.ca = TP1;
+  cap.cb = TP3;
 #if FLASHEND > 0x1fff
   inductor_lpre = 0;		// mark as zero
+  cap.v_loss = 0;		// set Vloss to zero
 #endif
   cap.cval_max = 0;		// set max to zero
-  cap.cpre_max = -12;	// set max to pF unit
+  cap.cpre_max = -15;	// set max to fF unit
 }
 
 

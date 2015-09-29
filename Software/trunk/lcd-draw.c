@@ -41,6 +41,8 @@ void lcd_draw_trans_pins( char dxb, char dyb)
 }
 
 //*****************************************************************************
+ #if !defined(SamplingADC) || (FLASHEND > 0x7fff)
+ // not enough Flash space for ShowIcons at ATmega328
 // Show all Icons on the screen, up to four at one screen
 void ShowIcons(void) {
 #define ShowTime 15000  /* 15 seconds wait time, or key press, or rotary encoder movement */
@@ -61,11 +63,11 @@ void ShowIcons(void) {
  lcd_big_icon(N_JFET|LCD_LOWER_RIGHT);
  lcd_update_icon(bmp_p_jfet);	// update to P_JFET
  lcd_set_cursor(2,1);
- lcd_data('N');
+ lcd_data('N');		// N-Type
  lcd_data('-');
  lcd_MEM_string(jfet_str);
  lcd_set_cursor(2,1+(LCD_LINE_LENGTH / 2));
- lcd_data('P');
+ lcd_data('P');		// P-Type
  lcd_data('-');
  lcd_MEM_string(jfet_str);
  wait_for_key_ms(ShowTime);
@@ -75,14 +77,14 @@ void ShowIcons(void) {
  lcd_big_icon(N_E_IGBT|LCD_UPPER_RIGHT);
  lcd_update_icon(bmp_p_e_igbt);	// update to P-E-IGBT
  lcd_set_cursor(5,0);
- lcd_data('N');
+ lcd_data('N');		// N-Type
  lcd_data('-');
- lcd_data('E');
+ lcd_data('E');		// Enhancement Type
  lcd_MEM_string(igbt_str);
  lcd_set_cursor(6,(LCD_LINE_LENGTH / 2));
- lcd_data('P');
+ lcd_data('P');		// P-Type
  lcd_data('-');
- lcd_data('E');
+ lcd_data('E');		// Enhancement Type
  lcd_MEM_string(igbt_str);
  wait_for_key_ms(ShowTime);
 
@@ -92,14 +94,14 @@ void ShowIcons(void) {
  lcd_big_icon(N_E_IGBT|LCD_LOWER_RIGHT);
  lcd_update_icon(bmp_p_d_igbt);	// update to P-D-IGBT
  lcd_set_cursor(1,0);
- lcd_data('N');
+ lcd_data('N');		// N-Type
  lcd_data('-');
- lcd_data('D');
+ lcd_data('D');		// Depletion Type
  lcd_MEM_string(igbt_str);
  lcd_set_cursor(2,(LCD_LINE_LENGTH / 2));
- lcd_data('P');
+ lcd_data('P');		// P-Type
  lcd_data('-');
- lcd_data('D');
+ lcd_data('D');		// Depletion Type
  lcd_MEM_string(igbt_str);
  wait_for_key_ms(ShowTime);
 
@@ -108,14 +110,14 @@ void ShowIcons(void) {
  lcd_big_icon(N_E_MOS|LCD_UPPER_RIGHT);
  lcd_update_icon(bmp_p_e_mos);  // update to P-E-MOS
  lcd_set_cursor(5,0);
- lcd_data('N');
+ lcd_data('N');		// N-Type
  lcd_data('-');
- lcd_data('E');
+ lcd_data('E');		// Enhancement Type
  lcd_MEM_string(mosfet_str);
  lcd_set_cursor(6,(LCD_LINE_LENGTH / 2));
- lcd_data('P');
+ lcd_data('P');		// P-Type
  lcd_data('-');
- lcd_data('E');
+ lcd_data('E');		// Enhancement Type
  lcd_MEM_string(mosfet_str);
  wait_for_key_ms(ShowTime);
 
@@ -125,14 +127,14 @@ void ShowIcons(void) {
  lcd_big_icon(N_E_MOS|LCD_LOWER_RIGHT);
  lcd_update_icon(bmp_p_d_mos);  // update to P-D-MOS
  lcd_set_cursor(1,1);
- lcd_data('N');
+ lcd_data('N');		// N-Type
  lcd_data('-');
- lcd_data('D');
+ lcd_data('D');		// Depletion Type
  lcd_MEM_string(mosfet_str);
  lcd_set_cursor(2,1+(LCD_LINE_LENGTH / 2));
- lcd_data('P');
+ lcd_data('P');		// P-Type
  lcd_data('-');
- lcd_data('D');
+ lcd_data('D');		// Depletion Type
  lcd_MEM_string(mosfet_str);
  wait_for_key_ms(ShowTime);
  #if (ICON_ELEMENTS == 14)
@@ -185,7 +187,7 @@ void ShowIcons(void) {
  wait_for_key_ms(ShowTime);
 
  lcd_clear();
- #ifdef LCD_CYRILLIC
+  #ifdef LCD_CYRILLIC
  for (cc=0;cc<((Cyr_ja+1-Cyr_B)+(Cyr_schtsch+1-Cyr_D));cc++) {
    if ((cc%16) == 0) {
      // begin new line
@@ -201,8 +203,9 @@ void ShowIcons(void) {
  wait_for_key_ms(ShowTime);
 
  lcd_clear();
- #endif
+  #endif
 
 }
-#endif
+ #endif  /* defined(SamplingADC) || (FLASHEND > 0x7fff)  */
+#endif  /* WITH_GRAPHICS */
 

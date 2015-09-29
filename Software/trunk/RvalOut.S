@@ -64,8 +64,8 @@ RvalOut:		; void RvalOut(uint8_t nrr)
  	cpc	r25, r1
  	brcc	ad1d8e 		; (ResistorVal[nrr] < 100)
  	lds	r18, inductor_lpre
- 	and	r18, r18
- 	brne	ad1d8e 		; (inductor_lpre == 0)
+	sbrc	r18, 7		; minus bit set?
+ 	rjmp	ad1d8e 		; (inductor_lpre >= 0)
 	mov	r24,r16
 	ACALL	Rnum2pins;	; pins = Rnum2pins(nrr)
         mov	r22, r25

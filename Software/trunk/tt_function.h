@@ -55,6 +55,8 @@ void show_C_ESR();			// show big capacity values and ESR
 void show_Resis13();			// show Resistor value at TP1:TP3 , measuring continuously
 void show_Cap13(void);		        // show Capacitor value at TP1:TP3, measuring continuously
 void show_resis(uint8_t pin1, uint8_t pin2, uint8_t how);   // show resistor (and inductance) between pin1 and pin2
+void show_cap(uint8_t how);		// show capacity and measure additional values
+void show_cap_simple(void);		// show capacity and measure additional values without [C]
 void ReadBigCap(uint8_t HighPin, uint8_t LowPin);	//capacity measurement only for big capacitors
 void CheckRotaryEncoder(void);				// check rotary puls generator
 void check_rotary(void);			// check state of rotary switch	for menu function

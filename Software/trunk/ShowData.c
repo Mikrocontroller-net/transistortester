@@ -12,7 +12,7 @@ void ShowData(void) {
 show_page_1:
 #endif
   lcd_clear();
-  lcd_MEM2_string(VERSION_str);	// "Version x.xxk"
+  lcd_MEM_string(VERSION_str);	// "Version x.xxk"
   lcd_line2();
   lcd_MEM2_string(R0_str);	// "R0="
   DisplayValue16(eeprom_read_byte(&EE_ESR_ZEROtab[2]),-2,' ',3);
@@ -144,7 +144,7 @@ show_page_5:
   wait_for_key_ms(MIDDLE_WAIT_TIME);
 
 #endif  /* SamplingADC */
-#ifdef WITH_GRAPHICS
+#if  defined(WITH_GRAPHICS) && !defined(SamplingADC)
  ShowIcons();		// show all Icons
 #endif
 }

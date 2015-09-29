@@ -332,10 +332,10 @@ ifneq ($(PARTNO),m8)
 OBJECTS += get_log.o
 endif
 OBJECTS += main.o Battery_check.o CheckPins.o GetResistance.o ChargePin10ms.o EntladePins.o
-OBJECTS +=  ReadCapacity.o GetRLmultip.o Calibrate_UR.o
+OBJECTS +=  ReadCapacity.o GetRLmultip.o Calibrate_UR.o show_Resis_Cap.o
 ifneq ($(PARTNO),m8)
 OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o GetFrequency.o function_menu.o message_key_released.o ReadBigCap.o
-OBJECTS += CheckRotaryEncoder.o CalibrationCap.o ShowData.o show_Resis_Cap.o
+OBJECTS += CheckRotaryEncoder.o CalibrationCap.o ShowData.o
 endif
 ifndef USE_EEPROM
 OBJECTS +=  EE_check_init.o

@@ -59,5 +59,5 @@ void RefVoltage(void) {
   ADCconfig.U_Bandgap = (referenz + REF_R_KORR);
 #endif
   adc_internal_reference = ADCconfig.U_Bandgap;
- }
+ } /* end of RefVoltage */
 

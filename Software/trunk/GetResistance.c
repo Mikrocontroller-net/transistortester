@@ -77,8 +77,8 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
   wdt_reset();
 // U_SCALE can be set to 4 for better resolution of ReadADC result
 #if U_SCALE != 1
-  ADCconfig.U_AVCC *= U_SCALE;	// scale to higher resolution, mV scale is not required
-  ADCconfig.U_Bandgap *= U_SCALE;
+  ADCconfig.U_AVCC = (adc_vcc_reference * U_SCALE);	// scale to higher resolution, mV scale is not required
+  ADCconfig.U_Bandgap = (adc_internal_reference * U_SCALE);
 #endif
 #if R_ANZ_MESS != ANZ_MESS
   ADCconfig.Samples = R_ANZ_MESS;	// switch to special number of repetitions
@@ -235,7 +235,7 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
   }
   testend:			// end of resistor measurement
 #if U_SCALE != 1
-  ADCconfig.U_AVCC /= U_SCALE;		// scale back to mV resolution
+  ADCconfig.U_AVCC = adc_vcc_reference;	// scale to higher resolution, mV scale is not required
   ADCconfig.U_Bandgap = adc_internal_reference;	// set back to normal resolution
 #endif
 #if R_ANZ_MESS != ANZ_MESS

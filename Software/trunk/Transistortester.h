@@ -723,9 +723,9 @@ End of configuration
 
 'd','e','r',' ','T','a','s','t','e',' ','i','n',' ','2','s','.',' ',
 'T','r','e','n','n','e',' ','d','i','e',' ','P','i','n','n','e',
-#ifdef TPCAP
+   #ifdef TPCAP
 '.',' ',
-#else
+   #else
 ' ','e','r','s','t',' ','n','a','c','h',' ','d','e','r',' ',
 'M','e','l','d','u','n','g',' ',
 
@@ -742,7 +742,7 @@ End of configuration
 'm','i','t',' ','m','e','h','r',' ','a','l','s',' ','1','0','0','n','F',' ',
 
 'a','n',' ','P','i','n',LCD_CHAR_INSEP,'1',LCD_CHAR_INSEP,'+',LCD_CHAR_INSEP,'3',' ','a','n','.',' ',
-#endif
+   #endif
 'S','o','f','t','w','a','r','e',' ','u','n','d',' ',
 
 'D','o','k','u','m','e','n','t','a','t','i','o','n',' ',
@@ -1401,7 +1401,7 @@ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR
  #if FLASHEND > 0x3fff
   extern const unsigned char PinRHtab[];
  #endif
-  extern const unsigned char PinADCtab[];
+//  extern const unsigned char PinADCtab[];
 #endif /* if defined (MAIN_C) */
 
 #ifdef WITH_GRAPHICS

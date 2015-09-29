@@ -368,7 +368,7 @@ GetRLmultip.o: ../GetRLmultip.S $(MKFILES)
 UfAusgabe.o: ../UfAusgabe.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-RvalOut.o: ../RvalOut.S $(MKFILES)
+RvalOut.o: ../RvalOut.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 PinLayout.o: ../PinLayout.S $(MKFILES)

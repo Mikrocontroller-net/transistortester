@@ -62,7 +62,7 @@ static unsigned int mylog(unsigned int y)
    bb = (bb2>>1)*(y>>8);            
    a += y * (unsigned long int)(bb - (bb>>3));
    return a>>16;
-}
+} /* end mylog */
 
 
 static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte calibrating)
@@ -89,6 +89,12 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
    wait100us();
 
    ADMUX = HighPin|(1<<REFS0);	// switch Multiplexer to Highpin and use 5V reference voltage
+#ifdef NO_AREF_CAP
+    wait100us(); /* time for voltage stabilization */
+#else
+    wait10ms(); /* time for voltage stabilization */
+#endif
+
    memset(uu,0,sizeof(uu));
 
    // we'll sum over N1..N2 (inclusive), excluding N3..(N4-1)
@@ -173,7 +179,7 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
       else c3-= eeprom_read_word(c_zero_tab2_lo+k);
    }
    return c3;
-}
+}  /* end sampling_cap_do */
 
 
 
@@ -213,7 +219,7 @@ void sampling_cap_calibrate()
             eeprom_write_word((void*)(c_zero_tab2_lo+k),c);
             eeprom_write_word((void*)(c_zero_tab2_hi+k),d);
          }
-}
+} /* end sampling_cap_calibrate */
 
 
 #endif   // SamplingADC

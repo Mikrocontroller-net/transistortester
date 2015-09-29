@@ -93,9 +93,10 @@ COMMON trans_t ntrans;		// parameters of N type transistor
 COMMON trans_t *_trans;		// pointer to trans_t structure
 
 COMMON uint8_t tmpval, tmpval2;
-COMMON unsigned int ref_mv;            //Reference-voltage  in mV units (as read with ADC)
+COMMON unsigned int ref_mv;      //Reference-voltage  in mV units (as read with ADC)
 COMMON unsigned int ref_mv_offs;       //Reference-voltage  in mV units with eeprom offset for C
 COMMON unsigned int adc_internal_reference;  //internal reference voltage of ADC in mV units
+COMMON unsigned int adc_vcc_reference;  // reference voltage of ADC,if switched to VCC in mV units
 COMMON  unsigned int RHmultip;	// Multiplier for capacity measurement with R_H (470KOhm)
 
 #ifdef WITH_MENU
@@ -110,6 +111,7 @@ COMMON unsigned int pinchange_max;
 #endif
 
 COMMON struct cap_t {
+  // Attention! If you change this structure, you must also change defines in GetESR.S !!!!
   unsigned long cval;		// capacitor value 
   unsigned long cval_max;	//capacitor with maximum value
   union t_combi{

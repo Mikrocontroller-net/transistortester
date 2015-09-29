@@ -242,7 +242,7 @@ CFLAGS += -DPOWER_OFF
 
 # Option BAT_CHECK enables the Battery Voltage Check, otherwise the SW Version is displayed instead of Bat.
 # BAT_CHECK should be set for battery powered tester version.
-CFLAGS += -DBAT_CHECK
+#CFLAGS += -DBAT_CHECK
 
 # The BAT_OUT option enables Battery Voltage Output on LCD (if BAT_CHECK is selected).
 # If your 9V supply has a diode installed, use the BAT_OUT=600 form to specify the

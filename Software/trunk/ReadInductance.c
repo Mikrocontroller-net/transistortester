@@ -38,7 +38,7 @@ void ReadInductance(void) {
   } rpins;	// resistor pin structure to prevent two return parameters
 
 
-  inductor_lpre = 0;	// H units, mark inductor as 0
+  inductor_lpre = 2;	// H units, mark inductor as 1, if resistor is too big
   if(PartFound != PART_RESISTOR) {
      return;	//We have found no resistor  
   }
@@ -215,8 +215,8 @@ void ReadInductance(void) {
              Display_mV(umax,4);
              lcd_space();
              DisplayValue(per_ref2,-1,'%',4);
-             wait_about4s();
-             wait_about2s();
+             wait_about4s();	// debug delay
+             wait_about2s();	// debug delay
           }
 #endif
 /* ********************************************************* */

@@ -11,7 +11,6 @@ void EntladePins() {
   uint8_t lop_cnt;		// loop counter
 // max. time of discharge in ms  (10000/20) == 10s
 #define MAX_ENTLADE_ZEIT  (10000/20)
-
   for(lop_cnt=0;lop_cnt<10;lop_cnt++) {
      adc_gnd = TXD_MSK;		// put all ADC to Input
      ADC_DDR = adc_gnd;

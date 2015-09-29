@@ -14,7 +14,7 @@ extern struct ADCconfig_t{
 
 #ifdef INHIBIT_SLEEP_MODE
 //  #define StartADCwait() ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; /* enable ADC and start */
-    #define StartADCwait() ADCSRA = StartADCmsk; /* Start conversion */\
+    #define StartADCwait() ADCSRA = (1<<ADSC)|(1>>ADEN)|(1<<ADIF)|AUTO_CLOCK_DIV; /* Start conversion */\
     while (ADCSRA & (1 << ADSC))  /* wait until conversion is done */
 #else
     #define StartADCwait() ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV; /*enable ADC and Interrupt */\
@@ -33,17 +33,33 @@ unsigned int ReadADC (uint8_t Probe) {
  unsigned int U; /* return value (mV) */
  uint8_t samples; /* loop counter */
  unsigned long Value; /* ADC value */
+#ifdef AUTOSCALE_ADC
+ uint8_t old_state;
+// uint8_t new_state;
+#endif
+
  Probe |= (1 << REFS0); /* use internal reference anyway */
+
 #ifdef AUTOSCALE_ADC
 sample:
-#endif
+
+ old_state = (ADMUX & (1 << REFS1));	// get old state of Reference
+// new_state = (Probe & (1 << REFS1)); 	// get requested REFS1 bit flag 
+ #if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
+ if (Probe & (1<<REFS1)) Probe &= ~(1<<REFS0);	/* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
+ #endif
+#else
+ #if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
+ if (Probe & (1 << REFS1)) Probe &= ~(1<<REFS0);	/* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
+ #endif
+#endif  /* AUTOSCALE_ADC */
+
  ADMUX = Probe; /* set input channel and U reference */
+
 #ifdef AUTOSCALE_ADC
  /* if voltage reference changes, wait for voltage stabilization */
- samples = (Probe & (1 << REFS1));		// get REFS1 bit flag 
- if (samples != ADCconfig.RefFlag) {
-    ADCconfig.RefFlag = samples;		// update flag
-    // switch to 1.1V Reference
+ if ((Probe & (1<<REFS1)) != old_state) {
+    //  Reference is switched, delay depends on NO_AREF_CAP option
  #ifdef NO_AREF_CAP
     wait100us(); /* time for voltage stabilization */
  #else
@@ -52,7 +68,8 @@ sample:
 // allways do one dummy read of ADC, 112us
     StartADCwait();		/* start ADC and wait */
  }
-#endif
+#endif  /* AUTOSCALE_ADC */
+
  /* * sample ADC readings */
  Value = 0UL; /* reset sampling variable */
  samples = 0; /* number of samples to take */
@@ -61,16 +78,13 @@ sample:
     Value += ADCW; /* add ADC reading */
 #ifdef AUTOSCALE_ADC
     /* auto-switch voltage reference for low readings */
-    if ((samples == 4) && (ADCconfig.U_Bandgap > 255) && ((uint16_t)Value < 1024) && !(Probe & (1 << REFS1))) {
+    if ((samples == 4) && (ADCconfig.U_Bandgap > 255) && ((uint16_t)Value < 1024) && !(Probe & (1<<REFS1))) {
        Probe |= (1 << REFS1); /* select internal bandgap reference */
- #if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
-       Probe &= ~(1 << REFS0);	/* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
- #endif
        goto sample; /* re-run sampling */
     }
 #endif
     samples++; /* one more done */
- }
+ }  /* end while */
 #ifdef AUTOSCALE_ADC
  /* * convert ADC reading to voltage * - single sample: U = ADC reading * U_ref / 1024 */
  /* get voltage of reference used */
@@ -79,6 +93,7 @@ sample:
 #else
  U = ADCconfig.U_AVCC; /* Vcc reference */
 #endif
+
  /* convert to voltage; */
  Value *= U; /* ADC readings * U_ref */
  Value /= 1023; /* / 1024 for 10bit ADC */

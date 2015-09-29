@@ -14,7 +14,7 @@ void RvalOut(uint8_t nrr) {
 
 #if FLASHEND > 0x1fff
    uint16_t rr;
-   if ((ResistorVal[nrr] < 100) && (inductor_lpre == 0)) {
+   if ((ResistorVal[nrr] < 100) && (inductor_lpre >= 0)) {
       rpins.pw = Rnum2pins(nrr);	// compute the pin numbers for resistor nrr
       rr = GetESR(rpins.pb[1], rpins.pb[0]);
       DisplayValue16(rr,-2,LCD_CHAR_OMEGA,3);

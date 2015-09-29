@@ -39,9 +39,9 @@ void Battery_check(void) {
              return;
           }
   #endif
-          lcd_MEM_string(Bat_str);		//output: "Bat. "
-	  Display_mV(bat_voltage,2);		// Display 2 Digits of this 10mV units
-          lcd_space();
+         lcd_MEM_string(Bat_str);		//output: "Bat. "
+	 Display_mV(bat_voltage,2);		// Display 2 Digits of this 10mV units
+         lcd_space();
  #else    /* without battery voltage output */
     lcd_MEM_string(Bat_str);		//output: "Bat. "
  #endif  /* BAT_OUT */
@@ -74,9 +74,9 @@ void Battery_check(void) {
 	lcd_MEM_string(BatEmpty);	//Battery empty!
         lcd_clear_line();			// clear to end of line
 	lcd_refresh();			// write the pixels to display, ST7920 only
-	wait_about5s();
+	wait_about5s();			// Let time to read the "empty" message
         ON_PORT &= ~(1<<ON_PIN);	// switch power off
-	wait_about2s();
+	wait_about2s();			// power should be switched off
 	return;
      }
      lcd_MEM_string(BatWeak);		//Battery weak

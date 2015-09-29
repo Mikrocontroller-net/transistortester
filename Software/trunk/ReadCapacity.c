@@ -84,15 +84,15 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   if(PartFound == PART_RESISTOR) {
 #if DebugOut == 10
      lcd_data('R');
-     wait_about2s();
+     wait_about2s();	/* debug delay */
 #endif
      return;	//We have found a resistor already 
   }
   for (ii=0;ii<NumOfDiodes;ii++) {
      if ((diodes.Cathode[ii] == LowPin) && (diodes.Anode[ii] == HighPin) && (diodes.Voltage[ii] < 1500)) {
 #if DebugOut == 10
-        lcd_data('D');
-        wait_about2s();
+        lcd_data('D');	// debug
+        wait_about2s();	/* debug delay */
 #endif
         return;
      }
@@ -103,8 +103,8 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   cap.esr = 0;				// set ESR of capacitor to zero
   vloss = 0;				// set lost voltage to zero
 #endif
+  cap.cpre = -15;			// mark for no cap
   cap.cval = 0;				// set capacity value to zero
-  cap.cpre = 0;			// mark for no cap
   EntladePins();			// discharge capacitor
   ADC_PORT = TXD_VAL;			// switch ADC-Port to GND
 // The polarity of residual voltage of the capacitor depends on the measurement
@@ -148,7 +148,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 #if DebugOut == 10
      lcd_data('K');
      lcd_space();
-     wait1s();
+     wait1s();		// debug delay
 #endif
 //     if (NumOfDiodes != 0) goto messe_mit_rh; /* ****************************** */
      goto keinC;		// was never charged enough, >100mF or shorted
@@ -166,13 +166,13 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
   lcd_data('3');
   lcd_data(':');
   u2lcd_space(cap_voltage2);
-  wait_about2s();
+  wait_about2s();	/* debug delay */
  #endif
   if ((cap_voltage2 + cap_voltage2) < cap_voltage1) {
  #if DebugOut == 10
      lcd_data('H');
      lcd_space();
-     wait_about1s();
+     wait_about1s();	/* debug delay */
  #endif
 //     if (ovcnt16 == 0 )  {
 //        goto messe_mit_rh;		// Voltage of more than 300mV is reached in one pulse, but not hold
@@ -203,7 +203,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
  #if DebugOut == 10
      lcd_data('L');
      lcd_space();
-     wait_about1s();
+     wait_about1s();	/* debug delay */
  #endif
 //     if (ovcnt16 == 0 )  {
 //        goto messe_mit_rh;		// Voltage of more than 300mV is reached in one pulse, but not hold
@@ -235,7 +235,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
    DisplayValue(cap.cval,cap.cpre,'F',4);
    lcd_space();
    u2lcd(ovcnt16);
-   wait_about3s();
+   wait_about3s();	/* debug delay */
 #endif
    goto checkDiodes;
 
@@ -343,7 +343,7 @@ messe_mit_rh:
   if (ovcnt16 >= (F_CPU/10000)) {
 #if DebugOut == 10
      lcd_data('k');
-     wait_about1s();
+     wait_about1s();	/* debug delay */
 #endif
      goto keinC;	// no normal end
   }
@@ -413,7 +413,7 @@ messe_mit_rh:
   lcd_testpin(HighPin);
   lcd_space();
   DisplayValue(cap.cval,cap.cpre,'F',4);
-  wait_about3s();
+  wait_about3s();	/* debug delay */
 #endif
   R_DDR = HiPinR_L; 		//switch R_L for High-Pin to GND
 #if F_CPU < 2000001
@@ -426,7 +426,7 @@ messe_mit_rh:
 #if DebugOut == 10
      lcd_data('<');
      lcd_space();
-     wait_about1s();
+     wait_about1s();	/* debug delay */
 #endif
       goto keinC;	//capacity to low, < 50pF @1MHz (25pF @8MHz)
    }
@@ -434,9 +434,9 @@ messe_mit_rh:
 checkDiodes:
    if((NumOfDiodes > 0)  && (PartFound != PART_FET)) {
 #if DebugOut == 10
-      lcd_data('D');
+      lcd_data('D');	// debug
       lcd_space();
-      wait_about1s();
+      wait_about1s();	/* debug delay */
 #endif
       // nearly shure, that there is one or more diodes in reverse direction,
       // which would be wrongly detected as capacitor 

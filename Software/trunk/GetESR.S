@@ -319,6 +319,8 @@ GetESR:
 	lds	r19, cap+cval_max+1;
 	lds	r20, cap+cval_max+2;
 	lds	r21, cap+cval_max+3;
+        sbrc	r21, 7;			/* negativ bit is set */
+	rjmp	set_high
 	lds	r17, cap+cpre_max;      /* prefix = cap.cpre_max; */
 	rjmp	ad_35ba;
 
@@ -335,10 +337,7 @@ ad_35ac:
 ad_35ba:
 	cpi	r17, -9;                /* while (prefix < -9) { // set cval to nF unit */
 	brlt	ad_35ac;                /*  } */
-;	std	Y+cap_val_nF, r18
-;	std	Y+cap_val_nF+1, r19
-;	std	Y+cap_val_nF+2, r20
-;	std	Y+cap_val_nF+3, r21
+        brne    set_high;
 
 
 #ifdef ESR_LONG_PULSE
@@ -352,6 +351,7 @@ ad_35ba:
 	cpc	r20, zero_reg
 	cpc	r21, zero_reg
 	brcc	ad_35e4
+set_high:
 	ldi	r24, 0xff;
 	ldi	r25, 0xff;
 	rjmp	ad_exit; 
@@ -711,20 +711,20 @@ is_ok2b:
 ad_38ac:
 
 #if RRpinMI == PIN_RM
-	ldi	r18, lo8(RRpinMI*10);
-	ldi	r19, hi8(RRpinMI*10);
+	ldi	r18, lo8(PIN_RM*10);
+	ldi	r19, hi8(PIN_RM*10);
 #else
-	lds	r4, RRpinMI;
+	lds	r4, RRpinMI;		/*  pin_rmi */
 	lds	r5, RRpinMI+1;
 	add	r4, r4;		RRpinMI*2
 	adc	r5, r5;
 	movw	r18, r4;
 	ldi	r30, 4;
-ad_3924:
-	add	r18, r4;		+ (2*RRpinMI)
+ad_2r:
+	add	r18, r4;		+ 4*(2*RRpinMI)
 	adc	r19, r5;
 	dec	r30;
-	brne	ad_3924;
+	brne	ad_2r;			add next (2*RRpinMI)
 #endif
 	movw	r4, r18;		/* r4:5 = 10 * RRpinMI */
 	movw	r10, r14;		/* r10:13 = r14:17 = sumvolt0 */
@@ -818,38 +818,30 @@ ad_3972:
 	ldi	r16, 4	;
 	call	DisplayValue;
 	call	lcd_line3;
-        ldd	r22, Y+LowUpCount;
-	ldi	r23, 0;
-	ldi	r24, 0;
+        ldd	r24, Y+LowUpCount;
 	ldi	r25, 0;
-	ldi	r20, 0;
-	ldi	r18, '<';
-	ldi	r16, 4	;
-	call	DisplayValue;
-        ldd	r22, Y+HighUpCount;
-	ldi	r23, 0;
-	ldi	r24, 0;
+	ldi	r22, 0;
+	ldi	r20, '<';
+	ldi	r18, 4	;
+	call	DisplayValue16;
+        ldd	r24, Y+HighUpCount;
 	ldi	r25, 0;
-	ldi	r20, 0;
-	ldi	r18, '>';
-	ldi	r16, 4	;
-	call	DisplayValue;
-        ldd	r22, Y+LowTooHigh;
-	ldi	r23, 0;
-	ldi	r24, 0;
+	ldi	r22, 0;
+	ldi	r20, '>';
+	ldi	r18, 4	;
+	call	DisplayValue16;
+        ldd	r24, Y+LowTooHigh;
 	ldi	r25, 0;
-	ldi	r20, 0;
-	ldi	r18, '+';
-	ldi	r16, 4	;
-	call	DisplayValue;
-        ldd	r22, Y+HighTooHigh;
-	ldi	r23, 0;
-	ldi	r24, 0;
+	ldi	r22, 0;
+	ldi	r20, '+';
+	ldi	r18, 4	;
+	call	DisplayValue16;
+        ldd	r24, Y+HighTooHigh;
 	ldi	r25, 0;
-	ldi	r20, 0;
-	ldi	r18, '#';
-	ldi	r16, 4	;
-	call	DisplayValue;
+	ldi	r22, 0;
+	ldi	r20, '#';
+	ldi	r18, 4	;
+	call	DisplayValue16;
 #endif
 	movw	r22, r4
 	ldi	r24, 0x00;

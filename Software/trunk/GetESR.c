@@ -1,6 +1,7 @@
 #include <avr/io.h>
 #include <stdlib.h>
 #include "Transistortester.h"
+#warning Please use the tome optimized Assembler version of GetESR
 
 #define MAX_CNT 255
 
@@ -22,7 +23,7 @@
     #define StartADCwait() sleep_cpu()
 #else
 //  #define StartADCwait() ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; /* enable ADC and start */
-    #define StartADCwait() ADCSRA = StartADCmsk; /* Start conversion */\
+    #define StartADCwait() ADCSRA = (1<<ADSC)|(1<<ADEN)|(1<<ADIF)|AUTO_CLOCK_DIV; /* Start conversion */\
     while (ADCSRA & (1 << ADSC))  /* wait until conversion is done */
 #endif
 
@@ -139,6 +140,8 @@ uint16_t GetESR(uint8_t hipin, uint8_t lopin) {
   cap_val_nF = 32000;
   if (PartFound == PART_CAPACITOR) {
      pp = cap.cpre_max;
+     if (cap.cval_max < 0) cap_val_nF = -cap.cval_max;
+     else                  cap_val_nF =  cap.cval_max;
      cap_val_nF = cap.cval_max;
      while (pp < -9) { // set cval to nF unit
          cap_val_nF /= 10;		// reduce value by factor ten

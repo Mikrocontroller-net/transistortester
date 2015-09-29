@@ -65,7 +65,7 @@ if ((test_mode & 0xf0) == 0) {
 }
 // no key pressed for 2s
 lcd_clear();
-lcd_MEM2_string(VERSION_str);	//"Version ..."
+lcd_MEM_string(VERSION_str);	//"Version ..."
 return;
 
 begin_selftest:
@@ -112,8 +112,8 @@ for(ww=0;ww<MAX_REP;ww++) {	// repeat the test MAX_REP times
    lcd_space();
 				//############################################
    if (tt == 1) {   // output of reference voltage and factors for capacity measurement
-      Calibrate_UR();		// get Reference voltage, Pin resistance
       lcd_MEM2_string(URef_str);	//"URef="
+      Calibrate_UR();		// get Reference voltage, Pin resistance
       Display_mV(ref_mv,4);
       lcd_line2();			//Cursor to column 1, row 2
       lcd_MEM2_string(RHfakt_str);	//"RHf="
@@ -218,7 +218,6 @@ for(ww=0;ww<MAX_REP;ww++) {	// repeat the test MAX_REP times
       break; // if key is pressed, don't repeat
    }
 } //end for ww
-//wait_about1s();
 wait_for_key_ms(1000);	// wait up to 1 second or key is pressed
 } //end for tt
   #if PROCESSOR_TYP == 1280
@@ -259,7 +258,7 @@ lcd_data('L');
 lcd_equal();			// lcd_data('=');
 ResistorVal[0] = (adcmv[1] * (unsigned long)R_L_VAL) / (adcmv[0] - adcmv[1]);
 DisplayValue(ResistorVal[0],-1,LCD_CHAR_OMEGA,3);
-wait_about1s();
+wait_about1s();			// only for mega1280
 last_line_used = 2;
 wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 // 
@@ -299,7 +298,7 @@ lcd_data('L');
 lcd_equal();			// lcd_data('=');
 ResistorVal[0] = (adcmv[1] * (unsigned long)R_L_VAL) / (adcmv[0] - adcmv[1]);
 DisplayValue(ResistorVal[0],-1,LCD_CHAR_OMEGA,3);
-wait_about1s();
+wait_about1s();			// only for mega1280
 last_line_used = 2;
 wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 //
@@ -338,7 +337,7 @@ lcd_data('L');
 lcd_equal();			// lcd_data('=');
 ResistorVal[0] = (adcmv[1] * (unsigned long)R_L_VAL) / (adcmv[0] - adcmv[1]);
 DisplayValue(ResistorVal[0],-1,LCD_CHAR_OMEGA,3);
-wait_about1s();
+wait_about1s();			// only for mega1280
 last_line_used = 2;
 wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
   #endif	/* PROCESSOR_TYP == 1280 */
@@ -576,7 +575,7 @@ ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples
  } /* end for ww */
  #endif		/* end FREQUENCY_50HZ */
 lcd_clear();
-lcd_MEM2_string(VERSION_str);	//"Version ..."
+lcd_MEM_string(VERSION_str);	//"Version ..."
 lcd_line2();
 lcd_MEM_string(ATE);		//"Selftest End"
 PartFound = PART_NONE;

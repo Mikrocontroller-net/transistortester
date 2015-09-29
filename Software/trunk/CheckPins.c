@@ -749,11 +749,11 @@ checkDiode:
   lcd_clear_line();
   lcd_line3();
   lcd_testpin(HighPin);
-  lcd_data('D');
+  lcd_data('D');	// debug
   lcd_testpin(LowPin);
   lcd_space();
   DisplayValue16(adc.lp_otr,-3,' ',3);
-  lcd_data('<');
+  lcd_data('<');	// debug
 #endif
      goto widmes;
   }
@@ -875,14 +875,14 @@ checkDiode:
   lcd_clear_line();
   lcd_line3();
   lcd_testpin(HighPin);
-  lcd_data('D');
+  lcd_data('D');	// debug
   lcd_testpin(LowPin);
   lcd_space();
-  lcd_data('h');
+  lcd_data('h');	// debug
   DisplayValue16(adc.hp3,-3,' ',2);
-  lcd_data('L');
+  lcd_data('L');	// debug
   DisplayValue16(adc.hp1,-3,' ',2);
-  lcd_data('H');
+  lcd_data('H');	// debug
   DisplayValue16(adc.hp2,-3,' ',2);
 #endif
   volt_dif = adc.hp3/8;
@@ -896,7 +896,7 @@ checkDiode:
         PartFound = PART_DIODE;	//mark for diode only, if no other component is found
 				//since there is a problem with Transistors with a protection diode
 #if DebugOut == 4
-        lcd_data('D');
+        lcd_data('D');	// debug
 #endif
      }
      diodes.Anode[NumOfDiodes] = HighPin;

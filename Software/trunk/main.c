@@ -15,8 +15,10 @@
 	#ifndef INHIBIT_SLEEP_MODE
 	  // prepare sleep mode
 	  EMPTY_INTERRUPT(TIMER2_COMPA_vect);
-	  EMPTY_INTERRUPT(ADC_vect);
 	#endif
+        #if !defined(INHIBIT_SLEEP_MODE) || defined(SamplingADC)
+	  EMPTY_INTERRUPT(ADC_vect);
+        #endif
 
 	//begin of transistortester program
 	int main(void) {

@@ -2757,6 +2757,8 @@ get_log:
      9c0:	18 95       	reti
 
 000009c2 <__vector_21>:
+	#endif
+        #if !defined(INHIBIT_SLEEP_MODE) || defined(SamplingADC)
 	  EMPTY_INTERRUPT(ADC_vect);
      9c2:	18 95       	reti
 
@@ -10795,9 +10797,9 @@ void EE_check_init(void) {
     3478:	b0 e0       	ldi	r27, 0x00	; 0
     347a:	e0 e4       	ldi	r30, 0x40	; 64
     347c:	fa e1       	ldi	r31, 0x1A	; 26
-	  EMPTY_INTERRUPT(TIMER2_COMPA_vect);
+        #if !defined(INHIBIT_SLEEP_MODE) || defined(SamplingADC)
 	  EMPTY_INTERRUPT(ADC_vect);
-	#endif
+        #endif
 
 	//begin of transistortester program
 	int main(void) {

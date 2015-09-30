@@ -337,7 +337,7 @@ ad_35ac:
 ad_35ba:
 	cpi	r17, -9;                /* while (prefix < -9) { // set cval to nF unit */
 	brlt	ad_35ac;                /*  } */
-        brne    set_high;
+        brne    load_max;		/* load max value for correction */
 
 
 #ifdef ESR_LONG_PULSE

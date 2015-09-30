@@ -428,8 +428,8 @@ void show_Cap13(void) {
         }
  #endif
  #else
-     if (cap.cpre > -15) {
-       cap.cpre_max = cap.cpre;
+     if (cap.cpre > -15) {	/* Capacity below the detection limit */
+       cap.cpre_max = cap.cpre;		// show_cap will display the cap.cval_max value
        cap.cval_max = cap.cval;
        show_cap(1);		// with [C] at the end of line
      } else { /* no cap detected */

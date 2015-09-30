@@ -43,6 +43,7 @@ samplingADC:
 	sts	ADCSRA, r22;
         ldi     r22, (1 << SM0) | (1 << SE);
         out     _SFR_IO_ADDR(SMCR), r22
+//	sei				; enable interrupts
         sleep 				; sleep until interrupt wakes us up; C-code has installed a
 					; dummy interrupt handler consisting of just reti
         sleep 				; once more, just in case the previous one was started at an unfortunate time w.r.t. the ADC's cycle; this one definitely is started between two ADC completions

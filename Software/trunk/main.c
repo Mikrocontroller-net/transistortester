@@ -89,8 +89,8 @@
 	  DIDR0 = ((1<<ADC5D) | (1<<ADC4D) | (1<<ADC3D) | (1<<ADC2D) | (1<<ADC1D) | (1<<ADC0D)) & ~((1<<TP3) | (1<<TP2) | (1<<TP1));	
 	  TCCR2A = (0<<WGM21) | (0<<WGM20);		// Counter 2 normal mode
 	  TCCR2B = CNTR2_PRESCALER;	//prescaler set in autoconf
-	  sei();				// enable interrupts
 	#endif
+	  sei();				// enable interrupts
 	  lcd_init();				//initialize LCD
 		
 	//  ADC_PORT = TXD_VAL;

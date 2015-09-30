@@ -9560,7 +9560,7 @@ void ReadInductance(void) {
 	push	r24;		/* 26.625 us */
     2fb8:	b4 f3       	brlt	.-20     	; 0x2fa6 <ad_35ac>
 	pop	r24;            /* 26.875 us */
-    2fba:	31 f4       	brne	.+12     	; 0x2fc8 <set_high>
+    2fba:	91 f4       	brne	.+36     	; 0x2fe0 <load_max>
 	wdr	;		/* 27.0   us */
     2fbc:	2a 35       	cpi	r18, 0x5A	; 90
   #else /* no ESR_LONG_PULSE, 8MHz, polling mode */
@@ -10857,9 +10857,9 @@ void EE_check_init(void) {
 	  TCCR2B = CNTR2_PRESCALER;	//prescaler set in autoconf
     34b6:	80 93 b1 00 	sts	0x00B1, r24
     34ba:	78 94       	sei
+	#endif
 	  sei();				// enable interrupts
     34bc:	0e 94 60 01 	call	0x2c0	; 0x2c0 <lcd_init>
-	#endif
 	  lcd_init();				//initialize LCD
     34c0:	13 fd       	sbrc	r17, 3
 		

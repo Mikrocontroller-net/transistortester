@@ -135,7 +135,7 @@ show_page_5:
           }
           lcd_MEM_string(C0samp_str);	// "C0samp "
 	  lcd_testpin(ii);
-	  lcd_space();
+	  lcd_data(':');
           lcd_testpin(jj);
 	  lcd_next_line(0);
 	  DisplayValue16(cc,-2,' ',3);

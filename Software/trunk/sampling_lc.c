@@ -173,7 +173,7 @@ uint16_t lc_cpar;    // value of parallel capacitor used for calculating inducta
    }
 
    d--;                 // improves estimate slightly (experimentally)
-   uint16_t par=samplingADC_twopulses|(4<<8);   // default: two pulses at minimal distance
+   uint16_t par = (1<<samplingADC_twopulses) | (4<<samplingADC_inter_pulse_width); // default: two pulses at minimal distance
    if (d<=6*3) {
       // in case of rather small d, need to measure d more precisely, by simply invoking the peaksearch function
       unsigned int per;
@@ -192,7 +192,7 @@ retry:
          // for high frequencies, we can send 2 pulses at the appropriate interval
          // (for lower frequencies, we just keep them at their default minimum distance)
          if (per<4) per=4;
-         par=samplingADC_twopulses|(((byte)per)<<8);
+         par = (1<<samplingADC_twopulses) | (((byte)per)<<samplingADC_inter_pulse_width);
       }
    }
 //   uart_newline(); for (i=0;i<255;i++) { uart_putc('a'); uart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
@@ -201,10 +201,10 @@ retry:
       // rather slow resonance: then re-sample with 4 or 16 times larger interval; shift variable serves to take this into account in later calculations
       if (d<64) {
          shift=2;
-         par=samplingADC_slow4|samplingADC_twopulses|(4<<8);
+         par = (1<<samplingADC_slow4) | (1<<samplingADC_twopulses) | (4<<samplingADC_inter_pulse_width);
       } else {
          shift=4;
-         par=samplingADC_slow16|samplingADC_twopulses|(4<<8);
+         par = (1<<samplingADC_slow16) | (1<<samplingADC_twopulses) | (4<<samplingADC_inter_pulse_width);
       }
       d>>=shift;
    }
@@ -212,8 +212,8 @@ retry:
    // we take the average of 8 measurements, to increase S/N, except when using slow16 mode, since then the sampling would take annoyingly long (and S/N usually is better anyway at these lower frequencies)
    for (i=0;i<8;i++) {
       samplingADC(par, uu, 0, HiPinR_L, 0, HiPinR_L, HiPinR_L);
-      if (par & samplingADC_slow16) goto noavg;
-      par|=samplingADC_cumul;
+      if (par & (1<<samplingADC_slow16)) goto noavg;
+      par |= (1<<samplingADC_cumul);
    }
    for (i=0;i<255;i++) uu[i]>>=3;   // divide all samples by 8
 noavg:;

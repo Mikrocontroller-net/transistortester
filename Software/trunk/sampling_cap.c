@@ -86,14 +86,18 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
    ADC_DDR = LoADC;			// switch Low-Pin to output (GND)
    R_PORT = 0;			//R_L to 0 (GND) 
    R_DDR = HiPinR_L;			
-   wait100us();
+//   wait200us();			// let the last ADC cycle finish
 
    ADMUX = HighPin|(1<<REFS0);	// switch Multiplexer to Highpin and use 5V reference voltage
 #ifdef NO_AREF_CAP
     wait100us(); /* time for voltage stabilization */
 #else
-    wait10ms(); /* time for voltage stabilization */
+    wait_about10ms(); /* time for voltage stabilization */
 #endif
+
+//   lcd_line1();
+//   lcd_string(itoa(ADCSRA, outval, 16));
+//   wait_about500ms();
 
    memset(uu,0,sizeof(uu));
 
@@ -116,8 +120,8 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
    #define N (N2-N1+1-(N4-N3))
    #define sumx (unsigned long)((N2*(N2+1l)/2)-(N4*(N4-1l)/2)+(N3*(N3-1l)/2)-(N1*(N1-1l)/2))
    unsigned long sumxx=(unsigned long)((N2*(N2+1l)*(2*N2+1l)/6)-(N4*(N4-1l)*(2*N4-1l)/6)+(N3*(N3-1l)*(2*N3-1l)/6)-(N1*(N1-1l)*(2*N1-1l)/6));
-   byte d=( hivolt ? HiPinR_L : HiPinR_H );
-   for (i=0;i<32;i++) samplingADC(samplingADC_step|samplingADC_cumul, uu, N2+1, d, HiPinR_H, d, HiPinR_L);
+   byte d=( (hivolt) ? HiPinR_L : HiPinR_H );
+   for (i=0;i<32;i++) samplingADC((1<<samplingADC_step)|(1<<samplingADC_cumul), uu, N2+1, d, HiPinR_H, d, HiPinR_L);
 
    R_DDR = 0;			
 #if 0
@@ -137,8 +141,8 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
    // cf. e.g. https://en.wikipedia.org/wiki/Ordinary_least_squares
    unsigned long sumy, sumxy;
    sumy=sumxy=0;
-   for (i=N1;i<=N2;i++) {
-      if (i==N3) i=N4;
+   for (i=N1;i<=N2;i++) {	/* 70-230 @16MHz, 35-115 @8MHz */
+      if (i==N3) i=N4;		// skip from N3 to (N4-1), 182-192 @16MHz, 200-200 @8MHz
       unsigned int z;
       if (hivolt) z=mylog(32768-uu[i]);
       else z=mylog(uu[i]);
@@ -202,22 +206,22 @@ void sampling_cap_calibrate()
             unsigned int d;
 //            unsigned int v;
             c=sampling_cap_do(i,j,0,1);
+            d=sampling_cap_do(i,j,1,1);
             lcd_clear();
             lcd_MEM2_string(C0samp_str);			//output "C0samp "
             lcd_space();				// lcd_data(' ');
             lcd_testpin(i);
-            lcd_data(' ');
+            lcd_data(':');
             lcd_testpin(j);
             lcd_space();				//lcd_data(' ');
             lcd_line2();
             DisplayValue16(c,-2,' ',4);
-            d=sampling_cap_do(i,j,1,1);
             DisplayValue16(d,-14,'F',4);
-            lcd_clear_line();
-            lcd_refresh();
             byte k=3*i+j-1;
             eeprom_write_word((void*)(c_zero_tab2_lo+k),c);
             eeprom_write_word((void*)(c_zero_tab2_hi+k),d);
+            lcd_clear_line();
+            lcd_refresh();
          }
 } /* end sampling_cap_calibrate */
 

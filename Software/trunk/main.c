@@ -17,6 +17,7 @@
 	  EMPTY_INTERRUPT(TIMER2_COMPA_vect);
 	#endif
         #if !defined(INHIBIT_SLEEP_MODE) || defined(SamplingADC)
+	  // ADC_vect is always required by samplingADC()
 	  EMPTY_INTERRUPT(ADC_vect);
         #endif
 
@@ -91,7 +92,7 @@
 	  DIDR0 = ((1<<ADC5D) | (1<<ADC4D) | (1<<ADC3D) | (1<<ADC2D) | (1<<ADC1D) | (1<<ADC0D)) & ~((1<<TP3) | (1<<TP2) | (1<<TP1));	
 	  TCCR2A = (0<<WGM21) | (0<<WGM20);		// Counter 2 normal mode
 	  TCCR2B = CNTR2_PRESCALER;	//prescaler set in autoconf
-	#endif
+	#endif		/* INHIBIT_SLEEP_MODE */
 	  sei();				// enable interrupts
 	  lcd_init();				//initialize LCD
 		
@@ -449,7 +450,11 @@
         lcd_data('-');
         cap.cval=sampling_cap(diodes.Cathode[0],diodes.Anode[0],1);   // at high voltage
         DisplayValue(cap.cval,sampling_cap_pre,'F',2);
-        lcd_MEM_string(AT05volt);
+ #if LCD_LINE_LENGTH > 16
+        lcd_MEM_string(AT05volt);	// " @0-5V"
+ #else
+        lcd_MEM_string(AT05volt+1);	// "@0-5V"
+ #endif
 #endif
         goto end3;
      } else if(NumOfDiodes == 2) { // double diode
@@ -860,12 +865,14 @@
        DisplayValue16(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance
  #endif
     } else {
-
+ #if LCD_LINES > 6
+       lcd_next_line(TEXT_RIGHT_TO_ICON);	// Make shure to be under the icon
+ #endif
        if ((PartMode&0x0f)  != PART_MODE_JFET) {     /* kein JFET */
           ReadCapacity(_trans->b,_trans->e);	//measure capacity
           lcd_show_Cg();	// show Cg=xxxpF
        }
-       lcd_next_line(0);	// double line
+       lcd_next_line(0);	// single line
  #if LCD_LINES > 6
        lcd_next_line(0);	// double line
  #endif

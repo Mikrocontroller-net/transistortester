@@ -34,7 +34,7 @@ samplingADC:
 
 	neg r20
 
-	sbrs r24,3			; if not two-impulses, set inter-impulse-timer to a reasonable value
+	sbrs r24,samplingADC_twopulses	; if not two-impulses, set inter-impulse-timer to a reasonable value
 	ldi	r25,6
 
 	ldi	r22, 0			; enable ADC in free-running mode
@@ -43,7 +43,6 @@ samplingADC:
 	sts	ADCSRA, r22;
         ldi     r22, (1 << SM0) | (1 << SE);
         out     _SFR_IO_ADDR(SMCR), r22
-//	sei				; enable interrupts
         sleep 				; sleep until interrupt wakes us up; C-code has installed a
 					; dummy interrupt handler consisting of just reti
         sleep 				; once more, just in case the previous one was started at an unfortunate time w.r.t. the ADC's cycle; this one definitely is started between two ADC completions
@@ -96,10 +95,10 @@ L05:
 	breq L98
 L98:
 				; 5 cycles
-	sbrc r24,3			; skip this impulse if not two pulses desired (r24 = control byte)
+	sbrc r24,samplingADC_twopulses	; skip this impulse if not two pulses desired (r24 = control byte)
 	AOUT	R_DDR, R12		; start of impulse
 	dec r23
-	sbrc r24,3			; skip this impulse if not two pulses desired
+	sbrc r24,samplingADC_twopulses	; skip this impulse if not two pulses desired
 	AOUT	R_DDR, R16		; end of impulse
 				; 2*r23 cycles for 1<=r23<=6
 	breq L99			; note that the flag is set by the dec between the above to OUTs
@@ -126,7 +125,7 @@ L04a:	dec	r19
 	nop
 	brne L04a
 
-	sbrs r24,4		; 3 cycles in normal case, 2 cycles if slow16
+	sbrs r24,samplingADC_slow16	; 3 cycles in normal case, 2 cycles if slow16
 	rjmp skipextradelay1
 
 				; for slow16, we insert two extra delays around the reading of the conversion result
@@ -151,16 +150,16 @@ skipextradelay1:
 	lds	r22, ADCL
 	lds	r21, ADCH
 	ld	r19,z
-	sbrc 	r24,2			; check bit 2 in the control byte: if set do addition
+	sbrc 	r24,samplingADC_cumul	; check bit 2 in the control byte: if set do addition
 	add	r22,r19
 	st	z+,r22
 	ld	r19,z
-	sbrc 	r24,2			; check bit 2 in the control byte: if set do addition
+	sbrc 	r24,samplingADC_cumul	; check bit 2 in the control byte: if set do addition
 	adc	r21,r19
 	st	z+,r21
 
 
-	sbrs r24,4		; 3 cycles in normal case, 2 cycles if slow16
+	sbrs r24,samplingADC_slow16	; 3 cycles in normal case, 2 cycles if slow16
 	rjmp skipextradelay2
 
         mov r19,r20		; extra delay for slow16, 4203-16*(i&0xfe) cycles
@@ -172,15 +171,15 @@ skipextradelay2:
 
 				; 4 cycles
 					; toggle output back to its "idle" state in case of step response
-	sbrc r24,0
+	sbrc r24,samplingADC_step
 	AOUT	R_DDR, R12		; Rddr_0
-	sbrc r24,0
+	sbrc r24,samplingADC_step
 	AOUT	R_PORT, R14		; Rport_0
 
 
 #define FIN_DELAY 599
 	ldi	r19,((FIN_DELAY-2)/3)	; 599 cycles make total loop take 1663 cycles = 13*128-1 = 1 less than period of ADC
-	sbrc 	r24,1			; check bit 1 in the control byte: if set, then delay for 3 clockcycles fewer, effectively increasing the time between samples by a factor of 4
+	sbrc 	r24,samplingADC_slow4	; check bit 1 in the control byte: if set, then delay for 3 clockcycles fewer, effectively increasing the time between samples by a factor of 4
 	dec	r19
 L04c:	dec	r19
 	brne L04c
@@ -197,6 +196,9 @@ L04c:	dec	r19
 	rjmp L05		; repeat 16 MHz loop
 
 done:
+	ldi	r22, (1<<ADSC) | (0<<ADATE) | (0<<ADEN) | (1<<ADIF) | (0<<ADIE) | AUTO_CLOCK_DIV;
+	sts	ADCSRA, r22;	; stop ADC
+	CALL	wait200us
     	ret;
 
 
@@ -260,9 +262,9 @@ MK_SIGNAL:
 	breq L98
 L98:
 				; 4 cycles
-	sbrc r24,3			; skip this impulse if not two pulses desired (r24 = control byte)
+	sbrc r24,samplingADC_twopulses			; skip this impulse if not two pulses desired (r24 = control byte)
 	AOUT	R_DDR, R12		; start of impulse
-	sbrc r24,3			; skip this impulse if not two pulses desired
+	sbrc r24,samplingADC_twopulses			; skip this impulse if not two pulses desired
 	AOUT	R_DDR, R16		; end of impulse
 
 	dec r23				; 1+2*r23 = 3 to 9 cycles for 1<=r23<=4
@@ -286,7 +288,7 @@ L04a:	dec	r19
 	nop
 	brne L04a
 
-	sbrs r24,4		; 3 cycles in normal case, 2 cycles if slow16
+	sbrs r24,samplingADC_slow16		; 3 cycles in normal case, 2 cycles if slow16
 	rjmp skipextradelay1
 
 				; for slow16, we insert two extra delays around the reading of the conversion result
@@ -311,11 +313,11 @@ skipextradelay1:
 	lds	r22, ADCL
 	lds	r21, ADCH
 	ld	r19,z
-	sbrc 	r24,2			; check bit 2 in the control byte: if set do addition
+	sbrc 	r24,samplingADC_cumul	; check bit 2 in the control byte: if set do addition
 	add	r22,r19			; if cumul bit is set, add old result to lower bits of ADC
 	st	z+,r22			; save lower bits (sum or single ADC)
 	ld	r19,z
-	sbrc 	r24,2			; check bit 2 in the control byte: if set do addition
+	sbrc 	r24,samplingADC_cumul	; check bit 2 in the control byte: if set do addition
 	adc	r21,r19			; if cumul bit ist set, add old result to higher bits of ADC
 	st	z+,r21			; save higher bits (sum or single ADC)
 
@@ -333,7 +335,7 @@ was_ready:
 ;	sts	ADCSRA, r21		; 10
 ;	nop				; 11
 fini_a8:
-	sbrs r24,4		; 3 cycles in normal case, 2 cycles if slow16
+	sbrs r24,samplingADC_slow16	; 3 cycles in normal case, 2 cycles if slow16
 	rjmp skipextradelay2
 
         mov r19,r20		; extra delay for slow16, 4203-16*(i&0xfe) cycles
@@ -345,9 +347,9 @@ skipextradelay2:
 
 				; 5 cycles
 					; toggle output back to its "idle" state in case of step response
-	sbrc r24,0
+	sbrc r24,samplingADC_step
 	AOUT	R_DDR, R12		; Rddr_0
-	sbrc r24,0
+	sbrc r24,samplingADC_step
 	AOUT	R_PORT, R14		; Rport_0
 	wdr			; one cycle more
 	; Now we have used in the loop 22+584+3+16+3+5 = 633 clock cycles for normal mode.
@@ -358,7 +360,7 @@ skipextradelay2:
 ; 194 läuft!
 #define FIN_DELAY 194
 	ldi	r19,((FIN_DELAY-2)/3)		; 2+(65*3) = 197 cycles make total loop take 831 cycles = 13*64-1 = 1 less than period of ADC
-	sbrc 	r24,1			; check slow4 bit: if set, then delay for 3 clockcycles fewer, effectively increasing the time between samples by a factor of 4
+	sbrc 	r24,samplingADC_slow4			; check slow4 bit: if set, then delay for 3 clockcycles fewer, effectively increasing the time between samples by a factor of 4
 	dec	r19
 L04c:	dec	r19
 	brne L04c

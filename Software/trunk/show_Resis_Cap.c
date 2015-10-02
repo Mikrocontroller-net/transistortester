@@ -483,9 +483,13 @@ void Bat_update(uint8_t tt) {
   }
 };	/* end Bat_update() */
 #endif
-#if defined(POWER_OFF) && defined(WITH_MENU)
+#if defined(POWER_OFF)
 uint8_t Pwr_mode_check(uint8_t tt) {
+ #if FLASHEND > 0x1fff
  if ((tt == 15) && (DC_Pwr_mode == 1)) return(0);  // when DC_Mode, next cycle start with 0
+ #else
+ if (tt == 15)  return(0);  // when DC_Mode, next cycle start with 0
+ #endif
  return(tt + 1);	// otherwise increase
 };
 #endif

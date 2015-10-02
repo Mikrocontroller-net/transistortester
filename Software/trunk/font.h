@@ -1,5 +1,14 @@
 #if (LCD_GRAPHIC_TYPE != 0)
 
+
+#if defined(FONT_5X8) || defined(FONT_5x8) 
+   #define FONT_WIDTH 6
+   #define FONT_HEIGHT 8
+   #include "fonts/5x8_vertikal_LSB_1.h"   //******Font_5x8 (create by mike0815 *** 23-09-2015 )
+ #define FONT_SELECTED
+ #endif
+ 
+ 
  #if defined(FONT_6X8) || defined (FONT_6x8)
   #define FONT_WIDTH 6
   #define FONT_HEIGHT 8

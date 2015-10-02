@@ -137,6 +137,7 @@ CFLAGS += -DLCD_ST7565_V_FLIP=0
 
 # If option WITH_LCD_ST7565 is present one of the following fonts should be
 # choosen. With a font width below 8 more than 16 characters can be shown in one display line.
+#CFLAGS += -DFONT_5X8
 #CFLAGS += -DFONT_6X8
 #CFLAGS += -DFONT_8X8
 CFLAGS += -DFONT_7X12

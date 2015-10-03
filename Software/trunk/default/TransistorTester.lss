@@ -8370,17 +8370,20 @@ void Bat_update(uint8_t tt) {
     2984:	8f 30       	cpi	r24, 0x0F	; 15
     2986:	21 f4       	brne	.+8      	; 0x2990 <Pwr_mode_check+0xc>
     2988:	90 91 31 01 	lds	r25, 0x0131
-  }
 };	/* end Bat_update() */
 #endif
 #if defined(POWER_OFF)
 uint8_t Pwr_mode_check(uint8_t tt) {
+ #if FLASHEND > 0x1fff
  if ((tt == 15) && (DC_Pwr_mode == 1)) return(0);  // when DC_Mode, next cycle start with 0
     298c:	91 30       	cpi	r25, 0x01	; 1
     298e:	11 f0       	breq	.+4      	; 0x2994 <Pwr_mode_check+0x10>
     2990:	8f 5f       	subi	r24, 0xFF	; 255
     2992:	08 95       	ret
     2994:	80 e0       	ldi	r24, 0x00	; 0
+ #else
+ if (tt == 15)  return(0);  // when DC_Mode, next cycle start with 0
+ #endif
  return(tt + 1);	// otherwise increase
     2996:	08 95       	ret
 

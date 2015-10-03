@@ -1030,7 +1030,7 @@ unsigned char options, unsigned char width, unsigned char height) {
    pagemax = (y + height - 1);
 
    if ((options & OPT_VREVERSE) == OPT_VREVERSE)
-      pdata += ((height - 1) * width) >> 3;
+      pdata += ((height-1)>>3) * width; /* begin of the last line of data */
 
    if (pagemax >= SCREEN_HEIGHT)
       pagemax = (SCREEN_HEIGHT - 1);	// limit to last page of screen

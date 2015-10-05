@@ -124,15 +124,15 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
    for (i=0;i<32;i++) samplingADC((1<<samplingADC_step)|(1<<samplingADC_cumul), uu, N2+1, d, HiPinR_H, d, HiPinR_L);
 
    R_DDR = 0;			
-#if 0
+#if 1
    uint16_t kk;
-   for (kk=1; kk<N2; kk+=2) {
+   for (kk=0; kk<(N2+8); kk+=16) {
      lcd_next_line_wait(0);
      DisplayValue16(kk,0,' ',4);
      u2lcd(uu[kk]);
      lcd_data(';');
-     DisplayValue16(kk+1,0,' ',4);
-     u2lcd(uu[kk+1]);
+     DisplayValue16(kk+8,0,' ',4);
+     u2lcd(uu[kk+8]);
      lcd_space();
    }
 #endif

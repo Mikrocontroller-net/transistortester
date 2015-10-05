@@ -864,7 +864,7 @@
        lcd_MEM_string(RDS_str);		// "RDS=
        DisplayValue16(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance
  #endif
-    } else {
+    } else {   /* depletion mode */
  #if LCD_LINES > 6
        lcd_next_line(TEXT_RIGHT_TO_ICON);	// Make shure to be under the icon
  #endif
@@ -884,7 +884,7 @@
        DisplayValue16(_trans->current,-6,'A',2);
        lcd_MEM_string(Vgs_str);		// "@Vg="
        Display_mV(_trans->gthvoltage,2);	//Gate-threshold voltage
-    }
+    }	/* end of enhancement or depletion mode WITH_GRAPHICS */
 #else	/* character display */
     if((PartMode&D_MODE) != D_MODE) {	//enhancement-MOSFET
 	//Gate capacity

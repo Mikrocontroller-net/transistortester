@@ -11811,7 +11811,7 @@ TyUfAusgabe:
        DisplayValue16(_trans->current,-6,'A',2);
        lcd_MEM_string(Vgs_str);		// "@Vg="
        Display_mV(_trans->gthvoltage,2);	//Gate-threshold voltage
-    }
+    }	/* end of enhancement or depletion mode WITH_GRAPHICS */
 #else	/* character display */
     if((PartMode&D_MODE) != D_MODE) {	//enhancement-MOSFET
     3a56:	f0 91 43 01 	lds	r31, 0x0143

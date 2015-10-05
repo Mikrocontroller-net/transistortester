@@ -920,7 +920,7 @@ void lcd_set_pixels(const unsigned char *pdata, unsigned char x, unsigned char y
 unsigned char options, unsigned char width, unsigned char height) {
 /* ------------------------------------------------------------------------------- */
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814))
-   if (x >= (SCREEN_WIDTH - 6) || (y >= (SCREEN_HEIGHT - 8)))
+   if (((x+width) > SCREEN_WIDTH) || ((y+height) > SCREEN_HEIGHT))
       return;
 
    unsigned char offset;
@@ -1026,7 +1026,7 @@ unsigned char options, unsigned char width, unsigned char height) {
 //   unsigned char height;
    unsigned char ymem;
 //   const unsigned char *pdata;
-   if ((x > (SCREEN_WIDTH - 6)) || (y > (SCREEN_HEIGHT-8))) return;
+   if (((x+width) > SCREEN_WIDTH) || ((y+height) > SCREEN_HEIGHT)) return;
    for (ii=0; ii<height; ii++) {
      if (options & OPT_VREVERSE) {
        hh = (height - 1 - ii) / 8;
@@ -1069,7 +1069,7 @@ unsigned char options, unsigned char width, unsigned char height) {
 /* ------------------------------------------------------------------------------- */
   // support for color display
   // lcd_set_pixels(const uchar *pdata, uchar x, uchar y, uchar options, uchar width, uchar height) 
-   if ((x > (SCREEN_WIDTH - 6)) || (y > (SCREEN_HEIGHT-8))) return;
+   if (((x+width) > SCREEN_WIDTH) || ((y+height) > SCREEN_HEIGHT)) return;
 
    unsigned char offset;
    unsigned char page;

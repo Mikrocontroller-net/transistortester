@@ -89,6 +89,11 @@
  #endif
 #endif
 
+#if (LCD_LINES < 7) && defined(WITH_6_SELECTION_MENU)
+ #warning Display has not sufficient count of lines for WITH_6_SELECTION_MENU !
+ #undef WITH_6_SELECTION_MENU
+#endif
+
 /* configure WITH_VEXT, TPext and TPex2  */
 #if (PROCESSOR_TYP == 8) || (PROCESSOR_TYP == 168) || (PROCESSOR_TYP == 328)
  #if FLASHEND > 0x1fff	/* at least ATmega16 */

@@ -120,12 +120,31 @@ void function_menu() {
  #ifdef PAGE_MODE
      ff = 0;
      if (func_number == page_nr) ff = 1;	// number is found
+
      p_nr = page_nr + 1;
      if (p_nr > MODE_LAST) p_nr -= (MODE_LAST + 1);
      if (func_number == p_nr) ff = 1;		// number is found
+
      p_nr = page_nr + 2;
      if (p_nr > MODE_LAST) p_nr -= (MODE_LAST + 1);
      if (func_number == p_nr) ff = 1;		// number is found
+
+   #ifdef WITH_6_SELECTION_MENU	
+ 
+	 p_nr = page_nr + 3;
+     if (p_nr > MODE_LAST) p_nr -= (MODE_LAST + 1);
+     if (func_number == p_nr) ff = 1;		// number is found
+ 	 
+     p_nr = page_nr + 4;
+     if (p_nr > MODE_LAST) p_nr -= (MODE_LAST + 1);
+     if (func_number == p_nr) ff = 1;		// number is found
+ 	 
+     p_nr = page_nr + 5;
+     if (p_nr > MODE_LAST) p_nr -= (MODE_LAST + 1);
+     if (func_number == p_nr) ff = 1;		// number is found
+ 	 
+  #endif
+
      if (ff == 0) {
         // func_number is not in page list
   #ifdef WITH_ROTARY_SWITCH
@@ -134,7 +153,11 @@ void function_menu() {
         } else {
            page_nr = func_number;	// for backward, set page_nr to func_number
         }
+   #ifdef WITH_6_SELECTION_MENU
+       if (page_nr > MODE_LAST) page_nr -= (MODE_LAST + 4);
+   #else
        if (page_nr > MODE_LAST) page_nr -= (MODE_LAST + 1);
+   #endif
   #else
         page_nr = func_number;
   #endif
@@ -165,7 +188,71 @@ void function_menu() {
         lcd_space();				// put a blank to 1. row of line 4
      }
      message2line(p_nr);			// show 3. page function
+ 	 
+  #ifdef WITH_6_SELECTION_MENU
+ 
+     lcd_line5();				// reset cursor to begin of line 5
+     p_nr = page_nr + 3;
+     if (p_nr > MODE_LAST) p_nr -= (MODE_LAST + 1);
+     if (func_number == p_nr) {
+        lcd_data('>');
+     } else {
+        lcd_space();				// put a blank to 1. row of line 5
+     }
+     message2line(p_nr);			// show 4. page function
+ 
+     lcd_line6();				// reset cursor to begin of line 6
+     p_nr = page_nr + 4;
+     if (p_nr > MODE_LAST) p_nr -= (MODE_LAST + 1);
+     if (func_number == p_nr) {
+        lcd_data('>');
+     } else {
+        lcd_space();				// put a blank to 1. row of line 6
+     }
+     message2line(p_nr);			// show 5. page function
+ 
+     lcd_line7();				// reset cursor to begin of line 7
+     p_nr = page_nr + 5;
+     if (p_nr > MODE_LAST) p_nr -= (MODE_LAST + 1);
+     if (func_number == p_nr) {
+        lcd_data('>');
+     } else {
+        lcd_space();				// put a blank to 1. row of line 7
+     }
+     message2line(p_nr);			// show 6. page function
+ 
+  #endif
+
  #else	/* no PAGE_MODE */
+ 
+  #ifdef WITH_6_SELECTION_MENU
+ 
+     lcd_line2();				// clear line 2
+     lcd_space();				// put a blank to 1. row of line 2
+     message2line(func_number + MODE_LAST - 1);	// show lower (previous) function
+     
+     lcd_line3();				// reset cursor to begin of line 3
+     lcd_space();				// put a blank to 1. row of line 3
+     message2line(func_number + MODE_LAST);		// show lower (previous) function
+    
+     lcd_line4();				// reset cursor to begin of line 4
+     lcd_data('>');				// put a '>' marker to row 1 of line 4
+     message2line(func_number);	// show selectable function
+ 
+     lcd_line5();				// reset cursor to begin of line 5
+     lcd_space();				// put a blank to 1. row of line 5
+     message2line(func_number + 1);		// show higher (next) function
+ 
+     lcd_line6();				// reset cursor to begin of line 6
+     lcd_space();				// put a blank to 1. row of line 6
+     message2line(func_number + 2);		// show higher (next) function
+ 
+     lcd_line7();				// reset cursor to begin of line 7
+     lcd_space();				// put a blank to 1. row of line 7
+     message2line(func_number + 3);		// show higher (next) function
+ 
+  #else
+
      lcd_line2();				// clear line 2
      lcd_space();				// put a blank to 1. row of line 2
      message2line(func_number + MODE_LAST);	// show lower (previous) function
@@ -175,6 +262,8 @@ void function_menu() {
      lcd_line4();				// reset cursor to begin of line 4
      lcd_space();				// put a blank to 1. row of line 4
      message2line(func_number + 1);		// show higher (next) function
+  #endif
+
  #endif         /* PAGE_MODE */
 #else	/* not LCD_LINES > 3 */
      lcd_line2();
@@ -285,7 +374,8 @@ void message2line(uint8_t number) {
  #ifdef WITH_VEXT
      if (number == MODE_VEXT) lcd_MEM_string(VOLTAGE_str); 
  #endif
- #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
+ #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
+
      if (number == MODE_CONTRAST) lcd_MEM_string(CONTRAST_str); 
  #endif
      if (number == MODE_SHOW) {
@@ -508,6 +598,36 @@ void make_frequency() {
        if (freq_nr > MAX_FREQ_NR) freq_nr -= (MAX_FREQ_NR + 1);
        old_freq = freq_nr;	// update the last active frequency number
 #if (LCD_LINES > 3)
+       
+  #ifdef WITH_6_SELECTION_MENU
+   
+   lcd_line2();	// position to line 2 for previous frequency
+       lcd_space();		// add a space to row 1 of line2
+       switch_frequency(freq_nr + MAX_FREQ_NR);
+       lcd_clear_line();		// clear remainder of line2
+       lcd_line4();
+       lcd_space();		// add a space to row 1 of line4
+       switch_frequency(freq_nr + 1);
+       lcd_clear_line();	// clear remainder of line4
+       lcd_line3();
+       lcd_space();		// add a space to row 1 of line3
+       switch_frequency(freq_nr);
+       lcd_clear_line();	// clear remainder of line3
+       lcd_line5();	// position to line 2 for previous frequency
+       lcd_space();		// add a space to row 1 of line5
+       switch_frequency(freq_nr + 2);
+       lcd_clear_line();		// clear remainder of line5
+       lcd_line6();
+       lcd_space();		// add a space to row 1 of line6
+       switch_frequency(freq_nr + 3);
+       lcd_clear_line();	// clear remainder of line6
+       lcd_line7();
+       lcd_data('>');
+       switch_frequency(freq_nr + 4);
+       lcd_clear_line();	// clear remainder of line7
+  
+  #else
+
        lcd_line2();	// position to line 2 for previous frequency
        lcd_space();		// add a space to row 1 of line2
        switch_frequency(freq_nr + MAX_FREQ_NR);
@@ -520,6 +640,7 @@ void make_frequency() {
        lcd_data('>');
        switch_frequency(freq_nr);
        lcd_clear_line();	// clear remainder of line3
+  #endif
 #else
        lcd_line2();	// position to line 2 for next frequency
        switch_frequency(freq_nr);

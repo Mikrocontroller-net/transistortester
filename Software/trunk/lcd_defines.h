@@ -175,6 +175,7 @@
 	#define CMD_DISPLAY_OFF         0xAE
 	#define CMD_DISPLAY_ON          0xAF
 	#define CMD_SET_PAGE            0xB0
+	#define CMD_SET_START_LINE		0x40    /* set the start line for ST8814, Z address */
 	#define CMD_SET_COLUMN_UPPER    0x10
 	#define CMD_SET_COLUMN_LOWER    0x00
 //Makros for LCD

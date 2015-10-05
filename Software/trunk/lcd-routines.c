@@ -117,6 +117,55 @@ void lcd_line4() {
 #endif
 }
 
+#ifdef WITH_6_SELECTION_MENU
+
+/* ******************************************************************************* */
+//move to the beginning of the 5. row
+void lcd_line5() {
+ #ifdef WITH_UART
+   uart_putc(' ');		// start of new line
+ #endif
+   lcd_text_line = 4;
+ #if (LCD_GRAPHIC_TYPE != 0)
+   lcd_set_cursor(4 * PAGES_PER_LINE,0);
+ #else
+   lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row5));
+   _lcd_column = 0;
+ #endif
+}
+
+/* ******************************************************************************* */
+//move to the beginning of the 6. row
+void lcd_line6() {
+ #ifdef WITH_UART
+   uart_putc(' ');		// start of new line
+ #endif
+   lcd_text_line = 5;
+ #if (LCD_GRAPHIC_TYPE != 0)
+   lcd_set_cursor(5 * PAGES_PER_LINE,0);
+ #else
+   lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row6));
+   _lcd_column = 0;
+ #endif
+}
+
+/* ******************************************************************************* */
+//move to the beginning of the 7. row
+void lcd_line7() {
+ #ifdef WITH_UART
+   uart_putc(' ');		// start of new line
+ #endif
+   lcd_text_line = 6;
+ #if (LCD_GRAPHIC_TYPE != 0)
+   lcd_set_cursor(6 * PAGES_PER_LINE,0);
+ #else
+   lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row7));
+   _lcd_column = 0;
+ #endif
+}
+
+#endif
+
 /* ******************************************************************************* */
 // position to next line to column xx
 // Text_line number is incremented by 1, if possible (not yet at the last line).
@@ -463,6 +512,7 @@ void lcd_init(void) {
    volume = eeprom_read_byte(&EE_Volume_Value);		// read Vop
    lcd_command(CMD_SET_VOP_UPPER | ((volume >> 5) & 0x07));	// set upper Vop
    lcd_command(CMD_SET_VOP_LOWER | (volume & 0x1f));	// set lower Vop
+   lcd_command(CMD_SET_START_LINE | (LCD_ST7565_Y_START & 0x3f));       // Set the Start line 0
    lcd_command(CMD_SET_ALLPTS_NORMAL);		// 0xa4 set display to normal
    lcd_command(CMD_SET_POWER_CONTROL | 4);	// 0x28|4 Charge Pump ON
    lcd_command(CMD_SET_COM_REVERSE);		// 0xc8

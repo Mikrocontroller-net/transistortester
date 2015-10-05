@@ -166,6 +166,8 @@
  // support for PCF8814 , used for Nokia 1100
 	#undef SCREEN_WIDTH		
 	#define SCREEN_WIDTH  96		/* for ST8814 */
+        #undef SCREEN_HEIGHT 
+        #define SCREEN_HEIGHT  65
 	#define CMD_SET_VOP_UPPER 0x20		/* upper 3 bits of Vop */
 	#define CMD_SET_VOP_LOWER 0x80		/* lower 5 bits of Vop */
 	#define CMD_SET_ALLPTS_NORMAL   0xA4

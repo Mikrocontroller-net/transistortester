@@ -725,18 +725,18 @@ void lcd_clear(void) {
    for (p = 0; p < (SCREEN_HEIGHT / 8); p++) {
      lcd_command(CMD_SET_COLUMN);		// set horizontal position to 0
      lcd_command(CMD_SET_PAGE | (0x0f & p));	// set page 0 to 7
-     for (count = 0; count < 102; count++)
+     for (count = 0; count < SCREEN_WIDTH; count++)
        lcd_write_data(0);
    }
 #elif (LCD_ST_TYPE == 8814)
    unsigned char p;
    unsigned char count;
 
-   for (p = 0; p < (SCREEN_HEIGHT / 8); p++) {
+   for (p = 0; p < ((SCREEN_HEIGHT+7) / 8); p++) {
      lcd_command(CMD_SET_COLUMN_UPPER);		// set horizontal position to 0
      lcd_command(CMD_SET_COLUMN_LOWER);
      lcd_command(CMD_SET_PAGE | (0x0f & p));	// set page 0 to 7
-     for (count = 0; count < 96; count++)
+     for (count = 0; count < SCREEN_WIDTH; count++)
        lcd_write_data(0);
    }
 #elif (LCD_ST_TYPE == 7108)
@@ -748,7 +748,7 @@ void lcd_clear(void) {
    for (p = 0; p < (SCREEN_HEIGHT / 8); p++) {
      lcd_command(CMD_SET_COLUMN_ADDR);		// set horizontal position to 0
      lcd_command(CMD_SET_PAGE | (0x07 & p));	// set page 0 to 7, vertical position = p*8
-     for (count = 0; count < 64; count++)
+     for (count = 0; count < (SCREEN_WIDTH/2); count++)
        lcd_write_data(0);			// clear 64 row in each controller (128 row total)
    }
 

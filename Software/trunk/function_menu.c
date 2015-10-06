@@ -303,6 +303,7 @@ void function_menu() {
            show_Resis13();		// measure resistor at TP1 and TP3
         }
         if (func_number == MODE_CAP13) {
+	   lcd_clear();
            show_Cap13();		// measure capacitor at TP1 and TP3
         }
         if (func_number == MODE_ROTARY) {

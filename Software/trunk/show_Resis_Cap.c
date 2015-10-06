@@ -345,9 +345,8 @@ void show_cap_simple(void)
  #endif
 void show_Cap13(void) {
   uint8_t key_pressed;
-//  message_key_released(CAP_13_str);	// 1-||-3 at the beginning of line 1
-//  lcd_set_cursor(0,LCD_LINE_LENGTH-3);
-//  lcd_MEM2_string(CMETER_13_str);	// "[C]" at the end of line 1
+
+//  lcd_clear();
  #ifdef POWER_OFF
   uint8_t times;
   for (times=0;times<250;) 
@@ -356,10 +355,6 @@ void show_Cap13(void) {
  #endif
   {
      init_parts();		// set all parts to nothing found 
-//     PartFound = PART_NONE;
-//     NumOfDiodes = 0;
-//     cap.cval_max = 0;		// clear cval_max for update of vloss
-//     cap.cpre_max = -15;	// set to fF unit
 //     cap.v_loss = 0;		// clear vloss  for low capacity values (<25pF)!
      ReadCapacity(TP3, TP1);
      PartFound = PART_CAPACITOR;
@@ -370,64 +365,6 @@ void show_Cap13(void) {
         cap.cpre = sampling_cap_pre;
      }
  #endif
- #if 0
-     lcd_line2();		// overwrite old Capacity value 
-     if (cap.cpre_max < 0) {
-        // a cap is detected
-        DisplayValue(cap.cval_max,cap.cpre_max,'F',4);	// display capacity
-        lcd_spaces(8 - _lcd_column);
-        PartFound = PART_CAPACITOR;	// GetESR should check the Capacity value
-        cap.esr = GetESR(TP3,TP1);
-        if ( cap.esr < 65530) {
-           // ESR is measured
-           lcd_MEM_string(&ESR_str[1]);		// show also "ESR="
-           DisplayValue16(cap.esr,-2,LCD_CHAR_OMEGA,2); // and ESR value
-	   lcd_clear_line();		// clear to end of line 2
-           lcd_set_cursor(0,4);
-           lcd_MEM_string(Resistor_str);   // "-[=]- .."
-           lcd_testpin(TP3);		// add the TP3
-        } else {		// no ESR known
-	   lcd_clear_line();		// clear to end of line, overwrite old ESR
-           lcd_set_cursor(0,4);		// clear ESR resistor
-           lcd_testpin(TP3);		// write the TP3
-           lcd_spaces(5);			// overwrite ESR resistor symbol
-        }
-        GetVloss();                        // get Voltage loss of capacitor
-     } else { /* no cap detected */
-       lcd_line1();
-       lcd_MEM2_string(CAP_13_str);	// 1-||-3
-       lcd_spaces(LCD_LINE_LENGTH - 3 - _lcd_column);
-       lcd_MEM2_string(CMETER_13_str);       // "[C]" at the end of line 1
-       lcd_line2();
-       lcd_data('?');
-       lcd_clear_line();		// clear to end of line 2
-  #if (LCD_LINES > 2)
-       lcd_line3();	
-       lcd_clear_line();	// clear old Vloss= message
-  #endif
-     }
- #if (LCD_LINES > 2)
-        lcd_line3();
-        if (cap.v_loss != 0) {
-           lcd_MEM_string(&VLOSS_str[1]);  // "Vloss="
-           DisplayValue16(cap.v_loss,-1,'%',2);
-        }
-        lcd_clear_line();		// clear to end of line
- #else
-        if (cap.v_loss != 0) {
-           key_pressed = wait_for_key_ms(SCREEN_TIME);
-  #ifdef WITH_ROTARY_SWITCH
-//           if ((key_pressed != 0) || (rotary.incre > 3)) break;
-  #else
-//           if (key_pressed != 0) break;
-  #endif
-           lcd_line2();
-           lcd_MEM_string(&VLOSS_str[1]);  // "Vloss="
-           DisplayValue16(cap.v_loss,-1,'%',2);
-           lcd_clear_line();		// clear to end of line
-        }
- #endif
- #else
      if (cap.cpre > -15) {	/* Capacity below the detection limit */
        cap.cpre_max = cap.cpre;		// show_cap will display the cap.cval_max value
        cap.cval_max = cap.cval;
@@ -440,12 +377,11 @@ void show_Cap13(void) {
        lcd_line2();
        lcd_data('?');
        lcd_clear_line();		// clear to end of line 2
-  #if (LCD_LINES > 2)
+ #if (LCD_LINES > 2)
        lcd_line3();	
        lcd_clear_line();	// clear old Vloss= message
-  #endif
-     }
  #endif
+     }
  #if defined(POWER_OFF) && defined(BAT_CHECK)
      Bat_update(times);
  #endif

@@ -78,11 +78,11 @@ void lcd_line2() {
 #ifdef WITH_UART
    uart_putc(' ');		// start of new line
 #endif
-   lcd_text_line = 1;
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(1 * PAGES_PER_LINE,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row2));
+   lcd_text_line = 1;
    _lcd_column = 0;
 #endif
 }
@@ -93,11 +93,11 @@ void lcd_line3() {
 #ifdef WITH_UART
    uart_putc(' ');		// start of new line
 #endif
-   lcd_text_line = 2;
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(2 * PAGES_PER_LINE,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row3));
+   lcd_text_line = 2;
    _lcd_column = 0;
 #endif
 }
@@ -108,11 +108,11 @@ void lcd_line4() {
 #ifdef WITH_UART
    uart_putc(' ');		// start of new line
 #endif
-   lcd_text_line = 3;
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(3 * PAGES_PER_LINE,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row4));
+   lcd_text_line = 3;
    _lcd_column = 0;
 #endif
 }
@@ -125,11 +125,11 @@ void lcd_line5() {
  #ifdef WITH_UART
    uart_putc(' ');		// start of new line
  #endif
-   lcd_text_line = 4;
  #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(4 * PAGES_PER_LINE,0);
  #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row5));
+   lcd_text_line = 4;
    _lcd_column = 0;
  #endif
 }
@@ -140,11 +140,11 @@ void lcd_line6() {
  #ifdef WITH_UART
    uart_putc(' ');		// start of new line
  #endif
-   lcd_text_line = 5;
  #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(5 * PAGES_PER_LINE,0);
  #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row6));
+   lcd_text_line = 5;
    _lcd_column = 0;
  #endif
 }
@@ -155,11 +155,11 @@ void lcd_line7() {
  #ifdef WITH_UART
    uart_putc(' ');		// start of new line
  #endif
-   lcd_text_line = 6;
  #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(6 * PAGES_PER_LINE,0);
  #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row7));
+   lcd_text_line = 6;
    _lcd_column = 0;
  #endif
 }
@@ -202,6 +202,7 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
 #if (LCD_GRAPHIC_TYPE != 0)
    //move to the specified position (depends on used font)
    _page = y;
+   lcd_text_line = y / PAGES_PER_LINE;
     // The pixel memory is greater as the display window.
     // For example the SPL501 controller has 132x65 dot matrix memory
     // LCD_ST7565_H_OFFSET specifies the offset of the 128 pixel of the display window.

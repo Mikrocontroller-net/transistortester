@@ -429,8 +429,8 @@ if (((test_mode & 0x0f) == 1) || (UnCalibrated == 2))
 // Message C > 100nF at TP1 and TP3
 cap_found = 0;
 for (ww=0;ww<64;ww++) {
+  init_parts();
   #if (TPCAP >= 0)
-  PartFound = PART_NONE;
   CalibrationCap();	// measure with internal calibration capacitor
   #else
   lcd_clear();
@@ -439,7 +439,6 @@ for (ww=0;ww<64;ww++) {
   lcd_testpin(TP3);
   lcd_MEM2_string(MinCap_str); // " >100nF!"
   PartFound = PART_NONE;
-  //measure  offset Voltage of analog Comparator for Capacity measurement
   ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
   #endif
   while (cap.cpre < -9) {

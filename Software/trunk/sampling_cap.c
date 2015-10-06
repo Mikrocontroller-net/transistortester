@@ -230,6 +230,11 @@ void sampling_cap_calibrate()
             lcd_clear_line();
             lcd_refresh();
          }
+   lcd_line1();
+   lcd_MEM_string(OK_str);	// "OK"
+   lcd_clear_line();
+   lcd_refresh();
+   wait_about200ms();
 } /* end sampling_cap_calibrate */
 
 

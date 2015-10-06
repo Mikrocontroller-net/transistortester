@@ -86,28 +86,11 @@ show_page_4:
   /* output line 8 */
   lcd_MEM2_string(REF_R_str);  // "REF_R="
   i2lcd((int8_t)eeprom_read_byte((uint8_t *)(&RefDiff)));
-#ifdef WITH_ROTARY_SWITCH
-  wait_for_key_ms(MIDDLE_WAIT_TIME);
-  if (rotary.incre > FAST_ROTATION) return;	// fast rotation ends the function
- #if (LCD_LINES > 3)
-  if (rotary.count < -1) goto show_page_1;
-  if (rotary.count < 0) goto show_page_3;
- #else
-  if (rotary.count < -3) goto show_page_1;
-  if (rotary.count < -2) goto show_page_2;
-  if (rotary.count < -1) goto show_page_3;
-  if (rotary.count < 0) goto show_page_4;
- #endif
- #if defined(SamplingADC) && (LCD_LINES < 4)
-show_page_5:
- #endif
-#else
-  wait_for_key_ms(MIDDLE_WAIT_TIME);
-#endif
 
 #ifdef SamplingADC
+show_page_5:
   /* modified output from sampling_cap_calibrate */
-  lcd_set_cursor((LCD_LINES-1),0);      // set for initial clear screen
+  lcd_set_cursor((LCD_LINES-1)*PAGES_PER_LINE,0);      // set for initial clear screen
   for (ii=0;ii<=2;ii++)
     for (jj=0;jj<=2;jj++)
        if (ii != jj) {
@@ -141,9 +124,23 @@ show_page_5:
 	  DisplayValue16(cc,-2,' ',3);
 	  DisplayValue16(dd,-12-2,'F',3);
        }
+#else  /* without SamplingADC */
+ #ifdef WITH_ROTARY_SWITCH
   wait_for_key_ms(MIDDLE_WAIT_TIME);
+  if (rotary.incre > FAST_ROTATION) return;	// fast rotation ends the function
+  #if (LCD_LINES > 3)
+  if (rotary.count < -1) goto show_page_1;
+  if (rotary.count < 0) goto show_page_3;
+  #else
+  if (rotary.count < -3) goto show_page_1;
+  if (rotary.count < -2) goto show_page_2;
+  if (rotary.count < -1) goto show_page_3;
+  if (rotary.count < 0) goto show_page_4;
+  #endif
+ #endif
 
 #endif  /* SamplingADC */
+  wait_for_key_ms(MIDDLE_WAIT_TIME);
 #if  defined(WITH_GRAPHICS) && !defined(SamplingADC)
  ShowIcons();		// show all Icons
 #endif

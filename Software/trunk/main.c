@@ -336,57 +336,16 @@
   }
 
   if (PartFound == PART_CAPACITOR) {
-#if 0
-//     lcd_MEM_string(Capacitor);
-     lcd_testpin(cap.ca);		//Pin number 1
-     lcd_MEM_string(CapZeich);		// capacitor sign
-     lcd_testpin(cap.cb);		//Pin number 2
-#if FLASHEND > 0x1fff
-     GetVloss();			// get Voltage loss of capacitor
-     if (cap.v_loss != 0) {
- #if (LCD_LINES > 2)
-        lcd_line3();
-        lcd_MEM_string(&VLOSS_str[1]);	// "Vloss="
- #else
-        lcd_MEM_string(VLOSS_str);	// " Vloss="
- #endif
-        DisplayValue16(cap.v_loss,-1,'%',2);
-     }
-#endif
-     lcd_line2(); 			//2. row 
-     DisplayValue(cap.cval_max,cap.cpre_max,'F',4);
-#if FLASHEND > 0x1fff
-     cap.esr = GetESR(cap.cb, cap.ca);		// get ESR of capacitor
-     if ( cap.esr < 65530) {
-        lcd_MEM_string(ESR_str);	// " ESR="
-        DisplayValue16(cap.esr,-2,LCD_CHAR_OMEGA,2);
- #if (LCD_LINES > 2)
-        lcd_set_cursor(0,4);
-        lcd_MEM_string(Resistor_str);	// -[=]-
-        lcd_testpin(cap.cb);		//Pin number 2
-        lcd_space();
- #endif
-     }
-#endif
 #if FLASHEND > 0x3fff
-     if ((cap.ca + cap.cb) == (TP1 + TP3)) {
-        show_Cap13();		// automatic capacity measurement
-        goto loop_start;
-     }
-#endif
-     goto tt_end;
-#else
- #if FLASHEND > 0x3fff
      if ((cap.ca + cap.cb) == (TP1 + TP3)) {
         show_Cap13();		// repeated capacity measurement
         goto loop_start;
      }
      show_cap(0);		// show capacity in normal way and measure additional parameters
- #else
+#else
      show_cap_simple();		// show capacity in normal way and measure additional parameters
- #endif
-     goto tt_end;
 #endif
+     goto tt_end;
   } /* end PartFound == PART_CAPACITOR */
 
   // ========================================
@@ -1062,7 +1021,7 @@ not_known:
 TyUfAusgabe:
 #ifdef WITH_THYRISTOR_GATE_V
  #ifdef WITH_GRAPHICS
-  lcd_set_cursor(2,TEXT_RIGHT_TO_ICON);		// position behind the icon,line 2
+  lcd_set_cursor(1*PAGES_PER_LINE,TEXT_RIGHT_TO_ICON);		// position behind the icon,line 2
  #else
   lcd_line2(); //2. row 
  #endif

@@ -357,7 +357,6 @@ skipextradelay2:
 	; So we have 831-633-4 = 194 cycles to waste. 
 
 
-; 194 läuft!
 #define FIN_DELAY 194
 	ldi	r19,((FIN_DELAY-2)/3)		; 2+(65*3) = 197 cycles make total loop take 831 cycles = 13*64-1 = 1 less than period of ADC
 	sbrc 	r24,samplingADC_slow4			; check slow4 bit: if set, then delay for 3 clockcycles fewer, effectively increasing the time between samples by a factor of 4

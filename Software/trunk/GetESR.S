@@ -273,11 +273,14 @@
 
 //=================================================================
 
+; #define WITHOUT_PROLOGUE   /* to use the local push / pop techniques */
+; without the local push/pop you can save 82 bytes Flash memory
 
 //=================================================================
 //void GetESR(uint8_t hipin, uint8_t lopin) {
  .section .text
 GetESR:
+#ifdef WITHOUT_PROLOGUE
        	push	r2;
        	push	r3;
        	push	r4;
@@ -298,12 +301,22 @@ GetESR:
        	push	r28;
        	in	r28, _SFR_IO_ADDR(SPL);
        	in	r29, _SFR_IO_ADDR(SPH);
-       	sbiw	r28, 0x1e;	/* 30 */
+       	sbiw	r28,  30 		;
        	in	r0, _SFR_IO_ADDR(SREG);
        	cli
        	out	_SFR_IO_ADDR(SPH), r29;
        	out	_SFR_IO_ADDR(SREG), r0;
 	out	_SFR_IO_ADDR(SPL), r28;
+#else
+ .extern __prologue_saves__
+ .extern __epilogue_restores__
+	ldi	r26, 30			;
+	ldi	r27, 0			;
+	ldi	r30, lo8(gs(Retur2))	;
+	ldi	r31, hi8(gs(Retur2))	;
+	jmp	__prologue_saves__ 	;
+Retur2:
+#endif
 
 
 	mov	SelectLowPin, r22;
@@ -906,7 +919,8 @@ ad_exit:
 #ifdef ADC_Sleep_Mode
 	out	_SFR_IO_ADDR(SMCR), zero_reg; 	/*  SMCR = 0 */
 #endif
-	adiw	r28, 0x1e;   /* 30 */
+#ifdef WITHOUT_PROLOGUE
+	adiw	r28, 30 		;
 	in	r0, _SFR_IO_ADDR(SREG); 63
 	cli
 	out	_SFR_IO_ADDR(SPH), r29; 62
@@ -931,4 +945,9 @@ ad_exit:
 	pop	r3;
 	pop	r2;
 	ret;
+#else
+	adiw	r28, 30
+	ldi	r30, 18
+	jmp	__epilogue_restores__
+#endif
  .endfunc

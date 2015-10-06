@@ -124,17 +124,19 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
    for (i=0;i<32;i++) samplingADC((1<<samplingADC_step)|(1<<samplingADC_cumul), uu, N2+1, d, HiPinR_H, d, HiPinR_L);
 
    R_DDR = 0;			
-#if 1
+#if 0
    uint16_t kk;
-   for (kk=0; kk<(N2+8); kk+=16) {
-     lcd_next_line_wait(0);
-     DisplayValue16(kk,0,' ',4);
-     u2lcd(uu[kk]);
-     lcd_data(';');
-     DisplayValue16(kk+8,0,' ',4);
-     u2lcd(uu[kk+8]);
-     lcd_space();
+   int16_t udiff;
+   uint16_t old_uu;
+   old_uu = uu[0];
+   for (kk=1; kk<15; kk++) {
+     udiff = uu[kk] - old_uu;
+     if (udiff < 0) udiff = -udiff;
+     old_uu = uu[kk];
+     if (((kk-1) % 3) == 0) lcd_next_line_wait(0);
+     DisplayValue16((uint16_t)udiff,0,' ',4);
    }
+   wait_about5s();
 #endif
 
    // we use the least-squares algorithm to find the slope

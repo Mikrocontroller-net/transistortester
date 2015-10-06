@@ -125,17 +125,22 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
 
    R_DDR = 0;			
 #if 0
+ #warning "sampling_cap with test output enabled!"
    uint16_t kk;
    int16_t udiff;
    uint16_t old_uu;
-   old_uu = uu[0];
-   for (kk=1; kk<15; kk++) {
+   old_uu = uu[N1];
+ #define Step3 ((N2-N1)/15)
+   for (kk=(N1+Step3); kk<N2; kk+=Step3) {
      udiff = uu[kk] - old_uu;
-     if (udiff < 0) udiff = -udiff;
+     if (udiff < 0) udiff = -udiff;	// absolute value
      old_uu = uu[kk];
-     if (((kk-1) % 3) == 0) lcd_next_line_wait(0);
-     DisplayValue16((uint16_t)udiff,0,' ',4);
+     if ( ((kk-N1-Step3) % (3*Step3)) == 0) lcd_next_line_wait(0);
+     DisplayValue16((uint16_t)(udiff)/32,0,' ',4);
    }
+   lcd_next_line_wait(0);
+   DisplayValue16(uu[1],0,'B',5);
+   lcd_clear_line();
    wait_about5s();
 #endif
 

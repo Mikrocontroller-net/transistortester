@@ -30,6 +30,7 @@ PARTNO = m328
 # the external voltage measurement and C+ESR measurement can be selected. Of course you can also return to
 # the normal transistor tester function and switch off the tester.
 CFLAGS += -DWITH_MENU
+#CFLAGS += -DSHORT_UNCAL_MSG
 
 # The menu function can be easier controlled with a incremental encoder (rotary switch).
 # Option WITH_6_SELECTION_MENU Increase the Selectable Functions in the Menu

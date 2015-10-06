@@ -1,7 +1,7 @@
 // table of the bits for the 8x14 character set
 // each byte hold 8 bits of a row, the upper bit is 1, the bit for the 8th line is 128
  #ifdef LCD_CYRILLIC                                      
-  #define CHAR_COUNT14 (Cyr_ja + 16)
+  #define CHAR_COUNT14 (Cyr_ja + 1)
  #else
   #define CHAR_COUNT14 128
  #endif

@@ -976,4 +976,8 @@ End of configuration
 // #undef WITH_VEXT   /* disable the external voltage measurement */
 #include "font.h"
 #include "autoconf.h"
+#ifdef WITH_GRAPHICS
+ #include "fonts/24x32_vertical_LSB.h"
+#endif
+
 #endif /* not defined ADC_PORT */

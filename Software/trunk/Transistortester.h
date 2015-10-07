@@ -8,13 +8,10 @@
 #include <avr/wdt.h>
 #include <avr/interrupt.h>
 #include <math.h>
-#include "config.h"
+#include "config.h"	/* part_defs.h lcd_defines.h font.h autoconf.h */
 #include "tt_function.h"
 #include "tt_resistor.h"
 #include "tt_globals.h"
-//#include "wait1000ms.h"
-//#include "lcd-routines.h"
-//#include "part_defs.h"
 
 
 #if defined (MAIN_C)
@@ -644,7 +641,7 @@ End of configuration
  const unsigned char mosfet_str[] MEM_TEXT = "-MOS";
  const unsigned char jfet_str[] MEM_TEXT = "JFET";
  const unsigned char igbt_str[] MEM_TEXT = "-IGBT";
-#if ((LCD_LINE_LENGTH > 17) || defined(WITH_GRAPHICS))
+#if ((!defined(WITH_GRAPHICS) && (LCD_LINE_LENGTH > 17)) || (defined(WITH_GRAPHICS) && (((SCREEN_WIDTH-TEXT_RIGHT_TO_ICON)/FONT_WIDTH) >= 8)))
  const unsigned char hfe_str[] MEM_TEXT ="hFE=";
  const unsigned char GateCap_str[] MEM_TEXT = "Cg=";
 #else

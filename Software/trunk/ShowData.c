@@ -88,7 +88,9 @@ show_page_4:
   i2lcd((int8_t)eeprom_read_byte((uint8_t *)(&RefDiff)));
 
 #ifdef SamplingADC
+#ifdef WITH_ROTARY_SWITCH
 show_page_5:
+#endif
   /* modified output from sampling_cap_calibrate */
   lcd_set_cursor((LCD_LINES-1)*PAGES_PER_LINE,0);      // set for initial clear screen
   for (ii=0;ii<=2;ii++)
@@ -102,8 +104,9 @@ show_page_5:
  #ifdef WITH_ROTARY_SWITCH
              if (rotary.incre > FAST_ROTATION) return;	// fast rotation ends the function
   #if (LCD_LINES > 3)
-             if (rotary.count < -1) goto show_page_1;
-             if (rotary.count < 0) goto show_page_3;
+             if (rotary.count < -2) goto show_page_1;	// page_2 is shown together with _page_1
+             if (rotary.count < -1) goto show_page_3;	// page_4 is shown together with _page 3
+             if (rotary.count < 0) goto show_page_5;
   #else
              if (rotary.count < -4) goto show_page_1;
              if (rotary.count < -3) goto show_page_2;

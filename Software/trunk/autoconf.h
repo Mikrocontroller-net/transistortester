@@ -16,7 +16,8 @@
  #define TEXT_RIGHT_TO_ICON ((ICON_WIDTH + 16 + 5 + 7) / FONT_WIDTH)
 #elif (LCD_ST_TYPE == 8812)
  /* defines for PCF8812 */
- #undef WITH_GRAPHICS
+ /* The space at the display is too small for the big icons for this type, some characters are missing */
+ #define WITH_GRAPHICS 1
  #undef PAGES_PER_LINE
  #define PAGES_PER_LINE ((FONT_HEIGHT + 7) / 8)
  #undef LCD_LINES
@@ -26,7 +27,8 @@
  #define TEXT_RIGHT_TO_ICON ((ICON_WIDTH + 16 + 5 + 7) / FONT_WIDTH)
 #elif (LCD_ST_TYPE == 8814)
  /* defines for PCF8814 */
- #undef WITH_GRAPHICS
+ /* The space at the display is too small for the big icons for this type, some characters are missing */
+ #define WITH_GRAPHICS 1
  #undef PAGES_PER_LINE
  #define PAGES_PER_LINE ((FONT_HEIGHT + 7) / 8)
  #undef LCD_LINES

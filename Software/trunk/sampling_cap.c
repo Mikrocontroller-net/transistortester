@@ -124,7 +124,7 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
    for (i=0;i<32;i++) samplingADC((1<<samplingADC_step)|(1<<samplingADC_cumul), uu, N2+1, d, HiPinR_H, d, HiPinR_L);
 
    R_DDR = 0;			
-#if 0
+#ifdef DEB_SAM
  #warning "sampling_cap with test output enabled!"
    uint16_t kk;
    int16_t udiff;

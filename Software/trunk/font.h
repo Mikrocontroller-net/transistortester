@@ -8,7 +8,7 @@
  #define FONT_SELECTED
  #endif
  
- 
+
  #if defined(FONT_6X8) || defined (FONT_6x8)
   #define FONT_WIDTH 6
   #define FONT_HEIGHT 8
@@ -110,10 +110,6 @@
    #define FONT_HEIGHT 8
    #include "fonts/6x8_vertikal_LSB_1.h"
    #define FONT_SELECTED
- #endif
-
- #if (LCD_ST_TYPE != 8812) && (LCD_ST_TYPE != 8814)
- #include "fonts/24x32_vertical_LSB.h"
  #endif
 
 #endif /* LCD_GRAPHIC_TYPE != 0 */

@@ -323,6 +323,12 @@ endif
 ifeq ($(WITH_LCD_ST7565),7920)
 OBJECTS += lcd-draw.o
 endif
+ifeq ($(WITH_LCD_ST7565),8814)
+OBJECTS += lcd-draw.o
+endif
+ifeq ($(WITH_LCD_ST7565),8812)
+OBJECTS += lcd-draw.o
+endif
 OBJECTS += swuart.o wait1000ms.o 
 ifneq ($(INHIBIT_SLEEP_MODE),1)
 OBJECTS += sleep_5ms.o

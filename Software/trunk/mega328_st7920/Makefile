@@ -32,14 +32,6 @@ PARTNO = m328p
 CFLAGS += -DWITH_MENU
 
 # The menu function can be easier controlled with a incremental encoder (rotary switch).
-# Option WITH_6_SELECTION_MENU Increase the Selectable Functions in the Menu
-# from 3 to 6 Selectable Functions and also Increase Frequency no. in f-Generator
-# from 3 to 6 Selectable Frequencies , but First you must decrease font to 6X8 or to suitable font size
-# that make enough empty lines space (at least 3 lines) to display more 3 functions & frequencies.
-# Otherwise, the Menu will not be appear well.
-
-#CFLAGS += -DWITH_6_SELECTION_MENU
-
 # Both switches of the rotary switch can be connected with 1 kOhm resistors to PD1 and PD3.
 # The common contact of the two switches must be connected to GND.
 # You must also connect both switch contacts with two 10 kOhm resistors to VCC (pull up).

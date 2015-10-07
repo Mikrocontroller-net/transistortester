@@ -36,9 +36,6 @@ void lcd_line1(void);
 void lcd_line2(void);
 void lcd_line3(void);
 void lcd_line4(void);
-void lcd_line5(void);
-void lcd_line6(void);
-void lcd_line7(void);
 
 unsigned char reverse_byte(unsigned char);
 void lcd_show_Cg(void);		// show Cg=xxxpF

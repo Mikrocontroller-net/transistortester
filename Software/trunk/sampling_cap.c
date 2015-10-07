@@ -125,6 +125,7 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
 
    R_DDR = 0;			
 #ifdef DEB_SAM
+//------------------------------------------------------------------
  #warning "sampling_cap with test output enabled!"
    uint16_t kk;
    int16_t udiff;
@@ -139,9 +140,10 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
      DisplayValue16((uint16_t)(udiff)/32,0,' ',4);
    }
    lcd_next_line_wait(0);
-   DisplayValue16(uu[1],0,'B',5);
+   DisplayValue16(uu[0]/32,0,'B',5);
    lcd_clear_line();
    wait_about5s();
+//------------------------------------------------------------------
 #endif
 
    // we use the least-squares algorithm to find the slope

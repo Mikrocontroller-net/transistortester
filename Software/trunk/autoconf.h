@@ -78,6 +78,12 @@
  #define LCD_LINE_LENGTH 16
 #endif
 
+#if (defined(WITH_GRAPHICS) && (((SCREEN_WIDTH-(TEXT_RIGHT_TO_ICON*FONT_WIDTH))/FONT_WIDTH) < 9))
+ #define LOW_H_SPACE 1
+#else
+ #define LOW_H_SPACE 0
+#endif
+
 #if (LCD_ST_TYPE != 7920)
 #define lcd_refresh() 
 #endif

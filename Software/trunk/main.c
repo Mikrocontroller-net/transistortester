@@ -612,7 +612,7 @@
     lcd_MEM_string(hfe_str);		//"B="  (hFE)
     DisplayValue(_trans->hfe,0,0,3);
 
-    lcd_next_line(TEXT_RIGHT_TO_ICON+1); // position behind the icon, Line 3
+    lcd_next_line(TEXT_RIGHT_TO_ICON+1-LOW_H_SPACE); // position behind the icon+1, Line 3
     lcd_data('I');
     if (_trans->current >= 10000) {
        lcd_data('e');				// emitter current has 10mA offset
@@ -625,17 +625,17 @@
 
     lcd_next_line(TEXT_RIGHT_TO_ICON); // position behind the icon, Line 4
     lcd_MEM_string(Ube_str);		//"Ube="
-    Display_mV(_trans->uBE,3);
+    Display_mV(_trans->uBE,3-LOW_H_SPACE);
     last_line_used = 1;
 
  #ifdef SHOW_ICE
     if (_trans->ice0 > 0) {
-       lcd_next_line_wait(TEXT_RIGHT_TO_ICON-1); // position behind the icon, Line 4 & wait and clear last line
+       lcd_next_line_wait(TEXT_RIGHT_TO_ICON-1-LOW_H_SPACE); // position behind the icon, Line 4 & wait and clear last line
        lcd_MEM2_string(ICE0_str);		// "ICE0="
        DisplayValue16(_trans->ice0,-6,'A',2);	// display ICEO
     }
     if (_trans->ices > 0) {
-       lcd_next_line_wait(TEXT_RIGHT_TO_ICON-1); // position behind the icon, Line 4 & wait and clear last line
+       lcd_next_line_wait(TEXT_RIGHT_TO_ICON-1-LOW_H_SPACE); // position behind the icon, Line 4 & wait and clear last line
        lcd_MEM2_string(ICEs_str);		// "ICEs="
        DisplayValue16(_trans->ices,-6,'A',2);	// display ICEs
     }

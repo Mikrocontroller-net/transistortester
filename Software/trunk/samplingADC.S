@@ -1,6 +1,9 @@
 
 // June-Sept 2015, pa3fwm@amsat.org
 
+#ifdef SamplingADC_CNT
+#include "samplingADC_cnt.S"		/* take replacement with counter1 use */
+#else
 #ifndef __ASSEMBLER__
  #define __ASSEMBLER__
 #endif
@@ -393,3 +396,4 @@ l08:	dec r19
 	ret
 ;     Attention: ATmega1280 and ATmega2560 take two clock tics more!
 #endif
+#endif  /* SamplingADC_CNT */

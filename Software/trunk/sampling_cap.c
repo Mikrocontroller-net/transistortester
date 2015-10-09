@@ -140,7 +140,8 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
      DisplayValue16((uint16_t)(udiff)/32,0,' ',4);
    }
    lcd_next_line_wait(0);
-   DisplayValue16(uu[0]/32,0,'B',5);
+   DisplayValue16(uu[0]/32,0,'a',5);
+   DisplayValue16(uu[1]/32,0,'b',5);
    lcd_clear_line();
    wait_about5s();
 //------------------------------------------------------------------

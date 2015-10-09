@@ -30,7 +30,6 @@ PARTNO = m328
 # the external voltage measurement and C+ESR measurement can be selected. Of course you can also return to
 # the normal transistor tester function and switch off the tester.
 CFLAGS += -DWITH_MENU
-#CFLAGS += -DSHORT_UNCAL_MSG
 
 # The menu function can be easier controlled with a incremental encoder (rotary switch).
 # Both switches of the rotary switch can be connected with 1 kOhm resistors to PD1 and PD3.
@@ -180,6 +179,12 @@ CFLAGS += -DWITH_SELFTEST
 # low capacity measurement and also for the AUTOSCALE_ADC measurement.
 # The AUTO_CAL option is only selectable for mega168 and mega328.
 CFLAGS += -DAUTO_CAL
+
+# The tester reports the uncalibrated state with a message after testing a part.
+# Normally a long text is shown, which explains the steps of calibration.
+# You can prevent the long explanation by setting the SHORT_UNCAL_MSG option.
+# With this option set, only a hint of one line is shown.
+#CFLAGS += -DSHORT_UNCAL_MSG
 
 # You can extend the measurement feature by use of a sampling mode for the ADC converter
 # to extend the resolution of capacity measurement to about 0.01pF.

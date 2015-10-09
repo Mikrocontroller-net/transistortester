@@ -177,6 +177,12 @@ CFLAGS += -DWITH_SELFTEST
 # The AUTO_CAL option is only selectable for mega168 and mega328.
 CFLAGS += -DAUTO_CAL
 
+# The tester reports the uncalibrated state with a message after testing a part.
+# Normally a long text is shown, which explains the steps of calibration.
+# You can prevent the long explanation by setting the SHORT_UNCAL_MSG option.
+# With this option set, only a hint of one line is shown.
+#CFLAGS += -DSHORT_UNCAL_MSG
+
 # You can extend the measurement feature by use of a sampling mode for the ADC converter
 # to extend the resolution of capacity measurement to about 0.01pF.
 # Setting the WITH_SamplinADC to 1 enables this feature for capacity values below 100pF.

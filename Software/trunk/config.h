@@ -967,12 +967,17 @@ Is SWUART_INVERT defined, the UART works is inverse mode
 End of configuration 
 */
 // defines for bits in samplingADC function, parameter 1 (what)
-#define samplingADC_step 7		/* do step response, not impulse */
-#define samplingADC_cumul 6		/* don't overwrite, but add the samples to the array */
-#define samplingADC_twopulses 5		/* send 2 impulses rather than one, inter-pulse time is in upper byte */
-#define samplingADC_slow16 4		/* only take a sample every 16 CPU-cycles */
-#define samplingADC_slow4 2		/* only take a sample every 4 CPU-cycles */
-#define samplingADC_inter_pulse_width 8	/* resides in the upper byte, shift by 8 */
+#define smplADC_step 7		/* do step response, not impulse */
+#define smplADC_cumul 6		/* don't overwrite, but add the samples to the array */
+#define smplADC_twopulses 5		/* send 2 impulses rather than one, inter-pulse time is in upper byte */
+#define smplADC_slow16 4		/* only take a sample every 16 CPU-cycles */
+#define smplADC_slow4 2		/* only take a sample every 4 CPU-cycles */
+#define smplADC_inter_pulse_width 8	/* resides in the upper byte, shift by 8 */
+#define samplingADC_step (1<<smplADC_step)
+#define samplingADC_cumul (1<<smplADC_cumul)
+#define samplingADC_twopulses (1<<smplADC_twopulses)
+#define samplingADC_slow4 (1<<smplADC_slow4)
+#define samplingADC_slow16 (1<<smplADC_slow16)
 // #undef WITH_VEXT   /* disable the external voltage measurement */
 #include "font.h"
 #include "autoconf.h"

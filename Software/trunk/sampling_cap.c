@@ -121,28 +121,33 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
    #define sumx (unsigned long)((N2*(N2+1l)/2)-(N4*(N4-1l)/2)+(N3*(N3-1l)/2)-(N1*(N1-1l)/2))
    unsigned long sumxx=(unsigned long)((N2*(N2+1l)*(2*N2+1l)/6)-(N4*(N4-1l)*(2*N4-1l)/6)+(N3*(N3-1l)*(2*N3-1l)/6)-(N1*(N1-1l)*(2*N1-1l)/6));
    byte d=( (hivolt) ? HiPinR_L : HiPinR_H );
-   for (i=0;i<32;i++) samplingADC((1<<samplingADC_step)|(1<<samplingADC_cumul), uu, N2+1, d, HiPinR_H, d, HiPinR_L);
+   for (i=0;i<32;i++) samplingADC(samplingADC_step|samplingADC_cumul, uu, N2+1, d, HiPinR_H, d, HiPinR_L);
 
    R_DDR = 0;			
-#ifdef DEB_SAM
+#if (DEB_SAM == 1)
 //------------------------------------------------------------------
  #warning "sampling_cap with test output enabled!"
    uint16_t kk;
    int16_t udiff;
    uint16_t old_uu;
-   old_uu = uu[N1];
- #define Step3 ((N2-N1)/15)
-   for (kk=(N1+Step3); kk<N2; kk+=Step3) {
+// #define Step3 ((N2-N1)/15)
+// define NN1 N1
+#define Step3 1
+#define NN1 0
+
+   old_uu = uu[NN1];
+   for (kk=(NN1+Step3); kk<(NN1+(Step3*16)); kk+=Step3) {
      udiff = uu[kk] - old_uu;
      if (udiff < 0) udiff = -udiff;	// absolute value
      old_uu = uu[kk];
-     if ( ((kk-N1-Step3) % (3*Step3)) == 0) lcd_next_line_wait(0);
+     if ( ((kk-NN1-Step3) % (3*Step3)) == 0) lcd_next_line_wait(0);
      DisplayValue16((uint16_t)(udiff)/32,0,' ',4);
    }
    lcd_next_line_wait(0);
    DisplayValue16(uu[0]/32,0,'a',5);
    DisplayValue16(uu[1]/32,0,'b',5);
    lcd_clear_line();
+   lcd_refresh();
    wait_about5s();
 //------------------------------------------------------------------
 #endif

@@ -74,7 +74,7 @@ uint16_t Rnum2pins(uint8_t num);	// compute Pin-Numbers of the resistor number
 
 #ifdef SamplingADC
 extern uint16_t samplingADC(   // code is in sampling_ADC.S
-   uint16_t what, 	// what to measure? see samplingADC_... defs below, R24:R25
+   uint16_t what, 	// what to measure? see smplADC_... defs below, R24:R25
    uint16_t *ptr,       // output pointer (note: ptr[0] will contain incorrect data; ptr[1]...ptr[n-1] will be valid) R22:R23
    uint8_t n,              // number of samples (n=0 for 256), R20
    uint8_t Rport_1,	// port value for active part of step / inactive part of impulse, R18
@@ -83,11 +83,11 @@ extern uint16_t samplingADC(   // code is in sampling_ADC.S
    uint8_t Rddr_0          // ddr value for same R12
    );
  // you can find the defines for bits in "what" in config.h
-// samplingADC_step      (1<<0)   // do step response, not impulse
-// samplingADC_slow4     (1<<1)   // only take a sample every 4 clockcycles
-// samplingADC_slow16    (1<<4)   // only take a sample every 16 clockcycles
-// samplingADC_cumul     (1<<2)   // don't overwrite, but add the samples to the array
-// samplingADC_twopulses (1<<3)   // send 2 impulses rather than one; inter-pulse time is in the upper 8 bits, should be in the range 4..15
+// smplADC_step      (1<<0)   // do step response, not impulse
+// smplADC_slow4     (1<<1)   // only take a sample every 4 clockcycles
+// smplADC_slow16    (1<<4)   // only take a sample every 16 clockcycles
+// smplADC_cumul     (1<<2)   // don't overwrite, but add the samples to the array
+// smplADC_twopulses (1<<3)   // send 2 impulses rather than one; inter-pulse time is in the upper 8 bits, should be in the range 4..15
 int32_t sampling_cap(uint8_t HighPin, uint8_t LowPin, uint8_t hivolt);   // returns measured capacitance in 0.01 pF units; hivolt flag demands measurement at 5 V rather than at 0 V
 void sampling_lc(uint8_t LowPin, uint8_t HighPin);
 #define sampling_cap_pre -14

@@ -14,7 +14,7 @@ uint16_t lc_qx;      // measured resonance Q (in units of 0.1)
 uint32_t lc_lx;      // measured inductance using the samplingADC method (in nH)
 uint16_t lc_cpartmp; 
 #ifndef CxL 
- #define CxL 15000			//default value for parallel capacitor for inductance measurement
+ #define CxL 18040			//default value for parallel capacitor for inductance measurement
 #endif
 const uint16_t lc_cpar_ee EEMEM = CxL;         // place for lc_cpar as calibration constant in eeprom
 
@@ -87,7 +87,7 @@ static unsigned int peaksearch(unsigned int uu[], unsigned int *qptr, byte d, by
       }
 skip:
       prevdelta=delta;
-   }
+   } /* end for i */
 
    if (qptr) {
       // calculate r = ratio of amplitude between two consecutive peaks (*1000 for scaling)
@@ -103,7 +103,7 @@ skip:
       *qptr=(unsigned int)r;
 //      uart_int((unsigned int)r); uart_newline();
    }
-   if (ipk<2) return 0;
+   if (ipk<2) return 0;		// only one or no peak found
    ipk--;
 //         if (d>=1) { wdt_reset(); uart_newline();uart_putc('i'); uart_int(ipk); uart_int(prevpeakx); uart_int(firstpeakx); uart_newline();}
    return (prevpeakx-firstpeakx+(ipk>>1))/ipk;
@@ -156,7 +156,6 @@ uint16_t lc_cpar;    // value of parallel capacitor used for calculating inducta
 #else
     wait_about10ms(); /* time for voltage stabilization */
 #endif
-
    samplingADC(0, uu, 0, HiPinR_L, 0, HiPinR_L, HiPinR_L);     // floats the HiPin during measurement, thus not loading the tuned circuit
 //   uart_newline(); for (i=0;i<255;i++) { uart_putc('A'); uart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
 
@@ -173,7 +172,7 @@ uint16_t lc_cpar;    // value of parallel capacitor used for calculating inducta
    }
 
    d--;                 // improves estimate slightly (experimentally)
-   uint16_t par = (1<<samplingADC_twopulses) | (4<<samplingADC_inter_pulse_width); // default: two pulses at minimal distance
+   uint16_t par = samplingADC_twopulses | (4<<smplADC_inter_pulse_width); // default: two pulses at minimal distance
    if (d<=6*3) {
       // in case of rather small d, need to measure d more precisely, by simply invoking the peaksearch function
       unsigned int per;
@@ -192,7 +191,7 @@ retry:
          // for high frequencies, we can send 2 pulses at the appropriate interval
          // (for lower frequencies, we just keep them at their default minimum distance)
          if (per<4) per=4;
-         par = (1<<samplingADC_twopulses) | (((byte)per)<<samplingADC_inter_pulse_width);
+         par = samplingADC_twopulses | (((byte)per)<<smplADC_inter_pulse_width);
       }
    }
 //   uart_newline(); for (i=0;i<255;i++) { uart_putc('a'); uart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
@@ -201,22 +200,51 @@ retry:
       // rather slow resonance: then re-sample with 4 or 16 times larger interval; shift variable serves to take this into account in later calculations
       if (d<64) {
          shift=2;
-         par = (1<<samplingADC_slow4) | (1<<samplingADC_twopulses) | (4<<samplingADC_inter_pulse_width);
+         par = samplingADC_slow4 | samplingADC_twopulses | (4<<smplADC_inter_pulse_width);
       } else {
          shift=4;
-         par = (1<<samplingADC_slow16) | (1<<samplingADC_twopulses) | (4<<samplingADC_inter_pulse_width);
+         par = samplingADC_slow16 | samplingADC_twopulses | (4<<smplADC_inter_pulse_width);
       }
       d>>=shift;
    }
-
+#if (DEB_SAM == 2)
+   lcd_line2();
+   DisplayValue16(shift,0,'s',4);
+   wait_about500ms();
+#endif
    // we take the average of 8 measurements, to increase S/N, except when using slow16 mode, since then the sampling would take annoyingly long (and S/N usually is better anyway at these lower frequencies)
    for (i=0;i<8;i++) {
       samplingADC(par, uu, 0, HiPinR_L, 0, HiPinR_L, HiPinR_L);
-      if (par & (1<<samplingADC_slow16)) goto noavg;
-      par |= (1<<samplingADC_cumul);
+      if (par & samplingADC_slow16) goto noavg;
+      par |= samplingADC_cumul;
    }
    for (i=0;i<255;i++) uu[i]>>=3;   // divide all samples by 8
+   goto xyz;
+
 noavg:;
+//***************************************************************************************************
+#if (DEB_SAM == 2)
+   uint16_t ii;
+   for (ii=0;ii<256;ii+=4) {
+      if ((ii%32) == 0) {
+         lcd_clear();
+	 DisplayValue16(ii,0,'-',4);
+	 DisplayValue16(ii+31,0,' ',4);
+	 lcd_next_line_wait(0);
+      } else{	 	lcd_next_line_wait(0); }
+      DisplayValue16(uu[ii],0,' ',5);
+      DisplayValue16(uu[ii+1],0,' ',5);
+      DisplayValue16(uu[ii+2],0,' ',5);
+      DisplayValue16(uu[ii+3],0,' ',5);
+      if ((ii%32) == 24) {
+	 lcd_clear_line();
+	 lcd_refresh();
+         wait_about5s();
+      }
+   }
+#endif
+xyz: ;
+//***************************************************************************************************
 
 //   uart_newline(); uart_putc('s'); uart_int(shift); uart_newline();  for (i=0;i<255;i++) { uart_putc('a'); uart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
 
@@ -232,19 +260,29 @@ noavg:;
    unsigned period=peaksearch(uu,&lc_qx,d,Maxpk);
 
    unsigned long v;
-   v= (unsigned long)period;         // measured period with 6 fraction bits, before applying shift, is < 256*64 = s^14
+   v= (unsigned long)period;         // measured period with 6 fraction bits, before applying shift, is < 256*64 = 2^14
    v=v*v;                            // v < 2^28   ; this is (except for shift)  d<<12
 #if F_CPU==16000000UL
-   v=(v>>10)*12368;                  // v < 2^32   ; is (d<<2)/(2*pi*fclock)^2 * 1e21 >>3
-                                     // that 12368 is calculated as 1/(2*pi*16e6)**2*1e21 /8, for 16 MHz CPU clock
+//   v=(v>>10)*12368;		// v < 2^32   ; is (d<<2)/(2*pi*fclock)^2 * 1e21 >>3
+				// that 12368 is calculated as 1/(2*pi*16e6)**2*1e21 /8, for 16 MHz CPU clock
+				// 1e21 / (2*pi*16e6)**2 / (8 * 1024)      = 12.07842632, which can be computed
+				// with a divide by 51 and a mul with 616 (= 12.07843137) .
+				// whith better accuracy than   12368/1024 = 12.07812500
+   v = (v/51)*616;
 #elif F_CPU==8000000UL
-   v=(v>>12)*49473;                  // for 8 MHz CPU clock, it's 49473, but we need to right-shift further to fit in 32 bit
+//   v=(v>>12)*49473;		// for 8 MHz CPU clock, it's 49473, but we need to right-shift further to fit in 32 bit
+				// 1e21 / (2*pi*16e6)**2 / (8 * 1024)      = 12.07842632, which can be computed
+				// with a divide by 51 and a mul with 616 (= 12.07843137) .
+				// whith better accuracy than   49473/4096 = 12.07836914
+   v = (v/51)*616;
    shift++;                          // change shift variable to compensate for that later on
 #else
    #error "CPU clocks other than 8 and 16 MHz not yet supported for SamplingADC"
    v=0;
 #endif
    v/=lc_cpar;                          //          ; is (d<<2)/(2*pi*fclock)^2/c * 1e9 >>3
+	// shift for 16 MHz 0, 2,  4; for 8 MHz 1, 3,  5
+        // resulting factor 2,32,512            8,128,2048 
    v<<=1+2*shift;                      //          ; is L in 1e-9 H  
                         // not nice: the nH number will always be even; then again, do we really measure that precisely?
    lc_lx=v;
@@ -283,7 +321,7 @@ noavg:;
 void sampling_lc_calibrate()
 {
    lcd_clear();
-   lcd_MEM2_string(str_cap_for_l_meas);
+   lcd_MEM2_string(str_cap_for_l_meas);		// "Cap for L meas?"
    byte i=0;
    byte ww=0;
    do { 
@@ -293,11 +331,12 @@ void sampling_lc_calibrate()
       lcd_line2();
       DisplayValue16(lc_cpartmp,-12,'F',4);
       i++;
-      if (lc_cpartmp<9500) i=0;		// unstable or not connected
+      if ((lc_cpartmp<9500) || (lc_cpartmp>33000)) i=0;		// unstable or not connected
       if (i > 4) {	// Cx measurement was stable
          eeprom_write_word((uint16_t *)&lc_cpar_ee,lc_cpartmp);
 	 lcd_space();
          lcd_MEM_string(OK_str);	// Output "OK"
+         lcd_refresh();
          break;
       }
       lcd_clear_line();

@@ -53,7 +53,7 @@ samplingADC:
  	jmp	__prologue_saves__
 Retur1:
 ;	clr	r1
-        sbrs	r24, samplingADC_twopulses	; if ((what1 & (1<<samplingADC_twopulses)) != 0) 
+        sbrs	r24, smplADC_twopulses	; if ((what1 & (1<<smplADC_twopulses)) != 0) 
 	ldi	r25, 6		; dp_width = 6;  // set dp_width for single pulse
 	movw	R4, R22		; R4:5 = &array[0];
  	mov	R13, R18	; Rport_1 -> R13
@@ -64,13 +64,13 @@ Retur1:
  	ldi	r18, 1				; span = 1;	// every CPU clock tic
  	ldi	r22, lo8(SAMPLES_IN_ADC_PERIOD)	; samples_per_adc_period = SAMPLES_IN_ADC_PERIOD;
 	ldi	r23, hi8(SAMPLES_IN_ADC_PERIOD)
- 	sbrs	r24, samplingADC_slow4		; if ((what1 & (1<<samplingADC_slow4)) != 0) 
+ 	sbrs	r24, smplADC_slow4		; if ((what1 & (1<<smplADC_slow4)) != 0) 
 	rjmp	check16;
  	ldi	r18, 4				; span = 4;	// every 4th CPU clock tic
  	ldi	r22, lo8(SAMPLES_IN_ADC_PERIOD/4)	; samples_per_adc_period = SAMPLES_IN_ADC_PERIOD/4; // without remainder
 	ldi	r23, hi8(SAMPLES_IN_ADC_PERIOD/4)
 check16:
- 	sbrs	r24, samplingADC_slow16		; if ((what1 & (1<<samplingADC_slow16)) == 0) 
+ 	sbrs	r24, smplADC_slow16		; if ((what1 & (1<<smplADC_slow16)) == 0) 
 	rjmp	no_slow;
  	ldi	r18, 16				; span = 16;	// every 16th CPU clock tic
  	ldi	r22, lo8(SAMPLES_IN_ADC_PERIOD/16)	; samples_per_adc_period = SAMPLES_IN_ADC_PERIOD/16; // without remainder
@@ -226,11 +226,11 @@ L98:
 	lsr	r23		; 3
 	dec	r23		; 4 count2 = (dp_width/2) - 1;
 #endif
-        sbrc	r24, samplingADC_twopulses	; 11
- 	AOUT	R_DDR, R12	; if ((what1 & (1<<samplingADC_twopulses)) != 0) R_DDR = Rddr_0;
+        sbrc	r24, smplADC_twopulses	; 11
+ 	AOUT	R_DDR, R12	; if ((what1 & (1<<smplADC_twopulses)) != 0) R_DDR = Rddr_0;
 	dec	r23		; 12 count2--;
-        sbrc	r24, samplingADC_twopulses	; 14
- 	AOUT	R_DDR, R16	; if ((what1 & (1<<samplingADC_twopulses)) != 0) R_DDR = Rddr_1;
+        sbrc	r24, smplADC_twopulses	; 14
+ 	AOUT	R_DDR, R16	; if ((what1 & (1<<smplADC_twopulses)) != 0) R_DDR = Rddr_1;
 
 	breq	L99		; 16 , dp_width = 4
 	dec	r23		;  count2--;
@@ -328,9 +328,9 @@ CheckNextSample:
 behind_SH:
         ; -----------------------------------------------------
 	; toggle output back to the idle state in case of _step
- 	sbrc	r24, samplingADC_step	; if (what1 & (1<<samplingADC_step)) R_DDR = Rddr_0;
+ 	sbrc	r24, smplADC_step	; if (what1 & (1<<smplADC_step)) R_DDR = Rddr_0;
  	AOUT	R_DDR, R12	; 4  Rddr_0
-	sbrc	r24, samplingADC_step	; if (what1 & (1<<samplingADC_step)) R_PORT = Rport_0;
+	sbrc	r24, smplADC_step	; if (what1 & (1<<smplADC_step)) R_PORT = Rport_0;
  	AOUT	R_PORT, R14	; 5  Rport_0
 
 	rcall	store_data		; store new ADC data to array and count Samples
@@ -394,10 +394,10 @@ store_data:
 ;##	lds	r22, TCNT1L		;  TCNT
 ;##	lds	r23, TCNT1H
 
-	sbrc	r24, samplingADC_cumul	; skip next instruction, if no acummulate
+	sbrc	r24, smplADC_cumul	; skip next instruction, if no acummulate
 	add	r22, r26		; + lo8(array[start1 + m_shift])
  	st	Z+, r22			; store lower part
-	sbrc	r24, samplingADC_cumul	; skip next instruction, if no acummulate
+	sbrc	r24, smplADC_cumul	; skip next instruction, if no acummulate
 	adc	r23, r27		; + hi8(array[start1 + m_shift])
  	st	Z, r23			; store upper part
 

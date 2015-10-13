@@ -116,7 +116,6 @@ void function_menu() {
   func_number = 0;
  #ifdef POWER_OFF
   uint8_t ll;
-  uint8_t mm;
   message_key_released(SELECTION_str);
   for (ll=0;ll<((MODE_LAST+1)*10);ll++) 
  #else
@@ -125,6 +124,7 @@ void function_menu() {
   {
      if (func_number > MODE_LAST) func_number -= (MODE_LAST + 1);
 #if (LCD_LINES > 3)
+  uint8_t mm;
  #ifdef PAGE_MODE
      ff = 0;
      mm = 0;
@@ -814,23 +814,6 @@ void do_10bit_PWM() {
         lcd_line2();		// goto line 2
         DisplayValue16((((unsigned long)pwm_flip * 1000) + 0x1ff) / 0x3ff,-1,'%',5);
         lcd_clear_line();
-#if 0
-        lcd_space();
-        if (rotary.count >= 0) {	// actual count for debugging
-           lcd_data('+');
-           lcd_data('0'+rotary.count);
-        } else {
-           lcd_data('-');
-           lcd_data('0'-rotary.count);
-        }
-        lcd_line3();
-        uint8_t kk;
-        kk = (rotary.ind + 1) & ROT_MSK;
-        do {
-           lcd_data('0'+rotary.state[kk]);	// debugging output of rotary state
-           kk = (kk + 1) & ROT_MSK;
-        } while (kk != rotary.ind);
-#endif
         old_perc = percent;	// update the old duty cycle
         if (key_pressed > 40) {
            wait_about300ms();	// wait some time to release the button

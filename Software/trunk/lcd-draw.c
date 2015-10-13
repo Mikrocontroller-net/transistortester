@@ -41,7 +41,7 @@ void lcd_draw_trans_pins( char dxb, char dyb)
 }
 
 //*****************************************************************************
- #if !defined(SamplingADC) || (FLASHEND > 0x7fff)
+ #ifdef SHOW_ICONS
  // not enough Flash space for ShowIcons at ATmega328
 // Show all Icons on the screen, up to four at one screen
 void ShowIcons(void) {
@@ -174,13 +174,13 @@ void ShowIcons(void) {
 
 // show character set
  for (cc=0;cc<(0x7f-0x20);cc++) {
-   if ((cc%16) == 0) {
+   if ((cc%LCD_LINE_LENGTH) == 0) {
      // begin new line
-     if((cc%64) == 0) {
+     if(((cc/LCD_LINE_LENGTH) % LCD_LINES) == 0) {
        wait_for_key_ms(ShowTime);
        lcd_clear();
      }
-     lcd_set_cursor(((cc/16)%4)*2,0);
+     lcd_set_cursor(((cc/LCD_LINE_LENGTH)%LCD_LINES)*PAGES_PER_LINE,0);
    }
   lcd_data(cc+0x20);
  } /* end for cc */
@@ -189,9 +189,9 @@ void ShowIcons(void) {
  lcd_clear();
   #ifdef LCD_CYRILLIC
  for (cc=0;cc<((Cyr_ja+1-Cyr_B)+(Cyr_schtsch+1-Cyr_D));cc++) {
-   if ((cc%16) == 0) {
+   if ((cc%LCD_LINE_LENGTH) == 0) {
      // begin new line
-     lcd_set_cursor(((cc/16)%4)*2,0);
+     lcd_set_cursor(((cc/LCD_LINE_LENGTH)%LCD_LINES)*PAGES_PER_LINE,0);
    }
    if (cc <= (Cyr_ja-Cyr_B))
    {

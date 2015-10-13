@@ -202,13 +202,18 @@ void lcd_big_icon(unsigned char temp1) {
  uint8_t pos_nr;
  #define TP_WIDTH 8	/* specifies the width of the Test Port number */
  #define DIODE_WIDTH 5    /* diode is 8 pixel width, but TP overlap the diode images with 3 pixels */
+ #if SCREEN_HEIGHT > 64
+  #define HALF_SCREEN_HEIGHT 32
+ #else
+  #define HALF_SCREEN_HEIGHT (SCREEN_HEIGHT / 2)
+ #endif
  pfont = (uint8_t *) bigfont[temp1 & 0x0f];	// first byte of character data
  pos_nr = temp1 & 0x30;	// filter the position Information
  icon_xx =  TP_WIDTH;		// left side 
  if ((pos_nr & 0x10) == 0) icon_xx += (SCREEN_WIDTH / 2); // right side
  icon_yy = 0;
  if (pos_nr < 0x20) {
-   icon_yy = (SCREEN_HEIGHT / 2);	// lower half of display
+   icon_yy = HALF_SCREEN_HEIGHT;	// lower half of display
    // shift lower icon position to the right
    icon_xx +=  (SCREEN_WIDTH / 2)  - ICON_WIDTH - TP_WIDTH - TP_WIDTH - DIODE_WIDTH;
  }

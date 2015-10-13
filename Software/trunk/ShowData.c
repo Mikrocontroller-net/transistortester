@@ -144,7 +144,8 @@ show_page_5:
 
 #endif  /* SamplingADC */
   wait_for_key_ms(MIDDLE_WAIT_TIME);
-#if  defined(WITH_GRAPHICS) && !defined(SamplingADC)
+//#if  defined(WITH_GRAPHICS) && !defined(SamplingADC)
+#ifdef SHOW_ICONS
  ShowIcons();		// show all Icons
 #endif
 }

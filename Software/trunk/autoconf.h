@@ -768,4 +768,9 @@
  #define MODE_8BIT 0x10
 #endif
 
+#if defined(WITH_GRAPHICS) && !defined(NO_ICONS_DEMO)
+  #undef SHOW_ICONS		/* if allready defined */
+  #define SHOW_ICONS
+#endif
+
 

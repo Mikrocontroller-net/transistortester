@@ -11,7 +11,7 @@
  .GLOBAL samplingADC
  .func	samplingADC
 
-//#define COUNTER_DP		/* different signal length of Double pulse is respected with counter */
+//#define COUNTER_DP	/* different signal length of Double pulse is respected with a counter delay */
 
 #warning samplingADC with counter under test
 
@@ -40,7 +40,7 @@
  .extern wait4us
  .extern wait2us
 ;===============================================================================================
-;	Version with using of counter1 for start of first ADC-cycle in a Signal sequence
+;	This version uses counter1 for start of first ADC-cycle in a Signal sequence
 ;===============================================================================================
 
  .section .text
@@ -77,7 +77,7 @@ check16:
 	ldi	r27, hi8(SAMPLES_IN_ADC_PERIOD/16)
 no_slow:
 	; r18 = span, r22:23 = samples in ADC period
-	movw	r2, r26			; save samples_per_adc_period
+	movw	r2, r26			; save samples_per_adc_period in r2:3
 
  	ldi	r26, (1<<ADTS2) | (0<<ADTS1) | (1<<ADTS0); 
  	sts	ADCSRB, r26		; // trigger source COUNTER1 compare match B
@@ -138,8 +138,8 @@ GeneratePulse:
  	sts	OCR1BH, r27		;  OCR1B = (ADC_StartDelay - 3 + start1Xspan);
  	sts	OCR1BL, r26		;  set compare B to start condition for this Pulse generation
 
- 	subi	r26, lo8(-(ADC_SHtime + 16 + 3)) ; 0xD0	
- 	sbci	r27, hi8(-(ADC_SHtime + 16 + 3)) ; 0xFE
+ 	subi	r26, lo8(-(ADC_SHtime + 16 + 3)) ; + time to S&H	
+ 	sbci	r27, hi8(-(ADC_SHtime + 16 + 3)) ; 
  	sts	OCR1AH, r27		; OCR1A = (ADC_StartDelay + ADC_SHtime + 16 + start1Xspan );
  	sts	OCR1AL, r26		; update compare A interrupt to behind S&H
 
@@ -158,11 +158,15 @@ finish:
  	sts	ADCSRA, r26
 
 ; 	adiw	r28, 0
- 	ldi	r30, 18
+ 	ldi	r30, 18			; restore full register list
  	jmp	__epilogue_restores__
 ;============== return ======================
 
 get_next_data:
+; ==== Test only
+ 	ldi	r26, (1<<ADTS2) | (0<<ADTS1) | (1<<ADTS0); 
+ 	sts	ADCSRB, r26		; // trigger source COUNTER1 compare match B
+; ==== Test only end
  	wdr					; wdt_reset();
  	ldi	r26, (1<<OCIE1A)		; TIMSK1 = (1<<OCIE1A);
  	sts	TIMSK1, r26			; // enable counter1 compare A Interrupt
@@ -182,18 +186,14 @@ get_next_data:
 #define SignalStartDelay (ADC_SHtime+ADC_StartDelay-15+1)
 ;			   256	+      32          -15+1 = 274
 #endif
-	ldi	r26, (SignalStartDelay / 4)
+	ldi	r26, (SignalStartDelay / 3)
 lop1:
 	dec	r26
-	nop
 	brne	lop1
-#if (SignalStartDelay % 4) > 2
+#if (SignalStartDelay % 3) > 1
 	nop
 #endif
-#if (SignalStartDelay % 4) > 1
-	nop
-#endif
-#if (SignalStartDelay % 4) > 0
+#if (SignalStartDelay % 3) > 0
 	nop
 #endif
 
@@ -267,9 +267,8 @@ L99:
 ;== 	sts	TCCR1B, r1	; TCCR1B = 0;  // stop counter, no longer required, is stopped by ISR_
 	mov	r8, r1			;  r8:9 m_shift = 0;
 	mov	r9, r1			;  used for multiple ADC-conversions during one Signal period
-;	movw	r8, r0			;  r8:9 m_shift = 0;
 ;	// The first triggered ADC conversion takes 13.5 ADC clock cycles from Counter Reg B compare
-;i	// Let us look, if the next ADC S&H in within the sampling period
+;	// Let us look, if the next ADC S&H in within the sampling period
 	
 
 //==============================================================================================
@@ -384,6 +383,8 @@ store_data:
 ;    // next ADC data are ready
 	lds	r17, ADCL		; neẃ ADC value
 	lds	r15, ADCH
+;##	sbrc	r24, smplADC_slow16		; if ((what1 & (1<<smplADC_slow16)) == 0) 
+;##	lds	r17, ADCSRA
 
 ;==	mov	r17, r22		;******************************************
 ;==	mov	r15, r23		;********* TEST ***************************
@@ -402,7 +403,7 @@ store_data:
 
 	ldi	r17, 1
 	add	r6, r17			; Samples++
-	adc	r7, r1			; add carry to r3
+	adc	r7, r1			; add carry to r7
 	ret				; return store_data
 
  .endfunc

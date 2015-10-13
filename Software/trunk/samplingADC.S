@@ -16,7 +16,6 @@
 
 
 
-
 // note: we use the maximum clock divider, regardless of the CPU clock
 // thus, a conversion always takes 1664 cycles
 // we _could_ do this differently, and run a conversion in 832 cycles at 8 MHz
@@ -42,6 +41,10 @@ samplingADC:
 
 	ldi	r22, 0			; enable ADC in free-running mode
 	sts	ADCSRB, r22		; with interrupts enabled for the synchronization procedure
+#ifdef PULSE_MODE2
+	AOUT	R_PORT, R14		; Rport_0
+	AOUT	R_DDR, R12		; Rddr_0
+#endif
 	ldi	r22, (1<<ADSC) | (1<<ADATE) | (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV;
 	sts	ADCSRA, r22;
         ldi     r22, (1 << SM0) | (1 << SE);
@@ -81,7 +84,11 @@ L05:
 	dec r23
 	ldi r21,7
 	sub r21,r23
+#ifdef PULSE_MODE2
+	nop
+#else
 	AOUT	R_PORT, R14		; Rport_0	; does nothing for step response, but prepares levels for impulse(s); we assume that for impulse, PORT data is same for on and off, so pulse is created purely via DDR
+#endif
 
 				; 1+2*r21 cycles for 1<=r21<=6  (but 12 cycles for r21>6)
 	dec r21
@@ -174,10 +181,17 @@ skipextradelay2:
 
 				; 4 cycles
 					; toggle output back to its "idle" state in case of step response
+#ifdef PULSE_MODE2
+	nop
+	nop
+	AOUT	R_PORT, R14		; Rport_0
+	AOUT	R_DDR, R12		; Rddr_0
+#else
 	sbrc r24,smplADC_step
 	AOUT	R_DDR, R12		; Rddr_0
 	sbrc r24,smplADC_step
 	AOUT	R_PORT, R14		; Rport_0
+#endif
 
 
 #define FIN_DELAY 599

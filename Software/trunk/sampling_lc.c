@@ -156,7 +156,11 @@ uint16_t lc_cpar;    // value of parallel capacitor used for calculating inducta
 #else
     wait_about10ms(); /* time for voltage stabilization */
 #endif
-   samplingADC(0, uu, 0, HiPinR_L, 0, HiPinR_L, HiPinR_L);     // floats the HiPin during measurement, thus not loading the tuned circuit
+#ifdef PULSE_MODE2
+    samplingADC(0, uu, 0, HiPinR_L, 0, 0, HiPinR_L);     // floats the HiPin during measurement, thus not loading the tuned circuit
+#else
+    samplingADC(0, uu, 0, HiPinR_L, 0, HiPinR_L, HiPinR_L);     // floats the HiPin during measurement, thus not loading the tuned circuit
+#endif
 //   uart_newline(); for (i=0;i<255;i++) { uart_putc('A'); uart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
 
    byte d;
@@ -208,17 +212,23 @@ retry:
       d>>=shift;
    }
    // we take the average of 8 measurements, to increase S/N, except when using slow16 mode, since then the sampling would take annoyingly long (and S/N usually is better anyway at these lower frequencies)
+   
    for (i=0;i<8;i++) {
+#ifdef PULSE_MODE2
+      samplingADC(par, uu, 0, HiPinR_L, 0, 0, HiPinR_L);
+#else
       samplingADC(par, uu, 0, HiPinR_L, 0, HiPinR_L, HiPinR_L);
+#endif
       if (par & samplingADC_slow16) goto noavg;
       par |= samplingADC_cumul;
-	wdt_reset();
+      wdt_reset();
    }
    for (i=0;i<255;i++) uu[i]>>=3;   // divide all samples by 8
 
-noavg:;
 //***************************************************************************************************
 #if (DEB_SAM == 2)
+  goto xyz;
+noavg:;
    uint16_t ii;
    for (ii=0;ii<256;ii+=4) {
       if ((ii%32) == 0) {
@@ -237,6 +247,9 @@ noavg:;
          wait_about5s();
       }
    } /* end for ii */
+xyz: ;
+#else
+noavg:;
 #endif
 //***************************************************************************************************
 

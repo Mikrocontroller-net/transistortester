@@ -79,6 +79,11 @@ no_slow:
 	; r18 = span, r22:23 = samples in ADC period
 	movw	r2, r26			; save samples_per_adc_period in r2:3
 
+#ifdef PULSE_MODE2
+ 	AOUT	R_PORT, R14	;  Rport_0	set to start condition
+ 	AOUT	R_DDR, R12	;  Rddr_0
+#endif
+
  	ldi	r26, (1<<ADTS2) | (0<<ADTS1) | (1<<ADTS0); 
  	sts	ADCSRB, r26		; // trigger source COUNTER1 compare match B
  	ldi	r26, (1<<ADEN) | (1<<ADSC) | (1<<ADATE) | (1<<ADIF) | (0<<ADIE) | AUTO_CLOCK_DIV;
@@ -203,8 +208,11 @@ lop1:
 	dec	r27		; 3 count2 = (dp_width/2) - 1;
 	ldi	r26, 7		; 4 count1 = 7 - count2;
 	sub	r26, r27	; 5
- 	AOUT	R_PORT, R14	; 6 R_PORT = Rport_0;	// does nothing for step response,
-
+#ifdef PULSE_MODE2
+	nop
+#else
+	AOUT	R_PORT, R14	; 6 R_PORT = Rport_0;	// does nothing for step response,
+#endif
 					; 1+(2*r26) for 1<=r26<=6
 	dec	r26		; 7 count1--;
 	breq	L98		; 9 , dp_width = 14
@@ -220,7 +228,11 @@ lop1:
 	breq	L98		; 19  dp_width = 4
 L98:
 #else
+#ifdef PULSE_MODE2
+	nop
+#else
  	AOUT	R_PORT, R14	; 1 R_PORT = Rport_0;	// does nothing for step response,
+#endif
 	mov	r27, r25	; 2 dp_width
 	lsr	r27		; 3
 	dec	r27		; 4 count2 = (dp_width/2) - 1;
@@ -326,10 +338,15 @@ CheckNextSample:
 behind_SH:
         ; -----------------------------------------------------
 	; toggle output back to the idle state in case of _step
+#ifdef PULSE_MODE2
+ 	AOUT	R_PORT, R14	; 5  Rport_0
+ 	AOUT	R_DDR, R12	; 4  Rddr_0
+#else
  	sbrc	r24, smplADC_step	; if (what1 & (1<<smplADC_step)) R_DDR = Rddr_0;
  	AOUT	R_DDR, R12	; 4  Rddr_0
 	sbrc	r24, smplADC_step	; if (what1 & (1<<smplADC_step)) R_PORT = Rport_0;
  	AOUT	R_PORT, R14	; 5  Rport_0
+#endif
 
 	rcall	store_data		; store new ADC data to array and count Samples
 ;    // This was the last ADC data of this Signal period 

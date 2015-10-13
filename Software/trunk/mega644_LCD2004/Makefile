@@ -35,6 +35,12 @@ PARTNO = m1284p
 # the normal transistor tester function and switch off the tester.
 CFLAGS += -DWITH_MENU
 
+# With the menu item "Show data" the used icons and the font data are displayed for
+# graphical displays after the presentation of calibration data.
+# You can switch off the presentation of the icons and the font data by setting
+# the option NO_ICONS_DEMO to save flash memory and display time.
+#CFLAGS += -DNO_ICONS_DEMO
+
 # The menu function can be easier controlled with a incremental encoder (rotary switch).
 # Both switches of the rotary switch can be connected with 1 kOhm resistors to PB5 and PB7.
 # The common contact of the two switches must be connected to GND.

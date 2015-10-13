@@ -257,18 +257,18 @@ noavg:;
    v= (unsigned long)period;         // measured period with 6 fraction bits, before applying shift, is < 256*64 = 2^14
    v=v*v;                            // v < 2^28   ; this is (except for shift)  d<<12
 #if F_CPU==16000000UL
-   v=(v>>10)*12368;		// v < 2^32   ; is (d<<2)/(2*pi*fclock)^2 * 1e21 >>3
+//   v=(v>>10)*12368;		// v < 2^32   ; is (d<<2)/(2*pi*fclock)^2 * 1e21 >>3
 				// that 12368 is calculated as 1/(2*pi*16e6)**2*1e21 /8, for 16 MHz CPU clock
 				// 1e21 / (2*pi*16e6)**2 / (8 * 1024)      = 12.07842632, which can be computed
 				// with a divide by 51 and a mul with 616 (= 12.07843137) .
 				// whith better accuracy than   12368/1024 = 12.07812500
-//   v = (v/51)*616;
+   v = (v/51)*616;
 #elif F_CPU==8000000UL
-   v=(v>>12)*49473;		// for 8 MHz CPU clock, it's 49473, but we need to right-shift further to fit in 32 bit
+//   v=(v>>12)*49473;		// for 8 MHz CPU clock, it's 49473, but we need to right-shift further to fit in 32 bit
 				// 1e21 / (2*pi*16e6)**2 / (8 * 1024)      = 12.07842632, which can be computed
 				// with a divide by 51 and a mul with 616 (= 12.07843137) .
 				// whith better accuracy than   49473/4096 = 12.07836914
-//   v = (v/51)*616;
+   v = (v/51)*616;
    shift++;                          // change shift variable to compensate for that later on
 #else
    #error "CPU clocks other than 8 and 16 MHz not yet supported for SamplingADC"
@@ -302,7 +302,11 @@ noavg:;
       lc_lx = 0;
       return;
    }
+#if F_CPU==16000000UL
    v= (unsigned long)period<<1;
+#else
+   v= (unsigned long)period;
+#endif
    lc_fx=((F_CPU<<(7-shift))/v);
 
    if (inductor_lpre >= 0) inductor_lpre = -1; 	/* no ESR measurement! */

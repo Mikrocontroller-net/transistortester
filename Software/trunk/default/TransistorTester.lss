@@ -23,15 +23,15 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_abbrev 000019a1  00000000  00000000  0000c263  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   00001e13  00000000  00000000  0000dc04  2**0
+ 10 .debug_line   00001e16  00000000  00000000  0000dc04  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  000006fc  00000000  00000000  0000fa18  2**2
+ 11 .debug_frame  000006fc  00000000  00000000  0000fa1c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000fdd  00000000  00000000  00010114  2**0
+ 12 .debug_str    00000fdd  00000000  00000000  00010118  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    00003ca8  00000000  00000000  000110f1  2**0
+ 13 .debug_loc    00003ca8  00000000  00000000  000110f5  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000018  00000000  00000000  00014d99  2**0
+ 14 .debug_ranges 00000018  00000000  00000000  00014d9d  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -460,7 +460,7 @@ void lcd_line1() {
    _lcd_column = 0;
      23a:	81 e0       	ldi	r24, 0x01	; 1
      23c:	cd df       	rcall	.-102    	; 0x1d8 <lcd_command>
-     23e:	23 d2       	rcall	.+1094   	; 0x686 <wait10ms>
+     23e:	22 d2       	rcall	.+1092   	; 0x684 <wait10ms>
 /* ************************************************************************************** */
 /* Set the character position to x,y , where x specifies the character number in a text line. */
 /* The y position is the page address (8 line units).                                     */
@@ -612,7 +612,7 @@ void lcd_fix_string(const unsigned char *data) {
 }
      2c4:	82 e3       	ldi	r24, 0x32	; 50
      2c6:	88 df       	rcall	.-240    	; 0x1d8 <lcd_command>
-     2c8:	de d1       	rcall	.+956    	; 0x686 <wait10ms>
+     2c8:	dd d1       	rcall	.+954    	; 0x684 <wait10ms>
 #endif
 
 /* ******************************************************************************* */
@@ -641,7 +641,7 @@ void lcd_fix_customchar(const unsigned char *chardata) {
 #if (LCD_ST_TYPE == 0)
     uint8_t ii;
     for (ii=0;ii<8;ii++) {
-     2e4:	d1 d1       	rcall	.+930    	; 0x688 <wait5ms>
+     2e4:	d0 d1       	rcall	.+928    	; 0x686 <wait5ms>
      2e6:	8c e0       	ldi	r24, 0x0C	; 12
      2e8:	77 df       	rcall	.-274    	; 0x1d8 <lcd_command>
         lcd_data(MEM_read_byte(chardata++));
@@ -1689,48 +1689,48 @@ wait200ms:
 
 
 wait100ms:
- wdr				; alle 100ms ein Watchdog reset!
-     67a:	a8 95       	wdr
  rcall wait50ms	    	; 50ms	9+x Return-Adresses
-     67c:	00 d0       	rcall	.+0      	; 0x67e <wait50ms>
+     67a:	00 d0       	rcall	.+0      	; 0x67c <wait50ms>
 
-0000067e <wait50ms>:
+0000067c <wait50ms>:
 ;laeuft in wait50us 	;100ms
 
 wait50ms:
  rcall wait10ms	    	;10ms	8+x Return-Adresses 
-     67e:	03 d0       	rcall	.+6      	; 0x686 <wait10ms>
+     67c:	03 d0       	rcall	.+6      	; 0x684 <wait10ms>
 
-00000680 <wait40ms>:
+0000067e <wait40ms>:
 wait40ms:
  rcall wait10ms	    	;20ms	8+x Return-Adresses  
-     680:	02 d0       	rcall	.+4      	; 0x686 <wait10ms>
+     67e:	02 d0       	rcall	.+4      	; 0x684 <wait10ms>
 
-00000682 <wait30ms>:
+00000680 <wait30ms>:
 ;laeuft in wait30us 	;50ms
 
 wait30ms:
  rcall wait10ms	    	;10ms	8+x Return-Adresses 
-     682:	01 d0       	rcall	.+2      	; 0x686 <wait10ms>
+     680:	01 d0       	rcall	.+2      	; 0x684 <wait10ms>
 
-00000684 <wait20ms>:
+00000682 <wait20ms>:
 ;laeuft in wait20us 	;30ms
 
 wait20ms:
  rcall wait10ms	    	;10ms	8+x Return-Adresses
-     684:	00 d0       	rcall	.+0      	; 0x686 <wait10ms>
+     682:	00 d0       	rcall	.+0      	; 0x684 <wait10ms>
 
-00000686 <wait10ms>:
+00000684 <wait10ms>:
 ; laeuft in wait10ms	;20ms
 
 wait10ms:
  rcall wait5ms	   	;5ms	7+x Return-Adresses
-     686:	00 d0       	rcall	.+0      	; 0x688 <wait5ms>
+     684:	00 d0       	rcall	.+0      	; 0x686 <wait5ms>
 
-00000688 <wait5ms>:
+00000686 <wait5ms>:
 ; laueft in wait5ms	;10ms
 
 wait5ms:
+ wdr				; every 5ms one Watchdog reset!
+     686:	a8 95       	wdr
  rcall wait1ms	   	;1ms	6+x Return-Adresses
      688:	03 d0       	rcall	.+6      	; 0x690 <wait1ms>
 
@@ -2065,7 +2065,7 @@ unsigned int W5msReadADC (uint8_t Probe) {
      77e:	0c 94 e2 1e 	jmp	0x3dc4	; 0x3dc4 <__prologue_saves__+0x20>
      782:	89 83       	std	Y+1, r24	; 0x01
   wait_about5ms();
-     784:	81 df       	rcall	.-254    	; 0x688 <wait5ms>
+     784:	80 df       	rcall	.-256    	; 0x686 <wait5ms>
      786:	89 81       	ldd	r24, Y+1	; 0x01
      788:	94 df       	rcall	.-216    	; 0x6b2 <ReadADC>
   return (ReadADC(Probe));
@@ -2082,7 +2082,7 @@ unsigned int W10msReadADC (uint8_t Probe) {
      798:	f3 e0       	ldi	r31, 0x03	; 3
      79a:	0c 94 e2 1e 	jmp	0x3dc4	; 0x3dc4 <__prologue_saves__+0x20>
      79e:	89 83       	std	Y+1, r24	; 0x01
-     7a0:	72 df       	rcall	.-284    	; 0x686 <wait10ms>
+     7a0:	71 df       	rcall	.-286    	; 0x684 <wait10ms>
      7a2:	89 81       	ldd	r24, Y+1	; 0x01
   wait_about10ms();
      7a4:	86 df       	rcall	.-244    	; 0x6b2 <ReadADC>
@@ -2100,7 +2100,7 @@ unsigned int W10msReadADC (uint8_t Probe) {
      7b6:	0c 94 e2 1e 	jmp	0x3dc4	; 0x3dc4 <__prologue_saves__+0x20>
 unsigned int W20msReadADC (uint8_t Probe) {
      7ba:	89 83       	std	Y+1, r24	; 0x01
-     7bc:	63 df       	rcall	.-314    	; 0x684 <wait20ms>
+     7bc:	62 df       	rcall	.-316    	; 0x682 <wait20ms>
      7be:	89 81       	ldd	r24, Y+1	; 0x01
      7c0:	78 df       	rcall	.-272    	; 0x6b2 <ReadADC>
      7c2:	21 96       	adiw	r28, 0x01	; 1
@@ -2142,7 +2142,7 @@ wrelease:
      7dc:	03 c0       	rjmp	.+6      	; 0x7e4 <no_w200>
 #if INHIBIT_SLEEP_MODE
 	RCALL	wait5ms		; wait5ms();
-     7de:	54 df       	rcall	.-344    	; 0x688 <wait5ms>
+     7de:	53 df       	rcall	.-346    	; 0x686 <wait5ms>
 #else
  	ldi	r24,  1
  	RCALL	sleep_5ms	; wait_about5ms();
@@ -2173,7 +2173,7 @@ no_cnt:
 wloop:
 #if INHIBIT_SLEEP_MODE
 	RCALL	wait10ms	; wait10ms();
-     7ee:	4b df       	rcall	.-362    	; 0x686 <wait10ms>
+     7ee:	4a df       	rcall	.-364    	; 0x684 <wait10ms>
 #else
  	ldi	r24, 0x02	; 2
  	RCALL	sleep_5ms	; wait_about10ms();
@@ -3902,7 +3902,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     1044:	98 db       	rcall	.-2256   	; 0x776 <W5msReadADC>
     1046:	1c 01       	movw	r2, r24
     1048:	14 b8       	out	0x04, r1	; 4
-    104a:	1e db       	rcall	.-2500   	; 0x688 <wait5ms>
+    104a:	1d db       	rcall	.-2502   	; 0x686 <wait5ms>
   R_DDR = 0;
     104c:	15 b8       	out	0x05, r1	; 5
   wait5ms();				// release all current (clear TRIAC and Thyristor)
@@ -4254,7 +4254,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     124a:	90 f5       	brcc	.+100    	; 0x12b0 <CheckPins+0x2c0>
   adc.hp1 = W5msReadADC(HighPin);	// voltage at the Emitter resistor
     124c:	14 b8       	out	0x04, r1	; 4
-    124e:	1c da       	rcall	.-3016   	; 0x688 <wait5ms>
+    124e:	1b da       	rcall	.-3018   	; 0x686 <wait5ms>
     1250:	81 2f       	mov	r24, r17
     1252:	8f 29       	or	r24, r15
     1254:	84 b9       	out	0x04, r24	; 4
@@ -4352,7 +4352,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
  #endif
   } else {
      c_hfe = (unsigned long)((adc.rhp - adc.tp1) / adc.tp1);
-    12e4:	d1 d9       	rcall	.-3166   	; 0x688 <wait5ms>
+    12e4:	d0 d9       	rcall	.-3168   	; 0x686 <wait5ms>
     12e6:	99 eb       	ldi	r25, 0xB9	; 185
     12e8:	29 16       	cp	r2, r25
     12ea:	97 e0       	ldi	r25, 0x07	; 7
@@ -4374,14 +4374,14 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   R_DDR = 0;			//all Resistor Ports to Input
     1302:	14 b8       	out	0x04, r1	; 4
   R_PORT = 0;			//switch all resistor ports to GND
-    1304:	c1 d9       	rcall	.-3198   	; 0x688 <wait5ms>
+    1304:	c0 d9       	rcall	.-3200   	; 0x686 <wait5ms>
   ADC_PORT = HiADCp;		//switch High-Pin to VCC
     1306:	ec 89       	ldd	r30, Y+20	; 0x14
   ADC_DDR = HiADCm;		//switch High-Pin to output
     1308:	e4 b9       	out	0x04, r30	; 4
 //  R_DDR = LoPinRL;		//switch R_L port for Low-Pin to output (GND)
   wait_about5ms();
-    130a:	be d9       	rcall	.-3204   	; 0x688 <wait5ms>
+    130a:	bd d9       	rcall	.-3206   	; 0x686 <wait5ms>
     130c:	f1 2f       	mov	r31, r17
   
   if(adc.lp_otr < 1977) {
@@ -4800,7 +4800,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     159c:	71 05       	cpc	r23, r1
     159e:	70 f5       	brcc	.+92     	; 0x15fc <CheckPins+0x60c>
     15a0:	14 b8       	out	0x04, r1	; 4
-    15a2:	72 d8       	rcall	.-3868   	; 0x688 <wait5ms>
+    15a2:	71 d8       	rcall	.-3870   	; 0x686 <wait5ms>
            ptrans.count++;		// count FET as two for accelerate searching
     15a4:	81 2f       	mov	r24, r17
     15a6:	85 29       	or	r24, r5
@@ -4931,7 +4931,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     ADC_PORT = TXD_VAL;			//switch Low-Pin to GND
     1656:	38 8b       	std	Y+16, r19	; 0x10
     R_DDR = TriPinRL | HiPinRL;		//RL port for High-Pin and Tristate-Pin to output
-    1658:	17 d8       	rcall	.-4050   	; 0x688 <wait5ms>
+    1658:	16 d8       	rcall	.-4052   	; 0x686 <wait5ms>
     // vCEs is already measured correctly with common emitter circuit
 //#ifdef SHOW_ICE
 //    R_PORT =  HiPinRL;	//RL port for High-Pin and Tristate-Pin to GND
@@ -5004,7 +5004,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     16b8:	14 b8       	out	0x04, r1	; 4
     16ba:	15 b8       	out	0x05, r1	; 5
     16bc:	e8 b8       	out	0x08, r14	; 8
-    16be:	0e 94 44 03 	call	0x688	; 0x688 <wait5ms>
+    16be:	0e 94 43 03 	call	0x686	; 0x686 <wait5ms>
     16c2:	f4 b8       	out	0x04, r15	; 4
     16c4:	89 2d       	mov	r24, r9
            // additional check the voltage hp4 at A with gate hold at GND level
@@ -5048,7 +5048,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     16f6:	08 f4       	brcc	.+2      	; 0x16fa <CheckPins+0x70a>
     16f8:	2d c2       	rjmp	.+1114   	; 0x1b54 <CheckPins+0xb64>
     16fa:	f5 b8       	out	0x05, r15	; 5
-    16fc:	0e 94 44 03 	call	0x688	; 0x688 <wait5ms>
+    16fc:	0e 94 43 03 	call	0x686	; 0x686 <wait5ms>
     1700:	15 b8       	out	0x05, r1	; 5
     1702:	89 2d       	mov	r24, r9
     1704:	38 d8       	rcall	.-3984   	; 0x776 <W5msReadADC>
@@ -5069,7 +5069,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     1714:	1f c2       	rjmp	.+1086   	; 0x1b54 <CheckPins+0xb64>
     1716:	04 b9       	out	0x04, r16	; 4
     1718:	05 b9       	out	0x05, r16	; 5
-    171a:	0e 94 44 03 	call	0x688	; 0x688 <wait5ms>
+    171a:	0e 94 43 03 	call	0x686	; 0x686 <wait5ms>
     171e:	d1 2e       	mov	r13, r17
      lcd_space();
 #endif
@@ -5503,7 +5503,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
             while (ADCSRA&(1<<ADSC));	// wait until ADC finished
     19ca:	0e 29       	or	r16, r14
     19cc:	07 b9       	out	0x07, r16	; 7
-    19ce:	0e 94 44 03 	call	0x688	; 0x688 <wait5ms>
+    19ce:	0e 94 43 03 	call	0x686	; 0x686 <wait5ms>
             tmp16 += ADCW;		// add result of ADC
     19d2:	e7 b8       	out	0x07, r14	; 7
     19d4:	89 2d       	mov	r24, r9
@@ -6554,7 +6554,7 @@ void ChargePin10ms(uint8_t PinToCharge, uint8_t ChargeDirection) {
     1f5a:	98 2b       	or	r25, r24
     1f5c:	94 b9       	out	0x04, r25	; 4
    wait_about10ms();			// wait about 10ms
-    1f5e:	0e 94 43 03 	call	0x686	; 0x686 <wait10ms>
+    1f5e:	0e 94 42 03 	call	0x684	; 0x684 <wait10ms>
    // switch back Input, no current
    R_DDR &= ~PinToCharge;	// switch back to input
     1f62:	84 b1       	in	r24, 0x04	; 4
@@ -7015,7 +7015,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      R_PORT = HiPinR_L;			//R_L to 1 (VCC) 
     21b6:	14 b9       	out	0x04, r17	; 4
      R_DDR = HiPinR_L;			//switch Pin to output, across R to GND or VCC
-    21b8:	0e 94 43 03 	call	0x686	; 0x686 <wait10ms>
+    21b8:	0e 94 42 03 	call	0x684	; 0x684 <wait10ms>
      wait10ms();			// wait exactly 10ms, do not sleep
     21bc:	14 b8       	out	0x04, r1	; 4
      R_DDR = 0;				// switch back to input
@@ -7510,7 +7510,7 @@ keinC:
   R_PORT = 0; 			// switch all resistor outputs to GND, no pull up
     24fa:	10 e0       	ldi	r17, 0x00	; 0
   return;
-    24fc:	0e 94 44 03 	call	0x688	; 0x688 <wait5ms>
+    24fc:	0e 94 43 03 	call	0x686	; 0x686 <wait5ms>
     2500:	8c 2f       	mov	r24, r28
   cap.cval_uncorrected.dw *= GetRLmultip(cap_voltage1);		// get factor to convert time to capacity from table
 #else
@@ -8325,7 +8325,7 @@ void show_cap_simple(void)
 #else
   lcd_clear_line();
 #endif  /* FLASHEND > 0x1fff */
-}
+} /* end show_cap or show_cap_simple */
     296e:	08 95       	ret
 
 00002970 <Bat_update>:
@@ -9008,7 +9008,7 @@ void ReadInductance(void) {
      ADC_PORT = TXD_VAL;		// switch ADC Port to GND
     2cda:	18 b8       	out	0x08, r1	; 8
      wait_about20ms();
-    2cdc:	0e 94 42 03 	call	0x684	; 0x684 <wait20ms>
+    2cdc:	0e 94 41 03 	call	0x682	; 0x682 <wait20ms>
      nr_pol1 = 0;
      if (inductance[1] > inductance[0]) { nr_pol1 = 1; } 
     2ce0:	21 e0       	ldi	r18, 0x01	; 1
@@ -10431,7 +10431,7 @@ void EE_check_init(void) {
   R_PORT = 0; 			// switch all resistor outputs to GND, no pull up
 #endif
   return;
- } // end GetVdrop()
+ } // end GetVloss()
     32c6:	a1 e0       	ldi	r26, 0x01	; 1
     32c8:	b0 e0       	ldi	r27, 0x00	; 0
     32ca:	e8 e6       	ldi	r30, 0x68	; 104
@@ -10512,7 +10512,7 @@ void EE_check_init(void) {
     3304:	4f 99       	sbic	0x09, 7	; 9
 	     if (RST_PIN_REG & (1<<RST_PIN)) break;	// button is released
     3306:	05 c0       	rjmp	.+10     	; 0x3312 <main+0x4c>
-    3308:	0e 94 43 03 	call	0x686	; 0x686 <wait10ms>
+    3308:	0e 94 42 03 	call	0x684	; 0x684 <wait10ms>
 	     wait_about10ms();
     330c:	1f 5f       	subi	r17, 0xFF	; 255
 	#ifdef WITH_ROTARY_SWITCH
@@ -10739,9 +10739,9 @@ end3:
     3408:	61 e0       	ldi	r22, 0x01	; 1
     340a:	80 e0       	ldi	r24, 0x00	; 0
     340c:	0e 94 f8 07 	call	0xff0	; 0xff0 <CheckPins>
-	     uart_putc(0x03);		// ETX, start of new measurement
-	 #endif
-	     
+//====================================================================
+#endif
+//
 	  // check all 6 combinations for the 3 pins 
 	//         High  Low  Tri
 	  CheckPins(TP1, TP2, TP3);

@@ -46,13 +46,13 @@ while (pause > 0)
 // wake up after output compare match interrupt
    TIMSK2 = (0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2); /* disable output compare match A interrupt */ 
 // TIMSK2 &= ~(1<<OCIE2A); /* disable output compare match A interrupt */ 
+   wdt_reset();
   }
  #else
    // Startup time is too long with 1MHz Clock!!!!
    // restart delay ist too long, use normal delay of 5ms
-   wait5ms();
+   wait5ms();		// wait5ms includes wdt_reset
    pause -= 1;
  #endif
-   wdt_reset();
   }
 }

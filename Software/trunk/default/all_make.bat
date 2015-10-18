@@ -79,6 +79,9 @@ make steril
 cd ../mega644_LCD2004
 echo "SubDir mega664_LCD2004"
 make steril
+cd ../mega644_ssd1306I2C
+echo "SubDir mega664_ssd1306I2C"
+make steril
 cd ../ST7735
 echo "SubDir ST7735"
 make steril

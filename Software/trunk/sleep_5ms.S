@@ -56,7 +56,7 @@ check_remain:
 ;  timer 1 is running, don't use sleep
 	RCALL	wait5ms		; wait5ms();
 	sbiw	r24, 1		; pause -= 1;
-	rjmp	next_loop
+	rjmp	wloop
 do_sleep:
  	cpi	r24, 0x01	; 1
  	cpc	r25, r1
@@ -87,13 +87,12 @@ set_cntr:
 	ldi	r18, (1 << SM1) | (1 << SM0) | (0 << SE);
 	out	_SFR_IO_ADDR(SMCR), r18;        /*  SMCR = (1 << SM0) | (0 << SE); */
  	sts	TIMSK2, r1	; TIMSK2 = (0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2); /* disable output compare match A interrupt */ 
+ 	wdr			; wdt_reset();
 
 #else
 ;    // restart delay ist too long, use normal delay of 5ms
-	RCALL	wait5ms		; wait5ms();
+	RCALL	wait5ms		; wait5ms();	// wait5ms includes wdt_reset()
 	sbiw	r24, 1		; pause -= 1;
 #endif
-next_loop:
- 	wdr			; wdt_reset();
  	rjmp	wloop 
  .endfunc

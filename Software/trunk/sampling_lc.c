@@ -23,11 +23,11 @@ const uint16_t lc_cpar_ee EEMEM = CxL;         // place for lc_cpar as calibrati
 
 #define Maxpk 20
 
-static unsigned int peaksearch(unsigned int uu[], unsigned int *qptr, byte d, byte maxpk)
-// searches uu[256] for peaks, using averaging over d samples (d should be about 1/4 of the expected period)
+static unsigned int peaksearch(unsigned int uu[], unsigned int *qptr, byte dist, byte maxpk)
+// searches uu[256] for peaks, using averaging over dist samples (dist should be about 1/4 of the expected period)
 // writes measured Q *10 into *qptr if non-NULL
 // maxpk is maximum number of peaks to take into account
-// if maxpk<=2, indicates preliminary search mode, where d may not yet be approximately correct; less stringent filtering then
+// if maxpk<=2, indicates preliminary search mode, where dist may not yet be approximately correct; less stringent filtering then
 // returns measured period, with 6 bits of fraction, or 0 if no resonance found
 {  
    unsigned int a=0;  // moving average of previous d points
@@ -41,33 +41,33 @@ static unsigned int peaksearch(unsigned int uu[], unsigned int *qptr, byte d, by
    unsigned int firstpeakx=0;     // time of first peak, with 6 bits of fraction
    unsigned int prevpeakx=0;      // time of previous peak, with 6 bits of fraction
    byte sawzero=1;                // flag: did we already encounter a zero?
-//         uart_putc('d'); uart_int(d); uart_newline();
+//         uart_putc('d'); uart_int(dist); uart_newline();
 
-   for (i=2;i<255-d;i++) 
+   for (i=2;i<255-dist;i++) 
    {
-      b+=uu[i+d];
+      b+=uu[i+dist];
       a+=uu[i];
-      if (i<2+d) continue;
-      a-=uu[i-d];
+      if (i<2+dist) continue;
+      a-=uu[i-dist];
       b-=uu[i];
       int delta=a-b;
       if (a==0) sawzero=1;
-      if (d<=2 && uu[i]==0) sawzero=1;
+      if (dist<=2 && uu[i]==0) sawzero=1;
 //         if (maxpk>2-2) { wdt_reset(); uart_putc('b'); uart_int(a); uart_int(b); uart_newline();}
 
       // note: uu[] can be assumed < 600 or so, since we're not interested in peaks above some 600 mV
-      // with d<=32 (because at least 2 periods must fit in 256 samples)
+      // with dist<=32 (because at least 2 periods must fit in 256 samples)
       // this means a and b cannot exceed about +20000, and cannot be negative
       // delta is between -20000 and 20000; near zero crossing delta can't exceed one uu[] value, i.e. +/- 600
       // delta can therefore safely be shifted <<6, but not <<8
       // hence the 6 bits of fraction in the peak location
       // on my atmega328p, in some cases most measured peak intervals differ by less than about 0.05, so 6 bits of fraction is just enough to not lose precision
-      if (delta>0 && prevdelta<=0 && i>2*d) {
+      if (delta>0 && prevdelta<=0 && i>2*dist) {
          // found (local) maximum
-//         uart_putc('p'); uart_int(i); uart_int(a+b); uart_int(d); uart_newline();
-         if (a+b < 3*d) break;  // stop if peak not significantly high
+//         uart_putc('p'); uart_int(i); uart_int(a+b); uart_int(dist); uart_newline();
+         if (a+b < 3*dist) break;  // stop if peak not significantly high
          unsigned x = (i<<6) - ((delta<<6)+(1<<5))/(delta-prevdelta);
-//         if (maxpk>2-2) { uart_putc('E'); uart_int(x); uart_int(ipk); uart_int(sawzero); uart_int(d); uart_newline(); }
+//         if (maxpk>2-2) { uart_putc('E'); uart_int(x); uart_int(ipk); uart_int(sawzero); uart_int(dist); uart_newline(); }
 
          sumpeak+=a+b;
          if (ipk==0) {
@@ -105,7 +105,7 @@ skip:
    }
    if (ipk<2) return 0;		// only one or no peak found
    ipk--;
-//         if (d>=1) { wdt_reset(); uart_newline();uart_putc('i'); uart_int(ipk); uart_int(prevpeakx); uart_int(firstpeakx); uart_newline();}
+//         if (dist>=1) { wdt_reset(); uart_newline();uart_putc('i'); uart_int(ipk); uart_int(prevpeakx); uart_int(firstpeakx); uart_newline();}
    return (prevpeakx-firstpeakx+(ipk>>1))/ipk;
 }  /* end of peaksearch */
 
@@ -156,18 +156,18 @@ uint16_t lc_cpar;    // value of parallel capacitor used for calculating inducta
 #else
     wait_about10ms(); /* time for voltage stabilization */
 #endif
-#ifdef PULSE_MODE2
-    samplingADC(0, uu, 0, HiPinR_L, 0, 0, HiPinR_L);     // floats the HiPin during measurement, thus not loading the tuned circuit
+#ifdef SamplingADC_CNT
+    samplingADC(1<<smplADC_inter_pulse_width, uu, 0, HiPinR_L, 0, 0, HiPinR_L);     // floats the HiPin during measurement, thus not loading the tuned circuit
 #else
     samplingADC(0, uu, 0, HiPinR_L, 0, HiPinR_L, HiPinR_L);     // floats the HiPin during measurement, thus not loading the tuned circuit
 #endif
 //   uart_newline(); for (i=0;i<255;i++) { uart_putc('A'); uart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
 
-   byte d;
+   byte dist0;
    unsigned shift=0;
    // check how long until signal reaches 0: that gives us a first guess of 1/4 of the resonance period (because we apply an impulse, so we start at the maximum of the sinewave)
-   for (d=2;d<250;d++) if (uu[d]==0) break;
-   if (d==250) {
+   for (dist0=2;dist0<250;dist0++) if (uu[dist0]==0) break;
+   if (dist0==250) {
       // no periodicity seen, so no valid results
 //      lc_lx=0;
 //      lc_fx=0;
@@ -175,21 +175,21 @@ uint16_t lc_cpar;    // value of parallel capacitor used for calculating inducta
       return;
    }
 
-   d--;                 // improves estimate slightly (experimentally)
+   dist0--;                 // improves estimate slightly (experimentally)
    uint16_t par = samplingADC_twopulses | (4<<smplADC_inter_pulse_width); // default: two pulses at minimal distance
-   if (d<=6*3) {
-      // in case of rather small d, need to measure d more precisely, by simply invoking the peaksearch function
+   if (dist0<=6*3) {
+      // in case of rather small dist0, need to measure dist0 more precisely, by simply invoking the peaksearch function
       unsigned int per;
 retry:
-      per=peaksearch(uu,NULL,d,2);
+      per=peaksearch(uu,NULL,dist0,2);
 //         uart_putc('p'); uart_int(per); uart_newline();
-      if (per==0) {   // not at least 2 peaks found: try with smaller d, or give up
-                      // reason for trying with small d is that with very small inductors, zero is often not reached before the first peak, making the zeroth peak look much too wide, causing overestimate of d
-                      // perhaps should no longer use that for estimating d...
-         if (d>2) { d=2; goto retry; }
+      if (per==0) {   // not at least 2 peaks found: try with smaller dist0, or give up
+                      // reason for trying with small dist0 is that with very small inductors, zero is often not reached before the first peak, making the zeroth peak look much too wide, causing overestimate of dist0
+                      // perhaps should no longer use that for estimating dist0...
+         if (dist0>2) { dist0=2; goto retry; }
          return;  
       }
-      d= 1+(per>>8);    // >>6 because of fraction bits, plus >>2 because d should be about a quarter period, plus +1 since 2 turns out to work better than 1 even on very fast signals (2 MHz or so)
+      dist0= 1+(per>>8);    // >>6 because of fraction bits, plus >>2 because dist0 should be about a quarter period, plus +1 since 2 turns out to work better than 1 even on very fast signals (2 MHz or so)
       per>>=6;
       if (per<=15) {
          // for high frequencies, we can send 2 pulses at the appropriate interval
@@ -199,22 +199,39 @@ retry:
       }
    }
 //   uart_newline(); for (i=0;i<255;i++) { uart_putc('a'); uart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
-
-   if (d>16) {
+	
+#ifdef SamplingADC_CNT
+   par = (1<<smplADC_inter_pulse_width);
+   if (dist0>16) {
       // rather slow resonance: then re-sample with 4 or 16 times larger interval; shift variable serves to take this into account in later calculations
-      if (d<64) {
+      if (dist0<64) {
+         shift=2;
+         par = samplingADC_slow4 | (2<<smplADC_inter_pulse_width);
+      } else {
+         shift=4;
+         par = samplingADC_slow16 | (4<<smplADC_inter_pulse_width);
+      }
+      dist0>>=shift;
+   }
+#else
+   if (dist0>16) {
+      // rather slow resonance: then re-sample with 4 or 16 times larger interval; shift variable serves to take this into account in later calculations
+      if (dist0<64) {
          shift=2;
          par = samplingADC_slow4 | samplingADC_twopulses | (4<<smplADC_inter_pulse_width);
       } else {
          shift=4;
          par = samplingADC_slow16 | samplingADC_twopulses | (4<<smplADC_inter_pulse_width);
       }
-      d>>=shift;
+      dist0>>=shift;
    }
+#endif
    // we take the average of 8 measurements, to increase S/N, except when using slow16 mode, since then the sampling would take annoyingly long (and S/N usually is better anyway at these lower frequencies)
    
+//      par |= samplingADC_cumul;
+      wdt_reset();
    for (i=0;i<8;i++) {
-#ifdef PULSE_MODE2
+#ifdef SamplingADC_CNT
       samplingADC(par, uu, 0, HiPinR_L, 0, 0, HiPinR_L);
 #else
       samplingADC(par, uu, 0, HiPinR_L, 0, HiPinR_L, HiPinR_L);
@@ -227,14 +244,18 @@ retry:
 
 //***************************************************************************************************
 #if (DEB_SAM == 2)
-  goto xyz;
+//  goto xyz;
 noavg:;
    uint16_t ii;
    for (ii=0;ii<256;ii+=4) {
       if ((ii%32) == 0) {
          lcd_clear();
 	 DisplayValue16(ii,0,'-',4);
-	 DisplayValue16(ii+31,0,' ',4);
+	 lcd_space();
+	 lcd_data('>');
+	 lcd_data('>');
+	 DisplayValue16(shift,0,' ',3);
+	 DisplayValue16(par>>smplADC_inter_pulse_width,0,' ',3);
 	 lcd_next_line_wait(0);
       } else{	 	lcd_next_line_wait(0); }
       DisplayValue16(uu[ii],0,' ',5);
@@ -264,7 +285,7 @@ noavg:;
    //   = 1/C/(2*pi*fclock)**2 * (d**2)
    //   = 1/(2*pi*fclock)**2 / C * (d**2)
 
-   unsigned period=peaksearch(uu,&lc_qx,d,Maxpk);
+   unsigned period=peaksearch(uu,&lc_qx,dist0,Maxpk);
 
    unsigned long v;
    v= (unsigned long)period;         // measured period with 6 fraction bits, before applying shift, is < 256*64 = 2^14

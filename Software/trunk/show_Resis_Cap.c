@@ -332,7 +332,7 @@ void show_cap_simple(void)
 #else
   lcd_clear_line();
 #endif  /* FLASHEND > 0x1fff */
-}
+} /* end show_cap or show_cap_simple */
 
 #if FLASHEND > 0x3fff
 /* ****************************************************************** */

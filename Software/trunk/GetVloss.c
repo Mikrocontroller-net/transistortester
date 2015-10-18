@@ -109,5 +109,5 @@ void GetVloss() {
   R_PORT = 0; 			// switch all resistor outputs to GND, no pull up
 #endif
   return;
- } // end GetVdrop()
+ } // end GetVloss()
 

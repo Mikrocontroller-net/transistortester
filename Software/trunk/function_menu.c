@@ -95,7 +95,7 @@
 #else
  #define MENU_LINES (LCD_LINES-1)
 #endif
-#define MENU_MIDDLE ((MENU_LINES/2)-1)
+#define MENU_MIDDLE ((MENU_LINES-1)/2)
 
 #ifdef WITH_MENU
 /* ****************************************************************** */

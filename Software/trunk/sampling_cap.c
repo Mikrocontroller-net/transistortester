@@ -71,6 +71,7 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
 
   uint8_t HiPinR_L, HiPinR_H;
   uint8_t LoADC;
+  uint8_t samp_opt;
   HiPinR_L = pgm_read_byte(&PinRLRHADCtab[HighPin]);	//R_L mask for HighPin R_L load
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
   HiPinR_H = pgm_read_byte((&PinRLRHADCtab[3])+HighPin);	//R_H mask for HighPin R_H load
@@ -99,7 +100,7 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
 //   lcd_string(itoa(ADCSRA, outval, 16));
 //   wait_about500ms();
 
-   memset(uu,0,sizeof(uu));
+//   memset(uu,0,sizeof(uu));
 
    // we'll sum over N1..N2 (inclusive), excluding N3..(N4-1)
 #if MHZ_CPU==16
@@ -120,8 +121,12 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
    #define N (N2-N1+1-(N4-N3))
    #define sumx (unsigned long)((N2*(N2+1l)/2)-(N4*(N4-1l)/2)+(N3*(N3-1l)/2)-(N1*(N1-1l)/2))
    unsigned long sumxx=(unsigned long)((N2*(N2+1l)*(2*N2+1l)/6)-(N4*(N4-1l)*(2*N4-1l)/6)+(N3*(N3-1l)*(2*N3-1l)/6)-(N1*(N1-1l)*(2*N1-1l)/6));
+   samp_opt = samplingADC_step;
    byte d=( (hivolt) ? HiPinR_L : HiPinR_H );
-   for (i=0;i<32;i++) samplingADC(samplingADC_step|samplingADC_cumul, uu, N2+1, d, HiPinR_H, d, HiPinR_L);
+   for (i=0;i<32;i++) {
+      samplingADC(samp_opt, uu, N2+1, d, HiPinR_H, d, HiPinR_L);
+      samp_opt |= samplingADC_cumul;
+   }
 
    R_DDR = 0;			
 #if (DEB_SAM == 1)

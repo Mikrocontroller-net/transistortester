@@ -92,7 +92,6 @@ wait200ms:
 
 
 wait100ms:
- wdr				; alle 100ms ein Watchdog reset!
  rcall wait50ms	    	; 50ms	9+x Return-Adresses
 ;laeuft in wait50us 	;100ms
 
@@ -115,6 +114,7 @@ wait10ms:
 ; laueft in wait5ms	;10ms
 
 wait5ms:
+ wdr				; every 5ms one Watchdog reset!
  rcall wait1ms	   	;1ms	6+x Return-Adresses
 wait4ms:
  rcall wait1ms	   	;2ms	6+x Return-Adresses

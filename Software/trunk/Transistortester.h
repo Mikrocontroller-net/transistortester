@@ -641,7 +641,7 @@ End of configuration
  const unsigned char mosfet_str[] MEM_TEXT = "-MOS";
  const unsigned char jfet_str[] MEM_TEXT = "JFET";
  const unsigned char igbt_str[] MEM_TEXT = "-IGBT";
-#if ((!defined(WITH_GRAPHICS) && (LCD_LINE_LENGTH > 17)) || (defined(WITH_GRAPHICS) && !defined(LOW_H_SPACE)))
+#if ((!defined(WITH_GRAPHICS) && (LCD_LINE_LENGTH > 17)) || (defined(WITH_GRAPHICS) && (LOW_H_SPACE != 1)))
  const unsigned char hfe_str[] MEM_TEXT ="hFE=";
  const unsigned char GateCap_str[] MEM_TEXT = "Cg=";
 #else

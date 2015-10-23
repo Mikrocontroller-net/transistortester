@@ -12,27 +12,22 @@
  .func	samplingADC
 
 
-#warning samplingADC with counter under test
-
-; currently use allways the 128 divider for ADC clock!
+; currently use allways the 128 divider for ADC clock for capacity measurement!
+; the ADC runs factor 2 too slow for 8 MHZ operation.
 #define AUTO_CLOCK_DIV16 ((1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0))	/* divide clock by 128 */
-//#if CPU_MHZ == 8
-#if 1
-#define AUTO_CLOCK_DIV8 ((1<<ADPS2) | (1<<ADPS1) | (0<<ADPS0))	/* divide clock by 64 */
+
+#if MHZ_CPU == 8
+ ; for inductor-measurement use the normal ADC speed, divider 64
+ #define AUTO_CLOCK_DIV8 ((1<<ADPS2) | (1<<ADPS1) | (0<<ADPS0))	/* divide clock by 64 */
 #else
-#define AUTO_CLOCK_DIV8 ((1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0))	/* divide clock by 128 */
+ ; use the 128 divider also for the inductor measurement
+ #define AUTO_CLOCK_DIV8 ((1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0))	/* divide clock by 128 */
 #endif
 
 #define TICS_PER_ADC_CLOCK 128
-#define SAMPLES_IN_ADC_PERIOD  (TICS_PER_ADC_CLOCK*13)
 
 #define ADC_StartDelay 32	/* we cannot trigger the ADC before the Counter1 is started */
 #define ADC_SHtime  (TICS_PER_ADC_CLOCK*2)	/* time to ADC S&H for triggered start */
-#if PROCESSOR_TYP == 1280
-  #define RESTART_DELAY 30
-#else
-  #define RESTART_DELAY 28
-#endif
 
 ;===============================================================================================
 ;	This version uses counter1 for start of first ADC-cycle in a Signal sequence
@@ -52,61 +47,56 @@ Retur1:
 	andi	R25, 0x0f	; 0 - 15 for pulse length 1-16
 	sbrc	r24,smplADC_twopulses
 	ldi	R25, 16		; use 16 for special direct pulse without 680 Ohm resistor
-is_well:
+
 	movw	R4, R22		; R4:5 = &array[0];
- 	mov	R13, R18	; Rport_1 -> R13
+ 	mov	R13, R18	; R13 = Rport_1 
 	ldi	R21, 1		; nn=256
-	cpse	R20,r1
+	cpse	R20, r1
 	ldi	R21, 0		; nn <256
 
  	ldi	r18, 1				; span = 1;	// every CPU clock tic
- 	ldi	r26, lo8(SAMPLES_IN_ADC_PERIOD)	; samples_per_adc_period = SAMPLES_IN_ADC_PERIOD;
-	ldi	r27, hi8(SAMPLES_IN_ADC_PERIOD)
- 	sbrs	r24, smplADC_slow4		; if ((what1 & (1<<smplADC_slow4)) != 0) 
-	rjmp	check16;
+ 	sbrc	r24, smplADC_slow4		; if ((what1 & (1<<smplADC_slow4)) != 0) 
  	ldi	r18, 4				; span = 4;	// every 4th CPU clock tic
- 	ldi	r26, lo8(SAMPLES_IN_ADC_PERIOD/4)	; samples_per_adc_period = SAMPLES_IN_ADC_PERIOD/4; // without remainder
-	ldi	r27, hi8(SAMPLES_IN_ADC_PERIOD/4)
-check16:
- 	sbrs	r24, smplADC_slow16		; if ((what1 & (1<<smplADC_slow16)) == 0) 
-	rjmp	no_slow;
+ 	sbrc	r24, smplADC_slow16		; if ((what1 & (1<<smplADC_slow16)) == 0) 
  	ldi	r18, 16				; span = 16;	// every 16th CPU clock tic
- 	ldi	r26, lo8(SAMPLES_IN_ADC_PERIOD/16)	; samples_per_adc_period = SAMPLES_IN_ADC_PERIOD/16; // without remainder
-	ldi	r27, hi8(SAMPLES_IN_ADC_PERIOD/16)
-no_slow:
-	; r18 = span, r22:23 = samples in ADC period
-	ldi	r22, AUTO_CLOCK_DIV16
+
+	mov	r22, R20	; NN
+	dec	r22
+	mul	r18, r22	; (NN-1) * span
+	movw	r22, r0		; r22:23 = last_sample = (NN-1) * span
+	clr	r1		; restore zero register
+	; r18 = span, r27=clock_div
+	ldi	r27, AUTO_CLOCK_DIV16
+	ldi	r26, 128
 #if (AUTO_CLOCK_DIV8 != AUTO_CLOCK_DIV16)
-	tst	r16		; is it L measurement?
-	brne	no_L
-	lsr	r26		; half of samples_per_adc_period
-	ror	r27
-	ldi	r22, AUTO_CLOCK_DIV8
+	tst	R16		; Rddr_1, is it L measurement?
+	breq	no_L
+	ldi	r27, AUTO_CLOCK_DIV8
+	ldi	r26, 64			; ADCclock is divided by 64
 no_L:
 #endif
-	movw	r2, r26			; save samples_per_adc_period in r2:3
+	ldi	r30, 13
+	mul	r26, r30		; TICS_PER_ADC_CLOCK * 13
+	movw	r2, r0			; save tics per ADC cycle in r2:3
+	clr	r1			; restore zero register
 
  	AOUT	R_PORT, R14	;  Rport_0	set to start condition
  	AOUT	R_DDR, R12	;  Rddr_0
 
  	ldi	r26, (1<<ADTS2) | (0<<ADTS1) | (1<<ADTS0); 
  	sts	ADCSRB, r26		; // trigger source COUNTER1 compare match B
- 	ldi	r26, (1<<ADEN) | (1<<ADSC) | (1<<ADATE) | (1<<ADIF) | (0<<ADIE) ;
-	or	r26, r22		; use actual clock div
- 	sts	ADCSRA, r26		; start first ADC with ext trigger, but start immediately
+ 	ori	r27, (1<<ADEN) | (1<<ADSC) | (1<<ADATE) | (1<<ADIF) | (0<<ADIE) ;
+ 	sts	ADCSRA, r27		; start first ADC with ext trigger, but start immediately
 wait_adc:
  	lds	r26, ADCSRA		;  while (ADCSRA & (1 << ADSC))
  	sbrc	r26, ADSC
  	rjmp	wait_adc 		; /* wait until first initial conversion is done */
 
-; 	ldi	r26, (1<<ADEN) | (0<<ADSC) | (1<<ADATE) | (1<<ADIF) | (0<<ADIE) ;
-;	or	r26, r22		; use actual clock div
  	sts	ADCSRA, r26		; clear flags (1<<ADIF)
 
- 	mov	r10, r1			; start1Xspan = 0;
+ 	mov	r10, r1			; start_pos = 0;
  	mov	r11, r1
  	movw	r6, r10			; r6:7 Samples = 0;	// no ADC sample get yet
-	movw	r22, r10 		; r22:23 start1 = 0;
 
 ;    // The pulse generation is time critical
 ;    // we are just behind the previous cycle of the ADC
@@ -116,11 +106,11 @@ wait_adc:
 
 //==============================================================================================
 GeneratePulse:
- 	; r2:3 = samples in a full ADC period (13 ADC-clocks)
+ 	; r2:3 = CPUtics of  a full ADC period (13 ADC-clocks)
 	; r4:5 = Address of buffer
 	; r6:7 = Samples,		the count of collected data
-	; r8:9 = m_shift,		used to find the right position of data for multiple ADC
-	; r10:11 = start1*span,		the time shift of this signal period
+	; r8:9 = sample_pos		the tic position of actual sample
+	; r10:11 = start_pos,		the tic position of the first sample in this signal period
 	; R12 = Rddr_0
 	; R13 = Rport_1
 	; R14 = Rport_0
@@ -129,7 +119,7 @@ GeneratePulse:
 	; r17 = scratch
 	; r18 = span			each time shift step has span CPU-tics
 	; R20:21 = nn			the number of requested data elements
-	; r22:23 = start1			the count of time shift values, span CPU tics each
+	; r22:23 = last_sample		the position of last sample	
 	; R24  = what, R25 = dp_width
  	sts	TCCR1B, r1		;  TCCR1B = 0;	// stop counter1
 
@@ -139,19 +129,17 @@ GeneratePulse:
  	sts	TCNT1L, r1
 
 ;  // set the ADC Start time, documentation mentions a 3 CPU clock delay, which is compensated here
- 	movw	r26, r10		; start1Xspan
+ 	movw	r26, r10		; start_pos
+	movw	r8, r10			; sample_pos = start_pos
 	add	r26, R25		; + dp_width
 	adc	r27, r1
-;	sbrc	r24,smplADC_twopulses
-;	adiw	r26, 2			; rjmp in jmp-table 
-;	adiw	r26, (ADC_StartDelay - 3)
 	adiw	r26, (ADC_StartDelay - 3)
- 	sts	OCR1BH, r27		;  OCR1B = (ADC_StartDelay - 3 + start1Xspan);
+ 	sts	OCR1BH, r27		;  OCR1B = (ADC_StartDelay - 3 + start_pos);
  	sts	OCR1BL, r26		;  set compare B to start condition for this Pulse generation
 
 #if (AUTO_CLOCK_DIV8 != AUTO_CLOCK_DIV16)
-	tst	r16			; test of L?
-        brne	no_L2
+	tst	R16			; test of L?
+        breq	no_L2
  	subi	r26, lo8(-((ADC_SHtime/2) + 16 + 3)) ; + time to S&H for double speed	
  	sbci	r27, hi8(-((ADC_SHtime/2) + 16 + 3)) ; 
 	rjmp	set_ocr1a
@@ -160,7 +148,7 @@ no_L2:
  	subi	r26, lo8(-(ADC_SHtime + 16 + 3)) ; + time to S&H	
  	sbci	r27, hi8(-(ADC_SHtime + 16 + 3)) ; 
 set_ocr1a:
- 	sts	OCR1AH, r27		; OCR1A = (ADC_StartDelay + ADC_SHtime + 16 + start1Xspan );
+ 	sts	OCR1AH, r27		; OCR1A = (ADC_StartDelay + ADC_SHtime + 16 + start_pos );
  	sts	OCR1AL, r26		; update compare A interrupt to behind S&H
  	sts	TIMSK1, r1			; // disable counter1 compare A Interrupt
 
@@ -175,7 +163,6 @@ set_ocr1a:
 finish:
 	clr	r1
  	sts	TCCR1B, r1			; TCCR1B = 0;	// stop counter1
-;//	sts	TIMSK1, r1			; // disable counter1 compare A Interrupt
  	ldi	r26, (1<<ADIF) | (1<<ADIE)	; // stop ADC
  	sts	ADCSRA, r26
 ;##	in	r28, _SFR_IO_ADDR(SPL)
@@ -185,8 +172,6 @@ finish:
 ;============== return ======================
 
 get_next_data:
-; 	ldi	r26, (1<<OCIE1A)		; TIMSK1 = (1<<OCIE1A);
-; 	sts	TIMSK1, r26			; // enable counter1 compare A Interrupt
  	ldi	r26, (0<<ICNC1)|(1<<CS10)	; TCCR1B = (0<<ICNC1)|(1<<CS10);
  	sts	TCCR1B, r26			; // start counter at full speed
 ;============ Counter 1 is started =================================================
@@ -198,15 +183,15 @@ get_next_data:
 	; The time difference for the different signal types is compensated with counter delay.
 
 #if (AUTO_CLOCK_DIV8 != AUTO_CLOCK_DIV16)
-#define SignalStartDelay (ADC_SHtime+ADC_StartDelay-13+1-3)
-;			   256	+      32          -13 = 272
+#define SignalStartDelay (ADC_SHtime+ADC_StartDelay-11+1-3)
+;			   256	+      32          -11 = 277
 	ldi	r26, (SignalStartDelay / 4)
 	tst	R16		; Rddr_1
-	brne	lop1		; no test of L
+	breq	lop1		; no test of L
 	subi	r26, (ADC_SHtime/4/2)	; ADC is factor two faster
 #else
-#define SignalStartDelay (ADC_SHtime+ADC_StartDelay-13+1)
-;			   256	+      32          -13 = 275
+#define SignalStartDelay (ADC_SHtime+ADC_StartDelay-11+1)
+;			   256	+      32          -11 = 277
 	ldi	r26, (SignalStartDelay / 4)
 #endif
 lop1:
@@ -223,17 +208,14 @@ lop1:
 	nop
 #endif
 
-	ldi	r30, lo8(gs(Return2)) ;13
-	ldi	r31, hi8(gs(Return2)) ;12
-	ldi	r27, 16		;11
-	sub	r27, R25	;10 (16-dp_width)
-	add	r30, r27	;9  + (16-dp_width)
-	adc	r31, r1		;8
+	ldi	r30, lo8(gs(Return2)) ;11
+	ldi	r31, hi8(gs(Return2)) ;10
+	sub	r30, R25	;9 -dp_width
+	sbc	r31, r1		;8
 	mov	r27, R14	;7  Rport_0
 	or	r27, R13	;6 Rport_1
  	wdr			;5 wdt_reset();
 	ijmp			;4 computed goto Return+(16-dp_width)
-Return2:
 	rjmp	direct_pulse	; special pulse without resistors, two additional tics
 	AOUT	R_PORT, R13	;17 R_PORT = Rport_1, dp_width = (16-1)
 	AOUT	R_PORT, R13	;16 R_PORT = Rport_1, dp_width = (15-1)
@@ -250,6 +232,7 @@ Return2:
 	AOUT	R_PORT, R13	; 5 R_PORT = Rport_1, dp_width = (4-1)
 	AOUT	R_PORT, R13	; 4 R_PORT = Rport_1, dp_width = (3-1)
  	AOUT	R_PORT, R13	; 3 R_PORT = Rport_1, dp_width = (2-1)	
+Return2:
  	AOUT	R_PORT, r27	; 2 R_PORT = Rport_1|Rport_0; // beginning of step, or end of (last) impulse
  	AOUT	R_DDR, R16	; 1 R_DDR = Rddr_1; // start of first measurement is aligned with this
 ;============ End of time critical part =================================================
@@ -285,8 +268,6 @@ wait_cnt:
 
 ;	// The first triggered ADC conversion takes 13.5 ADC clock cycles from Counter Reg B compare
  	sts	TCCR1B, r1	; TCCR1B = 0;  // stop counter, no longer required_
-	mov	r8, r1			;  r8:9 m_shift = 0;
-	mov	r9, r1			;  used for multiple ADC-conversions during one Signal period
  	ldi	r26, (1<<ICF1) | (1<<OCF1B) | (1<<OCF1A) | (1<<TOV1);
  	out	_SFR_IO_ADDR(TIFR1), r26	; clear interrupt flags
 	
@@ -298,17 +279,13 @@ CheckNextSample:
 ;    // The time to next S&H is below 1.5 ADC clocks in this case.
 ;    // If required, the next Signal period begins in about 13 ADC-clocks.
 ;    // Let us look, if the next ADC S&H is within the sampling period
- 	movw	r26, r8			; m_shift
+ 	movw	r26, r8			; sample_pos
 
- 	add	r26, r22		; + start1
- 	adc	r27, r23
-
-	add	r26, r2		; (m_shift + start1) + samples_per_adc_period
+	add	r26, r2		; sample_pos + adc_period
 	adc	r27, r3
-	adiw	r26, 1			; +1
 
- 	cp	R20, r26	;R20:21 = nn, r26:27 = samples_per_adc_period+m_shifts+start1+1 
- 	cpc	R21, r27
+ 	cp	r22, r26	;R22:23 = position of last sample, r26:27 = sample_pos + adc_period+1 
+ 	cpc	r23, r27
 
  	brcc	more_data	; if (((start1 + m_shift) + samples_per_adc_period + 1) > nn) 
 
@@ -323,28 +300,21 @@ CheckNextSample:
 ;	// The other situation is the repeated ADC. In this case we are just behind
 ;	// the end of ADC cycle, so we must wait for the next S&H time.
 ;	// The next S&H is at 1.5*ADCclock. 
-	cp	r1, r8			; r8:9 = m_shift
-	cpc	r1, r9
+	cp	r10, r8			; start_delay <= sample_pos
+	cpc	r11, r9
  	brcc	behind_SH 		; if (m_shift > 0) 
        // This is not the first ADC-cycle in this Signal-generation cycle.
        // Let us wait for next SH time.
         ldi	r26, ((TICS_PER_ADC_CLOCK*3)/6)		; 1.5 * ADC_CLOCK
 #if (AUTO_CLOCK_DIV8 != AUTO_CLOCK_DIV16)
-	tst	r16			; test of L?
-        brne	lop3			; it is Cap mode
+	tst	R16			; test of L?
+        breq	lop3			; it is Cap mode
         ldi	r26, ((TICS_PER_ADC_CLOCK*3)/12)	; 1.5 * ADC_CLOCK, Fast mode
 #endif
 lop3:
 	dec	r26
 	brne	lop3
-;       // Additionally we can wait the time, which the ISR_CNT1_A takes longer than the empty ISR_ADC 
-;       // 17 = 28 cycles - 11 cycles (INT+JMP+RTI)
-#if  MHZ_CPU == 8
-	call	wait2us
-#endif
-#if  MHZ_CPU == 16
-	call	wait1us
-#endif
+
 behind_SH:
         ; -------------------------------------
 	; toggle output back to the idle state 
@@ -353,11 +323,8 @@ behind_SH:
 
 	rcall	store_data		; store new ADC data to array and count Samples
 ;    // This was the last ADC data of this Signal period, update the time shift registers
-	ldi	r26, 1
- 	add	r22, r26	; start1 ++;  set start time to next,  multiply by span to get CPUtics
-	adc	r23, r1
 
- 	add	r10, r18		; start1Xspan += span:
+ 	add	r10, r18		; start_pos += span:
  	adc	r11, r1
 	call	wait200us	; ############# for Test only #################################################
  	rjmp	GeneratePulse 		; last data of this signal period is fetched
@@ -370,29 +337,27 @@ more_data:
 
 	rcall	store_data		; store new ADC data in array and count Samples
 
- 	add	r8, r2			; m_shift += samples_per_adc_period;
- 	adc	r9, r3			; + count of samples in previous periode (from S&H to S&H)
+ 	add	r8, r2			; sample_pos += adc_period;
+ 	adc	r9, r3			; 
  	rjmp	CheckNextSample 	; check, if the next data is the last one in this signal period
 
 ; Store ADC data in caller's array
 ; Wait for ADC data ready with polling
 ; The position of array cell is array[start1 + m_shift]
-; r8:9 = m_shift, r22:23 = start1, R4:5 = beginn of array
+; r8:9 = position of sample, R4:5 = beginn of array
 ; Function use register r17:15 to get new ADC data and
 ; register r26:27 to read (and accumulate) the old data at the array place.
 ; every call increments the Samples counter r6:7 .
 store_data:
- 	movw	r30, r8			; m_shift
-
- 	add	r30, r22		; + start1
- 	adc	r31, r23
-
- 	add	r30, r30		; (start1 + m_shift); // *2, int16
- 	adc	r31, r31
-
- 	add	r30, R4			; &array[start1 + m_shift]
- 	adc	r31, R5
-
+ 	movw	r26, r8			; sample_pos
+	movw	r30, R4			; &array
+sub_loop:
+	sub	r26, r18		; - span
+	sbc	r27, r1
+	brcs	is_found
+	adiw	r30, 2			; increment array address
+	rjmp	sub_loop
+is_found:
  	ld	r26, Z			; lo8(array[start1 + m_shift])
  	ldd	r27, Z+1		; hi8(array[start1 + m_shift])
 
@@ -406,14 +371,7 @@ wait_adc3:
 ;    // next ADC data are ready
 	lds	r17, ADCL		; neẃ ADC value
 	lds	r15, ADCH
-;##	sbrc	r24, smplADC_slow16		; if ((what1 & (1<<smplADC_slow16)) == 0) 
-;##	lds	r17, ADCSRA
 
-;==	mov	r17, r22		;******************************************
-;==	mov	r15, r23		;********* TEST ***************************
-;** 	lds	r17, ADCSRA		;  ADCSRA 
-;**	mov	r17, R12
-;**	mov	r15, r1
 ;##	lds	r17, TCNT1L		;  TCNT
 ;##	lds	r15, TCNT1H
 

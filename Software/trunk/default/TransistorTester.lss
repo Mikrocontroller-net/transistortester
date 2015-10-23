@@ -23,15 +23,15 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_abbrev 000019a1  00000000  00000000  0000c263  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   00001e16  00000000  00000000  0000dc04  2**0
+ 10 .debug_line   00001e13  00000000  00000000  0000dc04  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  000006fc  00000000  00000000  0000fa1c  2**2
+ 11 .debug_frame  000006fc  00000000  00000000  0000fa18  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000fdd  00000000  00000000  00010118  2**0
+ 12 .debug_str    00000fdd  00000000  00000000  00010114  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    00003ca8  00000000  00000000  000110f5  2**0
+ 13 .debug_loc    00003ca8  00000000  00000000  000110f1  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000018  00000000  00000000  00014d9d  2**0
+ 14 .debug_ranges 00000018  00000000  00000000  00014d99  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -10739,8 +10739,8 @@ end3:
     3408:	61 e0       	ldi	r22, 0x01	; 1
     340a:	80 e0       	ldi	r24, 0x00	; 0
     340c:	0e 94 f8 07 	call	0xff0	; 0xff0 <CheckPins>
-//====================================================================
-#endif
+	     uart_putc(0x03);		// ETX, start of new measurement
+	 #endif
 //
 	  // check all 6 combinations for the 3 pins 
 	//         High  Low  Tri

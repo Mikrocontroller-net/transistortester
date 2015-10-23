@@ -17,7 +17,7 @@
 ; currently use allways the 128 divider for ADC clock!
 #define AUTO_CLOCK_DIV16 ((1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0))	/* divide clock by 128 */
 //#if CPU_MHZ == 8
-#if 0
+#if 1
 #define AUTO_CLOCK_DIV8 ((1<<ADPS2) | (1<<ADPS1) | (0<<ADPS0))	/* divide clock by 64 */
 #else
 #define AUTO_CLOCK_DIV8 ((1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0))	/* divide clock by 128 */
@@ -49,10 +49,9 @@ samplingADC:
 Retur1:
 ;	clr	r1
 	dec	R25
-	andi	R25, 0x0f	; 0 - 15
-;	cpi	R25, 1		; is dp_width > 2
-;	brge	is_well
-;	ldi	R25, 1		; limit dp_width to 2
+	andi	R25, 0x0f	; 0 - 15 for pulse length 1-16
+	sbrc	r24,smplADC_twopulses
+	ldi	R25, 16		; use 16 for special direct pulse without 680 Ohm resistor
 is_well:
 	movw	R4, R22		; R4:5 = &array[0];
  	mov	R13, R18	; Rport_1 -> R13
@@ -143,6 +142,9 @@ GeneratePulse:
  	movw	r26, r10		; start1Xspan
 	add	r26, R25		; + dp_width
 	adc	r27, r1
+;	sbrc	r24,smplADC_twopulses
+;	adiw	r26, 2			; rjmp in jmp-table 
+;	adiw	r26, (ADC_StartDelay - 3)
 	adiw	r26, (ADC_StartDelay - 3)
  	sts	OCR1BH, r27		;  OCR1B = (ADC_StartDelay - 3 + start1Xspan);
  	sts	OCR1BL, r26		;  set compare B to start condition for this Pulse generation
@@ -190,52 +192,91 @@ get_next_data:
 ;============ Counter 1 is started =================================================
 ;  // We must count the CPU cycles used by the program to generate the signal just before S&H!
 	; The counter starts ADC in ADC_StartDelay tics.
-        ; The signal generation takes 29 tics.
-	; So we must only delay the two ADC clock cycles  (ADC_SHtime).
+        ; The signal generation takes 13 tics + (dp_width-1).
+	; So we must only delay the two ADC clock cycles (ADC_SHtime) plus the ADC_StartDelay,
+	; but minus the count of tics for the signal generation.
+	; The time difference for the different signal types is compensated with counter delay.
 
-#define SignalStartDelay (ADC_SHtime+ADC_StartDelay-(30-16)+1)
-;			   256	+      32          -(30-16)+1 = 271
-	ldi	r26, (SignalStartDelay / 3)
+#if (AUTO_CLOCK_DIV8 != AUTO_CLOCK_DIV16)
+#define SignalStartDelay (ADC_SHtime+ADC_StartDelay-13+1-3)
+;			   256	+      32          -13 = 272
+	ldi	r26, (SignalStartDelay / 4)
+	tst	R16		; Rddr_1
+	brne	lop1		; no test of L
+	subi	r26, (ADC_SHtime/4/2)	; ADC is factor two faster
+#else
+#define SignalStartDelay (ADC_SHtime+ADC_StartDelay-13+1)
+;			   256	+      32          -13 = 275
+	ldi	r26, (SignalStartDelay / 4)
+#endif
 lop1:
+	nop
 	dec	r26
 	brne	lop1
-#if (SignalStartDelay % 3) > 1
+#if (SignalStartDelay % 4) > 2
 	nop
 #endif
-#if (SignalStartDelay % 3) > 0
+#if (SignalStartDelay % 4) > 1
+	nop
+#endif
+#if (SignalStartDelay % 4) > 0
 	nop
 #endif
 
-	ldi	r30, lo8(gs(Return2)) ;30
-	ldi	r31, hi8(gs(Return2)) ;28
-	ldi	r27, 15		;27
-	sub	r27, R25	;26 (16-dp_width)
-	add	r30, r27	;25  + (16-dp_width)
-	adc	r31, r1		;24
-	mov	r27, R14	;23  Rport_0
-	or	r27, R13	;22 Rport_1
- 	wdr			;21 wdt_reset();
-	ijmp			;20 computed goto Return+(16-dp_width)
+	ldi	r30, lo8(gs(Return2)) ;13
+	ldi	r31, hi8(gs(Return2)) ;12
+	ldi	r27, 16		;11
+	sub	r27, R25	;10 (16-dp_width)
+	add	r30, r27	;9  + (16-dp_width)
+	adc	r31, r1		;8
+	mov	r27, R14	;7  Rport_0
+	or	r27, R13	;6 Rport_1
+ 	wdr			;5 wdt_reset();
+	ijmp			;4 computed goto Return+(16-dp_width)
 Return2:
-	AOUT	R_PORT, R13	;18 R_PORT = Rport_1, dp_width = 15
-	AOUT	R_PORT, R13	;17 R_PORT = Rport_1, dp_width = 14
-	AOUT	R_PORT, R13	;16 R_PORT = Rport_1, dp_width = 13
-	AOUT	R_PORT, R13	;15 R_PORT = Rport_1, dp_width = 12
-	AOUT	R_PORT, R13	;14 R_PORT = Rport_1, dp_width = 11
-	AOUT	R_PORT, R13	;13 R_PORT = Rport_1, dp_width = 10
-	AOUT	R_PORT, R13	;12 R_PORT = Rport_1, dp_width = 9
-	AOUT	R_PORT, R13	;11 R_PORT = Rport_1, dp_width = 8
-	AOUT	R_PORT, R13	;10 R_PORT = Rport_1, dp_width = 7
-	AOUT	R_PORT, R13	; 9 R_PORT = Rport_1, dp_width = 6
-	AOUT	R_PORT, R13	; 8 R_PORT = Rport_1, dp_width = 5
-	AOUT	R_PORT, R13	; 7 R_PORT = Rport_1, dp_width = 4
-	AOUT	R_PORT, R13	; 6 R_PORT = Rport_1, dp_width = 3
-	AOUT	R_PORT, R13	; 5 R_PORT = Rport_1, dp_width = 2
- 	AOUT	R_PORT, R13	; 4 R_PORT = Rport_1, dp_width = 1	
+	rjmp	direct_pulse	; special pulse without resistors, two additional tics
+	AOUT	R_PORT, R13	;17 R_PORT = Rport_1, dp_width = (16-1)
+	AOUT	R_PORT, R13	;16 R_PORT = Rport_1, dp_width = (15-1)
+	AOUT	R_PORT, R13	;15 R_PORT = Rport_1, dp_width = (14-1)
+	AOUT	R_PORT, R13	;14 R_PORT = Rport_1, dp_width = (13-1)
+	AOUT	R_PORT, R13	;13 R_PORT = Rport_1, dp_width = (12-1)
+	AOUT	R_PORT, R13	;12 R_PORT = Rport_1, dp_width = (11-1)
+	AOUT	R_PORT, R13	;11 R_PORT = Rport_1, dp_width = (10-1)
+	AOUT	R_PORT, R13	;10 R_PORT = Rport_1, dp_width = (9-1)
+	AOUT	R_PORT, R13	; 9 R_PORT = Rport_1, dp_width = (8-1)
+	AOUT	R_PORT, R13	; 8 R_PORT = Rport_1, dp_width = (7-1)
+	AOUT	R_PORT, R13	; 7 R_PORT = Rport_1, dp_width = (6-1)
+	AOUT	R_PORT, R13	; 6 R_PORT = Rport_1, dp_width = (5-1)
+	AOUT	R_PORT, R13	; 5 R_PORT = Rport_1, dp_width = (4-1)
+	AOUT	R_PORT, R13	; 4 R_PORT = Rport_1, dp_width = (3-1)
+ 	AOUT	R_PORT, R13	; 3 R_PORT = Rport_1, dp_width = (2-1)	
  	AOUT	R_PORT, r27	; 2 R_PORT = Rport_1|Rport_0; // beginning of step, or end of (last) impulse
  	AOUT	R_DDR, R16	; 1 R_DDR = Rddr_1; // start of first measurement is aligned with this
 ;============ End of time critical part =================================================
  	AOUT	R_PORT, R14	; R_PORT = Rport_0; only switch of unused Rport_0
+	rjmp	wait_cnt
+
+direct_pulse:
+	nop			;16	+ 2 tics for rjmp
+	nop			;15
+	in	r30, _SFR_IO_ADDR(ADC_DDR)	;14
+	in	r31, _SFR_IO_ADDR(ADC_PORT)	;13
+	ldi	r26, (1<<TP3)	;12
+	sbrc	R12, PIN_RL2	;11 is the bit for TP2 resistor set?
+	ldi	r26, (1<<TP2)	;10
+	sbrc	R12, PIN_RL1	;9 ist the bit for TP3 resistor set?
+	ldi	r26, (1<<TP1)	;8
+	; r26 now hold the bit for the direct ADC port
+	mov	r27, r31	;7 ADC_PORT state
+	or	r27, r26	;6 r27 is the for ADC port with HiPin set to 1
+	or	r26, r30	;5 r26 enables the HiPin and LoPin output,  ADC_DDR
+	AOUT	ADC_PORT, r27	;4 set Hipin to high
+	AOUT	R_DDR, R16	;3 R_DDR = Rddr1 open all resistor ports
+	AOUT	ADC_DDR, r26	;2 one clock tic high without resistor at HiPin, current about 5V/(42 Ohm)=119mA !!!
+	AOUT	ADC_DDR, r30	;1 disable the HiPin output
+;============ End of time critical part =================================================
+	AOUT	ADC_PORT, r31	; reset Hipin to low
+	rjmp	wait_cnt
 
 wait_cnt:
 	sbis	_SFR_IO_ADDR(TIFR1), OCF1A 	;  while (TIFR1 & (1 << OCF1A) == 0)
@@ -305,7 +346,6 @@ lop3:
 	call	wait1us
 #endif
 behind_SH:
-	call	wait100us	; ############# for Test only #################################################
         ; -------------------------------------
 	; toggle output back to the idle state 
  	AOUT	R_PORT, R14	; 5  Rport_0
@@ -319,6 +359,7 @@ behind_SH:
 
  	add	r10, r18		; start1Xspan += span:
  	adc	r11, r1
+	call	wait200us	; ############# for Test only #################################################
  	rjmp	GeneratePulse 		; last data of this signal period is fetched
 
 ;	--------------------------------------------------------------

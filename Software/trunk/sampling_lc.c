@@ -139,6 +139,7 @@ uint16_t lc_cpar;    // value of parallel capacitor used for calculating inducta
    byte i=0;
 
    unsigned int uu[257];
+   ADC_PORT = TXD_VAL;
    ADC_DDR = LoADC;			// switch Low-Pin to output (GND)
    wait100us();
 
@@ -157,7 +158,7 @@ uint16_t lc_cpar;    // value of parallel capacitor used for calculating inducta
     wait_about10ms(); /* time for voltage stabilization */
 #endif
 #ifdef SamplingADC_CNT
-    samplingADC(1<<smplADC_inter_pulse_width, uu, 0, HiPinR_L, 0, 0, HiPinR_L);     // floats the HiPin during measurement, thus not loading the tuned circuit
+    samplingADC(samplingADC_twopulses, uu, 0, HiPinR_L, 0, 0, HiPinR_L);     // floats the HiPin during measurement, thus not loading the tuned circuit
 #else
     samplingADC(0, uu, 0, HiPinR_L, 0, HiPinR_L, HiPinR_L);     // floats the HiPin during measurement, thus not loading the tuned circuit
 #endif
@@ -206,10 +207,11 @@ retry:
       // rather slow resonance: then re-sample with 4 or 16 times larger interval; shift variable serves to take this into account in later calculations
       if (dist0<64) {
          shift=2;
-         par = samplingADC_slow4 | (2<<smplADC_inter_pulse_width);
+         par = samplingADC_slow4 | (4<<smplADC_inter_pulse_width);
+//	par = samplingADC_slow4 | samplingADC_twopulses);	// high intensity pulse
       } else {
          shift=4;
-         par = samplingADC_slow16 | (4<<smplADC_inter_pulse_width);
+         par = samplingADC_slow16 | (16<<smplADC_inter_pulse_width);
       }
       dist0>>=shift;
    }

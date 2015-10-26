@@ -397,25 +397,25 @@
 #define F_ADC 125000
 //#define F_ADC 250000
 #if F_CPU/F_ADC == 2
- #define AUTO_CLOCK_DIV (1<<ADPS0) 
+ #define AUTO_CLOCK_DIV ((0<<ADPS2) | (0<<ADPS1) | (1<<ADPS0))
 #endif
 #if F_CPU/F_ADC == 4
- #define AUTO_CLOCK_DIV (1<<ADPS1) 
+ #define AUTO_CLOCK_DIV ((0<<ADPS2) | (1<<ADPS1) | (0<<ADPS0))
 #endif
 #if F_CPU/F_ADC == 8
- #define AUTO_CLOCK_DIV (1<<ADPS1) | (1<<ADPS0)
+ #define AUTO_CLOCK_DIV ((0<<ADPS2) | (1<<ADPS1) | (1<<ADPS0))
 #endif
 #if F_CPU/F_ADC == 16
- #define AUTO_CLOCK_DIV (1<<ADPS2)
+ #define AUTO_CLOCK_DIV ((1<<ADPS2) | (0<<ADPS1) | (0<<ADPS0))
 #endif
 #if F_CPU/F_ADC == 32
- #define AUTO_CLOCK_DIV (1<<ADPS2) | (1<<ADPS0)
+ #define AUTO_CLOCK_DIV ((1<<ADPS2) | (0<<ADPS1) | (1<<ADPS0))
 #endif
 #if F_CPU/F_ADC == 64
- #define AUTO_CLOCK_DIV (1<<ADPS2) | (1<<ADPS1)
+ #define AUTO_CLOCK_DIV ((1<<ADPS2) | (1<<ADPS1) | (0<<ADPS0))
 #endif
 #if F_CPU/F_ADC == 128
- #define AUTO_CLOCK_DIV (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0)
+ #define AUTO_CLOCK_DIV ((1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0))
 #endif
 //**********************************************************
 #define F_ADC_F 500000

@@ -767,7 +767,7 @@ _lcd_hw_write:
                RCALL    wait50us
  #endif
  #ifdef SLOW_LCD
-               RCALL    wait30us
+               RCALL    wait50us
  #else
                RCALL    wait1us
  #endif

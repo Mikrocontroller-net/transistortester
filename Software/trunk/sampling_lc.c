@@ -158,7 +158,7 @@ uint16_t lc_cpar;    // value of parallel capacitor used for calculating inducta
     wait_about10ms(); /* time for voltage stabilization */
 #endif
 #ifdef SamplingADC_CNT
-    samplingADC(samplingADC_twopulses, uu, 0, HiPinR_L, 0, 0, HiPinR_L);     // floats the HiPin during measurement, thus not loading the tuned circuit
+    samplingADC((1<<smplADC_span)|(1<<smplADC_direct), uu, 0, HiPinR_L, 0, 0, HiPinR_L);     // floats the HiPin during measurement, thus not loading the tuned circuit
 #else
     samplingADC(0, uu, 0, HiPinR_L, 0, HiPinR_L, HiPinR_L);     // floats the HiPin during measurement, thus not loading the tuned circuit
 #endif
@@ -177,41 +177,47 @@ uint16_t lc_cpar;    // value of parallel capacitor used for calculating inducta
    }
 
    dist0--;                 // improves estimate slightly (experimentally)
+#ifdef SamplingADC_CNT
+   uint16_t par = (1<<smplADC_span) | (1<<smplADC_direct); // default: one pulse 
+#else
    uint16_t par = samplingADC_twopulses | (4<<smplADC_inter_pulse_width); // default: two pulses at minimal distance
+#endif
    if (dist0<=6*3) {
       // in case of rather small dist0, need to measure dist0 more precisely, by simply invoking the peaksearch function
-      unsigned int per;
+      unsigned int full_per;
 retry:
-      per=peaksearch(uu,NULL,dist0,2);
+      full_per=peaksearch(uu,NULL,dist0,2);
 //         uart_putc('p'); uart_int(per); uart_newline();
-      if (per==0) {   // not at least 2 peaks found: try with smaller dist0, or give up
+      if (full_per==0) {   // not at least 2 peaks found: try with smaller dist0, or give up
                       // reason for trying with small dist0 is that with very small inductors, zero is often not reached before the first peak, making the zeroth peak look much too wide, causing overestimate of dist0
                       // perhaps should no longer use that for estimating dist0...
          if (dist0>2) { dist0=2; goto retry; }
          return;  
       }
-      dist0= 1+(per>>8);    // >>6 because of fraction bits, plus >>2 because dist0 should be about a quarter period, plus +1 since 2 turns out to work better than 1 even on very fast signals (2 MHz or so)
-      per>>=6;
-      if (per<=15) {
+      dist0= 1+(full_per>>8);    // >>6 because of fraction bits, plus >>2 because dist0 should be about a quarter period, plus +1 since 2 turns out to work better than 1 even on very fast signals (2 MHz or so)
+#ifndef SamplingADC_CNT
+      full_per>>=6;
+      if (full_per<=15) {
          // for high frequencies, we can send 2 pulses at the appropriate interval
          // (for lower frequencies, we just keep them at their default minimum distance)
-         if (per<4) per=4;
-         par = samplingADC_twopulses | (((byte)per)<<smplADC_inter_pulse_width);
+         if (full_per<4) full_per=4;
+         par = samplingADC_twopulses | (((byte)full_per)<<smplADC_inter_pulse_width);
       }
+#endif
    }
 //   uart_newline(); for (i=0;i<255;i++) { uart_putc('a'); uart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
 	
 #ifdef SamplingADC_CNT
-   par = (1<<smplADC_inter_pulse_width);
+   par = (1<<smplADC_span) | (1<<smplADC_direct);
    if (dist0>16) {
       // rather slow resonance: then re-sample with 4 or 16 times larger interval; shift variable serves to take this into account in later calculations
       if (dist0<64) {
          shift=2;
-         par = samplingADC_slow4 | (4<<smplADC_inter_pulse_width);
+         par = 3 | (4<<smplADC_span);
 //	par = samplingADC_slow4 | samplingADC_twopulses);	// high intensity pulse
       } else {
          shift=4;
-         par = samplingADC_slow16 | (16<<smplADC_inter_pulse_width);
+         par = 15 | (16<<smplADC_span);
       }
       dist0>>=shift;
    }
@@ -231,25 +237,26 @@ retry:
    // we take the average of 8 measurements, to increase S/N, except when using slow16 mode, since then the sampling would take annoyingly long (and S/N usually is better anyway at these lower frequencies)
    
 //      par |= samplingADC_cumul;
-      wdt_reset();
    for (i=0;i<8;i++) {
+      wdt_reset();
 #ifdef SamplingADC_CNT
       samplingADC(par, uu, 0, HiPinR_L, 0, 0, HiPinR_L);
 #else
       samplingADC(par, uu, 0, HiPinR_L, 0, HiPinR_L, HiPinR_L);
-#endif
       if (par & samplingADC_slow16) goto noavg;
+#endif
       par |= samplingADC_cumul;
-      wdt_reset();
    }
    for (i=0;i<255;i++) uu[i]>>=3;   // divide all samples by 8
 
 //***************************************************************************************************
-#if (DEB_SAM == 2)
-//  goto xyz;
+#ifndef SamplingADC_CNT
 noavg:;
+#endif
+#if (DEB_SAM == 2)
    uint16_t ii;
-   for (ii=0;ii<256;ii+=4) {
+//   for (ii=0;ii<256;ii+=4) {
+   for (ii=0;ii<64;ii+=4) {
       if ((ii%32) == 0) {
          lcd_clear();
 	 DisplayValue16(ii,0,'-',4);
@@ -270,9 +277,6 @@ noavg:;
          wait_about5s();
       }
    } /* end for ii */
-xyz: ;
-#else
-noavg:;
 #endif
 //***************************************************************************************************
 
@@ -325,12 +329,14 @@ noavg:;
    // inductor_lpre = -5, Inductance searched without 680 Ohm, rx is below 24 Ohm
    // inductor_lpre = -4,  Inductance is searched with 680i Ohm, 24 < rx < 2100
    // probably search of 
+#ifdef SamplingADC_CNT
    if (inductor_lx>2) {
       // if traditional measurement gave some meaningful-looking value ( > 20 uH, but that's rather arbitrary)
       // discard the new one, it's probably self-resonance
       // note that if a sizeable cap is in parallel, the normal measurement doesn't come up with an answer
       lc_lx=0;
    }
+#endif
 
    // freq/Hz = F_CPU/d
    if (period==0) {
@@ -355,7 +361,7 @@ noavg:;
 void sampling_lc_calibrate()
 {
    lcd_clear();
-   lcd_MEM2_string(str_cap_for_l_meas);		// "Cap for L meas?"
+   lcd_MEM2_string(cap_for_l_meas_str);		// "Cap for L meas?"
    byte i=0;
    byte ww=0;
    do { 

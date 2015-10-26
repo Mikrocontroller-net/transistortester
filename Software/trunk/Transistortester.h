@@ -130,6 +130,10 @@ End of configuration
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
   #endif
  #endif
+ #ifdef SamplingADC
+ //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
+ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
+ #endif
  #define LANG_SELECTED
 #endif
 #if defined(LANG_ITALIAN)		//italiano
@@ -173,6 +177,10 @@ End of configuration
   #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Contrasto";
   #endif
+ #endif
+ #ifdef SamplingADC
+ //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
+ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
  #endif
  #define LANG_SELECTED
 #endif
@@ -219,6 +227,10 @@ End of configuration
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
   #endif
  #endif
+ #ifdef SamplingADC
+ //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
+ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
+ #endif
  #define LANG_SELECTED
 #endif
 
@@ -251,7 +263,7 @@ End of configuration
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotacni koder";
-   const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','k','o','r','e','c','t','u','r','a',0};
+   const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','k','o','r','e','k','c','e',0};
    const unsigned char TURN_str[] MEM2_TEXT = "otocte!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Autotest";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "propoj sondy!";
@@ -263,6 +275,9 @@ End of configuration
   #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
   #endif
+ #endif
+ #ifdef SamplingADC
+const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF pro L mer?";
  #endif
  #define LANG_SELECTED
 #endif
@@ -309,6 +324,10 @@ End of configuration
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
   #endif
  #endif
+ #ifdef SamplingADC
+ //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
+ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
+ #endif
  #define LANG_SELECTED
 #endif
 
@@ -354,6 +373,10 @@ End of configuration
   #endif
  #endif
  #endif
+ #ifdef SamplingADC
+ //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
+ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
+ #endif
  #define LANG_SELECTED
 #endif
 
@@ -398,6 +421,10 @@ End of configuration
   #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Contrast";
   #endif
+ #endif
+ #ifdef SamplingADC
+ //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
+ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
  #endif
  #define LANG_SELECTED
 #endif
@@ -488,6 +515,10 @@ End of configuration
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Contraste";
   #endif
  #endif
+ #ifdef SamplingADC
+ //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
+ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
+ #endif
  #define LANG_SELECTED
 #endif
 
@@ -536,6 +567,10 @@ End of configuration
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontraszt";
   #endif
  #endif
+ #ifdef SamplingADC
+ //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
+ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
+ #endif
  #define LANG_SELECTED
 #endif
 
@@ -581,6 +616,10 @@ End of configuration
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrastas";
   #endif
  #endif
+ #endif
+ #ifdef SamplingADC
+ //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
+ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
  #endif
  #define LANG_SELECTED
 #endif
@@ -628,6 +667,10 @@ End of configuration
   #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Contrast";
   #endif
+ #endif
+ #ifdef SamplingADC
+ //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
+ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
  #endif
 #endif
 
@@ -1144,7 +1187,6 @@ Cyr_d,Cyr_i,Cyr_v,'.',' ',Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
  const unsigned char AnKat_str[] MEM_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_DIODE1, LCD_CHAR_LINE1,0};
  const unsigned char KatAn_str[] MEM_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_DIODE2, LCD_CHAR_LINE1,0};
 #ifdef SamplingADC
- const unsigned char str_cap_for_l_meas[] MEM2_TEXT = "Cap for L meas?";    // for now placed here, should be translated at some point
  const unsigned char AT05volt[] MEM_TEXT = " @0-5V";
  const unsigned char iF_str[] MEM2_TEXT = " if ";
  const unsigned char zQ_str[] MEM2_TEXT = "z Q=";
@@ -1380,7 +1422,7 @@ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR
  extern const unsigned char AnKat_str[] MEM_TEXT ;
  extern const unsigned char KatAn_str[] MEM_TEXT ;
 #ifdef SamplingADC
- extern const unsigned char str_cap_for_l_meas[] MEM2_TEXT;
+ extern const unsigned char cap_for_l_meas_str[] MEM2_TEXT;
  extern const unsigned char AT05volt[] MEM_TEXT;
  extern const unsigned char iF_str[] MEM2_TEXT ;
  extern const unsigned char zQ_str[] MEM2_TEXT ;

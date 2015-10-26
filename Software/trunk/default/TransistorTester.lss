@@ -258,7 +258,7 @@ _lcd_hw_write:
                RCALL    wait50us
  #endif
  #ifdef SLOW_LCD
-               RCALL    wait30us
+               RCALL    wait50us
  #else
                RCALL    wait1us
      182:	95 c2       	rjmp	.+1322   	; 0x6ae <wait1us>

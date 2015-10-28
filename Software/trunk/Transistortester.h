@@ -1486,3 +1486,28 @@ extern const unsigned char CyrillicMuIcon[] MEM_TEXT;	//µ
 #endif
 
 
+// macros for easily acquiring the bitmasks for pins
+ #define pinmaskRL(pin) pgm_read_byte(PinRLRHADCtab+(pin))
+#if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
+ #define pinmaskRH(pin) pgm_read_byte(PinRLRHADCtab+(pin)+3)
+ #define pinmaskADC(pin) (pgm_read_byte(PinRLRHADCtab+(pin)+6) | TXD_MSK)
+#else
+ #define pinmaskRH(pin) (pinmaskRL(pin)<<1)
+ #define pinmaskADC(pin) (pgm_read_byte(PinRLRHADCtab+(pin)+3) | TXD_MSK)
+#endif
+
+
+// for processor-dependent selection of reference:
+#if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
+ #define ADref1V1 ((0<<REFS0)|(1<<REFS1))   // use built-in reference, about 1.1 V;
+#else
+ #define ADref1V1 ((1<<REFS0)|(1<<REFS1))   // use built-in reference, about 1.1 V;
+#endif
+
+// macro for appropriate delay for voltage stabilization:
+#ifdef NO_AREF_CAP
+ #define wait_aref_stabilize    wait100us
+#else
+ #define wait_aref_stabilize    wait10ms
+#endif
+

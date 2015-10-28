@@ -1,5 +1,5 @@
 
-// June-Sept 2015, pa3fwm@amsat.org
+// original June-Sept 2015, pa3fwm@amsat.org
 
 #ifdef SamplingADC
 
@@ -30,8 +30,8 @@ static unsigned int peaksearch(unsigned int uu[], unsigned int *qptr, byte dist,
 // if maxpk<=2, indicates preliminary search mode, where dist may not yet be approximately correct; less stringent filtering then
 // returns measured period, with 6 bits of fraction, or 0 if no resonance found
 {  
-   unsigned int a=0;  // moving average of previous d points
-   unsigned int b=0;  // moving average of next d points
+   unsigned int a=0;  // moving average of previous dist points
+   unsigned int b=0;  // moving average of next dist points
    byte i;        // index in uu[]
    byte ipk=0;    // peak count
    int prevdelta=1;
@@ -62,7 +62,7 @@ static unsigned int peaksearch(unsigned int uu[], unsigned int *qptr, byte dist,
       // delta can therefore safely be shifted <<6, but not <<8
       // hence the 6 bits of fraction in the peak location
       // on my atmega328p, in some cases most measured peak intervals differ by less than about 0.05, so 6 bits of fraction is just enough to not lose precision
-      if (delta>0 && prevdelta<=0 && i>2*dist) {
+      if (delta>0 && prevdelta<=0 && i>2*dist-1) {
          // found (local) maximum
 //         uart_putc('p'); uart_int(i); uart_int(a+b); uart_int(dist); uart_newline();
          if (a+b < 3*dist) break;  // stop if peak not significantly high
@@ -80,7 +80,7 @@ static unsigned int peaksearch(unsigned int uu[], unsigned int *qptr, byte dist,
          }
          sawzero=0;
          prevpeak=a+b;
-//         if (maxpk>2-2) { uart_putc('e'); uart_int(x-prevpeakx); uart_int(a+b); uart_newline(); }
+//         if (maxpk>2) { myuart_putc('e'); myuart_putc(' '); uart_int(x-prevpeakx); uart_int(a+b); uart_int(x>>6); uart_newline(); }
          prevpeakx=x;
          ipk++;
          if (ipk==maxpk) break;
@@ -114,10 +114,13 @@ skip:
 
 void sampling_lc(byte LowPin, byte HighPin)
 {
-uint16_t lc_cpar;    // value of parallel capacitor used for calculating inductance, in pF
+   uint16_t lc_cpar;    // value of parallel capacitor used for calculating inductance, in pF
    lc_cpar=eeprom_read_word((uint16_t *)&lc_cpar_ee);
-//   byte LowPin=pb[0];
-//   byte HighPin=pb[1];
+
+//###################################################################################################
+#ifndef SamplingADC_CNT             // old version of the code
+//#if 1
+
    byte HiPinR_L, LoADC;
    HiPinR_L = pgm_read_byte(&PinRLRHADCtab[HighPin]);	//R_L mask for HighPin R_L load
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
@@ -162,7 +165,7 @@ uint16_t lc_cpar;    // value of parallel capacitor used for calculating inducta
 #else
     samplingADC(0, uu, 0, HiPinR_L, 0, HiPinR_L, HiPinR_L);     // floats the HiPin during measurement, thus not loading the tuned circuit
 #endif
-//   uart_newline(); for (i=0;i<255;i++) { uart_putc('A'); uart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
+   uart_newline(); for (i=0;i<255;i++) { uart_putc('A'); uart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
 
    byte dist0;
    unsigned shift=0;
@@ -249,10 +252,10 @@ retry:
    }
    for (i=0;i<255;i++) uu[i]>>=3;   // divide all samples by 8
 
-//***************************************************************************************************
 #ifndef SamplingADC_CNT
 noavg:;
 #endif
+//***************************************************************************************************
 #if (DEB_SAM == 2)
    uint16_t ii;
 //   for (ii=0;ii<256;ii+=4) {
@@ -284,6 +287,129 @@ noavg:;
 
 //         uart_putc('d'); uart_int(d); uart_newline();
 
+//###################################################################################################
+#else  // new version of the code, with SamplingADC_CNT and pulses via the ADC port, i.e., without 680 ohm series resistor
+
+   byte HiPinR_L, LoADC;
+   HiPinR_L = pinmaskRL(HighPin);
+   LoADC = pinmaskADC(LowPin);
+
+   lc_fx=0;
+   lc_qx=0;
+   lc_lx=0;
+   if ((PartFound != PART_RESISTOR) || (inductor_lpre > 0)) {
+      // can happen if we're invoke when there's both a diode and a resistor;
+      // don't try to measure inductance then
+      // the other reason is a too big resistance, 2100 Ohm is found by ReadInductance
+      return;
+   }
+
+   byte i=0;
+
+   unsigned int uu[255];
+   ADC_PORT = TXD_VAL;
+   ADC_DDR = LoADC;			// switch Low-Pin to output (GND)
+   wait100us();
+
+   // first, acquire data at maximum speed:
+   ADMUX=HighPin|ADref1V1;   // use built-in reference, about 1.1 V;
+                             // that's enough, because peaks more than about 0.6 V are not of interest
+                             // (because the negative peak would be chopped by the protection diodes)
+   wait_aref_stabilize();                               
+
+   // run a first measurement, using the narrow full-current impulse
+   samplingADC((1<<smplADC_span)|(1<<smplADC_direct), uu, 255, HiPinR_L, 0, 0, HiPinR_L);
+
+   // also measure some 20 samples at the "cold side" of the coil, and subtract
+   // at highest frequencies, this is useful because the on-chip ADC has an RC lowpass which gives an exponentially decaying "DC" offset
+   unsigned int uu0[20];
+   ADMUX=LowPin|ADref1V1;   // switch to "cold" side for reference measurement
+   samplingADC((1<<smplADC_span)|(1<<smplADC_direct), uu0, 20, HiPinR_L, 0, 0, HiPinR_L);
+   i=20; while (i--)        // essentially equivalent to for (i=0;i<20;i++) but saves many bytes of flash
+   {
+      if (uu[i]>=uu0[i]) uu[i]-=uu0[i];
+      else uu[i]=0;
+   }
+   ADMUX=HighPin|ADref1V1;   // back to "hot" side
+
+//   uart_newline(); for (i=0;i<255;i++) { myuart_putc('A'); myuart_putc(' '); uart_int(uu[i]); uart_int(uu0[i]); uart_newline(); wdt_reset(); }
+
+   byte dist0;         // estimate of duration of 1/4 of a period, used to set averaging interval in peaksearch()
+   unsigned shift=0;   // by how many bit positions measured period needs to be shifted due to measuring with span>1
+
+   // check how long until signal reaches 0: that gives us a first guess of 1/4 of the resonance period (because we apply an impulse, so we start at the maximum of the sinewave)
+   for (dist0=1;dist0<250;dist0++) if (uu[dist0]==0) break;
+   if (dist0==250) return; // no periodicity seen, so no valid results
+
+   uint16_t par = (1<<smplADC_span) | (1<<smplADC_direct); // default: one pulse 
+   if (dist0<=16) {
+      // in case of small dist0, need to measure dist0 more precisely, by simply invoking the peaksearch function
+      // this includes the case dist0==0, which may happen with very small coils, when the response starts at 0 rather than with a peak
+      unsigned int full_per;
+      if (dist0<=2) dist0=4;
+retry:
+      full_per=peaksearch(uu,NULL,dist0,2);
+      if (full_per==0) {   // not at least 2 peaks found: try with smaller dist0, or give up
+                      // reason for trying with small dist0 is that with very small inductors, zero is often not reached before the first peak, making the zeroth peak look much too wide, causing overestimate of dist0
+                      // perhaps should no longer use that for estimating dist0...
+         if (dist0>2) { dist0=2; goto retry; }
+         if (dist0==2) { dist0=1; goto retry; }
+      }
+      dist0= 1+(full_per>>8);    // >>6 because of fraction bits, plus >>2 because dist0 should be about a quarter period, plus +1 to round up
+   }
+	
+#define samplingADC_direct (1<<smplADC_direct)
+   par = (1<<smplADC_span) | samplingADC_direct;
+   if (dist0>16) {
+      // rather slow resonance: then re-sample with 4 or 16 times larger interval; shift variable serves to take this into account in later calculations
+      if (dist0<64) {
+         shift=2;
+         par = (4<<smplADC_span) | samplingADC_direct;
+//         par = 3 | (4<<smplADC_span);
+      } else {
+         shift=4;
+         par = (16<<smplADC_span) | samplingADC_direct;
+//         par = 15 | (16<<smplADC_span);
+      }
+      dist0>>=shift;
+   }
+
+   // we take the average of 8 measurements, to increase S/N, except when using span>1, since then the sampling takes annoyingly long and S/N usually is better anyway at these lower frequencies
+   for (i=0;i<8;i++) {
+      wdt_reset();
+      samplingADC(par, uu, 255, HiPinR_L, 0, 0, HiPinR_L);
+      if (par >> (smplADC_span+1)) goto noavg;
+      par |= samplingADC_cumul;
+   }
+   if (dist0<4) {  // note that dist0<4 implies shift==0 by the above code
+      // case of high frequency: subtract reference measurement, and do no scaling down of accumulated amplitudes since they are small in this case
+      ADMUX=LowPin|ADref1V1;   // switch to "cold" side for reference measurement
+      par &= ~samplingADC_cumul;
+      for (i=0;i<8;i++) {
+         samplingADC(par, uu0, 20, HiPinR_L, 0, 0, HiPinR_L);
+         par |= samplingADC_cumul;
+      }
+      i=20; while (i--)
+      {
+         unsigned int w=uu0[i];
+         if (uu[i]>=w) uu[i]-=w;
+         else uu[i]=0;
+      }
+   } else {
+      // low frequency: no reference measurement needed, but do scale amplitude by number of accumulated samples
+      i=255;
+      while (i--) uu[i]>>=3;   // divide all samples by 8
+   }
+
+//   uart_newline(); for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
+
+noavg:;
+//   { myuart_putc('d'); myuart_putc(' '); uart_int(dist0); uart_newline(); }
+
+
+#endif
+//###################################################################################################
+
    // calculation of the results:
    // d= distance between peaks (in units of CPU clock tics)
    //
@@ -314,10 +440,12 @@ noavg:;
    #error "CPU clocks other than 8 and 16 MHz not yet supported for SamplingADC"
    v=0;
 #endif
-   v/=lc_cpar;                          //          ; is (d<<2)/(2*pi*fclock)^2/c * 1e9 >>3
+//   v/=lc_cpar;                          //          ; is (d<<2)/(2*pi*fclock)^2/c * 1e9 >>3
+   v/=(lc_cpar>>1);                          //          ; is (d<<2)/(2*pi*fclock)^2/c * 1e9 >>2
 	// shift for 16 MHz 0, 2,  4; for 8 MHz 1, 3,  5
         // resulting factor 2,32,512            8,128,2048 
-   v<<=1+2*shift;                      //          ; is L in 1e-9 H  
+//   v<<=1+2*shift;                      //          ; is L in 1e-9 H  
+   v<<=2*shift;                      //          ; is L in 1e-9 H  
                         // not nice: the nH number will always be even; then again, do we really measure that precisely?
    lc_lx=v;
 

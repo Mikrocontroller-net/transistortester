@@ -208,7 +208,7 @@ Return2:
 direct_pulse:
 	nop			;16	+ 2 tics for rjmp
 #if MHZ_CPU != 16
-	nop			;15
+;	nop			;15
 #endif
 	in	r30, _SFR_IO_ADDR(ADC_DDR)	;14
 	in	r31, _SFR_IO_ADDR(ADC_PORT)	;13
@@ -225,7 +225,7 @@ direct_pulse:
 	AOUT	R_DDR, R16	;3 R_DDR = Rddr1 open all resistor ports
 	AOUT	ADC_DDR, r26	;2 one clock tic high without resistor at HiPin, current about 5V/(42 Ohm)=119mA !!!
 #if MHZ_CPU == 16
-	AOUT	ADC_DDR, r26	;2 one clock tic high without resistor at HiPin, current about 5V/(42 Ohm)=119mA !!!
+;	AOUT	ADC_DDR, r26	;2 one clock tic high without resistor at HiPin, current about 5V/(42 Ohm)=119mA !!!
 #endif
 	AOUT	ADC_DDR, r30	;1 disable the HiPin output
 ;============ End of time critical part =================================================
@@ -292,7 +292,7 @@ behind_SH:
 
  	add	r10, R19		; start_pos += span:
  	adc	r11, r1
-	call	wait200us	; ############# for Test only #################################################
+;	call	wait200us	; ############# for Test only #################################################
  	rjmp	GeneratePulse 		; last data of this signal period is fetched
 
 ;	--------------------------------------------------------------

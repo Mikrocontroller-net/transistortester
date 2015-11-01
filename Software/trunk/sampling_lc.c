@@ -497,6 +497,7 @@ void sampling_lc_calibrate()
 	 lcd_space();
          lcd_MEM_string(OK_str);	// Output "OK"
          lcd_refresh();
+         wait_about500ms();
          break;
       }
       lcd_clear_line();

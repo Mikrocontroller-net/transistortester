@@ -40,19 +40,22 @@ static unsigned int peaksearch(unsigned int uu[], unsigned int *qptr, byte dist,
    unsigned int sumpeak=0;        // sum of peaks
    unsigned int firstpeakx=0;     // time of first peak, with 6 bits of fraction
    unsigned int prevpeakx=0;      // time of previous peak, with 6 bits of fraction
-   byte sawzero=1;                // flag: did we already encounter a zero?
+   unsigned short firstzero=0;    // time of first zero, used for sanity check
+   byte sawzero=0;                // flag: did we already encounter a zero?
 //         uart_putc('d'); uart_int(dist); uart_newline();
 
-   for (i=2;i<255-dist;i++) 
+   for (i=0;i<255-dist;i++) 
    {
       b+=uu[i+dist];
       a+=uu[i];
-      if (i<2+dist) continue;
+      if (i<dist) continue;
       a-=uu[i-dist];
       b-=uu[i];
       int delta=a-b;
-      if (a==0) sawzero=1;
-      if (dist<=2 && uu[i]==0) sawzero=1;
+      if (a==0) {
+         sawzero=1;
+         if (!firstzero) firstzero=i-dist;
+      }
 //         if (maxpk>2-2) { wdt_reset(); uart_putc('b'); uart_int(a); uart_int(b); uart_newline();}
 
       // note: uu[] can be assumed < 600 or so, since we're not interested in peaks above some 600 mV
@@ -97,16 +100,15 @@ skip:
       unsigned long int r=((sumpeak-firstpeak)*1000ul)/(sumpeak-prevpeak);
       // r = exp(-pi/Q)  so Q = -pi/(ln(r))
       // for r almost 1 (i.e., high Q), this is approx. pi/(1-r)
-//      uart_newline(); uart_int((unsigned int)r);
       r = 31416u/get_log(1000-r);
       // note scaling: the get_log is *1000, and we now compute Q in multiples of .1, hence the numerator being 10000*pi
       *qptr=(unsigned int)r;
-//      uart_int((unsigned int)r); uart_newline();
    }
    if (ipk<2) return 0;		// only one or no peak found
    ipk--;
-//         if (dist>=1) { wdt_reset(); uart_newline();uart_putc('i'); uart_int(ipk); uart_int(prevpeakx); uart_int(firstpeakx); uart_newline();}
-   return (prevpeakx-firstpeakx+(ipk>>1))/ipk;
+   unsigned int per= (prevpeakx-firstpeakx+(ipk>>1))/ipk;   // average period; the (ipk>>1) provides for rounding
+   if (firstzero>(per>>6)) return 0;     // sanity check: first zero should be within first period
+   return per;
 }  /* end of peaksearch */
 
 
@@ -119,7 +121,6 @@ void sampling_lc(byte LowPin, byte HighPin)
 
 //###################################################################################################
 #ifndef SamplingADC_CNT             // old version of the code
-//#if 1
 
    byte HiPinR_L, LoADC;
    HiPinR_L = pgm_read_byte(&PinRLRHADCtab[HighPin]);	//R_L mask for HighPin R_L load
@@ -222,7 +223,9 @@ retry:
    }
    for (i=0;i<255;i++) uu[i]>>=3;   // divide all samples by 8
 
+#ifndef SamplingADC_CNT
 noavg:;
+#endif
 //***************************************************************************************************
 #if (DEB_SAM == 2)
    uint16_t ii;
@@ -293,7 +296,7 @@ noavg:;
    unsigned int uu0[20];
    ADMUX=LowPin|ADref1V1;   // switch to "cold" side for reference measurement
    samplingADC((1<<smplADC_span)|(1<<smplADC_direct), uu0, 20, HiPinR_L, 0, 0, HiPinR_L);
-   i=20; while (i--)        // essentially equivalent to for (i=0;i<20;i++) but saves many bytes of flash
+   for (i=0;i<20;i++)
    {
       if (uu[i]>=uu0[i]) uu[i]-=uu0[i];
       else uu[i]=0;
@@ -307,24 +310,18 @@ noavg:;
 
    // check how long until signal reaches 0: that gives us a first guess of 1/4 of the resonance period (because we apply an impulse, so we start at the maximum of the sinewave)
    for (dist0=1;dist0<250;dist0++) if (uu[dist0]==0) break;
-   if (dist0==250)  return; // no periodicity seen, so no valid results 
+   if (dist0==250) return; // no periodicity seen, so no valid results
 
    uint16_t par = (1<<smplADC_span) | (1<<smplADC_direct); // default: one pulse 
    if (dist0<=16) {
       // in case of small dist0, need to measure dist0 more precisely, by simply invoking the peaksearch function
       // this includes the case dist0==0, which may happen with very small coils, when the response starts at 0 rather than with a peak
       unsigned int full_per;
-      if (dist0<=2) dist0=4;
-retry:
       full_per=peaksearch(uu,NULL,dist0,2);
-      if (full_per==0) {   // not at least 2 peaks found: try with smaller dist0, or give up
-                      // reason for trying with small dist0 is that with very small inductors, zero is often not reached before the first peak, making the zeroth peak look much too wide, causing overestimate of dist0
-                      // perhaps should no longer use that for estimating dist0...
-         if (dist0>2) { dist0=2; goto retry; }
-         if (dist0==2) { dist0=1; goto retry; }
-      }
+//       { myuart_putc('D'); myuart_putc(' '); uart_int(dist0); uart_int(full_per); uart_newline(); }
       dist0= 1+(full_per>>8);    // >>6 because of fraction bits, plus >>2 because dist0 should be about a quarter period, plus +1 to round up
    }
+//   { myuart_putc('d'); myuart_putc(' '); uart_int(dist0); uart_newline(); }
 	
 #define samplingADC_direct (1<<smplADC_direct)
    par = (1<<smplADC_span) | samplingADC_direct;
@@ -357,7 +354,7 @@ retry:
          samplingADC(par, uu0, 20, HiPinR_L, 0, 0, HiPinR_L);
          par |= samplingADC_cumul;
       }
-      i=20; while (i--)
+      i=20; while (i--)         // equivalent to for (i=0;i<20;i++) but saves 48 bytes of flash????
       {
          unsigned int w=uu0[i];
          if (uu[i]>=w) uu[i]-=w;
@@ -425,14 +422,12 @@ noavg:;
    // inductor_lpre = -5, Inductance searched without 680 Ohm, rx is below 24 Ohm
    // inductor_lpre = -4,  Inductance is searched with 680i Ohm, 24 < rx < 2100
    // probably search of 
-#ifndef SamplingADC_CNT
    if (inductor_lx>2) {
       // if traditional measurement gave some meaningful-looking value ( > 20 uH, but that's rather arbitrary)
       // discard the new one, it's probably self-resonance
       // note that if a sizeable cap is in parallel, the normal measurement doesn't come up with an answer
       lc_lx=0;
    }
-#endif
 
    // freq/Hz = F_CPU/d
    if (period==0) {

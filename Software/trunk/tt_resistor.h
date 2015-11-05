@@ -11,7 +11,7 @@ uint8_t ResistorsFound;	//Number of found resistors
 
 #else  /* no main */
 
-extern unsigned long ResistorVal[3];	// Values of resistor 0:1, 0:2, 1:2
+extern unsigned long ResistorVal[3];	// Values of resistor 0:1, 0:2, 1:2, in units of 0.1 ohms
 extern uint8_t ResistorList[3];	// list of the found resistor Numbers
 extern uint8_t ResistorChecked[3];	// 2, if resistor is checked in both directions
 extern  uint8_t ResistorsFound;	//Number of found resistors

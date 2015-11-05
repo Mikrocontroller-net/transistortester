@@ -360,6 +360,18 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         adc.hp2 = ReadADC(HighPin);	//measure voltage at HighPin (assumed Emitter)
 
         if(adc.tp2 > 2000) {
+#ifdef WITH_PUT
+           // most likely it's a PNP transistor, but it might be a PUT (Programmable Unijunction Transistor)
+           // to check this, make Tri-Pin (assumed base) high again; PNP will stop conducting, PUT won't
+           R_PORT = TriPinRH;
+           tmp16 = W10msReadADC(LowPin);	//measure voltage at LowPin (assumed Collector)
+           if (tmp16>=1024) {     // compiler could optimize this to an 8-bit compare, but doesn't :-(
+              // still conducts, can't be a PNP
+              PartFound = PART_PUT;
+              ptrans.uBE = adc.hp2 - adc.tp2;	// "Offset Voltage"
+              goto savePresult;
+           }
+#endif
            //PNP-Transistor is found (Base voltage moves with Emitter to VCC)
            PartFound = PART_TRANSISTOR;
            PartMode = PART_MODE_PNP;

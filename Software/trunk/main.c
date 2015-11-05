@@ -298,6 +298,87 @@
 	#endif
 	  }
 
+#ifdef WITH_UJT
+// check for UJT
+        if (PartFound==PART_DIODE       
+            && NumOfDiodes==2                // UJT is detected as 2 diodes E-B1 and E-B2...
+            && ResistorsFound==1             // ...and a resistor B1-B2
+            && diodes.Anode[0]==diodes.Anode[1]      // check diodes have common anode
+            && (unsigned char)(ResistorList[0]+diodes.Anode[0])==2    // and resistor is between cathodes
+           ) 
+           // note: there also exist CUJTs (complementary UJTs); they seem to be (even) rarer than UJTs, and are not supported for now
+           {
+             uint8_t B1pin, B2pin, Epin;
+             Epin = diodes.Anode[0];
+             B1pin = diodes.Cathode[0];
+             B2pin = diodes.Cathode[1];
+ujt_exch_b:;
+             uint8_t port0, port1, ddr0, ddr1;
+             // B1 to ground via 0 ohm
+             // B2 to plus via 680 ohm
+             // discharge: E to ground via 680 ohm
+             // charge: E to plus via 470 k
+
+             port0 = pinmaskRL(B2pin);
+             ddr0 = port0 | pinmaskRL(Epin);
+             port0 |= pinmaskRH(Epin);
+             port1 = port0;
+             ddr1 = port1;
+              ADMUX = Epin|(1<<REFS0);	// switch Multiplexer to emitter and use 5V reference voltage
+              ADC_DDR = pinmaskADC(B1pin);
+              ADC_PORT = 0;
+              R_PORT = 0;
+              R_DDR = 0;			
+              wait_aref_stabilize();
+              unsigned int uu[64];
+ #ifndef SamplingADC_CNT
+              samplingADC(samplingADC_step|samplingADC_slow4, uu, 255/4, port1, ddr1, port0, ddr0);  // should move to slow16 and a smaller array but for some reason that doesn't work
+ #else
+              samplingADC((16<<smplADC_span), uu, 64, port1, ddr1, port0, ddr0);
+ #endif
+//              myuart_putc('s'); myuart_putc(' '); uart_int(port1); uart_int(ddr1); uart_int(port0); uart_int(ddr0); uart_newline();
+              uint8_t i;
+              uint8_t max=0;
+              for (i=10;i<64;i++) {
+                 uint8_t v=uu[i]>>2;  // 8-bit arithmetic is enough for this
+                 if (v>max) max=v;
+                 else break;
+              }
+              // found first maximum
+              // now check whether after this, the voltage drops significantly, if so, we've detected oscillation
+              max-=(max>>3);
+              for (;i<64;i++) {
+                 uint8_t v=uu[i]>>2;  // 8-bit arithmetic is enough for this
+                 if (v<max) {
+                    // significant voltage drop, oscillation found: must be an UJT
+                    PartFound=PART_UJT;
+                    ntrans.e=B1pin;
+                    ntrans.b=Epin;
+                    ntrans.c=B2pin;
+                    // calculate eta
+                    uint32_t v;
+                    uint32_t r=ResistorVal[ResistorList[0]];
+                    v=(r<<8)/(r+R_L_VAL);      // Vbb in units of supplyvoltage/256 ; perhaps should also take into account the about 20 ohm internal resistance?
+                    max-=35;               // subtract about 0.7 volts (1 diode voltage drop) from the maximum emitter voltage seen; 35 is 0.7/5*256.
+                    ntrans.gthvoltage=100ul*max/v;     // this is eta in percent, cf. http://www.allaboutcircuits.com/textbook/semiconductors/chpt-7/unijunction-transistor-ujt/
+                    goto ujtdone;
+                 }
+              }
+              // didn't find oscillation yet
+              if (B1pin == diodes.Cathode[0]) {
+                 // try exchanging the two base connections
+                 B1pin=B2pin;
+                 B2pin=diodes.Cathode[0];
+                 goto ujt_exch_b;
+              }
+ujtdone:;
+
+//   uart_newline(); for (i=0;i<64;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i<<2]); uart_newline(); wdt_reset(); }
+//   uart_newline(); for (i=0;i<64;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
+//              myuart_putc('v'); myuart_putc(' '); uart_int(min); uart_int(max); uart_newline();
+        }
+#endif
+
 	  //All checks are done, output result to display
 
 	#ifdef DebugOut 
@@ -334,6 +415,30 @@
 #endif
     goto TyUfAusgabe;
   }
+
+#ifdef WITH_PUT
+   if (PartFound == PART_PUT) {
+      static const unsigned char PUT_str[] MEM_TEXT = "PUT";
+      lcd_MEM_string(PUT_str);
+      _trans=&ptrans;
+      PinLayout('A','G',Cathode_char);
+      goto TyUfAusgabe;
+   }
+#endif
+
+#ifdef WITH_UJT
+   if (PartFound == PART_UJT) {
+      static const unsigned char UJT_str[] MEM_TEXT = "UJT";
+      static const unsigned char eta_str[] MEM_TEXT = "eta=";
+      lcd_MEM_string(UJT_str);
+      PinLayout('1','E','2');
+      lcd_next_line(0);
+      RvalOut(ResistorList[0]);
+      lcd_MEM_string(eta_str);		//"eta="
+      DisplayValue(ntrans.gthvoltage,-2,' ',3);
+      goto tt_end;
+   }
+#endif
 
   if (PartFound == PART_CAPACITOR) {
 #if FLASHEND > 0x3fff
@@ -1026,7 +1131,11 @@ TyUfAusgabe:
   lcd_line2(); //2. row 
  #endif
   lcd_MEM_string(Uf_str);		// "Uf="
+ #ifdef WITH_PUT
+  Display_mV(_trans->uBE,2);    // needed instead of ntrans for PUT, but costs 4 bytes more flash...
+ #else
   Display_mV(ntrans.uBE,2);
+ #endif
 #endif
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - 
  tt_end:

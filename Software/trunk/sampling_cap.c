@@ -102,7 +102,7 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
 
 //   memset(uu,0,sizeof(uu));
 
-   // we'll sum over N1..N2 (inclusive), excluding N3..(N4-1)
+   // we'll do the least-squares calculation over samples N1..N2 (inclusive), excluding N3..(N4-1)
 #if MHZ_CPU==16
    #define N1 70     // skip the initial part, which seems to behave a bit differently
    #define N2 230    // skip the last part where the sampling switch starts to affect the results
@@ -131,6 +131,7 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
       samplingADC(samp_opt, uu, N2+1, d, HiPinR_H, d, HiPinR_L);
       samp_opt |= samplingADC_cumul;
    }
+//   uart_newline(); for (i=0;i<N2;i++) { uart_putc('c'); uart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
 
    R_DDR = 0;			
 #if (DEB_SAM == 1)

@@ -205,6 +205,31 @@ Return2:
  	AOUT	R_PORT, R14	; R_PORT = Rport_0; only switch of unused Rport_0
 	rjmp	wait_cnt
 
+;; cap:
+;   byte d=( (hivolt) ? HiPinR_L : HiPinR_H );
+;      samplingADC(samp_opt, uu, N2+1, d, HiPinR_H, d, HiPinR_L);
+;
+;   Rport_1 = Rport_0 = HiPinR_H   or HiPinR_L
+;   Rddr_1 = HiPinR_H
+;   Rddr_0 = HiPinR_L
+;
+;uint16_t samplingADC(R24:25 what, R22:23 array[], R20 nn, R18 Rport_1, R16 Rddr_1, R14 Rport_0, R12 Rddr_0) {}
+;
+;         samplingADC(par, uu, 0, HiPinR_L, 0, 0, HiPinR_L);
+;; LC:
+;   Rport_1 = HiPinR_L
+;   Rport_0 = 0
+;   Rddr_1 = 0
+;   Rddr_0 = HiPinR_L
+; 
+;; UJT:
+;             port0 = pinmaskRL(B2pin);
+;             port1 = pinmaskRL(B2pin) | pinmaskRH(Epin)
+;             ddr1 = pinmaskRL(B2pin) | pinmaskRH(Epin)
+;             ddr0 = pinmaskRL(B2pin) | pinmaskRL(Epin);
+
+
+
 direct_pulse:
 	nop			;16	+ 2 tics for rjmp
 #if MHZ_CPU != 16

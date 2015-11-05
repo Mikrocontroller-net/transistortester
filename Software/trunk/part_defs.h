@@ -1,5 +1,5 @@
 
-//definitions of parts
+//definitions of parts  (values for global variable PartFound)
 #define PART_NONE 0
 #define PART_RESISTOR 1
 #define PART_DIODE 2
@@ -9,9 +9,12 @@
 #define PART_TRIAC 6
 #define PART_CAPACITOR 7
 #define PART_CELL 8
+#define PART_UJT 9
+#define PART_PUT 10
 
 //End (parts)
-//special definition for different parts 
+
+//special definition for different parts   (values for global variable PartMode)
 //FETs , even numbers are N-type
 #define PART_MODE_NONE 0
 #define PART_MODE_MOS 2

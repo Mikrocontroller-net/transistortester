@@ -508,6 +508,7 @@ ujtdone:;
  #endif
         }
 #else  // SamplingADC
+showdiodecap:
         cap.cval=sampling_cap(diodes.Cathode[0],diodes.Anode[0],0);   // at low voltage
         lcd_next_line_wait(0);		// next line, wait 5s and clear line 2
         DisplayValue(cap.cval,sampling_cap_pre,'F',2);
@@ -531,7 +532,11 @@ ujtdone:;
            lcd_MEM_string(AnKat_str);	//"->|-"
            lcd_testpin(diodes.Cathode[1]);
            UfAusgabe(0x01);
+#ifdef SamplingADC
+           goto showdiodecap;   // double diodes are often varicap; measure capacitance of one of them
+#else
            goto end3;
+#endif
         } 
         if(diodes.Cathode[0] == diodes.Cathode[1]) { //Common Cathode
            lcd_testpin(diodes.Anode[0]);
@@ -540,7 +545,11 @@ ujtdone:;
            lcd_MEM_string(KatAn_str);	//"-|<-"
            lcd_testpin(diodes.Anode[1]);
            UfAusgabe(0x01);
+#ifdef SamplingADC
+           goto showdiodecap;   // double diodes are often varicap; measure capacitance of one of them
+#else
            goto end3;
+#endif
 //        else if ((diodes.Cathode[0] == diodes.Anode[1]) && (diodes.Cathode[1] == diodes.Anode[0])) 
         } 
         if (diodes.Cathode[0] == diodes.Anode[1]) {

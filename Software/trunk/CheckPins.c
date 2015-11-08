@@ -15,6 +15,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 */
   struct {
      unsigned int lp_otr;
+     unsigned int lp_otrh;
      unsigned int vCEs;
      unsigned int hp1;
      unsigned int hp2;
@@ -143,6 +144,11 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   ADC_PORT = HiADCp;		//High-Pin fix to Vcc
   //for some MOSFET the gate (TristatePin) must be discharged
   adc.vCEs = W5msReadADC(LowPin);	// lp1 is the voltage at 680 Ohm with + Gate
+#ifdef WITH_PUT
+  R_PORT = TriPinRL | TriPinRH;
+  R_DDR = LoPinRL | TriPinRH;           
+  adc.lp_otrh = W5msReadADC(LowPin);	//read voltage of Low-Pin  , with tri-state ping to plus via RH; prevents accidental triggering of PUT
+#endif
   R_DDR = LoPinRL;	
   adc.lp_otr = W5msReadADC(LowPin);	//read voltage of Low-Pin  , without Gate current (+)
   R_DDR = 0;
@@ -161,6 +167,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      adc.vCEs = ADCconfig.U_AVCC - W5msReadADC(HighPin);	// voltage at 680 Ohm with - Gate
      R_DDR = HiPinRL;			// resistor-Port High-Pin to 1, TriState open
      adc.lp_otr = ADCconfig.U_AVCC - W5msReadADC(HighPin); // voltage at 680 Ohm with open Gate
+#ifdef WITH_PUT
+     adc.lp_otrh = adc.lp_otr;
+#endif
   } else {
      if ((adc.vCEs+288) > adc.lp2) goto checkDiode;	// no significant change
   }
@@ -331,7 +340,14 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 //  R_DDR = LoPinRL;		//switch R_L port for Low-Pin to output (GND)
   wait_about5ms();
   
-  if(adc.lp_otr < 1977) {
+
+
+#ifndef WITH_PUT
+  if(adc.lp_otr < 1977) 
+#else
+  if(adc.lp_otrh < 1977) 
+#endif
+  {
      //if the component has no connection between  HighPin and LowPin
 #if DebugOut == 5
      lcd_testpin(LowPin);

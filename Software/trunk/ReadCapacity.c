@@ -129,7 +129,20 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
      wait500us();			//wait a little time
      wdt_reset();
      // read voltage without current, is already charged enough?
+#ifdef big_cap_no_float
+     R_PORT = HiPinR_H;			//R_H to 1 (VCC), to ensure that if nothing is connected, measured voltage will be Vcc, rather than float anywhere
+     R_DDR = HiPinR_H;			// shouldn't influence the measurements significantly, since the R is almost 1000 times larger, and the time about 100 times shorter
+     cap_voltage1 = ReadADC(HighPin);
+     R_DDR = 0;				// switch back to input
+     R_PORT = 0;			// no Pull up
+     if (ovcnt16==0 && cap_voltage1 >=4096) {
+        // apparently very small capacitance, if it charges so quickly
+        goto messe_mit_rh;
+     }
+     cap_voltage1 -= residual_voltage; // voltage across capacitor
+#else
      cap_voltage1 = ReadADC(HighPin) - residual_voltage; // voltage of capacitor
+#endif
      if ((ovcnt16 > (MAX_LOAD_TIME/4)) && (cap_voltage1 < (MIN_VOLTAGE/4))) {
         // 300mV can not be reached well-timed 
         break;		// don't try to load any more

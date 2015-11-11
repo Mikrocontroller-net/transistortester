@@ -76,18 +76,22 @@ uint16_t Rnum2pins(uint8_t num);	// compute Pin-Numbers of the resistor number
 extern uint16_t samplingADC(   // code is in sampling_ADC.S
    uint16_t what, 	// what to measure? see smplADC_... defs below, R24:R25
    uint16_t *ptr,       // output pointer (note: ptr[0] will contain incorrect data; ptr[1]...ptr[n-1] will be valid) R22:R23
-   uint8_t n,              // number of samples (n=0 for 256), R20
+   uint8_t n,           // number of samples (n=0 for 256), R20
    uint8_t Rport_1,	// port value for active part of step / inactive part of impulse, R18
-   uint8_t Rddr_1,		// ddr value for same	R16
+   uint8_t Rddr_1,	// ddr value for same	R16
    uint8_t Rport_0,	// port values for inactive part of step / active part of impulse; note that for impulse response, Rport_1 must equal Rport_0 (we don't have enough time to toggle both port and ddr between impulses)  R14
-   uint8_t Rddr_0          // ddr value for same R12
+   uint8_t Rddr_0       // ddr value for same R12
    );
- // you can find the defines for bits in "what" in config.h
-// smplADC_step      (1<<0)   // do step response, not impulse
-// smplADC_slow4     (1<<1)   // only take a sample every 4 clockcycles
-// smplADC_slow16    (1<<4)   // only take a sample every 16 clockcycles
-// smplADC_cumul     (1<<2)   // don't overwrite, but add the samples to the array
-// smplADC_twopulses (1<<3)   // send 2 impulses rather than one; inter-pulse time is in the upper 8 bits, should be in the range 4..15
+// you can find the defines for bits in "what" in config.h
+//
+// meaning of Rport_1, Rddr_1, Rport_0 and Rddr_0 has changed with samplingADC_CNT; with that option, they are as follows.
+// the measurement cycle consist of three phases, henceforth called idle, pulse, and active, in that order.
+// Rport_0 and Rddr_0 apply during idle.
+// Rport_0 and Rddr_1 apply during active.
+// if the samplingADC_direct option is NOT used, during pulse Rddr_0 and Rport_1 apply (duration of pulse is between 1 and 16 CPU cycles, controlled by lower bits of 'what' parameter)
+// if the samplingADC_direct option is used, a 1 CPU-cycle pulse is applied via de ADC pin corresponding to a 1 bit in Rddr_0
+
+
 int32_t sampling_cap(uint8_t HighPin, uint8_t LowPin, uint8_t hivolt);   // returns measured capacitance in 0.01 pF units; hivolt flag demands measurement at 5 V rather than at 0 V
 void sampling_lc(uint8_t LowPin, uint8_t HighPin);
 #define sampling_cap_pre -14

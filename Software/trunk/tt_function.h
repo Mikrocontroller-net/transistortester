@@ -84,12 +84,14 @@ extern uint16_t samplingADC(   // code is in sampling_ADC.S
    );
 // you can find the defines for bits in "what" in config.h
 //
-// meaning of Rport_1, Rddr_1, Rport_0 and Rddr_0 has changed with samplingADC_CNT; with that option, they are as follows.
-// the measurement cycle consist of three phases, henceforth called idle, pulse, and active, in that order.
+// The meaning of Rport_1, Rddr_1, Rport_0 and Rddr_0 has changed with samplingADC_CNT; with that option, they are as follows.
+// The measurement cycle consist of three phases, henceforth called idle, pulse, and active, in that order.
+// Measurements are performed duing 'active' period.
 // Rport_0 and Rddr_0 apply during idle.
 // Rport_0 and Rddr_1 apply during active.
-// if the samplingADC_direct option is NOT used, during pulse Rddr_0 and Rport_1 apply (duration of pulse is between 1 and 16 CPU cycles, controlled by lower bits of 'what' parameter)
-// if the samplingADC_direct option is used, a 1 CPU-cycle pulse is applied via de ADC pin corresponding to a 1 bit in Rddr_0
+// If the samplingADC_direct option is NOT used, during pulse Rddr_0 and Rport_1 apply (duration of pulse is between 1 and 16 CPU cycles, controlled by lower bits of 'what' parameter).
+//  (note though that currently the non-direct mode is only used for step response measurements, with Rport_1=Port_0, so effectively no pulse is applied)
+// If the samplingADC_direct option is used, a 1 CPU-cycle pulse is applied via de ADC pin corresponding to a 1 bit in Rddr_0.
 
 
 int32_t sampling_cap(uint8_t HighPin, uint8_t LowPin, uint8_t hivolt);   // returns measured capacitance in 0.01 pF units; hivolt flag demands measurement at 5 V rather than at 0 V

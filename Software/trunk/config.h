@@ -971,24 +971,11 @@ End of configuration
 // defines for bits in samplingADC function, parameter 1 (what)
 // smplADC_* are bit numbers or offsets
 // samplingADC_* are corresponding bit values
-#ifdef SamplingADC_CNT
  #define smplADC_cumul 6		/* don't overwrite, but add the samples to the array */
  #define smplADC_direct 4	/* option for direct pulse without resistor */
  #define samplingADC_direct (1<<smplADC_direct)
  // 0x0f				/* pulse-length 1-16 */
  #define smplADC_span 8		/* distance between two samples, value in upper 8 bits */
-#else
- #define smplADC_twopulses 7	/* send 2 impulses rather than one, inter-pulse time is in upper byte, should be in the range 4..15 */
- #define smplADC_cumul 6		/* don't overwrite, but add the samples to the array */
- #define smplADC_step 5		/* do step response, not impulse */
- #define smplADC_slow16 4	/* only take a sample every 16 CPU-cycles */
- #define smplADC_slow4 2		/* only take a sample every 4 CPU-cycles */
- #define smplADC_inter_pulse_width 8	/* resides in the upper byte, shift by 8 */
- #define samplingADC_step (1<<smplADC_step)
- #define samplingADC_twopulses (1<<smplADC_twopulses)
- #define samplingADC_slow4 (1<<smplADC_slow4)
- #define samplingADC_slow16 (1<<smplADC_slow16)
-#endif
 #define samplingADC_cumul (1<<smplADC_cumul)
 
 

@@ -120,7 +120,8 @@ void sampling_lc(byte LowPin, byte HighPin)
    lc_cpar=eeprom_read_word((uint16_t *)&lc_cpar_ee);
 
 //###################################################################################################
-#ifndef SamplingADC_CNT             // old version of the code
+//#ifndef SamplingADC_CNT             // old version of the code
+#if 0
 
    byte HiPinR_L, LoADC;
    HiPinR_L = pgm_read_byte(&PinRLRHADCtab[HighPin]);	//R_L mask for HighPin R_L load
@@ -259,7 +260,7 @@ noavg:;
 //         uart_putc('d'); uart_int(d); uart_newline();
 
 //###################################################################################################
-#else  // new version of the code, with SamplingADC_CNT and pulses via the ADC port, i.e., without 680 ohm series resistor
+#else  // new version of the code, with pulses via the ADC port, i.e., without 680 ohm series resistor
 
    byte HiPinR_L, LoADC;
    HiPinR_L = pinmaskRL(HighPin);

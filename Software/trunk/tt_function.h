@@ -77,14 +77,14 @@ extern uint16_t samplingADC(   // code is in sampling_ADC.S
    uint16_t what, 	// what to measure? see smplADC_... defs below, R24:R25
    uint16_t *ptr,       // output pointer (note: ptr[0] will contain incorrect data; ptr[1]...ptr[n-1] will be valid) R22:R23
    uint8_t n,           // number of samples (n=0 for 256), R20
-   uint8_t Rport_1,	// port value for active part of step / inactive part of impulse, R18
-   uint8_t Rddr_1,	// ddr value for same	R16
-   uint8_t Rport_0,	// port values for inactive part of step / active part of impulse; note that for impulse response, Rport_1 must equal Rport_0 (we don't have enough time to toggle both port and ddr between impulses)  R14
-   uint8_t Rddr_0       // ddr value for same R12
+   uint8_t Rport_1,	
+   uint8_t Rddr_1,	
+   uint8_t Rport_0,	
+   uint8_t Rddr_0      
    );
 // you can find the defines for bits in "what" in config.h
 //
-// The meaning of Rport_1, Rddr_1, Rport_0 and Rddr_0 has changed with samplingADC_CNT; with that option, they are as follows.
+// The meaning of Rport_1, Rddr_1, Rport_0 and Rddr_0 are now as follows.
 // The measurement cycle consist of three phases, henceforth called idle, pulse, and active, in that order.
 // Measurements are performed duing 'active' period.
 // Rport_0 and Rddr_0 apply during idle.

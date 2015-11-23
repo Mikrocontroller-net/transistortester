@@ -71,7 +71,7 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
 
   uint8_t HiPinR_L, HiPinR_H;
   uint8_t LoADC;
-  uint8_t samp_opt;
+  uint16_t samp_opt;
   HiPinR_L = pgm_read_byte(&PinRLRHADCtab[HighPin]);	//R_L mask for HighPin R_L load
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
   HiPinR_H = pgm_read_byte((&PinRLRHADCtab[3])+HighPin);	//R_H mask for HighPin R_H load
@@ -121,17 +121,14 @@ static int32_t sampling_cap_do(byte HighPin, byte LowPin, byte hivolt, byte cali
    #define N (N2-N1+1-(N4-N3))
    #define sumx (unsigned long)((N2*(N2+1l)/2)-(N4*(N4-1l)/2)+(N3*(N3-1l)/2)-(N1*(N1-1l)/2))
    unsigned long sumxx=(unsigned long)((N2*(N2+1l)*(2*N2+1l)/6)-(N4*(N4-1l)*(2*N4-1l)/6)+(N3*(N3-1l)*(2*N3-1l)/6)-(N1*(N1-1l)*(2*N1-1l)/6));
-#ifdef SamplingADC_CNT
    samp_opt = 1;		// sample distance 1
-#else
-   samp_opt = samplingADC_step;
-#endif
    byte d=( (hivolt) ? HiPinR_L : HiPinR_H );
+
    for (i=0;i<32;i++) {
       samplingADC(samp_opt, uu, N2+1, d, HiPinR_H, d, HiPinR_L);
       samp_opt |= samplingADC_cumul;
    }
-//   uart_newline(); for (i=0;i<N2;i++) { uart_putc('c'); uart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
+//   uart_newline(); for (i=0;i<N2;i++) { myuart_putc('c'); myuart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
 
    R_DDR = 0;			
 #if (DEB_SAM == 1)
@@ -255,5 +252,13 @@ void sampling_cap_calibrate()
    wait_about200ms();
 } /* end sampling_cap_calibrate */
 
+
+
+
+
+// empty interrupt handler, needed for samplingADC.S
+ISR(TIMER1_COMPA_vect, ISR_BLOCK) {
+  ;
+}
 
 #endif   // SamplingADC

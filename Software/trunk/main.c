@@ -331,11 +331,7 @@ ujt_exch_b:;
               R_DDR = 0;			
               wait_aref_stabilize();
               unsigned int uu[64];
- #ifndef SamplingADC_CNT
-              samplingADC(samplingADC_step|samplingADC_slow4, uu, 255/4, port1, ddr1, port0, ddr0);  // should move to slow16 and a smaller array but for some reason that doesn't work
- #else
               samplingADC((16<<smplADC_span), uu, 64, port1, ddr1, port0, ddr0);
- #endif
 //              myuart_putc('s'); myuart_putc(' '); uart_int(port1); uart_int(ddr1); uart_int(port0); uart_int(ddr0); uart_newline();
               uint8_t i;
               uint8_t max=0;

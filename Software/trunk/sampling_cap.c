@@ -255,10 +255,12 @@ void sampling_cap_calibrate()
 
 
 
-
+//#ifndef SamplingADC_CNT
+#if 0
 // empty interrupt handler, needed for samplingADC.S
 ISR(TIMER1_COMPA_vect, ISR_BLOCK) {
   ;
 }
+#endif
 
 #endif   // SamplingADC

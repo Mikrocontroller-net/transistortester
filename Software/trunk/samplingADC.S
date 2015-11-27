@@ -123,7 +123,8 @@ backtosleep:
 	rjmp stepresponse
 
  	; wait a bit less than 256 ticks; precise value determined experimentally, by looking at the sampled data and aligning start of response with first sample
-#define Delay_pulse (207-Lessdelay)
+//#define Delay_pulse (207-Lessdelay)
+#define Delay_pulse (201-Lessdelay)	/* -6 additional clock tics (push, ldi, out, pop) */
 
  	ldi	r26,(Delay_pulse/3)
 #if Delay_pulse%3>0

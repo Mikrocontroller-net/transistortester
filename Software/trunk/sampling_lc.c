@@ -347,7 +347,8 @@ noavg:;
       if (par >> (smplADC_span+1)) goto noavg;
       par |= samplingADC_cumul;
    }
-   if (dist0<4) {  // note that dist0<4 implies shift==0 by the above code
+//   if (dist0<4) {  // note that dist0<4 implies shift==0 by the above code
+   if ((par >> smplADC_span) < 4) {
       // case of high frequency: subtract reference measurement, and do no scaling down of accumulated amplitudes since they are small in this case
       ADMUX=LowPin|ADref1V1;   // switch to "cold" side for reference measurement
       par &= ~samplingADC_cumul;
@@ -357,8 +358,7 @@ noavg:;
       }
       i=20; while (i--)         // equivalent to for (i=0;i<20;i++) but saves 48 bytes of flash????
       {
-         unsigned int w=uu0[i];
-         if (uu[i]>=w) uu[i]-=w;
+         if (uu[i]>=uu0[i]) uu[i]-=uu0[i];
          else uu[i]=0;
       }
    } else {
@@ -383,7 +383,8 @@ noavg:;
    //   = 1/C/(2*pi*fclock)**2 * (d**2)
    //   = 1/(2*pi*fclock)**2 / C * (d**2)
 
-   unsigned period=peaksearch(uu,&lc_qx,dist0,Maxpk);
+//   unsigned period=peaksearch(uu,&lc_qx,dist0,Maxpk);
+   unsigned period=peaksearch(uu,&lc_qx,2,Maxpk);
 
    unsigned long v;
    v= (unsigned long)period;         // measured period with 6 fraction bits, before applying shift, is < 256*64 = 2^14
@@ -434,10 +435,10 @@ noavg:;
    if (period==0) {
       lc_qx = 0;
       lc_lx = 0;
-#if 0
+#if (DEB_SAM == 3)
    uint16_t ii;
 //   for (ii=0;ii<256;ii+=4) {
-   for (ii=0;ii<64;ii+=4) {
+   for (ii=0;ii<128;ii+=4) {
       if ((ii%32) == 0) {
          lcd_clear();
 	 DisplayValue16(ii,0,'-',4);
@@ -445,6 +446,7 @@ noavg:;
 	 lcd_data('>');
 	 lcd_data('>');
 	 DisplayValue16(shift,0,' ',3);
+         DisplayValue16(dist0,0,' ',4);
 	 lcd_next_line_wait(0);
       } else{	 	lcd_next_line_wait(0); }
       DisplayValue16(uu[ii],0,' ',5);
@@ -457,6 +459,8 @@ noavg:;
          wait_about5s();
       }
    } /* end for ii */
+   lcd_refresh();
+   wait_about5s();
 #endif
       return;
    }

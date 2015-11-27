@@ -97,8 +97,8 @@ void GetFrequency(uint8_t range) {
 
      // set up counter 1 to measure one second
      TCCR1A = 0;			// normal operation
-     OCR1A = (F_CPU / 256UL)+1;		// set to 1 second  (counter 0 is started with 1)
-     OCR1B = 1;				// start counter 0 with first count
+     OCR1B = (F_CPU / 256UL)+1;		// set to 1 second  (counter 0 is started with 1)
+     OCR1A = 1;				// start counter 0 with first count
      TCNT1 = 0;				// set counter to zero
      GTCCR  |= (1<<PSRSYNC);		// reset clock precounter
      TIFR1 = (1<<OCF1B) | (1<<OCF1A);	// clear Output compare match
@@ -313,10 +313,10 @@ ISR(TIMER0_OVF_vect, ISR_BLOCK) {
 #endif
 
 /* ************************************************************ */
-/* Timer 1 Compare B interrupts with count 1 to start counter 0 */
+/* Timer 1 Compare A interrupts with count 1 to start counter 0 */
 /* This is defined as start of the measurement second.          */
 /* ************************************************************ */
-ISR(TIMER1_COMPB_vect, ISR_BLOCK) {
+ISR(TIMER1_COMPA_vect, ISR_BLOCK) {
 #if PROCESSOR_TYP == 1280
   TCCR3B = (1<<CS32) | (1<<CS31) | (0<<CS30);	// start the counter 3 with external input T3
 #else
@@ -325,9 +325,9 @@ ISR(TIMER1_COMPB_vect, ISR_BLOCK) {
 }
 
 /* ************************************************************ */
-/* Timer 1 Compare A interrupt after 1 second to stop counter 0 */
+/* Timer 1 Compare B interrupt after 1 second to stop counter 0 */
 /* ************************************************************ */
-ISR(TIMER1_COMPA_vect, ISR_BLOCK) {
+ISR(TIMER1_COMPB_vect, ISR_BLOCK) {
   // The TIMER1_COMPB_vect uses one push and one ldi more than this interrupt.
   // Therefore we stop timer 1 first and ajust to same time with wdt_reset();
   wdt_reset();			// for adjusting to same time as TIMER1_COMPB_vect

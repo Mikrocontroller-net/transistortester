@@ -19,19 +19,19 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY
   7 .debug_aranges 00000410  00000000  00000000  00004d10  2**3
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_info   00007143  00000000  00000000  00005120  2**0
+  8 .debug_info   00007152  00000000  00000000  00005120  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_abbrev 000019a1  00000000  00000000  0000c263  2**0
+  9 .debug_abbrev 00001994  00000000  00000000  0000c272  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   00001e13  00000000  00000000  0000dc04  2**0
+ 10 .debug_line   00001e18  00000000  00000000  0000dc06  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  000006fc  00000000  00000000  0000fa18  2**2
+ 11 .debug_frame  000006fc  00000000  00000000  0000fa20  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000fdd  00000000  00000000  00010114  2**0
+ 12 .debug_str    00000fe5  00000000  00000000  0001011c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    00003ca8  00000000  00000000  000110f1  2**0
+ 13 .debug_loc    00003cae  00000000  00000000  00011101  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000018  00000000  00000000  00014d99  2**0
+ 14 .debug_ranges 00000018  00000000  00000000  00014daf  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -3896,6 +3896,11 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     103c:	9e 83       	std	Y+6, r25	; 0x06
     103e:	8d 83       	std	Y+5, r24	; 0x05
     1040:	54 b8       	out	0x04, r5	; 4
+#ifdef WITH_PUT
+  R_PORT = TriPinRL | TriPinRH;
+  R_DDR = LoPinRL | TriPinRH;           
+  adc.lp_otrh = W5msReadADC(LowPin);	//read voltage of Low-Pin  , with tri-state ping to plus via RH; prevents accidental triggering of PUT
+#endif
   R_DDR = LoPinRL;	
     1042:	88 2d       	mov	r24, r8
   adc.lp_otr = W5msReadADC(LowPin);	//read voltage of Low-Pin  , without Gate current (+)
@@ -3967,6 +3972,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     10ae:	3e 4f       	sbci	r19, 0xFE	; 254
     10b0:	82 17       	cp	r24, r18
     10b2:	93 07       	cpc	r25, r19
+#ifdef WITH_PUT
+     adc.lp_otrh = adc.lp_otr;
+#endif
   } else {
      if ((adc.vCEs+288) > adc.lp2) goto checkDiode;	// no significant change
     10b4:	08 f4       	brcc	.+2      	; 0x10b8 <CheckPins+0xc8>
@@ -4384,7 +4392,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     130a:	bd d9       	rcall	.-3206   	; 0x686 <wait5ms>
     130c:	f1 2f       	mov	r31, r17
   
-  if(adc.lp_otr < 1977) {
+
+
+#ifndef WITH_PUT
+  if(adc.lp_otr < 1977) 
     130e:	f5 29       	or	r31, r5
     1310:	fb 8b       	std	Y+19, r31	; 0x13
     1312:	f4 b9       	out	0x04, r31	; 4
@@ -4450,6 +4461,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     1360:	a8 01       	movw	r20, r16
     1362:	97 01       	movw	r18, r14
     1364:	0e 94 94 1e 	call	0x3d28	; 0x3d28 <__udivmodsi4>
+              ptrans.uBE = adc.hp2 - adc.tp2;	// "Offset Voltage"
+              goto savePresult;
+           }
+#endif
            //PNP-Transistor is found (Base voltage moves with Emitter to VCC)
            PartFound = PART_TRANSISTOR;
     1368:	d3 01       	movw	r26, r6
@@ -4549,8 +4564,8 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     140a:	60 93 5f 01 	sts	0x015F, r22
               update_pins = 1;		// trans.ebc must be updated
     140e:	70 93 60 01 	sts	0x0160, r23
-
-        if(adc.tp2 > 2000) {
+           }
+#endif
            //PNP-Transistor is found (Base voltage moves with Emitter to VCC)
            PartFound = PART_TRANSISTOR;
            PartMode = PART_MODE_PNP;
@@ -7026,13 +7041,18 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     21c4:	a8 95       	wdr
      wdt_reset();
     21c6:	8c 2f       	mov	r24, r28
-     // read voltage without current, is already charged enough?
+        // apparently very small capacitance, if it charges so quickly
+        goto messe_mit_rh;
+     }
+     cap_voltage1 -= residual_voltage; // voltage across capacitor
+#else
      cap_voltage1 = ReadADC(HighPin) - residual_voltage; // voltage of capacitor
     21c8:	0e 94 59 03 	call	0x6b2	; 0x6b2 <ReadADC>
     21cc:	5c 01       	movw	r10, r24
     21ce:	a8 18       	sub	r10, r8
     21d0:	b9 08       	sbc	r11, r9
     21d2:	5e e7       	ldi	r21, 0x7E	; 126
+#endif
      if ((ovcnt16 > (MAX_LOAD_TIME/4)) && (cap_voltage1 < (MIN_VOLTAGE/4))) {
     21d4:	e5 16       	cp	r14, r21
     21d6:	f1 04       	cpc	r15, r1
@@ -10867,6 +10887,9 @@ TyUfAusgabe:
   lcd_MEM_string(Uf_str);		// "Uf="
     34b4:	80 91 49 01 	lds	r24, 0x0149
     34b8:	90 91 4a 01 	lds	r25, 0x014A
+ #ifdef WITH_PUT
+  Display_mV(_trans->uBE,2);    // needed instead of ntrans for PUT, but costs 4 bytes more flash...
+ #else
   Display_mV(ntrans.uBE,2);
     34bc:	0e 94 29 03 	call	0x652	; 0x652 <Display_mV>
     34c0:	c6 c3       	rjmp	.+1932   	; 0x3c4e <main+0x988>
@@ -10875,10 +10898,10 @@ TyUfAusgabe:
     34c6:	d6 d9       	rcall	.-3156   	; 0x2874 <show_cap_simple>
     34c8:	c2 c3       	rjmp	.+1924   	; 0x3c4e <main+0x988>
     34ca:	82 30       	cpi	r24, 0x02	; 2
-    PinLayout('1','G','2'); 	// CGA= or 123=...
+      DisplayValue(ntrans.gthvoltage,-2,' ',3);
+      goto tt_end;
+   }
 #endif
-    goto TyUfAusgabe;
-  }
 
   if (PartFound == PART_CAPACITOR) {
     34cc:	09 f0       	breq	.+2      	; 0x34d0 <main+0x20a>
@@ -11017,8 +11040,10 @@ TyUfAusgabe:
            lcd_testpin(diodes.Cathode[1]);
     35aa:	39 13       	cpse	r19, r25
     35ac:	16 c0       	rjmp	.+44     	; 0x35da <main+0x314>
-           UfAusgabe(0x01);
+           goto showdiodecap;   // double diodes are often varicap; measure capacitance of one of them
+#else
            goto end3;
+#endif
         } 
         if(diodes.Cathode[0] == diodes.Cathode[1]) { //Common Cathode
     35ae:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
@@ -11045,8 +11070,12 @@ TyUfAusgabe:
            UfAusgabe(0x01);
     35de:	81 e0       	ldi	r24, 0x01	; 1
     35e0:	80 93 0d 01 	sts	0x010D, r24
+#ifdef SamplingADC
+           goto showdiodecap;   // double diodes are often varicap; measure capacitance of one of them
+#else
            goto end3;
     35e4:	3b c0       	rjmp	.+118    	; 0x365c <main+0x396>
+#endif
 //        else if ((diodes.Cathode[0] == diodes.Anode[1]) && (diodes.Cathode[1] == diodes.Anode[0])) 
         } 
         if (diodes.Cathode[0] == diodes.Anode[1]) {

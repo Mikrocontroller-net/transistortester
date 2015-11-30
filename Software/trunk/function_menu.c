@@ -773,9 +773,8 @@ void do_10bit_PWM() {
   unsigned int pwm_flip;	// value for counter to flip the state
   message_key_released(PWM_10bit_str);	// display PWM-Generator and wait for key released
   // OC1B is connected with 680 Ohm resistor to TP2 (middle test pin) 
-  TCCR1A = (1<<COM1B1) | (0<<COM1B0) | (1<<WGM11) | (1<<WGM10); // fast PWM mode, count to 10 bit
+  TCCR1A = (1<<COM1B1) | (0<<COM1B0) | (1<<WGM11) | (1<<WGM10); // fast PWM mode, mode 7: count to 10 bit
   TIMSK1 = 0;		// no interrupt used
-  OCR1A = 1;		// highest frequency
   OCR1B	= 0xff;		// toggle OC1B at this count
   TIFR1 = (1<<OCF1A) | (1<<OCF1A) | (1<<TOV1);	// reset interrupt flags
   TCCR1C = 0;
@@ -793,10 +792,19 @@ void do_10bit_PWM() {
 #else
   DDRB  |= (1<<DDB2);	// set output enable
 #endif
-  TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (0<<CS11) | (1<<CS10); // no clock divide
+#ifdef PWM_SERVO
+ #define PWM_MAX_COUNT ((((unsigned long)F_CPU / 64) * 20) / 1000)
+  
+  TCCR1B = (1<<WGM13) | (1<<WGM12) | (0<<CS12) | (1<<CS11) | (1<<CS10); // mode 15, clock divide by 64
+  OCR1A = PWM_MAX_COUNT - 1;	// clock tics for 20 ms
+#else
+ #define PWM_MAX_COUNT 0x3ff
+  OCR1A = 1;		// highest frequency
+  TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (0<<CS11) | (1<<CS10); // mode 7, no clock divide
+#endif
   key_pressed = 0;
   old_perc = 0;
-  percent = 10;
+  percent = (SERVO_MAX + SERVO_MIN) / 2;	// set to middle
 #ifdef POWER_OFF
   uint8_t times;		// time limit
   for (times=0; times<240; ) 
@@ -806,13 +814,21 @@ void do_10bit_PWM() {
   {
      if (percent != old_perc) {
         // new duty cycle is requested
-        if (percent >= 100) {
-           percent -= 100;		//reset to 0 percent or higher
+        if (percent >= SERVO_MAX) {
+	   percent -= (SERVO_MAX - SERVO_MIN);		// reset to mininum value
         }
-        pwm_flip = (((unsigned long)0x3ff * percent) + 50) / 100;
+#ifdef PWM_SERVO
+        pwm_flip = (((unsigned long)PWM_MAX_COUNT * percent) + 500) / 1000;
+#else
+        pwm_flip = (((unsigned long)PWM_MAX_COUNT * percent) + 500) / 1000;
+#endif
         OCR1B = pwm_flip;		// new percentage
         lcd_line2();		// goto line 2
+#ifdef PWM_SERVO
+        DisplayValue16((((unsigned long)pwm_flip * 1000) + (PWM_MAX_COUNT/2)) / PWM_MAX_COUNT,-1,'%',5);
+#else
         DisplayValue16((((unsigned long)pwm_flip * 1000) + 0x1ff) / 0x3ff,-1,'%',5);
+#endif
         lcd_clear_line();
         old_perc = percent;	// update the old duty cycle
         if (key_pressed > 40) {
@@ -826,7 +842,7 @@ void do_10bit_PWM() {
      if (rotary.count >= 0) {
         percent += rotary.count;		// increase the duty cycle by rotary.count
      } else {
-        percent += (100 + rotary.count);	// decrease the duty cycle by rotary.count
+        percent += ((SERVO_MAX-SERVO_MIN) + rotary.count);	// decrease the duty cycle by rotary.count
      }
 #endif
      if (key_pressed > 50) {

@@ -772,5 +772,16 @@
   #undef SHOW_ICONS		/* if allready defined */
   #define SHOW_ICONS
 #endif
+#ifdef PWM_SERVO
+ #ifndef SERVO_MIN
+  #define SERVO_MIN 40	/* Pulswidth 0.8ms, Period 20ms : 4 percent */
+ #endif
+ #ifndef SERVO_MAX
+  #define SERVO_MAX 111	/* Pulswidth 2.2ms, Period 20ms : 11 percent */
+ #endif
+#else
+ #define SERVO_MIN 0
+ #define SERVO_MAX 1000
+#endif
 
 

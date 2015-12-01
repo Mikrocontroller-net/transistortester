@@ -824,7 +824,11 @@ void do_10bit_PWM() {
 #endif
         OCR1B = pwm_flip;		// new percentage
         lcd_line2();		// goto line 2
+#ifdef PWM_SERVO
+        DisplayValue16((unsigned long)pwm_flip * (1000000/(F_CPU/64))  ,-6,'s',3);
+#else
         DisplayValue16((((unsigned long)pwm_flip * 1000) + (PWM_MAX_COUNT/2)) / PWM_MAX_COUNT,-1,'%',5);
+#endif
         lcd_clear_line();
         old_perc = percent;	// update the old duty cycle
         if (key_pressed > 40) {

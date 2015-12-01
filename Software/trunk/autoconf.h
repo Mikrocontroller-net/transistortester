@@ -781,7 +781,7 @@
  #endif
 #else
  #define SERVO_MIN 0
- #define SERVO_MAX 1000
+ #define SERVO_MAX 100
 #endif
 
 

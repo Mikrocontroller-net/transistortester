@@ -820,15 +820,11 @@ void do_10bit_PWM() {
 #ifdef PWM_SERVO
         pwm_flip = (((unsigned long)PWM_MAX_COUNT * percent) + 500) / 1000;
 #else
-        pwm_flip = (((unsigned long)PWM_MAX_COUNT * percent) + 500) / 1000;
+        pwm_flip = (((unsigned long)PWM_MAX_COUNT * percent) + 50) / 100;
 #endif
         OCR1B = pwm_flip;		// new percentage
         lcd_line2();		// goto line 2
-#ifdef PWM_SERVO
         DisplayValue16((((unsigned long)pwm_flip * 1000) + (PWM_MAX_COUNT/2)) / PWM_MAX_COUNT,-1,'%',5);
-#else
-        DisplayValue16((((unsigned long)pwm_flip * 1000) + 0x1ff) / 0x3ff,-1,'%',5);
-#endif
         lcd_clear_line();
         old_perc = percent;	// update the old duty cycle
         if (key_pressed > 40) {

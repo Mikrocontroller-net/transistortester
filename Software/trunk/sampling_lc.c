@@ -383,8 +383,7 @@ noavg:;
    //   = 1/C/(2*pi*fclock)**2 * (d**2)
    //   = 1/(2*pi*fclock)**2 / C * (d**2)
 
-//   unsigned period=peaksearch(uu,&lc_qx,dist0,Maxpk);
-   unsigned period=peaksearch(uu,&lc_qx,2,Maxpk);
+   unsigned period=peaksearch(uu,&lc_qx,dist0,Maxpk);
 
    unsigned long v;
    v= (unsigned long)period;         // measured period with 6 fraction bits, before applying shift, is < 256*64 = 2^14

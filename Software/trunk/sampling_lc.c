@@ -67,7 +67,7 @@ static unsigned int peaksearch(unsigned int uu[], unsigned int *qptr, byte dist,
       // on my atmega328p, in some cases most measured peak intervals differ by less than about 0.05, so 6 bits of fraction is just enough to not lose precision
       if (delta>0 && prevdelta<=0 && i>2*dist-1) {
          // found (local) maximum
-//         uart_putc('p'); uart_int(i); uart_int(a+b); uart_int(dist); uart_newline();
+//         myuart_putc('p'); myuart_putc(' ');  uart_int(i); uart_int(a+b); uart_int(dist); uart_newline();
          if (a+b < 3*dist) break;  // stop if peak not significantly high
          unsigned x = (i<<6) - ((delta<<6)+(1<<5))/(delta-prevdelta);
 //         if (maxpk>2-2) { uart_putc('E'); uart_int(x); uart_int(ipk); uart_int(sawzero); uart_int(dist); uart_newline(); }
@@ -76,6 +76,12 @@ static unsigned int peaksearch(unsigned int uu[], unsigned int *qptr, byte dist,
          if (ipk==0) {
             firstpeak=a+b;
             firstpeakx=x;
+         } else if (dist!=1) {
+            // sanity check: distance between peaks is expected to be 4*dist samples, so if >=8*dist it's suspicious
+            byte tmp;       // use this intermediate variable to force compiler to use 8-bit arithmetic
+            tmp=x>>8;
+            tmp-=prevpeakx>>8;    // tmp now is peak distance in units of 4 samples
+            if (tmp>(dist<<1)) break;
          }
          if (!sawzero) {           // stop if the signal has not been zero since previous peak
             if (maxpk>2) break;
@@ -278,7 +284,26 @@ noavg:;
 
    byte i=0;
 
-   unsigned int uu[255];
+   unsigned int uu[255]={
+//1575, 2799, 3446, 2683, 1291, 322, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 526, 994, 992, 638, 136, 0, 0, 0, 0, 0, 149, 487, 640, 592, 376, 88, 0, 0, 0, 0, 0, 63, 236, 313, 293, 190, 48, 0, 0, 0, 0, 0, 27, 112, 155, 144, 96, 25, 0, 0, 0, 0, 0, 14, 54, 80, 79, 48, 16, 0, 0, 0, 0, 0, 7, 26, 40, 42, 24, 9, 0, 0, 0, 0, 0, 1, 14, 20, 20, 16, 7, 0, 0, 0, 0, 0, 0, 6, 8, 9, 8, 3, 2, 0, 0, 0, 0, 0, 1, 4, 8, 4, 0, 0, 0, 0, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 3, 0, 0, 1, 1, 3, 1, 5, 4, 0, 0, 1, 1, 3, 3, 3, 2, 3, 6, 4, 8, 5, 5, 6, 7, 6, 5, 7, 8, 5, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 7, 8, 8, 9, 8, 8, 8, 8, 7, 8, 7, 8, 5, 7, 5, 5, 8, 7, 5, 8, 8, 8, 8, 4, 3, 3, 1, 5, 72
+// shift=0 dist0=14      
+// 6.6Ohm L=.35mH   
+
+// shift=0 dist0=4  
+// 13.0Ohm L=.71mH    1036kHz Q=4.3   
+//1593, 2924, 3758, 4311, 3004, 1603, 624, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 249, 901, 1335, 1490, 1386, 1080, 654, 170, 0, 0, 0, 0, 0, 0, 0, 43, 360, 591, 720, 719, 608, 421, 181, 0, 0, 0, 0, 0, 0, 0, 0, 89, 222, 318, 347, 322, 256, 151, 34, 0, 0, 0, 0, 0, 0, 0, 2, 75, 129, 162, 166, 145, 107, 49, 0, 0, 0, 0, 0, 0, 0, 0, 17, 51, 71, 82, 78, 58, 40, 12, 0, 0, 0, 0, 0, 0, 0, 0, 15, 24, 34, 38, 31, 25, 9, 2, 0, 0, 0, 0, 0, 0, 0, 3, 8, 12, 13, 13, 11, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 3, 2, 3, 9, 3, 3, 3, 2, 1, 0, 1, 1, 3, 4, 4, 5, 7, 7, 8, 5, 4, 6, 5, 7, 2, 5, 6, 7, 7, 8, 8, 5, 8, 8, 8, 8, 6, 5, 5, 5, 6, 7, 5, 9, 9, 9, 10, 7, 8, 10, 7, 5, 4, 4, 5, 4, 5, 7, 5, 4, 6, 5, 5, 58
+
+// 1-RR-3   [RL] 13.0Ohm L=.71mH    1034kHz Q=4.4   
+//  shift=0 dist0=4 
+// 13.0Ohm L=.71mH    704.3kHz Q=4.4      
+
+1597, 2934, 3768, 4349, 3069, 1663, 676, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31, 717, 1219, 1459, 1439, 1191, 801, 336, 0, 0, 0, 0, 0, 0, 0, 0, 240, 510, 678, 732, 663, 504, 284, 47, 0, 0, 0, 0, 0, 0, 0, 14, 164, 280, 339, 346, 299, 208, 97, 0, 0, 0, 0, 0, 0, 0, 0, 27, 98, 145, 168, 156, 129, 83, 25, 0, 0, 0, 0, 0, 0, 0, 0, 24, 56, 75, 83, 74, 56, 24, 4, 0, 0, 0, 0, 0, 0, 0, 1, 20, 25, 34, 36, 25, 20, 8, 0, 0, 0, 0, 0, 0, 0, 0, 4, 8, 12, 14, 13, 7, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 3, 2, 4, 1, 1, 1, 0, 0, 0, 1, 4, 4, 3, 6, 7, 8, 8, 7, 4, 5, 5, 4, 1, 6, 7, 7, 8, 8, 8, 10, 8, 8, 8, 6, 6, 5, 4, 6, 5, 6, 6, 7, 8, 8, 7, 6, 5, 6, 4, 2, 3, 3, 3, 3, 6, 6, 8, 6, 5, 5, 6, 55
+
+
+};
+
+
+
    ADC_PORT = TXD_VAL;
    ADC_DDR = LoADC;			// switch Low-Pin to output (GND)
    wait100us();
@@ -384,6 +409,7 @@ noavg:;
    //   = 1/(2*pi*fclock)**2 / C * (d**2)
 
    unsigned period=peaksearch(uu,&lc_qx,dist0,Maxpk);
+//   { myuart_putc('d'); myuart_putc(' '); uart_int(dist0); uart_int(period); uart_newline(); }
 
    unsigned long v;
    v= (unsigned long)period;         // measured period with 6 fraction bits, before applying shift, is < 256*64 = 2^14

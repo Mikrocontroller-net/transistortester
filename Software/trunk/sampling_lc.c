@@ -320,6 +320,8 @@ noavg:;
    // check how long until signal reaches 0: that gives us a first guess of 1/4 of the resonance period (because we apply an impulse, so we start at the maximum of the sinewave)
    for (dist0=1;dist0<250;dist0++) if (uu[dist0]==0) break;
    if (dist0==250) return; // no periodicity seen, so no valid results
+   byte dist00;
+   dist00 = dist0;
 
    uint16_t par = (1<<smplADC_span) | (1<<smplADC_direct); // default: one pulse 
    if (dist0<=16) {
@@ -347,6 +349,34 @@ noavg:;
       }
       dist0>>=shift;
    }
+#if (DEB_SAM == 5)
+   uint16_t ii;
+//   for (ii=0;ii<256;ii+=4) {
+   for (ii=0;ii<255;ii+=4) {
+      if ((ii%32) == 0) {
+         lcd_clear();
+	 DisplayValue16(ii,0,'-',4);
+	 lcd_space();
+	 lcd_data('>');
+	 lcd_data('>');
+	 DisplayValue16(shift,0,' ',3);
+         DisplayValue16(dist0,0,' ',4);
+         DisplayValue16(dist00,0,' ',4);
+	 lcd_next_line_wait(0);
+      } else{	 	lcd_next_line_wait(0); }
+      DisplayValue16(uu[ii],0,' ',5);
+      DisplayValue16(uu[ii+1],0,' ',5);
+      DisplayValue16(uu[ii+2],0,' ',5);
+      DisplayValue16(uu[ii+3],0,' ',5);
+      if ((ii%32) == 28) {
+	 lcd_clear_line();
+	 lcd_refresh();
+         wait_about1s();
+      }
+   } /* end for ii */
+   lcd_refresh();
+   wait_about1s();
+#endif
 
    // we take the average of 8 measurements, to increase S/N, except when using span>1, since then the sampling takes annoyingly long and S/N usually is better anyway at these lower frequencies
    for (i=0;i<8;i++) {

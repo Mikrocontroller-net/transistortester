@@ -115,7 +115,11 @@ End of configuration
    const unsigned char SHOW_str[] MEM2_TEXT = "Zeige Daten";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "Schalte aus";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+ #ifdef PWM_SERVO
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "Servo PWM";
+ #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+ #endif
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Impulsdrehgeber";
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','K','o','r','r','e','k','t','u','r',0};
    const unsigned char TURN_str[] MEM2_TEXT = "drehen!";
@@ -163,7 +167,11 @@ End of configuration
    const unsigned char SHOW_str[] MEM2_TEXT = "Mostra dati";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "Spegnere";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generatore";
+ #ifdef PWM_SERVO
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "Servo PWM";
+ #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+ #endif
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "encoder rotativo";
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','C','o','r','r','e','c','t','i','o','n',0};
    const unsigned char TURN_str[] MEM2_TEXT = "turno!";
@@ -212,7 +220,11 @@ End of configuration
    const unsigned char SHOW_str[] MEM2_TEXT = "Pokaz dane";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "Wylacz";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+ #ifdef PWM_SERVO
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "Servo PWM";
+ #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+ #endif
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Enkoder obrotowy";
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','c','o','r','e','c','t','a',0};
    const unsigned char TURN_str[] MEM2_TEXT = "Pokrec!";
@@ -261,7 +273,11 @@ End of configuration
    const unsigned char SHOW_str[] MEM2_TEXT = "zobrazit udaje";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "Vypnout";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+ #ifdef PWM_SERVO
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "Servo PWM";
+ #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+ #endif
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotacni koder";
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','k','o','r','e','k','c','e',0};
    const unsigned char TURN_str[] MEM2_TEXT = "otocte!";
@@ -309,7 +325,11 @@ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF pro L mer?";
    const unsigned char SHOW_str[] MEM2_TEXT = "Informacie";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "Vypnut";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+ #ifdef PWM_SERVO
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "Servo PWM";
+ #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+ #endif
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Rotacny koder";
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','K','o','r','e','k','c','i','a',0};
    const unsigned char TURN_str[] MEM2_TEXT = "Krut!";
@@ -357,7 +377,11 @@ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF pro L mer?";
    const unsigned char SHOW_str[] MEM2_TEXT = "Prikazi podatke";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "izklopi";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+ #ifdef PWM_SERVO
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "Servo PWM";
+ #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+ #endif
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotary encoder";
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','k','o','r','r','e','k','c','i','j','a',0};
    const unsigned char TURN_str[] MEM2_TEXT = "turn!";
@@ -407,7 +431,11 @@ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF pro L mer?";
    const unsigned char SHOW_str[] MEM2_TEXT = "toon gegevens";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "uitschakelen";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+ #ifdef PWM_SERVO
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "Servo PWM";
+ #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+ #endif
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Rotary encoder";
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','c','o','r','r','e','c','t','i','e',0};
    const unsigned char TURN_str[] MEM2_TEXT = "rotaren!";
@@ -456,7 +484,11 @@ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF pro L mer?";
    const unsigned char SHOW_str[] MEM2_TEXT = "mostram dados";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "desconectar";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+ #ifdef PWM_SERVO
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "Servo PWM";
+ #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+ #endif
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "encoder rotativo";
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','C','o','r','r','e','c','t','i','o','n',0};
    const unsigned char TURN_str[] MEM2_TEXT = "rodar!";
@@ -500,7 +532,11 @@ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF pro L mer?";
    const unsigned char SHOW_str[] MEM2_TEXT = "mostrar datos";	
    const unsigned char OFF_str[] MEM2_TEXT = "desconectar";
    const unsigned char F_GEN_str[] MEM2_TEXT = "F-Generador";
+ #ifdef PWM_SERVO
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "Servo PWM";
+ #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+ #endif
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "encoder rotativo";
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','C','o','r','r','e','c','c','i','o','n',0};
    const unsigned char TURN_str[] MEM2_TEXT = "rotar!";
@@ -552,7 +588,11 @@ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF pro L mer?";
    const unsigned char SHOW_str[] MEM2_TEXT = "adatokat mutat";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "kikapcsol";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+ #ifdef PWM_SERVO
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "Servo PWM";
+ #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+ #endif
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Rotary encoder";
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','C','o','r','r','e','c','t','i','o','n',0};
    const unsigned char TURN_str[] MEM2_TEXT = "forgat!";
@@ -600,7 +640,11 @@ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF pro L mer?";
    const unsigned char SHOW_str[] MEM2_TEXT = "Rodyti informacija";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "isjungti";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+ #ifdef PWM_SERVO
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "Servo PWM";
+ #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+ #endif
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotary encoder";
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','k','o','r','e','k','c','i','j','a',0};
    const unsigned char TURN_str[] MEM2_TEXT = "turn!";      //???
@@ -653,7 +697,11 @@ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF pro L mer?";
    const unsigned char SHOW_str[] MEM2_TEXT = "Show data";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "Switch off";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+ #ifdef PWM_SERVO
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "Servo PWM";
+ #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+ #endif
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotary encoder";
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','c','o','r','r','e','c','t','i','o','n',0};
    const unsigned char TURN_str[] MEM2_TEXT = "turn!";	

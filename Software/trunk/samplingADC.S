@@ -161,7 +161,8 @@ L11:	dec r26
 
 stepresponse:
  	; wait a bit less than 256 ticks; precise value determined experimentally
-#define Delay_step (222-Lessdelay)
+// #define Delay_step (222-Lessdelay)
+#define Delay_step (216-Lessdelay)	/* -6 additional clock tics (push, ldi, out, pop) */
 
  	ldi	r26,(Delay_step/3)
 #if Delay_step%3>0

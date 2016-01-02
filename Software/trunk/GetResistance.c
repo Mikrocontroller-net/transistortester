@@ -100,7 +100,12 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
      adc.hp2 = adc.hp1;
      wdt_reset();
   }
-  if (ii == MAX_REPEAT) goto testend;
+  if (ii == MAX_REPEAT) {
+ #if (DEBUG_OUT == 1)
+     lcd_data('a');
+ #endif
+     goto testend;
+  }
 #else
   adc.tp1 = W5msReadADC(LowPin);	// low-voltage at Rx with load
   adc.hp1 = ReadADC(HighPin);		// voltage at resistor Rx with R_L
@@ -113,6 +118,9 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
   adc.hp2 = W5msReadADC(HighPin);	// read voltage, should be down
   if (adc.hp2 > (20*U_SCALE)) {
      // if resistor, voltage should be down
+ #if (DEBUG_OUT == 1)
+     lcd_data('b');
+ #endif
      goto testend;
   }
   R_PORT = HiPinRH;		//switch R_H for High-Pin to VCC
@@ -134,7 +142,12 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
      adc.lp2 = adc.lp1;
      wdt_reset();
   }
-  if (ii == MAX_REPEAT) goto testend;
+  if (ii == MAX_REPEAT) {
+ #if (DEBUG_OUT == 1)
+     lcd_data('c');
+ #endif
+     goto testend;
+  }
 #else
   adc.tp2 = W5msReadADC(HighPin);	//high voltage with load
   adc.lp1 = ReadADC(LowPin);		//voltage at the other end of Rx
@@ -147,6 +160,9 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
 		
   if((adc.hp1 < (4400*U_SCALE)) && (adc.hp2 > (97*U_SCALE))) {
      //voltage break down isn't insufficient 
+ #if (DEBUG_OUT == 1)
+     lcd_data('d');
+ #endif
      goto testend; 
   }
 //    if((adc.hp2 + (adc.hp2 / 61)) < adc.hp1)
@@ -156,6 +172,9 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
      if (adc.lp1 < (169*U_SCALE)) { // take measurement with R_H 
         if (adc.lp2 < (38*U_SCALE)) {
            // measurement > 60MOhm too big resistance
+ #if (DEBUG_OUT == 1)
+     lcd_data('e');
+ #endif
            goto testend;
         }
         // two measurements with R_H resistors (470k) are made:
@@ -215,6 +234,11 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
               // mismatch of the two measurements
 //              ResistorsFound--;		// this one isn't a resistor
 //              goto testend; // <10% mismatch
+ #if (DEBUG_OUT == 1)
+     lcd_line3();
+     DisplayValue(lrx1,-1,' ',4);
+     DisplayValue(ResistorVal[resnum],-1,' ',4);
+ #endif
            } else {
               // resistor has the same value in both directions
               if (PartFound < PART_DIODE) {
@@ -224,7 +248,7 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
               ResistorList[ResistorsFound] = resnum;	// save number of this resistor
               ResistorsFound++;			// 1 more resistor found
            }
-              goto testend;
+           goto testend;
         } else {		// resistor is never checked before
            // must be a new one with other pins
            ResistorVal[resnum] = lrx1;	// save register value

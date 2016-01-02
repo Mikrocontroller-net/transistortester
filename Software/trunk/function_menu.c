@@ -114,9 +114,9 @@ void function_menu() {
 #endif
 
   func_number = 0;
+  message_key_released(SELECTION_str);
  #ifdef POWER_OFF
   uint8_t ll;
-  message_key_released(SELECTION_str);
   for (ll=0;ll<((MODE_LAST+1)*10);ll++) 
  #else
   while (1)		/* without end, if no power off specified */
@@ -793,12 +793,9 @@ void do_10bit_PWM() {
   DDRB  |= (1<<DDB2);	// set output enable
 #endif
 #ifdef PWM_SERVO
- #define PWM_MAX_COUNT ((((unsigned long)F_CPU / 64) * 20) / 1000)
-  
-  TCCR1B = (1<<WGM13) | (1<<WGM12) | (0<<CS12) | (1<<CS11) | (1<<CS10); // mode 15, clock divide by 64
+  TCCR1B = (1<<WGM13) | (1<<WGM12) | SERVO_START; // mode 15, clock divide by 8 or 64
   OCR1A = PWM_MAX_COUNT - 1;	// clock tics for 20 ms
 #else
- #define PWM_MAX_COUNT 0x3ff
   OCR1A = 1;		// highest frequency
   TCCR1B = (0<<WGM13) | (1<<WGM12) | (0<<CS12) | (0<<CS11) | (1<<CS10); // mode 7, no clock divide
 #endif
@@ -815,7 +812,7 @@ void do_10bit_PWM() {
      if (percent != old_perc) {
         // new duty cycle is requested
         if (percent >= SERVO_MAX) {
-	   percent -= (SERVO_MAX - SERVO_MIN);		// reset to mininum value
+	   percent -= (SERVO_MAX - SERVO_MIN);		// reset near to mininum value
         }
 #ifdef PWM_SERVO
         pwm_flip = (((unsigned long)PWM_MAX_COUNT * percent) + 500) / 1000;
@@ -825,7 +822,11 @@ void do_10bit_PWM() {
         OCR1B = pwm_flip;		// new percentage
         lcd_line2();		// goto line 2
 #ifdef PWM_SERVO
-        DisplayValue16((unsigned long)pwm_flip * (1000000/(F_CPU/64))  ,-6,'s',3);
+        DisplayValue(((unsigned long)pwm_flip * SERVO_DIV)/MHZ_CPU ,-6,'s',3);
+	lcd_space();
+	lcd_data('/');
+	lcd_space();
+	DisplayValue16(((unsigned long)PWM_MAX_COUNT * SERVO_DIV)/MHZ_CPU, -6,'s',3);
 #else
         DisplayValue16((((unsigned long)pwm_flip * 1000) + (PWM_MAX_COUNT/2)) / PWM_MAX_COUNT,-1,'%',5);
 #endif

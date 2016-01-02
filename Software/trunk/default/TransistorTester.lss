@@ -19,19 +19,19 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY
   7 .debug_aranges 00000410  00000000  00000000  00004d10  2**3
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_info   00007152  00000000  00000000  00005120  2**0
+  8 .debug_info   00007153  00000000  00000000  00005120  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_abbrev 00001994  00000000  00000000  0000c272  2**0
+  9 .debug_abbrev 00001994  00000000  00000000  0000c273  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   00001e18  00000000  00000000  0000dc06  2**0
+ 10 .debug_line   00001e1c  00000000  00000000  0000dc07  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  000006fc  00000000  00000000  0000fa20  2**2
+ 11 .debug_frame  000006fc  00000000  00000000  0000fa24  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000fe5  00000000  00000000  0001011c  2**0
+ 12 .debug_str    00000fe5  00000000  00000000  00010120  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    00003cae  00000000  00000000  00011101  2**0
+ 13 .debug_loc    00003cae  00000000  00000000  00011105  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000018  00000000  00000000  00014daf  2**0
+ 14 .debug_ranges 00000018  00000000  00000000  00014db3  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -6012,7 +6012,9 @@ void GetResistance(uint8_t HighPin, uint8_t LowPin)
     1c36:	81 35       	cpi	r24, 0x51	; 81
     1c38:	91 05       	cpc	r25, r1
     1c3a:	78 f5       	brcc	.+94     	; 0x1c9a <GetResistance+0x128>
-     // if resistor, voltage should be down
+ #if (DEBUG_OUT == 1)
+     lcd_data('b');
+ #endif
      goto testend;
   }
   R_PORT = HiPinRH;		//switch R_H for High-Pin to VCC
@@ -6133,8 +6135,8 @@ void GetResistance(uint8_t HighPin, uint8_t LowPin)
      adc.lp1 = ReadADC(LowPin);		//voltage at the other end of Rx
     1cc8:	67 01       	movw	r12, r14
     1cca:	c5 cf       	rjmp	.-118    	; 0x1c56 <GetResistance+0xe4>
-  if((adc.hp1 < (4400*U_SCALE)) && (adc.hp2 > (97*U_SCALE))) {
-     //voltage break down isn't insufficient 
+     lcd_data('d');
+ #endif
      goto testend; 
   }
 //    if((adc.hp2 + (adc.hp2 / 61)) < adc.hp1)
@@ -6157,7 +6159,7 @@ void GetResistance(uint8_t HighPin, uint8_t LowPin)
     1ce2:	c9 16       	cp	r12, r25
     1ce4:	d1 04       	cpc	r13, r1
     1ce6:	c8 f2       	brcs	.-78     	; 0x1c9a <GetResistance+0x128>
-           // measurement > 60MOhm too big resistance
+ #endif
            goto testend;
         }
         // two measurements with R_H resistors (470k) are made:
@@ -6481,9 +6483,9 @@ void GetResistance(uint8_t HighPin, uint8_t LowPin)
     1f02:	25 2b       	or	r18, r21
     1f04:	09 f0       	breq	.+2      	; 0x1f08 <GetResistance+0x396>
     1f06:	c9 ce       	rjmp	.-622    	; 0x1c9a <GetResistance+0x128>
-              // mismatch of the two measurements
-//              ResistorsFound--;		// this one isn't a resistor
-//              goto testend; // <10% mismatch
+     DisplayValue(lrx1,-1,' ',4);
+     DisplayValue(ResistorVal[resnum],-1,' ',4);
+ #endif
            } else {
               // resistor has the same value in both directions
               if (PartFound < PART_DIODE) {
@@ -6508,7 +6510,7 @@ void GetResistance(uint8_t HighPin, uint8_t LowPin)
     1f26:	80 93 6f 01 	sts	0x016F, r24
     1f2a:	b7 ce       	rjmp	.-658    	; 0x1c9a <GetResistance+0x128>
            }
-              goto testend;
+           goto testend;
         } else {		// resistor is never checked before
            // must be a new one with other pins
            ResistorVal[resnum] = lrx1;	// save register value

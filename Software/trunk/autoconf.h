@@ -779,9 +779,45 @@
  #ifndef SERVO_MAX
   #define SERVO_MAX 111	/* Pulswidth 2.2ms, Period 20ms : 11 percent */
  #endif
+ #ifndef SERVO_PERIOD
+  #define SERVO_PERIOD 20000UL	/* Period 20ms in us units */
+ #endif
+ #define SERVO_DIV 1
+ #define SERVO_START ((0<<CS12) | (0<<CS11) | (1<<CS10))
+ #if ((SERVO_PERIOD*MHZ_CPU)  > 0xffff)
+  #undef SERVO_DIV
+  #define SERVO_DIV 8
+  #undef SERVO_START
+  #define SERVO_START ((0<<CS12) | (1<<CS11) | (0<<CS10))
+  #if (((SERVO_PERIOD * MHZ_CPU) / SERVO_DIV) > 0xffff)
+   #undef SERVO_DIV
+   #define SERVO_DIV 64
+   #undef SERVO_START
+   #define SERVO_START ((0<<CS12) | (1<<CS11) | (1<<CS10))
+  #endif
+ #endif
+ #if SERVO_MAX > 251
+  #warning  The maximum pulse width SERVO_MAX must set below 25.2% !
+  #undef SERVO_MAX
+  #define SERVO_MAX 251
+ #endif
+ #if SERVO_MIN >= SERVO_MAX
+  #warning  The minimum pulse width SERVO_MIN must set below SERVO_MAX !
+  #undef SERVO_MIN
+  #define SERVO_MIN (SERVO_MAX/2)
+ #endif
+ #define PWM_MAX_COUNT ((SERVO_PERIOD * MHZ_CPU) / SERVO_DIV)
+ #if PWM_MAX_COUNT < 0x3ff
+  #warning PWM_MAX_COUNT
+ #endif
 #else
- #define SERVO_MIN 0
- #define SERVO_MAX 100
+ 
+ #ifndef SERVO_MIN
+  #define SERVO_MIN 0
+ #endif
+ #ifndef SERVO_MAX
+  #define SERVO_MAX 100
+ #endif
+ #define PWM_MAX_COUNT 0x3ff
 #endif
-
 

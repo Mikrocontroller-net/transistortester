@@ -320,8 +320,10 @@ noavg:;
    // check how long until signal reaches 0: that gives us a first guess of 1/4 of the resonance period (because we apply an impulse, so we start at the maximum of the sinewave)
    for (dist0=1;dist0<250;dist0++) if (uu[dist0]==0) break;
    if (dist0==250) return; // no periodicity seen, so no valid results
+#if (DEB_SAM == 5)
    byte dist00;
    dist00 = dist0;
+#endif
 
    uint16_t par = (1<<smplADC_span) | (1<<smplADC_direct); // default: one pulse 
    if (dist0<=16) {

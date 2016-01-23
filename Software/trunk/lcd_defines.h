@@ -314,10 +314,17 @@
    #if LCD_LINE_LENGTH < 16
     #warning LCD_LINE_LENGTH not correctly set!
    #endif
+   #if FOUR_LINE_LCD == 14
+    	#define LCD_Row1	0x80	/* Setting for TC1604 disülay */
+	#define LCD_Row2	0xC0
+	#define LCD_Row3	0x90
+	#define LCD_Row4	0xD0
+   #else
     	#define LCD_Row1	0x00
 	#define LCD_Row2	0x40
 	#define LCD_Row3	0x10
 	#define LCD_Row4	0x50
+   #endif
   #endif
  #endif
 

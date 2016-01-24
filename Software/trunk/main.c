@@ -302,12 +302,13 @@
 // check for UJT
         if (PartFound==PART_DIODE       
             && NumOfDiodes==2                // UJT is detected as 2 diodes E-B1 and E-B2...
-            && ResistorsFound==1             // ...and a resistor B1-B2
+//            && ResistorsFound==1             // ...and a resistor B1-B2
             && diodes.Anode[0]==diodes.Anode[1]      // check diodes have common anode
-            && (unsigned char)(ResistorList[0]+diodes.Anode[0])==2    // and resistor is between cathodes
+//            && (unsigned char)(ResistorList[0]+diodes.Anode[0])==2    // and resistor is between cathodes
            ) 
            // note: there also exist CUJTs (complementary UJTs); they seem to be (even) rarer than UJTs, and are not supported for now
            {
+ #if WITH_UJT == 2
              uint8_t B1pin, B2pin, Epin;
              Epin = diodes.Anode[0];
              B1pin = diodes.Cathode[0];
@@ -325,8 +326,8 @@ ujt_exch_b:;
              port1 = port0;
              ddr1 = port1;
               ADMUX = Epin|(1<<REFS0);	// switch Multiplexer to emitter and use 5V reference voltage
-              ADC_DDR = pinmaskADC(B1pin);
-              ADC_PORT = 0;
+              ADC_DDR = pinmaskADC(B1pin) | TXD_MSK;
+              ADC_PORT = TXD_VAL;
               R_PORT = 0;
               R_DDR = 0;			
               wait_aref_stabilize();
@@ -335,6 +336,7 @@ ujt_exch_b:;
 //              myuart_putc('s'); myuart_putc(' '); uart_int(port1); uart_int(ddr1); uart_int(port0); uart_int(ddr0); uart_newline();
               uint8_t i;
               uint8_t max=0;
+              uint8_t maxm;
               for (i=10;i<64;i++) {
                  uint8_t v=uu[i]>>2;  // 8-bit arithmetic is enough for this
                  if (v>max) max=v;
@@ -342,24 +344,26 @@ ujt_exch_b:;
               }
               // found first maximum
               // now check whether after this, the voltage drops significantly, if so, we've detected oscillation
-              max-=(max>>3);
+              maxm = max - (max>>3);
               for (;i<64;i++) {
                  uint8_t v=uu[i]>>2;  // 8-bit arithmetic is enough for this
-                 if (v<max) {
+                 if (v<maxm) {
                     // significant voltage drop, oscillation found: must be an UJT
                     PartFound=PART_UJT;
                     ntrans.e=B1pin;
                     ntrans.b=Epin;
                     ntrans.c=B2pin;
                     // calculate eta
+                    ResistorChecked[ntrans.e - TP1 + ntrans.c - TP1 - 1] = 0;	// forget last resistance measurement
+                    GetResistance(ntrans.c, ntrans.e);	// resistor value is in ResistorVal[resnum]
                     uint32_t v;
-                    uint32_t r=ResistorVal[ResistorList[0]];
+                    uint32_t r=ResistorVal[ntrans.e - TP1 + ntrans.c - TP1 - 1];
                     v=(r<<8)/(r+R_L_VAL);      // Vbb in units of supplyvoltage/256 ; perhaps should also take into account the about 20 ohm internal resistance?
                     max-=35;               // subtract about 0.7 volts (1 diode voltage drop) from the maximum emitter voltage seen; 35 is 0.7/5*256.
                     ntrans.gthvoltage=100ul*max/v;     // this is eta in percent, cf. http://www.allaboutcircuits.com/textbook/semiconductors/chpt-7/unijunction-transistor-ujt/
                     goto ujtdone;
                  }
-              }
+              } /* end for i */
               // didn't find oscillation yet
               if (B1pin == diodes.Cathode[0]) {
                  // try exchanging the two base connections
@@ -372,8 +376,45 @@ ujtdone:;
 //   uart_newline(); for (i=0;i<64;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i<<2]); uart_newline(); wdt_reset(); }
 //   uart_newline(); for (i=0;i<64;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
 //              myuart_putc('v'); myuart_putc(' '); uart_int(min); uart_int(max); uart_newline();
+ #else		/* WITH_UJT != 2 */
+             uint16_t v0,v1,v2;
+             ntrans.b = diodes.Anode[0];			// common anode must be emitter of UJT
+             ADC_DDR = pinmaskADC(diodes.Cathode[0]) | TXD_MSK;
+             ADC_PORT =  TXD_VAL;   // UJT B2 to GND
+             R_PORT = pinmaskRL(ntrans.b) | pinmaskRL(diodes.Cathode[1]);	// UJT emitter and B2 with RL to VCC
+             R_DDR = R_PORT;
+             v1 = ADCconfig.U_AVCC - W5msReadADC(diodes.Cathode[1]);			// read voltage at B2
+             R_PORT = pinmaskRL(diodes.Cathode[1]);	// UJT B2 with RL to VCC, emitter open
+             R_DDR = R_PORT;
+             v0 = ADCconfig.U_AVCC - W5msReadADC(diodes.Cathode[1]);			// read voltage at B2
+             if (v0 < v1) v1 -= v0;
+
+             R_PORT = pinmaskRL(ntrans.b) | pinmaskRL(diodes.Cathode[0]);	// UJT emitter and B2 with RL to VCC
+             R_DDR = R_PORT;
+             ADC_DDR = pinmaskADC(diodes.Cathode[1]) | TXD_MSK;
+             v2 = ADCconfig.U_AVCC - W5msReadADC(diodes.Cathode[0]);			// read voltage at B2
+             R_PORT = pinmaskRL(diodes.Cathode[0]);	// UJT B2 with RL to VCC, emitter open
+             R_DDR = R_PORT;
+             v0 = ADCconfig.U_AVCC - W5msReadADC(diodes.Cathode[0]);			// read voltage at B2
+             if (v0 < v2) v2 -= v0;
+             if (v1 > v2) {
+                ntrans.uBE = v1;
+                ntrans.e = diodes.Cathode[0];
+                ntrans.c = diodes.Cathode[1];
+             } else {
+                ntrans.uBE = v2;
+                ntrans.e = diodes.Cathode[1];
+                ntrans.c = diodes.Cathode[0];
+             }
+             if (ntrans.uBE > 1500) {
+                ResistorChecked[ntrans.e - TP1 + ntrans.c - TP1 - 1] = 0;	// forget last resistance measurement
+                GetResistance(ntrans.c, ntrans.e);	// resistor value is in ResistorVal[resnum]
+                PartFound = PART_UJT;
+             }
+           
+ #endif		/* WITH_UJT != 2 */
         }
-#endif
+#endif		/* defined WITH_UJT */
 
 	  //All checks are done, output result to display
 
@@ -424,14 +465,26 @@ ujtdone:;
 
 #ifdef WITH_UJT
    if (PartFound == PART_UJT) {
-      static const unsigned char UJT_str[] MEM_TEXT = "UJT";
-      static const unsigned char eta_str[] MEM_TEXT = "eta=";
+      static const unsigned char UJT_str[] MEM_TEXT = "N-UJT";
       lcd_MEM_string(UJT_str);
       PinLayout('1','E','2');
+ #if WITH_UJT == 2
+      static const unsigned char eta_str[] MEM_TEXT = " eta=";
       lcd_next_line(0);
-      RvalOut(ResistorList[0]);
+//      RvalOut(ResistorList[0]);
+      ResistorChecked[ntrans.e - TP1 + ntrans.c - TP1 - 1] = 0;	// forget last resistance measurement
+      GetResistance(ntrans.c, ntrans.e);	// resistor value is in ResistorVal[resnum]
+      DisplayValue(ResistorVal[ntrans.e - TP1 + ntrans.c - TP1 - 1],-1,LCD_CHAR_OMEGA,2);
       lcd_MEM_string(eta_str);		//"eta="
-      DisplayValue(ntrans.gthvoltage,-2,' ',3);
+      DisplayValue(ntrans.gthvoltage,0,'%',3);
+ #else
+      static const unsigned char R12_str[] MEM_TEXT = "R12=";
+      lcd_next_line(0);
+      lcd_MEM_string(R12_str);		//"R12="
+      DisplayValue(ResistorVal[ntrans.e - TP1 + ntrans.c - TP1 - 1],-1,LCD_CHAR_OMEGA,2);
+      lcd_data(',');
+      DisplayValue(((RR680PL * (unsigned long)(ADCconfig.U_AVCC - ntrans.uBE)) / ntrans.uBE)-RRpinPL,-1,LCD_CHAR_OMEGA,3);
+ #endif
       goto tt_end;
    }
 #endif

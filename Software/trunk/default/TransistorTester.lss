@@ -266,7 +266,7 @@ _lcd_hw_write:
 00000184 <_lcd_hw_write_exit>:
  #endif
 _lcd_hw_write_exit:
-               ret
+               ret		; end _lcd_hw_write
      184:	08 95       	ret
 
 00000186 <lcd_save_position>:
@@ -3594,10 +3594,10 @@ cap_found = 0;
 for (ww=0;ww<64;ww++) {
      f04:	ff 4f       	sbci	r31, 0xFF	; 255
      f06:	e4 91       	lpm	r30, Z
+  wait_about200ms();			// wait additional time
 } // end for ww
 }	/* end if((test_mode & 0x0f) == 1) */
  #endif  /* end AUTO_CAL */
-
 
 ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples
      f08:	e4 b9       	out	0x04, r30	; 4
@@ -4083,7 +4083,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         R_DDR = TriPinRH | HiPinRL;	//High-Pin to output
     1136:	28 f0       	brcs	.+10     	; 0x1142 <CheckPins+0x152>
         R_PORT = TriPinRH | HiPinRL;	//switch R_L for High-Pin to VCC
-    1138:	84 e0       	ldi	r24, 0x04	; 4
+    1138:	85 e0       	ldi	r24, 0x05	; 5
      lcd_space();
      DisplayValue16(adc.lp2,-3,' ',3);
      DisplayValue16(adc.lp1,-3,' ',3);
@@ -4099,7 +4099,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         R_PORT = TriPinRH | HiPinRL;	//switch R_L for High-Pin to VCC
         adc.lp2 = W10msReadADC(TristatePin); //read voltage of assumed Gate 
     1140:	04 c0       	rjmp	.+8      	; 0x114a <CheckPins+0x15a>
-    1142:	84 e0       	ldi	r24, 0x04	; 4
+    1142:	85 e0       	ldi	r24, 0x05	; 5
     1144:	80 93 16 01 	sts	0x0116, r24
         if(adc.lp2>3911) {  //MOSFET
     1148:	84 e2       	ldi	r24, 0x24	; 36
@@ -4179,11 +4179,11 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     11c2:	28 f4       	brcc	.+10     	; 0x11ce <CheckPins+0x1de>
      //if it is a self-conducting P_MOSFET or P-JFET , then must be:  adc.hp1 > adc.hp2 
      if(adc.hp1>(adc.hp2+599)) {
-    11c4:	84 e0       	ldi	r24, 0x04	; 4
+    11c4:	85 e0       	ldi	r24, 0x05	; 5
     11c6:	80 93 16 01 	sts	0x0116, r24
     11ca:	82 e3       	ldi	r24, 0x32	; 50
     11cc:	04 c0       	rjmp	.+8      	; 0x11d6 <CheckPins+0x1e6>
-    11ce:	84 e0       	ldi	r24, 0x04	; 4
+    11ce:	85 e0       	ldi	r24, 0x05	; 5
         //read voltage at the Gate , to differ between MOSFET and JFET
         ADC_PORT = HiADCp;	//switch High-Pin directly to VCC
     11d0:	80 93 16 01 	sts	0x0116, r24
@@ -4429,7 +4429,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 #if FLASHEND > 0x1fff
         R_DDR = LoPinRL | TriPinRL;	//switch R_L port for Tristate-Pin (Base) to output (GND)
     1332:	ae c0       	rjmp	.+348    	; 0x1490 <CheckPins+0x4a0>
-    1334:	83 e0       	ldi	r24, 0x03	; 3
+    1334:	84 e0       	ldi	r24, 0x04	; 4
         wait_about5ms();		// load gate capacitor
     1336:	80 93 16 01 	sts	0x0116, r24
         R_DDR = LoPinRL | TriPinRH;	//switch R_H port for Tristate-Pin (Base) to output (GND)
@@ -4653,7 +4653,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     14a2:	08 f4       	brcc	.+2      	; 0x14a6 <CheckPins+0x4b6>
               ptrans.ices = (unsigned int)(((unsigned long)adc.vCEs * 10000) / RR680MI); // ICEs 1uA
     14a4:	6a c0       	rjmp	.+212    	; 0x157a <CheckPins+0x58a>
-    14a6:	84 e0       	ldi	r24, 0x04	; 4
+    14a6:	85 e0       	ldi	r24, 0x05	; 5
     14a8:	80 93 16 01 	sts	0x0116, r24
     14ac:	82 e1       	ldi	r24, 0x12	; 18
     14ae:	80 93 15 01 	sts	0x0115, r24
@@ -4989,7 +4989,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     1684:	08 f0       	brcs	.+2      	; 0x1688 <CheckPins+0x698>
        adc.hp4 = W5msReadADC(HighPin);  //read voltage with switched back base
     1686:	47 c0       	rjmp	.+142    	; 0x1716 <CheckPins+0x726>
-    1688:	85 e0       	ldi	r24, 0x05	; 5
+    1688:	86 e0       	ldi	r24, 0x06	; 6
     168a:	80 93 16 01 	sts	0x0116, r24
        R_DDR = HiPinRL;			// base to input
     168e:	80 91 54 01 	lds	r24, 0x0154
@@ -5077,7 +5077,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     170a:	08 f0       	brcs	.+2      	; 0x170e <CheckPins+0x71e>
           wait_about5ms();
     170c:	23 c2       	rjmp	.+1094   	; 0x1b54 <CheckPins+0xb64>
-    170e:	86 e0       	ldi	r24, 0x06	; 6
+    170e:	87 e0       	ldi	r24, 0x07	; 7
           R_DDR = HiPinRL;		//switch R_L port HighPin to output (GND)
     1710:	80 93 16 01 	sts	0x0116, r24
           if(W5msReadADC(HighPin) > 244) {
@@ -5163,7 +5163,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
       R_PORT = HiPinRL | TriPinRL;	//R_L port of Tristate-Pin (Basis) to VCC
     176e:	b0 c0       	rjmp	.+352    	; 0x18d0 <CheckPins+0x8e0>
       wait_about5ms();			// load gate capacitor
-    1770:	83 e0       	ldi	r24, 0x03	; 3
+    1770:	84 e0       	ldi	r24, 0x04	; 4
     1772:	80 93 16 01 	sts	0x0116, r24
       R_DDR = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to output
     1776:	8c e0       	ldi	r24, 0x0C	; 12
@@ -5382,7 +5382,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 #ifdef SHOW_ICE
          if (update_pins != 0) {
     18e2:	65 c0       	rjmp	.+202    	; 0x19ae <CheckPins+0x9be>
-    18e4:	84 e0       	ldi	r24, 0x04	; 4
+    18e4:	85 e0       	ldi	r24, 0x05	; 5
     18e6:	80 93 16 01 	sts	0x0116, r24
 	    // update residual collector (emitter) current without base current
             ntrans.ice0 = (unsigned int)(((unsigned long)adc.lp_otr * 10000) / RR680MI); // ICE0 0.01mA
@@ -5755,9 +5755,9 @@ checkDiode:
       adc.hp2 = ADCconfig.U_AVCC - W5msReadADC(LowPin); // GND--R_H--LP--|<--VCC
     1ae8:	e0 f4       	brcc	.+56     	; 0x1b22 <CheckPins+0xb32>
     1aea:	80 91 16 01 	lds	r24, 0x0116
-    1aee:	82 30       	cpi	r24, 0x02	; 2
+    1aee:	83 30       	cpi	r24, 0x03	; 3
     1af0:	18 f4       	brcc	.+6      	; 0x1af8 <CheckPins+0xb08>
-    1af2:	82 e0       	ldi	r24, 0x02	; 2
+    1af2:	83 e0       	ldi	r24, 0x03	; 3
     1af4:	80 93 16 01 	sts	0x0116, r24
     1af8:	80 91 14 01 	lds	r24, 0x0114
     1afc:	e8 2f       	mov	r30, r24
@@ -6400,7 +6400,7 @@ void GetResistance(uint8_t HighPin, uint8_t LowPin)
      // measurement is finished, lrx1 is the resistance value of one direction
      if(PartFound < PART_TRANSISTOR) {
     1e8c:	10 91 16 01 	lds	r17, 0x0116
-    1e90:	13 30       	cpi	r17, 0x03	; 3
+    1e90:	14 30       	cpi	r17, 0x04	; 4
     1e92:	08 f0       	brcs	.+2      	; 0x1e96 <GetResistance+0x324>
     1e94:	02 cf       	rjmp	.-508    	; 0x1c9a <GetResistance+0x128>
 // Search for resistors
@@ -6489,7 +6489,7 @@ void GetResistance(uint8_t HighPin, uint8_t LowPin)
            } else {
               // resistor has the same value in both directions
               if (PartFound < PART_DIODE) {
-    1f08:	12 30       	cpi	r17, 0x02	; 2
+    1f08:	13 30       	cpi	r17, 0x03	; 3
     1f0a:	19 f0       	breq	.+6      	; 0x1f12 <GetResistance+0x3a0>
                  PartFound = PART_RESISTOR;	// only mark as resistor, if no other part found
     1f0c:	81 e0       	ldi	r24, 0x01	; 1
@@ -6613,7 +6613,7 @@ void EntladePins() {
      }
      if (clr_cnt == MAX_ENTLADE_ZEIT) {
         PartFound = PART_CELL;	// mark as Battery
-    1f86:	28 e0       	ldi	r18, 0x08	; 8
+    1f86:	29 e0       	ldi	r18, 0x09	; 9
     1f88:	c2 2e       	mov	r12, r18
   uint8_t lop_cnt;		// loop counter
 // max. time of discharge in ms  (10000/20) == 10s
@@ -6642,7 +6642,7 @@ void EntladePins() {
     1fa4:	0e 94 59 03 	call	0x6b2	; 0x6b2 <ReadADC>
      if ((PartFound == PART_CELL) || (adcmv[0] < CAP_EMPTY_LEVEL) & (adcmv[1] < CAP_EMPTY_LEVEL) & (adcmv[2] < CAP_EMPTY_LEVEL)) {
     1fa8:	20 91 16 01 	lds	r18, 0x0116
-    1fac:	28 30       	cpi	r18, 0x08	; 8
+    1fac:	29 30       	cpi	r18, 0x09	; 9
     1fae:	79 f0       	breq	.+30     	; 0x1fce <EntladePins+0x5c>
     1fb0:	31 e0       	ldi	r19, 0x01	; 1
     1fb2:	c4 30       	cpi	r28, 0x04	; 4
@@ -7160,7 +7160,7 @@ messe_mit_rh:
 #endif
   R_PORT = HiPinR_H;           	// switch R_H resistor port for HighPin to VCC
   if(PartFound == PART_FET) {
-    2258:	84 30       	cpi	r24, 0x04	; 4
+    2258:	85 30       	cpi	r24, 0x05	; 5
     225a:	71 f4       	brne	.+28     	; 0x2278 <ReadCapacity+0x188>
     225c:	81 e0       	ldi	r24, 0x01	; 1
     225e:	80 93 81 00 	sts	0x0081, r24
@@ -7464,9 +7464,9 @@ checkDiodes:
    if((NumOfDiodes > 0)  && (PartFound != PART_FET)) {
     2470:	21 f0       	breq	.+8      	; 0x247a <ReadCapacity+0x38a>
     2472:	80 91 16 01 	lds	r24, 0x0116
-    2476:	84 30       	cpi	r24, 0x04	; 4
+    2476:	85 30       	cpi	r24, 0x05	; 5
     2478:	d1 f5       	brne	.+116    	; 0x24ee <ReadCapacity+0x3fe>
-    247a:	87 e0       	ldi	r24, 0x07	; 7
+    247a:	88 e0       	ldi	r24, 0x08	; 8
     247c:	80 93 16 01 	sts	0x0116, r24
       wait_about1s();	/* debug delay */
 #endif
@@ -9230,7 +9230,7 @@ Retur2:
     2e02:	20 91 16 01 	lds	r18, 0x0116
 
 	lds	r18, PartFound;		/* if (PartFound == PART_CAPACITOR) { */
-    2e06:	27 30       	cpi	r18, 0x07	; 7
+    2e06:	28 30       	cpi	r18, 0x08	; 8
 	cpi	r18, PART_CAPACITOR;	
     2e08:	51 f5       	brne	.+84     	; 0x2e5e <load_max>
 ; 	brne	ad_35e4;
@@ -9952,7 +9952,7 @@ ad_2r:
     309a:	20 91 16 01 	lds	r18, 0x0116
 	ldd	r8, Y+sumvolt1+2;
 	ldd	r9, Y+sumvolt1+3;
-    309e:	27 30       	cpi	r18, 0x07	; 7
+    309e:	28 30       	cpi	r18, 0x08	; 8
 /* ############################################################ */
 	lds	r18, PartFound;		/* if (PartFound == PART_CAPACITOR) { */
     30a0:	b1 f4       	brne	.+44     	; 0x30ce <no_sub>
@@ -10696,7 +10696,7 @@ end3:
     33b0:	80 91 16 01 	lds	r24, 0x0116
 	#endif
 	  EntladePins();		// discharge all capacitors!
-    33b4:	88 30       	cpi	r24, 0x08	; 8
+    33b4:	89 30       	cpi	r24, 0x09	; 9
 	  if(PartFound == PART_CELL) {
     33b6:	61 f4       	brne	.+24     	; 0x33d0 <main+0x10a>
     33b8:	0e 94 1d 01 	call	0x23a	; 0x23a <lcd_clear>
@@ -10836,7 +10836,7 @@ end3:
 	#endif
 
 	  _trans = &ntrans;			// default transistor structure to show
-    347c:	85 30       	cpi	r24, 0x05	; 5
+    347c:	86 30       	cpi	r24, 0x06	; 6
     347e:	41 f4       	brne	.+16     	; 0x3490 <main+0x1ca>
     3480:	8d e3       	ldi	r24, 0x3D	; 61
 	  if (PartFound == PART_THYRISTOR) {
@@ -10852,7 +10852,7 @@ end3:
     348a:	67 e4       	ldi	r22, 0x47	; 71
     348c:	83 e4       	ldi	r24, 0x43	; 67
     348e:	09 c0       	rjmp	.+18     	; 0x34a2 <main+0x1dc>
-    3490:	86 30       	cpi	r24, 0x06	; 6
+    3490:	87 30       	cpi	r24, 0x07	; 7
             PinLayout(Cathode_char,'G','A'); 	// CGA= or 123=...
     3492:	b9 f4       	brne	.+46     	; 0x34c2 <main+0x1fc>
     3494:	86 e4       	ldi	r24, 0x46	; 70
@@ -10895,12 +10895,12 @@ TyUfAusgabe:
   Display_mV(ntrans.uBE,2);
     34bc:	0e 94 29 03 	call	0x652	; 0x652 <Display_mV>
     34c0:	c6 c3       	rjmp	.+1932   	; 0x3c4e <main+0x988>
-    34c2:	87 30       	cpi	r24, 0x07	; 7
+    34c2:	88 30       	cpi	r24, 0x08	; 8
     34c4:	11 f4       	brne	.+4      	; 0x34ca <main+0x204>
     34c6:	d6 d9       	rcall	.-3156   	; 0x2874 <show_cap_simple>
     34c8:	c2 c3       	rjmp	.+1924   	; 0x3c4e <main+0x988>
-    34ca:	82 30       	cpi	r24, 0x02	; 2
-      DisplayValue(ntrans.gthvoltage,-2,' ',3);
+    34ca:	83 30       	cpi	r24, 0x03	; 3
+ #endif
       goto tt_end;
    }
 #endif
@@ -11197,7 +11197,7 @@ TyUfAusgabe:
      lcd_data(NumOfDiodes + '0');
     368a:	90 e0       	ldi	r25, 0x00	; 0
     368c:	db c2       	rjmp	.+1462   	; 0x3c44 <main+0x97e>
-    368e:	83 30       	cpi	r24, 0x03	; 3
+    368e:	84 30       	cpi	r24, 0x04	; 4
     3690:	09 f0       	breq	.+2      	; 0x3694 <main+0x3ce>
     3692:	5e c1       	rjmp	.+700    	; 0x3950 <main+0x68a>
      lcd_MEM_string(AnKat_str);		//"->|-"
@@ -11601,7 +11601,7 @@ TyUfAusgabe:
     394c:	8b 2d       	mov	r24, r11
     394e:	d8 c0       	rjmp	.+432    	; 0x3b00 <main+0x83a>
        lcd_MEM_string(Uf_str);			//"Uf="
-    3950:	84 30       	cpi	r24, 0x04	; 4
+    3950:	85 30       	cpi	r24, 0x05	; 5
     3952:	09 f0       	breq	.+2      	; 0x3956 <main+0x690>
     3954:	f0 c0       	rjmp	.+480    	; 0x3b36 <main+0x870>
     3956:	80 91 15 01 	lds	r24, 0x0115

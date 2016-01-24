@@ -411,8 +411,7 @@ last_line_used = 2;
 wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 
 #ifdef SamplingADC
-  sampling_cap_calibrate();
-  sampling_lc_calibrate();
+  sampling_cap_calibrate();		// measure zero capacity for samplingADC
 #endif
 
  #ifdef AUTO_CAL
@@ -540,8 +539,12 @@ for (ww=0;ww<64;ww++) {
 }	/* end if((test_mode & 0x0f) == 1) */
  #endif  /* end AUTO_CAL */
 
-
 ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples
+
+#ifdef SamplingADC
+  sampling_lc_calibrate();	// Cap for L-meas
+#endif
+
 
  #ifdef FREQUENCY_50HZ
 //#define TEST_SLEEP_MODE	/* only select for checking the sleep delay */

@@ -298,7 +298,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         ptrans.count++;			// count as two, the inverse is identical
         goto savePresult;		// save pin numbers and exit
      }
-     // no JFET od D-MOS
+     // no JFET or D-MOS
      goto checkDiode;	
   } // end component has current without TristatePin signal
 

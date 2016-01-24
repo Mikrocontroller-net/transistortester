@@ -6,7 +6,7 @@
 #include <avr/io.h>
 #include "config.h"
 
-;#define FAST_SERIAL_OUT
+;#define FAST_SERIAL_OUT	/* use no sub-function for bit setting */
 #define FAST_SPI_OUTPUT
        .section .text
 
@@ -772,7 +772,7 @@ _lcd_hw_write:
                RCALL    wait1us
  #endif
 _lcd_hw_write_exit:
-               ret
+               ret		; end _lcd_hw_write
        .endfunc
 #endif /* LCD_INTERFACE_MODE */
 ;----------------------------------------------------------------------

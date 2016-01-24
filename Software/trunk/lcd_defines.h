@@ -290,41 +290,37 @@
 	#define lcd_cursor_off() lcd_command(CMD_SetDisplayAndCursor | 0x04)
 
 //Addresses of lines
+ #ifndef DD_RAM_OFFSET
+  #define DD_RAM_OFFSET 0
+ #endif
  #if (defined(LCD_DOGM) && defined(FOUR_LINE_LCD))
   #if FOUR_LINE_LCD == 3
         /* lines for a ST7036 controller, 3 lines */
-    	#define LCD_Row1	0x00
-	#define LCD_Row2	0x10
-	#define LCD_Row3	0x20
-	#define LCD_Row4	0x30
+    	#define LCD_Row1	0x00+DD_RAM_OFFSET
+	#define LCD_Row2	0x10+DD_RAM_OFFSET
+	#define LCD_Row3	0x20+DD_RAM_OFFSET
+	#define LCD_Row4	0x30+DD_RAM_OFFSET
   #else
         /* lines for a SSD1803 controller */
-    	#define LCD_Row1	0x00
-	#define LCD_Row2	0x20
-	#define LCD_Row3	0x40
-	#define LCD_Row4	0x60
+    	#define LCD_Row1	0x00+DD_RAM_OFFSET
+	#define LCD_Row2	0x20+DD_RAM_OFFSET
+	#define LCD_Row3	0x40+DD_RAM_OFFSET
+	#define LCD_Row4	0x60+DD_RAM_OFFSET
   #endif
  #else
   #if LCD_LINE_LENGTH == 20
-    	#define LCD_Row1	0x00
-	#define LCD_Row2	0x40
-	#define LCD_Row3	0x14
-	#define LCD_Row4	0x54
+    	#define LCD_Row1	0x00+DD_RAM_OFFSET
+	#define LCD_Row2	0x40+DD_RAM_OFFSET
+	#define LCD_Row3	0x14+DD_RAM_OFFSET
+	#define LCD_Row4	0x54+DD_RAM_OFFSET
   #else
    #if LCD_LINE_LENGTH < 16
     #warning LCD_LINE_LENGTH not correctly set!
    #endif
-   #if FOUR_LINE_LCD == 14
-    	#define LCD_Row1	0x80	/* Setting for TC1604 disülay */
-	#define LCD_Row2	0xC0
-	#define LCD_Row3	0x90
-	#define LCD_Row4	0xD0
-   #else
-    	#define LCD_Row1	0x00
-	#define LCD_Row2	0x40
-	#define LCD_Row3	0x10
-	#define LCD_Row4	0x50
-   #endif
+    	#define LCD_Row1	0x00+DD_RAM_OFFSET
+	#define LCD_Row2	0x40+DD_RAM_OFFSET
+	#define LCD_Row3	0x10+DD_RAM_OFFSET
+	#define LCD_Row4	0x50+DD_RAM_OFFSET
   #endif
  #endif
 

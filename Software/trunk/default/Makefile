@@ -44,6 +44,11 @@ UI_LANGUAGE = LANG_ENGLISH
 #CFLAGS += -DFOUR_LINE_LCD
 #CFLAGS += -DLCD_LINE_LENGTH=20
 
+# Some character display types have a different DD_RAM start adress for line 1. 
+# Usually the DD_RAM start address for line 1 is 0.
+# You can specify a different start address with the option DD_RAM_OFFSET
+#DD_RAM_OFFSET=128
+
 
 # The LCD_ST7565 option must be set to support a 128x64 LCD graphics display
 # with ST7565 controller. It is controlled with a 1-bit interface (SPI or I2C)

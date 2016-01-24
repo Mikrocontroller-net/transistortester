@@ -79,6 +79,11 @@ UI_LANGUAGE = LANG_ENGLISH
 #CFLAGS += -DFOUR_LINE_LCD
 #CFLAGS += -DLCD_LINE_LENGTH=20
 
+# Some character display types have a different DD_RAM start adress for line 1. 
+# Usually the DD_RAM start address for line 1 is 0.
+# You can specify a different start address with the option DD_RAM_OFFSET
+#DD_RAM_OFFSET=128
+
 # The PAGE_MODE activates a moving line cursor for menu function selection together with FOUR_LINE_LCD
 # and WITH_ROTARY_SWITCH.
 # Without the PAGE_MODE option, the line cursor is fixed to line 3 and the text moves.

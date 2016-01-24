@@ -134,10 +134,6 @@ End of configuration
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
   #endif
  #endif
- #ifdef SamplingADC
- //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
- const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
- #endif
  #define LANG_SELECTED
 #endif
 #if defined(LANG_ITALIAN)		//italiano
@@ -185,10 +181,6 @@ End of configuration
   #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Contrasto";
   #endif
- #endif
- #ifdef SamplingADC
- //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
- const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
  #endif
  #define LANG_SELECTED
 #endif
@@ -239,10 +231,6 @@ End of configuration
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
   #endif
  #endif
- #ifdef SamplingADC
- //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
- const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
- #endif
  #define LANG_SELECTED
 #endif
 
@@ -291,9 +279,6 @@ End of configuration
   #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
   #endif
- #endif
- #ifdef SamplingADC
-const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF pro L mer?";
  #endif
  #define LANG_SELECTED
 #endif
@@ -344,10 +329,6 @@ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF pro L mer?";
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrast";
   #endif
  #endif
- #ifdef SamplingADC
- //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
- const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
- #endif
  #define LANG_SELECTED
 #endif
 
@@ -397,10 +378,6 @@ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF pro L mer?";
   #endif
  #endif
  #endif
- #ifdef SamplingADC
- //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
- const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
- #endif
  #define LANG_SELECTED
 #endif
 
@@ -449,10 +426,6 @@ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF pro L mer?";
   #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Contrast";
   #endif
- #endif
- #ifdef SamplingADC
- //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
- const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
  #endif
  #define LANG_SELECTED
 #endif
@@ -551,10 +524,6 @@ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF pro L mer?";
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Contraste";
   #endif
  #endif
- #ifdef SamplingADC
- //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
- const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
- #endif
  #define LANG_SELECTED
 #endif
 
@@ -607,10 +576,6 @@ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF pro L mer?";
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontraszt";
   #endif
  #endif
- #ifdef SamplingADC
- //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
- const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
- #endif
  #define LANG_SELECTED
 #endif
 
@@ -660,10 +625,6 @@ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF pro L mer?";
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Kontrastas";
   #endif
  #endif
- #endif
- #ifdef SamplingADC
- //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
- const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
  #endif
  #define LANG_SELECTED
 #endif
@@ -715,10 +676,6 @@ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF pro L mer?";
   #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
    const unsigned char CONTRAST_str[] MEM2_TEXT = "Contrast";
   #endif
- #endif
- #ifdef SamplingADC
- //const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "C<30nF for L?";    // should be translated at some point
- const unsigned char cap_for_l_meas_str[] MEM2_TEXT = "Cap for L meas?";    // should be translated at some point
  #endif
 #endif
 
@@ -1381,6 +1338,10 @@ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR
   const unsigned char REF_R_str[] MEM2_TEXT = "REF_R=";
 #endif
 
+#ifdef SamplingADC
+ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = {'1',LCD_CHAR_LINE1,LCD_CHAR_CAP,LCD_CHAR_LINE1,'3',' ','1','0','-','3','0','n','F','(','L',')',0};
+#endif
+
 //End of EEPROM-Strings
 #else
  // no MAIN_C
@@ -1538,10 +1499,10 @@ extern const unsigned char CyrillicMuIcon[] MEM_TEXT;	//µ
  #define pinmaskRL(pin) pgm_read_byte(PinRLRHADCtab+(pin))
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
  #define pinmaskRH(pin) pgm_read_byte(PinRLRHADCtab+(pin)+3)
- #define pinmaskADC(pin) (pgm_read_byte(PinRLRHADCtab+(pin)+6) | TXD_MSK)
+ #define pinmaskADC(pin) (pgm_read_byte(PinRLRHADCtab+(pin)+6))
 #else
  #define pinmaskRH(pin) (pinmaskRL(pin)<<1)
- #define pinmaskADC(pin) (pgm_read_byte(PinRLRHADCtab+(pin)+3) | TXD_MSK)
+ #define pinmaskADC(pin) (pgm_read_byte(PinRLRHADCtab+(pin)+3))
 #endif
 
 

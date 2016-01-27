@@ -380,7 +380,7 @@ ujtdone:;
              uint16_t v0,v1,v2;
              ntrans.b = diodes.Anode[0];			// common anode must be emitter of UJT
              ADC_DDR = pinmaskADC(diodes.Cathode[0]) | TXD_MSK;
-             ADC_PORT =  TXD_VAL;   // UJT B2 to GND
+             ADC_PORT =  TXD_VAL;   // UJT B1 to GND
              R_PORT = pinmaskRL(ntrans.b) | pinmaskRL(diodes.Cathode[1]);	// UJT emitter and B2 with RL to VCC
              R_DDR = R_PORT;
              v1 = ADCconfig.U_AVCC - W5msReadADC(diodes.Cathode[1]);			// read voltage at B2
@@ -465,13 +465,12 @@ ujtdone:;
 
 #ifdef WITH_UJT
    if (PartFound == PART_UJT) {
-      static const unsigned char UJT_str[] MEM_TEXT = "N-UJT";
+      static const unsigned char UJT_str[] MEM_TEXT = "UJT";
       lcd_MEM_string(UJT_str);
       PinLayout('1','E','2');
  #if WITH_UJT == 2
       static const unsigned char eta_str[] MEM_TEXT = " eta=";
       lcd_next_line(0);
-//      RvalOut(ResistorList[0]);
       ResistorChecked[ntrans.e - TP1 + ntrans.c - TP1 - 1] = 0;	// forget last resistance measurement
       GetResistance(ntrans.c, ntrans.e);	// resistor value is in ResistorVal[resnum]
       DisplayValue(ResistorVal[ntrans.e - TP1 + ntrans.c - TP1 - 1],-1,LCD_CHAR_OMEGA,2);

@@ -1329,7 +1329,7 @@ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR
 				     (1<<TP3)|TXD_VAL};	// Table of commands to switch the ADC-Pins 0,1,2 to output
 
 
- const uint8_t PrefixTab[] MEM_TEXT = { 'p','n',LCD_CHAR_U,'m',0,'k','M'}; // p,n,u,m,-,k,M
+ const uint8_t PrefixTab[] MEM_TEXT = { 'f','p','n',LCD_CHAR_U,'m',0,'k','M'}; // f,p,n,u,m,-,k,M
 
 
 #ifdef AUTO_CAL
@@ -1445,7 +1445,7 @@ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR
   extern const uint16_t RHtab[];
  #endif
   extern const unsigned char PinRLRHADCtab[] PROGMEM;
-  extern const uint8_t PrefixTab[]; // p,n,u,m,-,k,M
+  extern const uint8_t PrefixTab[]; // f,p,n,u,m,-,k,M
  #if FLASHEND > 0x3fff
   extern const unsigned char PinRHtab[];
  #endif

@@ -8,6 +8,9 @@
 
 
 
+#ifdef WITH_XTAL
+#define WITH_MENU      // to allow more digits for crystal frequency
+#endif
 
 
 /* ************************************************************************
@@ -129,7 +132,7 @@ void DisplayValue(signed long signedValue, int8_t Exponent, unsigned char Unit, 
   // the following is much more concise
   // also removes the limits checking, since limit errors should never happen, and if they do, they'd show _incorrect_ results;
   // showing a garbage prefix character seems preferable to something correct-looking but off by some power of 10
-  Index = ((uint8_t)(Exponent+14))/3;
+  Index = ((uint8_t)(Exponent+17))/3;
   Offset = ((uint8_t)(6-Exponent))%3;
 
   /* convert value into string */

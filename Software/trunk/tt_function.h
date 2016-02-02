@@ -73,7 +73,7 @@ void i2c_init(void);			// init the I2C interface
 uint16_t Rnum2pins(uint8_t num);	// compute Pin-Numbers of the resistor number
 
 #ifdef SamplingADC
-extern uint16_t samplingADC(   // code is in sampling_ADC.S
+uint16_t samplingADC(   // code is in sampling_ADC.S
    uint16_t what, 	// what to measure? see smplADC_... defs below, R24:R25
    uint16_t *ptr,       // output pointer (note: ptr[0] will contain incorrect data; ptr[1]...ptr[n-1] will be valid) R22:R23
    uint8_t n,           // number of samples (n=0 for 256), R20
@@ -94,9 +94,21 @@ extern uint16_t samplingADC(   // code is in sampling_ADC.S
 // If the samplingADC_direct option is used, a 1 CPU-cycle pulse is applied via de ADC pin corresponding to a 1 bit in Rddr_0.
 
 
-int32_t sampling_cap(uint8_t HighPin, uint8_t LowPin, uint8_t hivolt);   // returns measured capacitance in 0.01 pF units; hivolt flag demands measurement at 5 V rather than at 0 V
+int32_t sampling_cap(uint8_t HighPin, uint8_t LowPin, uint8_t opts);   // returns measured capacitance in 0.01 pF units; opts&1 is flag demands measurement at 5 V rather than at 0 V; opts&2 is flag to not subtract the parasitic capacitance
 void sampling_lc(uint8_t LowPin, uint8_t HighPin);
 #define sampling_cap_pre -14
 void sampling_cap_calibrate(void);	// calibrate the sampling cap method
 void sampling_lc_calibrate(void);	// calibrate the sampling  LC method
+
+#ifdef WITH_XTAL
+void sampling_test_xtal(void);          // test presence of resonator or crystal between pin 1 and 3 (hardcoded)
+void sampling_measure_xtal(void);       // measure resonator or crystal between pin 1 and 3 (hardcoded),
+                                        //   uses data already gathered in previous sampling_test_xtal() call
+                                        //   prints output to LCD too
+
+// version to be called when using samlingADC_freq option, to pass the desired frequency:
+uint16_t samplingADC_freqgen(uint16_t, uint16_t*, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint16_t freq);
+// version to be called when using samlingADC_sck option, to also pass the desired short circuit duration:
+uint16_t samplingADC_freqgen_sck(uint16_t, uint16_t*, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint16_t freq, uint8_t shortcircuitduration);
+#endif
 #endif

@@ -416,6 +416,15 @@ ujtdone:;
         }
 #endif		/* defined WITH_UJT */
 
+#ifdef WITH_XTAL
+        if (PartFound==PART_NONE || PartFound==PART_CAPACITOR) {
+           // still not recognized anything? then check for ceramic resonator or crystal
+           // these tests are time-consuming, so we do them last, and only on TP1/TP3
+           sampling_test_xtal();
+        }
+#endif
+
+
 	  //All checks are done, output result to display
 
 	#ifdef DebugOut 
@@ -500,6 +509,21 @@ ujtdone:;
 #endif
      goto tt_end;
   } /* end PartFound == PART_CAPACITOR */
+
+#ifdef WITH_XTAL
+  if (PartFound == PART_CERAMICRESONATOR) {
+      static const unsigned char cerres_str[] MEM_TEXT = "Cer.resonator  ";
+      lcd_MEM_string(cerres_str);
+      sampling_measure_xtal();
+      goto tt_end;
+  }
+  if (PartFound == PART_XTAL) {
+      static const unsigned char xtal_str[] MEM_TEXT = "Crystal  ";
+      lcd_MEM_string(xtal_str);
+      sampling_measure_xtal();
+      goto tt_end;
+  }
+#endif
 
   // ========================================
   if(PartFound == PART_DIODE) {

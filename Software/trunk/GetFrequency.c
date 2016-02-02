@@ -312,10 +312,14 @@ ISR(TIMER0_OVF_vect, ISR_BLOCK) {
 }
 #endif
 
+#endif // WITH_MENU
+
+#if defined(WITH_MENU) || ( defined(SamplingADC) && !defined(SamplingADC_CNT))
 /* ************************************************************ */
 /* Timer 1 Compare A interrupts with count 1 to start counter 0 */
 /* This is defined as start of the measurement second.          */
 /* ************************************************************ */
+// this handler is also used by SamplingADC.S, where simply any dummy interrupt handler is usable; but if timing of this handler changes, need to adapt SamplingADC.S as well
 ISR(TIMER1_COMPA_vect, ISR_BLOCK) {
 #if PROCESSOR_TYP == 1280
   TCCR3B = (1<<CS32) | (1<<CS31) | (0<<CS30);	// start the counter 3 with external input T3
@@ -323,7 +327,9 @@ ISR(TIMER1_COMPA_vect, ISR_BLOCK) {
   TCCR0B = (1<<CS02) | (1<<CS01) | (0<<CS00);	// now start the counter 0 with external input T0
 #endif
 }
+#endif  // WITH_MENU or SamplingADC
 
+#ifdef WITH_MENU
 /* ************************************************************ */
 /* Timer 1 Compare B interrupt after 1 second to stop counter 0 */
 /* ************************************************************ */

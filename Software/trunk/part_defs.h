@@ -11,6 +11,8 @@
 #define PART_CAPACITOR 8
 #define PART_CELL 9
 #define PART_PUT 10
+#define PART_CERAMICRESONATOR 11
+#define PART_XTAL 12
 
 //End (parts)
 

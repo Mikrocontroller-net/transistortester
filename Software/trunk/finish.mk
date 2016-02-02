@@ -72,6 +72,9 @@ sampling_cap.o: ../sampling_cap.c $(MKFILES)
 sampling_lc.o: ../sampling_lc.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
+sampling_xtal.o: ../sampling_xtal.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 ########### Compile assembler source only 
 
 samplingADC.o: ../samplingADC.S $(MKFILES)

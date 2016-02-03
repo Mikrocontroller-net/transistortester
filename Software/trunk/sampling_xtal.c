@@ -29,7 +29,7 @@ typedef uint8_t byte;
 
 int16_t sumi;
 int16_t sumq;
-void minifourier(unsigned int uu[], int16_t freq, byte nuu, byte phase0)
+static void minifourier(unsigned int uu[], int16_t freq, byte nuu, byte phase0)
 {
    // computes approximation of one term of Fourier transform of uu[0...nuu-1] at frequency freq with initial phase phase0
    // result is returned in global variables sumi and sumq
@@ -38,11 +38,11 @@ void minifourier(unsigned int uu[], int16_t freq, byte nuu, byte phase0)
    uint16_t avg=uu[0]<<3;
    byte i;                     // index in uu[]
    int16_t phi16=phase0<<8;    // 16-bit phase of the "oscillator"
-   sumi=sumq=0;
+   int16_t sumi1,sumq1;
+   sumi1=sumq1=0;
    for (i=0;i<nuu;i++) 
    {
       int8_t u=uu[i]-(avg>>3);               // more or less remove DC component
-//      avg+=((signed)(uu[i]-((avg+4)>>3)));
       avg+=u;
       byte phi=phi16>>8;
 #if 0
@@ -64,12 +64,12 @@ void minifourier(unsigned int uu[], int16_t freq, byte nuu, byte phase0)
       if (phi&0x80) u=-u;                                  // 180 degrees
       if (phi&0x20) { di=dq=u>>2; } else { di=u; dq=0; }   //  45 degrees
       if (phi&0x40) { int8_t tmp=dq; dq=di; di=-tmp; }     //  90 degrees
-      sumi+=di;
-      sumq+=dq;
+      sumi1+=di; sumq1+=dq;
 #endif
       phi16+=freq;
       //if (what==1) {      myuart_putc('f'); myuart_putc(' '); uart_int(i); uart_int(1000+sumi); uart_int(1000+sumq); uart_int(1000+u); uart_int(1000+sumi-prevsumi); uart_int(uu[i]); uart_newline(); wdt_reset();}
    }
+   sumi=sumi1; sumq=sumq1;
 }
 
 
@@ -80,16 +80,6 @@ static void findphase(unsigned int uu[], int16_t freq, byte nuu)
    // (poor man's arctangent)
    byte phase=0;
    byte bit=0x40;
-/*
-   minifourier(uu,freq,nuu,phase); 
-   if (sumq>0) phase+=0x80;
-   // binary search for the upward zero-crossing of sumq, to find maximum of sumi; works because this signal is pretty "well behaved"
-   while (bit) {
-      minifourier(uu,freq,nuu,phase+bit); 
-      if (sumq<0) phase+=bit;
-      bit>>=1;
-   }
-*/
    bit=0x80;
    // binary search for the upward zero-crossing of sumq, to find maximum of sumi; works because this signal is pretty "well behaved"
    while (bit) {
@@ -115,7 +105,7 @@ static void show_progress(void)
 }
 
 
-uint16_t findfreqmax(unsigned int uu[], byte nuu)
+static uint16_t findfreqmax(unsigned int uu[], byte nuu)
 {
    // find frequency for which minifourier() is largest
 
@@ -124,13 +114,15 @@ uint16_t findfreqmax(unsigned int uu[], byte nuu)
    uint8_t i;
    byte imax=0;
    int16_t maxi=0;
-   int16_t mini=32767;
-   uint16_t sumiq,sumiq1=0,sumiq2=0;
+//   int16_t mini=32767;
+//   uint16_t sumiq,sumiq1=0,sumiq2=0;
    for (i=6;i<=129;i+=1) {        // start at i=6, corresponding to 16 MHz / (256/6) = 375 kHz, to prevent DC component from being selected
-/*
-      findphase(uu,i<<8,nuu);
+#if 1
+      // simpler code, saves flash, would be a bit slower, which we compensate by considering only half the data in this course search
+      findphase(uu,i<<8,nuu/2);
       if (sumi>maxi) { imax=i; maxi=sumi; }
-*/
+#else
+      // somewhat faster code because of simpler calculations, but takes some 100 bytes more flash
       minifourier(uu,i<<8,nuu,0);
       if (sumi<0) sumi=-sumi;
       if (sumq<0) sumq=-sumq;
@@ -142,6 +134,7 @@ uint16_t findfreqmax(unsigned int uu[], byte nuu)
       if (sumiq+sumiq1+sumiq2>maxi) { maxi=sumiq+sumiq1+sumiq2; imax=i-1; }
       sumiq2=sumiq1;
       sumiq1=sumiq;
+#endif
 //      {            myuart_putc('r'); myuart_putc(' '); uart_int(i); uart_int(10000+sumq); uart_int(10000+sumi); uart_int(imax); uart_newline(); wdt_reset(); }
    }
    show_progress();
@@ -255,7 +248,6 @@ void sampling_test_xtal()
       for (d=d0;d<d1;d+=ds) {
          // we acquire data for a short time (only 40 samples), because we need to try so many different intervals, otherwise it would take too long
          samplingADC_freqgen((1<<smplADC_span)|wht, uu, 40, HiPinR_L, HiPinR_H, 0, HiPinR_L, d);
-//         samplingADC_freqgen((1<<smplADC_span)|wht, uu, 200, HiPinR_L, HiPinR_H, 0, HiPinR_L, d);
 //   { byte i;for (i=0;i<200;i++) { myuart_putc('B'); myuart_putc(' '); uart_int(uu[i]); uart_int(d); uart_int(i); uart_newline(); wdt_reset(); } }
 
          R_DDR=0;   // switch off low-side current after measurement
@@ -459,7 +451,7 @@ newff:;
 #endif
 
 
-   if (isXtal) {
+   if (isXtal && ff!=1) {
 
       // in case of crystal, find motional capacitance and series resonance
       //
@@ -498,6 +490,7 @@ newff:;
       lcd_data('z');
    } else {
       // no crystal, then just ceramic resonator, only show a single resonant frequency
+      // also use this code for crystals if ff=1, practically speaking, if we have an 8 MHz crystal, since then precision measurements are not possible
       lcd_clear_line2();
       DisplayValue(f,0,'H',4);
       lcd_data('z');

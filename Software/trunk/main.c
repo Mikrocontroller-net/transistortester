@@ -326,7 +326,7 @@ ujt_exch_b:;
              port1 = port0;
              ddr1 = port1;
               ADMUX = Epin|(1<<REFS0);	// switch Multiplexer to emitter and use 5V reference voltage
-              ADC_DDR = pinmaskADC(B1pin) | TXD_MSK;
+              ADC_DDR = pinmaskADC(B1pin);
               ADC_PORT = TXD_VAL;
               R_PORT = 0;
               R_DDR = 0;			
@@ -379,7 +379,7 @@ ujtdone:;
  #else		/* WITH_UJT != 2 */
              uint16_t v0,v1,v2;
              ntrans.b = diodes.Anode[0];			// common anode must be emitter of UJT
-             ADC_DDR = pinmaskADC(diodes.Cathode[0]) | TXD_MSK;
+             ADC_DDR = pinmaskADC(diodes.Cathode[0]);
              ADC_PORT =  TXD_VAL;   // UJT B1 to GND
              R_PORT = pinmaskRL(ntrans.b) | pinmaskRL(diodes.Cathode[1]);	// UJT emitter and B2 with RL to VCC
              R_DDR = R_PORT;
@@ -391,7 +391,7 @@ ujtdone:;
 
              R_PORT = pinmaskRL(ntrans.b) | pinmaskRL(diodes.Cathode[0]);	// UJT emitter and B2 with RL to VCC
              R_DDR = R_PORT;
-             ADC_DDR = pinmaskADC(diodes.Cathode[1]) | TXD_MSK;
+             ADC_DDR = pinmaskADC(diodes.Cathode[1]);
              v2 = ADCconfig.U_AVCC - W5msReadADC(diodes.Cathode[0]);			// read voltage at B2
              R_PORT = pinmaskRL(diodes.Cathode[0]);	// UJT B2 with RL to VCC, emitter open
              R_DDR = R_PORT;

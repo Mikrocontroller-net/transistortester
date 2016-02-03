@@ -481,7 +481,7 @@ newff:;
       uint16_t cm = ((parcap/25) * (df>>5) )/(uint16_t)(f>>14);    // try to keep it in a 16-bit division, at the expense of accuracy; this measurement isn't very precise anyway
       // 25 should precisely be 25.6; rounded down to at least slightly compensate for rounding down due to truncation
 
-      lcd_set_cursor(0,10);
+      lcd_set_cursor(0,9);
       static const unsigned char str_Cm[] MEM_TEXT = "Cm="; lcd_MEM_string(str_Cm);
       DisplayValue(cm,-15,'F',2);
 

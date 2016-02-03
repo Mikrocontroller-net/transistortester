@@ -482,7 +482,34 @@
   /* The SPI interface uses four signals  RES, EN, RS and B0 */
   /* additional Chip Enable CE is defined */
   #ifdef STRIP_GRID_BOARD
-   #if STRIP_GRID_BOARD == 5
+   #if STRIP_GRID_BOARD == 2
+   // alternative connection of graphical LCD for the chinese T4 board with PD0 <--> LCD-REST patch
+   /* the Reset Pin, 0 = Reset */
+   #define HW_LCD_RES_DDR         DDRD
+   #define HW_LCD_RES_PORT        PORTD
+   #define HW_LCD_RES_PIN         0
+
+   /* serial clock input  (SCL) */
+   #define HW_LCD_EN_DDR          DDRD
+   #define HW_LCD_EN_PORT         PORTD
+   #define HW_LCD_EN_PIN          2
+
+   /* command / data switch  0=command 1=data */
+   #define HW_LCD_RS_DDR          DDRD
+   #define HW_LCD_RS_PORT         PORTD
+   #define HW_LCD_RS_PIN          3
+
+   /* serial data input SI | SDA */
+   #define HW_LCD_B0_DDR          DDRD
+   #define HW_LCD_B0_PORT         PORTD
+   #define HW_LCD_B0_PIN          1
+
+   /* Chip Enable input */
+   #define HW_LCD_CE_DDR          DDRD
+   #define HW_LCD_CE_PORT         PORTD
+   #define HW_LCD_CE_PIN          5
+
+   #elif STRIP_GRID_BOARD == 5
    // alternative connection of graphical LCD for the chinese T5 board
    /* the Reset Pin, 0 = Reset */
    #define HW_LCD_RES_DDR         DDRD

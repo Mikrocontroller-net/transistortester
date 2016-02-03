@@ -270,7 +270,7 @@ noavg:;
 
    byte HiPinR_L, LoADC;
    HiPinR_L = pinmaskRL(HighPin);
-   LoADC = pinmaskADC(LowPin) | TXD_MSK;
+   LoADC = pinmaskADC(LowPin);
 
    lc_fx=0;
    lc_qx=0;

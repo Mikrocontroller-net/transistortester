@@ -1499,10 +1499,10 @@ extern const unsigned char CyrillicMuIcon[] MEM_TEXT;	//µ
  #define pinmaskRL(pin) pgm_read_byte(PinRLRHADCtab+(pin))
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
  #define pinmaskRH(pin) pgm_read_byte(PinRLRHADCtab+(pin)+3)
- #define pinmaskADC(pin) (pgm_read_byte(PinRLRHADCtab+(pin)+6))
+ #define pinmaskADC(pin) (pgm_read_byte(PinRLRHADCtab+(pin)+6)) | TXD_MSK
 #else
  #define pinmaskRH(pin) (pinmaskRL(pin)<<1)
- #define pinmaskADC(pin) (pgm_read_byte(PinRLRHADCtab+(pin)+3))
+ #define pinmaskADC(pin) (pgm_read_byte(PinRLRHADCtab+(pin)+3)) | TXD_MSK
 #endif
 
 

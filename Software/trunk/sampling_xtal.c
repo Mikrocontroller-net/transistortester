@@ -73,8 +73,7 @@ static void minifourier(unsigned int uu[], int16_t freq, byte nuu, byte phase0)
 }
 
 
-byte rphase;
-static void findphase(unsigned int uu[], int16_t freq, byte nuu)
+static byte findphase(unsigned int uu[], int16_t freq, byte nuu)
 {
    // find phase at which minifourier().sumi is maximal for given frequency
    // (poor man's arctangent)
@@ -87,7 +86,7 @@ static void findphase(unsigned int uu[], int16_t freq, byte nuu)
       if (sumq<0) phase+=bit;
       bit>>=1;
    }
-   rphase=phase;
+   return phase;
 }
 
 
@@ -159,17 +158,17 @@ static uint16_t findfreqmax(unsigned int uu[], byte nuu)
    // now try to find maximum with more precision, by searching for equally high points on both skirts
    // binary search; may not be the best idea, some smoothing/integration (like in peaksearch()) might be better
    {
-      ii=256;
-      imax2-=128;
-      while (ii) {
-         imax2+=ii;
-         findphase(uu,imax2+128,nuu);
+      i=128;
+      do {
+         imax2+=i;
+         findphase(uu,imax2+0,nuu);
          int16_t a=sumi;
-         findphase(uu,imax2-128,nuu);
-         if (a<sumi) imax2-=ii;
-         ii>>=1;
-      }
-     wdt_reset();
+         findphase(uu,imax2-256,nuu);
+         if (a<sumi) imax2-=i;
+         i>>=1;
+      } while (i);
+      imax2-=128;
+      wdt_reset();
    }
    show_progress();
    return imax2;
@@ -379,12 +378,13 @@ newff:;
       uint8_t probingstepsize=0;
       uint8_t ssdstep=1;
       uint8_t ph0;         // starting phase, at ssd=5
+      uint8_t rphase;
       // we start at ssd=5, because this is the minimum meaningful value because of the duration of the excitation pulses
       for (ssd=5;ssd<ff/2;ssd+=ssdstep) {
          samplingADC_freqgen_sck((ff<<smplADC_span)|wht|samplingADC_sck, uu, 255, HiPinR_L|LoPinR_L, HiPinR_H|LoPinR_L, 0|LoPinR_L, HiPinR_L|LoPinR_L, dmax, ssd);
 //   for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_int(ssd); uart_newline(); wdt_reset(); }
          R_DDR=0;   // switch off low-side bias current between measurements
-         findphase(uu+128,imax2,127);
+         rphase=findphase(uu+128,imax2,127);
          if (ssd==5) { ph0=rphase; rphase=0; }
          else {
             rphase-=ph0;
@@ -426,7 +426,8 @@ newff:;
    // so an integer number of times fclk/ff needs to be added
    // the real frequency must be "near" imax1/65536*fclk = fclk/65536/ff * imax1*ff
    f=imax2;
-   while (f+32768 < (uint32_t)imax1*ff) f+=65536ul;
+//   while (f+32768 < (uint32_t)imax1*ff) f+=65536ul;   // older version, takes more flash
+   while (((f+32768)>>8) < (imax1>>8)*ff) f+=65536ul; 
    // assuming fclk = 16.000000000 MHz:
    //      f = f*16000000/65536/ff;
    //      f = f*15625/64/ff;
@@ -486,16 +487,15 @@ newff:;
       lcd_next_line(0);
       static const unsigned char str_par[] MEM_TEXT = "par "; lcd_MEM_string(str_par);
 
-      DisplayValue(f,0,'H',6);
-      lcd_data('z');
+      DisplayValue(f,0,'H',6); lcd_data('z');
    } else {
       // no crystal, then just ceramic resonator, only show a single resonant frequency
       // also use this code for crystals if ff=1, practically speaking, if we have an 8 MHz crystal, since then precision measurements are not possible
       lcd_clear_line2();
-      DisplayValue(f,0,'H',4);
-      lcd_data('z');
+      DisplayValue(f,0,'H',4); lcd_data('z');
    }
 
 }
+
 
 #endif   // WITH_XTAL

@@ -308,7 +308,7 @@
            ) 
            // note: there also exist CUJTs (complementary UJTs); they seem to be (even) rarer than UJTs, and are not supported for now
            {
- #if WITH_UJT == 2
+ #ifdef WITH_SamplingADC
              uint8_t B1pin, B2pin, Epin;
              Epin = diodes.Anode[0];
              B1pin = diodes.Cathode[0];
@@ -376,7 +376,7 @@ ujtdone:;
 //   uart_newline(); for (i=0;i<64;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i<<2]); uart_newline(); wdt_reset(); }
 //   uart_newline(); for (i=0;i<64;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
 //              myuart_putc('v'); myuart_putc(' '); uart_int(min); uart_int(max); uart_newline();
- #else		/* WITH_UJT != 2 */
+ #else		/* ! WITH_SamplingADC */
              uint16_t v0,v1,v2;
              ntrans.b = diodes.Anode[0];			// common anode must be emitter of UJT
              ADC_DDR = pinmaskADC(diodes.Cathode[0]);
@@ -412,12 +412,12 @@ ujtdone:;
                 PartFound = PART_UJT;
              }
            
- #endif		/* WITH_UJT != 2 */
+ #endif		/* defined WITH_SamplingADC */
         }
 #endif		/* defined WITH_UJT */
 
 #ifdef WITH_XTAL
-        if (PartFound==PART_NONE || PartFound==PART_CAPACITOR) {
+        if (PartFound==PART_NONE || ((PartFound==PART_CAPACITOR) && (cap.cpre_max == -12))) {
            // still not recognized anything? then check for ceramic resonator or crystal
            // these tests are time-consuming, so we do them last, and only on TP1/TP3
            sampling_test_xtal();
@@ -477,7 +477,7 @@ ujtdone:;
       static const unsigned char UJT_str[] MEM_TEXT = "UJT";
       lcd_MEM_string(UJT_str);
       PinLayout('1','E','2');
- #if WITH_UJT == 2
+ #ifdef WITH_SamplingADC
       static const unsigned char eta_str[] MEM_TEXT = " eta=";
       lcd_next_line(0);
       ResistorChecked[ntrans.e - TP1 + ntrans.c - TP1 - 1] = 0;	// forget last resistance measurement
@@ -485,17 +485,17 @@ ujtdone:;
       DisplayValue(ResistorVal[ntrans.e - TP1 + ntrans.c - TP1 - 1],-1,LCD_CHAR_OMEGA,2);
       lcd_MEM_string(eta_str);		//"eta="
       DisplayValue(ntrans.gthvoltage,0,'%',3);
- #else
+ #else /* ! WITH_SamplingADC */
       static const unsigned char R12_str[] MEM_TEXT = "R12=";
       lcd_next_line(0);
       lcd_MEM_string(R12_str);		//"R12="
       DisplayValue(ResistorVal[ntrans.e - TP1 + ntrans.c - TP1 - 1],-1,LCD_CHAR_OMEGA,2);
       lcd_data(',');
       DisplayValue(((RR680PL * (unsigned long)(ADCconfig.U_AVCC - ntrans.uBE)) / ntrans.uBE)-RRpinPL,-1,LCD_CHAR_OMEGA,3);
- #endif
+ #endif	 /* WITH_SamplingADC */
       goto tt_end;
    }
-#endif
+#endif /* WITH_UJT */
 
   if (PartFound == PART_CAPACITOR) {
 #if FLASHEND > 0x3fff

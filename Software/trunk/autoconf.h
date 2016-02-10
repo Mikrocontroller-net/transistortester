@@ -200,6 +200,7 @@
   #define MEM2_read_byte(a)  eeprom_read_byte(a)
   #define MEM2_read_word(a)  eeprom_read_word(a)
   #define lcd_MEM2_string(a)  lcd_fix_string(a)
+  #define use_lcd_pgm
  #else
   #define MEM2_TEXT PROGMEM
   #define MEM2_read_byte(a)  pgm_read_byte(a)

@@ -44,7 +44,7 @@
     }  /* end while */
 #else
     lcd_clear();
-    lcd_MEM_string(HelpCalibration_str);	// only short message!
+    lcd_pgm_string(HelpCalibration_str);	// only short message!
 #endif
     wait_for_key_ms(TIME_TO_READ);	// key pressed
   }

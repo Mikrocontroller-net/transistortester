@@ -159,9 +159,9 @@ void DisplayValue(signed long signedValue, int8_t Exponent, unsigned char Unit, 
 
 #ifdef NO_NANO
 
-  if (Index == 1)
+  if (Index == 2)
 
-    { /* use no nano */
+    { /* use no nano, prefix 'f','p','n','u','m',' ','k','M' */
 
       Index++;				/* use mikro instead of nano */
 

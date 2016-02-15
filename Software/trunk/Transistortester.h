@@ -120,7 +120,9 @@ End of configuration
  #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
+ #ifdef WITH_ROTARY_CHECK
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Impulsdrehgeber";
+ #endif
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','K','o','r','r','e','k','t','u','r',0};
    const unsigned char TURN_str[] MEM2_TEXT = "drehen!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Selbsttest";
@@ -168,7 +170,9 @@ End of configuration
  #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
+ #ifdef WITH_ROTARY_CHECK
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "encoder rotativo";
+ #endif
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','C','o','r','r','e','c','t','i','o','n',0};
    const unsigned char TURN_str[] MEM2_TEXT = "turno!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Autotest";
@@ -217,7 +221,9 @@ End of configuration
  #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
+ #ifdef WITH_ROTARY_CHECK
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Enkoder obrotowy";
+ #endif
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','c','o','r','e','c','t','a',0};
    const unsigned char TURN_str[] MEM2_TEXT = "Pokrec!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Auto-test";
@@ -266,7 +272,9 @@ End of configuration
  #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
+ #ifdef WITH_ROTARY_CHECK
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotacni koder";
+ #endif
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','k','o','r','e','k','c','e',0};
    const unsigned char TURN_str[] MEM2_TEXT = "otocte!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Autotest";
@@ -315,7 +323,9 @@ End of configuration
  #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
+ #ifdef WITH_ROTARY_CHECK
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Rotacny koder";
+ #endif
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','K','o','r','e','k','c','i','a',0};
    const unsigned char TURN_str[] MEM2_TEXT = "Krut!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Plna kalibracia";	//"Samotestovanie";
@@ -363,7 +373,9 @@ End of configuration
  #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
+ #ifdef WITH_ROTARY_CHECK
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotary encoder";
+ #endif
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','k','o','r','r','e','k','c','i','j','a',0};
    const unsigned char TURN_str[] MEM2_TEXT = "turn!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Selftest";
@@ -413,7 +425,9 @@ End of configuration
  #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
+ #ifdef WITH_ROTARY_CHECK
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Rotary encoder";
+ #endif
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','c','o','r','r','e','c','t','i','e',0};
    const unsigned char TURN_str[] MEM2_TEXT = "rotaren!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Zelftest";
@@ -462,7 +476,9 @@ End of configuration
  #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
+ #ifdef WITH_ROTARY_CHECK
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "encoder rotativo";
+ #endif
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','C','o','r','r','e','c','t','i','o','n',0};
    const unsigned char TURN_str[] MEM2_TEXT = "rodar!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Autoteste";
@@ -510,7 +526,9 @@ End of configuration
  #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
+ #ifdef WITH_ROTARY_CHECK
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "encoder rotativo";
+ #endif
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','C','o','r','r','e','c','c','i','o','n',0};
    const unsigned char TURN_str[] MEM2_TEXT = "rotar!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Calibracion...";
@@ -562,7 +580,9 @@ End of configuration
  #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
+ #ifdef WITH_ROTARY_CHECK
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Rotary encoder";
+ #endif
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','C','o','r','r','e','c','t','i','o','n',0};
    const unsigned char TURN_str[] MEM2_TEXT = "forgat!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "On-teszt mod";
@@ -610,7 +630,9 @@ End of configuration
  #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
+ #ifdef WITH_ROTARY_CHECK
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotary encoder";
+ #endif
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','k','o','r','e','k','c','i','j','a',0};
    const unsigned char TURN_str[] MEM2_TEXT = "turn!";      //???
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Testuoju";
@@ -663,7 +685,9 @@ End of configuration
  #else
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
  #endif
+ #ifdef WITH_ROTARY_CHECK
    const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotary encoder";
+ #endif
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','c','o','r','r','e','c','t','i','o','n',0};
    const unsigned char TURN_str[] MEM2_TEXT = "turn!";	
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Selftest";
@@ -1365,7 +1389,9 @@ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR
   extern const unsigned char OFF_str[] MEM2_TEXT ;
   extern const unsigned char F_GEN_str[] MEM2_TEXT ;
   extern const unsigned char PWM_10bit_str[] MEM2_TEXT ;
+ #ifdef WITH_ROTARY_CHECK
   extern const unsigned char RotaryEncoder_str[] MEM2_TEXT ;
+ #endif
   extern const unsigned char SetCapCorr_str[] MEM2_TEXT ;
   extern const unsigned char TURN_str[] MEM2_TEXT ;	
   extern const unsigned char FULLCHECK_str[] MEM2_TEXT ;

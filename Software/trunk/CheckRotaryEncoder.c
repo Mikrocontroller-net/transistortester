@@ -9,6 +9,7 @@
 // CheckRotaryEndoder
 
 #ifdef WITH_MENU
+ #ifdef WITH_ROTARY_CHECK
 void CheckRotaryEncoder(void) {
   unsigned int TP13tab[4];	//count of state of the bits TP1 and TP3
   unsigned int TP23tab[4];	//count of state of the bits TP2 and TP3
@@ -161,4 +162,5 @@ end_rotary:
   R_DDR = 0;	// all resistor ports to input
   ADC_DDR = TXD_MSK;	// switch ADC port to input
 }
-#endif
+ #endif  /* WITH_ROTARY_CHECK */
+#endif /* WITH_MENU */

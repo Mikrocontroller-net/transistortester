@@ -286,6 +286,9 @@
 //------------------=========----------
 #elif PROCESSOR_TYP == 644
 //------------------=========----------
+ #ifndef WITH_ROTARY_CHECK
+  #define WITH_ROTARY_CHECK		/* ROTARY Check is default for 644 */
+ #endif
   #define MCU_STATUS_REG MCUCR
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1
@@ -312,6 +315,9 @@
 //------------------=========----------
 #elif PROCESSOR_TYP == 1280
 //------------------=========----------
+ #ifndef WITH_ROTARY_CHECK
+  #define WITH_ROTARY_CHECK		/* ROTARY Check is default for 1280 */
+ #endif
   #define MCU_STATUS_REG MCUCR
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1

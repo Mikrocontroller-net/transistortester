@@ -54,13 +54,23 @@
  #define MODE_ESR 4		/* ESR measurement in circuit */
  #define MODE_RESIS 5		/* ResistorCheck at TP1:TP3 */
  #define MODE_CAP13 6		/* Capacitor check at TP1:TP3 */
- #define MODE_ROTARY 7		/* Test Rotary Switch */
- #define MODE_BIG_CAP_CORR 8	/* Correction for big caps */
+ #define MODE_BIG_CAP_CORR 7	/* Correction for big caps */
+ #define NNN 7
+ #ifdef WITH_ROTARY_CHECK
+ #define MODE_ROTARY 8		/* Test Rotary Switch */
+ #undef NNN
  #define NNN 8
- #ifdef WITH_SELFTEST
-  #define MODE_SELFTEST 9	/* full selftest function with calibration */
-  #undef NNN
-  #define NNN 9
+  #ifdef WITH_SELFTEST
+   #define MODE_SELFTEST 9	/* full selftest function with calibration */
+   #undef NNN
+   #define NNN 9
+  #endif
+ #else
+  #ifdef WITH_SELFTEST
+   #define MODE_SELFTEST 8	/* full selftest function with calibration */
+   #undef NNN
+   #define NNN 8
+  #endif
  #endif
  #ifdef WITH_VEXT
   #define MODE_VEXT (NNN+1)	/* external voltage measurement and zener voltage */
@@ -217,9 +227,11 @@ void function_menu() {
 	   lcd_clear();
            show_Cap13();		// measure capacitor at TP1 and TP3
         }
+  #ifdef WITH_ROTARY_CHECK
         if (func_number == MODE_ROTARY) {
            CheckRotaryEncoder();		// check rotary encoder
         }
+  #endif
         if (func_number == MODE_BIG_CAP_CORR) {
            set_big_cap_corr();
         }
@@ -278,7 +290,9 @@ void message2line(uint8_t number) {
      if (number == MODE_ESR) lcd_MEM2_string(C_ESR_str);
      if (number == MODE_RESIS) lcd_MEM_string(RESIS_13_str);
      if (number == MODE_CAP13) lcd_MEM_string(CAP_13_str);
+ #ifdef WITH_ROTARY_CHECK
      if (number == MODE_ROTARY) lcd_MEM2_string(RotaryEncoder_str);
+ #endif
      if (number == MODE_BIG_CAP_CORR) lcd_MEM2_string(SetCapCorr_str);
  #ifdef WITH_SELFTEST
      if (number == MODE_SELFTEST) lcd_MEM2_string(FULLCHECK_str);

@@ -252,7 +252,26 @@ void sampling_test_xtal()
          R_DDR=0;   // switch off low-side current after measurement
          uint16_t sumd=0;
          sumd=sumabs(uu+1,39);
-         if (sumd>maxsumd) { maxsumd=sumd; dmax=d; }
+         if (sumd>maxsumd) {
+ #if (DEB_SAM == 10)
+      uint16_t ii;
+      for (ii=0;ii<40;ii+=4) {
+         if (ii == 0) {
+            lcd_clear();
+            DisplayValue16(d,0,' ',4);
+            DisplayValue16(ds,0,' ',3);
+            DisplayValue16(sumd,0,' ',5);
+            lcd_clear();
+         }
+         DisplayValue16(uu[ii],0,' ',5);
+         DisplayValue16(uu[ii+1],0,' ',5);
+         DisplayValue16(uu[ii+2],0,' ',5);
+         DisplayValue16(uu[ii+3],0,' ',5);
+      } /* end for ii */
+ #endif
+            maxsumd=sumd;
+            dmax=d;
+         }
          wdt_reset();
 //         myuart_putc('b'); myuart_putc(' '); uart_int(d); uart_int(sumd); uart_newline(); 
       }
@@ -269,11 +288,12 @@ void sampling_test_xtal()
    // now check: in the second phase, we should have a significantly larger oscillation amplitude because of the longer stimulus
    // if not, then there's apparently no crystal
 //         myuart_putc('S'); myuart_putc(' '); uart_int(maxsumd0); uart_int(maxsumd); uart_newline(); 
-   if (maxsumd>maxsumd0+(maxsumd0>>1))
+//   if (maxsumd>maxsumd0+(maxsumd0>>1))
+   if (maxsumd > (maxsumd0+140))
    {
       PartFound=PART_XTAL;
    }
-}
+} /* end sampling_test_xtal */
 
 
 

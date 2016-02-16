@@ -34,6 +34,9 @@ PARTNO = m1284p
 # the external voltage measurement and C+ESR measurement can be selected. Of course you can also return to
 # the normal transistor tester function and switch off the tester.
 CFLAGS += -DWITH_MENU
+#
+# For ATmega328 the menu function "rotary encoder check" is only enabled with the WITH_ROTARY_CHECK option.
+#CFLAGS += -DWITH_ROTARY_CHECK
 
 # With the menu item "Show data" the used icons and the font data are displayed for
 # graphical displays after the presentation of calibration data.

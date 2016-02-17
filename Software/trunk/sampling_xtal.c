@@ -513,7 +513,7 @@ newff:;
 
       f+=df;   // back to parallel resonant frequency
 
-      lcd_next_line(0);
+      lcd_next_line_wait(0);
       static const unsigned char str_par[] MEM_TEXT = "par "; lcd_MEM_string(str_par);
 
       DisplayValue(f,0,'H',6); lcd_data('z');

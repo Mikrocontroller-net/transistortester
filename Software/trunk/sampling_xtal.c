@@ -24,6 +24,7 @@ typedef uint8_t byte;
 
 
 
+//#define DEB_SAM 10
 
 
 
@@ -233,29 +234,39 @@ void sampling_test_xtal()
    }
 
    // next try a bunch of pulses, at different intervals
-   // first try all possible intervals in somewhat coarse steps for a short while
-   // next repeat, but with finer steps in a limited range for a longer while (i.e., about 4 times as many pulses)
-   uint16_t d;
-   uint16_t maxsumd0;
-   uint16_t maxsumd=0;
+   // first try all possible intervals in somewhat coarse steps
+   // next repeat, but with finer steps in a limited range around the best one found in the first iteration
+   // both times, we check how much oscillation there is during 10 consecutive samples (not more, to save time)
+   // the pulse interval having most oscillation is of course the one we want
+   // in both scans we also keep track of the "average" amount of oscillation over all pulse intervals
+   // in the first scan, this is a reasonable measure of the "background" level, i.e., on freqs where the crystal is not excited
+   // the second scan only covers frequencies very near the peak, so there the average is a robust (outlier-insensitive) measure for how much response we get from the crystal
+   // we declare a crystal detect if that second average is at least twice the first
+   uint16_t maxsumd=0;  // highest amount of oscillation seen so far
    uint16_t d0,d1,ds;   // minimum, maximum interval, and stepsize
-   d0=0;
+   uint16_t avg;        // sum of amount of oscillation, to later computer average from, for current scan
+   uint8_t avg0;        // same average but from first scan, times 2, since it'll be used as threshold
+
+   d0=0;                // parameters for the first scan: cover the entire useful range, in steps of 4
    d1=8*256+64;
-   ds=16/1;
+   ds=4;
    wht|=samplingADC_freq;
+   wht|=samplingADC_many;
    for (;;) { 
+      avg=0;
+      uint16_t d;
       for (d=d0;d<d1;d+=ds) {
          // we acquire data for a short time (only 40 samples), because we need to try so many different intervals, otherwise it would take too long
-         samplingADC_freqgen((1<<smplADC_span)|wht, uu, 40, HiPinR_L, HiPinR_H, 0, HiPinR_L, d);
+         samplingADC_freqgen((1<<smplADC_span)|wht, uu, 10, HiPinR_L, HiPinR_H, 0, HiPinR_L, d);
 //   { byte i;for (i=0;i<200;i++) { myuart_putc('B'); myuart_putc(' '); uart_int(uu[i]); uart_int(d); uart_int(i); uart_newline(); wdt_reset(); } }
 
          R_DDR=0;   // switch off low-side current after measurement
          uint16_t sumd=0;
-         sumd=sumabs(uu+1,39);
+         sumd=sumabs(uu+1,9);
          if (sumd>maxsumd) {
  #if (DEB_SAM == 10)
       uint16_t ii;
-      for (ii=0;ii<40;ii+=4) {
+      for (ii=0;ii<10;ii+=4) {
          if (ii == 0) {
             lcd_clear();
             DisplayValue16(d,0,' ',4);
@@ -272,24 +283,22 @@ void sampling_test_xtal()
             maxsumd=sumd;
             dmax=d;
          }
+         avg+=sumd;
          wdt_reset();
 //         myuart_putc('b'); myuart_putc(' '); uart_int(d); uart_int(sumd); uart_newline(); 
       }
-//         myuart_putc('S'); myuart_putc(' '); uart_int(dmax); uart_int(maxsumd); uart_newline(); 
+//         myuart_putc('S'); myuart_putc(' '); uart_int(dmax); uart_int(maxsumd); uart_int(avg); uart_newline(); 
       if (ds==1) break;  // if we were already in the second (fine-grained) phase, break
-      maxsumd0=maxsumd;
-      ds=1;              // otherwise, set variables up for the second phase
-      d0=dmax-48;
-      if (d0&0x8000) d0=0;
-      d1=dmax+48;
-      wht|=samplingADC_many;
-//      d0=0; d1=8*256+64;
+                         // otherwise, set variables up for the second scan
+      avg0=avg>>8;       // compute twice the average amount of oscillation of the first scan; strictly we should divide avg by (d1-d0)/ds/2, but in the first scan that's 264, which we approximate by 256
+      ds=1;              // parameters for second scan: only a narrow range around the peak we found, in minimal steps
+      d0=dmax-8;
+      d1=dmax+8;
+      if (d0&0x8000) { d0=0; d1=16; }
    }
-   // now check: in the second phase, we should have a significantly larger oscillation amplitude because of the longer stimulus
-   // if not, then there's apparently no crystal
-//         myuart_putc('S'); myuart_putc(' '); uart_int(maxsumd0); uart_int(maxsumd); uart_newline(); 
-//   if (maxsumd>maxsumd0+(maxsumd0>>1))
-   if (maxsumd > (maxsumd0+140))
+   avg>>=4;              // compute average; in the second scan, we should divide by d1-d0 = 16
+//         myuart_putc('S'); myuart_putc(' '); uart_int(avg); uart_int(avg0); uart_newline(); 
+   if (avg > avg0)
    {
       PartFound=PART_XTAL;
    }
@@ -405,12 +414,12 @@ newff:;
 //   for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_int(ssd); uart_newline(); wdt_reset(); }
          R_DDR=0;   // switch off low-side bias current between measurements
          rphase=findphase(uu+128,imax2,127);
+//         rphase=findphase(uu,imax2,255);
          if (ssd==5) { ph0=rphase; rphase=0; }
          else {
             rphase-=ph0;
             if ((ph1l^rphase) & 0x80) {
                // most significant bit changed
-//               if (!(((ph1l<<1)^ph1l) & 0x80)) 
                if (( (rphase-ph1l)^ph1l ) &0x80)
                {
                   // and we were near 0 or 255

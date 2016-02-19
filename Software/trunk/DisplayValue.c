@@ -8,8 +8,8 @@
 
 
 
-#ifdef WITH_XTAL
-#define WITH_MENU      // to allow more digits for crystal frequency
+#if defined(WITH_XTAL) || defined(WITH_MENU)
+#define LONG_OUTPUT      // to allow more digits for crystal frequency
 #endif
 
 
@@ -40,7 +40,7 @@
  *  - unit character (0 = none)
 
  *  digits = 2 to 4 
- *  for option WITH_MENU digits can also be 5, 6 and 7
+ *  for option LONG_OUTPUT  digits can also be 5, 6 and 7
 
  */
 
@@ -50,7 +50,7 @@ void DisplayValue(signed long signedValue, int8_t Exponent, unsigned char Unit, 
 
 //  char OutBuffer[15];
 
-#ifdef WITH_MENU
+#ifdef LONG_OUTPUT
   unsigned long     Limit;
 #else
   unsigned int      Limit;
@@ -79,7 +79,7 @@ void DisplayValue(signed long signedValue, int8_t Exponent, unsigned char Unit, 
   if (digits == 3) Limit = 1000;	/* scale value down to 3 digits */
 
   if (digits == 4) Limit = 10000;	/* scale value down to 4 digits */
-#ifdef WITH_MENU
+#ifdef LONG_OUTPUT
   if (digits == 5) Limit = 100000;	/* scale value down to 5 digits */
   if (digits == 6) Limit = 1000000;	/* scale value down to 6 digits */
   if (digits == 7) Limit = 10000000;	/* scale value down to 7 digits */
@@ -137,7 +137,7 @@ void DisplayValue(signed long signedValue, int8_t Exponent, unsigned char Unit, 
 
   /* convert value into string */
 
-#ifdef WITH_MENU
+#ifdef LONG_OUTPUT
   ultoa(Value, OutBuffer, 10);
 #else
   utoa((unsigned int)Value, OutBuffer, 10);
@@ -145,7 +145,7 @@ void DisplayValue(signed long signedValue, int8_t Exponent, unsigned char Unit, 
 
   Length = strlen(OutBuffer);
 
-#ifdef WITH_MENU
+#ifdef LONG_OUTPUT
  #ifdef NO_NANO
   if ((Length > (4+Offset))  && (Index != 0))
  #else

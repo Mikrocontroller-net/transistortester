@@ -248,6 +248,7 @@ void sampling_test_xtal()
    uint8_t avg0;        // same average but from first scan, times 2, since it'll be used as threshold
 
    d0=0;                // parameters for the first scan: cover the entire useful range, in steps of 4
+   avg0 = 0;
    d1=8*256+64;
    ds=4;
    wht|=samplingADC_freq;

@@ -252,7 +252,7 @@
 /* P1:P0 = 00 external input, P1:P0 = 10 high frequency crystal, P1:P0 = 11 low frequency crystal */
  #define FINP_DDR DDRC
  #define FINP_PORT PORTC
- #ifdef STRIP_GRID_BOARD
+ #if ((STRIP_GRID_BOARD & 0x10) == 0x10)
   // 00 = external, 10 = HF Xtal, 11 = LF Xtal
   #define FINP_P0 PC2		/* Y1 port of HC4052 is selected with 10 */
   #define FINP_P1 PC1
@@ -631,7 +631,7 @@
  /* PSB must be connected to GND and RS(CS) and RESET must be connected to 1. */
 				/* --------------------------------------------- */
  #if PROCESSOR_TYP == 644	/* mega324/644/1284 with serial ST7920 interface */
-  #ifdef STRIP_GRID_BOARD
+  #if defined(STRIP_GRID_BOARD) && ((STRIP_GRID_BOARD & 0xef) != 0)
    #define HW_LCD_EN_PORT         PORTB
    #define HW_LCD_EN_DDR          DDRB
    #define HW_LCD_EN_PIN          6
@@ -781,7 +781,7 @@
  /* The 4-bit parallel Interface is usually used for the character display */
 				/* --------------------------------------------- */
  #if PROCESSOR_TYP == 644	/* connection for 4-bit parallel interface and mega324/644/1284 */
-  #ifdef STRIP_GRID_BOARD
+  #if defined(STRIP_GRID_BOARD) && ((STRIP_GRID_BOARD & 0xef) != 0)
  // special Layout for strip grid board with the 4-bit parallel interface and ATmega324/644/1284
    #define HW_LCD_EN_PORT         PORTB
    #define HW_LCD_EN_PIN          2

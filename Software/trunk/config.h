@@ -252,8 +252,14 @@
 /* P1:P0 = 00 external input, P1:P0 = 10 high frequency crystal, P1:P0 = 11 low frequency crystal */
  #define FINP_DDR DDRC
  #define FINP_PORT PORTC
- #define FINP_P0 PC1
- #define FINP_P1 PC2
+ #ifdef STRIP_GRID_BOARD
+  // 00 = external, 10 = HF Xtal, 11 = LF Xtal
+  #define FINP_P0 PC2		/* Y1 port of HC4052 is selected with 10 */
+  #define FINP_P1 PC1
+ #else
+  #define FINP_P0 PC1		/* Y2 port of HC4052 is selected with 10 */
+  #define FINP_P1 PC2
+ #endif
 #elif PROCESSOR_TYP == 1280
 /* ------------------------------------------------------------------------- */
 /* define the input pin for frequency measuring and also the pin change monitoring port for measuring the periode */

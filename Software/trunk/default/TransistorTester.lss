@@ -19,19 +19,19 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY
   7 .debug_aranges 00000410  00000000  00000000  00004d10  2**3
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_info   00007163  00000000  00000000  00005120  2**0
+  8 .debug_info   0000716f  00000000  00000000  00005120  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_abbrev 00001994  00000000  00000000  0000c283  2**0
+  9 .debug_abbrev 00001994  00000000  00000000  0000c28f  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   00001e1e  00000000  00000000  0000dc17  2**0
+ 10 .debug_line   00001e1e  00000000  00000000  0000dc23  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  000006fc  00000000  00000000  0000fa38  2**2
+ 11 .debug_frame  000006fc  00000000  00000000  0000fa44  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000fe5  00000000  00000000  00010134  2**0
+ 12 .debug_str    00000fee  00000000  00000000  00010140  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    00003cae  00000000  00000000  00011119  2**0
+ 13 .debug_loc    00003cae  00000000  00000000  0001112e  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000018  00000000  00000000  00014dc7  2**0
+ 14 .debug_ranges 00000018  00000000  00000000  00014ddc  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -1413,7 +1413,7 @@ void DisplayValue(signed long signedValue, int8_t Exponent, unsigned char Unit, 
      596:	4a e0       	ldi	r20, 0x0A	; 10
   /* convert value into string */
 
-#ifdef WITH_MENU
+#ifdef LONG_OUTPUT
   ultoa(Value, OutBuffer, 10);
 #else
   utoa((unsigned int)Value, OutBuffer, 10);
@@ -10909,7 +10909,7 @@ TyUfAusgabe:
     34cc:	09 f0       	breq	.+2      	; 0x34d0 <main+0x20a>
     34ce:	df c0       	rjmp	.+446    	; 0x368e <main+0x3c8>
         show_Cap13();		// repeated capacity measurement
-        goto loop_start;
+        goto shut_off;		// key was pressed or timeout
      }
      show_cap(0);		// show capacity in normal way and measure additional parameters
 #else
@@ -11943,7 +11943,7 @@ resistor_out:
     3b56:	30 91 5a 01 	lds	r19, 0x015A
           // is the TP1:TP3 resistor and no additional diode
           show_Resis13();		// call of the special resistor measurement
-          goto loop_start;			// key is pressed!
+          goto shut_off;		// key is pressed or timeout
        }
  #endif
        show_resis(rpins.pb[0],rpins.pb[1],0);

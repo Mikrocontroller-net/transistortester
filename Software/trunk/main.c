@@ -501,7 +501,7 @@ ujtdone:;
 #if FLASHEND > 0x3fff
      if ((cap.ca + cap.cb) == (TP1 + TP3)) {
         show_Cap13();		// repeated capacity measurement
-        goto loop_start;
+        goto shut_off;		// key was pressed or timeout
      }
      show_cap(0);		// show capacity in normal way and measure additional parameters
 #else
@@ -1111,7 +1111,7 @@ resistor_out:
        if ((ResistorList[0] == 1) && (NumOfDiodes == 0)) {
           // is the TP1:TP3 resistor and no additional diode
           show_Resis13();		// call of the special resistor measurement
-          goto loop_start;			// key is pressed!
+          goto shut_off;		// key is pressed or timeout
        }
  #endif
        show_resis(rpins.pb[0],rpins.pb[1],0);
@@ -1272,6 +1272,7 @@ wait_again:
   }
  #endif
   // only one Measurement requested, shut off
+shut_off:
  #if FLASHEND > 0x3fff
   // look, if the tester is uncalibrated (C-source will be included directly)
   lcd_cursor_off();

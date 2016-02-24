@@ -26,8 +26,8 @@ CFLAGS = -Wall
 # atmega1284: m1284p
 # atmega1280: m1280	// see config.h for different port setting
 # atmega2560: m2560	// see config.h for different port setting
-PARTNO = m644p
-#PARTNO = m1284p
+#PARTNO = m644p
+PARTNO = m1284p
 
 # The WITH_MENU option enables a dialog to choose some additional functions.
 # Currently a frequency measurement at ATmega Pin PD4, a frequency generator at TP2 ,
@@ -59,7 +59,7 @@ CFLAGS += -DWITH_MENU
 # WITH_ROTARY_COUNT to 5 for getting the best resolution.
 # You can also use two separate push-buttons for Up and Down instead ot the rotary encoder.
 # You must set the WITH_ROTARY_SWITCH to 4 for the UP/DOWN push-buttons.
-CFLAGS += -DWITH_ROTARY_SWITCH=4
+#CFLAGS += -DWITH_ROTARY_SWITCH=4
 # the option CHANGE_ROTARY_DIRECTION changes the rotary direction by swap of switches
 #CFLAGS += -DCHANGE_ROTARY_DIRECTION
 # The best solution for connecting the rotary switch is PB5 and PB7, because this setting can be used
@@ -138,7 +138,7 @@ CFLAGS += -DLCD_ST7565_H_FLIP=1
 # With LCD_ST7565_H_OFFSET you can specify a horizontal pixel offset to the display window.
 # The controller knows 132 horizontal pixel, the window shows only 128 pixel.
 # OFFSET values can vary for the connected display type to 0, 2 or 4.
-CFLAGS += -DLCD_ST7565_H_OFFSET=2
+CFLAGS += -DLCD_ST7565_H_OFFSET=0
 # If LCD_ST7565 option is set to 1: Flip the display's vertical direction
 CFLAGS += -DLCD_ST7565_V_FLIP=1
 # The contrast value can be predefined with the constant VOLUME_VALUE
@@ -192,6 +192,7 @@ CFLAGS += -DWITH_SELFTEST
 #CFLAGS += -DNO_COMMON_COLLECTOR_HFE
 #CFLAGS += -DNO_COMMON_EMITTER_HFE
 
+
 # AUTO_CAL will enable the autocalibration of zero offset of capacity measurement and
 # also the port output resistance values will be find out in SELFTEST section.
 # With a external capacitor a additionally correction of reference voltage is figured out for 
@@ -209,6 +210,10 @@ CFLAGS += -DSHORT_UNCAL_MSG
 # to extend the resolution of capacity measurement to about 0.01pF.
 # Setting the WITH_SamplinADC to 1 enables this feature for capacity values below 100pF.
 WITH_SamplingADC = 1
+
+# If OP_MHZ is set to 16 (16 MHz operation) and SamplingADC is enabled,
+# you can enable the Xtal and ceramic resonator measurement at TP1:3 wit option
+CFLAGS += -DWITH_XTAL
 
 
 # The WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring.
@@ -265,7 +270,7 @@ CFLAGS += -DESR_ZERO=20
 CFLAGS += -DNO_AREF_CAP
 
 # The OP_MHZ option tells the software the Operating Frequency of your ATmega.
-OP_MHZ = 8
+OP_MHZ = 16
 
 # Restart from sleep mode will be delayed for 16384 clock tics with crystal mode.
 # Operation with the internal RC-Generator or external clock will delay the restart by only 6 clock tics.

@@ -289,6 +289,12 @@
  #ifndef WITH_ROTARY_CHECK
   #define WITH_ROTARY_CHECK		/* ROTARY Check is default for 644 */
  #endif
+ #ifndef WITH_UJT
+  #define WITH_UJT
+ #endif
+ #ifndef WITH_PUT
+  #define WITH_PUT
+ #endif
   #define MCU_STATUS_REG MCUCR
   #define ADC_COMP_CONTROL ADCSRB
   #define TI1_INT_FLAGS TIFR1

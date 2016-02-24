@@ -1284,7 +1284,8 @@ shut_off:
  #endif
   ON_PORT &= ~(1<<ON_PIN);		//switch off power
   wait_for_key_ms(0); //never ending loop 
-#else
+#else   /* no POWER_OFF */
+shut_off:
   // look, if the tester is uncalibrated (C-source will be included directly)
   lcd_cursor_off();
   #include "HelpCalibration.c"

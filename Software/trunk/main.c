@@ -796,7 +796,7 @@ showdiodecap:
     lcd_draw_trans_pins(-7, 16);	// show the pin numbers
     lcd_next_line(TEXT_RIGHT_TO_ICON);	// position behind the icon, Line 2
     lcd_MEM_string(hfe_str);		//"B="  (hFE)
-    DisplayValue(_trans->hfe,0,0,3);
+    DisplayValue(_trans->hfe,-1,0,3);
 
     lcd_next_line(TEXT_RIGHT_TO_ICON+1-LOW_H_SPACE); // position behind the icon+1, Line 3
     lcd_data('I');
@@ -830,7 +830,7 @@ showdiodecap:
     PinLayout('E','B','C'); 		//  EBC= or 123=...
     lcd_line2(); //2. row 
     lcd_MEM_string(hfe_str);		//"B="  (hFE)
-    DisplayValue(_trans->hfe,0,0,3);
+    DisplayValue(_trans->hfe,-1,0,3);
  #if FLASHEND > 0x1fff
     lcd_space();
 

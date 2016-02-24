@@ -46,27 +46,32 @@ static void minifourier(unsigned int uu[], int16_t freq, byte nuu, byte phase0)
       int8_t u=uu[i]-(avg>>3);               // more or less remove DC component
       avg+=u;
       byte phi=phi16>>8;
-#if 0
-      int8_t u2=u/2;
-      switch (phi>>5) {
-         // approximate sine by a stepped triangle:
-         case 0: sumi+=u;            break;
-         case 1: sumi+=u2; sumq+=u2; break;
-         case 2:           sumq+=u;  break;
-         case 3: sumi-=u2; sumq+=u2; break;
-         case 4: sumi-=u;            break;
-         case 5: sumi-=u2; sumq-=u2; break;
-         case 6:           sumq-=u;  break;
-         case 7: sumi+=u2; sumq-=u2; break;
+ /*
+      int8_t v=phi;
+      if (v<0) v=-v;
+      v-=64;
+      sumi1+=(u*v)>>6;
+      v=phi-64;
+      if (v<0) v=-v;
+      v-=64;
+      sumq1+=(u*v)>>6;
+ */
+ // saves some 32 bytes of flash, at cost of readability:
+      int8_t v;
+      int8_t ph;
+      int16_t a;
+      ph=phi;
+again:
+      v=ph;
+      if (v<0) v=-v;
+      v-=64;
+      a=(u*v)>>6;
+      if (ph==(int8_t)phi) {
+         sumi1+=a;
+         ph-=64;
+         goto again;
       }
-#else
-      // equivalent to the above, but saves 194 bytes of flash  (don't delete the above code from the source file since it's more readable)
-      int8_t di,dq;
-      if (phi&0x80) u=-u;                                  // 180 degrees
-      if (phi&0x20) { di=dq=u>>2; } else { di=u; dq=0; }   //  45 degrees
-      if (phi&0x40) { int8_t tmp=dq; dq=di; di=-tmp; }     //  90 degrees
-      sumi1+=di; sumq1+=dq;
-#endif
+      sumq1+=a;
       phi16+=freq;
       //if (what==1) {      myuart_putc('f'); myuart_putc(' '); uart_int(i); uart_int(1000+sumi); uart_int(1000+sumq); uart_int(1000+u); uart_int(1000+sumi-prevsumi); uart_int(uu[i]); uart_newline(); wdt_reset();}
    }
@@ -84,6 +89,7 @@ static byte findphase(unsigned int uu[], int16_t freq, byte nuu)
    // binary search for the upward zero-crossing of sumq, to find maximum of sumi; works because this signal is pretty "well behaved"
    while (bit) {
       minifourier(uu,freq,nuu,phase+bit); 
+//      {      myuart_putc('f'); myuart_putc(' '); uart_int(phase+bit); uart_int(bit); uart_int(1000+sumi); uart_int(1000+sumq); uart_newline(); wdt_reset();}
       if (sumq<0) phase+=bit;
       bit>>=1;
    }
@@ -105,7 +111,7 @@ static void show_progress(void)
 }
 
 
-static uint16_t findfreqmax(unsigned int uu[], byte nuu)
+static uint16_t findfreqmax(unsigned int uu[], byte nuu, byte minfreq)
 {
    // find frequency for which minifourier() is largest
 
@@ -116,9 +122,10 @@ static uint16_t findfreqmax(unsigned int uu[], byte nuu)
    int16_t maxi=0;
 //   int16_t mini=32767;
 //   uint16_t sumiq,sumiq1=0,sumiq2=0;
-   for (i=6;i<=129;i+=1) {        // start at i=6, corresponding to 16 MHz / (256/6) = 375 kHz, to prevent DC component from being selected
+   for (i=minfreq;i<=129;i+=1)
+   {
 #if 1
-      // simpler code, saves flash, would be a bit slower, which we compensate by considering only half the data in this course search
+      // simpler code, saves flash, would be a bit slower, which we compensate by considering only half the data in this coarse search
       findphase(uu,i<<8,nuu/2);
       if (sumi>maxi) { imax=i; maxi=sumi; }
 #else
@@ -233,6 +240,10 @@ void sampling_test_xtal()
       return;
    }
 
+   // if more than 100 pF capacitance, than it's very unlikely to be a crystal: don't waste time testing it, don't take risk of incorrectly concluding it is one
+   if (cap.cval_max > 100) return;
+
+
    // next try a bunch of pulses, at different intervals
    // first try all possible intervals in somewhat coarse steps
    // next repeat, but with finer steps in a limited range around the best one found in the first iteration
@@ -248,7 +259,6 @@ void sampling_test_xtal()
    uint8_t avg0;        // same average but from first scan, times 2, since it'll be used as threshold
 
    d0=0;                // parameters for the first scan: cover the entire useful range, in steps of 4
-   avg0 = 0;
    d1=8*256+64;
    ds=4;
    wht|=samplingADC_freq;
@@ -259,7 +269,7 @@ void sampling_test_xtal()
       for (d=d0;d<d1;d+=ds) {
          // we acquire data for a short time (only 40 samples), because we need to try so many different intervals, otherwise it would take too long
          samplingADC_freqgen((1<<smplADC_span)|wht, uu, 10, HiPinR_L, HiPinR_H, 0, HiPinR_L, d);
-//   { byte i;for (i=0;i<200;i++) { myuart_putc('B'); myuart_putc(' '); uart_int(uu[i]); uart_int(d); uart_int(i); uart_newline(); wdt_reset(); } }
+//   if ((d&0x3f)==0) { byte i;for (i=0;i<10;i++) { myuart_putc('B'); myuart_putc(' '); uart_int(uu[i]); uart_int(d); uart_int(i); uart_newline(); wdt_reset(); } }
 
          R_DDR=0;   // switch off low-side current after measurement
          uint16_t sumd=0;
@@ -321,7 +331,7 @@ void sampling_measure_xtal()
    LoADC = pinmaskADC(LowPin);
 
    unsigned int uu[255];
-   int i;
+   byte i;
 
    ADC_PORT = TXD_VAL;
    ADC_DDR = LoADC;			// switch Low-Pin to output (GND)
@@ -339,7 +349,8 @@ void sampling_measure_xtal()
    samplingADC_freqgen((1<<smplADC_span)|wht, uu, 255, HiPinR_L, HiPinR_H, 0, HiPinR_L, dmax);
 //   for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
 
-   uint16_t imax1=findfreqmax(uu,255);   // obtain a coarse estimate of the resonant frequency
+   uint16_t imax1=findfreqmax(uu,255,6);   // obtain a coarse estimate of the resonant frequency
+                                           // start search at i=6, corresponding to 16 MHz / (256/6) = 375 kHz, to prevent DC component from being selected
 
    // next, calculate span (here called ff) to be used for final measurement
    // for ceramic resonators, we choose ff about 16
@@ -349,19 +360,30 @@ void sampling_measure_xtal()
    byte oldff=1;   // flag that we're still at the first ff attempt in case of crystal
    if (!isXtal) { oldff=0; ff=16; }
 
-newff:;
    byte u;
+   byte ncumul=1;
+newff:;
    // I say "about" in the above, because we should avoid ff values which would result in a sampling rate near a subharmonic of the signal
-   // if the signal would be close to a subharmonic, the informvation from the span=1 measurement above will not suffice to disambiguate the aliasing
+   // if the signal would be close to a subharmonic, the information from the span=1 measurement above will not suffice to disambiguate the aliasing
    do {
       ff--;
       imax2=imax1*ff;        // estimate of what the frequency will be with span=ff; note that truncation to 16 bits of this multiplication mimics the aliasing due to subsampling
       u=imax2>>8;
       if (ff==1) break;      // one hopes we'll not get such a low ff; this happens with crystals very near half the clockfrequency; for those, we can't properly resolve the aliasing
    } while ((u&0x60)==0 || (u&0x60)==0x60);
+   // the while condition avoids any case where u&0x7f is below 0x20 or above 0x59
+   // i.e., we should expect between 32 and 95 periods in 256 samples
+   // can use this in findfreqmax to reduce search time and to avoid false detections
 
    // sampling during longer time (with larger span), to make frequency estimate more precise
-   samplingADC_freqgen((ff<<smplADC_span)|wht, uu, 255, HiPinR_L|LoPinR_L, HiPinR_H|LoPinR_L, 0|LoPinR_L,         HiPinR_L|LoPinR_L, dmax);
+//   for (i=0;i<ncumul;i++) 
+   for (i=ncumul; i!=0; i--) 
+   {
+      samplingADC_freqgen((ff<<smplADC_span)|wht, uu, 255, HiPinR_L|LoPinR_L, HiPinR_H|LoPinR_L, 0|LoPinR_L,         HiPinR_L|LoPinR_L, dmax);
+      wht|=samplingADC_cumul;
+   }
+   wht&=~samplingADC_cumul;
+   wdt_reset();
    // from here on, we use the test pins as follows:
    // low side is connected via de ADC-pin to ground (20 ohm or so) and via the low resistor (680 ohm) to +5V, thus establishing about 0.14 V on this pin
    // high side idles with 680 ohm to ground
@@ -385,15 +407,15 @@ newff:;
          if (u>umax) umax=u;
       }
 //      myuart_putc('O'); myuart_putc(' '); uart_int(umax); uart_int(umin); uart_int(ff); uart_newline();
-      if (umax-umin<10) { ff=32; goto newff; }
+      if (umax-umin<10) { ff=32; ncumul=4; goto newff; }
    }
 
-   imax2=findfreqmax(uu,255);   // find the frequency of the new measurement
+
+   imax2=findfreqmax(uu,255,25);   // find the frequency of the new measurement; 25 is a safe lower bound on expected frequency (32, see above)
    if (u&0x80) imax2=-imax2;    // make it negative if that's what we expect based on the coarse measurement
 //   myuart_putc('o'); myuart_putc(' '); uart_int(imax1); uart_int(imax2); uart_int(ff); uart_newline();
 
 
-//   if (imax2<19300 || imax2>19400) 
 //   for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
 
    // next step, but only for crystals, is to short-circuit the crystal for a while and see how that influences the phase
@@ -405,19 +427,34 @@ newff:;
    uint8_t ph1l=0;   // fractional part of total phase shift, unwrapped
    uint8_t ph1h=0;   // integer part of same
    if (isXtal) {
-      uint8_t probingstepsize=0;
+      uint8_t probingstepsize=2;  // flag: 2 initially, then 1 during increment probingstepsize, finally 0 when steps can no longer increase further
       uint8_t ssdstep=1;
       uint8_t ph0;         // starting phase, at ssd=5
       uint8_t rphase;
-      // we start at ssd=5, because this is the minimum meaningful value because of the duration of the excitation pulses
-      for (ssd=5;ssd<ff/2;ssd+=ssdstep) {
-         samplingADC_freqgen_sck((ff<<smplADC_span)|wht|samplingADC_sck, uu, 255, HiPinR_L|LoPinR_L, HiPinR_H|LoPinR_L, 0|LoPinR_L, HiPinR_L|LoPinR_L, dmax, ssd);
-//   for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_int(ssd); uart_newline(); wdt_reset(); }
+      // we start with the longest possible short-circuit duration of the crystal
+      // and then gradually try shorter durations
+      // but not close to 0 duration, since esp. for low-frequency crystals, the phaseshift turns out to be not really linear in the duration
+      // presumably, it takes a bit of time for the crystal's swinging frequency to adapt to the new load situation?
+      // note: those low-freq crystals tend to get large ff values
+      ssd=ff/2; 
+      uint8_t sse=ssd/2;
+      if (sse<5) sse=5;   // ssd<5 is not allowed because the time it takes to send the pulses is included in the ssd time
+      while (1)
+      {
+         for (i=ncumul; i!=0; i--) {
+            samplingADC_freqgen_sck((ff<<smplADC_span)|wht|samplingADC_sck, uu, 255, HiPinR_L|LoPinR_L, HiPinR_H|LoPinR_L, 0|LoPinR_L, HiPinR_L|LoPinR_L, dmax, ssd);
+            wht|=samplingADC_cumul;
+         }
+         wht&=~samplingADC_cumul;
+//if (ssd==5 || ssd==13)   for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_int(ssd); uart_newline(); wdt_reset(); }
          R_DDR=0;   // switch off low-side bias current between measurements
          rphase=findphase(uu+128,imax2,127);
-//         rphase=findphase(uu,imax2,255);
-         if (ssd==5) { ph0=rphase; rphase=0; }
-         else {
+         if (probingstepsize&2) { 
+            // first measurement, at maximum ssd; this is the 0-reference for the phase, stored in ph0
+            ph0=rphase; rphase=0; 
+            probingstepsize--;
+         } else {
+            // non-first measurement
             rphase-=ph0;
             if ((ph1l^rphase) & 0x80) {
                // most significant bit changed
@@ -428,26 +465,28 @@ newff:;
                   if (ph1l&0x80) ph1h++; else ph1h--;
                }
             }
+            if (probingstepsize&1) {
+               // if phase turns out to grow slowly, make stepsize larger
+               int8_t r=rphase;
+               if (r<48 && r>-48) ssdstep<<=1;
+               else probingstepsize=0;
+            }
          }
          ph1l=rphase;
-         if (ssd==7) probingstepsize=1;
-         if (probingstepsize) {
-            // if phase turns out to grow slowly, make stepsize larger
-            int8_t r=rphase;
-            if (r<48 && r>-48) ssdstep<<=1;
-            else probingstepsize=0;
-         }
 
-//         myuart_putc('y'); myuart_putc(' '); uart_int(ssd); uart_int(ph1l);  uart_int(ph1l+(((uint16_t)ph1h)<<8)); uart_int(ff); uart_int(dmax); uart_int(imax1); uart_int(imax2); uart_newline(); 
+//         myuart_putc('y'); myuart_putc(' '); uart_int(ssd); uart_int(ph1l);  uart_int(ph1l+(((uint16_t)ph1h)<<8)); uart_int(ff); uart_int(dmax); uart_int(imax1); uart_int(imax2); uart_int(ph0+rphase); uart_newline(); 
          wdt_reset();
          show_progress();
+         if (ssd<ssdstep+sse) break;
+         ssd-=ssdstep;
       }
-      ssd-=5+ssdstep;
+      ssd=ff/2-ssd;
       // now ph1h:ph1l is the phaseshift (in 360/256 degrees) during ssd*256 clockcycles of shortcircuiting the crystal
       // this implies a frequency difference of ph1/256 / (ssd*256/fclock) = ph1/256/ssd/256*fclock = ph1 * fclock / ssd / 65536
       // assuming fclk = 16.000000000 MHz: ph1 * 244.140 / ssd
 
-   } else ph1h=0x80;
+   }
+   else ph1h=0x80;  // for ceramic resonators; tells the below code not to do alias-correction, i.e., not to subtract the measured freq from 16. This is of course a guess, in case of cer.res. we have no way reliably resolve the aliasing.
 
    uint32_t f;
    // samplerate is fclk/ff
@@ -456,14 +495,14 @@ newff:;
    // so an integer number of times fclk/ff needs to be added
    // the real frequency must be "near" imax1/65536*fclk = fclk/65536/ff * imax1*ff
    f=imax2;
-//   while (f+32768 < (uint32_t)imax1*ff) f+=65536ul;   // older version, takes more flash
-   while (((f+32768)>>8) < (imax1>>8)*ff) f+=65536ul; 
+   while (f+32768 < (uint32_t)imax1*ff) f+=65536ul;   // older version, takes more flash
+//   while (((f+32768)>>8) < (imax1>>8)*ff) f+=65536ul;    // hmm, but now, a month later and after other changes, the old version takes less flash; weird
    // assuming fclk = 16.000000000 MHz:
    //      f = f*16000000/65536/ff;
    //      f = f*15625/64/ff;
    f = f*625/64*25/ff;
    uint16_t ph1 = (((uint16_t)ph1h)<<8)|ph1l;
-   if (!(ph1h&0x80)) f=F_CPU-f;         else ph1=-ph1;
+   if ((ph1h&0x80)) { f=F_CPU-f; ph1=-ph1; }
 
 //#define F_CPU 16016000UL
 //#define F_CPU 16032000UL

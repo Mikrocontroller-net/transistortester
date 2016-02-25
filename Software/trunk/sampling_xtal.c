@@ -268,10 +268,9 @@ void sampling_test_xtal()
    uint16_t maxsumd=0;  // highest amount of oscillation seen so far
    uint16_t d0,d1,ds;   // minimum, maximum interval, and stepsize
    uint16_t avg;        // sum of amount of oscillation, to later computer average from, for current scan
-   uint8_t avg0;        // same average but from first scan, times 2, since it'll be used as threshold
+   uint8_t avg0=avg0;   // same average but from first scan, times 2, since it'll be used as threshold; self-initialization suppresses compiler warning
 
    d0=0;                // parameters for the first scan: cover the entire useful range, in steps of 4
-   avg0 = 0;
    d1=8*256+64;
    ds=4;
    wht|=samplingADC_freq;
@@ -440,7 +439,7 @@ newff:;
    if (isXtal) {
       uint8_t probingstepsize=2;  // flag: 2 initially, then 1 during increment probingstepsize, finally 0 when steps can no longer increase further
       uint8_t ssdstep=1;
-      uint8_t ph0;         // starting phase, at ssd=5
+      uint8_t ph0=ph0;         // starting phase, at ssd=5; self-initialization suppresses compiler warning
       uint8_t rphase;
       // we start with the longest possible short-circuit duration of the crystal
       // and then gradually try shorter durations

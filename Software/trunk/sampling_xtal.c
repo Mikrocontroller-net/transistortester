@@ -73,7 +73,9 @@ again:
       }
       sumq1+=a;
       phi16+=freq;
-      //if (what==1) {      myuart_putc('f'); myuart_putc(' '); uart_int(i); uart_int(1000+sumi); uart_int(1000+sumq); uart_int(1000+u); uart_int(1000+sumi-prevsumi); uart_int(uu[i]); uart_newline(); wdt_reset();}
+#if ((DEB_UART & 0x02) != 0)
+      if (what==1) {      myuart_putc('f'); myuart_putc(' '); uart_int(i); uart_int(1000+sumi); uart_int(1000+sumq); uart_int(1000+u); uart_int(1000+sumi-prevsumi); uart_int(uu[i]); uart_newline(); wdt_reset();}
+#endif
    }
    sumi=sumi1; sumq=sumq1;
 }
@@ -89,7 +91,9 @@ static byte findphase(unsigned int uu[], int16_t freq, byte nuu)
    // binary search for the upward zero-crossing of sumq, to find maximum of sumi; works because this signal is pretty "well behaved"
    while (bit) {
       minifourier(uu,freq,nuu,phase+bit); 
-//      {      myuart_putc('f'); myuart_putc(' '); uart_int(phase+bit); uart_int(bit); uart_int(1000+sumi); uart_int(1000+sumq); uart_newline(); wdt_reset();}
+#if ((DEB_UART & 0x04) != 0)
+      {      myuart_putc('f'); myuart_putc(' '); uart_int(phase+bit); uart_int(bit); uart_int(1000+sumi); uart_int(1000+sumq); uart_newline(); wdt_reset();}
+#endif
       if (sumq<0) phase+=bit;
       bit>>=1;
    }
@@ -136,13 +140,17 @@ static uint16_t findfreqmax(unsigned int uu[], byte nuu, byte minfreq)
       sumiq=sumi+sumq;
       if (sumiq<mini) mini=sumiq;
       sumiq-=mini;
-      // if(what==2) { myuart_putc('r'); myuart_putc(' '); uart_int(i); uart_int(sumiq); uart_int(sumiq+sumiq1+sumiq2); uart_newline(); wdt_reset(); }
+ #if ((DEB_UART & 0x08) != 0)
+      if(what==2) { myuart_putc('r'); myuart_putc(' '); uart_int(i); uart_int(sumiq); uart_int(sumiq+sumiq1+sumiq2); uart_newline(); wdt_reset(); }
+ #endif
       wdt_reset();
       if (sumiq+sumiq1+sumiq2>maxi) { maxi=sumiq+sumiq1+sumiq2; imax=i-1; }
       sumiq2=sumiq1;
       sumiq1=sumiq;
 #endif
-//      {            myuart_putc('r'); myuart_putc(' '); uart_int(i); uart_int(10000+sumq); uart_int(10000+sumi); uart_int(imax); uart_newline(); wdt_reset(); }
+#if ((DEB_UART & 0x08) != 0)
+      {            myuart_putc('r'); myuart_putc(' '); uart_int(i); uart_int(10000+sumq); uart_int(10000+sumi); uart_int(imax); uart_newline(); wdt_reset(); }
+#endif
    }
    show_progress();
 
@@ -158,8 +166,10 @@ static uint16_t findfreqmax(unsigned int uu[], byte nuu, byte minfreq)
       findphase(uu,ii,nuu);
       // find maximum
       if (sumi>maxi) { imax2=ii; maxi=sumi; }
-      // if (what==2)  {            myuart_putc('w'); myuart_putc(' '); uart_int(ii); uart_int(10000+sumq); uart_int(10000+sumi); uart_newline(); wdt_reset(); }
-//      {            myuart_putc('w'); myuart_putc(' '); uart_int(ii); uart_int(10000+sumq); uart_int(10000+sumi); uart_newline(); wdt_reset(); }
+#if ((DEB_UART & 0x08) != 0)
+//      if (what==2)  {            myuart_putc('w'); myuart_putc(' '); uart_int(ii); uart_int(10000+sumq); uart_int(10000+sumi); uart_newline(); wdt_reset(); }
+      {            myuart_putc('w'); myuart_putc(' '); uart_int(ii); uart_int(10000+sumq); uart_int(10000+sumi); uart_newline(); wdt_reset(); }
+#endif
      wdt_reset();
    }
    show_progress();
@@ -233,7 +243,9 @@ void sampling_test_xtal()
    // run a first measurement using a single impulse
    // this allows us to detect ceramic resonators
    samplingADC((1<<smplADC_span), uu, 255, HiPinR_L, HiPinR_H, 0, HiPinR_L);
-//   { byte i;for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); } }
+#if ((DEB_UART & 0x10) != 0)
+   { byte i;for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); } }
+#endif
    uint16_t sumd=sumabs(uu+1,254);
    if (sumd>=3072) {
       PartFound=PART_CERAMICRESONATOR;
@@ -259,6 +271,7 @@ void sampling_test_xtal()
    uint8_t avg0;        // same average but from first scan, times 2, since it'll be used as threshold
 
    d0=0;                // parameters for the first scan: cover the entire useful range, in steps of 4
+   avg0 = 0;
    d1=8*256+64;
    ds=4;
    wht|=samplingADC_freq;
@@ -269,36 +282,26 @@ void sampling_test_xtal()
       for (d=d0;d<d1;d+=ds) {
          // we acquire data for a short time (only 40 samples), because we need to try so many different intervals, otherwise it would take too long
          samplingADC_freqgen((1<<smplADC_span)|wht, uu, 10, HiPinR_L, HiPinR_H, 0, HiPinR_L, d);
-//   if ((d&0x3f)==0) { byte i;for (i=0;i<10;i++) { myuart_putc('B'); myuart_putc(' '); uart_int(uu[i]); uart_int(d); uart_int(i); uart_newline(); wdt_reset(); } }
+#if ((DEB_UART & 0x10) != 0)
+   if ((d&0x3f)==0) { byte i;for (i=0;i<10;i++) { myuart_putc('B'); myuart_putc(' '); uart_int(uu[i]); uart_int(d); uart_int(i); uart_newline(); wdt_reset(); } }
+#endif
 
          R_DDR=0;   // switch off low-side current after measurement
          uint16_t sumd=0;
          sumd=sumabs(uu+1,9);
          if (sumd>maxsumd) {
- #if (DEB_SAM == 10)
-      uint16_t ii;
-      for (ii=0;ii<10;ii+=4) {
-         if (ii == 0) {
-            lcd_clear();
-            DisplayValue16(d,0,' ',4);
-            DisplayValue16(ds,0,' ',3);
-            DisplayValue16(sumd,0,' ',5);
-            lcd_clear();
-         }
-         DisplayValue16(uu[ii],0,' ',5);
-         DisplayValue16(uu[ii+1],0,' ',5);
-         DisplayValue16(uu[ii+2],0,' ',5);
-         DisplayValue16(uu[ii+3],0,' ',5);
-      } /* end for ii */
- #endif
             maxsumd=sumd;
             dmax=d;
          }
          avg+=sumd;
          wdt_reset();
-//         myuart_putc('b'); myuart_putc(' '); uart_int(d); uart_int(sumd); uart_newline(); 
+#if ((DEB_UART & 0x10) != 0)
+         myuart_putc('b'); myuart_putc(' '); uart_int(d); uart_int(sumd); uart_newline(); 
+#endif
       }
-//         myuart_putc('S'); myuart_putc(' '); uart_int(dmax); uart_int(maxsumd); uart_int(avg); uart_newline(); 
+#if ((DEB_UART & 0x10) != 0)
+         myuart_putc('S'); myuart_putc(' '); uart_int(dmax); uart_int(maxsumd); uart_int(avg); uart_newline(); 
+#endif
       if (ds==1) break;  // if we were already in the second (fine-grained) phase, break
                          // otherwise, set variables up for the second scan
       avg0=avg>>8;       // compute twice the average amount of oscillation of the first scan; strictly we should divide avg by (d1-d0)/ds/2, but in the first scan that's 264, which we approximate by 256
@@ -347,7 +350,9 @@ void sampling_measure_xtal()
 
    // initial sampling, still with span=1
    samplingADC_freqgen((1<<smplADC_span)|wht, uu, 255, HiPinR_L, HiPinR_H, 0, HiPinR_L, dmax);
-//   for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
+#if ((DEB_UART & 0x20) != 0)
+   for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
+#endif
 
    uint16_t imax1=findfreqmax(uu,255,6);   // obtain a coarse estimate of the resonant frequency
                                            // start search at i=6, corresponding to 16 MHz / (256/6) = 375 kHz, to prevent DC component from being selected
@@ -406,17 +411,23 @@ newff:;
          if (u<umin) umin=u;
          if (u>umax) umax=u;
       }
-//      myuart_putc('O'); myuart_putc(' '); uart_int(umax); uart_int(umin); uart_int(ff); uart_newline();
+#if ((DEB_UART & 0x20) != 0)
+      myuart_putc('O'); myuart_putc(' '); uart_int(umax); uart_int(umin); uart_int(ff); uart_newline();
+#endif
       if (umax-umin<10) { ff=32; ncumul=4; goto newff; }
    }
 
 
    imax2=findfreqmax(uu,255,25);   // find the frequency of the new measurement; 25 is a safe lower bound on expected frequency (32, see above)
    if (u&0x80) imax2=-imax2;    // make it negative if that's what we expect based on the coarse measurement
-//   myuart_putc('o'); myuart_putc(' '); uart_int(imax1); uart_int(imax2); uart_int(ff); uart_newline();
+#if ((DEB_UART & 0x20) != 0)
+   myuart_putc('o'); myuart_putc(' '); uart_int(imax1); uart_int(imax2); uart_int(ff); uart_newline();
+#endif
 
 
-//   for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
+#if ((DEB_UART & 0x20) != 0)
+   for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); }
+#endif
 
    // next step, but only for crystals, is to short-circuit the crystal for a while and see how that influences the phase
    // from that we can compute the series resonance frequency (which is the frequency in the short-circuited state)
@@ -446,7 +457,9 @@ newff:;
             wht|=samplingADC_cumul;
          }
          wht&=~samplingADC_cumul;
-//if (ssd==5 || ssd==13)   for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_int(ssd); uart_newline(); wdt_reset(); }
+#if ((DEB_UART & 0x20) != 0)
+if (ssd==5 || ssd==13)   for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_int(ssd); uart_newline(); wdt_reset(); }
+#endif
          R_DDR=0;   // switch off low-side bias current between measurements
          rphase=findphase(uu+128,imax2,127);
          if (probingstepsize&2) { 
@@ -474,7 +487,9 @@ newff:;
          }
          ph1l=rphase;
 
-//         myuart_putc('y'); myuart_putc(' '); uart_int(ssd); uart_int(ph1l);  uart_int(ph1l+(((uint16_t)ph1h)<<8)); uart_int(ff); uart_int(dmax); uart_int(imax1); uart_int(imax2); uart_int(ph0+rphase); uart_newline(); 
+#if ((DEB_UART & 0x20) != 0)
+         myuart_putc('y'); myuart_putc(' '); uart_int(ssd); uart_int(ph1l);  uart_int(ph1l+(((uint16_t)ph1h)<<8)); uart_int(ff); uart_int(dmax); uart_int(imax1); uart_int(imax2); uart_int(ph0+rphase); uart_newline(); 
+#endif
          wdt_reset();
          show_progress();
          if (ssd<ssdstep+sse) break;

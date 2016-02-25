@@ -1300,7 +1300,8 @@ end3:
   // there is one resistor or more detected
 #if (LCD_LINES > 3)
   ADC_DDR =  TXD_MSK; 	// switch pin with reference to input, activate relay
-  lcd_line3();
+//  lcd_line3();
+  lcd_next_line_wait(0);
 #else
   wait_for_key_ms(display_time);
   ADC_DDR =  TXD_MSK; 	// switch pin with reference to input, activate relay

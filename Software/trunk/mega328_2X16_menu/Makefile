@@ -204,6 +204,9 @@ CFLAGS += -DAUTO_CAL
 # to extend the resolution of capacity measurement to about 0.01pF.
 # Setting the WITH_SamplinADC to 1 enables this feature for capacity values below 100pF.
 WITH_SamplingADC = 1
+#CFLAGS += -DWITH_XTAL
+CFLAGS += -DWITH_UJT
+CFLAGS += -DWITH_PUT
 
 # The WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring.
 CFLAGS += -DWITH_AUTO_REF

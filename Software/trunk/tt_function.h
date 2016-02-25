@@ -71,6 +71,8 @@ void Bat_update(uint8_t tt);		// Update Battery voltage
 void init_parts(void);			// initialize all parts to nothing found
 void i2c_init(void);			// init the I2C interface
 uint16_t Rnum2pins(uint8_t num);	// compute Pin-Numbers of the resistor number
+void myuart_putc(uint8_t bb);
+void uart_int(uint16_t num);
 
 #ifdef SamplingADC
 uint16_t samplingADC(   // code is in sampling_ADC.S

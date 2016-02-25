@@ -31,6 +31,9 @@ make steril
 cd ../mega328_strip_grid_dogm
 echo "SubDir mega328_strip_grid_dogm"
 make steril
+cd ../mega328_2X16_menu
+echo "SubDir mega328_2X16_menu
+make steril
 cd ../mega328_st7565
 echo "SubDir mega328_st7665"
 make steril

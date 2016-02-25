@@ -121,7 +121,8 @@ void show_resis(byte pin1, byte pin2, byte how)
   #else
            lcd_clear_line();
   #endif
-           lcd_line2();
+//           lcd_line2();
+           lcd_next_line_wait(0);
   #ifdef SamplingADC
            if (!lclx0) {  /* Frequency found */
 //              lcd_next_line(0);

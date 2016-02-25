@@ -534,7 +534,8 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     adc.tp2 = ReadADC(TristatePin);	//voltage of gate
     adc.lp2 = ReadADC(LowPin);		//voltage of Cathode
 #endif
-    if(adc.hp1 < 1600) {
+//    if(adc.hp1 < 1600) {
+    if(adc.hp1 < 4500) {   /* limit for opto-coupler with low hFE */
        //component has current => NPN-Transistor or somthing else
 
        //Test auf Thyristor:

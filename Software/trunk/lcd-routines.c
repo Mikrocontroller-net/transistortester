@@ -246,6 +246,24 @@ void lcd_update_icon_opt(const unsigned char *ubitmap, unsigned char options) {
  lcd_set_pixels( pfont, xx, yy, options, ww, hh);	// update the icon at the specified position with specified size
 }
 #endif
+#ifdef DEB_UART
+void myuart_putc(unsigned char temp2) {
+  uart_putc(temp2);
+  wdt_reset();
+}
+void uart_int(unsigned int temp3) {
+ unsigned char str3[10];
+ unsigned char ii = 0;
+ 
+ utoa(temp3, str3, 10);
+
+ while (str3[ii] != 0) {
+   uart_putc(str3[ii]);
+   ii++;
+ }
+ uart_putc(' ');
+}
+#endif
 
 /* ******************************************************************************* */
 /* ******************************************************************************* */

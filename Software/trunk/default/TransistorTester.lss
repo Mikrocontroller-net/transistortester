@@ -4294,10 +4294,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     1280:	40 e0       	ldi	r20, 0x00	; 0
      adc.rhp = ADCconfig.U_AVCC - adc.hp1;	// voltage at the Emitter resistor
     1282:	50 e0       	ldi	r21, 0x00	; 0
-    1284:	60 ec       	ldi	r22, 0xC0	; 192
-    1286:	79 e2       	ldi	r23, 0x29	; 41
-    1288:	8d ec       	ldi	r24, 0xCD	; 205
-    128a:	92 e0       	ldi	r25, 0x02	; 2
+    1284:	60 e8       	ldi	r22, 0x80	; 128
+    1286:	71 ea       	ldi	r23, 0xA1	; 161
+    1288:	83 e0       	ldi	r24, 0x03	; 3
+    128a:	9c e1       	ldi	r25, 0x1C	; 28
     128c:	0e 94 a2 1e 	call	0x3d44	; 0x3d44 <__udivmodsi4>
     1290:	ab 81       	ldd	r26, Y+3	; 0x03
      adc.tp1 = ReadADC(TristatePin);	// voltage at base resistor 
@@ -4305,8 +4305,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     1294:	0e 94 69 1e 	call	0x3cd2	; 0x3cd2 <__muluhisi3>
     1298:	a9 81       	ldd	r26, Y+1	; 0x01
     129a:	ba 81       	ldd	r27, Y+2	; 0x02
+     // c_hfe with 1% resolution for optocoupler
  #ifdef LONG_HFE
-     c_hfe = ((unsigned long)adc.rhp * (unsigned long)(((unsigned long)R_H_VAL * 1000) / 
+     c_hfe = ((unsigned long)adc.rhp * (unsigned long)(((unsigned long)R_H_VAL * 10000) / 
     129c:	9d 01       	movw	r18, r26
     129e:	40 e0       	ldi	r20, 0x00	; 0
     12a0:	50 e0       	ldi	r21, 0x00	; 0
@@ -4329,13 +4330,13 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     12c2:	5a 81       	ldd	r21, Y+2	; 0x02
     12c4:	24 1b       	sub	r18, r20
     12c6:	35 0b       	sbc	r19, r21
-     R_DDR =  TriPinRH | HiPinRL;	// Tripin=RH-
      adc.hp1 = W5msReadADC(HighPin);
      adc.rhp = ADCconfig.U_AVCC - adc.hp1;	// voltage at the Emitter resistor
      adc.tp1 = ReadADC(TristatePin);	// voltage at base resistor 
+     // c_hfe with 1% resolution for optocoupler
  #ifdef LONG_HFE
-     c_hfe = ((unsigned long)adc.rhp * (unsigned long)(((unsigned long)R_H_VAL * 1000) / 
-    12c8:	4a e0       	ldi	r20, 0x0A	; 10
+     c_hfe = ((unsigned long)adc.rhp * (unsigned long)(((unsigned long)R_H_VAL * 10000) / 
+    12c8:	44 e6       	ldi	r20, 0x64	; 100
     12ca:	42 9f       	mul	r20, r18
     12cc:	c0 01       	movw	r24, r0
     12ce:	43 9f       	mul	r20, r19
@@ -4356,10 +4357,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     12e2:	89 87       	std	Y+9, r24	; 0x09
               (unsigned int)RR680PL)) / (unsigned int)adc.tp1;	
  #else
-     c_hfe = ((adc.rhp / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.tp1/50);
+     c_hfe = ((adc.rhp / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.tp1/5);
  #endif
   } else {
-     c_hfe = (unsigned long)((adc.rhp - adc.tp1) * 10) / adc.tp1;
+     c_hfe = (unsigned long)((adc.rhp - adc.tp1) * 100) / adc.tp1;
     12e4:	9a 87       	std	Y+10, r25	; 0x0a
     12e6:	ab 87       	std	Y+11, r26	; 0x0b
     12e8:	bc 87       	std	Y+12, r27	; 0x0c
@@ -4459,12 +4460,12 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         adc.hp2 = ReadADC(HighPin);	//measure voltage at HighPin (assumed Emitter)
     1362:	00 e0       	ldi	r16, 0x00	; 0
     1364:	10 e0       	ldi	r17, 0x00	; 0
-    1366:	60 ec       	ldi	r22, 0xC0	; 192
-    1368:	79 e2       	ldi	r23, 0x29	; 41
+    1366:	60 e8       	ldi	r22, 0x80	; 128
+    1368:	71 ea       	ldi	r23, 0xA1	; 161
 
         if(adc.tp2 > 2000) {
-    136a:	8d ec       	ldi	r24, 0xCD	; 205
-    136c:	92 e0       	ldi	r25, 0x02	; 2
+    136a:	83 e0       	ldi	r24, 0x03	; 3
+    136c:	9c e1       	ldi	r25, 0x1C	; 28
     136e:	a8 01       	movw	r20, r16
     1370:	97 01       	movw	r18, r14
     1372:	0e 94 a2 1e 	call	0x3d44	; 0x3d44 <__udivmodsi4>
@@ -4498,9 +4499,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
               tmp16 -= adc.lp_otr;
     138a:	80 91 6c 01 	lds	r24, 0x016C
            }
-
+           // e_hfe with 1% resolution for optocoupler
  #ifdef LONG_HFE
-           e_hfe = ((unsigned int)tmp16 * (unsigned long)(((unsigned long)R_H_VAL * 1000) / 
+           e_hfe = ((unsigned int)tmp16 * (unsigned long)(((unsigned long)R_H_VAL * 10000) / 
     138e:	88 23       	and	r24, r24
     1390:	69 f0       	breq	.+26     	; 0x13ac <CheckPins+0x3bc>
     1392:	80 91 5d 01 	lds	r24, 0x015D
@@ -4520,13 +4521,13 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
            if (tmp16 > adc.lp_otr) {
               tmp16 -= adc.lp_otr;
            }
-
+           // e_hfe with 1% resolution for optocoupler
  #ifdef LONG_HFE
-           e_hfe = ((unsigned int)tmp16 * (unsigned long)(((unsigned long)R_H_VAL * 1000) / 
+           e_hfe = ((unsigned int)tmp16 * (unsigned long)(((unsigned long)R_H_VAL * 10000) / 
     13bc:	96 01       	movw	r18, r12
               (unsigned int)RR680MI)) / (unsigned int)adc.tp2;	
  #else
-           e_hfe = ((tmp16 / ((RR680MI+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/50);
+           e_hfe = ((tmp16 / ((RR680MI+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/5);
  #endif
            // first hFE or e_hfe is greater than last hfe ?
            if ((ptrans.count == 0) || (e_hfe > ptrans.hfe)){
@@ -4850,10 +4851,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     15d2:	40 e0       	ldi	r20, 0x00	; 0
     15d4:	50 e0       	ldi	r21, 0x00	; 0
     adc.rtp = ADCconfig.U_AVCC - adc.tp1;	// voltage at Base resistor
-    15d6:	60 ec       	ldi	r22, 0xC0	; 192
-    15d8:	79 e2       	ldi	r23, 0x29	; 41
-    15da:	8d ec       	ldi	r24, 0xCD	; 205
-    15dc:	92 e0       	ldi	r25, 0x02	; 2
+    15d6:	60 e8       	ldi	r22, 0x80	; 128
+    15d8:	71 ea       	ldi	r23, 0xA1	; 161
+    15da:	83 e0       	ldi	r24, 0x03	; 3
+    15dc:	9c e1       	ldi	r25, 0x1C	; 28
     15de:	0e 94 a2 1e 	call	0x3d44	; 0x3d44 <__udivmodsi4>
     if (adc.rtp < 10) { 
     15e2:	d5 01       	movw	r26, r10
@@ -4878,13 +4879,14 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     1604:	4b 87       	std	Y+11, r20	; 0x0b
     1606:	5c 87       	std	Y+12, r21	; 0x0c
        adc.rtp = ADCconfig.U_AVCC - adc.tp1;	// voltage at Base resistor
+       // c_hfe with 1% resolution for optocoupler
  #ifdef LONG_HFE
-       c_hfe = ((unsigned long)adc.lp1 * (unsigned long)(((unsigned long)R_H_VAL * 1000) / 
+       c_hfe = ((unsigned long)adc.lp1 * (unsigned long)(((unsigned long)R_H_VAL * 10000) / 
     1608:	12 c0       	rjmp	.+36     	; 0x162e <CheckPins+0x63e>
     160a:	95 01       	movw	r18, r10
     160c:	26 1b       	sub	r18, r22
     160e:	37 0b       	sbc	r19, r23
-    1610:	4a e0       	ldi	r20, 0x0A	; 10
+    1610:	44 e6       	ldi	r20, 0x64	; 100
     1612:	42 9f       	mul	r20, r18
     1614:	c0 01       	movw	r24, r0
     1616:	43 9f       	mul	r20, r19
@@ -4909,17 +4911,18 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     1632:	04 b9       	out	0x04, r16	; 4
     1634:	05 b9       	out	0x05, r16	; 5
     1636:	89 2d       	mov	r24, r9
+       // c_hfe with 1% resolution for optocoupler
  #ifdef LONG_HFE
-       c_hfe = ((unsigned long)adc.lp1 * (unsigned long)(((unsigned long)R_H_VAL * 1000) / 
+       c_hfe = ((unsigned long)adc.lp1 * (unsigned long)(((unsigned long)R_H_VAL * 10000) / 
               (unsigned int)RR680MI)) / (unsigned int)adc.rtp;	
     1638:	9e d8       	rcall	.-3780   	; 0x776 <W5msReadADC>
     163a:	98 87       	std	Y+8, r25	; 0x08
-       R_PORT = TriPinRH;		// Tripin=RH+
        adc.lp1 = W5msReadADC(LowPin);
        adc.tp1 = ReadADC(TristatePin);	// voltage at the Base 
        adc.rtp = ADCconfig.U_AVCC - adc.tp1;	// voltage at Base resistor
+       // c_hfe with 1% resolution for optocoupler
  #ifdef LONG_HFE
-       c_hfe = ((unsigned long)adc.lp1 * (unsigned long)(((unsigned long)R_H_VAL * 1000) / 
+       c_hfe = ((unsigned long)adc.lp1 * (unsigned long)(((unsigned long)R_H_VAL * 10000) / 
     163c:	8f 83       	std	Y+7, r24	; 0x07
     163e:	84 2d       	mov	r24, r4
     1640:	38 d8       	rcall	.-3984   	; 0x6b2 <ReadADC>
@@ -4929,10 +4932,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     1648:	34 d8       	rcall	.-3992   	; 0x6b2 <ReadADC>
               (unsigned int)RR680MI)) / (unsigned int)adc.rtp;	
  #else
-       c_hfe = ((adc.lp1 / ((RR680MI+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/50);
+       c_hfe = ((adc.lp1 / ((RR680MI+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/5);
  #endif
     } else {
-       c_hfe = (unsigned long)((adc.lp1 - adc.rtp) * 10) / adc.rtp;
+       c_hfe = (unsigned long)((adc.lp1 - adc.rtp) * 100) / adc.rtp;
     164a:	6c 01       	movw	r12, r24
     164c:	2f 81       	ldd	r18, Y+7	; 0x07
     164e:	38 85       	ldd	r19, Y+8	; 0x08
@@ -5201,10 +5204,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     17aa:	6c 01       	movw	r12, r24
     17ac:	e1 2c       	mov	r14, r1
     17ae:	f1 2c       	mov	r15, r1
-    17b0:	60 ec       	ldi	r22, 0xC0	; 192
-    17b2:	79 e2       	ldi	r23, 0x29	; 41
-    17b4:	8d ec       	ldi	r24, 0xCD	; 205
-    17b6:	92 e0       	ldi	r25, 0x02	; 2
+    17b0:	60 e8       	ldi	r22, 0x80	; 128
+    17b2:	71 ea       	ldi	r23, 0xA1	; 161
+    17b4:	83 e0       	ldi	r24, 0x03	; 3
+    17b6:	9c e1       	ldi	r25, 0x1C	; 28
       adc.rtp = ADCconfig.U_AVCC - adc.tp2;	// voltage at the base resistor
     17b8:	a7 01       	movw	r20, r14
     17ba:	96 01       	movw	r18, r12
@@ -5253,9 +5256,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
             tmp16 -= adc.lp_otr;
     17f6:	20 93 45 01 	sts	0x0145, r18
          }
-
+         // e_hfe with 1% resilution for optocoupler
   #ifdef LONG_HFE
-         e_hfe = ((unsigned int)tmp16 * (unsigned long)(((unsigned long)R_H_VAL * 1000) / 
+         e_hfe = ((unsigned int)tmp16 * (unsigned long)(((unsigned long)R_H_VAL * 10000) / 
     17fa:	30 93 46 01 	sts	0x0146, r19
     17fe:	40 93 47 01 	sts	0x0147, r20
     1802:	50 93 48 01 	sts	0x0148, r21
@@ -5277,13 +5280,13 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
          if (tmp16 > adc.lp_otr) {
             tmp16 -= adc.lp_otr;
          }
-
+         // e_hfe with 1% resilution for optocoupler
   #ifdef LONG_HFE
-         e_hfe = ((unsigned int)tmp16 * (unsigned long)(((unsigned long)R_H_VAL * 1000) / 
+         e_hfe = ((unsigned int)tmp16 * (unsigned long)(((unsigned long)R_H_VAL * 10000) / 
     1828:	0e 94 a2 1e 	call	0x3d44	; 0x3d44 <__udivmodsi4>
               (unsigned int)RR680PL)) / (unsigned int)adc.rtp;	
   #else
-         e_hfe = ((tmp16 / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.rtp/50);
+         e_hfe = ((tmp16 / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.rtp/5);
   #endif
          if ((ntrans.count == 0) || (e_hfe > ntrans.hfe)){
     182c:	30 93 4c 01 	sts	0x014C, r19
@@ -11445,12 +11448,12 @@ TyUfAusgabe:
     3816:	f0 91 43 01 	lds	r31, 0x0143
     381a:	60 81       	ld	r22, Z
     381c:	71 81       	ldd	r23, Z+1	; 0x01
-    DisplayValue(_trans->hfe,-1,0,3);
+    DisplayValue(_trans->hfe,-2,0,3);
     381e:	82 81       	ldd	r24, Z+2	; 0x02
     3820:	93 81       	ldd	r25, Z+3	; 0x03
     3822:	03 e0       	ldi	r16, 0x03	; 3
     3824:	20 e0       	ldi	r18, 0x00	; 0
-    3826:	4f ef       	ldi	r20, 0xFF	; 255
+    3826:	4e ef       	ldi	r20, 0xFE	; 254
     3828:	0e 94 88 02 	call	0x510	; 0x510 <DisplayValue>
     382c:	0e 94 d7 00 	call	0x1ae	; 0x1ae <lcd_space>
     3830:	89 e4       	ldi	r24, 0x49	; 73

@@ -75,6 +75,9 @@ sampling_lc.o: ../sampling_lc.c $(MKFILES)
 sampling_xtal.o: ../sampling_xtal.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
+CheckUJT.o: ../CheckUJT.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+
 ########### Compile assembler source only 
 
 samplingADC.o: ../samplingADC.S $(MKFILES)

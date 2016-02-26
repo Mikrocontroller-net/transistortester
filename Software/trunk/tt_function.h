@@ -73,6 +73,7 @@ void i2c_init(void);			// init the I2C interface
 uint16_t Rnum2pins(uint8_t num);	// compute Pin-Numbers of the resistor number
 void myuart_putc(uint8_t bb);
 void uart_int(uint16_t num);
+void CheckUJT(void);		// measure UJT
 
 #ifdef SamplingADC
 uint16_t samplingADC(   // code is in sampling_ADC.S
@@ -96,7 +97,6 @@ uint16_t samplingADC(   // code is in sampling_ADC.S
 // If the samplingADC_direct option is used, a 1 CPU-cycle pulse is applied via de ADC pin corresponding to a 1 bit in Rddr_0.
 
 
-void CheckUJT(void);		// measure UJT
 int32_t sampling_cap(uint8_t HighPin, uint8_t LowPin, uint8_t opts);   // returns measured capacitance in 0.01 pF units; opts&1 is flag demands measurement at 5 V rather than at 0 V; opts&2 is flag to not subtract the parasitic capacitance
 void sampling_lc(uint8_t LowPin, uint8_t HighPin);
 #define sampling_cap_pre -14

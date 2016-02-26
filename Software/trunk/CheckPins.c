@@ -329,7 +329,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      c_hfe = ((adc.rhp / ((RR680PL+500)/1000)) * (R_H_VAL/500)) / (adc.tp1/5);
  #endif
   } else {
-     c_hfe = (unsigned long)((adc.rhp - adc.tp1) * 100) / adc.tp1;
+     c_hfe = (unsigned long)((unsigned long)(adc.rhp - adc.tp1) * 100) / adc.tp1;
   }
 #endif
 
@@ -518,7 +518,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        c_hfe = ((adc.lp1 / ((RR680MI+500)/1000)) * (R_H_VAL/500)) / (adc.tp2/5);
  #endif
     } else {
-       c_hfe = (unsigned long)((adc.lp1 - adc.rtp) * 100) / adc.rtp;
+       c_hfe = (unsigned long)((unsigned long)(adc.lp1 - adc.rtp) * 100) / adc.rtp;
     }
 #endif
     //Tristate (can be Base) to VCC, Test if NPN
@@ -668,7 +668,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
          if (tmp16 > adc.lp_otr) {
             tmp16 -= adc.lp_otr;
          }
-         // e_hfe with 1% resilution for optocoupler
+         // e_hfe with 1% resolution for optocoupler
   #ifdef LONG_HFE
          e_hfe = ((unsigned int)tmp16 * (unsigned long)(((unsigned long)R_H_VAL * 10000) / 
               (unsigned int)RR680PL)) / (unsigned int)adc.rtp;	

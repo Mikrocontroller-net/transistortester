@@ -77,14 +77,17 @@ void CheckUJT(void);		// measure UJT
 
 #ifdef SamplingADC
 uint16_t samplingADC(   // code is in sampling_ADC.S
-   uint16_t what, 	// what to measure? see smplADC_... defs below, R24:R25
-   uint16_t *ptr,       // output pointer (note: ptr[0] will contain incorrect data; ptr[1]...ptr[n-1] will be valid) R22:R23
+   uint16_t what, 	// what to measure? see smplADC_... defs in config.h, R24:R25
+   void *ptr,           // output pointer (note: ptr[0] will contain incorrect data; ptr[1]...ptr[n-1] will be valid) R22:R23
    uint8_t n,           // number of samples (n=0 for 256), R20
    uint8_t Rport_1,	
    uint8_t Rddr_1,	
    uint8_t Rport_0,	
    uint8_t Rddr_0      
    );
+// ptr can point to an array of either 8 or 16 bit data (with or without smplADC_8bit, respectively)
+// and either signed or unsigned (with or without smplADC_hpf, respectively)
+//
 // you can find the defines for bits in "what" in config.h
 //
 // The meaning of Rport_1, Rddr_1, Rport_0 and Rddr_0 are now as follows.
@@ -95,6 +98,8 @@ uint16_t samplingADC(   // code is in sampling_ADC.S
 // If the samplingADC_direct option is NOT used, during pulse Rddr_0 and Rport_1 apply (duration of pulse is between 1 and 16 CPU cycles, controlled by lower bits of 'what' parameter).
 //  (note though that currently the non-direct mode is only used for step response measurements, with Rport_1=Port_0, so effectively no pulse is applied)
 // If the samplingADC_direct option is used, a 1 CPU-cycle pulse is applied via de ADC pin corresponding to a 1 bit in Rddr_0.
+
+
 
 
 int32_t sampling_cap(uint8_t HighPin, uint8_t LowPin, uint8_t opts);   // returns measured capacitance in 0.01 pF units; opts&1 is flag demands measurement at 5 V rather than at 0 V; opts&2 is flag to not subtract the parasitic capacitance
@@ -110,8 +115,8 @@ void sampling_measure_xtal(void);       // measure resonator or crystal between 
                                         //   prints output to LCD too
 
 // version to be called when using samlingADC_freq option, to pass the desired frequency:
-uint16_t samplingADC_freqgen(uint16_t, uint16_t*, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint16_t freq);
+uint16_t samplingADC_freqgen(uint16_t, void*, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint16_t freq);
 // version to be called when using samlingADC_sck option, to also pass the desired short circuit duration:
-uint16_t samplingADC_freqgen_sck(uint16_t, uint16_t*, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint16_t freq, uint8_t shortcircuitduration);
+uint16_t samplingADC_freqgen_sck(uint16_t, void*, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint16_t freq, uint8_t shortcircuitduration);
 #endif
 #endif

@@ -121,7 +121,11 @@ int32_t sampling_cap(byte HighPin, byte LowPin, byte opts)
    #define N (N2-N1+1-(N4-N3))
    #define sumx (unsigned long)((N2*(N2+1l)/2)-(N4*(N4-1l)/2)+(N3*(N3-1l)/2)-(N1*(N1-1l)/2))
    unsigned long sumxx=(unsigned long)((N2*(N2+1l)*(2*N2+1l)/6)-(N4*(N4-1l)*(2*N4-1l)/6)+(N3*(N3-1l)*(2*N3-1l)/6)-(N1*(N1-1l)*(2*N1-1l)/6));
+#ifdef SamplingADC_CNT
    samp_opt = 1;		// sample distance 1
+#else
+   samp_opt = 0;
+#endif
    byte d=( (opts&1) ? HiPinR_L : HiPinR_H );
 
    for (i=0;i<32;i++) {

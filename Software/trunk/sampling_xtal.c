@@ -30,21 +30,20 @@ typedef uint8_t byte;
 
 int16_t sumi;
 int16_t sumq;
-static void minifourier(unsigned int uu[], int16_t freq, byte nuu, byte phase0)
+
+static void minifourier(int8_t uu[], int16_t freq, byte nuu, byte phase0)
 {
    // computes approximation of one term of Fourier transform of uu[0...nuu-1] at frequency freq with initial phase phase0
    // result is returned in global variables sumi and sumq
    // freq is 16-bit fractional frequency, i.e., phase increments by freq/65536*2*pi per element of uu[]
    // phase0 is 8-bit fractional
-   uint16_t avg=uu[0]<<3;
    byte i;                     // index in uu[]
    int16_t phi16=phase0<<8;    // 16-bit phase of the "oscillator"
    int16_t sumi1,sumq1;
    sumi1=sumq1=0;
    for (i=0;i<nuu;i++) 
    {
-      int8_t u=uu[i]-(avg>>3);               // more or less remove DC component
-      avg+=u;
+      int8_t u=uu[i];
       byte phi=phi16>>8;
  /*
       int8_t v=phi;
@@ -81,7 +80,8 @@ again:
 }
 
 
-static byte findphase(unsigned int uu[], int16_t freq, byte nuu)
+
+static byte findphase(int8_t uu[], int16_t freq, byte nuu)
 {
    // find phase at which minifourier().sumi is maximal for given frequency
    // (poor man's arctangent)
@@ -103,19 +103,11 @@ static byte findphase(unsigned int uu[], int16_t freq, byte nuu)
 
 static void show_progress(void)
 {
-/*
-   static uint8_t a=0;
-   lcd_save_position();
-   static uint8_t syms[4]={'|','/','-','\\'};
-   a=(a+1)&3;
-   lcd_data(syms[a]);
-   lcd_restore_position();
-*/
    lcd_data('.');
 }
 
 
-static uint16_t findfreqmax(unsigned int uu[], byte nuu, byte minfreq)
+static uint16_t findfreqmax(int8_t uu[], byte nuu, byte minfreq)
 {
    // find frequency for which minifourier() is largest
 
@@ -124,8 +116,6 @@ static uint16_t findfreqmax(unsigned int uu[], byte nuu, byte minfreq)
    uint8_t i;
    byte imax=0;
    int16_t maxi=0;
-//   int16_t mini=32767;
-//   uint16_t sumiq,sumiq1=0,sumiq2=0;
    for (i=minfreq;i<=129;i+=1)
    {
 #if 1
@@ -161,7 +151,6 @@ static uint16_t findfreqmax(unsigned int uu[], byte nuu, byte minfreq)
    int16_t ii;
    maxi=0;
    for (ii=(imaxx-2)<<8;ii<=(imaxx+2)<<8;ii+=16)  
-//   for (ii=18000; ii<=23000; ii+=16)
    {
       findphase(uu,ii,nuu);
       // find maximum
@@ -193,17 +182,15 @@ static uint16_t findfreqmax(unsigned int uu[], byte nuu, byte minfreq)
 }
 
 
-static uint16_t sumabs(unsigned int uu[], byte nuu)
-// computes sum of absolute values of uu[] after subtraction of DC level
+static uint16_t sumabs8(int8_t uu[], byte nuu)
+// computes sum of absolute values of uu[]
 // this is a measure for "how much" oscillation there is
 {
-   uint16_t avg=uu[1]<<3;
    uint16_t sumd2=0;
    byte i;
    for (i=0;i<nuu;i++)
    {
-      int8_t u=((signed)(uu[i]-((avg)>>3)));
-      avg+=u;
+      int8_t u=uu[i];
       if (u<0) u=-u;
       sumd2+=u;
    }
@@ -227,8 +214,9 @@ void sampling_test_xtal()
    HiPinR_L = pinmaskRL(HighPin);
    byte HiPinR_H = pinmaskRH(HighPin);
    LoADC = pinmaskADC(LowPin);
+   byte what;
 
-   unsigned int uu[255];
+   int8_t ub[255];
 
    ADC_PORT = TXD_VAL;
    ADC_DDR = LoADC;			// switch Low-Pin to output (GND)
@@ -237,18 +225,21 @@ void sampling_test_xtal()
    ADMUX=HighPin|ADref1V1;   // use built-in reference, about 1.1 V
    wait_aref_stabilize();                               
 
-   wht=samplingADC_mux;      // we let the ADC MUX switch back and forth between both sides of the crystal, thus ensuring that the "high" end of the crystal will have roughly the same DC potential as the low end
+   what=samplingADC_mux;      // we let the ADC MUX switch back and forth between both sides of the crystal, thus ensuring that the "high" end of the crystal will have roughly the same DC potential as the low end
                              // note that the use of TP1 (MUX=0) for low side is hardcoded!
+   what|=samplingADC_8bit|samplingADC_hpf;
 
    // run a first measurement using a single impulse
    // this allows us to detect ceramic resonators
-   samplingADC((1<<smplADC_span), uu, 255, HiPinR_L, HiPinR_H, 0, HiPinR_L);
+   samplingADC(what|(1<<smplADC_span), ub, 255, HiPinR_L, HiPinR_H, 0, HiPinR_L);
 #if ((DEB_UART & 0x10) != 0)
    { byte i;for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(uu[i]); uart_newline(); wdt_reset(); } }
+   { byte i;for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(1000+ub[i]); uart_newline(); wdt_reset(); } }
 #endif
-   uint16_t sumd=sumabs(uu+1,254);
+   uint16_t sumd=sumabs8(ub+1,254);
    if (sumd>=3072) {
       PartFound=PART_CERAMICRESONATOR;
+      wht=what;
       return;
    }
 
@@ -273,21 +264,22 @@ void sampling_test_xtal()
    d0=0;                // parameters for the first scan: cover the entire useful range, in steps of 4
    d1=8*256+64;
    ds=4;
-   wht|=samplingADC_freq;
-   wht|=samplingADC_many;
+   what|=samplingADC_freq;
+   what|=samplingADC_many;
    for (;;) { 
       avg=0;
       uint16_t d;
       for (d=d0;d<d1;d+=ds) {
-         // we acquire data for a short time (only 40 samples), because we need to try so many different intervals, otherwise it would take too long
-         samplingADC_freqgen((1<<smplADC_span)|wht, uu, 10, HiPinR_L, HiPinR_H, 0, HiPinR_L, d);
+         // we acquire data for a short time (only 10 samples), because we need to try so many different intervals, otherwise it would take too long
+         samplingADC_freqgen((1<<smplADC_span)|what, ub, 10, HiPinR_L, HiPinR_H, 0, HiPinR_L, d);
 #if ((DEB_UART & 0x10) != 0)
    if ((d&0x3f)==0) { byte i;for (i=0;i<10;i++) { myuart_putc('B'); myuart_putc(' '); uart_int(uu[i]); uart_int(d); uart_int(i); uart_newline(); wdt_reset(); } }
+   if (d==472){ byte i;for (i=0;i<10;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(1000+ub[i]); uart_newline(); wdt_reset(); } }
 #endif
 
          R_DDR=0;   // switch off low-side current after measurement
          uint16_t sumd=0;
-         sumd=sumabs(uu+1,9);
+         sumd=sumabs8(ub+1,9);
          if (sumd>maxsumd) {
             maxsumd=sumd;
             dmax=d;
@@ -315,12 +307,12 @@ void sampling_test_xtal()
    {
       PartFound=PART_XTAL;
    }
+   wht=what;
 } /* end sampling_test_xtal */
 
 
 
 
-// void do_sampling_resonator(byte LowPin, byte HighPin)
 void sampling_measure_xtal()
 {
    byte LowPin=TP1;
@@ -332,7 +324,7 @@ void sampling_measure_xtal()
    byte HiPinR_H = pinmaskRH(HighPin);
    LoADC = pinmaskADC(LowPin);
 
-   unsigned int uu[255];
+   int8_t uu[255];
    byte i;
 
    ADC_PORT = TXD_VAL;
@@ -380,10 +372,9 @@ newff:;
    // can use this in findfreqmax to reduce search time and to avoid false detections
 
    // sampling during longer time (with larger span), to make frequency estimate more precise
-//   for (i=0;i<ncumul;i++) 
    for (i=ncumul; i!=0; i--) 
    {
-      samplingADC_freqgen((ff<<smplADC_span)|wht, uu, 255, HiPinR_L|LoPinR_L, HiPinR_H|LoPinR_L, 0|LoPinR_L,         HiPinR_L|LoPinR_L, dmax);
+      samplingADC_freqgen(((ff<<smplADC_span)|wht), uu, 255, HiPinR_L|LoPinR_L, HiPinR_H|LoPinR_L, 0|LoPinR_L,         HiPinR_L|LoPinR_L, dmax);
       wht|=samplingADC_cumul;
    }
    wht&=~samplingADC_cumul;
@@ -403,10 +394,9 @@ newff:;
       // smaller ff if at the end of the data the amplitude is small
       // bigger ff if at the end of the data the amplitude is still very large
       oldff=0;
-      byte umin=255,umax=0;
+      int8_t umin=127,umax=-127;
       for (i=254;i>220;i--) {
-         if (uu[i]==0) { ff=128; goto newff; }
-         byte u=uu[i];
+         int8_t u=uu[i];
          if (u<umin) umin=u;
          if (u>umax) umax=u;
       }
@@ -414,6 +404,7 @@ newff:;
       myuart_putc('O'); myuart_putc(' '); uart_int(umax); uart_int(umin); uart_int(ff); uart_newline();
 #endif
       if (umax-umin<10) { ff=32; ncumul=4; goto newff; }
+      if (umax-umin>40) { ff=128; goto newff; }
    }
 
 
@@ -500,7 +491,7 @@ if (ssd==5 || ssd==13)   for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '
       // assuming fclk = 16.000000000 MHz: ph1 * 244.140 / ssd
 
    }
-   else ph1h=0x80;  // for ceramic resonators; tells the below code not to do alias-correction, i.e., not to subtract the measured freq from 16. This is of course a guess, in case of cer.res. we have no way reliably resolve the aliasing.
+   else ph1h=0x00;  // for ceramic resonators; tells the below code not to do alias-correction, i.e., not to subtract the measured freq from 16. This is of course a guess, in case of cer.res. we have no way reliably resolve the aliasing.
 
    uint32_t f;
    // samplerate is fclk/ff

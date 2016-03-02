@@ -1004,7 +1004,7 @@ End of configuration
 // defines for bits in samplingADC function, parameter 1 (what)
 // smplADC_* are bit numbers or offsets
 // samplingADC_* are corresponding bit values
-// note: _freq, _many, _mux and _sck are only valid WITH_XTAL
+// note: _hpf, _freq, _many, _mux and _sck are only valid WITH_XTAL
 
  #define smplADC_freq 7		/* generate a bunch of pulses (only without -DSamplingADC_CNT ) */
  #define smplADC_cumul 6	/* don't overwrite, but add the samples to the array */
@@ -1012,6 +1012,8 @@ End of configuration
  #define smplADC_direct 4	/* direct pulse without resistor */
  #define smplADC_mux 3		/* with large span, switch MUX to input 0 for ADC measurements that are to be discarded */
  #define smplADC_sck 1		/* short-circuit the crystal after excitation, duration given by extra parameter */
+ #define smplADC_8bit 0         /* treat the array as an array of 8-bit samples */
+ #define smplADC_hpf 2          /* treat the data with a high-pass filter, i.e., remove DC; only to be used with _8bit, in which case the 8bit samples are signed */
  // 0x0f				/* pulse-length 1-16, only for -DSamplingADC_CNT */
 
 
@@ -1023,6 +1025,8 @@ End of configuration
 #define samplingADC_many (1<<smplADC_many)
 #define samplingADC_sck (1<<smplADC_sck)
 #define samplingADC_mux (1<<smplADC_mux)
+#define samplingADC_8bit (1<<smplADC_8bit)
+#define samplingADC_hpf (1<<smplADC_hpf)
 
 
 

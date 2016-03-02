@@ -45,6 +45,12 @@ samplingADC_freqgen_sck:
 ; the last two arguments are only used WITH_XTAL, and are optional (can be omitted if not needed; registers will not be clobbered)
 
 #ifdef WITH_XTAL
+	push r4				; r4:5 will be used for the high-pass filter
+	push r5
+	push r17
+	mov r5,r1
+	dec r5				; set bit 7 in r5 to mark it for initialization
+
 	sbrs r24,smplADC_sck		; if we'll need to short-circuit the DUT later on, store the correct value of ADC_DDR in r9
 	rjmp L30a
 	push r9
@@ -359,11 +365,39 @@ L23:
 #endif
  				; now need to check whether we should read or discard it
 	dec	r22		; r22 counts AD conversions within one pulse cycle
+brnewaitevent:
 	brne	waitevent	; if r22 not yet zero, it's not yet our turn
 
 
 	lds	r22, ADCL	; read ADC
 	lds	r23, ADCH
+
+#ifdef WITH_XTAL
+	sbrs	r5,7		; bit 7 of r5 is used as marker that we still need to initialize the DC level
+	rjmp L25
+	movw	r4,r22
+	lsl	r4
+	rol	r5
+	lsl	r4
+	rol	r5
+;lsl	r4
+;rol	r5
+L25:
+	mov	r17,r4		; r4:5 contains "DC-level"<<2
+	mov	r19,r5
+	lsr	r19		; shift >>2
+	ror	r17
+	lsr	r19
+	ror	r17
+;lsr	r19
+;ror	r17
+	sbrc 	r24,smplADC_hpf
+	sub 	r22,r17		; subtract DC from sample
+	sbrc 	r24,smplADC_hpf
+	sbc 	r23,r19
+	add	r4,r22		; update DC<<2, namely  dc := (sample-dc)/8 ;
+	adc	r5,r23
+#endif
 
 	ld	r19,z		; and store, accumulating if that bit in r24 is set
 	sbrc 	r24,smplADC_cumul
@@ -372,12 +406,14 @@ L23:
 	ld	r19,z
 	sbrc 	r24,smplADC_cumul
 	adc	r23,r19
+	sbrs    r24,smplADC_8bit
 	st	z+,r23
 
 	mov	r22,r21		; reinitialize r22
 
 	dec r20			; decrement counter of remaining samples
-	brne waitevent
+;	brne waitevent
+	brne brnewaitevent
 
 end:
  	sts	TIMSK1, r1	; disable counter1 interrupts
@@ -394,6 +430,9 @@ end:
 	AOUT ADC_DDR,r9
 	pop r9
 L30c:
+	pop r17
+	pop r5
+	pop r4
 #endif
 	ret
 

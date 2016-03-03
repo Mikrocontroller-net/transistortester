@@ -315,6 +315,12 @@ _xpos += FONT_WIDTH;		// move pointer to the next character position
         uart_putc('h');
         uart_putc('m');
     	break;
+ #if LCD_CHAR_INDUCTOR1 != 'w'
+    case LCD_CHAR_INDUCTOR1:
+    case LCD_CHAR_INDUCTOR2:
+        uart_putc('L');
+        break;
+ #endif
     default:
     	uart_putc(temp1);
  }

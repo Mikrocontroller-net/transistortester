@@ -140,15 +140,14 @@ void GetFrequency(uint8_t range) {
      lcd_equal();		// lcd_data('=');
  #if PROCESSOR_TYP == 644
      if ((FDIV_PORT&(1<<FDIV_PIN)) == 0) {
-        DisplayValue(ext_freq.dw,0,'H',7);
+        Display_Hz(ext_freq.dw, 7);
      } else {
         // frequency divider is activ
-        DisplayValue(ext_freq.dw*FREQ_DIV,0,'H',7);
+        Display_Hz(ext_freq.dw*FREQ_DIV, 7);
      }
  #else
-     DisplayValue(ext_freq.dw,0,'H',7);
+     Display_Hz(ext_freq.dw, 7);
  #endif
-     lcd_data('z');
  #if PROCESSOR_TYP == 644
      lcd_space();
      if ((FDIV_PORT&(1<<FDIV_PIN)) != 0) {

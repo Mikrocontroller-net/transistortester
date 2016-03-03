@@ -104,6 +104,7 @@ static byte findphase(int8_t uu[], int16_t freq, byte nuu)
 static void show_progress(void)
 {
    lcd_data('.');
+   lcd_refresh();
 }
 
 

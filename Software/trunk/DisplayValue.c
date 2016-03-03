@@ -271,3 +271,9 @@ void DisplayValue16(uint16_t Value, int8_t Exponent, unsigned char Unit, unsigne
 void Display_mV(uint16_t xx, uint8_t ll) {
  DisplayValue((long)xx,-3,'V',ll);
 }
+#if defined(WITH_MENU) || defined(WITH_XTAL)
+void Display_Hz(unsigned long xx, uint8_t dd) {
+ DisplayValue(xx,0,'H',dd);
+ lcd_data('z');
+}
+#endif

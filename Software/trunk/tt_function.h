@@ -28,6 +28,7 @@ void scale_intref_adc(void);		// get scale factors for ReadADC with internal ref
 void DisplayValue(signed long vval,int8_t Expo,unsigned char Unit, unsigned char Digits); //output Digits characters with exponent and unit
 void DisplayValue16(uint16_t vval,int8_t Expo,unsigned char Unit, unsigned char Digits); //output Digits characters with exponent and unit
 void Display_mV(uint16_t val, uint8_t dd);		// show mV with dd digits
+void Display_Hz(unsigned long val, uint8_t dd);		// show Hz with dd digits
 unsigned int compute_hfe(unsigned int lpx, unsigned int tpy);
 void sleep_5ms(uint8_t xxx);		// set processor to sleep state for xxx times 5ms, xxx>200  (xxx-200)*100  
 void PinLayout(char pin1, char pin2, char pin3); // show pin layout with EBC= or 123=

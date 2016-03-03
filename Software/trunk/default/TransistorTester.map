@@ -136,6 +136,7 @@ LOAD ReadBigCap.o
 LOAD CheckRotaryEncoder.o
 LOAD CalibrationCap.o
 LOAD ShowData.o
+LOAD CheckUJT.o
 LOAD EE_check_init.o
 START GROUP
 LOAD /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a
@@ -463,6 +464,7 @@ END GROUP
  .text          0x00000000000032bc        0x0 CheckRotaryEncoder.o
  .text          0x00000000000032bc        0x0 CalibrationCap.o
  .text          0x00000000000032bc        0x0 ShowData.o
+ .text          0x00000000000032bc        0x0 CheckUJT.o
  .text          0x00000000000032bc        0x2 EE_check_init.o
                 0x00000000000032bc                EE_check_init
  .text          0x00000000000032be        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
@@ -748,6 +750,7 @@ END GROUP
  .data          0x0000000000800100        0x0 CheckRotaryEncoder.o
  .data          0x0000000000800100        0x0 CalibrationCap.o
  .data          0x0000000000800100        0x0 ShowData.o
+ .data          0x0000000000800100        0x0 CheckUJT.o
  .data          0x0000000000800100        0x0 EE_check_init.o
  .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
  .data          0x0000000000800100        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
@@ -812,6 +815,7 @@ END GROUP
  .bss           0x0000000000800100        0x0 CheckRotaryEncoder.o
  .bss           0x0000000000800100        0x0 CalibrationCap.o
  .bss           0x0000000000800100        0x0 ShowData.o
+ .bss           0x0000000000800100        0x0 CheckUJT.o
  .bss           0x0000000000800100        0x0 EE_check_init.o
  .bss           0x0000000000800100        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_umulhisi3.o)
  .bss           0x0000000000800100        0x0 /usr/lib/gcc/avr/4.8.2/avr5/libgcc.a(_usmulhisi3.o)
@@ -1022,6 +1026,7 @@ END GROUP
  .comment       0x0000000000000000       0x12 CheckRotaryEncoder.o
  .comment       0x0000000000000000       0x12 CalibrationCap.o
  .comment       0x0000000000000000       0x12 ShowData.o
+ .comment       0x0000000000000000       0x12 CheckUJT.o
  .comment       0x0000000000000000       0x12 EE_check_init.o
 
 .debug
@@ -1036,7 +1041,7 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x0000000000000000      0x410
+.debug_aranges  0x0000000000000000      0x428
  *(.debug_aranges)
  .debug_aranges
                 0x0000000000000000       0x20 lcd_hw_4_bit.o
@@ -1105,12 +1110,14 @@ END GROUP
  .debug_aranges
                 0x00000000000003d8       0x18 ShowData.o
  .debug_aranges
-                0x00000000000003f0       0x20 EE_check_init.o
+                0x00000000000003f0       0x18 CheckUJT.o
+ .debug_aranges
+                0x0000000000000408       0x20 EE_check_init.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x717c
+.debug_info     0x0000000000000000     0x722a
  *(.debug_info)
  .debug_info    0x0000000000000000       0x7d lcd_hw_4_bit.o
  .debug_info    0x000000000000007d      0xa83 lcd-routines.o
@@ -1145,10 +1152,11 @@ END GROUP
  .debug_info    0x0000000000006ea6       0xae CheckRotaryEncoder.o
  .debug_info    0x0000000000006f54       0xae CalibrationCap.o
  .debug_info    0x0000000000007002       0xae ShowData.o
- .debug_info    0x00000000000070b0       0xcc EE_check_init.o
+ .debug_info    0x00000000000070b0       0xae CheckUJT.o
+ .debug_info    0x000000000000715e       0xcc EE_check_init.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x0000000000000000     0x1994
+.debug_abbrev   0x0000000000000000     0x19ea
  *(.debug_abbrev)
  .debug_abbrev  0x0000000000000000       0x14 lcd_hw_4_bit.o
  .debug_abbrev  0x0000000000000014      0x261 lcd-routines.o
@@ -1183,9 +1191,10 @@ END GROUP
  .debug_abbrev  0x0000000000001820       0x56 CheckRotaryEncoder.o
  .debug_abbrev  0x0000000000001876       0x56 CalibrationCap.o
  .debug_abbrev  0x00000000000018cc       0x56 ShowData.o
- .debug_abbrev  0x0000000000001922       0x72 EE_check_init.o
+ .debug_abbrev  0x0000000000001922       0x56 CheckUJT.o
+ .debug_abbrev  0x0000000000001978       0x72 EE_check_init.o
 
-.debug_line     0x0000000000000000     0x1e1f
+.debug_line     0x0000000000000000     0x1e7d
  *(.debug_line)
  .debug_line    0x0000000000000000       0x6c lcd_hw_4_bit.o
  .debug_line    0x000000000000006c      0x1ac lcd-routines.o
@@ -1200,27 +1209,28 @@ END GROUP
  .debug_line    0x0000000000000651       0x9a wait_for_key_ms.o
  .debug_line    0x00000000000006eb       0x83 RefVoltage.o
  .debug_line    0x000000000000076e       0x54 get_log.o
- .debug_line    0x00000000000007c2      0x455 main.o
- .debug_line    0x0000000000000c17       0xe4 Battery_check.o
- .debug_line    0x0000000000000cfb      0x2bf CheckPins.o
- .debug_line    0x0000000000000fba      0x135 GetResistance.o
- .debug_line    0x00000000000010ef       0x98 ChargePin10ms.o
- .debug_line    0x0000000000001187       0xf4 EntladePins.o
- .debug_line    0x000000000000127b      0x1d8 ReadCapacity.o
- .debug_line    0x0000000000001453       0x76 GetRLmultip.o
- .debug_line    0x00000000000014c9       0xd8 Calibrate_UR.o
- .debug_line    0x00000000000015a1      0x11f show_Resis_Cap.o
- .debug_line    0x00000000000016c0      0x18c ReadInductance.o
- .debug_line    0x000000000000184c      0x1ab GetESR.o
- .debug_line    0x00000000000019f7      0x110 GetVloss.o
- .debug_line    0x0000000000001b07       0x5f GetFrequency.o
- .debug_line    0x0000000000001b66       0x5f function_menu.o
- .debug_line    0x0000000000001bc5       0x5f message_key_released.o
- .debug_line    0x0000000000001c24       0x5f ReadBigCap.o
- .debug_line    0x0000000000001c83       0x5f CheckRotaryEncoder.o
- .debug_line    0x0000000000001ce2       0x5f CalibrationCap.o
- .debug_line    0x0000000000001d41       0x5f ShowData.o
- .debug_line    0x0000000000001da0       0x7f EE_check_init.o
+ .debug_line    0x00000000000007c2      0x454 main.o
+ .debug_line    0x0000000000000c16       0xe4 Battery_check.o
+ .debug_line    0x0000000000000cfa      0x2bf CheckPins.o
+ .debug_line    0x0000000000000fb9      0x135 GetResistance.o
+ .debug_line    0x00000000000010ee       0x98 ChargePin10ms.o
+ .debug_line    0x0000000000001186       0xf4 EntladePins.o
+ .debug_line    0x000000000000127a      0x1d8 ReadCapacity.o
+ .debug_line    0x0000000000001452       0x76 GetRLmultip.o
+ .debug_line    0x00000000000014c8       0xd8 Calibrate_UR.o
+ .debug_line    0x00000000000015a0      0x11f show_Resis_Cap.o
+ .debug_line    0x00000000000016bf      0x18c ReadInductance.o
+ .debug_line    0x000000000000184b      0x1ab GetESR.o
+ .debug_line    0x00000000000019f6      0x110 GetVloss.o
+ .debug_line    0x0000000000001b06       0x5f GetFrequency.o
+ .debug_line    0x0000000000001b65       0x5f function_menu.o
+ .debug_line    0x0000000000001bc4       0x5f message_key_released.o
+ .debug_line    0x0000000000001c23       0x5f ReadBigCap.o
+ .debug_line    0x0000000000001c82       0x5f CheckRotaryEncoder.o
+ .debug_line    0x0000000000001ce1       0x5f CalibrationCap.o
+ .debug_line    0x0000000000001d40       0x5f ShowData.o
+ .debug_line    0x0000000000001d9f       0x5f CheckUJT.o
+ .debug_line    0x0000000000001dfe       0x7f EE_check_init.o
 
 .debug_frame    0x0000000000000000      0x6fc
  *(.debug_frame)
@@ -1240,7 +1250,7 @@ END GROUP
  .debug_frame   0x000000000000069c       0x3c GetVloss.o
  .debug_frame   0x00000000000006d8       0x24 EE_check_init.o
 
-.debug_str      0x0000000000000000      0xfee
+.debug_str      0x0000000000000000      0xffc
  *(.debug_str)
  .debug_str     0x0000000000000000      0x3fd lcd-routines.o
                                         0x456 (size before relaxing)
@@ -1284,7 +1294,9 @@ END GROUP
                                         0x177 (size before relaxing)
  .debug_str     0x0000000000000fbf        0xe ShowData.o
                                         0x171 (size before relaxing)
- .debug_str     0x0000000000000fcd       0x21 EE_check_init.o
+ .debug_str     0x0000000000000fcd        0xe CheckUJT.o
+                                        0x171 (size before relaxing)
+ .debug_str     0x0000000000000fdb       0x21 EE_check_init.o
                                         0x184 (size before relaxing)
 
 .debug_loc      0x0000000000000000     0x3e5c

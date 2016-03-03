@@ -17,21 +17,21 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY, DEBUGGING
   6 .comment      00000011  00000000  00000000  00004cf1  2**0
                   CONTENTS, READONLY
-  7 .debug_aranges 00000410  00000000  00000000  00004d08  2**3
+  7 .debug_aranges 00000428  00000000  00000000  00004d08  2**3
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_info   0000717c  00000000  00000000  00005118  2**0
+  8 .debug_info   0000722a  00000000  00000000  00005130  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_abbrev 00001994  00000000  00000000  0000c294  2**0
+  9 .debug_abbrev 000019ea  00000000  00000000  0000c35a  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   00001e1f  00000000  00000000  0000dc28  2**0
+ 10 .debug_line   00001e7d  00000000  00000000  0000dd44  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  000006fc  00000000  00000000  0000fa48  2**2
+ 11 .debug_frame  000006fc  00000000  00000000  0000fbc4  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000fee  00000000  00000000  00010144  2**0
+ 12 .debug_str    00000ffc  00000000  00000000  000102c0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    00003e5c  00000000  00000000  00011132  2**0
+ 13 .debug_loc    00003e5c  00000000  00000000  000112bc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000018  00000000  00000000  00014f8e  2**0
+ 14 .debug_ranges 00000018  00000000  00000000  00015118  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -4902,7 +4902,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
        c_hfe = (unsigned long)((unsigned long)(adc.lp1 - adc.rtp) * 100) / adc.rtp;
     1622:	2f 81       	ldd	r18, Y+7	; 0x07
     1624:	38 85       	ldd	r19, Y+8	; 0x08
-    1626:	24 39       	cpi	r18, 0x94	; 148
+    1626:	20 33       	cpi	r18, 0x30	; 48
     1628:	31 41       	sbci	r19, 0x11	; 17
     162a:	08 f0       	brcs	.+2      	; 0x162e <CheckPins+0x63e>
     162c:	bb c1       	rjmp	.+886    	; 0x19a4 <CheckPins+0x9b4>
@@ -4953,7 +4953,8 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
     1666:	4f c0       	rjmp	.+158    	; 0x1706 <CheckPins+0x716>
 #endif
 //    if(adc.hp1 < 1600) {
-    if(adc.hp1 < 4500) {   /* limit for opto-coupler with low hFE */
+//    if(adc.hp1 < 4500) {   /* limit for opto-coupler with low hFE */
+    if(adc.hp1 < 4400) {   /* limit for opto-coupler with low hFE */
     1668:	8f 81       	ldd	r24, Y+7	; 0x07
     166a:	98 85       	ldd	r25, Y+8	; 0x08
     166c:	8a 56       	subi	r24, 0x6A	; 106
@@ -10879,7 +10880,7 @@ TyUfAusgabe:
     34be:	d6 d9       	rcall	.-3156   	; 0x286c <show_cap_simple>
     34c0:	c2 c3       	rjmp	.+1924   	; 0x3c46 <main+0x988>
     34c2:	83 30       	cpi	r24, 0x03	; 3
- #endif	 /* WITH_SamplingADC */
+ #endif	 /* SamplingADC */
       goto tt_end;
    }
 #endif /* WITH_UJT */

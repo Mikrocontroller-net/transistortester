@@ -224,9 +224,11 @@ void sampling_cap_calibrate()
       for (j=0;j<=2;j++)
          if (i!=j) {
             unsigned int c;
-            unsigned int d;
             c=sampling_cap(i,j,2);
+#ifdef PULLUP_DISABLE
+            unsigned int d;
             d=sampling_cap(i,j,3);
+#endif
             lcd_clear();
             lcd_MEM2_string(C0samp_str);			//output "C0samp "
             lcd_space();				// lcd_data(' ');
@@ -235,11 +237,17 @@ void sampling_cap_calibrate()
             lcd_testpin(j);
             lcd_space();				//lcd_data(' ');
             lcd_line2();
+            byte k=3*i+j-1;
+#ifdef PULLUP_DISABLE
             DisplayValue16(c,-2,' ',4);
             DisplayValue16(d,-14,'F',4);
-            byte k=3*i+j-1;
-            eeprom_write_word((void*)(c_zero_tab2_lo+k),c);
-            eeprom_write_word((void*)(c_zero_tab2_hi+k),d);
+            eeprom_write_word((void*)(c_zero_tab2_lo+k),c); /* C0 from 0 to 1 */
+            eeprom_write_word((void*)(c_zero_tab2_hi+k),d); /* C0 from 1 to 0 */
+#else
+            DisplayValue16(c,-14,' ',4);
+            eeprom_write_word((void*)(c_zero_tab2_lo+k),c); /* C0 from 0 to 1 */
+            eeprom_write_word((void*)(c_zero_tab2_hi+k),c); /* set 1to0 same as 0to1 */
+#endif
             lcd_clear_line();
             lcd_refresh();
          }

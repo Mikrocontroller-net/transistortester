@@ -142,7 +142,7 @@ COMMON uint8_t WithReference;		// Marker for found precision voltage reference =
 COMMON uint8_t PartFound;	 	// type of the found part 
 COMMON uint8_t PartMode;		// description of the found part
 COMMON char outval[10];			// String for ASCII-output i2lcd, u2lcd
-COMMON char OutBuffer[10];		// String for ASCII-output DisplayValue
+//COMMON char OutBuffer[10];		// String for ASCII-output DisplayValue
 COMMON uint8_t empty_count;		// counter for max count of empty measurements
 COMMON uint8_t mess_count;		// counter for max count of nonempty measurements
 

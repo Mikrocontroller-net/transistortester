@@ -238,6 +238,9 @@ void sampling_test_xtal()
    { byte i;for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(1000+ub[i]); uart_newline(); wdt_reset(); } }
 #endif
    uint16_t sumd=sumabs8(ub+1,254);
+//   lcd_line4();
+//   DisplayValue16(sumd,0,' ',5);
+//   wait_about5s();
    if (sumd>=3072) {
       PartFound=PART_CERAMICRESONATOR;
       wht=what;
@@ -555,19 +558,19 @@ if (ssd==5 || ssd==13)   for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '
 
       lcd_next_line(0);
       static const unsigned char str_ser[] MEM_TEXT = "ser "; lcd_MEM_string(str_ser);
-      DisplayValue(f,0,'H',6); lcd_data('z');
+      Display_Hz(f, 6); 	// DisplayValue(f,0,'H',6); lcd_data('z');
 
       f+=df;   // back to parallel resonant frequency
 
       lcd_next_line_wait(0);
       static const unsigned char str_par[] MEM_TEXT = "par "; lcd_MEM_string(str_par);
 
-      DisplayValue(f,0,'H',6); lcd_data('z');
+      Display_Hz(f, 6); 	// DisplayValue(f,0,'H',6); lcd_data('z');
    } else {
       // no crystal, then just ceramic resonator, only show a single resonant frequency
       // also use this code for crystals if ff=1, practically speaking, if we have an 8 MHz crystal, since then precision measurements are not possible
       lcd_clear_line2();
-      DisplayValue(f,0,'H',4); lcd_data('z');
+      Display_Hz(f, 6); 	// DisplayValue(f,0,'H',6); lcd_data('z');
    }
 
 }

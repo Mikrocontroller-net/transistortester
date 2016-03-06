@@ -25,8 +25,8 @@ unsigned int GetRLmultip(unsigned int cvolt);  // get C-Multiplikator for voltag
 void Scale_C_with_vcc(void);		// scale capacity value for different VCC Voltages
 void scale_intref_adc(void);		// get scale factors for ReadADC with internal reference
 //uint8_t value_out(unsigned long vval,uint8_t pp);    // output 4 digits with (pp-1) digits after point
-void DisplayValue(signed long vval,int8_t Expo,unsigned char Unit, unsigned char Digits); //output Digits characters with exponent and unit
-void DisplayValue16(uint16_t vval,int8_t Expo,unsigned char Unit, unsigned char Digits); //output Digits characters with exponent and unit
+void DisplayValue(signed long vval,int8_t Expo,unsigned char Unit, uint8_t Digits); //output Digits characters with exponent and unit
+void DisplayValue16(uint16_t vval,int8_t Expo,unsigned char Unit, uint8_t Digits); //output Digits characters with exponent and unit
 void Display_mV(uint16_t val, uint8_t dd);		// show mV with dd digits
 void Display_Hz(unsigned long val, uint8_t dd);		// show Hz with dd digits
 unsigned int compute_hfe(unsigned int lpx, unsigned int tpy);

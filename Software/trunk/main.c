@@ -408,13 +408,13 @@
 
 #ifdef WITH_XTAL
   if (PartFound == PART_CERAMICRESONATOR) {
-      static const unsigned char cerres_str[] MEM_TEXT = "Cer.resonator  ";
+//      static const unsigned char cerres_str[] MEM_TEXT = "Cer.resonator  ";
       lcd_MEM_string(cerres_str);
       sampling_measure_xtal();
       goto tt_end;
   }
   if (PartFound == PART_XTAL) {
-      static const unsigned char xtal_str[] MEM_TEXT = "Crystal  ";
+//      static const unsigned char xtal_str[] MEM_TEXT = "Crystal  ";
       lcd_MEM_string(xtal_str);
       sampling_measure_xtal();
       goto tt_end;
@@ -480,14 +480,18 @@ showdiodecap:
         cap.cval=sampling_cap(diodes.Cathode[0],diodes.Anode[0],0);   // at low voltage
         lcd_next_line_wait(0);		// next line, wait 5s and clear line 2
         DisplayValue(cap.cval,sampling_cap_pre,'F',2);
+ #ifdef PULLUP_DISABLE
         lcd_data('-');
         cap.cval=sampling_cap(diodes.Cathode[0],diodes.Anode[0],1);   // at high voltage
         DisplayValue(cap.cval,sampling_cap_pre,'F',2);
- #if LCD_LINE_LENGTH > 16
+  #if LCD_LINE_LENGTH > 16
         lcd_MEM_string(AT05volt);	// " @0-5V"
- #else
+  #else
         lcd_MEM_string(AT05volt+1);	// "@0-5V"
- #endif
+  #endif
+ #else
+  #warning Capacity measurement from high to low not possible for diodes without PULLUP_DISABLE option!
+ #endif  /* PULLUP_DISABLE */
 #endif
         goto end3;
      } else if(NumOfDiodes == 2) { // double diode

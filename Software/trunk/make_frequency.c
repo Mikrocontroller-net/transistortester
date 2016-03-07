@@ -4,7 +4,8 @@
 /* a long key press returns to the selection menu */
 /* *************************************************** */
 void make_frequency() {
-#define MAX_FREQ_NR 19
+#undef KEYPRESS_LENGTH_10ms 
+#define KEYPRESS_LENGTH_10ms 10		/* change frequency only with >100ms key press */
   uint8_t key_pressed;
   uint8_t significant;		// number of signigficant bits to show the frequency (+16 for option)
   unsigned long wish_freq;	// frequency (Hz), which you want to create
@@ -68,6 +69,7 @@ void make_frequency() {
         }
         lcd_clear_line();	// clear remainder of line1
      }
+#endif
      // Generate frequency
      if (significant > (16+1)) {
         // use lower significant digits and the frequency selection digit f_digit
@@ -140,9 +142,6 @@ void make_frequency() {
 #endif
      lcd_data('z');
      lcd_clear_line();
-#undef KEYPRESS_LENGTH_10ms 
-#define KEYPRESS_LENGTH_10ms 10		/* change frequency only with >100ms key press */
-#endif
      key_pressed = wait_for_key_ms(1500);	// check key and rotary encoder
 #ifdef POWER_OFF
  #ifdef WITH_ROTARY_SWITCH

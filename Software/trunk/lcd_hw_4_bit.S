@@ -118,14 +118,14 @@ _lcd_hw_write:
 	set_ce_output		// enable chip
 	; Set RS (0=Cmd, 1=Char)	
   #if (LCD_INTERFACE_MODE == MODE_3LINE)
-	sbrc    preg_1, 0
-	rjmp	set_rs
-	set_b0_low
-	set_b0_output
-	rjmp	set_sce
-set_rs:
+	sbrs    preg_1, 0
+	rjmp	clr_rs
 	set_b0_input
 	set_b0_high		// enable B0 pullup
+	rjmp	set_sce
+clr_rs:
+	set_b0_low
+	set_b0_output
 set_sce:
 	set_rs_low
 	set_rs_output		// SCE to GND;
@@ -134,14 +134,14 @@ set_sce:
 	set_en_high		// enable en pullup
 	rcall	wait1us
   #else
-	sbrc    preg_1, 0
-	rjmp	set_rs
-	set_rs_low
-	set_rs_output		// set B0 for RS to GND
-        rjmp	fini_rs
-set_rs:
+	sbrs    preg_1, 0
+	rjmp	clr_rs
 	set_rs_input		// set B0 to input
 	set_rs_high		// enable B0 pullup
+        rjmp	fini_rs
+clr_rs:
+	set_rs_low
+	set_rs_output		// set B0 for RS to GND
 fini_rs:
 	rcall	wait1us
    #endif

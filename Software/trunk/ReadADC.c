@@ -14,8 +14,8 @@ extern struct ADCconfig_t{
 
 #ifdef INHIBIT_SLEEP_MODE
 //  #define StartADCwait() ADCSRA = (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; /* enable ADC and start */
-    #define StartADCwait() ADCSRA = (1<<ADSC)|(1>>ADEN)|(1<<ADIF)|AUTO_CLOCK_DIV; /* Start conversion */\
-    while (ADCSRA & (1 << ADSC))  /* wait until conversion is done */
+    #define StartADCwait() ADCSRA = (1<<ADSC)|(1<<ADEN)|(1<<ADIF)|AUTO_CLOCK_DIV; /* Start conversion */\
+    while (ADCSRA & (1 << ADSC));  /* wait until conversion is done */
 #else
     #define StartADCwait() ADCSRA = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV; /*enable ADC and Interrupt */\
     set_sleep_mode(SLEEP_MODE_ADC);\
@@ -33,33 +33,24 @@ unsigned int ReadADC (uint8_t Probe) {
  unsigned int U; /* return value (mV) */
  uint8_t samples; /* loop counter */
  unsigned long Value; /* ADC value */
-#ifdef AUTOSCALE_ADC
- uint8_t old_state;
-// uint8_t new_state;
-#endif
 
  Probe |= (1 << REFS0); /* use internal reference anyway */
 
 #ifdef AUTOSCALE_ADC
-sample:
-
- old_state = (ADMUX & (1 << REFS1));	// get old state of Reference
-// new_state = (Probe & (1 << REFS1)); 	// get requested REFS1 bit flag 
- #if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
- if (Probe & (1<<REFS1)) Probe &= ~(1<<REFS0);	/* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
- #endif
-#else
- #if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
- if (Probe & (1 << REFS1)) Probe &= ~(1<<REFS0);	/* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
- #endif
+get_sample:
 #endif  /* AUTOSCALE_ADC */
+
+#if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
+ if (Probe & (1 << REFS1)) Probe &= ~(1<<REFS0);	/* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
+#endif
 
  ADMUX = Probe; /* set input channel and U reference */
 
 #ifdef AUTOSCALE_ADC
  /* if voltage reference changes, wait for voltage stabilization */
- if ((Probe & (1<<REFS1)) != old_state) {
+ if ((Probe & (1<<REFS1)) != ADCconfig.RefFlag) {
     //  Reference is switched, delay depends on NO_AREF_CAP option
+    ADCconfig.RefFlag = (Probe & (1<<REFS1));	// save new reference state
  #ifdef NO_AREF_CAP
     wait100us(); /* time for voltage stabilization */
  #else
@@ -80,7 +71,7 @@ sample:
     /* auto-switch voltage reference for low readings */
     if ((samples == 4) && (ADCconfig.U_Bandgap > 255) && ((uint16_t)Value < 1024) && !(Probe & (1<<REFS1))) {
        Probe |= (1 << REFS1); /* select internal bandgap reference */
-       goto sample; /* re-run sampling */
+       goto get_sample; /* re-run sampling */
     }
 #endif
     samples++; /* one more done */

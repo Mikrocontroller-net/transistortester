@@ -314,7 +314,7 @@ CFLAGS += -DBAT_CHECK
 # If your 9V supply has a diode installed, use the BAT_OUT=600 form to specify the
 # threshold voltage of your diode to adjust the output value.
 # This threshold level is added to LCD-output and does not affect the voltage checking levels.
-CFLAGS += -DBAT_OUT=150
+CFLAGS += -DBAT_OUT=2
 
 # To adjust the warning-level and poor-level of battery check to the capability of a
 # low drop voltage regulator, you can specify the Option BAT_POOR=5400 .

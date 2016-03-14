@@ -121,8 +121,6 @@
 	 #endif
 	#endif
 
-	//  DIDR0 = 0x3f;			//disable all Input register of ADC
-
 	//#if POWER_OFF+0 > 1
 	  // tester display time selection
 	#ifndef USE_EEPROM
@@ -148,9 +146,6 @@
 	  if (ii > 30) {
 	     display_time = LONG_WAIT_TIME;	// ... set long time display anyway
 	  }
-	//#else
-	//  #define display_time OFF_WAIT_TIME
-	//#endif
 
 	#if POWER_OFF+0 > 1
 	  empty_count = 0;
@@ -325,7 +320,7 @@
 
 	#ifdef DebugOut 
 	  // only clear two lines of LCD
-	  lcd_clear_line2();
+
 	  lcd_clear_line1();
 	#else
 	  lcd_clear();				// clear total display
@@ -451,14 +446,12 @@
            lcd_testpin(diodes.Anode[0]);
         }
  #endif
+	GetIr(diodes.Cathode[0],diodes.Anode[0]);	// measure and output Ir=x.xuA
 #else
         // too less memory to sort the pins
         lcd_testpin(diodes.Anode[0]);
         lcd_MEM_string(AnKat_str);		//"->|-"
         lcd_testpin(diodes.Cathode[0]);
-#endif
-#if FLASHEND > 0x1fff
-	GetIr(diodes.Cathode[0],diodes.Anode[0]);	// measure and output Ir=x.xuA
 #endif
         UfAusgabe(0x70);		// mark for additional resistor and output Uf= in line 2
 #ifndef SamplingADC
@@ -1172,8 +1165,8 @@ wait_again:
   }
  #endif
   // only one Measurement requested, shut off
-shut_off:
  #if FLASHEND > 0x3fff
+shut_off:
   // look, if the tester is uncalibrated (C-source will be included directly)
   lcd_cursor_off();
   #include "HelpCalibration.c"

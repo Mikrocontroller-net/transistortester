@@ -133,7 +133,7 @@
  #define TPREF (1<<MUX2) 
  #define TPRELAY PC4
  // Port pin for Battery voltage measuring PC5
- #define TPBAT ((1<<MUX2) | (1<<MUX0))
+ #define TPBAT PC5		/* identical to ((1<<MUX2) | (1<<MUX0)) */
  // option WITH_VEXT can be set automatically, if WITH_UART is unset
  #define TPCAP -1
 #endif	/* PROCESSOR_TYP */

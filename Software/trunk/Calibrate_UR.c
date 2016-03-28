@@ -39,7 +39,7 @@ void Calibrate_UR(void) {
                                         // ref_mv_offs, ADCconfig.U_Bandgap
                                         //############################################
 
-  EntladePins();	// make shure, that no voltage is left from capacitors
+  EntladePins();	// make sure, that no voltage is left from capacitors
 #ifdef AUTO_CAL
   // measurement of internal resistance of the ADC port outputs switched to GND
   ADC_PORT =  TXD_VAL;	//ADC-Ports to GND

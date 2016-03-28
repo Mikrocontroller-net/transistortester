@@ -451,7 +451,7 @@ checkDiodes:
       lcd_space();
       wait_about1s();	/* debug delay */
 #endif
-      // nearly shure, that there is one or more diodes in reverse direction,
+      // nearly sure, that there is one or more diodes in reverse direction,
       // which would be wrongly detected as capacitor 
    } else {
       PartFound = PART_CAPACITOR;	//capacitor is found

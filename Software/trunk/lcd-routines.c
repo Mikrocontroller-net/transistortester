@@ -561,7 +561,7 @@ void lcd_init(void) {
 #else    /* !(LCD_ST_TYPE == 7565 | 1306) | 7108 | 7920 | 7108 | 8812 | 8814 | 7735 | 9163) */
 /* must be a character display */
    wait_about100ms();
-   // to initialise, send 3 times to be shure to be in 8 Bit mode
+   // to initialise, send 3 times to be sure to be in 8 Bit mode
 
  #if LCD_INTERFACE_MODE == MODE_PARALLEL
    lcd_command(0x33);			// switch to 8-bit

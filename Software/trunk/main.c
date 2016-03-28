@@ -904,7 +904,7 @@ showdiodecap:
  #endif
     } else {   /* depletion mode */
  #if LCD_LINES > 6
-       lcd_next_line(TEXT_RIGHT_TO_ICON);	// Make shure to be under the icon
+       lcd_next_line(TEXT_RIGHT_TO_ICON);	// Make sure to be under the icon
  #endif
        if ((PartMode&0x0f)  != PART_MODE_JFET) {     /* kein JFET */
           ReadCapacity(_trans->b,_trans->e);	//measure capacity

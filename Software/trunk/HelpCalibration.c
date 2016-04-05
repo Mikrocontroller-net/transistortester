@@ -1,4 +1,4 @@
-#ifdef AUTO_CAL
+#if defined(AUTO_CAL) && (FLASHEND > 0x3fff)
 // Check is direct included in the main source of the TransistorTester
 // a function with a call from main will use additional 38 bytes of flash
   // define additional variables , ii is already defined in main
@@ -48,4 +48,4 @@
 #endif
     wait_for_key_ms(TIME_TO_READ);	// key pressed
   }
-#endif
+#endif  /* AUTO_CAL && (FLASHEND > 0x3fff) */

@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include "Transistortester.h"
 
-
 //=================================================================
 // selection of different functions
 
@@ -108,11 +107,119 @@
 #define MENU_MIDDLE ((MENU_LINES-1)/2)
 
 #ifdef WITH_MENU
+
+void do_menu(uint8_t func_number) {
+
+//    lcd_MEM2_string(DoMenu_str);	// "do menu "
+//    u2lcd(func_number);
+    if (func_number == MODE_FREQ) GetFrequency(0);
+#if PROCESSOR_TYP == 644
+    if (func_number == MODE_HFREQ) GetFrequency(1);	// measure high frequency with 16:1 divider
+    if (func_number == MODE_H_CRYSTAL) GetFrequency(5); // HF crystal input + 16:1 divider
+    if (func_number == MODE_L_CRYSTAL) GetFrequency(6); // LF crystal input, 1:1 divider
+#endif
+    if (func_number == MODE_FGEN) {
+       make_frequency();		// make some sample frequencies
+    }
+    if (func_number == MODE_PWM) {
+       do_10bit_PWM();		// generate 10bit PWM
+    }
+    if (func_number == MODE_ESR) {
+       show_C_ESR();		// measure capacity and ESR at TP1 and TP3
+    }
+    if (func_number == MODE_RESIS) {
+       show_Resis13();		// measure resistor at TP1 and TP3
+    }
+    if (func_number == MODE_CAP13) {
+   lcd_clear();
+       show_Cap13();		// measure capacitor at TP1 and TP3
+    }
+#ifdef WITH_ROTARY_CHECK
+    if (func_number == MODE_ROTARY) {
+       CheckRotaryEncoder();		// check rotary encoder
+    }
+#endif
+    if (func_number == MODE_BIG_CAP_CORR) {
+       set_big_cap_corr();
+    }
+#ifdef WITH_SELFTEST
+    if (func_number == MODE_SELFTEST) AutoCheck(0x11);	// Full selftest with calibration
+#endif
+    if (func_number == MODE_VEXT) show_vext();
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
+    if (func_number == MODE_CONTRAST) set_contrast();
+#endif
+    if (func_number == MODE_SHOW) {
+       ShowData();			// Show Calibration Data
+    }
+    if (func_number == MODE_OFF) {
+       ON_PORT &= ~(1<<ON_PIN);              //switch off power
+       wait_for_key_ms(0); //never ending loop
+    }
+}
+
 /* ****************************************************************** */
 /* ****************************************************************** */
-void function_menu() {
+#ifdef WITH_HARDWARE_SERIAL_XX
+
+uint8_t last_func_number = 0;
+
+uint8_t read_menu() {
+  uint8_t c;
+  while ( !(UCSR0A & (1<<RXC0)) );	// Wait for received data
+  c = UDR0;
+//  u2lcd(c);
+  if (c == '\n') { // '\n' alone == redo last operation
+    return last_func_number;
+  }
+  last_func_number = c - '0'; // '0' -> 255 , '1' -> 0, ...
+  // must be followed by \n
+  do {
+    while ( !(UCSR0A & (1<<RXC0)) );	// Wait for received data
+    c = UDR0;
+//  u2lcd(c);
+  } while (c != '\n');
+  return last_func_number;
+}
+void display_menu() {
+  uint8_t ii;
+  rawSerial = 1;
+  lcd_data('\n');
+  lcd_data('-');
+  lcd_data('-');
+  lcd_data('-');
+  for (ii = 0; ii < MODE_LAST; ii++) {
+      if (ii == last_func_number) lcd_data('>');
+      else			lcd_space();
+	  message2line(ii);
+  }
+  lcd_data('\n');
+  lcd_data('-');
+  lcd_data('-');
+  lcd_data('-');
+  rawSerial = 0;
+}
+uint8_t function_menu() {
+  uint8_t func_number;
+
+  display_menu();
+  func_number = read_menu();
+  if (func_number == 0) {
+	  return 0;
+  } else {
+	  do_menu(func_number);
+          lcd_MEM2_string(Done_str);	// "Done.\n"
+	  lcd_refresh();
+	  return 1;
+  }
+}
+
+#else // !WITH_HARDWARE_SERIAL
+
+uint8_t function_menu() {
   uint8_t ii;
   uint8_t func_number;
+
 #ifdef PAGE_MODE
   uint8_t page_nr;
   uint8_t p_nr;
@@ -135,6 +242,11 @@ void function_menu() {
      if (func_number > MODE_LAST) func_number -= (MODE_LAST + 1);
 #if (LCD_LINES > 3)
   uint8_t mm;
+#ifdef WITH_HARDWARE_SERIAL
+     uart_newline();          // start of new measurement
+     for (mm=0;mm<LCD_LINE_LENGTH;mm++) uart_putc('=');
+     message_key_released(SELECTION_str);	//write Line 1 with Selection:
+#endif
  #ifdef PAGE_MODE
      ff = 0;
      mm = 0;
@@ -204,51 +316,8 @@ void function_menu() {
 #endif
      {
         // selection only with key-press
-        if (func_number == MODE_TRANS) break;		// return to TransistorTester
-        if (func_number == MODE_FREQ) GetFrequency(0);
- #if PROCESSOR_TYP == 644
-        if (func_number == MODE_HFREQ) GetFrequency(1);	// measure high frequency with 16:1 divider
-        if (func_number == MODE_H_CRYSTAL) GetFrequency(5); // HF crystal input + 16:1 divider
-        if (func_number == MODE_L_CRYSTAL) GetFrequency(6); // LF crystal input, 1:1 divider
- #endif
-        if (func_number == MODE_FGEN) {
-           make_frequency();		// make some sample frequencies
-        }
-        if (func_number == MODE_PWM) {
-           do_10bit_PWM();		// generate 10bit PWM
-        }
-        if (func_number == MODE_ESR) {
-           show_C_ESR();		// measure capacity and ESR at TP1 and TP3
-        }
-        if (func_number == MODE_RESIS) {
-           show_Resis13();		// measure resistor at TP1 and TP3
-        }
-        if (func_number == MODE_CAP13) {
-	   lcd_clear();
-           show_Cap13();		// measure capacitor at TP1 and TP3
-        }
-  #ifdef WITH_ROTARY_CHECK
-        if (func_number == MODE_ROTARY) {
-           CheckRotaryEncoder();		// check rotary encoder
-        }
-  #endif
-        if (func_number == MODE_BIG_CAP_CORR) {
-           set_big_cap_corr();
-        }
-  #ifdef WITH_SELFTEST
-        if (func_number == MODE_SELFTEST) AutoCheck(0x11);	// Full selftest with calibration
-  #endif
-        if (func_number == MODE_VEXT) show_vext();
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
-        if (func_number == MODE_CONTRAST) set_contrast();
-  #endif
-        if (func_number == MODE_SHOW) {
-           ShowData();			// Show Calibration Data
-        }
-        if (func_number == MODE_OFF) {
-           ON_PORT &= ~(1<<ON_PIN);              //switch off power
-           wait_for_key_ms(0); //never ending loop 
-        }
+        if (func_number == MODE_TRANS) return 0;		// return to TransistorTester
+        do_menu(func_number);
         // don't increase function number for easier selection the same function
         ii = 0;			// function was executed before, do not increase func_number
 #ifdef WITH_ROTARY_SWITCH
@@ -270,8 +339,11 @@ void function_menu() {
 #endif
      if (ii > 0) func_number++;	// increase the function number with key press
   } /* end for ll */
-  return;
+
+  return 0;
  } // end function_menu()
+
+#endif // !WITH_HARDWARE_SERIAL
 
 /* ****************************************************************** */
 /* message2line writes the message corresponding to the number to LCD */
@@ -310,10 +382,8 @@ void message2line(uint8_t number) {
      if (number == MODE_OFF) {
         lcd_MEM2_string(OFF_str);
      }
-     while (_lcd_column<LCD_LINE_LENGTH) {
-        lcd_space();
+     lcd_clear_line();
      }
-}
 
 /* ****************************************************************** */
 /* show_C_ESR measures the capacity and ESR of a capacitor connected to TP1 and TP3 */

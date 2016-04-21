@@ -899,13 +899,14 @@
 // R_ANZ_MESS can be set to a higher number of measurements (up to 200) for resistor measurement
 #define R_ANZ_MESS 190
 
+#ifndef WITH_HARDWARE_SERIAL
 //Watchdog
 #define WDT_enabled
 /* If you remove the "#define WDT_enabled" , the Watchdog will not be activated.
   This is only for Test or debugging usefull.
  For normal operation please activate the Watchdog !
 */
-
+#endif
 
 
 // RH_OFFSET : systematic offset of resistor measurement with RH (470k) 

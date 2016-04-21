@@ -29,21 +29,68 @@
 // capacitor is measured. If the voltage is more than 300mV, the capacity is computed by
 // interpolating the corresponding values of the table RLtab and multiply that with the number
 // of load pulses (*10).
-#if R_L_VAL == 3300
-// resistor   330 Ohm                       300   325   350   375   400   425   450   475   500   525   550   575   600   625   650   675   700   725   750   775   800   825   850   875   900   925   950   975  1000  1025  1050  1075  1100  1125  1150  1175  1200  1225  1250  1275  1300  1325  1350  1375  1400  mV
- const uint16_t RLtab[] MEM_TEXT = {43680,40214,37242,34667,32414,30425,28657,27076,25652,24364,23192,22123,21142,20240,19407,18636,17920,17253,16630,16048,15501,14988,14505,14049,13619,13212,12826,12460,12112,11781,11466,11165,10878,10603,10341,10089, 9848, 9617, 9395, 9181, 8976, 8778, 8588, 8404, 8227};
-#else
+// don't know why values are correct with a +40 0hm delta ?
+const uint16_t RLtab[] MEM_TEXT = {
+	/*  300 */ 161615107.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  325 */ 148790151.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  350 */ 137796673.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  375 */ 128268372.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  400 */ 119930523.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  425 */ 112573043.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  450 */ 106032531.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  475 */ 100179988.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  500 */  94912216.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  525 */  90145671.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  550 */  85812001.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  575 */  81854741.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  600 */  78226835.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  625 */  74888757.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  650 */  71807063.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  675 */  68953262.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  700 */  66302933.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  725 */  63835026.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  750 */  61531294.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  775 */  59375846.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  800 */  57354779.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  825 */  55455872.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  850 */  53668345.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  875 */  51982646.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  900 */  50390288.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  925 */  48883700.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  950 */  47456108.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/*  975 */  46101432.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/* 1000 */  44814201.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/* 1025 */  43589478.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/* 1050 */  42422794.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/* 1075 */  41310098.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/* 1100 */  40247707.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/* 1125 */  39232264.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/* 1150 */  38260704.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/* 1175 */  37330225.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/* 1200 */  36438256.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/* 1225 */  35582436.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/* 1250 */  34760595.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/* 1275 */  33970731.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/* 1300 */  33210996.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/* 1325 */  32479683.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/* 1350 */  31775210.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/* 1375 */  31096111.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5,
+	/* 1400 */  30441023.0 / (PIN_RM + PIN_RP + R_L_VAL) + 0.5
+};
 
-// resistor   680 Ohm                       300   325   350   375   400   425   450   475   500   525   550   575   600   625   650   675   700   725   750   775   800   825   850   875   900   925   950   975  1000  1025  1050  1075  1100  1125  1150  1175  1200  1225  1250  1275  1300  1325  1350  1375  1400  mV
- const uint16_t RLtab[] MEM_TEXT = {22447,20665,19138,17815,16657,15635,14727,13914,13182,12520,11918,11369,10865,10401, 9973, 9577, 9209, 8866, 8546, 8247, 7966, 7702, 7454, 7220, 6999, 6789, 6591, 6403, 6224, 6054, 5892, 5738, 5590, 5449, 5314, 5185, 5061, 4942, 4828, 4718, 4613, 4511, 4413, 4319, 4228};
-#endif
+//	#if R_L_VAL == 3300
+//	// resistor   330 Ohm               300   325   350   375   400   425   450   475   500   525   550   575   600   625   650   675   700   725   750   775   800   825   850   875   900   925   950   975  1000  1025  1050  1075  1100  1125  1150  1175  1200  1225  1250  1275  1300  1325  1350  1375  1400  mV
+//	const uint16_t RLtab[] MEM_TEXT = {43680,40214,37242,34667,32414,30425,28657,27076,25652,24364,23192,22123,21142,20240,19407,18636,17920,17253,16630,16048,15501,14988,14505,14049,13619,13212,12826,12460,12112,11781,11466,11165,10878,10603,10341,10089, 9848, 9617, 9395, 9181, 8976, 8778, 8588, 8404, 8227};
+//	#else
+//	// resistor   680 Ohm               300   325   350   375   400   425   450   475   500   525   550   575   600   625   650   675   700   725   750   775   800   825   850   875   900   925   950   975  1000  1025  1050  1075  1100  1125  1150  1175  1200  1225  1250  1275  1300  1325  1350  1375  1400  mV
+//	const uint16_t RLtab[] MEM_TEXT = {22447,20665,19138,17815,16657,15635,14727,13914,13182,12520,11918,11369,10865,10401, 9973, 9577, 9209, 8866, 8546, 8247, 7966, 7702, 7454, 7220, 6999, 6789, 6591, 6403, 6224, 6054, 5892, 5738, 5590, 5449, 5314, 5185, 5061, 4942, 4828, 4718, 4613, 4511, 4413, 4319, 4228};
+//	#endif
 
 #if FLASHEND > 0x1fff
 //                                        {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63,  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91 };
  const uint16_t LogTab[] PROGMEM = {0, 20, 41, 62, 83, 105, 128, 151, 174, 198, 223, 248, 274, 301, 329, 357, 386, 416, 446, 478, 511, 545, 580, 616, 654, 693, 734, 777, 821, 868, 916, 968, 1022, 1079, 1139, 1204, 1273, 1347, 1427, 1514, 1609, 1715, 1833, 1966, 2120, 2303, 2526 };
 
 #endif
-
 
 
 #ifdef AUTO_RH
@@ -72,7 +119,7 @@ const uint16_t RHtab[] PROGMEM = {
  // these values are 1e7/R_H_VAL/-ln(1-ref/5000)   (note that R_H_VAL is in multiples of 10 ohm)
  // the +0.5 is for rounding
 
-#endif  /* AUTO_RH */
+#endif  // AUTO_RH
 
 
 // with integer factors the ADC-value will be changed to mV resolution in ReadADC !
@@ -101,17 +148,17 @@ End of configuration
 // All languages must be placed before the english text.
 // If none is actually selected, LANG_SELECTED is not set.
 #ifndef LANG_SELECTED		//default language is english
-   const unsigned char TestRunning[] MEM_TEXT = "Testing..."; //€€€€€€";
-   const unsigned char BatWeak[] MEM_TEXT = "weak"; //€€€";
-   const unsigned char BatEmpty[] MEM_TEXT = "empty!"; //€€";
-   const unsigned char TestFailed2[] MEM_TEXT = "damaged "; //€€€€";
-   const unsigned char Bauteil[] MEM_TEXT = "part"; //€€€€€€";
+   const unsigned char TestRunning[] MEM_TEXT = "Testing...";
+   const unsigned char BatWeak[] MEM_TEXT = "weak";
+   const unsigned char BatEmpty[] MEM_TEXT = "empty!";
+   const unsigned char TestFailed2[] MEM_TEXT = "damaged ";
+   const unsigned char Bauteil[] MEM_TEXT = "part";
 //   const unsigned char Diode[] MEM_TEXT = "Diode: ";
    const unsigned char Triac[] MEM_TEXT = "Triac";
    const unsigned char Thyristor[] MEM_TEXT = "Thyrist.";
-   const unsigned char Unknown[] MEM_TEXT = " unknown"; //€";
-   const unsigned char TestFailed1[] MEM_TEXT = "No, unknown, or"; //€";
-   const unsigned char OrBroken[] MEM_TEXT = "or damaged "; //€€";
+   const unsigned char Unknown[] MEM_TEXT = " unknown";
+   const unsigned char TestFailed1[] MEM_TEXT = "No, unknown, or";
+   const unsigned char OrBroken[] MEM_TEXT = "or damaged ";
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'C'
  #ifdef WITH_SELFTEST
@@ -327,6 +374,10 @@ End of configuration
 #ifdef WITH_MENU
  const unsigned char FatTP2_str[] MEM2_TEXT = "f@TP2";
  const unsigned char C_ESR_str[] MEM2_TEXT = "C+ESR@TP1:3";
+#endif
+#ifdef WITH_HARDWARE_SERIAL
+ const unsigned char DoMenu_str[] MEM2_TEXT = "do menu ";
+ const unsigned char Done_str[] MEM2_TEXT = "Done.\n";
 #endif
 
 #if FLASHEND > 0x3fff

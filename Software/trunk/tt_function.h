@@ -46,7 +46,7 @@ void i2lcd_space(int iw);		// output integer value to LCD and ' '
 void u2lcd_space(uint16_t iw);		// output unsigned integer value to LCD and ' '
 void EE_check_init(void);		// check calibration values and init the values if unset
 void GetFrequency(uint8_t range);	// measure Frequency and display 
-void function_menu();			// menu for selecting extra function
+uint8_t function_menu();			// menu for selecting extra function
 void show_vext();			// show external voltage (zener) 
 void set_big_cap_corr();		// set the correction value for big capacitor measurement
 void message_key_released(const unsigned char XX_str[]); // clear display, show message XX_str and wait for released key

@@ -16,8 +16,8 @@
     zeich = ' ';		// initial value for while loop
     line_nr = LCD_LINES;		// begin with the first LCD line, but don't wait
     while (zeich != (char)0) {	// zero is end of text
-       space_pos = 16;		// if no space is found
-       for (ii=0;ii<17;ii++) {	// look for the last space character
+       space_pos = LCD_LINE_LENGTH;		// if no space is found
+       for (ii=0;ii<(LCD_LINE_LENGTH+1);ii++) {	// look for the last space character
          zeich = pgm_read_byte(&HelpCalibration_str[ii+jj]);
          if (zeich == ' ')  space_pos = ii; // save the position
        }

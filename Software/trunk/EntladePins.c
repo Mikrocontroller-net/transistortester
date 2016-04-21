@@ -11,6 +11,9 @@ void EntladePins() {
   uint8_t lop_cnt;		// loop counter
 // max. time of discharge in ms  (10000/20) == 10s
 #define MAX_ENTLADE_ZEIT  (10000/20)
+#if DebugOut == 99
+  uart_putc('L');		//Debug
+#endif
   for(lop_cnt=0;lop_cnt<10;lop_cnt++) {
      adc_gnd = TXD_MSK;		// put all ADC to Input
      ADC_DDR = adc_gnd;
@@ -21,13 +24,24 @@ void EntladePins() {
      adcmv[0] = W5msReadADC(TP1);	// which voltage has Pin 1?
      adcmv[1] = ReadADC(TP2);	// which voltage has Pin 2?
      adcmv[2] = ReadADC(TP3);	// which voltage has Pin 3?
-     if ((PartFound == PART_CELL) || (adcmv[0] < CAP_EMPTY_LEVEL) & (adcmv[1] < CAP_EMPTY_LEVEL) & (adcmv[2] < CAP_EMPTY_LEVEL)) {
+#if DebugOut == 99
+        lcd_line3();
+        uart_putc('T');
+        u2lcd_space(adcmv[0]);	// lcd_string(utoa(adcmv[0], outval, 10)); lcd_space();
+        u2lcd_space(adcmv[1]);	// lcd_string(utoa(adcmv[1], outval, 10)); lcd_space();
+        u2lcd(adcmv[2]);		// lcd_string(utoa(adcmv[2], outval, 10));
+        wait2s();
+#endif
+     if ((PartFound == PART_CELL) || ((adcmv[0] < CAP_EMPTY_LEVEL) && (adcmv[1] < CAP_EMPTY_LEVEL) && (adcmv[2] < CAP_EMPTY_LEVEL))) {
         ADC_DDR = TXD_MSK;		// switch all ADC-Pins to input
         R_DDR = 0;			// switch all R_L Ports (and R_H) to input
 #if FLASHEND > 0x3fff
         cell_mv[0] = adcmv[0];		// save the voltage of pin 1
         cell_mv[1] = adcmv[1];		// save the voltage of pin 2
         cell_mv[2] = adcmv[2];		// save the voltage of pin 3
+#endif
+#if DebugOut == 99
+        uart_putc('l');		//Debug
 #endif
         return;			// all is discharged
      }
@@ -71,14 +85,17 @@ void EntladePins() {
      }
 #if DebugOut == 99
         lcd_line4();
-        u2lcd_space(adcmv[0];	// lcd_string(utoa(adcmv[0], outval, 10)); lcd_space();
-        u2lcd_space(adcmv[1];	// lcd_string(utoa(adcmv[1], outval, 10)); lcd_space();
-        u2lcd(adcmv[2];		// lcd_string(utoa(adcmv[2], outval, 10));
+        u2lcd_space(adcmv[0]);	// lcd_string(utoa(adcmv[0], outval, 10)); lcd_space();
+        u2lcd_space(adcmv[1]);	// lcd_string(utoa(adcmv[1], outval, 10)); lcd_space();
+        u2lcd(adcmv[2]);		// lcd_string(utoa(adcmv[2], outval, 10));
 #endif
      for(adcmv[0]=0;adcmv[0]<clr_cnt;adcmv[0]++) {
         // for safety, discharge 5% of discharge  time
         wait1ms();
      }
   } // end for lop_cnt
+#if DebugOut == 99
+  uart_putc('x');		//Debug
+#endif
  }
 

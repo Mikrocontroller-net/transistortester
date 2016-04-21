@@ -3,6 +3,10 @@
 //
 // Pin selection can be changed in lcd-routines.h with define
  
+#ifdef WITH_HARDWARE_SERIAL
+#include "lcd-routines-serial.c"
+#else
+
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/pgmspace.h>
@@ -1176,3 +1180,4 @@ void lcd_refresh(void) {
 #endif
 
 
+#endif // ndef WITH_HARDWARE_SERIAL

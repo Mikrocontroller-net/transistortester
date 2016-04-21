@@ -290,7 +290,6 @@ ASMFLAGS += -x assembler-with-cpp -Wa,-gdwarf2
 LDFLAGS = $(COMMON)
 LDFLAGS +=  -Wl,--relax,-Map=$(PROJECT).map
 
-
 ## Intel Hex file production flags
 HEX_FLASH_FLAGS = -R .eeprom -R .fuse -R .lock -R .signature
 #HEX_FLASH_FLAGS += -R .fuse -R .lock -R .signature
@@ -301,7 +300,8 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Objects that must be built in order to link
-OBJECTS = lcd_hw_4_bit.o lcd-routines.o i2lcd.o PinLayout.o RvalOut.o UfAusgabe.o DisplayValue.o
+OBJECTS = lcd_hw_4_bit.o lcd-routines.o
+OBJECTS += i2lcd.o PinLayout.o RvalOut.o UfAusgabe.o DisplayValue.o
 ifeq ($(WITH_LCD_ST7565),1)
 OBJECTS += lcd-draw.o
 endif

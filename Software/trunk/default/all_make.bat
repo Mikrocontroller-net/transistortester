@@ -79,6 +79,9 @@ make steril
 cd ../arduino_m2560
 echo "SubDir arduino_m2560"
 make steril
+cd ../arduino_uno
+echo "SubDir arduino_uno"
+make steril
 cd ../mega644_LCD2004
 echo "SubDir mega664_LCD2004"
 make steril

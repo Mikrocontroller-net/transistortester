@@ -1,4 +1,3 @@
-
 	#include <avr/io.h>
 	#include <util/delay.h>
 	#include <avr/sleep.h>
@@ -60,6 +59,8 @@
 	  UCSR0B = 0;		// disable UART, if started with bootloader
 	 #endif
 	#endif
+          wait500ms();
+
 	#if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
 	 #define BAUD_RATE 9600
 //	  UBRR0H = (F_CPU / 16 / BAUD_RATE - 1) >> 8;
@@ -74,6 +75,7 @@
          #endif
           SERIAL_DDR |= (1<<SERIAL_BIT);
 	#endif
+
 	  tmp = (WDRF_HOME & ((1<<WDRF)));	// save Watch Dog Flag
 	  WDRF_HOME &= ~(1<<WDRF);	 	//reset Watch Dog flag
 	  wdt_disable();			// disable Watch Dog
@@ -130,9 +132,14 @@
 	//  rotary_switch_present = eeprom_read_byte(&EE_RotarySwitch);
 	  rotary.ind = ROT_MSK+1;		//initilize state history with next call of check_rotary()
 	#endif
+#ifdef WITH_HARDWARE_SERIAL
+//	ii = 60;
+	ii = 30;
+#else
 	#if 1
 	  for (ii=0; ii<60; ii++) {
-	     if (RST_PIN_REG & (1<<RST_PIN)) break;	// button is released
+		if (RST_PIN_REG & (1 << RST_PIN))
+			break;	// button is released
 	     wait_about10ms();
 	  }
 	#else
@@ -146,7 +153,7 @@
 	  if (ii > 30) {
 	     display_time = LONG_WAIT_TIME;	// ... set long time display anyway
 	  }
-
+#endif // WITH_HARDWARE_SERIAL
 	#if POWER_OFF+0 > 1
 	  empty_count = 0;
 	  mess_count = 0;
@@ -158,7 +165,7 @@
 	#endif
 	#ifdef WITH_MENU
 	  if (ii >= 60) {
-	     function_menu();		// selection of function
+		while(function_menu());		// selection of function
 	  }
 	#endif
 
@@ -277,7 +284,6 @@
 	  CheckPins(TP2, TP3, TP1);
 	  CheckPins(TP3, TP2, TP1);
 
-	  
 	  // Capacity measurement is only possible correctly with two Pins connected.
 	  // A third connected pin will increase the capacity value!
 	//  if(((PartFound == PART_NONE) || (PartFound == PART_RESISTOR) || (PartFound == PART_DIODE)) ) {
@@ -314,7 +320,6 @@
            sampling_test_xtal();
         }
 #endif
-
 
 	  //All checks are done, output result to display
 
@@ -537,28 +542,22 @@ showdiodecap:
           Only once the pin No of anyone Cathode is identical of another anode.
           two diodes in series is additionally detected as third big diode.
         */
-        if(diodes.Cathode[0] == diodes.Anode[1])
-          {
+			if (diodes.Cathode[0] == diodes.Anode[1]) {
            diode_sequence = 0x01;	// 0 1
           }
-        if(diodes.Anode[0] == diodes.Cathode[1])
-          {
+			if (diodes.Anode[0] == diodes.Cathode[1]) {
            diode_sequence = 0x10;	// 1 0
           }
-        if(diodes.Cathode[0] == diodes.Anode[2])
-          {
+			if (diodes.Cathode[0] == diodes.Anode[2]) {
            diode_sequence = 0x02;	// 0 2
           }
-        if(diodes.Anode[0] == diodes.Cathode[2])
-          {
+			if (diodes.Anode[0] == diodes.Cathode[2]) {
            diode_sequence = 0x20;	// 2 0
           }
-        if(diodes.Cathode[1] == diodes.Anode[2])
-          {
+			if (diodes.Cathode[1] == diodes.Anode[2]) {
            diode_sequence = 0x12;	// 1 2
           }
-        if(diodes.Anode[1] == diodes.Cathode[2])
-          {
+			if (diodes.Anode[1] == diodes.Cathode[2]) {
            diode_sequence = 0x21;	// 2 1
           }
 //        if((ptrans.b<3) && (ptrans.c<3)) 
@@ -589,7 +588,8 @@ showdiodecap:
        n_cval = cap.cval;			// save the found capacity value
        n_cpre  = cap.cpre;			// and dimension
        ReadCapacity(ptrans.b, ptrans.e);	// read capacity of PNP base-emitter
-       if (((n_cpre == cap.cpre) && (cap.cval > n_cval)) || (cap.cpre > n_cpre)){
+			if (((n_cpre == cap.cpre) && (cap.cval > n_cval))
+					|| (cap.cpre > n_cpre)) {
           // the capacity value or dimension of the PNP B-E is greater than the NPN B-E
           PartMode = PART_MODE_PNP;
        } else {
@@ -598,7 +598,8 @@ showdiodecap:
     }  /* end ((ptrans.count != 0) && (ntrans.count !=0)) */
 #endif
     // not possible for mega8, change Pin sequence instead.
-    if ((ptrans.count != 0) && (ntrans.count !=0) && (!(RST_PIN_REG & (1<<RST_PIN)))) {
+		if ((ptrans.count != 0) && (ntrans.count != 0)
+				&& (!(RST_PIN_REG & (1 << RST_PIN)))) {
        // if the Start key is still pressed, use the other Transistor
 #if 0
        if (PartMode == PART_MODE_NPN) {
@@ -651,7 +652,9 @@ showdiodecap:
 #endif
     an_cat = 0;
     for (ii=0; ii<NumOfDiodes; ii++) {
-       if ((diodes.Anode[ii] == _trans->b) || (diodes.Cathode[ii] == _trans->b)) continue;
+			if ((diodes.Anode[ii] == _trans->b)
+					|| (diodes.Cathode[ii] == _trans->b))
+				continue;
        // no side of the diode is connected to the base, this must be the protection diode   
 #ifdef WITH_GRAPHICS
        options = 0;
@@ -670,8 +673,8 @@ showdiodecap:
   #endif
  #else
        // Layout with 123= style
-       an_cat = (((PartMode == PART_MODE_NPN) && (ntrans.c > ntrans.e)) ||
-                 ((PartMode != PART_MODE_NPN) && (ptrans.c < ptrans.e)));
+			an_cat = (((PartMode == PART_MODE_NPN) && (ntrans.c > ntrans.e))
+					|| ((PartMode != PART_MODE_NPN) && (ptrans.c < ptrans.e)));
  #endif
        if (an_cat) {
           lcd_MEM_string(AnKat_str);	//"->|-"
@@ -737,7 +740,6 @@ showdiodecap:
     lcd_equal();			// lcd_data('=');
     DisplayValue16(_trans->current,-6,'A',2);	// display Ic or Ie current
  #endif
-
 
  #if defined(SHOW_ICE)
     lcd_next_line_wait(0);		// next line, wait 5s and clear line 2
@@ -862,7 +864,8 @@ showdiodecap:
  #endif
 #else /* EBC_STYLE not defined */
        // layout with 123= style
-       an_cat = (((PartMode&P_CHANNEL) && (ptrans.c < ptrans.e)) || ((!(PartMode&P_CHANNEL)) && (ntrans.c > ntrans.e)));
+			an_cat = (((PartMode & P_CHANNEL) && (ptrans.c < ptrans.e))
+					|| ((!(PartMode & P_CHANNEL)) && (ntrans.c > ntrans.e)));
 #endif /* end ifdef EBC_STYLE */
 
 #ifndef WITH_GRAPHICS
@@ -988,8 +991,7 @@ showdiodecap:
   }  /* end (PartFound == PART_FET) */
 
 //   if(PartFound == PART_RESISTOR) 
-resistor_out:
-   if(ResistorsFound != 0) {
+	resistor_out: if (ResistorsFound != 0) {
     if (ResistorsFound == 1) { // single resistor
 
        rpins.pw = Rnum2pins(ResistorList[0]);	// get pin numbers for resistor 1
@@ -1023,7 +1025,6 @@ resistor_out:
           }
        }
        // ResistorVal[0] TP1:TP2, [1] TP1:TP3, [2] TP2:TP3
-
 
     //   x = TP1;
     //   y = TP3;
@@ -1094,7 +1095,6 @@ not_known:
   max_time = SHORT_WAIT_TIME;		// use allways the short wait time
   goto end2;
 
-
 //gakAusgabe:
 //  PinLayout(Cathode_char,'G','A'); 	// CGA= or 123=...
 TyUfAusgabe:
@@ -1122,7 +1122,8 @@ TyUfAusgabe:
  end2:
   ADC_DDR = (1<<TPRELAY) | TXD_MSK; 	// switch pin with reference to GND, release relay
   lcd_refresh();			// write the pixels to display, ST7920 only
-  while(!(RST_PIN_REG & (1<<RST_PIN)));	//wait ,until button is released
+	while (!(RST_PIN_REG & (1 << RST_PIN)))
+		;	//wait ,until button is released
 #ifdef WITH_ROTARY_SWITCH
 wait_again:
 #endif
@@ -1145,11 +1146,13 @@ wait_again:
  #endif
   {
      // menu selected by long key press or rotary switch
-     function_menu();		// start the function menu
+		while(function_menu());// start the function menu
      goto loop_start;
   }
 #endif
-  if (ii != 0 ) goto loop_start;	// key is pressed again, repeat measurement
+	if (ii != 0)
+		goto loop_start;
+	// key is pressed again, repeat measurement
 #ifdef WITH_ROTARY_SWITCH
   if (rotary.incre > 0) goto wait_again;
 #endif
@@ -1183,12 +1186,14 @@ shut_off:
   lcd_cursor_off();
   #include "HelpCalibration.c"
 #endif
-  goto loop_start;	// POWER_OFF not selected, repeat measurement
+	goto loop_start;
+	// POWER_OFF not selected, repeat measurement
 //  return 0;
 
 end3:
   // the diode  is already shown on the LCD
-  if (ResistorsFound == 0) goto tt_end;
+	if (ResistorsFound == 0)
+		goto tt_end;
   ADC_DDR = (1<<TPRELAY) | TXD_MSK; 	// switch pin with reference to GND, release relay
   // there is one resistor or more detected
 #if (LCD_LINES > 3)
@@ -1229,7 +1234,6 @@ void init_parts(void) {
   cap.cval_max = 0;		// set max to zero
   cap.cpre_max = -15;	// set max to fF unit
 }
-
 
 #ifdef WITH_SELFTEST
  #include "AutoCheck.c"

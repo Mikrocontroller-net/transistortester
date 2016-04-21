@@ -25,14 +25,14 @@
 ;*
 ;***************************************************************************
 
-.global uart_putc
 .func uart_putc
+.global uart_putc
 .extern wait100us
 .extern wait3us
 
  .section .text
 uart_putc:	
-#ifdef WITH_UART
+#if defined(WITH_UART) && (!defined(WITH_HARDWARE_SERIAL))
 ;	push bitcnt
 ;	in temp,_SFR_IO_ADDR(SREG)
 		push	Txbyte		; save character 
@@ -71,7 +71,15 @@ putchar2:
 		pop	Txbyte		; restore character send
 ;   	out _SFR_IO_ADDR(SREG),temp
 ;   	pop bitcnt
-#endif
+#endif /* defined(WITH_UART) && (!defined(WITH_HARDWARE_SERIAL)) */
+#ifdef WITH_HARDWARE_SERIAL
+		; wait for empty transmit buffer
+w3:
+		lds	r25, UCSR0A
+		sbrs	r25, UDRE0
+		rjmp	w3		; wait
+		AOUT    UDR0, r24	; put data to transmit buffer
+#endif	/* def WITH_HARDWARE_SERIAL */
 		ret			;   return
 
 .endfunc

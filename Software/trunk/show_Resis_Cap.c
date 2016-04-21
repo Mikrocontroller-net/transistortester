@@ -54,6 +54,8 @@ typedef uint8_t byte;
    #define EXTRASPACES ' ',' ',' ',' ',
   #elif LCD_LINE_LENGTH==21
    #define EXTRASPACES ' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==40
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
   #else
    #warning Please add support for your LCD_LINE_LENGTH
    #define EXTRASPACES

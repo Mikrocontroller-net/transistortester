@@ -10,17 +10,17 @@
 
 // configure the LINE_LENGTH and LCD_LINES for character Display
 #ifdef FOUR_LINE_LCD
- #if FOUR_LINE_LCD == 3
-  #define LCD_LINES 3
-  #define PAGES_PER_LINE 1
-  #ifndef LCD_LINE_LENGTH
-   #define LCD_LINE_LENGTH 16  /* usually a 16 character line */
-  #endif
- #else
+ #if FOUR_LINE_LCD == 1
   #define LCD_LINES 4
   #define PAGES_PER_LINE 1
   #ifndef LCD_LINE_LENGTH
    #define LCD_LINE_LENGTH 20  /* usually a 20 character line */
+  #endif
+ #else
+  #define LCD_LINES FOUR_LINE_LCD
+  #define PAGES_PER_LINE 1
+  #ifndef LCD_LINE_LENGTH
+   #define LCD_LINE_LENGTH 16  /* usually a 16 character line */
   #endif
  #endif
 #else  /* no FOUR_LINE_LCD */

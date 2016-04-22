@@ -1,0 +1,44 @@
+Sie müssen eine "shield" Platine für den Arduino UNO benutzen, um das Transistortester Programm zu nutzen.
+Sie finden eine Beispielplatine im Ordner Hardware/ArduinoUno_shield, welche aus einem Stück Streifenraster Platinenmaterial gebildet wurde.
+Diese Implementation des Transistortesters benutzt derzeit kein LCD Display.
+Alle Daten werden nur auf dem seriellen Port mit 115200 Baud ausgegeben.
+Natürlich hat ein unabhängiger Tester einige Vorteile.
+Aber der Arduino Uno ist ein einfacher Weg um die Software auszuprobieren
+weil man keinen Programmierer oder keine externe Stromversorgung braucht.
+
+Auf meinem Mint Linux-System habe ich die Arduino Sketch Entwicklungsumgebung benutzt, um das 
+Board zu wählen (Tools/Board -> Arduino Uno).
+Dann konnte ich den richtigen seriellen Port prüfen und auswählen (Tools/Serieller Port -> /dev/ttyACM0) .
+Bitte überprüfen Sie auf ihrem Rechner die Port Nummer (ttyACM0, ttyACM1 ...).
+Benutzen Sie bitte nicht die Sketch Umgebung, um das Transistortester Programm zu übersetzen.
+Benutzen Sie bitte nur meine Makefile mit dem avr-gcc Paket und dem avrdude Programm um die Software
+zu übersetzen und zum ATmega zu übertragen.
+Ich habe das "make flash" Kommando auf einer Linux Terminal Fenster benutzt, um das Programm zum
+ATmega328P auf der Arduino Platine zu übertragen.
+Wenn ich den "make upload" Befehl benutzt habe, wurde die Programm-Daten zwar richtig zum ATmega328P
+übertragen, aber die EEprom Daten wurden nicht korrekt übertragen.
+Auf meinem Board hat das Laden der EEprom Daten einige Daten aus dem Flash Speicher zerstört und
+deshalb war das Programm nicht mehr lauffähig.
+Dieses Problem mit den EEprom Daten ist der Grund, warum Sie die Makefile Option USE_EEPROM nicht
+benutzen sollten und warum Sie die Kalibration zwei Mal laufen lassen sollten.
+
+Für die Tests habe ich zwei chinesische Arduino Uno Nachbildungen benutzt, die aber im Original Zustand
+viele Probleme zeigten. Der Grund war ein Hardware Problem bei diesen Arduino Boards mit einer DIP Version
+des ATmega328P. Das GND Signal von Pin 8 des ATmega328 war bei diesen Boards nicht angeschlossen.
+Sie sollten also besser die chinesischen Boards prüfen, wenn Sie eine DIP version des ATmega328
+auf einem Sockel finden.
+Der Widerstand zwischen Pin 8 und Pin 22 des ATmega328P sollte unter 0.5 Ohm liegen!!!
+Beide Pinne des ATmega328P sind auch intern verbunden, aber diese Verbindung hat gewöhnlich mehr als 1 Ohm.
+Wenn Sie nicht sicher sind, ob Ihr Board das gleiche Problem hat, können Sie auch den ATmega328 (DIP)
+entfernen und der Widerstand zwischen Pin 8 und Pin 22 des Sockels erneut messen.
+Sie sollten im Fehlerfall eine Drahtbrücke auf der Arduino Uno Platine nachrüsten.
+Sie können auch eine Beschreibung mit Bildern auf https://www.mikrocontroller.net/topic/395590 finden!
+Ich habe zusätzlich auch einen SMD Kondensator (220nF) zwischen Pin 7 und Pin 8 nachgerüstet.
+
+Um die Daten des Transistortesters anzuzeigen, wird der serielle Port (TXD, PD1) benutzt.
+Dieser Port ist mit der USB-Schnittstelle des Arduino verbunden.
+Um die Daten darzustellen, sollten Sie das Terminal Fenster (Tools/Serial Monitor) ihres Arduino Sketchs benutzen.
+Das Terminal Fenster startet mit der vorher ausgewählten seriellen Schnittstelle (Tools/Serieller Port).
+Sie müssen eine Baud Rate von 115200 auf ihrem "Seriell Monitor" Fenster einstellen.
+Bitte beenden Sie den "Seriell Monitor", bevor Sie versuchen neue Software hochladen.
+

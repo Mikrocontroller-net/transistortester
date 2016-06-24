@@ -54,6 +54,42 @@ typedef uint8_t byte;
    #define EXTRASPACES ' ',' ',' ',' ',
   #elif LCD_LINE_LENGTH==21
    #define EXTRASPACES ' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==22
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==23
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==24
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==25
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==26
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==27
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==28
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==29
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==30
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==31
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==32
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ', 
+  #elif LCD_LINE_LENGTH==33
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==34
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==35
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==36
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==37
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==38
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+  #elif LCD_LINE_LENGTH==39
+   #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',   
   #elif LCD_LINE_LENGTH==40
    #define EXTRASPACES ' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
   #else

@@ -23,7 +23,7 @@ CFLAGS = -Wall
 # atmega328: m328 or m328p
 # atmega1280: m1280	// see config.h for different port setting
 # atmega2560: m2560	// see config.h for different port setting
-PARTNO = m328
+PARTNO = m328p
 
 # The WITH_MENU option enables a dialog to choose some additional functions.
 # Currently a frequency measurement at ATmega Pin PD4, a frequency generator at TP2 ,
@@ -128,6 +128,9 @@ WITH_LCD_ST7565 = 7735
 # Good values are e.g. 4 or 7. If unsure just have a try.
 LCD_ST7565_RESISTOR_RATIO = 4
 
+# The option LCD_SCREEN_ROTATE exchange the horizontal and vertial axis.
+# This option is only possible, if horizontal/vertical exchange is supported by the controller.
+#CFLAGS += -DLCD_SCREEN_ROTATE=1
 # If LCD_ST7565 option is set to 1: Flip the display's horizontal direction.
 CFLAGS += -DLCD_ST7565_H_FLIP=0
 # With LCD_ST7565_H_OFFSET you can specify a horizontal pixel offset to the display window.

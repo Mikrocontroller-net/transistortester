@@ -552,7 +552,11 @@ void lcd_init(void) {
    lcd_command(CMD_SET_COLOR_FORMAT);		// set color format
     lcd_write_data(0x05);		// 16 bit/pixel
    lcd_command(CMD_MEMORY_ADDRESS_CONTROL);		// Memory address control
+#ifdef LCD_SCREEN_ROTATE
+    lcd_write_data(0x3c);	 	// MV=exchange xy, ML=Vertical refresh, RGB=BGR color,MH=Refresh right to left
+#else
     lcd_write_data(0x1c);	 	// ML=Vertical refresh, RGB=BGR color,MH=Refresh right to left
+#endif
    lcd_command(CMD_INVERSION_CONTROL);		// Display Inversion Control
     lcd_write_data(0x00);		// NLA=0, NLB=0, NLC=0
    // ? Gamma set

@@ -19,19 +19,19 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY
   7 .debug_aranges 00000428  00000000  00000000  00004ce0  2**3
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_info   0000700f  00000000  00000000  00005108  2**0
+  8 .debug_info   00007011  00000000  00000000  00005108  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_abbrev 000018c7  00000000  00000000  0000c117  2**0
+  9 .debug_abbrev 000018d2  00000000  00000000  0000c119  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   00001e1d  00000000  00000000  0000d9de  2**0
+ 10 .debug_line   00001e20  00000000  00000000  0000d9eb  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  00000684  00000000  00000000  0000f7fc  2**2
+ 11 .debug_frame  00000684  00000000  00000000  0000f80c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000fc5  00000000  00000000  0000fe80  2**0
+ 12 .debug_str    00000fc5  00000000  00000000  0000fe90  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    00003d59  00000000  00000000  00010e45  2**0
+ 13 .debug_loc    00003d59  00000000  00000000  00010e55  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000018  00000000  00000000  00014b9e  2**0
+ 14 .debug_ranges 00000018  00000000  00000000  00014bae  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -1643,7 +1643,7 @@ void Display_mV(uint16_t xx, uint8_t ll) {
      69e:	08 95       	ret
 
 000006a0 <wait5s>:
-; Every wait call needs only one instruction (rcall).
+; A maximum of 28 bytes of space for return addresses is used in RAM 
 ; I see no way to implement this function with C-language (too tricky)
 
 
@@ -1657,21 +1657,16 @@ wait4s:
      6a2:	02 d0       	rcall	.+4      	; 0x6a8 <wait1000ms>
 
 000006a4 <wait3s>:
-; run to wait3s
-
 wait3s:
- rcall wait1s		;1s	12+x Return-Adresses
+ rcall wait1s		;	12+x return-adresses
      6a4:	01 d0       	rcall	.+2      	; 0x6a8 <wait1000ms>
 
 000006a6 <wait2s>:
-; run to wait2s		;3s
-
 wait2s:
  rcall wait1s		;1s     12+x Return-Adresses
      6a6:	00 d0       	rcall	.+0      	; 0x6a8 <wait1000ms>
 
 000006a8 <wait1000ms>:
-; run to wait1s		,2s
 
 wait1s:
 wait1000ms:	
@@ -1679,7 +1674,6 @@ wait1000ms:
      6a8:	00 d0       	rcall	.+0      	; 0x6aa <wait500ms>
 
 000006aa <wait500ms>:
-;laueft in wait500ms	;1s	
 
 wait500ms:
  rcall wait100ms	;100ms	10+x Return-Adresses
@@ -1687,25 +1681,20 @@ wait500ms:
 
 000006ac <wait400ms>:
 wait400ms:
- rcall wait100ms	;200ms	10+x Return-Adresses
+ rcall wait100ms	;100ms	10+x Return-Adresses
      6ac:	02 d0       	rcall	.+4      	; 0x6b2 <wait100ms>
 
 000006ae <wait300ms>:
-
 wait300ms:
- rcall wait100ms        ;300ms	10+x Return-Adresses
+ rcall wait100ms	;100ms	10+x Return-Adresses
      6ae:	01 d0       	rcall	.+2      	; 0x6b2 <wait100ms>
 
 000006b0 <wait200ms>:
-; laeuft in wait200ms	;500ms	10+x Return-Adresses
-
-
 wait200ms:
  rcall wait100ms	;100ms	10+x Return-Adresses
      6b0:	00 d0       	rcall	.+0      	; 0x6b2 <wait100ms>
 
 000006b2 <wait100ms>:
-; laeuft in wait100ms 	;200ms
 
 
 wait100ms:
@@ -1713,7 +1702,6 @@ wait100ms:
      6b2:	00 d0       	rcall	.+0      	; 0x6b4 <wait50ms>
 
 000006b4 <wait50ms>:
-;laeuft in wait50us 	;100ms
 
 wait50ms:
  rcall wait10ms	    	;10ms	8+x Return-Adresses 
@@ -1721,33 +1709,26 @@ wait50ms:
 
 000006b6 <wait40ms>:
 wait40ms:
- rcall wait10ms	    	;20ms	8+x Return-Adresses  
+ rcall wait10ms	    	;10ms	8+x Return-Adresses  
      6b6:	02 d0       	rcall	.+4      	; 0x6bc <wait10ms>
 
 000006b8 <wait30ms>:
-;laeuft in wait30us 	;50ms
-
 wait30ms:
- rcall wait10ms	    	;10ms	8+x Return-Adresses 
+ rcall wait10ms	    	;10ms	8+x Return-Adresses  
      6b8:	01 d0       	rcall	.+2      	; 0x6bc <wait10ms>
 
 000006ba <wait20ms>:
-;laeuft in wait20us 	;30ms
-
 wait20ms:
  rcall wait10ms	    	;10ms	8+x Return-Adresses
      6ba:	00 d0       	rcall	.+0      	; 0x6bc <wait10ms>
 
 000006bc <wait10ms>:
-; laeuft in wait10ms	;20ms
 
 wait10ms:
  rcall wait5ms	   	;5ms	7+x Return-Adresses
      6bc:	00 d0       	rcall	.+0      	; 0x6be <wait5ms>
 
 000006be <wait5ms>:
-; laueft in wait5ms	;10ms
-
 wait5ms:
  wdr				; every 5ms one Watchdog reset!
      6be:	a8 95       	wdr
@@ -1756,133 +1737,137 @@ wait5ms:
 
 000006c2 <wait4ms>:
 wait4ms:
- rcall wait1ms	   	;2ms	6+x Return-Adresses
+ rcall wait1ms	   	;1ms	6+x Return-Adresses
      6c2:	02 d0       	rcall	.+4      	; 0x6c8 <wait1ms>
 
 000006c4 <wait3ms>:
-; laueft in wait3ms	;5ms	
-
 wait3ms:
  rcall wait1ms	   	;1ms	6+x Return-Adresses
      6c4:	01 d0       	rcall	.+2      	; 0x6c8 <wait1ms>
 
 000006c6 <wait2ms>:
-; laeuft in wait2ms	;3ms
-
-
 wait2ms:
  rcall wait1ms	   	;1ms	6+x Return-Adresses
      6c6:	00 d0       	rcall	.+0      	; 0x6c8 <wait1ms>
 
 000006c8 <wait1ms>:
-; laeuft in wait1ms	;2ms
 
 wait1ms:
  rcall wait500us    	;500us	5+x Return-Adresses
      6c8:	00 d0       	rcall	.+0      	; 0x6ca <wait500us>
 
 000006ca <wait500us>:
-;laeuft in wait500us	;1ms
-
 wait500us:
  rcall wait100us    	;100us	4+x Return-Adresses
      6ca:	03 d0       	rcall	.+6      	; 0x6d2 <wait100us>
 
 000006cc <wait400us>:
 wait400us:
- rcall wait100us    	;200us	4+x Return-Adresses
+ rcall wait100us    	;100us	4+x Return-Adresses
      6cc:	02 d0       	rcall	.+4      	; 0x6d2 <wait100us>
 
 000006ce <wait300us>:
-;laeuft in wait300us	;500us
-
 wait300us:
  rcall wait100us    	;100us	4+x Return-Adresses
      6ce:	01 d0       	rcall	.+2      	; 0x6d2 <wait100us>
 
 000006d0 <wait200us>:
-;laeuft in wait200us	;300us
-
 wait200us:
  rcall wait100us    	;100us	4+x Return-Adresses
      6d0:	00 d0       	rcall	.+0      	; 0x6d2 <wait100us>
 
 000006d2 <wait100us>:
-; laeuft in wait100us	;200us	
-
 
 wait100us:
- rcall wait50us	    	; 50us	3+x Return-Adresses
+#if US100_TICS > (2 * US50_TICS)
+ nop
+#endif
+ rcall wait50us	    	; 50us delay
      6d2:	00 d0       	rcall	.+0      	; 0x6d4 <wait50us>
 
 000006d4 <wait50us>:
-; laeuft in wait50us	;100us	
-
 wait50us:
- rcall wait10us     	;10us	2+x Return-Adresses
+#if US50_TICS > (US40_TICS + US10_TICS)
+ nop
+#endif
+ rcall wait10us     	;10us delay
      6d4:	03 d0       	rcall	.+6      	; 0x6dc <wait10us>
 
 000006d6 <wait40us>:
 wait40us:
- rcall wait10us     	;20us
+#if US40_TICS > (US30_TICS + US10_TICS)
+ nop
+#endif
+ rcall wait10us     	;10us delay
      6d6:	02 d0       	rcall	.+4      	; 0x6dc <wait10us>
 
 000006d8 <wait30us>:
-; laeuft in wait30us	;50us
-
 wait30us:
- rcall wait10us     	;10us	2+x Return-Adresses
+#if US30_TICS > (US20_TICS + US10_TICS)
+ nop
+#endif
+ rcall wait10us     	;10us delay
      6d8:	01 d0       	rcall	.+2      	; 0x6dc <wait10us>
 
 000006da <wait20us>:
-; laeuft in wait20us	;20us
-
 wait20us:
- rcall wait10us		;10us	2+x Return-Adresses
+#if US20_TICS > (2 * US10_TICS)
+ nop
+#endif
+ rcall wait10us		;10us delay
      6da:	00 d0       	rcall	.+0      	; 0x6dc <wait10us>
 
 000006dc <wait10us>:
-wait1us:
-#endif
 
-#if F_CPU == 8000000
-; 8MHz Version			x = 2
- rcall wait5us		;5us
+#if US5_TICS >= RCALL_TICS
+ #if US10_TICS > (2 * US5_TICS)
+  nop
+ #endif
+ rcall wait5us
      6dc:	00 d0       	rcall	.+0      	; 0x6de <wait5us>
 
 000006de <wait5us>:
-; run directly to wait5us ;10us
-
+   #define INNER_TICS US1_TICS
 wait5us:
- rcall wait1us		;1us
+   #if US5_TICS > (US4_TICS + US1_TICS)
+    nop
+   #endif
+   rcall wait1us
      6de:	03 d0       	rcall	.+6      	; 0x6e6 <wait1us>
 
 000006e0 <wait4us>:
 wait4us:
- rcall wait1us		;2us
+   #if US4_TICS > (US3_TICS + US1_TICS)
+    nop
+   #endif
+   rcall wait1us
      6e0:	02 d0       	rcall	.+4      	; 0x6e6 <wait1us>
 
 000006e2 <wait3us>:
-
 wait3us:
- rcall wait1us		;3us
+   #if US3_TICS > (US2_TICS + US1_TICS)
+    nop
+   #endif
+   rcall wait1us
      6e2:	01 d0       	rcall	.+2      	; 0x6e6 <wait1us>
 
 000006e4 <wait2us>:
 wait2us:
- rcall wait1us
+   #if US2_TICS > (2 * US1_TICS)
+    nop
+   #endif
+   rcall wait1us
      6e4:	00 d0       	rcall	.+0      	; 0x6e6 <wait1us>
 
 000006e6 <wait1us>:
-; run directly to wait1us
-
-wait1us:
- nop
-     6e6:	00 00       	nop
-wait500ns:
- nop
  #endif
-#endif
+ #if WAST_TICS3 > 1
+    nop	
+ #endif
+ #if WAST_TICS3 > 0
+    nop	
+     6e6:	00 00       	nop
+ #endif
 
  ret
      6e8:	08 95       	ret

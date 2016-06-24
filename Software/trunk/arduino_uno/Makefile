@@ -27,8 +27,10 @@ PARTNO = m328p
 
 # include HardwareSerial functions
 WITHOUT_LCD = 1
+BAUD_RATE = 115200
 CFLAGS += -DWITH_HARDWARE_SERIAL 
-CFLAGS += -DBAUDRATE=115200
+#CFLAGS += -DBAUDRATE=115200
+CFLAGS += -DBAUDRATE=$(BAUD_RATE)
 
 # The WITH_MENU option enables a dialog to choose some additional functions.
 # Currently a frequency measurement at ATmega Pin PD4, a frequency generator at TP2 ,
@@ -242,11 +244,12 @@ INHIBIT_SLEEP_MODE = 1
 #PROGRAMMER=wiring
 #PORT = /dev/ttyACM0
 #AVRDUDE_BAUD = -b 115200 -D
-# setting for ARDUINO MEGA, requires bootloader
-PROGRAMMER=arduino
+# setting for ARDUINO UNO, requires bootloader
+PROGRAMMER=arduino 
+#PORT = /dev/ttyUSB0
 PORT = /dev/ttyACM0
 BitClock=5.0
-AVRDUDE_BAUD = -b 115200
+AVRDUDE_BAUD = -b $(BAUD_RATE)
 # ********************** end of selectable options
 
 include ../setup.mk

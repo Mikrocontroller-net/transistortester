@@ -40,6 +40,9 @@ make steril
 cd ../mega328_st7565_kit
 echo "SubDir mega328_st7665_kit"
 make steril
+cd ../mega328_color_kit
+echo "SubDir mega328_color_kit"
+make steril
 cd ../mega328_st7920
 echo "SubDir mega328_st7920"
 make steril

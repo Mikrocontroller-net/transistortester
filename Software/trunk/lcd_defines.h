@@ -200,9 +200,14 @@
 	#define CMD_POWER_CONTROL2 0xc1
 	#define CMD_VCOM_CONTROL1 0xc5
 	#undef SCREEN_HEIGHT
+	#undef SCREEN_WIDTH
+#ifdef LCD_SCREEN_ROTATE
+        #define SCREEN_HEIGHT 128
+        #define SCREEN_WIDTH 160
+#else
         #define SCREEN_HEIGHT 160
-//	#undef SCREEN_WIDTH
-//	#define SCREEN_WIDTH 128
+        #define SCREEN_WIDTH 128
+#endif
 //Makros for LCD
 	#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
 	#define lcd_cursor_on()  // ignored

@@ -128,6 +128,9 @@ WITH_LCD_ST7565 = 9163
 # Good values are e.g. 4 or 7. If unsure just have a try.
 LCD_ST7565_RESISTOR_RATIO = 4
 
+# The option LCD_SCREEN_ROTATE exchange the horizontal and vertial axis.
+# This option is only possible, if horizontal/vertical exchange is supported by the controller.
+#CFLAGS += -DLCD_SCREEN_ROTATE=1
 # If LCD_ST7565 option is set to 1: Flip the display's horizontal direction.
 CFLAGS += -DLCD_ST7565_H_FLIP=1
 # With LCD_ST7565_H_OFFSET you can specify a horizontal pixel offset to the display window.

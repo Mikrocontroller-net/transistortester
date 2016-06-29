@@ -29,8 +29,13 @@
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
   const uint8_t EE_Volume_Value EEMEM = VOLUME_VALUE;	// Volume Value for ST7565 controller 
 #endif
+#ifdef LCD_CHANGE_COLOR
+  const uint8_t EE_BG_COLOR1 EEMEM = LCD_BG_COLOR & 0xff;	// lower bits of background color
+  const uint8_t EE_BG_COLOR2 EEMEM = LCD_BG_COLOR >> 8;		// higher bits of background color 
+  const uint8_t EE_FG_COLOR1 EEMEM = LCD_FG_COLOR & 0xff;	// lower bits of foreground color
+  const uint8_t EE_FG_COLOR2 EEMEM = LCD_FG_COLOR >> 8;		// higher bits of foreground color 
+#endif
 
-//End of EEPROM-Strings
 #else
  // no MAIN_C
  #define COMMON extern
@@ -53,6 +58,12 @@
  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
   extern const uint8_t EE_Volume_Value EEMEM;	// Volume Value for ST7565 controller 
  #endif
+#ifdef LCD_CHANGE_COLOR
+  extern const uint8_t EE_BG_COLOR1 EEMEM;	// lower bits of background color
+  extern const uint8_t EE_BG_COLOR2 EEMEM;	// higher bits of background color 
+  extern const uint8_t EE_FG_COLOR1 EEMEM;	// lower bits of foreground color
+  extern const uint8_t EE_FG_COLOR2 EEMEM;	// higher bits of foreground color 
+#endif
 #endif /* if defined (MAIN_C) */
 
 
@@ -195,5 +206,15 @@ COMMON uint8_t lcd_bit_mem[64][16];
 #endif
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
  COMMON const uint8_t EE_Volume_Value EEMEM;   // Volume Value for ST7565 controller 
+#endif
+#ifdef LCD_CHANGE_COLOR
+COMMON union {
+  uint16_t w;
+  uint8_t b[2];
+} lcd_bg_color;
+COMMON union {
+  uint16_t w;
+  uint8_t b[2];
+} lcd_fg_color;
 #endif
 

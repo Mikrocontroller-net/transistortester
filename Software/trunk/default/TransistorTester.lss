@@ -508,8 +508,8 @@ void lcd_restore_position(void) {
      25e:	fe 01       	movw	r30, r28
      260:	84 91       	lpm	r24, Z
      262:	98 2f       	mov	r25, r24
-       lcd_write_data(LCD_BG_COLOR >> 8);	// clear 5 red / 3 green pixels
        lcd_write_data(LCD_BG_COLOR & 0xff);	// clear 3 green / 5 blue pixels
+#endif
      }
    }
 #else

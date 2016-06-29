@@ -75,6 +75,7 @@ uint16_t Rnum2pins(uint8_t num);	// compute Pin-Numbers of the resistor number
 void myuart_putc(uint8_t bb);
 void uart_int(uint16_t num);
 void CheckUJT(void);		// measure UJT
+void select_color(uint8_t xc);		// select color function 
 
 #ifdef SamplingADC
 uint16_t samplingADC(   // code is in sampling_ADC.S

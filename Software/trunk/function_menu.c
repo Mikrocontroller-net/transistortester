@@ -33,14 +33,26 @@
    #define MODE_CONTRAST (NNN+2)	/* select contrast */
    #define MODE_SHOW (NNN+3)	/* show data function */
   #else
-   #define MODE_SHOW (NNN+2)	/* show data function */
+   #ifdef LCD_CHANGE_COLOR
+    #define MODE_SELECT_FG (NNN+2)
+    #define MODE_SELECT_BG (NNN+3)
+    #define MODE_SHOW (NNN+4)
+   #else
+    #define MODE_SHOW (NNN+2)	/* show data function */
+   #endif
   #endif
  #else
   #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
    #define MODE_CONTRAST (NNN+1)	/* select contrast */
    #define MODE_SHOW (NNN+2)	/* show data function */
   #else
-   #define MODE_SHOW (NNN+1)	/* show data function */
+   #ifdef LCD_CHANGE_COLOR
+    #define MODE_SELECT_FG (NNN+1)
+    #define MODE_SELECT_BG (NNN+2)
+    #define MODE_SHOW (NNN+3)
+   #else
+    #define MODE_SHOW (NNN+1)	/* show data function */
+   #endif
   #endif
   #define MODE_VEXT 66
  #endif		/* end #ifdef WITH_VEXT */
@@ -56,9 +68,9 @@
  #define MODE_BIG_CAP_CORR 7	/* Correction for big caps */
  #define NNN 7
  #ifdef WITH_ROTARY_CHECK
- #define MODE_ROTARY 8		/* Test Rotary Switch */
- #undef NNN
- #define NNN 8
+  #define MODE_ROTARY 8		/* Test Rotary Switch */
+  #undef NNN
+  #define NNN 8
   #ifdef WITH_SELFTEST
    #define MODE_SELFTEST 9	/* full selftest function with calibration */
    #undef NNN
@@ -77,19 +89,32 @@
    #define MODE_CONTRAST (NNN+2)	/* select contrast */
    #define MODE_SHOW (NNN+3)	/* show data function */
   #else
-   #define MODE_SHOW (NNN+2)	/* show data function */
+   #ifdef LCD_CHANGE_COLOR
+    #define MODE_SELECT_FG (NNN+2)
+    #define MODE_SELECT_BG (NNN+3)
+    #define MODE_SHOW (NNN+4)
+   #else
+    #define MODE_SHOW (NNN+2)	/* show data function */
+   #endif
   #endif
  #else
   #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
    #define MODE_CONTRAST (NNN+1)	/* select contrast */
    #define MODE_SHOW (NNN+2)	/* show data function */
   #else
-   #define MODE_SHOW (NNN+1)	/* show data function */
+   #ifdef LCD_CHANGE_COLOR
+    #define MODE_SELECT_FG (NNN+1)
+    #define MODE_SELECT_BG (NNN+2)
+    #define MODE_SHOW (NNN+3)
+   #else
+    #define MODE_SHOW (NNN+1)	/* show data function */
+   #endif
   #endif
   #define MODE_VEXT 66
  #endif		/* end #ifdef WITH_VEXT */
  #define MODE_HFREQ 66
 #endif
+
 #define MIN_SELECT_TIME 50	/* 50x10ms must be hold down to select function without a rotary switch */
 #ifdef POWER_OFF
  #define MODE_OFF MODE_SHOW+1	/* add the power off function */
@@ -148,6 +173,10 @@ void do_menu(uint8_t func_number) {
     if (func_number == MODE_VEXT) show_vext();
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
     if (func_number == MODE_CONTRAST) set_contrast();
+#endif
+#ifdef LCD_CHANGE_COLOR
+    if (func_number == MODE_SELECT_FG) select_color(0);		// select foreground color
+    if (func_number == MODE_SELECT_BG) select_color(1);		// select background color
 #endif
     if (func_number == MODE_SHOW) {
        ShowData();			// Show Calibration Data
@@ -375,6 +404,10 @@ void message2line(uint8_t number) {
  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
 
      if (number == MODE_CONTRAST) lcd_MEM_string(CONTRAST_str); 
+ #endif
+ #ifdef LCD_CHANGE_COLOR
+     if (number == MODE_SELECT_FG) lcd_MEM_string(FrontColor_str); 
+     if (number == MODE_SELECT_BG) lcd_MEM_string(BackColor_str); 
  #endif
      if (number == MODE_SHOW) {
         lcd_MEM2_string(SHOW_str);
@@ -722,6 +755,111 @@ uint8_t contrast;
   eeprom_write_byte((uint8_t *)(&EE_Volume_Value), (int8_t)contrast);	// save contrast value
 }
  #endif /* LCD_ST_TYPE == 7565 */
+
+ #ifdef LCD_CHANGE_COLOR
+/* *************************************************** */
+/* set the color values for the ST7735/ILI9163 display */
+/* *************************************************** */
+void select_color(uint8_t xcol) {
+/* xcol = 0  for foreground */
+/* xcol != 0 for backgreound */
+uint8_t key_pressed;
+uint8_t color[3];	// color red, green, blue
+uint8_t tmp1, tmp2;
+uint8_t c_num;
+uint8_t cc;
+uint8_t max_value;
+  // set the contrast value
+  if (xcol == 0) {
+    message_key_released(FrontColor_str);	// display FrontColor and wait for key released
+    tmp1 = eeprom_read_byte(&EE_FG_COLOR1);	// lower bits of foreground color
+    tmp2 = eeprom_read_byte(&EE_FG_COLOR2);	// upper bits of foreground color
+  } else {
+    message_key_released(BackColor_str);  	// display BackColor and wait for key released
+    tmp1 = eeprom_read_byte(&EE_BG_COLOR1);
+    tmp2 = eeprom_read_byte(&EE_BG_COLOR2);
+  }
+  color[0] = tmp2 >> 3;
+  color[2] = tmp1 & 0x1f;
+  color[1] = ((tmp2 & 0x07) << 3) | (tmp1 >> 5);
+  c_num = 0;
+  #ifdef POWER_OFF
+  uint8_t times;
+  for (times=0;times<240;)
+  #else
+  while (1)                     /* wait endless without option POWER_OFF */
+  #endif
+  {
+     for (cc=0; cc<3; cc++) {
+        lcd_set_cursor((1+cc)*PAGES_PER_LINE,0);
+        if (c_num == cc) lcd_data('>');
+        else             lcd_space();
+  #if LCD_CHANGE_COLOR == 1
+        if (cc == 0) lcd_data('R');
+  #else
+        if (cc == 0) lcd_data('B');
+  #endif
+        if (cc == 1) lcd_data('G');
+  #if LCD_CHANGE_COLOR == 1
+        if (cc == 2) lcd_data('B');
+  #else
+        if (cc == 2) lcd_data('R');
+  #endif
+        lcd_data('=');
+        DisplayValue16(color[cc],0,' ',4);
+        lcd_clear_line();		// clear to end of line
+     }
+     key_pressed = wait_for_key_ms(1600);
+#ifdef POWER_OFF
+ #ifdef WITH_ROTARY_SWITCH
+     if ((key_pressed != 0) || (rotary.incre > 0)) times = 0;	// reset counter, operator is active
+ #else
+     if (key_pressed != 0)  times = 0;	// reset counter, operator is active
+ #endif
+#endif
+     if(key_pressed >= 130) break;	// more than 1.3 seconds
+     max_value = 31;
+     if (c_num == 1) max_value = 63;
+#ifdef WITH_ROTARY_SWITCH
+     if (rotary.incre > FAST_ROTATION) break;		// fast rotation ends setting of contrast
+     if (rotary.count >= 0) {
+        color[c_num] += rotary.count;		// increase the contrast by rotary.count
+     } else {
+        color[c_num] += (max_value + 1 + rotary.count);	// decrease the contrast by rotary.count
+     }
+     color[c_num] &= max_value;
+     if (xcol == 0) {
+        // foreground color
+        lcd_fg_color.b[1] = (color[0] << 3) | (color[1] >> 3);
+        lcd_fg_color.b[0] = ((color[1] & 7) << 5) | (color[2] & 0x1f);
+     } else {
+        lcd_bg_color.b[1] = (color[0] << 3) | (color[1] >> 3);
+        lcd_bg_color.b[0] = ((color[1] & 7) << 5) | (color[2] & 0x1f);
+     }
+#endif
+     if (key_pressed > 0) {
+        if (key_pressed > 40) {
+           c_num += 2;	// decrease the color number 
+        } else {
+           c_num++;		// increase the color number
+        }
+     }
+     if (c_num > 2) c_num -= 3;
+#ifdef POWER_OFF
+     times = Pwr_mode_check(times);	// no time limit with DC_Pwr_mode
+#endif
+  } /* end for times */
+
+//  eeprom_write_byte((uint8_t *)(&EE_Volume_Value), (int8_t)contrast);	// save contrast value
+  if (xcol == 0) {
+     eeprom_write_byte((uint8_t *)(&EE_FG_COLOR1), (int8_t)lcd_fg_color.b[0]);
+     eeprom_write_byte((uint8_t *)(&EE_FG_COLOR2), (int8_t)lcd_fg_color.b[1]);
+  } else {
+     eeprom_write_byte((uint8_t *)(&EE_BG_COLOR1), (int8_t)lcd_bg_color.b[0]);
+     eeprom_write_byte((uint8_t *)(&EE_BG_COLOR2), (int8_t)lcd_bg_color.b[1]);
+  }
+}
+ #endif
 /* *************************************************** */
 /* set the correction value for big capacitor measurement */
 /* *************************************************** */

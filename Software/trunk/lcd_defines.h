@@ -28,6 +28,9 @@
   #define LCD_LINES 2
   #define LCD_LINE_LENGTH 16
 #endif
+#if (LCD_ST_TYPE != 7735) && (LCD_ST_TYPE != 9163)
+ #undef LCD_CHANGE_COLOR
+#endif
 
 
 /* *********************************************************************************************************** */
@@ -216,10 +219,10 @@
 	#define LCD_ST7565_V_OFFSET 0
  #endif
  #ifndef LCD_BG_COLOR
-	#define LCD_BG_COLOR 0x0000	/* 5 bit read, 6 bit green, 5 bit blue */
+	#define LCD_BG_COLOR 0x0000	/* 5 bit red, 6 bit green, 5 bit blue */
  #endif
  #ifndef LCD_FG_COLOR
-	#define LCD_FG_COLOR 0xffff	/* 5 bit read, 6 bit green, 5 bit blue */
+	#define LCD_FG_COLOR 0xffff	/* 5 bit red, 6 bit green, 5 bit blue */
  #endif
 	#define ST_DIVA 14
 	#define ST_VPA 20
@@ -252,10 +255,10 @@
 	#define LCD_ST7565_V_OFFSET 32	/* 160 - 128 */
  #endif
  #ifndef LCD_BG_COLOR
-	#define LCD_BG_COLOR 0x0000	/* 5 bit read, 6 bit green, 5 bit blue */
+	#define LCD_BG_COLOR 0x0000	/* 5 bit red, 6 bit green, 5 bit blue */
  #endif
  #ifndef LCD_FG_COLOR
-	#define LCD_FG_COLOR 0xffff	/* 5 bit read, 6 bit green, 5 bit blue */
+	#define LCD_FG_COLOR 0xffff	/* 5 bit red, 6 bit green, 5 bit blue */
  #endif
 	#define ST_DIVA 17
 	#define ST_VPA 20

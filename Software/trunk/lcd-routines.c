@@ -552,6 +552,12 @@ void lcd_init(void) {
    lcd_command(CMD_SET_COLOR_FORMAT);		// set color format
     lcd_write_data(0x05);		// 16 bit/pixel
    lcd_command(CMD_MEMORY_ADDRESS_CONTROL);		// Memory address control
+#ifdef LCD_CHANGE_COLOR
+   lcd_bg_color.b[0] = eeprom_read_byte(&EE_BG_COLOR1);
+   lcd_bg_color.b[1] = eeprom_read_byte(&EE_BG_COLOR2);
+   lcd_fg_color.b[0] = eeprom_read_byte(&EE_FG_COLOR1);
+   lcd_fg_color.b[1] = eeprom_read_byte(&EE_FG_COLOR2);
+#endif
 #ifdef LCD_SCREEN_ROTATE
     lcd_write_data(0x3c);	 	// MV=exchange xy, ML=Vertical refresh, RGB=BGR color,MH=Refresh right to left
 #else
@@ -769,8 +775,13 @@ void lcd_clear(void) {
    
    for (count = 0; count < (SCREEN_HEIGHT + LCD_ST7565_V_OFFSET); count++) {
      for (p = 0; p < SCREEN_WIDTH; p++) {
+#ifdef LCD_CHANGE_COLOR
+       lcd_write_data(lcd_bg_color.b[1]);	// clear 5 red / 3 green pixels
+       lcd_write_data(lcd_bg_color.b[0]);	// clear 3 green / 5 blue pixels
+#else
        lcd_write_data(LCD_BG_COLOR >> 8);	// clear 5 red / 3 green pixels
        lcd_write_data(LCD_BG_COLOR & 0xff);	// clear 3 green / 5 blue pixels
+#endif
      }
    }
 #else
@@ -1125,12 +1136,22 @@ unsigned char options, unsigned char width, unsigned char height) {
          {
            if ((byte & 0x80) != 0) {
 	      // set pixel to foreground color
+  #ifdef LCD_CHANGE_COLOR
+              lcd_write_data(lcd_fg_color.b[1]);	// 5 red / 3 green pixel 
+              lcd_write_data(lcd_fg_color.b[0]);	// 3 green / 5 blue pixel
+  #else
               lcd_write_data(LCD_FG_COLOR >> 8);	// 5 red / 3 green pixel 
               lcd_write_data(LCD_FG_COLOR & 0xff);	// 3 green / 5 blue pixel
+  #endif
            } else {
 	      // set pixel to background color
+  #ifdef LCD_CHANGE_COLOR
+              lcd_write_data(lcd_bg_color.b[1]);	// 5 red  / 3 green pixel
+              lcd_write_data(lcd_bg_color.b[0]);	// 3 green / 5 blue pixel
+  #else
               lcd_write_data(LCD_BG_COLOR >> 8);	// 5 red  / 3 green pixel
               lcd_write_data(LCD_BG_COLOR & 0xff);	// 3 green / 5 blue pixel
+  #endif
            }
            byte *= 2;		// next bit to 2**7
          } /* end for bb */

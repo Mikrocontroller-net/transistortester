@@ -147,6 +147,16 @@ CFLAGS += -DLCD_ST7565_V_FLIP=0
 # If your output start in the middle of the display, you can specify a Y_START of 32
 #CFLAGS += -DLCD_ST7565_Y_START=32
 
+# You can select the foreground and background color with a special menu, if you
+# set the LCD_CHANGE_COLOR option. When the value is set to 2, red and blue color is exchanged.
+CFLAGS += -DLCD_CHANGE_COLOR=2
+
+# You can select the background color (format 5 bit red, 6 bit green, 5 bit blue)
+CFLAGS += -DLCD_BG_COLOR=0x7800
+
+# You can select the foreground color (format 5 bit red, 6 bit green, 5 bit blue)
+CFLAGS += -DLCD_FG_COLOR=0xffff
+
 # If option WITH_LCD_ST7565 is present one of the following fonts should be
 # choosen. With a font width below 8 more than 16 characters can be shown in one display line.
 #CFLAGS += -DFONT_5X8

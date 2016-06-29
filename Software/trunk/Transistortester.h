@@ -349,6 +349,10 @@ End of configuration
  const unsigned char ICE0_str[] MEM2_TEXT = "ICE0=";
  const unsigned char ICEs_str[] MEM2_TEXT = "ICEs=";
 #endif
+#ifdef LCD_CHANGE_COLOR
+ const unsigned char FrontColor_str[] MEM2_TEXT = "FrontColor";
+ const unsigned char BackColor_str[] MEM2_TEXT = "BackColor";
+#endif
 
 
 #ifdef WITH_SELFTEST
@@ -632,6 +636,10 @@ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR
   extern const unsigned char ResIcon2[] MEM_TEXT;	// Resistor Icon2
 #if LCD_CHAR_RESIS3 !=  'R'
   extern const unsigned char ResIcon3[] MEM_TEXT;	// Resistor Icon2
+#endif
+#ifdef LCD_CHANGE_COLOR
+  extern const unsigned char FrontColor_str[];
+  extern const unsigned char BackColor_str[];
 #endif
 
 //generate Omega- and µ-character as Custom-character, if these characters has a number of loadable type

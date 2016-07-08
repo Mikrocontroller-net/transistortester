@@ -23,11 +23,7 @@
 .func samplingADC
 
 
-#if AUTO_CLOCK_DIV == ((1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0))
- #define TICS_PER_ADC_CLOCK 128
-#elif AUTO_CLOCK_DIV == ((1<<ADPS2) | (1<<ADPS1) | (0<<ADPS0))
- #define TICS_PER_ADC_CLOCK 64
-#else
+#if (TICS_PER_ADC_CLOCK != 128) && (TICS_PER_ADC_CLOCK != 64)
 #error Unsupported clock frequency
 #endif
 

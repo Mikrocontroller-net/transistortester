@@ -394,6 +394,44 @@
 #define Cyr_c	(0xe5 - GR_OFFSET2)
 #define Cyr_schtsch (0xe6 - GR_OFFSET2)
 
+ #ifdef LCD_ST_TYPE
+ // is graphical display, use special czech characters
+ #define Cz_a	0x10
+ #define Cz_c	0x11
+ #define Cz_d	0x12
+ #define Cz_e	0x13
+ #define Cz_ee	0x14
+ #define Cz_i	0x15
+ #define Cz_n	0x16
+ #define Cz_o	0x17
+ #define Cz_r	0x18
+ #define Cz_s	0x19
+ #define Cz_t	0x1a
+ #define Cz_u	0x1b
+ #define Cz_uu	0x1c
+ #define Cz_y	0x1d
+ #define Cz_z	0x1e
+ #define Cz_Z	0x1f
+#else
+  // use ASCII replacements for czech characters
+  #define Cz_a	'a'
+  #define Cz_c	'c'
+  #define Cz_d	'd'
+  #define Cz_e	'e'
+  #define Cz_ee	'e'
+  #define Cz_i	'i'
+  #define Cz_n	'n'
+  #define Cz_o	'o'
+  #define Cz_r	'r'
+  #define Cz_s	's'
+  #define Cz_t	't'
+  #define Cz_u	'u'
+  #define Cz_uu	'u'
+  #define Cz_y	'y'
+  #define Cz_z	'z'
+  #define Cz_Z	'Z'
+#endif
+
 //defines for the big special "character" set, the graphical symbols
 #define ICON_WIDTH 24
 #define ICON_HEIGHT 32

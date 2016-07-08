@@ -156,8 +156,6 @@ uint16_t GetESR(uint8_t hipin, uint8_t lopin) {
         // limit cap_val_nF to prevent overflow
         cap_val_nF = 32000;
      }
-//     if (cap_val_nF > (1800/18)) {
-        /* normal ADC-speed, ADC-Clock 8us */
 #ifdef ADC_Sleep_Mode
         StartADCmsk = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | AUTO_CLOCK_DIV; /* enable ADC and Interrupt */
         ADCSRA = StartADCmsk;		/* enable ADC and Interrupt */
@@ -165,17 +163,6 @@ uint16_t GetESR(uint8_t hipin, uint8_t lopin) {
         StartADCmsk =  (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; /* enable and start ADC */
 #endif
 
-//     } else {
-        /* fast ADC-speed, ADC-Clock 2us */
-#ifdef ADC_Sleep_Mode
-//        StartADCmsk = (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | FAST_CLOCK_DIV; /* enable ADC and Interrupt */
-//        ADCSRA = StartADCmsk;		/* enable ADC and Interrupt */
-//        SMCR = (1 << SM0) | (1 <<SE);	/* set ADC Noise Reduction and Sleep Enable */
-#else
-//        StartADCmsk =  (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | FAST_CLOCK_DIV; /* enable and start ADC */
-#endif
-//        big_cap = 0;
-//     }
   }
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
   LoADC = pgm_read_byte((&PinRLRHADCtab[6])+lopin-TP1) | TXD_MSK;

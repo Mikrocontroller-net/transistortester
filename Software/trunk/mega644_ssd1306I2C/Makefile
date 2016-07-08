@@ -211,10 +211,13 @@ CFLAGS += -DSHORT_UNCAL_MSG
 # Setting the WITH_SamplinADC to 1 enables this feature for capacity values below 100pF.
 WITH_SamplingADC = 1
 
-# If OP_MHZ is set to 16 (16 MHz operation) and SamplingADC is enabled,
-# you can enable the Xtal and ceramic resonator measurement at TP1:3 wit option
-CFLAGS += -DWITH_XTAL
-
+# Option WITH_XTAL enables additional Xtal / Ceramic resonator tests.
+# Option can be set only together with SamplingADC=1 and OP_MHZ=16
+CFLAGS += -DWITH_XTAL 
+# Option WITH_UJT enables additional tests for UJT (UniJunction Transistor)
+#CFLAGS += -DWITH_UJT
+# Option WITH_PUT enables additional tests for PUT (Programmable Unijunction Transistor)
+#CFLAGS += -DWITH_PUT
 
 # The WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring.
 CFLAGS += -DWITH_AUTO_REF
@@ -414,7 +417,7 @@ i2lcd.o: ../i2lcd.S $(MKFILES)
 ReadADC.o: ../ReadADC.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
-sleep_5ms.o: ../sleep_5ms.S $(MKFILES)
+sleep_5ms.o: ../sleep_5ms.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 wait_for_key_ms.o: ../wait_for_key_ms.c $(MKFILES)

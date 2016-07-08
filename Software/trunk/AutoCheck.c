@@ -70,6 +70,7 @@ return;
 
 begin_selftest:
 lcd_line2();
+Calibrate_UR();		// get Reference voltage, Pin resistance
 lcd_MEM2_string(R0_str);		// "R0="
 eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (uint8_t)0);	// clear zero offset
 eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[3]), (uint8_t)0);	// clear zero offset
@@ -113,7 +114,6 @@ for(ww=0;ww<MAX_REP;ww++) {	// repeat the test MAX_REP times
 				//############################################
    if (tt == 1) {   // output of reference voltage and factors for capacity measurement
       lcd_MEM2_string(URef_str);	//"URef="
-      Calibrate_UR();		// get Reference voltage, Pin resistance
       Display_mV(ref_mv,4);
       lcd_line2();			//Cursor to column 1, row 2
       lcd_MEM2_string(RHfakt_str);	//"RHf="

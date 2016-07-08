@@ -397,52 +397,31 @@
 // 250 kHz is out of the full accuracy specification!
 // clock divider is 4, when CPU_Clock==1MHz and ADC_Clock==250kHz
 // clock divider is 128, when CPU_Clock==16MHz and ADC_Clock==125kHz
-#define F_ADC 125000
+#define F_ADC 200000
 //#define F_ADC 250000
-#if F_CPU/F_ADC == 2
+#if F_CPU/F_ADC <= 2
+ #define TICS_PER_ADC_CLOCK 2
  #define AUTO_CLOCK_DIV ((0<<ADPS2) | (0<<ADPS1) | (1<<ADPS0))
-#endif
-#if F_CPU/F_ADC == 4
+#elif F_CPU/F_ADC <= 4
+ #define TICS_PER_ADC_CLOCK 4
  #define AUTO_CLOCK_DIV ((0<<ADPS2) | (1<<ADPS1) | (0<<ADPS0))
-#endif
-#if F_CPU/F_ADC == 8
+#elif F_CPU/F_ADC <= 8
+ #define TICS_PER_ADC_CLOCK 8
  #define AUTO_CLOCK_DIV ((0<<ADPS2) | (1<<ADPS1) | (1<<ADPS0))
-#endif
-#if F_CPU/F_ADC == 16
+#elif F_CPU/F_ADC <= 16
+ #define TICS_PER_ADC_CLOCK 16
  #define AUTO_CLOCK_DIV ((1<<ADPS2) | (0<<ADPS1) | (0<<ADPS0))
-#endif
-#if F_CPU/F_ADC == 32
+#elif F_CPU/F_ADC <= 32
+ #define TICS_PER_ADC_CLOCK 32
  #define AUTO_CLOCK_DIV ((1<<ADPS2) | (0<<ADPS1) | (1<<ADPS0))
-#endif
-#if F_CPU/F_ADC == 64
+#elif F_CPU/F_ADC <= 64
+ #define TICS_PER_ADC_CLOCK 64
  #define AUTO_CLOCK_DIV ((1<<ADPS2) | (1<<ADPS1) | (0<<ADPS0))
-#endif
-#if F_CPU/F_ADC == 128
+#else
+ #define TICS_PER_ADC_CLOCK 128
  #define AUTO_CLOCK_DIV ((1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0))
 #endif
 //**********************************************************
-#define F_ADC_F 500000
-#if F_CPU/F_ADC_F == 2
- #define FAST_CLOCK_DIV (1<<ADPS0) 
-#endif
-#if F_CPU/F_ADC_F == 4
- #define FAST_CLOCK_DIV (1<<ADPS1) 
-#endif
-#if F_CPU/F_ADC_F == 8
- #define FAST_CLOCK_DIV (1<<ADPS1) | (1<<ADPS0)
-#endif
-#if F_CPU/F_ADC_F == 16
- #define FAST_CLOCK_DIV (1<<ADPS2)
-#endif
-#if F_CPU/F_ADC_F == 32
- #define FAST_CLOCK_DIV (1<<ADPS2) | (1<<ADPS0)
-#endif
-#if F_CPU/F_ADC_F == 64
- #define FAST_CLOCK_DIV (1<<ADPS2) | (1<<ADPS1)
-#endif
-#if F_CPU/F_ADC_F == 128
- #define FAST_CLOCK_DIV (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0)
-#endif
 
 #ifndef PIN_RP
   #define PIN_RP  220           //estimated internal resistance PORT to VCC
@@ -721,24 +700,24 @@
  #define LCD_CLEAR
 #endif
 
-#if F_CPU <= 1000000UL
-  #define CNTR2_PRESCALER (1<<CS22) | (0<<CS21) | (1<<CS20)   /* prescaler 128, 128us @ 1MHz */
-  #define T2_PERIOD 128
+// check for required T2 clock divider for 5ms / 10ms delay (max 255)
+#if ((F_CPU/100) / 32) < 256
+ #define CNTR2_PRESCALER (0<<CS22) | (1<<CS21) | (1<<CS20)	/* prescaler 32 */
+ #define TICS_PER_T2_COUNT 32
+#elif ((F_CPU/100) / 64) < 256
+ #define CNTR2_PRESCALER (1<<CS22) | (0<<CS21) | (0<<CS20)	/* prescaler 64 */
+ #define TICS_PER_T2_COUNT 64
+#elif ((F_CPU/100) / 128) < 256
+ #define CNTR2_PRESCALER (1<<CS22) | (0<<CS21) | (1<<CS20)	/* prescaler 128 */
+ #define TICS_PER_T2_COUNT 128
+#elif ((F_CPU/100) / 256) < 256
+ #define CNTR2_PRESCALER (1<<CS22) | (1<<CS21) | (0<<CS20)	/* prescaler 256 */
+ #define TICS_PER_T2_COUNT 256
+#else
+ #define CNTR2_PRESCALER (1<<CS22) | (1<<CS21) | (1<<CS20)	/* prescaler 1024 */
+ #define TICS_PER_T2_COUNT 1024
 #endif
-#if F_CPU == 2000000UL
-  #define CNTR2_PRESCALER (1<<CS22) | (1<<CS21) | (0<<CS20)   /* prescaler 256, 128us @ 2MHz */
-  #define T2_PERIOD 128
-#endif
-#if F_CPU == 4000000UL
-  #define CNTR2_PRESCALER (1<<CS22) | (1<<CS21) | (0<<CS20)   /* prescaler 256, 64us @ 2MHz */
-  #define T2_PERIOD 64
-#endif
-#if F_CPU >= 8000000UL
-  #define CNTR2_PRESCALER (1<<CS22) | (1<<CS21) | (1<<CS20)   /* prescaler 1024, 128us @ 8MHz, 64us @ 16MHz */
-// #define T2_PERIOD (1024/(F_CPU/1000000UL))
-  #define T2_PERIOD (1024 / MHZ_CPU)
-       /* set to 128 or 64 us */
-#endif
+
 #if FLASHEND <= 0x3fff
  #ifdef WITH_MENU
   #undef WITH_MENU

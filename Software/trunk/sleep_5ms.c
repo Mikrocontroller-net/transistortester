@@ -9,8 +9,6 @@
 void sleep_5ms(uint8_t spause){
 uint16_t pause;		// pause is the delay in 5ms units
 uint8_t t2_offset;
-#define RESTART_DELAY_US (RESTART_DELAY_TICS/(F_CPU/1000000UL))
-// for 8 MHz crystal the Restart delay is 16384/8 = 2048us
 
 pause = spause;
 // spause = 202 = 2s
@@ -23,7 +21,8 @@ if (spause > 200) {
 
 while (pause > 0)
   {
- #if 3000 > RESTART_DELAY_US
+ #if (F_CPU / 500) > RESTART_DELAY_TICS
+   /* 2 ms are more tics than RESTART_DELAY_TICS */
    if ((TCCR1B & ((1<<CS12)|(1<<CS11)|(1<<CS10))) != 0) {
       // timer 1 is running, don't sleep 
       wait5ms();
@@ -31,10 +30,10 @@ while (pause > 0)
    } else {
    if (pause > 1)
      {
-      t2_offset =  (10000 - RESTART_DELAY_US) / T2_PERIOD;	/* set to 10ms above the actual counter */
+      t2_offset = ((F_CPU / 100) - RESTART_DELAY_TICS) / TICS_PER_T2_COUNT;
       pause -= 2;
      } else {
-      t2_offset =  (5000 - RESTART_DELAY_US) / T2_PERIOD;	/* set to 5ms above the actual counter */
+      t2_offset = ((F_CPU / 200) - RESTART_DELAY_TICS) / TICS_PER_T2_COUNT;
       pause = 0;
      }
    

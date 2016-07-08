@@ -14,11 +14,9 @@
 
  .section .text
 
-;// for 8 MHz crystal the Restart delay is 16384/8 = 2048us
-#define RESTART_DELAY_US (RESTART_DELAY_TICS / MHZ_CPU )
-#define DELAY_10ms  ((10000 / T2_PERIOD) - (RESTART_DELAY_US / T2_PERIOD))
+#define DELAY_10ms  (((F_CPU / 100) - RESTART_DELAY_TICS) / TICS_PER_T2_COUNT)
 
-#define DELAY_5ms  ( (5000 / T2_PERIOD) - (RESTART_DELAY_US / T2_PERIOD) )
+#define DELAY_5ms  (((F_CPU / 200) - RESTART_DELAY_TICS) / TICS_PER_T2_COUNT)
 
 
 ;/* set the processor to sleep state */
@@ -43,13 +41,12 @@ sleep_5ms:
 wloop:
  	sbiw	r24, 0x00	; 0 while (pause > 0)
  	brne	check_remain 
-;#if 3000 <= RESTART_DELAY_US
 ; 	sts	TIMSK2, r1	; TIMSK2 = (0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2); /* disable output compare match A interrupt */ 
 ;#endif
  	ret
 
 check_remain:
-#if 3000 > RESTART_DELAY_US
+#if (F_CPU / 500) > RESTART_DELAY_TICS
         lds	r18, TCCR1B	; if (TCCR1B & ((1<<CS12)|(1<<CS11)|(1<<CS10)) != 0) 
 	andi	r18, ((1<<CS12)|(1<<CS11)|(1<<CS10))	;
 	breq	do_sleep
@@ -63,11 +60,11 @@ do_sleep:
  	breq	only_one 		; if (pause > 1)
  	sbiw	r24, 0x02	; pause -= 2;
 ;     // Startup time is too long with 1MHz Clock!!!!
-	ldi	r19, DELAY_10ms ; t2_offset =  (10000 - RESTART_DELAY_US) / T2_PERIOD;	/* set to 10ms above the actual counter */
+	ldi	r19, DELAY_10ms ; 	/* set to 10ms above the actual counter */
  	rjmp	set_cntr 
 
 only_one:
-	ldi	r19, DELAY_5ms	; t2_offset =  (5000 - RESTART_DELAY_US) / T2_PERIOD;	/* set to 5ms above the actual counter */
+	ldi	r19, DELAY_5ms	; 	/* set to 5ms above the actual counter */
  	ldi	r24, 0x00	;  pause = 0;
  	ldi	r25, 0x00	; 0
    

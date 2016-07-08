@@ -66,7 +66,7 @@
 
  const unsigned char HelpCalibration_str[] PROGMEM = {'H','e',' ','o',Cyr_t,Cyr_k,'a',Cyr_l,Cyr_i,Cyr_b,'p','o',Cyr_v,'a',Cyr_n,'!'
   #ifndef SHORT_UNCAL_MSG
-,Cyr_D,Cyr_l,Cyr_ja,LCD_CHAR_INSEP,Cyr_z,'a',Cyr_p,'y','c',Cyr_k,'a',' ',
+,' ',Cyr_D,Cyr_l,Cyr_ja,LCD_CHAR_INSEP,Cyr_z,'a',Cyr_p,'y','c',Cyr_k,'a',' ',
 Cyr_k,'a',Cyr_l,Cyr_i,Cyr_b,'p','o',Cyr_v,Cyr_k,Cyr_i,' ',
 
 Cyr_z,'a',Cyr_k,'o','p','o',Cyr_t,Cyr_i,Cyr_t,'e',LCD_CHAR_INSEP,Cyr_t,'p',Cyr_i,' ',

@@ -405,20 +405,7 @@ store_cvn:
 	ldi	r18, (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV; /* enable and start ADC */
 	mov	StartADCmsk, r18;
 #endif
-	rjmp	ad_3604;		/* } else { */
-ad_35fe:
-     /* fast ADC-speed, ADC-Clock 2us */
-#ifdef ADC_Sleep_Mode
-	ldi	r25, (1<<ADEN) | (1<<ADIF) | (1<<ADIE) | FAST_CLOCK_DIV; /* enable ADC and Interrupt */
-	mov	StartADCmsk, r25;
-	sts	ADCSRA, StartADCmsk; 	/*  ADCSRA = StartADCmsk;	// enable ADC and Interrupt */
-#else
-	ldi	r25, (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | FAST_CLOCK_DIV; /* enable and start ADC */
-	mov	StartADCmsk, r25;
-#endif
-					/*  }  */
 
-ad_3604:
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
 	LDIZ	PinRLRHADCtab+6; 	/* LoADC = pgm_read_byte((&PinRLRHADCtab[6])+cap.ca) | TXD_MSK; */
 #else
@@ -538,8 +525,6 @@ ad_3604:
 						// when time is too short, voltage is down before SH of ADC
 						// when time is too long, capacitor will be overloaded.
 						// That will cause too high voltage without current.
-	ldi	r27, (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | FAST_CLOCK_DIV;	/* enable ADC and start with ADSC */
-	mov	r9, r27
 	//         adcv[0] = ADCW;		// Voltage LowPin with current
 	//         ADMUX = SelectHighPin;
 	ldi	r26, (1<<ADSC) | (1<<ADEN) | (1<<ADIF) | AUTO_CLOCK_DIV;	/* enable ADC and start with ADSC */

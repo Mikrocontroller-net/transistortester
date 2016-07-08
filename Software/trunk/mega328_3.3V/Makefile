@@ -204,6 +204,7 @@ CFLAGS += -DAUTO_CAL
 # to extend the resolution of capacity measurement to about 0.01pF.
 # Setting the WITH_SamplinADC to 1 enables this feature for capacity values below 100pF.
 WITH_SamplingADC = 1
+
 # Option WITH_XTAL enables additional Xtal / Ceramic resonator tests.
 # Option can be set only together with SamplingADC=1 and OP_MHZ=16
 #CFLAGS += -DWITH_XTAL 
@@ -211,8 +212,6 @@ WITH_SamplingADC = 1
 CFLAGS += -DWITH_UJT
 # Option WITH_PUT enables additional tests for PUT (Programmable Unijunction Transistor)
 CFLAGS += -DWITH_PUT
-
-
 
 # The WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring.
 CFLAGS += -DWITH_AUTO_REF

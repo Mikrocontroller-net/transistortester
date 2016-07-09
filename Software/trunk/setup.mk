@@ -270,6 +270,7 @@ MCU = atmega2560
 endif
 
 CFLAGS += -DF_CPU=$(OP_MHZ)000000UL
+CFLAGS += -DF_CPU_HZ=$(OP_MHZ)000000
 CFLAGS += -DMHZ_CPU=$(OP_MHZ)
 
 ## Options common to compile, link and assembly rules

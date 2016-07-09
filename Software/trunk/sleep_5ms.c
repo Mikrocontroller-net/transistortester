@@ -21,7 +21,7 @@ if (spause > 200) {
 
 while (pause > 0)
   {
- #if (F_CPU / 500) > RESTART_DELAY_TICS
+ #if (F_CPU / 400) > RESTART_DELAY_TICS
    /* 2 ms are more tics than RESTART_DELAY_TICS */
    if ((TCCR1B & ((1<<CS12)|(1<<CS11)|(1<<CS10))) != 0) {
       // timer 1 is running, don't sleep 

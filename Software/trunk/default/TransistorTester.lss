@@ -9470,8 +9470,8 @@ store_cvn:
     2eaa:	74 b8       	out	0x04, r7	; 4
 	AOUT	ADC_DDR, r19;		/* switch High Pin to GND */
     2eac:	0e 94 70 03 	call	0x6e0	; 0x6e0 <wait4us>
-	AOUT	R_PORT, LoPinR_L
-	AOUT	R_DDR, LoPinR_L
+	AOUT	R_PORT, LoPinR_L	/* r7 */
+	AOUT	R_DDR, LoPinR_L		/* r7 */
     2eb0:	14 b8       	out	0x04, r1	; 4
   #endif
  #else
@@ -9509,8 +9509,8 @@ esr_loop:
     2ec0:	74 b8       	out	0x04, r7	; 4
 	AOUT	ADC_DDR, r19;		/* ADC_DDR = LoADC;	// switch Low-Pin to output (GND) */
     2ec2:	60 92 7c 00 	sts	0x007C, r6
-	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L */
-	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L */
+	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L (r7) */
+	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L (r7) */
     2ec6:	a8 95       	wdr
 	sts	ADMUX, SelectLowPin;		/* ADMUX = SelectLowPin; */
     2ec8:	a0 92 7a 00 	sts	0x007A, r10
@@ -9551,8 +9551,8 @@ esr_loop:
     2f06:	c4 b8       	out	0x04, r12	; 4
     2f08:	0e 94 6f 03 	call	0x6de	; 0x6de <wait5us>
 #endif
-	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L;	// switch R-Port to VCC */
-	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L;	// switch R_L port for HighPin to output (VCC) */
+	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L (r12);	// switch R-Port to VCC */
+	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L (r12);	// switch R_L port for HighPin to output (VCC) */
     2f0c:	0e 94 71 03 	call	0x6e2	; 0x6e2 <wait3us>
 	wdr	;		/* 27.0   us */
 	wdr	;		/* 27.125 us */
@@ -9570,8 +9570,8 @@ esr_loop:
 00002f1c <ad_370c>:
     2f1c:	80 91 7a 00 	lds	r24, 0x007A
 #endif
-	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L;	// switch R-Port to VCC */
-	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L;	// switch R_L port for HighPin to output (VCC) */
+	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L (r12);	// switch R-Port to VCC */
+	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L (r12);	// switch R_L port for HighPin to output (VCC) */
 	DelayBigCap;			/* wait the time defined by macro */
 	AOUT	R_DDR, zero_reg;	/* R_DDR = 0; // switch current off,  SH is 1.5 ADC clock behind real start */
 	AOUT	R_PORT, zero_reg;	/* R_PORT = 0; */
@@ -9604,9 +9604,9 @@ ad_370c:
     2f36:	c4 b8       	out	0x04, r12	; 4
 	AOUT	ADC_DDR, r19;		/* ADC_DDR = HiADC;	// switch High-Pin to output (GND) */
     2f38:	a8 95       	wdr
-	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L;	// switch R-Port to VCC */
+	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L (r12);	// switch R-Port to VCC */
     2f3a:	b0 92 7c 00 	sts	0x007C, r11
-	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L;	// switch R_L port for HighPin to output (VCC) */
+	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L (r12);	// switch R_L port for HighPin to output (VCC) */
 
 	wdr	;			/* wdt_reset(); */
     2f3e:	a0 92 7a 00 	sts	0x007A, r10
@@ -9647,8 +9647,8 @@ ad_370c:
     2f7c:	74 b8       	out	0x04, r7	; 4
     2f7e:	0e 94 6f 03 	call	0x6de	; 0x6de <wait5us>
 #endif
-	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L; */
-	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L;	// switch LowPin with 680 Ohm to VCC */
+	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L (r7) ; */
+	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L (r7) ;	// switch LowPin with 680 Ohm to VCC */
     2f82:	0e 94 71 03 	call	0x6e2	; 0x6e2 <wait3us>
 	wdr	;		/* 27.0   us */
 	wdr	;		/* 27.125 us */
@@ -9665,7 +9665,7 @@ ad_370c:
 
 00002f92 <ad_37f4>:
     2f92:	80 91 7a 00 	lds	r24, 0x007A
-	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L;	// switch LowPin with 680 Ohm to VCC */
+	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L (r7) ;	// switch LowPin with 680 Ohm to VCC */
 
 	DelayBigCap;			/* wait the time defined by macro */
 					/*  }  */
@@ -9757,8 +9757,8 @@ ad_37f4:
     2fe4:	74 b8       	out	0x04, r7	; 4
 	brcs	is_ok1;		/* r20:21 >= 50 */
     2fe6:	0e 94 73 03 	call	0x6e6	; 0x6e6 <wait1us>
-	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L; */
-	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L;	// switch LowPin with 680 Ohm to VCC */
+	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L (r7);  */
+	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L (r7);	// switch LowPin with 680 Ohm to VCC */
     2fea:	14 b8       	out	0x04, r1	; 4
 	call	wait1us;			/* additional charge the capacitor */
     2fec:	15 b8       	out	0x05, r1	; 5
@@ -9809,8 +9809,8 @@ is_ok1b:
     3014:	c4 b8       	out	0x04, r12	; 4
 	AOUT	ADC_DDR, r19;		/* ADC_DDR = LoADC;	// switch Low-Pin to output (GND) */
     3016:	0e 94 73 03 	call	0x6e6	; 0x6e6 <wait1us>
-	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L;	// switch R-Port to VCC */
-	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L;	// switch R_L port for HighPin to output (VCC) */
+	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L (r12);	// switch R-Port to VCC */
+	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L (r12);	// switch R_L port for HighPin to output (VCC) */
     301a:	14 b8       	out	0x04, r1	; 4
 	call	wait1us;			/* additional charge the capacitor */
     301c:	15 b8       	out	0x05, r1	; 5

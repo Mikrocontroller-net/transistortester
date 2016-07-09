@@ -498,8 +498,8 @@ store_cvn:
 	/* start voltage should be negativ */
 	ldd	r19, Y+HiADC;		/* ADC_DDR = HiADC;	// switch High Pin to GND */
 	AOUT	ADC_DDR, r19;		/* switch High Pin to GND */
-	AOUT	R_PORT, LoPinR_L
-	AOUT	R_DDR, LoPinR_L
+	AOUT	R_PORT, LoPinR_L	/* r7 */
+	AOUT	R_DDR, LoPinR_L		/* r7 */
 #ifdef ESR_LONG_PULSE
 #warning "Long current pulses are used for ESR-measurement!"
 	call	wait10us;	/* Delay about half the current puls-length of measurement loop */
@@ -533,8 +533,8 @@ store_cvn:
 esr_loop:
 	ldd	r19, Y+LoADC;
 	AOUT	ADC_DDR, r19;		/* ADC_DDR = LoADC;	// switch Low-Pin to output (GND) */
-	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L */
-	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L */
+	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L (r7) */
+	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L (r7) */
 	sts	ADMUX, SelectLowPin;		/* ADMUX = SelectLowPin; */
 
 	wdr	;				/* wdt_reset(); */
@@ -553,8 +553,8 @@ esr_loop:
 	call	wait10us;		/* wait longer to start the short current pulse */
 	call	EXTRA_DELAY2PULSE;
 #endif
-	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L;	// switch R-Port to VCC */
-	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L;	// switch R_L port for HighPin to output (VCC) */
+	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L (r12);	// switch R-Port to VCC */
+	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L (r12);	// switch R_L port for HighPin to output (VCC) */
 	DelayBigCap;			/* wait the time defined by macro */
 	AOUT	R_DDR, zero_reg;	/* R_DDR = 0; // switch current off,  SH is 1.5 ADC clock behind real start */
 	AOUT	R_PORT, zero_reg;	/* R_PORT = 0; */
@@ -582,8 +582,8 @@ ad_370c:
 	      /* ********* Reverse direction, connect High side with GND *********** */
 	ldd	r19, Y+HiADC;		/* ADC_DDR = HiADC;	// switch High Pin to GND */
 	AOUT	ADC_DDR, r19;		/* ADC_DDR = HiADC;	// switch High-Pin to output (GND) */
-	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L;	// switch R-Port to VCC */
-	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L;	// switch R_L port for HighPin to output (VCC) */
+	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L (r12);	// switch R-Port to VCC */
+	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L (r12);	// switch R_L port for HighPin to output (VCC) */
 
 	wdr	;			/* wdt_reset(); */
 	sts	ADMUX, SelectHighPin;	/* ADMUX = SelectHighPin; */
@@ -603,8 +603,8 @@ ad_370c:
 	call	wait10us;		/* wait longer to start the short current pulse */
 	call	EXTRA_DELAY2PULSE;
 #endif
-	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L; */
-	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L;	// switch LowPin with 680 Ohm to VCC */
+	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L (r7) ; */
+	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L (r7) ;	// switch LowPin with 680 Ohm to VCC */
 
 	DelayBigCap;			/* wait the time defined by macro */
 					/*  }  */
@@ -657,8 +657,8 @@ ad_37f4:
 	cp	r18, r20;
 	cpc	zero_reg, r21;
 	brcs	is_ok1;		/* r20:21 >= 50 */
-	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L; */
-	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L;	// switch LowPin with 680 Ohm to VCC */
+	AOUT	R_PORT, LoPinR_L;	/* R_PORT = LoPinR_L (r7);  */
+	AOUT	R_DDR, LoPinR_L;	/* R_DDR = LoPinR_L (r7);	// switch LowPin with 680 Ohm to VCC */
 	call	wait1us;			/* additional charge the capacitor */
 	AOUT	R_DDR, zero_reg; 	// switch current off
 	AOUT	R_PORT, zero_reg; 
@@ -682,8 +682,8 @@ is_ok1b:
 	brcs	is_ok2;
 	ldd	r19, Y+LoADC;
 	AOUT	ADC_DDR, r19;		/* ADC_DDR = LoADC;	// switch Low-Pin to output (GND) */
-	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L;	// switch R-Port to VCC */
-	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L;	// switch R_L port for HighPin to output (VCC) */
+	AOUT	R_PORT, HiPinR_L;	/* R_PORT = HiPinR_L (r12);	// switch R-Port to VCC */
+	AOUT	R_DDR, HiPinR_L;	/* R_DDR = HiPinR_L (r12);	// switch R_L port for HighPin to output (VCC) */
 	call	wait1us;			/* additional charge the capacitor */
 ;##	DelayBigCap;			/* wait the time defined by macro */
 	AOUT	R_DDR, zero_reg;	/* R_DDR = 0; // switch current off,  SH is 1.5 ADC clock behind real start */

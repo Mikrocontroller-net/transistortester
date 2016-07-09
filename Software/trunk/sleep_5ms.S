@@ -14,9 +14,9 @@
 
  .section .text
 
-#define DELAY_10ms  (((F_CPU / 100) - RESTART_DELAY_TICS) / TICS_PER_T2_COUNT)
+#define DELAY_10ms  (((F_CPU_HZ / 100) - RESTART_DELAY_TICS) / TICS_PER_T2_COUNT)
 
-#define DELAY_5ms  (((F_CPU / 200) - RESTART_DELAY_TICS) / TICS_PER_T2_COUNT)
+#define DELAY_5ms  (((F_CPU_HZ / 200) - RESTART_DELAY_TICS) / TICS_PER_T2_COUNT)
 
 
 ;/* set the processor to sleep state */
@@ -46,7 +46,7 @@ wloop:
  	ret
 
 check_remain:
-#if (F_CPU / 500) > RESTART_DELAY_TICS
+#if (F_CPU_HZ / 400) > RESTART_DELAY_TICS
         lds	r18, TCCR1B	; if (TCCR1B & ((1<<CS12)|(1<<CS11)|(1<<CS10)) != 0) 
 	andi	r18, ((1<<CS12)|(1<<CS11)|(1<<CS10))	;
 	breq	do_sleep

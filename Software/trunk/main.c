@@ -410,13 +410,13 @@
   if (PartFound == PART_CERAMICRESONATOR) {
 //      static const unsigned char cerres_str[] MEM_TEXT = "Cer.resonator  ";
       lcd_MEM_string(cerres_str);
-      sampling_measure_xtal();
+      if (sampling_measure_xtal()) goto loop_start;
       goto tt_end;
   }
   if (PartFound == PART_XTAL) {
 //      static const unsigned char xtal_str[] MEM_TEXT = "Crystal  ";
       lcd_MEM_string(xtal_str);
-      sampling_measure_xtal();
+      if (sampling_measure_xtal()) goto loop_start;
       goto tt_end;
   }
 #endif

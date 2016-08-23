@@ -107,6 +107,8 @@ static void show_progress(void)
    lcd_refresh();
 }
 
+static uint8_t xtal_cancel;   // flag set to 1 to inform caller that user wants to cancel measurement; ugly to do this in global variable, but saves flash compared to properly doing it via the return values
+
 
 static uint16_t findfreqmax(int8_t uu[], byte nuu, byte minfreq)
 {
@@ -135,6 +137,7 @@ static uint16_t findfreqmax(int8_t uu[], byte nuu, byte minfreq)
       if(what==2) { myuart_putc('r'); myuart_putc(' '); uart_int(i); uart_int(sumiq); uart_int(sumiq+sumiq1+sumiq2); uart_newline(); wdt_reset(); }
  #endif
       wdt_reset();
+      if (!(RST_PIN_REG & (1<<RST_PIN))) { xtal_cancel=1; return; }
       if (sumiq+sumiq1+sumiq2>maxi) { maxi=sumiq+sumiq1+sumiq2; imax=i-1; }
       sumiq2=sumiq1;
       sumiq1=sumiq;
@@ -160,7 +163,8 @@ static uint16_t findfreqmax(int8_t uu[], byte nuu, byte minfreq)
 //      if (what==2)  {            myuart_putc('w'); myuart_putc(' '); uart_int(ii); uart_int(10000+sumq); uart_int(10000+sumi); uart_newline(); wdt_reset(); }
       {            myuart_putc('w'); myuart_putc(' '); uart_int(ii); uart_int(10000+sumq); uart_int(10000+sumi); uart_newline(); wdt_reset(); }
 #endif
-     wdt_reset();
+      wdt_reset();
+      if (!(RST_PIN_REG & (1<<RST_PIN))) { xtal_cancel=1; return; }
    }
    show_progress();
    // now try to find maximum with more precision, by searching for equally high points on both skirts
@@ -238,6 +242,7 @@ void sampling_test_xtal()
    { byte i;for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '); uart_int(1000+ub[i]); uart_newline(); wdt_reset(); } }
 #endif
    uint16_t sumd=sumabs8(ub+1,254);
+//   { myuart_putc('d'); myuart_putc(' '); uart_int(sumd); uart_newline(); wdt_reset(); }
 //   lcd_line4();
 //   DisplayValue16(sumd,0,' ',5);
 //   wait_about5s();
@@ -312,12 +317,14 @@ void sampling_test_xtal()
       PartFound=PART_XTAL;
    }
    wht=what;
+//         myuart_putc('S'); myuart_putc(' '); uart_int(dmax); uart_int(maxsumd); uart_int(avg); uart_newline(); 
+//   wait_about5ms();
 } /* end sampling_test_xtal */
 
 
 
 
-void sampling_measure_xtal()
+uint8_t sampling_measure_xtal()
 {
    byte LowPin=TP1;
    byte HighPin=TP3;
@@ -335,6 +342,8 @@ void sampling_measure_xtal()
    ADC_DDR = LoADC;			// switch Low-Pin to output (GND)
    wait100us();
 
+   xtal_cancel=0;
+
    ADMUX=HighPin|ADref1V1;   // use built-in reference, about 1.1 V;
                              // that's enough, because peaks more than about 0.6 V are not of interest
                              // (because the negative peak would be chopped by the protection diodes)
@@ -351,6 +360,7 @@ void sampling_measure_xtal()
 
    uint16_t imax1=findfreqmax(uu,255,6);   // obtain a coarse estimate of the resonant frequency
                                            // start search at i=6, corresponding to 16 MHz / (256/6) = 375 kHz, to prevent DC component from being selected
+   if (xtal_cancel) return xtal_cancel;
 
    // next, calculate span (here called ff) to be used for final measurement
    // for ceramic resonators, we choose ff about 16
@@ -413,9 +423,10 @@ newff:;
 
 
    imax2=findfreqmax(uu,255,25);   // find the frequency of the new measurement; 25 is a safe lower bound on expected frequency (32, see above)
+   if (xtal_cancel) return xtal_cancel;
    if (u&0x80) imax2=-imax2;    // make it negative if that's what we expect based on the coarse measurement
 #if ((DEB_UART & 0x20) != 0)
-   myuart_putc('o'); myuart_putc(' '); uart_int(imax1); uart_int(imax2); uart_int(ff); uart_newline();
+   myuart_putc('o'); myuart_putc(' '); uart_int(dmax); uart_int(imax1); uart_int(imax2); uart_int(ff); uart_newline();
 #endif
 
 
@@ -485,6 +496,7 @@ if (ssd==5 || ssd==13)   for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '
          myuart_putc('y'); myuart_putc(' '); uart_int(ssd); uart_int(ph1l);  uart_int(ph1l+(((uint16_t)ph1h)<<8)); uart_int(ff); uart_int(dmax); uart_int(imax1); uart_int(imax2); uart_int(ph0+rphase); uart_newline(); 
 #endif
          wdt_reset();
+         if (!(RST_PIN_REG & (1<<RST_PIN))) return 1;
          show_progress();
          if (ssd<ssdstep+sse) break;
          ssd-=ssdstep;
@@ -573,6 +585,7 @@ if (ssd==5 || ssd==13)   for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '
       Display_Hz(f, 6); 	// DisplayValue(f,0,'H',6); lcd_data('z');
    }
 
+   return xtal_cancel;
 }
 
 

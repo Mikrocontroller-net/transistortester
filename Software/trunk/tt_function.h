@@ -104,7 +104,10 @@ uint16_t samplingADC(   // code is in sampling_ADC.S
 
 
 
-int32_t sampling_cap(uint8_t HighPin, uint8_t LowPin, uint8_t opts);   // returns measured capacitance in 0.01 pF units; opts&1 is flag demands measurement at 5 V rather than at 0 V; opts&2 is flag to not subtract the parasitic capacitance
+int32_t sampling_cap(uint8_t HighPin, uint8_t LowPin, uint8_t opts);   
+// returns measured capacitance in 0.01 pF units
+// opts&1 is flag demands measurement at 5 V rather than at 0 V
+// opts&2 is flag to not subtract the parasitic capacitance
 void sampling_lc(uint8_t LowPin, uint8_t HighPin);
 #define sampling_cap_pre -14
 void sampling_cap_calibrate(void);	// calibrate the sampling cap method
@@ -112,9 +115,10 @@ void sampling_lc_calibrate(void);	// calibrate the sampling  LC method
 
 #ifdef WITH_XTAL
 void sampling_test_xtal(void);          // test presence of resonator or crystal between pin 1 and 3 (hardcoded)
-void sampling_measure_xtal(void);       // measure resonator or crystal between pin 1 and 3 (hardcoded),
+uint8_t sampling_measure_xtal(void);    // measure resonator or crystal between pin 1 and 3 (hardcoded),
                                         //   uses data already gathered in previous sampling_test_xtal() call
                                         //   prints output to LCD too
+                                        //   returns nonzero if user interrupts this (time-consuming) measurement
 
 // version to be called when using samlingADC_freq option, to pass the desired frequency:
 uint16_t samplingADC_freqgen(uint16_t, void*, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint16_t freq);

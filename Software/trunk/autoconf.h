@@ -574,6 +574,10 @@
         #define LCD_CHAR_INDUCTOR2  10		//end of coil
 #endif 
 
+#ifdef FONT_6X8
+	#define LCD_CHAR_BETA 11
+#endif
+
 #if FLASHEND > 0x3fff
  #define LCD_CHAR_RESIS3 0
 #else

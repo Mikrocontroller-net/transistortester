@@ -215,7 +215,11 @@ End of configuration
  const unsigned char hfe_str[] MEM_TEXT ="hFE=";
  const unsigned char GateCap_str[] MEM_TEXT = "Cg=";
 #else
- const unsigned char hfe_str[] MEM_TEXT ="B=";
+ #ifdef LCD_CHAR_BETA
+  const unsigned char hfe_str[] MEM_TEXT = {LCD_CHAR_BETA,'=',0};
+ #else
+  const unsigned char hfe_str[] MEM_TEXT ="B=";
+ #endif
  const unsigned char GateCap_str[] MEM_TEXT = "C=";
 #endif
  const unsigned char Cap_str[] MEM_TEXT = "C=";

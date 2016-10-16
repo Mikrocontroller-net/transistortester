@@ -212,7 +212,7 @@ CFLAGS += -DAUTO_CAL
 # Normally a long text is shown, which explains the steps of calibration.
 # You can prevent the long explanation by setting the SHORT_UNCAL_MSG option.
 # With this option set, only a hint of one line is shown.
-#CFLAGS += -DSHORT_UNCAL_MSG
+CFLAGS += -DSHORT_UNCAL_MSG
 
 # You can extend the measurement feature by use of a sampling mode for the ADC converter
 # to extend the resolution of capacity measurement to about 0.01pF.

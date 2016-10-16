@@ -28,7 +28,7 @@
   #define LCD_LINES 2
   #define LCD_LINE_LENGTH 16
 #endif
-#if (LCD_ST_TYPE != 7735) && (LCD_ST_TYPE != 9163)
+#if (LCD_ST_TYPE != 7735) && (LCD_ST_TYPE != 9163) && (LCD_ST_TYPE != 9341)
  #undef LCD_CHANGE_COLOR
 #endif
 
@@ -226,6 +226,43 @@
  #endif
 	#define ST_DIVA 14
 	#define ST_VPA 20
+
+/* *********************************************************************************************************** */
+#elif (LCD_ST_TYPE == 9341)
+	#define CMD_EXIT_SLEEP 0x11
+	#define CMD_SET_GAMMA 0x26
+	#define CMD_DISPLAY_ON 0x29
+ 	#define CMD_CASET  0x2a		/* set column address */
+ 	#define CMD_RASET  0x2b		/* set row (page) address */
+	#define CMD_RAMWR 0x2c		/* write data to RAM */
+	#define CMD_MEMORY_ADDRESS_CONTROL 0x36
+	#define CMD_SET_COLOR_FORMAT 0x3a
+	#define CMD_FRAME_RATE_CONTROL 0xb1
+	#define CMD_POWER_CONTROL1 0xc0
+	#define CMD_POWER_CONTROL2 0xc1
+	#define CMD_VCOM_CONTROL1 0xc5
+	#undef SCREEN_HEIGHT
+	#undef SCREEN_WIDTH
+#ifdef LCD_SCREEN_ROTATE
+        #define SCREEN_HEIGHT 320
+        #define SCREEN_WIDTH 240
+#else
+        #define SCREEN_HEIGHT 240
+        #define SCREEN_WIDTH 320
+#endif
+//Makros for LCD
+	#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
+	#define lcd_cursor_on()  // ignored
+	#define lcd_cursor_off() // ignored
+ #ifndef LCD_ST7565_V_OFFSET
+	#define LCD_ST7565_V_OFFSET 0
+ #endif
+ #ifndef LCD_BG_COLOR
+	#define LCD_BG_COLOR 0x0000	/* 5 bit red, 6 bit green, 5 bit blue */
+ #endif
+ #ifndef LCD_FG_COLOR
+	#define LCD_FG_COLOR 0xffff	/* 5 bit red, 6 bit green, 5 bit blue */
+ #endif
         
 /* *********************************************************************************************************** */
 #elif (LCD_ST_TYPE == 9163)
@@ -264,7 +301,7 @@
 	#define ST_VPA 20
 
 /* *********************************************************************************************************** */
-#else /* not ((LCD_ST_TYPE == 7565 || 1306 || 7920 || 7108 || 8812 || 8814 || 7735 || 9163) */
+#else /* not ((LCD_ST_TYPE == 7565 || 1306 || 7920 || 7108 || 8812 || 8814 || 7735 || 9341 || 9163) */
 /* must be a character display! */
 	#define lcd_write_data(data)                   _lcd_hw_write(0x01, data); wait50us();
 	#define lcd_write_init(data_length)            _lcd_hw_write(0x80, CMD_SetIFOptions | (data_length << 4))
@@ -335,7 +372,7 @@
 #endif
 
 //defines for the cyrillic character set
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 9163) || (LCD_ST_TYPE == 7735))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 9163) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE==9341))
  	#define GR_OFFSET1 0x20	/* shift 0xa0 to 0x80, direct behind ASCII table, to save place in font table */
  	#define GR_OFFSET2 0xd0	/* shift 0xe0 to 0x10, before the ASCII table */  
 #else

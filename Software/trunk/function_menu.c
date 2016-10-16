@@ -757,9 +757,9 @@ uint8_t contrast;
  #endif /* LCD_ST_TYPE == 7565 */
 
  #ifdef LCD_CHANGE_COLOR
-/* *************************************************** */
-/* set the color values for the ST7735/ILI9163 display */
-/* *************************************************** */
+/* *********************************************************** */
+/* set the color values for the ST7735/ILI9163/ILI9341 display */
+/* *********************************************************** */
 void select_color(uint8_t xcol) {
 /* xcol = 0  for foreground */
 /* xcol != 0 for backgreound */

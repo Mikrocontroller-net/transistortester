@@ -214,16 +214,16 @@ void lcd_big_icon(unsigned char temp1) {
  pfont = (uint8_t *) bigfont[temp1 & 0x0f];	// first byte of character data
  pos_nr = temp1 & 0x30;	// filter the position Information
  icon_xx =  TP_WIDTH;		// left side 
- if ((pos_nr & 0x10) == 0) icon_xx += (SCREEN_WIDTH / 2); // right side
+ if ((pos_nr & 0x10) == 0) icon_xx += (SCREEN_WIDTH / (ONE_B/4)); // right side
  icon_yy = 0;
  if (pos_nr < 0x20) {
    icon_yy = HALF_SCREEN_HEIGHT;	// lower half of display
    // shift lower icon position to the right
-   icon_xx +=  (SCREEN_WIDTH / 2)  - ICON_WIDTH - TP_WIDTH - TP_WIDTH - DIODE_WIDTH;
+   icon_xx +=  (SCREEN_WIDTH / (ONE_B/4))  - ICON_WIDTH - TP_WIDTH - TP_WIDTH - DIODE_WIDTH;
  }
 
  lcd_set_pixels( pfont, icon_xx, icon_yy, 0, ICON_WIDTH, ICON_HEIGHT);	// write the pixel data of the Icon
-}
+} /* end lcd_big_icon() */
 
 /* ******************************************************************************* */
 // update a icon 
@@ -248,7 +248,7 @@ void lcd_update_icon_opt(const unsigned char *ubitmap, unsigned char options) {
  ww =  pgm_read_byte(&ubitmap[2]);		// the width of the bitfield
  hh =  pgm_read_byte(&ubitmap[3]);		// the height of the bitfield (must be multiple of 8 for ST7565)
  lcd_set_pixels( pfont, xx, yy, options, ww, hh);	// update the icon at the specified position with specified size
-}
+} /* end lcd_update_icon_opt() */
 #endif
 #ifdef DEB_UART
 void myuart_putc(unsigned char temp2) {
@@ -266,6 +266,13 @@ void uart_int(unsigned int temp3) {
    ii++;
  }
  uart_putc(' ');
+}
+#endif
+/* ******************************************************************************* */
+#if (LCD_GRAPHIC_TYPE != 0)
+void lcd_write_word(unsigned int xx) {
+ lcd_write_data(xx>>8);		// send upper bits
+ lcd_write_data(xx&0xff);	// send lower bits
 }
 #endif
 
@@ -542,27 +549,25 @@ void lcd_init(void) {
     lcd_write_data(ST_DIVA);		// DIVA=14, default 14(132*162) 17(128*128)
     lcd_write_data(ST_VPA);		// VPA=16, default 20(132*162) 17(128*128)
    lcd_command(CMD_POWER_CONTROL1);		// Power_Control1
-    lcd_write_data(0x0e);		// 0x08 VRH=14, GVDD=4.1
-    lcd_write_data(0x00);		// VC=0, VCI1=2.75
+    lcd_write_word(0x0e00);		// 0x08 VRH=14, GVDD=4.1, VC=0, VCI1=2.75
    lcd_command(CMD_POWER_CONTROL2);		// Power_Control2
     lcd_write_data(0x05);		// BT=5, AVDD=2x VCL=-1x VGH=6x VGL=-3x
    lcd_command(CMD_VCOM_CONTROL1);		// VCOM_Control1
-    lcd_write_data(0x38);		// VMH=56  VCOMH=3.900
-    lcd_write_data(0x40);		// VML=64  VCOML=-0.900
+    lcd_write_word(0x3840);		// VMH=56  VCOMH=3.900, VML=64  VCOML=-0.900
    lcd_command(CMD_SET_COLOR_FORMAT);		// set color format
     lcd_write_data(0x05);		// 16 bit/pixel
    lcd_command(CMD_MEMORY_ADDRESS_CONTROL);		// Memory address control
-#ifdef LCD_CHANGE_COLOR
+ #ifdef LCD_CHANGE_COLOR
    lcd_bg_color.b[0] = eeprom_read_byte(&EE_BG_COLOR1);
    lcd_bg_color.b[1] = eeprom_read_byte(&EE_BG_COLOR2);
    lcd_fg_color.b[0] = eeprom_read_byte(&EE_FG_COLOR1);
    lcd_fg_color.b[1] = eeprom_read_byte(&EE_FG_COLOR2);
-#endif
-#ifdef LCD_SCREEN_ROTATE
+ #endif
+ #ifdef LCD_SCREEN_ROTATE
     lcd_write_data(0x3c);	 	// MV=exchange xy, ML=Vertical refresh, RGB=BGR color,MH=Refresh right to left
-#else
+ #else
     lcd_write_data(0x1c);	 	// ML=Vertical refresh, RGB=BGR color,MH=Refresh right to left
-#endif
+ #endif
    lcd_command(CMD_INVERSION_CONTROL);		// Display Inversion Control
     lcd_write_data(0x00);		// NLA=0, NLB=0, NLC=0
    // ? Gamma set
@@ -572,6 +577,69 @@ void lcd_init(void) {
 //   lcd_command(0x2c);		// RAMWR
    wait_about50ms();
 /* -------------------------------------------------------------------------- */
+#elif (LCD_ST_TYPE == 9341)   /* !(LCD_ST_TYPE == 7565 | 1306 | 8812 | 8814 | 7920 | 7108 | 7735 | 9163) */
+/* -------------------------------------------------------------------------- */
+/* init sequence for ILI9341 is taken from the ComponentTester-trendy code of Markus R. */
+  lcd_command(0xf6);		/* power control A */
+  lcd_write_word(0x392c);
+  lcd_write_word(0x0033);	/* Vcore 1.6V */
+  lcd_write_data(0x02);	/* DDVDH 5.6V */
+
+  lcd_command(0xcf);		/* power control B */
+  lcd_write_word(0x0099);
+  lcd_write_data(0x30);	/* enable discharge */
+
+  lcd_command(0xf7);		/* pump ratio control */
+  lcd_write_data(0x20);     /* 2xVCI */
+
+  lcd_command(CMD_POWER_CONTROL1);	/* power control 1 */
+  lcd_write_data(0x23);	/* GVDD 4.60V */
+
+  lcd_command(CMD_POWER_CONTROL2);	/* power control 2 */
+  lcd_write_data(0x03);	/* DDVDH=2*VCI, VGH=6xVCI, VGL=-3*VCI */
+
+  lcd_command(CMD_VCOM_CONTROL1);	/* VCOM control 1 */
+  lcd_write_word(0x5c4c);	/* VCOMH = 5.000V, could be used to adjust contrast, VCOML = -0.600V */
+
+  lcd_command(0xc7);		/* VCOM control 2 */
+  lcd_write_data(0x94);	/* VCOM offset voltage -44 */
+
+  lcd_command(0xe8);		/* driver timing control A */
+  lcd_write_word(0x8591);	/* default + 1 unit, default CR timing */
+  lcd_write_data(0x78);	/* default - 2 units */
+
+  lcd_command(0xea);		/* driver timing control B */
+  lcd_write_word(0x0000);
+
+  lcd_command(CMD_SET_COLOR_FORMAT);	/* set pixel format for RGB image data */
+  lcd_write_data(0x05);	/* 16 Bits per pixel */
+
+  lcd_command(CMD_FRAME_RATE_CONTROL);	/* frame control for normal display mode */
+  lcd_write_word(0x0018);	/* f_OSC , 24 clocks */
+
+  lcd_command(0xb6);		/* display function control */
+  lcd_write_word(0x0080);	/* V63 / V0 - VCOML / VCOMH , white, 1 frame */
+  lcd_write_word(0x2700);	/* 320 lines , DOTCLK / 2 */
+
+  lcd_command(CMD_SET_GAMMA);		/* gamma set */
+  lcd_write_data(0x01);	/* gamma curve 1 */
+
+  lcd_command(CMD_MEMORY_ADDRESS_CONTROL);	/* memory access control */
+  #ifdef LCD_SCREEN_ROTATE
+    lcd_write_data(0x20);	/* swap x and y, RGB */
+  #else
+    lcd_write_data(0x00);	/*  RGB */
+  #endif
+
+  /* power on */
+  wait_about200ms();
+  lcd_command(CMD_EXIT_SLEEP);		/* exit sleep mode */
+  wait_about50ms();
+  lcd_command(CMD_DISPLAY_ON);         /* display on */
+  wait_about100ms();
+
+  /* we don't clear the display now, because it's quite slow */
+
 #else    /* !(LCD_ST_TYPE == 7565 | 1306) | 7108 | 7920 | 7108 | 8812 | 8814 | 7735 | 9163) */
 /* must be a character display */
    wait_about100ms();
@@ -756,32 +824,35 @@ void lcd_clear(void) {
        lcd_bit_mem[count][p] = 0;		// clear bits in image data
      }
    }
-#elif ((LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163))
+#elif ((LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163) || (LCD_ST_TYPE == 9341))
    // clear display for the ST7735 color LCD controller
+ #if (SCREEN_WIDTH < 256)
    unsigned char p;
+ #else
+   unsigned int p;
+ #endif
+ #if ((SCREEN_HEIGHT + LCD_ST7565_V_OFFSET) < 256)
    unsigned char count;
+ #else
+   unsigned int count;
+ #endif
 
    lcd_command(CMD_CASET);
-    lcd_write_data(0);	// set start column
-    lcd_write_data(0);	// set start column
-    lcd_write_data(SCREEN_WIDTH>>8);	// set end column
-    lcd_write_data(SCREEN_WIDTH & 0xff); // set end column
+    lcd_write_word(0);	// set start column
+    lcd_write_word(SCREEN_WIDTH);	// set end column
    lcd_command(CMD_RASET);
-    lcd_write_data(0);	// set start row
-    lcd_write_data(0);	// set start row
-    lcd_write_data((SCREEN_HEIGHT + LCD_ST7565_V_OFFSET) >>8);	// set end row
-    lcd_write_data((SCREEN_HEIGHT + LCD_ST7565_V_OFFSET)  & 0xff); // set end row
+    lcd_write_word(0);	// set start row
+    lcd_write_word(SCREEN_HEIGHT + LCD_ST7565_V_OFFSET);	// set end row
    lcd_command(CMD_RAMWR);	// write data to RAM
    
    for (count = 0; count < (SCREEN_HEIGHT + LCD_ST7565_V_OFFSET); count++) {
+     wdt_reset();
      for (p = 0; p < SCREEN_WIDTH; p++) {
-#ifdef LCD_CHANGE_COLOR
-       lcd_write_data(lcd_bg_color.b[1]);	// clear 5 red / 3 green pixels
-       lcd_write_data(lcd_bg_color.b[0]);	// clear 3 green / 5 blue pixels
-#else
-       lcd_write_data(LCD_BG_COLOR >> 8);	// clear 5 red / 3 green pixels
-       lcd_write_data(LCD_BG_COLOR & 0xff);	// clear 3 green / 5 blue pixels
-#endif
+ #ifdef LCD_CHANGE_COLOR
+       lcd_write_word(lcd_bg_color.w);		// clear 5 red / 6 green  / 5 blue pixels
+ #else
+       lcd_write_word(LCD_BG_COLOR);		// clear 5 red / 6 green / 5 blue pixels
+ #endif
      }
    }
 #else
@@ -1065,96 +1136,108 @@ unsigned char options, unsigned char width, unsigned char height) {
        }
      } /* end for jj */
    } /* end for ii */
-#elif ((LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163))
+#elif ((LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163) || (LCD_ST_TYPE == 9341))
 /* ------------------------------------------------------------------------------- */
+// void lcd_set_pixels(const unsigned char *pdata, unsigned char x, unsigned char y,
+// unsigned char options, unsigned char width, unsigned char height) 
   // support for color display
-  // lcd_set_pixels(const uchar *pdata, uchar x, uchar y, uchar options, uchar width, uchar height) 
-   if (((x+width) > SCREEN_WIDTH) || ((y+height) > SCREEN_HEIGHT)) return;
+   if (((x+width) > (SCREEN_WIDTH / (ONE_B/8))) || ((y+height) > (SCREEN_HEIGHT / (ONE_B/8)))) return;
 
-   unsigned char offset;
+ #if (SCREEN_HEIGHT < 256)
    unsigned char page;
    unsigned char pagemax;
+ #else
+   unsigned int page;
+   unsigned int pagemax;
+ #endif
+   unsigned char offset;
    unsigned char xx;
 
-   page = y;		
-   pagemax = (y + height - 1);
+   page = y * (ONE_B/8);		
+   pagemax = (y + height - 1) * (ONE_B/8);
+   if (pagemax >= SCREEN_HEIGHT)
+      pagemax = (SCREEN_HEIGHT - 1);	// limit to last page of screen
 
    if ((options & OPT_VREVERSE) == OPT_VREVERSE)
       pdata += ((height-1)>>3) * width; /* begin of the last line of data */
 
-   if (pagemax >= SCREEN_HEIGHT)
-      pagemax = (SCREEN_HEIGHT - 1);	// limit to last page of screen
-   for (; page <= pagemax; page+=8)
+   for (; page <= pagemax; page+=ONE_B)
    { 
   #if (LCD_ST7565_H_FLIP == 1)
-      xx = (SCREEN_WIDTH  - x - width) + LCD_ST7565_H_OFFSET;
+      xx = ((SCREEN_WIDTH / (ONE_B/8)) - x - width);
   #else
-      xx = x + LCD_ST7565_H_OFFSET;
+      xx = x;
   #endif
       for (offset = 0; offset < width; offset++)
       {
          unsigned char byte;
-  #if (LCD_ST7565_H_FLIP == 1)
-         if (!((options & OPT_HREVERSE) == OPT_HREVERSE))
-  #else
-         if ((options & OPT_HREVERSE) == OPT_HREVERSE)
-  #endif
-            { byte = pgm_read_byte(pdata + width - offset - 1);
-         } else {
-            byte = pgm_read_byte(pdata + offset);
-         }
+         lcd_command(CMD_RASET);		// set row range
   #if (LCD_ST7565_V_FLIP == 1)
-         if (((options & OPT_VREVERSE) == OPT_VREVERSE))
+         lcd_write_word(((SCREEN_HEIGHT) - ONE_B) - page + LCD_ST7565_V_OFFSET);
+         lcd_write_word(((SCREEN_HEIGHT) - ONE_B) - page + LCD_ST7565_V_OFFSET + (ONE_B - 1));
   #else
-         if (!((options & OPT_VREVERSE) == OPT_VREVERSE))
+         lcd_write_word(LCD_ST7565_V_OFFSET + page);
+         lcd_write_word(LCD_ST7565_V_OFFSET + page + (ONE_B - 1));
   #endif
-            { byte = reverse_byte(byte);
-         }
+         unsigned char dd;
+         for (dd=0; dd<(ONE_B/8); dd++) {
+            lcd_command(CMD_CASET);		// set column range
+            lcd_write_word((xx + offset)*(ONE_B/8) + dd + LCD_ST7565_H_OFFSET);
+            lcd_write_word((xx + offset)*(ONE_B/8) + dd + LCD_ST7565_H_OFFSET);
+            lcd_command(CMD_RAMWR);		// write pixel data to RAM
+
+  #if (LCD_ST7565_H_FLIP == 1)
+            if (!((options & OPT_HREVERSE) == OPT_HREVERSE))
+  #else
+            if ((options & OPT_HREVERSE) == OPT_HREVERSE)
+  #endif
+               { byte = pgm_read_byte(pdata + width - offset - 1);
+            } else {
+               byte = pgm_read_byte(pdata + offset);
+            }
+  #if (LCD_ST7565_V_FLIP == 1)
+            if (((options & OPT_VREVERSE) == OPT_VREVERSE))
+  #else
+            if (!((options & OPT_VREVERSE) == OPT_VREVERSE))
+  #endif
+               { byte = reverse_byte(byte);
+            }
 //         if ((options & OPT_CINVERSE) == OPT_CINVERSE) {
 //            byte = ~byte;
 //         }
-      lcd_command(CMD_RASET);		// set row range
-  #if (LCD_ST7565_V_FLIP == 1)
-      lcd_write_data(0);			// upper row bits allways zero
-      lcd_write_data(((SCREEN_HEIGHT) - 8) - page + LCD_ST7565_V_OFFSET);
-      lcd_write_data(0);			// upper row bits allways zero
-      lcd_write_data(((SCREEN_HEIGHT) - 8) - page + LCD_ST7565_V_OFFSET + 7);
-  #else
-      lcd_write_data(0);			// upper row bits allways zero
-      lcd_write_data(LCD_ST7565_V_OFFSET + page);
-      lcd_write_data(0);			// upper row bits allways zero
-      lcd_write_data(LCD_ST7565_V_OFFSET + page + 7);
-  #endif
-      lcd_command(CMD_CASET);		// set column range
-      lcd_write_data(0);			// upper column bits allways zero
-      lcd_write_data(xx + offset);
-      lcd_write_data(0);			// upper column bits allways zero
-      lcd_write_data(xx + offset);
-      lcd_command(CMD_RAMWR);		// write pixel data to RAM
-         unsigned char bb;
-         for (bb=0; bb<8; bb++)
-         {
-           if ((byte & 0x80) != 0) {
-	      // set pixel to foreground color
+            unsigned char bb;
+            for (bb=0; bb<8; bb++)
+            {
+              if ((byte & 0x80) != 0) {
+	         // set pixel to foreground color
   #ifdef LCD_CHANGE_COLOR
-              lcd_write_data(lcd_fg_color.b[1]);	// 5 red / 3 green pixel 
-              lcd_write_data(lcd_fg_color.b[0]);	// 3 green / 5 blue pixel
+                 lcd_write_word(lcd_fg_color.w);	// 5 red / 6 green / 5 blue pixel 
+   #if ONE_B == 16
+                 lcd_write_word(lcd_fg_color.w);	// 5 red / 6 green / 5 blue pixel 
+   #endif
   #else
-              lcd_write_data(LCD_FG_COLOR >> 8);	// 5 red / 3 green pixel 
-              lcd_write_data(LCD_FG_COLOR & 0xff);	// 3 green / 5 blue pixel
+                 lcd_write_word(LCD_FG_COLOR);	// 5 red / 6 green / 5 green pixel 
+   #if ONE_B == 16
+                 lcd_write_word(LCD_FG_COLOR);	// 5 red / 6 green / 5 green pixel 
+   #endif
   #endif
-           } else {
-	      // set pixel to background color
+              } else {
+	         // set pixel to background color
   #ifdef LCD_CHANGE_COLOR
-              lcd_write_data(lcd_bg_color.b[1]);	// 5 red  / 3 green pixel
-              lcd_write_data(lcd_bg_color.b[0]);	// 3 green / 5 blue pixel
+                 lcd_write_word(lcd_bg_color.w);	// 5 red  / 6 green  / 5 blue pixel
+   #if ONE_B == 16
+                 lcd_write_word(lcd_bg_color.w);	// 5 red  / 6 green  / 5 blue pixel
+   #endif
   #else
-              lcd_write_data(LCD_BG_COLOR >> 8);	// 5 red  / 3 green pixel
-              lcd_write_data(LCD_BG_COLOR & 0xff);	// 3 green / 5 blue pixel
+                 lcd_write_word(LCD_BG_COLOR);	// 5 red  / 6 green  / 5 blue pixel
+   #if ONE_B == 16
+                 lcd_write_word(LCD_BG_COLOR);	// 5 red  / 6 green  / 5 blue pixel
+   #endif
   #endif
-           }
-           byte *= 2;		// next bit to 2**7
-         } /* end for bb */
+              }
+              byte *= 2;		// next bit to 2**7
+            } /* end for bb */
+         } /* end for dd */
       } /* end for offset */
       if ((options & OPT_VREVERSE) == OPT_VREVERSE) {
          pdata -= width;

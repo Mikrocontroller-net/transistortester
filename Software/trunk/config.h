@@ -3,7 +3,7 @@
         Configuration
 */
 #ifndef ADC_PORT
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163) || (LCD_ST_TYPE == 9341))
   #define LCD_GRAPHIC_TYPE 1
 #elif (LCD_ST_TYPE == 7920)
   #define LCD_GRAPHIC_TYPE 2
@@ -355,7 +355,7 @@
  // Strip Grid board version
   #define RST_PORT PORTD
   #define RST_PIN_REG PIND
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+  #if (LCD_GRAPHIC_TYPE != 0)
    #define RST_PIN PD7     //Pin, is switched to low, if push button is pressed
    // option STRIP_GRID is used to specify other connection of the LCD (chinese version),
    // the RST_PIN remain at PD7.
@@ -375,7 +375,7 @@
 /* Port(s) / Pins for LCD						     */
 /* ************************************************************************* */
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163) || (LCD_ST_TYPE == 9341))
  /* set the default INTERFACE_MODE for the ST7565 controller */
  #ifndef LCD_INTERFACE_MODE
   #define LCD_INTERFACE_MODE MODE_SPI

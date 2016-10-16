@@ -2,6 +2,7 @@
 MKFILES = Makefile ../setup.mk ../finish.mk
 CFLAGS += -mcall-prologues
 # you can set the EFUSE_VAL to 0xfc or to 0x04, if your avrdude mask out the unused bits
+# this value enable the brown out voltage of 4.3V
 EFUSE_VAL = 0x04
 ifeq ($(INHIBIT_SLEEP_MODE),1)
 # set the option for gcc 
@@ -29,6 +30,9 @@ CFLAGS += -DLCD_ST_TYPE=7735
 endif
 ifeq ($(WITH_LCD_ST7565),9163)
 CFLAGS += -DLCD_ST_TYPE=9163
+endif
+ifeq ($(WITH_LCD_ST7565),9341)
+CFLAGS += -DLCD_ST_TYPE=9341
 endif
 ifeq ($(WITH_LCD_ST7565),7920)
 CFLAGS += -DLCD_ST_TYPE=7920
@@ -319,6 +323,9 @@ ifeq ($(WITH_LCD_ST7565),7735)
 OBJECTS += lcd-draw.o
 endif
 ifeq ($(WITH_LCD_ST7565),9163)
+OBJECTS += lcd-draw.o
+endif
+ifeq ($(WITH_LCD_ST7565),9341)
 OBJECTS += lcd-draw.o
 endif
 ifeq ($(WITH_LCD_ST7565),7920)

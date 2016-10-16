@@ -296,7 +296,7 @@ CFLAGS += -DUSE_EEPROM
 # The PULLUP_DISABLE option disable the pull-up Resistors of IO-Ports.
 # To use this option a external pull-up Resistor (10k to 30k)
 # from Pin 13 to VCC must be installed!
-CFLAGS += -DPULLUP_DISABLE
+#CFLAGS += -DPULLUP_DISABLE
 
 # The ANZ_MESS option specifies, how often an ADC value is read and accumulated.
 # Possible values of ANZ_MESS are 5 to 200 .

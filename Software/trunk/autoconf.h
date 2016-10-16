@@ -3,20 +3,26 @@
        Automatic Configuration
 */
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163) || (LCD_ST_TYPE == 9341))
 /* Define under which conditions a graphical display is supported. */
 /* The graphical display should at least support 128x64 pixels. */
+ #if ((SCREEN_HEIGHT > 127) && (SCREEN_WIDTH > 255))
+  #define ONE_B 16
+ #else
+  #define ONE_B 8
+ #endif
  #define WITH_GRAPHICS 1
  #undef PAGES_PER_LINE
- #define PAGES_PER_LINE ((FONT_HEIGHT + 7) / 8)
+ #define PAGES_PER_LINE ((FONT_HEIGHT + (ONE_B-1)) / ONE_B)
  #undef LCD_LINES
- #define LCD_LINES ((SCREEN_HEIGHT/8) / PAGES_PER_LINE)
+ #define LCD_LINES ((SCREEN_HEIGHT/ONE_B) / PAGES_PER_LINE)
  #undef LCD_LINE_LENGTH
- #define LCD_LINE_LENGTH (SCREEN_WIDTH / FONT_WIDTH)
+ #define LCD_LINE_LENGTH (SCREEN_WIDTH / (ONE_B/8) / FONT_WIDTH )
  #define TEXT_RIGHT_TO_ICON ((ICON_WIDTH + 16 + 5 + 7) / FONT_WIDTH)
 #elif (LCD_ST_TYPE == 8812)
  /* defines for PCF8812 */
  /* The space at the display is too small for the big icons for this type, some characters are missing */
+ #define ONE_B 8
  #define WITH_GRAPHICS 1
  #undef PAGES_PER_LINE
  #define PAGES_PER_LINE ((FONT_HEIGHT + 7) / 8)
@@ -28,6 +34,7 @@
 #elif (LCD_ST_TYPE == 8814)
  /* defines for PCF8814 */
  /* The space at the display is too small for the big icons for this type, some characters are missing */
+ #define ONE_B 8
  #define WITH_GRAPHICS 1
  #undef PAGES_PER_LINE
  #define PAGES_PER_LINE ((FONT_HEIGHT + 7) / 8)
@@ -558,7 +565,7 @@
 #define LCD_CHAR_INDUCTOR1 'w'		// use ww for inductor symbol
 #define LCD_CHAR_INDUCTOR2 'w'		// use ww for inductor symbol
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE ==8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163) || defined(LCD_USE_OWN_FONT))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE ==8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163) || (LCD_ST_TYPE == 9341) || defined(LCD_USE_OWN_FONT))
 // redefine the special symbols for software character set used with graphical display
         #undef LCD_CHAR_DEGREE
         #define LCD_CHAR_DEGREE 0xf8	// Character for degree

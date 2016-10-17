@@ -565,7 +565,7 @@
 #define LCD_CHAR_INDUCTOR1 'w'		// use ww for inductor symbol
 #define LCD_CHAR_INDUCTOR2 'w'		// use ww for inductor symbol
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE ==8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163) || (LCD_ST_TYPE == 9341) || defined(LCD_USE_OWN_FONT))
+#if (defined(WITH_GRAPHICS) || defined(LCD_USE_OWN_FONT))
 // redefine the special symbols for software character set used with graphical display
         #undef LCD_CHAR_DEGREE
         #define LCD_CHAR_DEGREE 0xf8	// Character for degree
@@ -579,11 +579,9 @@
         #define LCD_CHAR_INDUCTOR1  9		//begin of coil
         #undef LCD_CHAR_INDUCTOR2
         #define LCD_CHAR_INDUCTOR2  10		//end of coil
+	#define LCD_CHAR_BETA 11
 #endif 
 
-#ifdef FONT_6X8
-	#define LCD_CHAR_BETA 11
-#endif
 
 #if FLASHEND > 0x3fff
  #define LCD_CHAR_RESIS3 0

@@ -137,7 +137,7 @@ static uint16_t findfreqmax(int8_t uu[], byte nuu, byte minfreq)
       if(what==2) { myuart_putc('r'); myuart_putc(' '); uart_int(i); uart_int(sumiq); uart_int(sumiq+sumiq1+sumiq2); uart_newline(); wdt_reset(); }
  #endif
       wdt_reset();
-      if (!(RST_PIN_REG & (1<<RST_PIN))) { xtal_cancel=1; return; }
+      if (!(RST_PIN_REG & (1<<RST_PIN))) { xtal_cancel=1; return 0; }	  
       if (sumiq+sumiq1+sumiq2>maxi) { maxi=sumiq+sumiq1+sumiq2; imax=i-1; }
       sumiq2=sumiq1;
       sumiq1=sumiq;
@@ -164,7 +164,7 @@ static uint16_t findfreqmax(int8_t uu[], byte nuu, byte minfreq)
       {            myuart_putc('w'); myuart_putc(' '); uart_int(ii); uart_int(10000+sumq); uart_int(10000+sumi); uart_newline(); wdt_reset(); }
 #endif
       wdt_reset();
-      if (!(RST_PIN_REG & (1<<RST_PIN))) { xtal_cancel=1; return; }
+      if (!(RST_PIN_REG & (1<<RST_PIN))) { xtal_cancel=1; return 0; }
    }
    show_progress();
    // now try to find maximum with more precision, by searching for equally high points on both skirts

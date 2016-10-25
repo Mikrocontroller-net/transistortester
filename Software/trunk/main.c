@@ -588,7 +588,11 @@ showdiodecap:
        n_cval = cap.cval;			// save the found capacity value
        n_cpre  = cap.cpre;			// and dimension
        ReadCapacity(ptrans.b, ptrans.e);	// read capacity of PNP base-emitter
-			if (((n_cpre == cap.cpre) && (cap.cval > n_cval))
+       // check if one hfe is very low. If yes, simulate a very low BE capacity
+       if ((ntrans.hfe < 500) && (ptrans.hfe >= 500)) n_cpre = -16; // set NPN BE capacity to low value
+       if ((ptrans.hfe < 500) && (ntrans.hfe >= 500)) cap.cpre = -16; // set PNP BE capacity to low value
+
+       if (((n_cpre == cap.cpre) && (cap.cval > n_cval))
 					|| (cap.cpre > n_cpre)) {
           // the capacity value or dimension of the PNP B-E is greater than the NPN B-E
           PartMode = PART_MODE_PNP;

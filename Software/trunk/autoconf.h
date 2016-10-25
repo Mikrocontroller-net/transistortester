@@ -594,7 +594,9 @@
 // The one with the lower capacity value is the parasitic, the other is shown by default
 // This is enabled for all processors (deselecting save about 120 bytes flash)
 // Otherwise the shown type (NPNp or PNPn) depends on the selected pin sequence of the tester!
-#define SEARCH_PARASITIC
+#if FLASHEND > 0x1fff
+ #define SEARCH_PARASITIC
+#endif
 
 //#if FLASHEND > 0x1fff
 // you can save about 14 bytes of Flash, if you deselect Thyristor gate voltage

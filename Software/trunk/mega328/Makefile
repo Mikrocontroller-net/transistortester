@@ -23,7 +23,7 @@ CFLAGS = -Wall
 # atmega328: m328 or m328p
 # atmega1280: m1280	// see config.h for different port setting
 # atmega2560: m2560	// see config.h for different port setting
-PARTNO = m328
+PARTNO = m328p
 
 # The WITH_MENU option enables a dialog to choose some additional functions.
 # Currently a frequency measurement at ATmega Pin PD4, a frequency generator at TP2 ,

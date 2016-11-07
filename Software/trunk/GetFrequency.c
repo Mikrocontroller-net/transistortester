@@ -156,20 +156,17 @@ void GetFrequency(uint8_t range) {
  #if PROCESSOR_TYP == 644
      if ((FDIV_PORT&(1<<FDIV_PIN)) == 0) {
         Display_Hz(ext_freq.dw, 7);
+        lcd_space();		// Frequency divider is not activ
      } else {
         // frequency divider is activ
         Display_Hz(ext_freq.dw*FREQ_DIV, 7);
+        lcd_data('/');		// Frequency divider is activ
      }
  #else
      Display_Hz(ext_freq.dw, 7);
  #endif
  #if PROCESSOR_TYP == 644
      lcd_space();
-     if ((FDIV_PORT&(1<<FDIV_PIN)) != 0) {
-        lcd_data('/');		// Frequency divider is activ
-     } else {
-        lcd_space();		// Frequency divider is not activ
-     }
  #endif
      FREQINP_DDR &= ~(1<<FREQINP_PIN);	// switch frequency pin to input
      if (TCCR1B != 0) {

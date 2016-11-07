@@ -80,7 +80,8 @@ void lcd_line1() {
 //#define FONT_V_SPACE (((FONT_HEIGHT + 7) / 8) * 8)
 void lcd_line2() {
 #ifdef WITH_UART
-   uart_putc(' ');		// start of new line
+//   uart_putc(' ');		// start of new line
+   uart_newline();		// start of new line
 #endif
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(1 * PAGES_PER_LINE,0);
@@ -95,7 +96,8 @@ void lcd_line2() {
 //move to the beginning of the 3. row
 void lcd_line3() {
 #ifdef WITH_UART
-   uart_putc(' ');		// start of new line
+//   uart_putc(' ');		// start of new line
+   uart_newline();		// start of new line
 #endif
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(2 * PAGES_PER_LINE,0);
@@ -110,7 +112,8 @@ void lcd_line3() {
 //move to the beginning of the 4. row
 void lcd_line4() {
 #ifdef WITH_UART
-   uart_putc(' ');		// start of new line
+//   uart_putc(' ');		// start of new line
+   uart_newline();		// start of new line
 #endif
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(3 * PAGES_PER_LINE,0);
@@ -128,7 +131,8 @@ void lcd_line4() {
 void lcd_next_line(uint8_t xx) {
    lcd_clear_line();
 #ifdef WITH_UART
-   uart_putc(' ');
+//   uart_putc(' ');
+   uart_newline();		// start of new line
 #endif
    lcd_text_line ++;
    if (lcd_text_line > (LCD_LINES - 1))  {
@@ -563,7 +567,7 @@ void lcd_init(void) {
    lcd_fg_color.b[0] = eeprom_read_byte(&EE_FG_COLOR1);
    lcd_fg_color.b[1] = eeprom_read_byte(&EE_FG_COLOR2);
  #endif
- #ifdef LCD_SCREEN_ROTATE
+ #if LCD_SCREEN_ROTATE != 0
     lcd_write_data(0x3c);	 	// MV=exchange xy, ML=Vertical refresh, RGB=BGR color,MH=Refresh right to left
  #else
     lcd_write_data(0x1c);	 	// ML=Vertical refresh, RGB=BGR color,MH=Refresh right to left
@@ -625,7 +629,7 @@ void lcd_init(void) {
   lcd_write_data(0x01);	/* gamma curve 1 */
 
   lcd_command(CMD_MEMORY_ADDRESS_CONTROL);	/* memory access control */
-  #ifdef LCD_SCREEN_ROTATE
+  #if LCD_SCREEN_ROTATE != 0
     lcd_write_data(0x20);	/* swap x and y, RGB */
   #else
     lcd_write_data(0x00);	/*  RGB */
@@ -1173,11 +1177,11 @@ unsigned char options, unsigned char width, unsigned char height) {
          unsigned char byte;
          lcd_command(CMD_RASET);		// set row range
   #if (LCD_ST7565_V_FLIP == 1)
-         lcd_write_word(((SCREEN_HEIGHT) - ONE_B) - page + LCD_ST7565_V_OFFSET);
-         lcd_write_word(((SCREEN_HEIGHT) - ONE_B) - page + LCD_ST7565_V_OFFSET + (ONE_B - 1));
+         lcd_write_word(((SCREEN_HEIGHT-1) - ONE_B) - page + LCD_ST7565_V_OFFSET);
+         lcd_write_word(((SCREEN_HEIGHT-1) - ONE_B) - page + LCD_ST7565_V_OFFSET + (ONE_B-1));
   #else
          lcd_write_word(LCD_ST7565_V_OFFSET + page);
-         lcd_write_word(LCD_ST7565_V_OFFSET + page + (ONE_B - 1));
+         lcd_write_word(LCD_ST7565_V_OFFSET + page + (ONE_B-1));
   #endif
          unsigned char dd;
          for (dd=0; dd<(ONE_B/8); dd++) {
@@ -1235,7 +1239,7 @@ unsigned char options, unsigned char width, unsigned char height) {
    #endif
   #endif
               }
-              byte *= 2;		// next bit to 2**7
+              byte *= 2;		// next bit to 2**7 position
             } /* end for bb */
          } /* end for dd */
       } /* end for offset */

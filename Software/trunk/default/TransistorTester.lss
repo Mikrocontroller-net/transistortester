@@ -408,7 +408,7 @@ void lcd_line1() {
    _lcd_column = 0;
      204:	80 93 96 01 	sts	0x0196, r24
      208:	10 92 37 01 	sts	0x0137, r1
-   uart_putc(' ');		// start of new line
+   uart_newline();		// start of new line
 #endif
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(1 * PAGES_PER_LINE,0);
@@ -424,7 +424,7 @@ void lcd_line1() {
      214:	80 93 96 01 	sts	0x0196, r24
    _lcd_column = 0;
      218:	10 92 37 01 	sts	0x0137, r1
-   uart_putc(' ');		// start of new line
+   uart_newline();		// start of new line
 #endif
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(2 * PAGES_PER_LINE,0);
@@ -442,7 +442,7 @@ void lcd_line1() {
      228:	01 c0       	rjmp	.+2      	; 0x22c <lcd_set_cursor+0xe>
      22a:	80 e8       	ldi	r24, 0x80	; 128
      22c:	86 0f       	add	r24, r22
-   uart_putc(' ');		// start of new line
+   uart_newline();		// start of new line
 #endif
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(3 * PAGES_PER_LINE,0);
@@ -803,7 +803,8 @@ void lcd_next_line(uint8_t xx) {
      3a2:	fa de       	rcall	.-524    	; 0x198 <lcd_data>
      3a4:	0f 91       	pop	r16
 #ifdef WITH_UART
-   uart_putc(' ');
+//   uart_putc(' ');
+   uart_newline();		// start of new line
 #endif
    lcd_text_line ++;
      3a6:	08 95       	ret

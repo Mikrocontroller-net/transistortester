@@ -31,6 +31,9 @@
 #if (LCD_ST_TYPE != 7735) && (LCD_ST_TYPE != 9163) && (LCD_ST_TYPE != 9341)
  #undef LCD_CHANGE_COLOR
 #endif
+#ifndef LCD_SCREEN_ROTATE
+ #define LCD_SCREEN_ROTATE 0
+#endif
 
 
 /* *********************************************************************************************************** */
@@ -204,7 +207,7 @@
 	#define CMD_VCOM_CONTROL1 0xc5
 	#undef SCREEN_HEIGHT
 	#undef SCREEN_WIDTH
-#ifdef LCD_SCREEN_ROTATE
+#if LCD_SCREEN_ROTATE != 0
         #define SCREEN_HEIGHT 128
         #define SCREEN_WIDTH 160
 #else
@@ -243,7 +246,7 @@
 	#define CMD_VCOM_CONTROL1 0xc5
 	#undef SCREEN_HEIGHT
 	#undef SCREEN_WIDTH
-#ifdef LCD_SCREEN_ROTATE
+#if LCD_SCREEN_ROTATE != 0
         #define SCREEN_HEIGHT 320
         #define SCREEN_WIDTH 240
 #else

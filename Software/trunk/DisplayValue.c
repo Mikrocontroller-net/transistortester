@@ -215,5 +215,6 @@ void Display_mV(uint16_t xx, uint8_t ll) {
 void Display_Hz(unsigned long xx, uint8_t dd) {
  DisplayValue(xx,0,'H',dd);
  lcd_data('z');
+ lcd_space();
 }
 #endif

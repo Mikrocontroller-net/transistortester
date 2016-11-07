@@ -28,3 +28,24 @@ the USB connector once for operating with the accu.
 I recommend to charge the accu before first use.
 You should not use the accu with a voltage below 2.8V.  
 
+===========================================================
+Please note, that another simular version is also available!
+
+One main difference is a 12-pin female header.
+The layout is probably:
+Pin  Signal
+ 1    GND
+ 2    VCC
+ 3    ?
+ 4    ?
+ 5    ?
+ 6    ?
+ 7    GND   ISP
+ 8    VCC   ISP
+ 9    MOSI  ISP
+10    MISO  ISP
+11    SCLK  ISP
+12    Reset ISP
+
+Please note, that the sequence of ISP-GND and ISP-VCC is different
+for both versions.

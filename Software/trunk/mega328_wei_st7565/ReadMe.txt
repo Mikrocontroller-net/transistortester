@@ -8,10 +8,10 @@ Pin  Signal
  1    GND
  2    VCC
  3    GND  LCD-CS
- 4    PD0  LCD-Reset
- 5    PD1  LCD-RS
- 6    PD2  LCD-SCLK
- 7    PD3  LCD-SI
+ 4    PD0  LCD-Reset 
+ 5    PD1  LCD-RS    
+ 6    PD2  LCD-SCLK  
+ 7    PD3  LCD-SI    
  8    VCC   ISP
  9    GND   ISP
 10    MOSI  ISP
@@ -29,23 +29,25 @@ I recommend to charge the accu before first use.
 You should not use the accu with a voltage below 2.8V.  
 
 ===========================================================
-Please note, that another simular version is also available!
+Please note, that another simular version labled VANVELL ELC
+is also available!
 
 One main difference is a 12-pin female header.
-The layout is probably:
+The layout is found by Janusz B. :
 Pin  Signal
- 1    GND
- 2    VCC
- 3    ?
- 4    ?
- 5    ?
- 6    ?
- 7    GND   ISP
- 8    VCC   ISP
- 9    MOSI  ISP
-10    MISO  ISP
-11    SCLK  ISP
-12    Reset ISP
+12    GND  LCD-CS
+11    PD0  LCD-Reset
+10    PD1  LCD-RS
+ 9    PD3  LCD-SI
+ 8    PD2  LCD-SCLK
+ 7    VCC   ISP + LCD
+ 6    GND   ISP + LCD
+ 5    150 Ohm to VCC   +LED 
+ 4    MOSI  ISP
+ 3    MISO  ISP
+ 2    SCLK  ISP
+ 1    Reset ISP
 
 Please note, that the sequence of ISP-GND and ISP-VCC is different
-for both versions.
+for both versions. You can not use the same ISP adapter.
+The signals of the LCD-Modul are also not in the same sequence!

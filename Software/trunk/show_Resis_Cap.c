@@ -358,15 +358,13 @@ void show_cap_simple(void)
  #else  /* only two lines */
   #if FLASHEND > 0x3fff
   if (how && present_vloss)
-  #else
-  if (present_vloss)
-  #endif
   {
      lcd_next_line_wait(0);		// show vloss after waiting
      lcd_MEM_string(&VLOSS_str[1]);      // "Vloss=" 
      DisplayValue16(cap.v_loss,-1,'%',2);
-     lcd_clear_line();		// clear to end of line
   }
+  lcd_clear_line();		// clear to end of line
+  #endif
  #endif
 #else
   lcd_clear_line();

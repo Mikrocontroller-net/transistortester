@@ -107,11 +107,7 @@
 	     lcd_line1();
              lcd_MEM_string(TestTimedOut);	//Output Timeout
 	     wait_about3s();			// time to read the Timeout message
-	#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
-	     lcd_powersave();			// set graphical display to power save mode
-	#endif
-	     ON_PORT &= ~(1<<ON_PIN);			//shut off!
-	//     ON_DDR = (1<<ON_PIN);		//switch to GND
+	     switch_tester_off();
 	     return 0;
 	  }
 
@@ -1179,11 +1175,7 @@ shut_off:
   #include "HelpCalibration.c"
  #endif
 //  MCUSR = 0;
- #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
-  lcd_powersave();			// set graphical display to power save mode
- #endif
-  ON_PORT &= ~(1<<ON_PIN);		//switch off power
-  wait_for_key_ms(0); //never ending loop 
+  switch_tester_off();
 #else   /* no POWER_OFF */
 shut_off:
   // look, if the tester is uncalibrated (C-source will be included directly)
@@ -1237,6 +1229,15 @@ void init_parts(void) {
 #endif
   cap.cval_max = 0;		// set max to zero
   cap.cpre_max = -15;	// set max to fF unit
+}
+
+void switch_tester_off(void)
+{
+ #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
+  lcd_powersave();			// set graphical display to power save mode
+ #endif
+  ON_PORT &= ~(1<<ON_PIN);		//switch off power
+  wait_for_key_ms(0); //never ending loop 
 }
 
 #ifdef WITH_SELFTEST

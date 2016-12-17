@@ -76,6 +76,7 @@ void myuart_putc(uint8_t bb);
 void uart_int(uint16_t num);
 void CheckUJT(void);		// measure UJT
 void select_color(uint8_t xc);		// select color function 
+void switch_tester_off(void);		// switch power off
 
 #ifdef SamplingADC
 uint16_t samplingADC(   // code is in sampling_ADC.S

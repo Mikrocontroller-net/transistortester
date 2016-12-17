@@ -451,7 +451,7 @@ void Bat_update(uint8_t tt) {
      lcd_line2();	// use the last line for Bat=
   #endif
      Battery_check();
-     wait_about2s();	/* time delay for reading the Bat= message */
+     wait_about1s();	/* time delay for reading the Bat= message */
  #endif
   }
 };	/* end Bat_update() */

@@ -75,8 +75,7 @@ void Battery_check(void) {
         lcd_clear_line();			// clear to end of line
 	lcd_refresh();			// write the pixels to display, ST7920 only
 	wait_about5s();			// Let time to read the "empty" message
-        ON_PORT &= ~(1<<ON_PIN);	// switch power off
-	wait_about2s();			// power should be switched off
+        switch_tester_off();		// switch power off
 	return;
      }
      lcd_MEM_string(BatWeak);		//Battery weak

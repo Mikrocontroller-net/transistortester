@@ -182,8 +182,7 @@ void do_menu(uint8_t func_number) {
        ShowData();			// Show Calibration Data
     }
     if (func_number == MODE_OFF) {
-       ON_PORT &= ~(1<<ON_PIN);              //switch off power
-       wait_for_key_ms(0); //never ending loop
+       switch_tester_off();		//switch off power
     }
 }
 

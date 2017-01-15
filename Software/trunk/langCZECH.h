@@ -43,7 +43,7 @@
   #endif
   #ifdef WITH_ROTARY_CHECK
 //const unsigned char RotaryEncoder_str[] MEM2_TEXT = "rotaèní kodér";
-   const unsigned char RotaryEncoder_str[] MEM2_TEXT = {'r','o','t','a',Cz_c,'n','í',' ','k','o','d',Cz_e,'r',0};
+   const unsigned char RotaryEncoder_str[] MEM2_TEXT = {'R','o','t','a',Cz_c,'n',Cz_i,' ','k','o','d',Cz_e,'r',0};
   #endif
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','k','o','r','e','k','c','e',0};
 //const unsigned char TURN_str[] MEM2_TEXT = "otoète!";

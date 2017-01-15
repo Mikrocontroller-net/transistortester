@@ -231,8 +231,14 @@
  #define PCMSK_FREQ PCMSK1
  #define PCINT_FREQ PCINT8
 /* define both input pins for rotaty encoder */
- #define ROTARY_A_DDR DDRB
- #define ROTARY_B_DDR DDRB
+ #ifndef ROTARY_1_DDR
+  #define ROTARY_1_DDR DDRB
+  #define ROTARY_1_REG PINB
+ #endif
+ #ifndef ROTARY_2_DDR
+  #define ROTARY_2_DDR DDRB
+  #define ROTARY_2_REG PINB
+ #endif
  #ifndef ROTARY_1_PIN
   // default connection is PB7
   #define ROTARY_1_PIN PB7
@@ -242,8 +248,6 @@
   #define ROTARY_2_PIN PB5
   // can be preset to PB6 for character display and PB3 for ST7565 graphic controller
  #endif
- #define ROTARY_A_REG PINB
- #define ROTARY_B_REG PINB
 /* FDIV_PIN specifies the output pin, which switch on a 16:1 frequency divider */
  #define FDIV_DDR DDRC
  #define FDIV_PORT PORTC
@@ -269,10 +273,14 @@
  #define PCMSK_FREQ EIMSK
  #define PCINT_FREQ INT6
 /* define both input pins for rotaty encoder */
- #define ROTARY_A_DDR DDRA
- #define ROTARY_B_DDR DDRA
- #define ROTARY_A_REG PINA
- #define ROTARY_B_REG PINA
+ #ifndef ROTARY_1_DDR
+  #define ROTARY_1_DDR DDRA
+  #define ROTARY_1_REG PINA
+ #endif
+ #ifndef ROTARY_2_DDR
+  #define ROTARY_2_DDR DDRA
+  #define ROTARY_2_REG PINA
+ #endif
  #ifndef ROTARY_1_PIN
   // default connection is PA3
   #define ROTARY_1_PIN PA3
@@ -290,8 +298,14 @@
  #define PCMSK_FREQ PCMSK2
  #define PCINT_FREQ PCINT20
 /* define both input pins for rotaty encoder */
- #define ROTARY_A_DDR DDRD
- #define ROTARY_B_DDR DDRD
+ #ifndef ROTARY_1_DDR
+  #define ROTARY_1_DDR DDRD
+  #define ROTARY_1_REG PIND
+ #endif
+ #ifndef ROTARY_2_DDR
+  #define ROTARY_2_DDR DDRD
+  #define ROTARY_2_REG PIND
+ #endif
  #ifndef ROTARY_1_PIN
   // default connection is PD3
   #define ROTARY_1_PIN PD3
@@ -301,16 +315,22 @@
   #define ROTARY_2_PIN PD1
   // can be preset to PD2 for character display and PD5 for ST7565 graphic controller
  #endif
- #define ROTARY_A_REG PIND
- #define ROTARY_B_REG PIND
 #endif		/* PROCESSOR_TYP */
 
 #if CHANGE_ROTARY_DIRECTION
  #define ROTARY_B_PIN ROTARY_1_PIN	/* is connected to LCD-D7/D5 or ST7565-B0 */
+ #define ROTARY_B_DDR ROTARY_1_DDR
+ #define ROTARY_B_REG ROTARY_1_REG
  #define ROTARY_A_PIN ROTARY_2_PIN
+ #define ROTARY_A_DDR ROTARY_2_DDR
+ #define ROTARY_A_REG ROTARY_2_REG
 #else		/* CHANGE_ROTARY_DIRECTION */
  #define ROTARY_A_PIN ROTARY_1_PIN	/* is connected to LCD-D7/D5 or ST7565-B0 */
+ #define ROTARY_A_DDR ROTARY_1_DDR
+ #define ROTARY_A_REG ROTARY_1_REG
  #define ROTARY_B_PIN ROTARY_2_PIN
+ #define ROTARY_B_DDR ROTARY_2_DDR
+ #define ROTARY_B_REG ROTARY_2_REG
 #endif		/* CHANGE_ROTARY_DIRECTION */
 
 

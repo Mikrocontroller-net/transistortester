@@ -273,7 +273,7 @@ CFLAGS += -DBAT_POOR=3300
 
 # The sleep mode of the ATmega168 or ATmega328 is normally used by the software to save current.
 # You can inhibit this with the option INHIBIT_SLEEP_MODE .
-INHIBIT_SLEEP_MODE = 0
+INHIBIT_SLEEP_MODE = 1
 
 
 # Select your programmer type, speed and port, if you wish to use avrdude.

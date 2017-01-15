@@ -162,7 +162,10 @@ GetESR:
 Retur2:
 #endif
 
-
+#if TP1 > 0
+	subi	r22, TP1
+	subi	r24, TP1
+#endif
 	mov	SelectLowPin, r22;
 	mov	SelectHighPin, r24;
         add	r24, r22;
@@ -252,13 +255,7 @@ store_cvn:
 #else
 	LDIZ	PinRLRHADCtab+3; 	/* LoADC = pgm_read_byte((&PinRLRHADCtab[3])+cap.ca) | TXD_MSK; */
 #endif
-#if TP1 == 0
 	add	r30, SelectLowPin;
-#else
-	ldi	r24, -TP1;
-	add	r24, SelectLowPin;
-	add	r30, r24;	
-#endif
 	adc	r31, zero_reg;
 	lpm	r24, Z+;
 	ori	r24, TXD_MSK;
@@ -269,13 +266,7 @@ store_cvn:
 #else
 	LDIZ	PinRLRHADCtab+3; 	/* HiADC = pgm_read_byte((&PinRLRHADCtab[3])+cap.cb) | TXD_MSK; */
 #endif
-#if TP1 == 0
 	add	r30, SelectHighPin;
-#else
-	ldi	r24, -TP1;
-	add	r24, SelectHighPin;
-	add	r30, r24;	
-#endif
 	adc	r31, zero_reg;
 	lpm	r24, Z+;
 	ori	r24, TXD_MSK;
@@ -295,7 +286,7 @@ store_cvn:
 #if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
 	    /* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
 	//  SelectLowPin = (cap.ca | (1<<REFS1) | (0<<REFS0));	// switch ADC to LowPin, Internal Ref. 
-	ldi	r25, (1<<REFS1)|(0<<REFS0);	0xC0
+	ldi	r25, (1<<REFS1)|(0<<REFS0);	0x80
 	or	SelectLowPin, r25;
 	//  SelectHighPin = (cap.cb | (1<<REFS1) | (0<<REFS0));	// switch ADC to HighPin, Internal Ref. 
 	or	SelectHighPin, r25;
@@ -505,6 +496,36 @@ is_ok2b:
 	mov	r21, r13;
 	cpi	r21, MAX_CNT;
 	breq	ad_38ac;
+#if FLASHEND > 0x3fff
+  /* use additional 470k only with processors with more than 16k */
+        cpi	r21, MAX_CNT/2;
+        brne	jesr_loop
+; activate also the 470k resistors for half of samples
+ #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
+	LDIZ	PinRLRHADCtab+3;	/* HiPinR_H = pgm_read_byte(&PinRLRHADCtab[cap.cb+3]);	//R_H mask for HighPin R_H load */
+	mov	r21, SelectHighPin;
+	andi	r21, 0x03
+	add	r30, r21;
+	adc	r31, zero_reg;
+	lpm	r21, Z+;
+	add	HiPinR_L, r21		; enable also the 470k resistor
+	LDIZ	PinRLRHADCtab+3;	/* LoPinR_H = pgm_read_byte(&PinRLRHADCtab[cap.ca+3]);	//R_H mask for LowPin R_H load */
+	mov	r21, SelectLowPin;
+	andi	r21, 0x03
+	add	r30, r21;
+	adc	r31, zero_reg;
+	lpm	r21, Z+;
+	add	LoPinR_L, r21		; enable also the 470k resistor
+ #else
+	mov	r21, HiPinR_L
+	add	r21, r21	; quick and dirty: usually is double HiPinR_H
+	add	HiPinR_L, r21
+	mov	r21, LoPinR_L
+	add	r21, r21	; quick and dirty: usually is double LoPinR_H
+	add	LoPinR_L, r21
+ #endif
+jesr_loop:
+#endif
 	rjmp	esr_loop;		/* } // end for */
 ad_38ac:
 

@@ -23,7 +23,7 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_abbrev 000018ec  00000000  00000000  0000c110  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   00001e36  00000000  00000000  0000d9fc  2**0
+ 10 .debug_line   00001e38  00000000  00000000  0000d9fc  2**0
                   CONTENTS, READONLY, DEBUGGING
  11 .debug_frame  00000690  00000000  00000000  0000f834  2**2
                   CONTENTS, READONLY, DEBUGGING
@@ -9171,10 +9171,11 @@ void ReadInductance(void) {
 
 00002dae <Retur2>:
     2dae:	66 2e       	mov	r6, r22
-Retur2:
+
+#if TP1 > 0
+	subi	r22, TP1
+	subi	r24, TP1
 #endif
-
-
 	mov	SelectLowPin, r22;
     2db0:	b8 2e       	mov	r11, r24
 	mov	SelectHighPin, r24;
@@ -9322,14 +9323,8 @@ store_cvn:
     2e22:	e6 0d       	add	r30, r6
     2e24:	f1 1d       	adc	r31, r1
 #endif
-#if TP1 == 0
 	add	r30, SelectLowPin;
     2e26:	85 91       	lpm	r24, Z+
-#else
-	ldi	r24, -TP1;
-	add	r24, SelectLowPin;
-	add	r30, r24;	
-#endif
 	adc	r31, zero_reg;
     2e28:	80 60       	ori	r24, 0x00	; 0
 	lpm	r24, Z+;
@@ -9346,14 +9341,8 @@ store_cvn:
     2e30:	eb 0d       	add	r30, r11
     2e32:	f1 1d       	adc	r31, r1
 #endif
-#if TP1 == 0
 	add	r30, SelectHighPin;
     2e34:	85 91       	lpm	r24, Z+
-#else
-	ldi	r24, -TP1;
-	add	r24, SelectHighPin;
-	add	r30, r24;	
-#endif
 	adc	r31, zero_reg;
     2e36:	80 60       	ori	r24, 0x00	; 0
 	lpm	r24, Z+;
@@ -9748,7 +9737,11 @@ is_ok2b:
 00002fa0 <ad_38ac>:
 	cpi	r21, MAX_CNT;
     2fa0:	40 90 34 01 	lds	r4, 0x0134
-	breq	ad_38ac;
+	add	r21, r21	; quick and dirty: usually is double LoPinR_H
+	add	LoPinR_L, r21
+ #endif
+jesr_loop:
+#endif
 	rjmp	esr_loop;		/* } // end for */
     2fa4:	50 90 35 01 	lds	r5, 0x0135
 

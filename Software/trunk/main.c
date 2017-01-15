@@ -423,7 +423,7 @@
      if(NumOfDiodes == 1) {		//single Diode
 //        lcd_MEM_string(Diode);		//"Diode: "
 #if FLASHEND > 0x1fff
-        // enough memory to sort the pins
+        // enough memory (>8k) to sort the pins
  #if EBC_STYLE == 321
         // the higher test pin number is left side
         if (diodes.Anode[0] > diodes.Cathode[0]) {
@@ -477,6 +477,7 @@ showdiodecap:
  #ifdef PULLUP_DISABLE
         lcd_data('-');
         cap.cval=sampling_cap(diodes.Cathode[0],diodes.Anode[0],1);   // at high voltage
+        if (cap.cval < 0) cap.cval = 0;		// don't show negativ value
         DisplayValue(cap.cval,sampling_cap_pre,'F',2);
   #if LCD_LINE_LENGTH > 16
         lcd_MEM_string(AT05volt);	// " @0-5V"

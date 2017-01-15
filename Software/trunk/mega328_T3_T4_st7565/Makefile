@@ -38,7 +38,7 @@ CFLAGS += -DWITH_MENU
 # graphical displays after the presentation of calibration data.
 # You can switch off the presentation of the icons and the font data by setting
 # the option NO_ICONS_DEMO to save flash memory and display time.
-#CFLAGS += -DNO_ICONS_DEMO
+CFLAGS += -DNO_ICONS_DEMO
 
 # The menu function can be easier controlled with a incremental encoder (rotary switch).
 # Both switches of the rotary switch can be connected with 1 kOhm resistors to PD1 and PD3.
@@ -55,7 +55,7 @@ CFLAGS += -DWITH_MENU
 # WITH_ROTARY_COUNT to 5 for getting the best resolution.
 # You can also use two separate push-buttons for Up and Down instead ot the rotary encoder.
 # You must set the WITH_ROTARY_SWITCH to 4 for the UP/DOWN push-buttons.
-#CFLAGS += -DWITH_ROTARY_SWITCH=2
+CFLAGS += -DWITH_ROTARY_SWITCH=2
 # the option CHANGE_ROTARY_DIRECTION changes the rotary direction by swap of switches
 #CFLAGS += -DCHANGE_ROTARY_DIRECTION
 # The best solution for connecting the rotary switch is PD1 and PD3, because this setting can be used
@@ -118,7 +118,7 @@ WITH_LCD_ST7565 = 1
 # of the ATmega are used. For the RESET signal a external pull-up resistor is required, if the
 # option PULLUP_DISABLE is set. For the other signals the internal pullup resistors of the ATmega
 # are temporary used, even if option PULLUP_DISABLE is set.
-CFLAGS += -DLCD_SPI_OPEN_COL
+#CFLAGS += -DLCD_SPI_OPEN_COL
 
 # The I2C Address can be preset to a address of 0x3d instead of 0x3c by setting the constant LCD_I2C_ADDR.
 #CFLAGS += -DLCD_I2C_ADDR=0x3d

@@ -585,8 +585,9 @@ if (ssd==5 || ssd==13)   for (i=0;i<255;i++) { myuart_putc('a'); myuart_putc(' '
       Display_Hz(f, 6); 	// DisplayValue(f,0,'H',6); lcd_data('z');
    }
 
+//   lcd_refresh();
    return xtal_cancel;
-}
+} /* end sampling_measure_xtal() */
 
 
 #endif   // WITH_XTAL

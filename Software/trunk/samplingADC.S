@@ -372,10 +372,10 @@ brnewaitevent:
 	sbrs	r5,7		; bit 7 of r5 is used as marker that we still need to initialize the DC level
 	rjmp L25
 	movw	r4,r22
+	lsl	r4		; r4:5 = r22:23 << 2
+	rol	r5		; rotate left through Carry
 	lsl	r4
-	rol	r5
-	lsl	r4
-	rol	r5
+	rol	r5		; rotate left through Carry
 ;lsl	r4
 ;rol	r5
 L25:

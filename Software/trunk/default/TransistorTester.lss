@@ -23,15 +23,15 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_abbrev 000018ec  00000000  00000000  0000c110  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   00001e38  00000000  00000000  0000d9fc  2**0
+ 10 .debug_line   00001e3a  00000000  00000000  0000d9fc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  00000690  00000000  00000000  0000f834  2**2
+ 11 .debug_frame  00000690  00000000  00000000  0000f838  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000fd7  00000000  00000000  0000fec4  2**0
+ 12 .debug_str    00000fd7  00000000  00000000  0000fec8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    00003d4e  00000000  00000000  00010e9b  2**0
+ 13 .debug_loc    00003d4e  00000000  00000000  00010e9f  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000018  00000000  00000000  00014be9  2**0
+ 14 .debug_ranges 00000018  00000000  00000000  00014bed  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -11897,10 +11897,10 @@ end3:
     3af6:	80 91 0e 01 	lds	r24, 0x010E
     3afa:	90 91 0f 01 	lds	r25, 0x010F
     3afe:	0e 94 d4 03 	call	0x7a8	; 0x7a8 <wait_for_key_ms>
-#if (LCD_LINES > 3)
-  ADC_DDR =  TXD_MSK; 	// switch pin with reference to input, activate relay
-//  lcd_line3();
   lcd_next_line_wait(0);
+ #else
+  lcd_line3();
+ #endif
 #else
   wait_for_key_ms(display_time);
     3b02:	17 b8       	out	0x07, r1	; 7

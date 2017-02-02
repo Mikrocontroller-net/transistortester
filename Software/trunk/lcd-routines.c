@@ -58,9 +58,6 @@ void lcd_equal(void) {
 /* ******************************************************************************* */
 //move to the beginning of the 1. row
 void lcd_line1() {
-#ifdef WITH_UART
-   uart_newline();		// start of new measurement
-#endif
    lcd_text_line = 0;
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(0 * PAGES_PER_LINE,0);
@@ -71,6 +68,12 @@ void lcd_line1() {
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row1));
    _lcd_column = 0;
 #endif
+#ifdef WITH_UART
+   uart_newline();		// start of new measurement
+ #if WITH_UART == 2		// MAURO
+   uart_putc('1');		// MAURO
+ #endif				// MAURO
+#endif
 }
 
 /* ******************************************************************************* */
@@ -79,48 +82,54 @@ void lcd_line1() {
 // or you can select a 8-line rounding of the positioning of the lines with: 
 //#define FONT_V_SPACE (((FONT_HEIGHT + 7) / 8) * 8)
 void lcd_line2() {
-#ifdef WITH_UART
-//   uart_putc(' ');		// start of new line
-   uart_newline();		// start of new line
-#endif
+   lcd_text_line = 1;
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(1 * PAGES_PER_LINE,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row2));
-   lcd_text_line = 1;
    _lcd_column = 0;
+#endif
+#ifdef WITH_UART
+   uart_newline();		// start of new line
+ #if WITH_UART == 2		// MAURO
+   uart_putc('2');		// MAURO
+ #endif				// MAURO
 #endif
 }
 
 /* ******************************************************************************* */
 //move to the beginning of the 3. row
 void lcd_line3() {
-#ifdef WITH_UART
-//   uart_putc(' ');		// start of new line
-   uart_newline();		// start of new line
-#endif
+   lcd_text_line = 2;
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(2 * PAGES_PER_LINE,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row3));
-   lcd_text_line = 2;
    _lcd_column = 0;
+#endif
+#ifdef WITH_UART
+   uart_newline();		// start of new line
+ #if WITH_UART == 2		// MAURO
+   uart_putc('3');		// MAURO
+ #endif				// MAURO
 #endif
 }
 
 /* ******************************************************************************* */
 //move to the beginning of the 4. row
 void lcd_line4() {
-#ifdef WITH_UART
-//   uart_putc(' ');		// start of new line
-   uart_newline();		// start of new line
-#endif
+   lcd_text_line = 3;
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(3 * PAGES_PER_LINE,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row4));
-   lcd_text_line = 3;
    _lcd_column = 0;
+#endif
+#ifdef WITH_UART
+   uart_newline();		// start of new line
+ #if WITH_UART == 2		// MAURO
+   uart_putc('4');		// MAURO
+ #endif				// MAURO
 #endif
 }
 
@@ -130,10 +139,6 @@ void lcd_line4() {
 // If already at the last line of the display, last_line_used is set to 1 .
 void lcd_next_line(uint8_t xx) {
    lcd_clear_line();
-#ifdef WITH_UART
-//   uart_putc(' ');
-   uart_newline();		// start of new line
-#endif
    lcd_text_line ++;
    if (lcd_text_line > (LCD_LINES - 1))  {
       // Limit is reached
@@ -143,6 +148,13 @@ void lcd_next_line(uint8_t xx) {
       last_line_used = 0;
    }
    lcd_set_cursor((uint8_t)(lcd_text_line * PAGES_PER_LINE), xx);
+#ifdef WITH_UART
+//   uart_putc(' ');
+   uart_newline();		// start of new line
+ #if WITH_UART == 2		// MAURO
+   uart_putc('1'+lcd_text_line);	// MAURO
+ #endif				// MAURO
+#endif
 }
 /* ******************************************************************************* */
 #ifdef WAIT_LINE2_CLEAR

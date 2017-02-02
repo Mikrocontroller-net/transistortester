@@ -892,9 +892,9 @@ END GROUP
                 0x00000000008001a3                _end = .
                 0x00000000008001a3                PROVIDE (__heap_start, .)
 
-.eeprom         0x0000000000810000      0x1da
+.eeprom         0x0000000000810000      0x1d9
  *(.eeprom*)
- .eeprom        0x0000000000810000      0x1da main.o
+ .eeprom        0x0000000000810000      0x1d9 main.o
                 0x0000000000810000                PrefixTab
                 0x0000000000810008                ResIcon2
                 0x0000000000810010                ResIcon1
@@ -907,54 +907,54 @@ END GROUP
                 0x000000000081003f                RILO_str
                 0x0000000000810046                RIHI_str
                 0x000000000081004d                VERSION_str
-                0x000000000081005b                Inductor_str
-                0x0000000000810060                Resistor_str
-                0x0000000000810065                Dioden
-                0x000000000081006a                KatAn_str
-                0x000000000081006e                AnKat_str
-                0x0000000000810072                Ir_str
-                0x0000000000810078                Lis_str
-                0x000000000081007b                VLOSS_str
-                0x0000000000810083                ESR_str
-                0x0000000000810089                VCC_str
-                0x000000000081008e                Cell_str
-                0x0000000000810094                CapZeich
-                0x0000000000810098                Vgs_str
-                0x000000000081009d                vt_str
-                0x00000000008100a2                Uf_str
-                0x00000000008100a6                Ube_str
-                0x00000000008100ab                N123_str
-                0x00000000008100b1                PNP_str
-                0x00000000008100b5                NPN_str
-                0x00000000008100b9                Cap_str
-                0x00000000008100bc                GateCap_str
-                0x00000000008100bf                hfe_str
-                0x00000000008100c2                igbt_str
-                0x00000000008100c8                jfet_str
-                0x00000000008100cd                mosfet_str
-                0x00000000008100d2                DC_Pwr_Mode_str
-                0x00000000008100de                OK_str
-                0x00000000008100e1                Bat_str
-                0x00000000008100e7                ATE
-                0x00000000008100f0                RELPROBE
-                0x0000000000810100                SELFTEST
-                0x0000000000810110                TestTimedOut
-                0x0000000000810119                OrBroken
-                0x0000000000810125                TestFailed1
-                0x0000000000810135                Unknown
-                0x000000000081013e                Thyristor
-                0x0000000000810147                Triac
-                0x000000000081014d                Bauteil
-                0x0000000000810152                TestFailed2
-                0x000000000081015b                BatEmpty
-                0x0000000000810162                BatWeak
-                0x0000000000810167                TestRunning
-                0x0000000000810172                RLtab
-                0x00000000008101cc                EE_ESR_ZEROtab
-                0x00000000008101d0                c_zero_tab
-                0x00000000008101d7                ref_offset
-                0x00000000008101d9                RefDiff
-                0x00000000008101da                __eeprom_end = .
+                0x000000000081005a                Inductor_str
+                0x000000000081005f                Resistor_str
+                0x0000000000810064                Dioden
+                0x0000000000810069                KatAn_str
+                0x000000000081006d                AnKat_str
+                0x0000000000810071                Ir_str
+                0x0000000000810077                Lis_str
+                0x000000000081007a                VLOSS_str
+                0x0000000000810082                ESR_str
+                0x0000000000810088                VCC_str
+                0x000000000081008d                Cell_str
+                0x0000000000810093                CapZeich
+                0x0000000000810097                Vgs_str
+                0x000000000081009c                vt_str
+                0x00000000008100a1                Uf_str
+                0x00000000008100a5                Ube_str
+                0x00000000008100aa                N123_str
+                0x00000000008100b0                PNP_str
+                0x00000000008100b4                NPN_str
+                0x00000000008100b8                Cap_str
+                0x00000000008100bb                GateCap_str
+                0x00000000008100be                hfe_str
+                0x00000000008100c1                igbt_str
+                0x00000000008100c7                jfet_str
+                0x00000000008100cc                mosfet_str
+                0x00000000008100d1                DC_Pwr_Mode_str
+                0x00000000008100dd                OK_str
+                0x00000000008100e0                Bat_str
+                0x00000000008100e6                ATE
+                0x00000000008100ef                RELPROBE
+                0x00000000008100ff                SELFTEST
+                0x000000000081010f                TestTimedOut
+                0x0000000000810118                OrBroken
+                0x0000000000810124                TestFailed1
+                0x0000000000810134                Unknown
+                0x000000000081013d                Thyristor
+                0x0000000000810146                Triac
+                0x000000000081014c                Bauteil
+                0x0000000000810151                TestFailed2
+                0x000000000081015a                BatEmpty
+                0x0000000000810161                BatWeak
+                0x0000000000810166                TestRunning
+                0x0000000000810171                RLtab
+                0x00000000008101cb                EE_ESR_ZEROtab
+                0x00000000008101cf                c_zero_tab
+                0x00000000008101d6                ref_offset
+                0x00000000008101d8                RefDiff
+                0x00000000008101d9                __eeprom_end = .
 
 .fuse
  *(.fuse)
@@ -1192,43 +1192,43 @@ END GROUP
  .debug_abbrev  0x0000000000001824       0x56 CheckUJT.o
  .debug_abbrev  0x000000000000187a       0x72 EE_check_init.o
 
-.debug_line     0x0000000000000000     0x1e3a
+.debug_line     0x0000000000000000     0x1e40
  *(.debug_line)
  .debug_line    0x0000000000000000       0x6c lcd_hw_4_bit.o
- .debug_line    0x000000000000006c      0x1ac lcd-routines.o
- .debug_line    0x0000000000000218       0x4d i2lcd.o
- .debug_line    0x0000000000000265       0x6c PinLayout.o
- .debug_line    0x00000000000002d1       0x5b RvalOut.o
- .debug_line    0x000000000000032c       0x80 UfAusgabe.o
- .debug_line    0x00000000000003ac      0x136 DisplayValue.o
- .debug_line    0x00000000000004e2       0x39 swuart.o
- .debug_line    0x000000000000051b       0x67 wait1000ms.o
- .debug_line    0x0000000000000582       0x80 ReadADC.o
- .debug_line    0x0000000000000602       0x9a wait_for_key_ms.o
- .debug_line    0x000000000000069c       0x83 RefVoltage.o
- .debug_line    0x000000000000071f       0x54 get_log.o
- .debug_line    0x0000000000000773      0x45d main.o
- .debug_line    0x0000000000000bd0       0xe3 Battery_check.o
- .debug_line    0x0000000000000cb3      0x2bf CheckPins.o
- .debug_line    0x0000000000000f72      0x135 GetResistance.o
- .debug_line    0x00000000000010a7       0x98 ChargePin10ms.o
- .debug_line    0x000000000000113f       0xf8 EntladePins.o
- .debug_line    0x0000000000001237      0x1d8 ReadCapacity.o
- .debug_line    0x000000000000140f       0x76 GetRLmultip.o
- .debug_line    0x0000000000001485       0xd8 Calibrate_UR.o
- .debug_line    0x000000000000155d      0x121 show_Resis_Cap.o
- .debug_line    0x000000000000167e      0x18c ReadInductance.o
- .debug_line    0x000000000000180a      0x1a9 GetESR.o
- .debug_line    0x00000000000019b3      0x110 GetVloss.o
- .debug_line    0x0000000000001ac3       0x5f GetFrequency.o
- .debug_line    0x0000000000001b22       0x5f function_menu.o
- .debug_line    0x0000000000001b81       0x5f message_key_released.o
- .debug_line    0x0000000000001be0       0x5f ReadBigCap.o
- .debug_line    0x0000000000001c3f       0x5f CheckRotaryEncoder.o
- .debug_line    0x0000000000001c9e       0x5f CalibrationCap.o
- .debug_line    0x0000000000001cfd       0x5f ShowData.o
- .debug_line    0x0000000000001d5c       0x5f CheckUJT.o
- .debug_line    0x0000000000001dbb       0x7f EE_check_init.o
+ .debug_line    0x000000000000006c      0x1b0 lcd-routines.o
+ .debug_line    0x000000000000021c       0x4d i2lcd.o
+ .debug_line    0x0000000000000269       0x6c PinLayout.o
+ .debug_line    0x00000000000002d5       0x5b RvalOut.o
+ .debug_line    0x0000000000000330       0x80 UfAusgabe.o
+ .debug_line    0x00000000000003b0      0x136 DisplayValue.o
+ .debug_line    0x00000000000004e6       0x39 swuart.o
+ .debug_line    0x000000000000051f       0x67 wait1000ms.o
+ .debug_line    0x0000000000000586       0x80 ReadADC.o
+ .debug_line    0x0000000000000606       0x9a wait_for_key_ms.o
+ .debug_line    0x00000000000006a0       0x83 RefVoltage.o
+ .debug_line    0x0000000000000723       0x54 get_log.o
+ .debug_line    0x0000000000000777      0x45f main.o
+ .debug_line    0x0000000000000bd6       0xe3 Battery_check.o
+ .debug_line    0x0000000000000cb9      0x2bf CheckPins.o
+ .debug_line    0x0000000000000f78      0x135 GetResistance.o
+ .debug_line    0x00000000000010ad       0x98 ChargePin10ms.o
+ .debug_line    0x0000000000001145       0xf8 EntladePins.o
+ .debug_line    0x000000000000123d      0x1d8 ReadCapacity.o
+ .debug_line    0x0000000000001415       0x76 GetRLmultip.o
+ .debug_line    0x000000000000148b       0xd8 Calibrate_UR.o
+ .debug_line    0x0000000000001563      0x121 show_Resis_Cap.o
+ .debug_line    0x0000000000001684      0x18c ReadInductance.o
+ .debug_line    0x0000000000001810      0x1a9 GetESR.o
+ .debug_line    0x00000000000019b9      0x110 GetVloss.o
+ .debug_line    0x0000000000001ac9       0x5f GetFrequency.o
+ .debug_line    0x0000000000001b28       0x5f function_menu.o
+ .debug_line    0x0000000000001b87       0x5f message_key_released.o
+ .debug_line    0x0000000000001be6       0x5f ReadBigCap.o
+ .debug_line    0x0000000000001c45       0x5f CheckRotaryEncoder.o
+ .debug_line    0x0000000000001ca4       0x5f CalibrationCap.o
+ .debug_line    0x0000000000001d03       0x5f ShowData.o
+ .debug_line    0x0000000000001d62       0x5f CheckUJT.o
+ .debug_line    0x0000000000001dc1       0x7f EE_check_init.o
 
 .debug_frame    0x0000000000000000      0x690
  *(.debug_frame)

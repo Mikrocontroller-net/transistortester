@@ -376,7 +376,7 @@ uint8_t function_menu() {
 /* ****************************************************************** */
 /* message2line writes the message corresponding to the number to LCD */
 /* ****************************************************************** */
-void message2line(uint8_t number) {
+void message2line(uint8_t number) { 
      if (number > MODE_LAST) number -= (MODE_LAST + 1);
      if (number == MODE_TRANS) lcd_MEM2_string(TESTER_str);
      if (number == MODE_FREQ) lcd_MEM2_string(FREQ_str);
@@ -414,8 +414,13 @@ void message2line(uint8_t number) {
      if (number == MODE_OFF) {
         lcd_MEM2_string(OFF_str);
      }
-     lcd_clear_line();
-     }
+ lcd_clear_line();
+ #ifdef WITH_UART	
+ // if (_lcd_column>=LCD_LINE_LENGTH) {   //Mauro
+   uart_newline();                   // MAURO
+ // }                                     //Mauro
+ #endif 
+} /* end message2line() */
 
 /* ****************************************************************** */
 /* show_C_ESR measures the capacity and ESR of a capacitor connected to TP1 and TP3 */

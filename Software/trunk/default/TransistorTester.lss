@@ -9,7 +9,7 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
   2 .bss          000000a3  00800100  00800100  00003f24  2**0
                   ALLOC
-  3 .eeprom       000001da  00810000  00810000  00003f24  2**0
+  3 .eeprom       000001d9  00810000  00810000  00003f24  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
   4 .stab         00000a98  00000000  00000000  00004100  2**2
                   CONTENTS, READONLY, DEBUGGING
@@ -23,15 +23,15 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_abbrev 000018ec  00000000  00000000  0000c110  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   00001e3a  00000000  00000000  0000d9fc  2**0
+ 10 .debug_line   00001e40  00000000  00000000  0000d9fc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  00000690  00000000  00000000  0000f838  2**2
+ 11 .debug_frame  00000690  00000000  00000000  0000f83c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000fd7  00000000  00000000  0000fec8  2**0
+ 12 .debug_str    00000fd7  00000000  00000000  0000fecc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    00003d4e  00000000  00000000  00010e9f  2**0
+ 13 .debug_loc    00003d4e  00000000  00000000  00010ea3  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000018  00000000  00000000  00014bed  2**0
+ 14 .debug_ranges 00000018  00000000  00000000  00014bf1  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -378,20 +378,20 @@ void lcd_command(unsigned char temp1) {
      1ec:	08 95       	ret
 
 000001ee <lcd_line2>:
-     1ee:	80 ec       	ldi	r24, 0xC0	; 192
-     1f0:	f3 df       	rcall	.-26     	; 0x1d8 <lcd_command>
-     1f2:	81 e0       	ldi	r24, 0x01	; 1
+     1ee:	81 e0       	ldi	r24, 0x01	; 1
+     1f0:	80 93 96 01 	sts	0x0196, r24
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163))
  ;
 #else
 	wait50us();		// wait at least 50us after every instruction for character LCD
-     1f4:	80 93 96 01 	sts	0x0196, r24
+     1f4:	80 ec       	ldi	r24, 0xC0	; 192
+     1f6:	f0 df       	rcall	.-32     	; 0x1d8 <lcd_command>
      1f8:	10 92 37 01 	sts	0x0137, r1
+}
+
+/* ******************************************************************************* */
 //move to the beginning of the 1. row
 void lcd_line1() {
-#ifdef WITH_UART
-   uart_newline();		// start of new measurement
-#endif
    lcd_text_line = 0;
      1fc:	08 95       	ret
 
@@ -402,39 +402,45 @@ void lcd_line1() {
    _xpos = 0;			// LCD_ST7565_H_OFFSET is not used for ST7920 controller
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row1));
-     1fe:	80 e9       	ldi	r24, 0x90	; 144
-     200:	eb df       	rcall	.-42     	; 0x1d8 <lcd_command>
-     202:	82 e0       	ldi	r24, 0x02	; 2
+     1fe:	82 e0       	ldi	r24, 0x02	; 2
+     200:	80 93 96 01 	sts	0x0196, r24
    _lcd_column = 0;
-     204:	80 93 96 01 	sts	0x0196, r24
+     204:	80 e9       	ldi	r24, 0x90	; 144
+     206:	e8 df       	rcall	.-48     	; 0x1d8 <lcd_command>
      208:	10 92 37 01 	sts	0x0137, r1
-   uart_newline();		// start of new line
-#endif
+//move to the beginning of the 2. row
+// for the ST7920 you can select a accurate vertical pixel positioning of line with:
+// or you can select a 8-line rounding of the positioning of the lines with: 
+//#define FONT_V_SPACE (((FONT_HEIGHT + 7) / 8) * 8)
+void lcd_line2() {
+   lcd_text_line = 1;
+     20c:	08 95       	ret
+
+0000020e <lcd_line4>:
+     20e:	83 e0       	ldi	r24, 0x03	; 3
 #if (LCD_GRAPHIC_TYPE != 0)
    lcd_set_cursor(1 * PAGES_PER_LINE,0);
 #else
    lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row2));
-     20c:	08 95       	ret
-
-0000020e <lcd_line4>:
-     20e:	80 ed       	ldi	r24, 0xD0	; 208
-   lcd_text_line = 1;
-     210:	e3 df       	rcall	.-58     	; 0x1d8 <lcd_command>
-     212:	83 e0       	ldi	r24, 0x03	; 3
-     214:	80 93 96 01 	sts	0x0196, r24
+     210:	80 93 96 01 	sts	0x0196, r24
+     214:	80 ed       	ldi	r24, 0xD0	; 208
    _lcd_column = 0;
+     216:	e0 df       	rcall	.-64     	; 0x1d8 <lcd_command>
      218:	10 92 37 01 	sts	0x0137, r1
-   uart_newline();		// start of new line
-#endif
-#if (LCD_GRAPHIC_TYPE != 0)
-   lcd_set_cursor(2 * PAGES_PER_LINE,0);
-#else
-   lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row3));
+}
+
+/* ******************************************************************************* */
+//move to the beginning of the 3. row
+void lcd_line3() {
+   lcd_text_line = 2;
      21c:	08 95       	ret
 
 0000021e <lcd_set_cursor>:
      21e:	60 93 37 01 	sts	0x0137, r22
-   lcd_text_line = 2;
+#if (LCD_GRAPHIC_TYPE != 0)
+   lcd_set_cursor(2 * PAGES_PER_LINE,0);
+#else
+   lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row3));
      222:	81 30       	cpi	r24, 0x01	; 1
      224:	11 f4       	brne	.+4      	; 0x22a <lcd_set_cursor+0xc>
      226:	80 ec       	ldi	r24, 0xC0	; 192
@@ -442,17 +448,20 @@ void lcd_line1() {
      228:	01 c0       	rjmp	.+2      	; 0x22c <lcd_set_cursor+0xe>
      22a:	80 e8       	ldi	r24, 0x80	; 128
      22c:	86 0f       	add	r24, r22
-   uart_newline();		// start of new line
-#endif
-#if (LCD_GRAPHIC_TYPE != 0)
-   lcd_set_cursor(3 * PAGES_PER_LINE,0);
-#else
-   lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row4));
+}
+
+/* ******************************************************************************* */
+//move to the beginning of the 4. row
+void lcd_line4() {
+   lcd_text_line = 3;
      22e:	d4 cf       	rjmp	.-88     	; 0x1d8 <lcd_command>
 
 00000230 <lcd_restore_position>:
      230:	60 91 00 01 	lds	r22, 0x0100
-   lcd_text_line = 3;
+#if (LCD_GRAPHIC_TYPE != 0)
+   lcd_set_cursor(3 * PAGES_PER_LINE,0);
+#else
+   lcd_command((uint8_t)(CMD_SetDDRAMAddress + LCD_Row4));
      234:	80 91 02 01 	lds	r24, 0x0102
      238:	f2 cf       	rjmp	.-28     	; 0x21e <lcd_set_cursor>
 
@@ -771,7 +780,7 @@ void lcd_fix_customchar(const unsigned char *chardata) {
 
 00000378 <lcd_show_Cg>:
      378:	0f 93       	push	r16
-     37a:	8c eb       	ldi	r24, 0xBC	; 188
+     37a:	8b eb       	ldi	r24, 0xBB	; 187
    lcd_fix_customchar(ResIcon2);		//load Character  ]
      37c:	90 e0       	ldi	r25, 0x00	; 0
      37e:	7a df       	rcall	.-268    	; 0x274 <lcd_fix_string>
@@ -802,10 +811,6 @@ void lcd_next_line(uint8_t xx) {
      3a0:	8f e3       	ldi	r24, 0x3F	; 63
      3a2:	fa de       	rcall	.-524    	; 0x198 <lcd_data>
      3a4:	0f 91       	pop	r16
-#ifdef WITH_UART
-//   uart_putc(' ');
-   uart_newline();		// start of new line
-#endif
    lcd_text_line ++;
      3a6:	08 95       	ret
 
@@ -898,7 +903,7 @@ PinLayout:
  	mov	r15, r20		; Pin3
      3e0:	f4 2e       	mov	r15, r20
  	ldi	r24, lo8(N123_str)	; 0x0B
-     3e2:	8b ea       	ldi	r24, 0xAB	; 171
+     3e2:	8a ea       	ldi	r24, 0xAA	; 170
  	ldi	r25, hi8(N123_str)	; 0x01	
      3e4:	90 e0       	ldi	r25, 0x00	; 0
  #ifdef USE_EEPROM
@@ -1171,7 +1176,7 @@ ad1cbe:
  	RCALL	lcd_line2;					//2. row
      4b0:	9e de       	rcall	.-708    	; 0x1ee <lcd_line2>
  	ldi	r24, lo8(Uf_str);	0xE9
-     4b2:	82 ea       	ldi	r24, 0xA2	; 162
+     4b2:	81 ea       	ldi	r24, 0xA1	; 161
  	ldi	r25, hi8(Uf_str);	0x01
      4b4:	90 e0       	ldi	r25, 0x00	; 0
 #ifdef USE_EEPROM
@@ -1228,7 +1233,7 @@ SerienDiodenAusgabe:
  	RCALL	lcd_testpin	; lcd_testpin(diodes.Anode[first]);
      4e0:	64 de       	rcall	.-824    	; 0x1aa <lcd_testpin>
  	ldi	r24, lo8(AnKat_str)	;0xA3
-     4e2:	8e e6       	ldi	r24, 0x6E	; 110
+     4e2:	8d e6       	ldi	r24, 0x6D	; 109
  	ldi	r25, hi8(AnKat_str)	;0x03
      4e4:	90 e0       	ldi	r25, 0x00	; 0
 #ifdef USE_EEPROM
@@ -1244,7 +1249,7 @@ SerienDiodenAusgabe:
  	RCALL	lcd_testpin	; lcd_testpin(diodes.Cathode[first]);
      4ea:	5f de       	rcall	.-834    	; 0x1aa <lcd_testpin>
  	ldi	r24, lo8(AnKat_str)	;0xA3
-     4ec:	8e e6       	ldi	r24, 0x6E	; 110
+     4ec:	8d e6       	ldi	r24, 0x6D	; 109
  	ldi	r25, hi8(AnKat_str)	;0x03
      4ee:	90 e0       	ldi	r25, 0x00	; 0
 #ifdef USE_EEPROM
@@ -2332,7 +2337,7 @@ RefVoltage:
 
 #ifdef AUTO_CAL
  	ldi	r24, lo8(ref_offset)	; 1
-     858:	87 ed       	ldi	r24, 0xD7	; 215
+     858:	86 ed       	ldi	r24, 0xD6	; 214
  	ldi	r25, hi8(ref_offset)	; 0
      85a:	91 e0       	ldi	r25, 0x01	; 1
 ;; 	ACALL	eeprom_read_word	; eeprom_read_word((uint16_t *)(&ref_offset));
@@ -2345,7 +2350,7 @@ RefVoltage:
 	mov	r19, r24
      860:	38 2f       	mov	r19, r24
 	ldi	r24, lo8(ref_offset+1)
-     862:	88 ed       	ldi	r24, 0xD8	; 216
+     862:	87 ed       	ldi	r24, 0xD7	; 215
 	ldi	r25, hi8(ref_offset+1)
      864:	91 e0       	ldi	r25, 0x01	; 1
 	ACALL	eeprom_read_byte
@@ -2484,7 +2489,7 @@ ad2120:
 #endif 
 #ifdef AUTO_CAL
 	ldi	r24, lo8(RefDiff)
-     8dc:	89 ed       	ldi	r24, 0xD9	; 217
+     8dc:	88 ed       	ldi	r24, 0xD8	; 216
 	ldi	r25, hi8(RefDiff)
      8de:	91 e0       	ldi	r25, 0x01	; 1
 	ACALL	eeprom_read_byte	; (int8_t)eeprom_read_byte((uint8_t *)&RefDiff));
@@ -2835,8 +2840,8 @@ lcd_clear();
      a6a:	16 c2       	rjmp	.+1068   	; 0xe98 <AutoCheck+0x452>
 lcd_MEM_string(VERSION_str);	//"Version ..."
      a6c:	e6 db       	rcall	.-2100   	; 0x23a <lcd_clear>
-     a6e:	80 e0       	ldi	r24, 0x00	; 0
-     a70:	91 e0       	ldi	r25, 0x01	; 1
+     a6e:	8f ef       	ldi	r24, 0xFF	; 255
+     a70:	90 e0       	ldi	r25, 0x00	; 0
      a72:	00 dc       	rcall	.-2048   	; 0x274 <lcd_fix_string>
 return;
      a74:	bc db       	rcall	.-2184   	; 0x1ee <lcd_line2>
@@ -2863,12 +2868,12 @@ if ((test_mode & 0xf0) == 0) {
      a8e:	e4 db       	rcall	.-2104   	; 0x258 <lcd_pgm_string>
   lcd_data('?');			// wait for key pressed for confirmation
      a90:	60 e0       	ldi	r22, 0x00	; 0
-     a92:	8e ec       	ldi	r24, 0xCE	; 206
+     a92:	8d ec       	ldi	r24, 0xCD	; 205
      a94:	91 e0       	ldi	r25, 0x01	; 1
   if (wait_for_key_ms(2000) > 10) goto begin_selftest;	// key is pressed again
      a96:	0e 94 15 1f 	call	0x3e2a	; 0x3e2a <__eewr_byte_m168>
      a9a:	60 e0       	ldi	r22, 0x00	; 0
-     a9c:	8f ec       	ldi	r24, 0xCF	; 207
+     a9c:	8e ec       	ldi	r24, 0xCE	; 206
      a9e:	91 e0       	ldi	r25, 0x01	; 1
      aa0:	0e 94 15 1f 	call	0x3e2a	; 0x3e2a <__eewr_byte_m168>
 lcd_clear();
@@ -2879,7 +2884,7 @@ begin_selftest:
 lcd_line2();
      aa4:	60 e0       	ldi	r22, 0x00	; 0
 Calibrate_UR();		// get Reference voltage, Pin resistance
-     aa6:	8d ec       	ldi	r24, 0xCD	; 205
+     aa6:	8c ec       	ldi	r24, 0xCC	; 204
      aa8:	91 e0       	ldi	r25, 0x01	; 1
 lcd_MEM2_string(R0_str);		// "R0="
      aaa:	0e 94 15 1f 	call	0x3e2a	; 0x3e2a <__eewr_byte_m168>
@@ -2934,7 +2939,7 @@ DisplayValue16(adcmv[0],-2,' ',3);
      b04:	89 83       	std	Y+1, r24	; 0x01
 DisplayValue16(adcmv[1],-2,' ',3);
      b06:	69 81       	ldd	r22, Y+1	; 0x01
-     b08:	8e ec       	ldi	r24, 0xCE	; 206
+     b08:	8d ec       	ldi	r24, 0xCD	; 205
      b0a:	91 e0       	ldi	r25, 0x01	; 1
      b0c:	0e 94 15 1f 	call	0x3e2a	; 0x3e2a <__eewr_byte_m168>
      b10:	8a e5       	ldi	r24, 0x5A	; 90
@@ -2948,7 +2953,7 @@ DisplayValue16(adcmv[2],-2,LCD_CHAR_OMEGA,3);
 if (adcmv[0] >= 90) {
      b1e:	8b 83       	std	Y+3, r24	; 0x03
      b20:	6b 81       	ldd	r22, Y+3	; 0x03
-     b22:	8f ec       	ldi	r24, 0xCF	; 207
+     b22:	8e ec       	ldi	r24, 0xCE	; 206
      b24:	91 e0       	ldi	r25, 0x01	; 1
   adcmv[0] = ESR_ZERO;	// set back to default value
      b26:	0e 94 15 1f 	call	0x3e2a	; 0x3e2a <__eewr_byte_m168>
@@ -2963,7 +2968,7 @@ eeprom_write_byte((uint8_t *)(&EE_ESR_ZEROtab[2]), (uint8_t)adcmv[0]);	// fix ze
      b36:	8d 83       	std	Y+5, r24	; 0x05
 if (adcmv[1] >= 90) {
      b38:	6d 81       	ldd	r22, Y+5	; 0x05
-     b3a:	8d ec       	ldi	r24, 0xCD	; 205
+     b3a:	8c ec       	ldi	r24, 0xCC	; 204
      b3c:	91 e0       	ldi	r25, 0x01	; 1
      b3e:	0e 94 15 1f 	call	0x3e2a	; 0x3e2a <__eewr_byte_m168>
   adcmv[1] = ESR_ZERO;	// set back to default value
@@ -3096,7 +3101,7 @@ adcmv[1] = (unsigned int) cap.cval_uncorrected.dw;	//save capacity value of empt
      c2a:	8f 83       	std	Y+7, r24	; 0x07
      c2c:	0f c0       	rjmp	.+30     	; 0xc4c <AutoCheck+0x206>
      c2e:	a0 db       	rcall	.-2240   	; 0x370 <lcd_clear_line2>
-     c30:	80 ef       	ldi	r24, 0xF0	; 240
+     c30:	8f ee       	ldi	r24, 0xEF	; 239
      c32:	90 e0       	ldi	r25, 0x00	; 0
 ReadCapacity(TP2, TP3);
      c34:	1f db       	rcall	.-2498   	; 0x274 <lcd_fix_string>
@@ -3169,7 +3174,7 @@ if (UnCalibrated == 2)
   adcmv[3] = adcmv[0] + 2;		// mark as uncalibrated until Cap > 100nF has success
 } else {
   adcmv[3] = adcmv[0];			// mark as calibrated, short calibration is finished
-     c84:	f0 ed       	ldi	r31, 0xD0	; 208
+     c84:	ff ec       	ldi	r31, 0xCF	; 207
      c86:	ef 2e       	mov	r14, r31
   UnCalibrated = 0;			// clear the UnCalibrated Flag
      c88:	f1 e0       	ldi	r31, 0x01	; 1
@@ -3196,7 +3201,7 @@ DisplayValue(adcmv[2],-12,'F',3);		//output cap0 1:2
      caa:	1d 05       	cpc	r17, r13
      cac:	91 f7       	brne	.-28     	; 0xc92 <AutoCheck+0x24c>
      cae:	9f da       	rcall	.-2754   	; 0x1ee <lcd_line2>
-     cb0:	8e ed       	ldi	r24, 0xDE	; 222
+     cb0:	8d ed       	ldi	r24, 0xDD	; 221
      cb2:	90 e0       	ldi	r25, 0x00	; 0
      cb4:	df da       	rcall	.-2626   	; 0x274 <lcd_fix_string>
      cb6:	82 e0       	ldi	r24, 0x02	; 2
@@ -3223,7 +3228,7 @@ for (ww=0;ww<7;ww++) {			//checking loop
      cd0:	b4 da       	rcall	.-2712   	; 0x23a <lcd_clear>
      cd2:	80 e0       	ldi	r24, 0x00	; 0
      cd4:	6a da       	rcall	.-2860   	; 0x1aa <lcd_testpin>
-     cd6:	84 e9       	ldi	r24, 0x94	; 148
+     cd6:	83 e9       	ldi	r24, 0x93	; 147
      cd8:	90 e0       	ldi	r25, 0x00	; 0
      cda:	cc da       	rcall	.-2664   	; 0x274 <lcd_fix_string>
      cdc:	82 e0       	ldi	r24, 0x02	; 2
@@ -3334,7 +3339,7 @@ for (ww=0;ww<64;ww++) {
    cap.cpre++;
    cap.cval /= 10;
      d68:	74 c0       	rjmp	.+232    	; 0xe52 <AutoCheck+0x40c>
-     d6a:	87 ed       	ldi	r24, 0xD7	; 215
+     d6a:	86 ed       	ldi	r24, 0xD6	; 214
      d6c:	91 e0       	ldi	r25, 0x01	; 1
      d6e:	0e 94 23 1f 	call	0x3e46	; 0x3e46 <__eewr_word_m168>
      d72:	63 da       	rcall	.-2874   	; 0x23a <lcd_clear>
@@ -3407,7 +3412,7 @@ for (ww=0;ww<64;ww++) {
      dec:	90 e0       	ldi	r25, 0x00	; 0
    ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
      dee:	34 da       	rcall	.-2968   	; 0x258 <lcd_pgm_string>
-     df0:	89 ed       	ldi	r24, 0xD9	; 217
+     df0:	88 ed       	ldi	r24, 0xD8	; 216
    R_DDR = 1<<PIN_RH3;		//Pin 3 over R_H to GND
      df2:	91 e0       	ldi	r25, 0x01	; 1
      df4:	0e 94 0d 1f 	call	0x3e1a	; 0x3e1a <__eerd_byte_m168>
@@ -3437,7 +3442,7 @@ for (ww=0;ww<64;ww++) {
    ADCconfig.U_Bandgap = adc_internal_reference;
      e14:	b2 0e       	add	r11, r18
      e16:	6b 2d       	mov	r22, r11
-     e18:	89 ed       	ldi	r24, 0xD9	; 217
+     e18:	88 ed       	ldi	r24, 0xD8	; 216
      e1a:	91 e0       	ldi	r25, 0x01	; 1
      e1c:	0e 94 15 1f 	call	0x3e2a	; 0x3e2a <__eewr_byte_m168>
      e20:	8b 2d       	mov	r24, r11
@@ -3456,12 +3461,12 @@ for (ww=0;ww<64;ww++) {
    adcmv[2] = ReadADC(CAP_ADC);  // get cap voltage with VCC reference
      e38:	8c e0       	ldi	r24, 0x0C	; 12
      e3a:	ce d9       	rcall	.-3172   	; 0x1d8 <lcd_command>
-     e3c:	80 ed       	ldi	r24, 0xD0	; 208
+     e3c:	8f ec       	ldi	r24, 0xCF	; 207
    ADCconfig.U_Bandgap = adc_internal_reference;
      e3e:	91 e0       	ldi	r25, 0x01	; 1
      e40:	0e 94 0d 1f 	call	0x3e1a	; 0x3e1a <__eerd_byte_m168>
      e44:	68 2f       	mov	r22, r24
-     e46:	83 ed       	ldi	r24, 0xD3	; 211
+     e46:	82 ed       	ldi	r24, 0xD2	; 210
      e48:	91 e0       	ldi	r25, 0x01	; 1
      e4a:	0e 94 15 1f 	call	0x3e2a	; 0x3e2a <__eewr_byte_m168>
    udiff = (int8_t)(((signed long)(adcmv[0] + adcmv[2] - adcmv[1])) * adc_internal_reference / adcmv[1])+REF_R_KORR;
@@ -3499,7 +3504,7 @@ for (ww=0;ww<64;ww++) {
    lcd_line2();
    lcd_MEM2_string(REF_R_str);	// "REF_R="
    udiff2 = udiff + (int8_t)eeprom_read_byte((uint8_t *)(&RefDiff));
-     e86:	87 ee       	ldi	r24, 0xE7	; 231
+     e86:	86 ee       	ldi	r24, 0xE6	; 230
    (void) eeprom_write_byte((uint8_t *)(&RefDiff), (uint8_t)udiff2);	// hold offset for true reference Voltage
      e88:	90 e0       	ldi	r25, 0x00	; 0
      e8a:	f4 d9       	rcall	.-3096   	; 0x274 <lcd_fix_string>
@@ -3520,14 +3525,14 @@ for (ww=0;ww<64;ww++) {
      ea4:	81 11       	cpse	r24, r1
      ea6:	0d c0       	rjmp	.+26     	; 0xec2 <mark_as_uncalibrated+0x22>
    wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
-     ea8:	80 ed       	ldi	r24, 0xD0	; 208
+     ea8:	8f ec       	ldi	r24, 0xCF	; 207
      eaa:	91 e0       	ldi	r25, 0x01	; 1
    UnCalibrated = 0;		// clear the UnCalibrated Flag
      eac:	0e 94 0d 1f 	call	0x3e1a	; 0x3e1a <__eerd_byte_m168>
    lcd_cursor_off();		// switch cursor off
      eb0:	61 e0       	ldi	r22, 0x01	; 1
      eb2:	68 0f       	add	r22, r24
-     eb4:	83 ed       	ldi	r24, 0xD3	; 211
+     eb4:	82 ed       	ldi	r24, 0xD2	; 210
    cap_found = eeprom_read_byte((uint8_t *)&c_zero_tab[0]);	// read first capacity zero offset
      eb6:	91 e0       	ldi	r25, 0x01	; 1
      eb8:	0e 94 15 1f 	call	0x3e2a	; 0x3e2a <__eewr_byte_m168>
@@ -3615,7 +3620,7 @@ lcd_MEM_string(ATE);		//"Selftest End"
      f12:	00 97       	sbiw	r24, 0x00	; 0
 PartFound = PART_NONE;
      f14:	c9 f0       	breq	.+50     	; 0xf48 <GetIr+0x84>
-     f16:	82 e7       	ldi	r24, 0x72	; 114
+     f16:	81 e7       	ldi	r24, 0x71	; 113
      last_line_used = 2;
      f18:	90 e0       	ldi	r25, 0x00	; 0
      f1a:	ac d9       	rcall	.-3240   	; 0x274 <lcd_fix_string>
@@ -3716,7 +3721,7 @@ void Battery_check(void) {
           if (bat_voltage < 900) 
      f82:	18 07       	cpc	r17, r24
      f84:	40 f4       	brcc	.+16     	; 0xf96 <Battery_check+0x3c>
-     f86:	82 ed       	ldi	r24, 0xD2	; 210
+     f86:	81 ed       	ldi	r24, 0xD1	; 209
      f88:	90 e0       	ldi	r25, 0x00	; 0
    #endif
           {
@@ -3729,7 +3734,7 @@ void Battery_check(void) {
              lcd_clear_line();			// clear to end of line
      f94:	1c c0       	rjmp	.+56     	; 0xfce <Battery_check+0x74>
              DC_Pwr_mode = 1;
-     f96:	81 ee       	ldi	r24, 0xE1	; 225
+     f96:	80 ee       	ldi	r24, 0xE0	; 224
      f98:	90 e0       	ldi	r25, 0x00	; 0
      f9a:	6c d9       	rcall	.-3368   	; 0x274 <lcd_fix_string>
              return;
@@ -3755,7 +3760,7 @@ void Battery_check(void) {
 
   // check the battery voltage
   if (bat_adc <  WARN_LEVEL) {
-     fb2:	8b e5       	ldi	r24, 0x5B	; 91
+     fb2:	8a e5       	ldi	r24, 0x5A	; 90
      fb4:	91 e0       	ldi	r25, 0x01	; 1
      fb6:	5e d9       	rcall	.-3396   	; 0x274 <lcd_fix_string>
      fb8:	b1 d9       	rcall	.-3230   	; 0x31c <lcd_clear_line>
@@ -3766,10 +3771,10 @@ void Battery_check(void) {
      fbe:	07 c0       	rjmp	.+14     	; 0xfce <Battery_check+0x74>
 	//Vcc <6,3V; no proper operation is possible
 	lcd_MEM_string(BatEmpty);	//Battery empty!
-     fc0:	82 e6       	ldi	r24, 0x62	; 98
+     fc0:	81 e6       	ldi	r24, 0x61	; 97
      fc2:	91 e0       	ldi	r25, 0x01	; 1
      fc4:	02 c0       	rjmp	.+4      	; 0xfca <Battery_check+0x70>
-     fc6:	8e ed       	ldi	r24, 0xDE	; 222
+     fc6:	8d ed       	ldi	r24, 0xDD	; 221
         lcd_clear_line();			// clear to end of line
      fc8:	90 e0       	ldi	r25, 0x00	; 0
      fca:	54 d9       	rcall	.-3416   	; 0x274 <lcd_fix_string>
@@ -7368,7 +7373,7 @@ messe_mit_rh:
 #ifdef AUTO_CAL
      // auto calibration mode, cap_null can be updated in selftest section
      tmpint = eeprom_read_byte(&c_zero_tab[pin_combination]);	// read zero offset
-    23ce:	80 53       	subi	r24, 0x30	; 48
+    23ce:	81 53       	subi	r24, 0x31	; 49
     23d0:	9e 4f       	sbci	r25, 0xFE	; 254
     23d2:	0e 94 0d 1f 	call	0x3e1a	; 0x3e1a <__eerd_byte_m168>
     23d6:	c0 90 68 01 	lds	r12, 0x0168
@@ -7709,7 +7714,7 @@ is_lower:
 	; r22 = tabind , r25 = tabres
 
 	LDIZ	RLtab
-    25da:	e2 e7       	ldi	r30, 0x72	; 114
+    25da:	e1 e7       	ldi	r30, 0x71	; 113
     25dc:	f1 e0       	ldi	r31, 0x01	; 1
 	add	r30, r22		; + tabind
     25de:	e6 0f       	add	r30, r22
@@ -8089,7 +8094,7 @@ void show_resis(byte pin1, byte pin2, byte how)
            lcd_testpin(pin1);
     27e6:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
            lcd_MEM_string(Resistor_str);	// -[==]-
-    27ea:	80 e6       	ldi	r24, 0x60	; 96
+    27ea:	8f e5       	ldi	r24, 0x5F	; 95
     27ec:	90 e0       	ldi	r25, 0x00	; 0
     27ee:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
            lcd_refresh();
@@ -8104,7 +8109,7 @@ void show_resis(byte pin1, byte pin2, byte how)
            if (inductor_lpre < 0)
     27f8:	87 ff       	sbrs	r24, 7
     27fa:	04 c0       	rjmp	.+8      	; 0x2804 <show_resis+0x24>
-    27fc:	8c e5       	ldi	r24, 0x5C	; 92
+    27fc:	8b e5       	ldi	r24, 0x5B	; 91
   #endif
 
            {
@@ -8140,7 +8145,7 @@ void show_resis(byte pin1, byte pin2, byte how)
               if (inductor_lpre < -2) {
     2820:	8e 3f       	cpi	r24, 0xFE	; 254
     2822:	94 f4       	brge	.+36     	; 0x2848 <show_resis+0x68>
-    2824:	88 e7       	ldi	r24, 0x78	; 120
+    2824:	87 e7       	ldi	r24, 0x77	; 119
                  // resistor has also inductance
                  lcd_MEM_string(Lis_str);		// "L="
     2826:	90 e0       	ldi	r25, 0x00	; 0
@@ -8179,7 +8184,7 @@ void show_cap_simple(void)
     2856:	80 91 78 01 	lds	r24, 0x0178
   lcd_testpin(cap.ca);               //Pin number 1
     285a:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
-    285e:	84 e9       	ldi	r24, 0x94	; 148
+    285e:	83 e9       	ldi	r24, 0x93	; 147
   lcd_MEM_string(CapZeich);          // capacitor sign
     2860:	90 e0       	ldi	r25, 0x00	; 0
     2862:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
@@ -8221,7 +8226,7 @@ void show_cap_simple(void)
     289a:	90 e0       	ldi	r25, 0x00	; 0
     289c:	89 2b       	or	r24, r25
     289e:	21 f0       	breq	.+8      	; 0x28a8 <show_cap_simple+0x5a>
-    28a0:	81 e6       	ldi	r24, 0x61	; 97
+    28a0:	80 e6       	ldi	r24, 0x60	; 96
   #endif
   // show Vloss additionally in line 2 , or no Vloss
  #endif
@@ -8245,7 +8250,7 @@ void show_cap_simple(void)
      if (cap.v_loss != 0) {
     28b8:	89 2b       	or	r24, r25
     28ba:	69 f0       	breq	.+26     	; 0x28d6 <show_cap_simple+0x88>
-    28bc:	8b e7       	ldi	r24, 0x7B	; 123
+    28bc:	8a e7       	ldi	r24, 0x7A	; 122
     28be:	90 e0       	ldi	r25, 0x00	; 0
     28c0:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
         lcd_MEM_string(VLOSS_str);      // " Vloss=" 
@@ -8278,7 +8283,7 @@ void show_cap_simple(void)
     28f6:	0e 94 88 02 	call	0x510	; 0x510 <DisplayValue>
     28fa:	cc 23       	and	r28, r28
     28fc:	69 f0       	breq	.+26     	; 0x2918 <show_cap_simple+0xca>
-    28fe:	83 e8       	ldi	r24, 0x83	; 131
+    28fe:	82 e8       	ldi	r24, 0x82	; 130
 
 #if FLASHEND > 0x1fff
   if (present_esr) {
@@ -9910,7 +9915,7 @@ ad_396c:
 	movw	r18, r6;		/* r18:21 = r6:9 = sumvolt1 */
     3024:	71 d6       	rcall	.+3298   	; 0x3d08 <__udivmodsi4>
 	movw	r20, r8;
-    3026:	8c ec       	ldi	r24, 0xCC	; 204
+    3026:	8b ec       	ldi	r24, 0xCB	; 203
 	call	__mulsi3;		/* r22:25 = r22:25 * r18:21 */
     3028:	91 e0       	ldi	r25, 0x01	; 1
     302a:	79 81       	ldd	r23, Y+1	; 0x01
@@ -10616,7 +10621,7 @@ end3:
 	  if (WithReference) {
     3314:	79 f0       	breq	.+30     	; 0x3334 <main+0xe6>
     3316:	0e 94 f7 00 	call	0x1ee	; 0x1ee <lcd_line2>
-    331a:	89 e8       	ldi	r24, 0x89	; 137
+    331a:	88 e8       	ldi	r24, 0x88	; 136
 	 #if POWER_OFF+0 > 1
 	     if ((mess_count == 0) && (empty_count == 0))
 	 #endif
@@ -10649,7 +10654,7 @@ end3:
 	  if(PartFound == PART_CELL) {
     3342:	61 f4       	brne	.+24     	; 0x335c <main+0x10e>
     3344:	0e 94 1d 01 	call	0x23a	; 0x23a <lcd_clear>
-    3348:	8e e8       	ldi	r24, 0x8E	; 142
+    3348:	8d e8       	ldi	r24, 0x8D	; 141
 	    lcd_clear();
     334a:	90 e0       	ldi	r25, 0x00	; 0
     334c:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
@@ -10673,12 +10678,12 @@ end3:
 	#ifdef WITH_SELFTEST
 	 #ifdef AUTO_CAL
 	  lcd_cursor_off();
-    3362:	83 ed       	ldi	r24, 0xD3	; 211
+    3362:	82 ed       	ldi	r24, 0xD2	; 210
     3364:	91 e0       	ldi	r25, 0x01	; 1
     3366:	59 d5       	rcall	.+2738   	; 0x3e1a <__eerd_byte_m168>
 	  UnCalibrated = (eeprom_read_byte(&c_zero_tab[3]) - eeprom_read_byte(&c_zero_tab[0]));
     3368:	18 2f       	mov	r17, r24
-    336a:	80 ed       	ldi	r24, 0xD0	; 208
+    336a:	8f ec       	ldi	r24, 0xCF	; 207
     336c:	91 e0       	ldi	r25, 0x01	; 1
     336e:	55 d5       	rcall	.+2730   	; 0x3e1a <__eerd_byte_m168>
     3370:	18 1b       	sub	r17, r24
@@ -10699,7 +10704,7 @@ end3:
 	  AutoCheck(0x00);			//check, if selftest should be done, only calibration
 	 #else
 	  AutoCheck(0x01);			//check, if selftest should be done, full selftest without MENU
-    338a:	87 e6       	ldi	r24, 0x67	; 103
+    338a:	86 e6       	ldi	r24, 0x66	; 102
     338c:	91 e0       	ldi	r25, 0x01	; 1
     338e:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
 	 #endif
@@ -10710,7 +10715,7 @@ end3:
     3394:	61 e0       	ldi	r22, 0x01	; 1
     3396:	80 e0       	ldi	r24, 0x00	; 0
     3398:	0e 94 ec 07 	call	0xfd8	; 0xfd8 <CheckPins>
-	     uart_putc(0x03);		// ETX, start of new measurement
+	    uart_newline();			 // MAURO Added
 	 #endif
 //
 	  // check all 6 combinations for the 3 pins 
@@ -10786,7 +10791,7 @@ end3:
 	  _trans = &ntrans;			// default transistor structure to show
     3408:	86 30       	cpi	r24, 0x06	; 6
     340a:	41 f4       	brne	.+16     	; 0x341c <main+0x1ce>
-    340c:	8e e3       	ldi	r24, 0x3E	; 62
+    340c:	8d e3       	ldi	r24, 0x3D	; 61
 	  if (PartFound == PART_THYRISTOR) {
     340e:	91 e0       	ldi	r25, 0x01	; 1
     3410:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
@@ -10803,7 +10808,7 @@ end3:
     341c:	87 30       	cpi	r24, 0x07	; 7
             PinLayout(Cathode_char,'G','A'); 	// CGA= or 123=...
     341e:	b9 f4       	brne	.+46     	; 0x344e <main+0x200>
-    3420:	87 e4       	ldi	r24, 0x47	; 71
+    3420:	86 e4       	ldi	r24, 0x46	; 70
     3422:	91 e0       	ldi	r25, 0x01	; 1
     3424:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
 #endif
@@ -10823,7 +10828,7 @@ end3:
     342e:	0e 94 ea 01 	call	0x3d4	; 0x3d4 <PinLayout>
     PinLayout('1','G','2'); 	// CGA= or 123=...
     3432:	0e 94 f7 00 	call	0x1ee	; 0x1ee <lcd_line2>
-    3436:	82 ea       	ldi	r24, 0xA2	; 162
+    3436:	81 ea       	ldi	r24, 0xA1	; 161
     3438:	90 e0       	ldi	r25, 0x00	; 0
     343a:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
 TyUfAusgabe:
@@ -10888,7 +10893,7 @@ TyUfAusgabe:
         if (diodes.Anode[0] < diodes.Cathode[0]) {
     3472:	89 2f       	mov	r24, r25
     3474:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
-    3478:	8e e6       	ldi	r24, 0x6E	; 110
+    3478:	8d e6       	ldi	r24, 0x6D	; 109
     347a:	90 e0       	ldi	r25, 0x00	; 0
     347c:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
            lcd_testpin(diodes.Anode[0]);
@@ -10896,7 +10901,7 @@ TyUfAusgabe:
            lcd_MEM_string(AnKat_str);	//"->|-"
     3484:	08 c0       	rjmp	.+16     	; 0x3496 <main+0x248>
     3486:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
-    348a:	8a e6       	ldi	r24, 0x6A	; 106
+    348a:	89 e6       	ldi	r24, 0x69	; 105
            lcd_testpin(diodes.Cathode[0]);
     348c:	90 e0       	ldi	r25, 0x00	; 0
     348e:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
@@ -10930,7 +10935,7 @@ TyUfAusgabe:
     34bc:	8d 3f       	cpi	r24, 0xFD	; 253
     34be:	0c f0       	brlt	.+2      	; 0x34c2 <main+0x274>
     34c0:	14 c3       	rjmp	.+1576   	; 0x3aea <main+0x89c>
-    34c2:	89 eb       	ldi	r24, 0xB9	; 185
+    34c2:	88 eb       	ldi	r24, 0xB8	; 184
         if (cap.cpre < -3) {	/* capacity is measured */
     34c4:	90 e0       	ldi	r25, 0x00	; 0
     34c6:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
@@ -10962,7 +10967,7 @@ TyUfAusgabe:
 #endif
         goto end3;
      } else if(NumOfDiodes == 2) { // double diode
-    34f4:	85 e6       	ldi	r24, 0x65	; 101
+    34f4:	84 e6       	ldi	r24, 0x64	; 100
     34f6:	90 e0       	ldi	r25, 0x00	; 0
     34f8:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
         lcd_data('2');
@@ -10974,14 +10979,14 @@ TyUfAusgabe:
         if(diodes.Anode[0] == diodes.Anode[1]) { //Common Anode
     3508:	80 91 84 01 	lds	r24, 0x0184
     350c:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
-    3510:	8a e6       	ldi	r24, 0x6A	; 106
+    3510:	89 e6       	ldi	r24, 0x69	; 105
     3512:	90 e0       	ldi	r25, 0x00	; 0
            lcd_testpin(diodes.Cathode[0]);
     3514:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
     3518:	80 91 7e 01 	lds	r24, 0x017E
            lcd_MEM_string(KatAn_str);	//"-|<-"
     351c:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
-    3520:	8e e6       	ldi	r24, 0x6E	; 110
+    3520:	8d e6       	ldi	r24, 0x6D	; 109
     3522:	90 e0       	ldi	r25, 0x00	; 0
            lcd_testpin(diodes.Anode[0]);
     3524:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
@@ -11000,14 +11005,14 @@ TyUfAusgabe:
         } 
         if(diodes.Cathode[0] == diodes.Cathode[1]) { //Common Cathode
     353a:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
-    353e:	8e e6       	ldi	r24, 0x6E	; 110
+    353e:	8d e6       	ldi	r24, 0x6D	; 109
     3540:	90 e0       	ldi	r25, 0x00	; 0
     3542:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
            lcd_testpin(diodes.Anode[0]);
     3546:	80 91 84 01 	lds	r24, 0x0184
            lcd_MEM_string(AnKat_str);	//"->|-"
     354a:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
-    354e:	8a e6       	ldi	r24, 0x6A	; 106
+    354e:	89 e6       	ldi	r24, 0x69	; 105
     3550:	90 e0       	ldi	r25, 0x00	; 0
 	   lcd_testpin(diodes.Cathode[0]);
     3552:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
@@ -11111,18 +11116,18 @@ TyUfAusgabe:
           }
 //        if((ptrans.b<3) && (ptrans.c<3)) 
         if(diode_sequence < 0x22) {
-    35e2:	85 e6       	ldi	r24, 0x65	; 101
+    35e2:	84 e6       	ldi	r24, 0x64	; 100
     35e4:	90 e0       	ldi	r25, 0x00	; 0
     35e6:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
            lcd_data('3');
     35ea:	0e 94 65 02 	call	0x4ca	; 0x4ca <SerienDiodenAusgabe>
            lcd_MEM_string(Dioden);	//"Diodes "
     35ee:	7d c2       	rjmp	.+1274   	; 0x3aea <main+0x89c>
-    35f0:	8d e4       	ldi	r24, 0x4D	; 77
+    35f0:	8c e4       	ldi	r24, 0x4C	; 76
     35f2:	91 e0       	ldi	r25, 0x01	; 1
     35f4:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
            SerienDiodenAusgabe();
-    35f8:	85 e3       	ldi	r24, 0x35	; 53
+    35f8:	84 e3       	ldi	r24, 0x34	; 52
            goto end3;
     35fa:	91 e0       	ldi	r25, 0x01	; 1
         }
@@ -11131,7 +11136,7 @@ TyUfAusgabe:
     35fc:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
     3600:	0e 94 f7 00 	call	0x1ee	; 0x1ee <lcd_line2>
      lcd_MEM_string(Unknown); 		//" unbek."
-    3604:	89 e1       	ldi	r24, 0x19	; 25
+    3604:	88 e1       	ldi	r24, 0x18	; 24
     3606:	91 e0       	ldi	r25, 0x01	; 1
     3608:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
      lcd_line2(); //2. row 
@@ -11139,7 +11144,7 @@ TyUfAusgabe:
      lcd_MEM_string(OrBroken); 		//"oder defekt "
     3610:	80 5d       	subi	r24, 0xD0	; 208
     3612:	0e 94 cc 00 	call	0x198	; 0x198 <lcd_data>
-    3616:	8e e6       	ldi	r24, 0x6E	; 110
+    3616:	8d e6       	ldi	r24, 0x6D	; 109
      lcd_data(NumOfDiodes + '0');
     3618:	90 e0       	ldi	r25, 0x00	; 0
     361a:	06 c3       	rjmp	.+1548   	; 0x3c28 <main+0x9da>
@@ -11268,7 +11273,7 @@ TyUfAusgabe:
     3708:	80 91 15 01 	lds	r24, 0x0115
     370c:	8c 30       	cpi	r24, 0x0C	; 12
     370e:	51 f4       	brne	.+20     	; 0x3724 <main+0x4d6>
-    3710:	85 eb       	ldi	r24, 0xB5	; 181
+    3710:	84 eb       	ldi	r24, 0xB4	; 180
     3712:	90 e0       	ldi	r25, 0x00	; 0
        if (ntrans.count != 0) {
           lcd_data('n');		// mark for parasitic NPn
@@ -11293,7 +11298,7 @@ TyUfAusgabe:
        }
     } else {
        _trans = &ptrans;		// change transistor structure
-    3730:	81 eb       	ldi	r24, 0xB1	; 177
+    3730:	80 eb       	ldi	r24, 0xB0	; 176
     3732:	90 e0       	ldi	r25, 0x00	; 0
     3734:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
     3738:	80 91 4a 01 	lds	r24, 0x014A
@@ -11375,7 +11380,7 @@ TyUfAusgabe:
     37a2:	11 e0       	ldi	r17, 0x01	; 1
     37a4:	11 23       	and	r17, r17
     37a6:	31 f0       	breq	.+12     	; 0x37b4 <main+0x566>
-    37a8:	8e e6       	ldi	r24, 0x6E	; 110
+    37a8:	8d e6       	ldi	r24, 0x6D	; 109
     37aa:	90 e0       	ldi	r25, 0x00	; 0
     37ac:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
  #endif
@@ -11383,7 +11388,7 @@ TyUfAusgabe:
     37b0:	11 e0       	ldi	r17, 0x01	; 1
     37b2:	08 c0       	rjmp	.+16     	; 0x37c4 <main+0x576>
           lcd_MEM_string(AnKat_str);	//"->|-"
-    37b4:	8a e6       	ldi	r24, 0x6A	; 106
+    37b4:	89 e6       	ldi	r24, 0x69	; 105
     37b6:	90 e0       	ldi	r25, 0x00	; 0
     37b8:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
     37bc:	03 c0       	rjmp	.+6      	; 0x37c4 <main+0x576>
@@ -11411,7 +11416,7 @@ TyUfAusgabe:
  #endif
 #else		/* character display */
     PinLayout('E','B','C'); 		//  EBC= or 123=...
-    37d2:	8f eb       	ldi	r24, 0xBF	; 191
+    37d2:	8e eb       	ldi	r24, 0xBE	; 190
     37d4:	90 e0       	ldi	r25, 0x00	; 0
     37d6:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
     lcd_line2(); //2. row 
@@ -11473,7 +11478,7 @@ TyUfAusgabe:
     3848:	0e 94 3a 03 	call	0x674	; 0x674 <DisplayValue16>
     384c:	80 e0       	ldi	r24, 0x00	; 0
     384e:	0e 94 b3 01 	call	0x366	; 0x366 <lcd_next_line_wait>
-    3852:	86 ea       	ldi	r24, 0xA6	; 166
+    3852:	85 ea       	ldi	r24, 0xA5	; 165
     3854:	90 e0       	ldi	r25, 0x00	; 0
     3856:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
  #endif
@@ -11560,7 +11565,7 @@ TyUfAusgabe:
     38f2:	80 81       	ld	r24, Z
     38f4:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
           lcd_testpin(diodes.Anode[vak_diode_nr]);
-    38f8:	8e e6       	ldi	r24, 0x6E	; 110
+    38f8:	8d e6       	ldi	r24, 0x6D	; 109
     38fa:	90 e0       	ldi	r25, 0x00	; 0
     38fc:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
     3900:	f8 01       	movw	r30, r16
@@ -11576,7 +11581,7 @@ TyUfAusgabe:
     3910:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
        } else {
           lcd_testpin(diodes.Cathode[vak_diode_nr]);
-    3914:	8a e6       	ldi	r24, 0x6A	; 106
+    3914:	89 e6       	ldi	r24, 0x69	; 105
     3916:	90 e0       	ldi	r25, 0x00	; 0
     3918:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
     391c:	f8 01       	movw	r30, r16
@@ -11585,7 +11590,7 @@ TyUfAusgabe:
     3920:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
     3924:	0e 94 d7 00 	call	0x1ae	; 0x1ae <lcd_space>
           lcd_testpin(diodes.Anode[vak_diode_nr]);
-    3928:	82 ea       	ldi	r24, 0xA2	; 162
+    3928:	81 ea       	ldi	r24, 0xA1	; 161
     392a:	90 e0       	ldi	r25, 0x00	; 0
     392c:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
        }
@@ -11638,7 +11643,7 @@ TyUfAusgabe:
     396c:	19 f4       	brne	.+6      	; 0x3974 <main+0x726>
 
     tmp = PartMode&0x0f;
-    396e:	88 ec       	ldi	r24, 0xC8	; 200
+    396e:	87 ec       	ldi	r24, 0xC7	; 199
     3970:	90 e0       	ldi	r25, 0x00	; 0
     3972:	13 c0       	rjmp	.+38     	; 0x399a <main+0x74c>
     3974:	85 ff       	sbrs	r24, 5
@@ -11659,7 +11664,7 @@ TyUfAusgabe:
     3982:	13 30       	cpi	r17, 0x03	; 3
           lcd_data('D');			// N-D or P-D
     3984:	41 f4       	brne	.+16     	; 0x3996 <main+0x748>
-    3986:	82 ec       	ldi	r24, 0xC2	; 194
+    3986:	81 ec       	ldi	r24, 0xC1	; 193
           fetidx += 2;
        } else {
           lcd_data('E');			// N-E or P-E
@@ -11672,7 +11677,7 @@ TyUfAusgabe:
           lcd_MEM_string(igbt_str);	//"-IGBT"
     3992:	85 e4       	ldi	r24, 0x45	; 69
     3994:	07 c0       	rjmp	.+14     	; 0x39a4 <main+0x756>
-    3996:	8d ec       	ldi	r24, 0xCD	; 205
+    3996:	8c ec       	ldi	r24, 0xCC	; 204
     3998:	90 e0       	ldi	r25, 0x00	; 0
           lcd_MEM_string(mosfet_str);	//"-MOS "
        }
@@ -11751,7 +11756,7 @@ TyUfAusgabe:
        ReadCapacity(_trans->b,_trans->e);	//measure capacity
     39ec:	0e 94 64 10 	call	0x20c8	; 0x20c8 <ReadCapacity>
     39f0:	0e 94 bc 01 	call	0x378	; 0x378 <lcd_show_Cg>
-    39f4:	8d e9       	ldi	r24, 0x9D	; 157
+    39f4:	8c e9       	ldi	r24, 0x9C	; 156
     39f6:	90 e0       	ldi	r25, 0x00	; 0
     39f8:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
        lcd_show_Cg();	// show Cg=xxxpF
@@ -11821,7 +11826,7 @@ TyUfAusgabe:
     3a72:	86 81       	ldd	r24, Z+6	; 0x06
     3a74:	97 81       	ldd	r25, Z+7	; 0x07
     3a76:	0e 94 3a 03 	call	0x674	; 0x674 <DisplayValue16>
-    3a7a:	88 e9       	ldi	r24, 0x98	; 152
+    3a7a:	87 e9       	ldi	r24, 0x97	; 151
     3a7c:	90 e0       	ldi	r25, 0x00	; 0
     3a7e:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
     3a82:	e0 91 38 01 	lds	r30, 0x0138
@@ -11853,7 +11858,7 @@ TyUfAusgabe:
        lcd_next_line_wait(0);		// line 4, if possible & wait 5s and clear last line 
     3aac:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
        if (an_cat) {
-    3ab0:	8e e6       	ldi	r24, 0x6E	; 110
+    3ab0:	8d e6       	ldi	r24, 0x6D	; 109
     3ab2:	90 e0       	ldi	r25, 0x00	; 0
           lcd_testpin(diodes.Anode[0]);
     3ab4:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
@@ -11863,7 +11868,7 @@ TyUfAusgabe:
     3abe:	80 91 84 01 	lds	r24, 0x0184
     3ac2:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
           lcd_testpin(diodes.Cathode[0]);
-    3ac6:	8a e6       	ldi	r24, 0x6A	; 106
+    3ac6:	89 e6       	ldi	r24, 0x69	; 105
     3ac8:	90 e0       	ldi	r25, 0x00	; 0
        } else {
           lcd_testpin(diodes.Cathode[0]);
@@ -11873,7 +11878,7 @@ TyUfAusgabe:
     3ad2:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
     3ad6:	0e 94 d7 00 	call	0x1ae	; 0x1ae <lcd_space>
           lcd_testpin(diodes.Anode[0]);
-    3ada:	82 ea       	ldi	r24, 0xA2	; 162
+    3ada:	81 ea       	ldi	r24, 0xA1	; 161
     3adc:	90 e0       	ldi	r25, 0x00	; 0
     3ade:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
        }
@@ -11910,7 +11915,7 @@ end3:
   ADC_DDR =  TXD_MSK; 	// switch pin with reference to input, activate relay
     3b0e:	0e 94 cc 00 	call	0x198	; 0x198 <lcd_data>
   lcd_clear();
-    3b12:	85 e6       	ldi	r24, 0x65	; 101
+    3b12:	84 e6       	ldi	r24, 0x64	; 100
 //#if FLASHEND > 0x1fff
   lcd_data('0'+NumOfDiodes);
     3b14:	90 e0       	ldi	r25, 0x00	; 0
@@ -12044,14 +12049,14 @@ end3:
        z = TP2+(ii>0);
     3bd2:	29 83       	std	Y+1, r18	; 0x01
     3bd4:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
-    3bd8:	80 e6       	ldi	r24, 0x60	; 96
+    3bd8:	8f e5       	ldi	r24, 0x5F	; 95
     3bda:	90 e0       	ldi	r25, 0x00	; 0
        lcd_testpin(x);  	//Pin-number 1
     3bdc:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
     3be0:	80 2f       	mov	r24, r16
     3be2:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
        lcd_MEM_string(Resistor_str);    // -[=]-
-    3be6:	80 e6       	ldi	r24, 0x60	; 96
+    3be6:	8f e5       	ldi	r24, 0x5F	; 95
     3be8:	90 e0       	ldi	r25, 0x00	; 0
     3bea:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
        lcd_testpin(y);		//Pin-number 2
@@ -12078,7 +12083,7 @@ end3:
     3c08:	8b 19       	sub	r24, r11
     3c0a:	0e 94 1b 02 	call	0x436	; 0x436 <RvalOut>
     3c0e:	11 c0       	rjmp	.+34     	; 0x3c32 <main+0x9e4>
-    3c10:	85 e2       	ldi	r24, 0x25	; 37
+    3c10:	84 e2       	ldi	r24, 0x24	; 36
        RvalOut(2-(ii>>1));
     3c12:	91 e0       	ldi	r25, 0x01	; 1
     3c14:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
@@ -12089,11 +12094,11 @@ end3:
   } // end (PartFound == PART_RESISTOR)
 
   lcd_MEM_string(TestFailed1); 	//"Kein,unbek. oder"
-    3c1c:	82 e5       	ldi	r24, 0x52	; 82
+    3c1c:	81 e5       	ldi	r24, 0x51	; 81
     3c1e:	91 e0       	ldi	r25, 0x01	; 1
     3c20:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
   lcd_line2(); //2. row 
-    3c24:	8d e4       	ldi	r24, 0x4D	; 77
+    3c24:	8c e4       	ldi	r24, 0x4C	; 76
     3c26:	91 e0       	ldi	r25, 0x01	; 1
 #if defined(LANG_ITALIAN)               //italiano
   lcd_MEM_string(Bauteil);		//"campione"
@@ -12145,7 +12150,7 @@ wait_again:
   }
 #endif
 	if (ii != 0)
-    3c52:	80 e1       	ldi	r24, 0x10	; 16
+    3c52:	8f e0       	ldi	r24, 0x0F	; 15
   // look, if the tester is uncalibrated (C-source will be included directly)
   lcd_cursor_off();
   #include "HelpCalibration.c"

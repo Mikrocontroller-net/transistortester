@@ -23,7 +23,7 @@ CFLAGS = -Wall
 # atmega328: m328 or m328p
 # atmega1280: m1280	// see config.h for different port setting
 # atmega2560: m2560	// see config.h for different port setting
-PARTNO = m328p
+PARTNO = m328
 
 # The WITH_MENU option enables a dialog to choose some additional functions.
 # Currently a frequency measurement at ATmega Pin PD4, a frequency generator at TP2 ,
@@ -38,7 +38,7 @@ CFLAGS += -DWITH_MENU
 # graphical displays after the presentation of calibration data.
 # You can switch off the presentation of the icons and the font data by setting
 # the option NO_ICONS_DEMO to save flash memory and display time.
-#CFLAGS += -DNO_ICONS_DEMO
+CFLAGS += -DNO_ICONS_DEMO
 
 # The menu function can be easier controlled with a incremental encoder (rotary switch).
 # Both switches of the rotary switch can be connected with 1 kOhm resistors to PD1 and PD3.
@@ -161,9 +161,9 @@ CFLAGS += -DLCD_FG_COLOR=0xffff
 # choosen. With a font width below 8 more than 16 characters can be shown in one display line.
 #CFLAGS += -DFONT_5X8
 #CFLAGS += -DFONT_6X8
-#CFLAGS += -DFONT_8X8
+CFLAGS += -DFONT_8X8
 #CFLAGS += -DFONT_7X12
-CFLAGS += -DFONT_8X12thin
+#CFLAGS += -DFONT_8X12thin
 #CFLAGS += -DFONT_8X14
 #CFLAGS += -DFONT_8X15
 #CFLAGS += -DFONT_8X16
@@ -192,7 +192,7 @@ CFLAGS += -DWITH_SELFTEST
 # The T1 to T7 tests are usefull to find problems with your tester.
 # You can also disable the extended tests T1 to T7 with the option NO_TEST_T1_T7 to accelerate the calibration
 # for the atmega328 and atmega168.
-#CFLAGS += -DNO_TEST_T1_T7
+CFLAGS += -DNO_TEST_T1_T7
 
 # FREQUENCY_50HZ enables a 50 Hz frequency generator for up to one minute at the end of selftests.
 #CFLAGS += -DFREQUENCY_50HZ
@@ -220,7 +220,7 @@ WITH_SamplingADC = 1
 
 # Option WITH_XTAL enables additional Xtal / Ceramic resonator tests.
 # Option can be set only together with SamplingADC=1 and OP_MHZ=16
-#CFLAGS += -DWITH_XTAL 
+CFLAGS += -DWITH_XTAL 
 # Option WITH_UJT enables additional tests for UJT (UniJunction Transistor)
 #CFLAGS += -DWITH_UJT
 # Option WITH_PUT enables additional tests for PUT (Programmable Unijunction Transistor)
@@ -239,6 +239,7 @@ CFLAGS += -DC_H_KORR=0
 
 
 # The WITH_UART option enables the software UART  (TTL level output at Pin PC3, 26).
+# You can set WITH_UART to 2 to enable a special mode of serial output with line number in column 1.
 # If the option is deselected, PC3 can be used as external voltage input with a
 # 10:1 resistor divider.
 CFLAGS += -DWITH_UART
@@ -281,7 +282,7 @@ CFLAGS += -DESR_ZERO=20
 CFLAGS += -DNO_AREF_CAP
 
 # The OP_MHZ option tells the software the Operating Frequency of your ATmega.
-OP_MHZ = 8
+OP_MHZ = 16
 
 # Restart from sleep mode will be delayed for 16384 clock tics with crystal mode.
 # Operation with the internal RC-Generator or external clock will delay the restart by only 6 clock tics.

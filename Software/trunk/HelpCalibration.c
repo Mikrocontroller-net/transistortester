@@ -45,6 +45,9 @@
 #else
     lcd_clear();
     lcd_pgm_string(HelpCalibration_str);	// only short message!
+	#ifdef WITH_UART		//Mauro 
+		uart_newline();		//Mauro 
+	#endif					//Mauro 
 #endif
     wait_for_key_ms(TIME_TO_READ);	// key pressed
   }

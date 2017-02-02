@@ -212,7 +212,7 @@
 	     Vext = W5msReadADC(TPext);	// read external voltage 
 	//     ADC_DDR = TXD_MSK;		//activate Software-UART 
 	 #ifdef WITH_UART
-	     uart_putc(' ');		// start of next value
+	    uart_newline();		// MAURO replaced uart_putc(' ') by uart_newline()
 	 #endif
 	 #if EXT_NUMERATOR <= (0xffff/U_VCC)
 	     Display_mV(Vext*EXT_NUMERATOR/EXT_DENOMINATOR,3);	// Display 3 Digits of this mV units
@@ -266,7 +266,8 @@
 	  lcd_MEM_string(TestRunning);		//String: testing...
 	  lcd_refresh();			// write the pixels to display, ST7920 only
 	 #ifdef WITH_UART
-	     uart_putc(0x03);		// ETX, start of new measurement
+	    uart_putc(0x03);		// ETX, start of new measurement 
+	    uart_newline();			 // MAURO Added
 	 #endif
 //
 	  // check all 6 combinations for the 3 pins 
@@ -1086,6 +1087,9 @@ showdiodecap:
   lcd_MEM_string(Bauteil);		//"Bauteil"
 #endif
 not_known:
+#ifdef WITH_UART	
+   uart_newline();		// MAURO added
+#endif			
 #ifdef WITH_GRAPHICS
      lcd_big_icon(QUESTION);		// show big question mark
 #endif

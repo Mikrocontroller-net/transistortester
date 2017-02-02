@@ -347,7 +347,7 @@ End of configuration
  const unsigned char Inductor_str[] MEM_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_INDUCTOR1, LCD_CHAR_INDUCTOR2,LCD_CHAR_LINE1,0};
 #endif
 #if defined (WITH_SELFTEST) || !defined (BAT_CHECK)
- const unsigned char VERSION_str[] MEM_TEXT = "Version 1.12k";
+ const unsigned char VERSION_str[] MEM_TEXT = "Version1.13k";
 #endif
 #ifdef SHOW_ICE
  const unsigned char ICE0_str[] MEM2_TEXT = "ICE0=";

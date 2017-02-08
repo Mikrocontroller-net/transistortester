@@ -23,15 +23,15 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_abbrev 000018ec  00000000  00000000  0000c110  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   00001e40  00000000  00000000  0000d9fc  2**0
+ 10 .debug_line   00001e42  00000000  00000000  0000d9fc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_frame  00000690  00000000  00000000  0000f83c  2**2
+ 11 .debug_frame  00000690  00000000  00000000  0000f840  2**2
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000fd7  00000000  00000000  0000fecc  2**0
+ 12 .debug_str    00000fd7  00000000  00000000  0000fed0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_loc    00003d4e  00000000  00000000  00010ea3  2**0
+ 13 .debug_loc    00003d4e  00000000  00000000  00010ea7  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_ranges 00000018  00000000  00000000  00014bf1  2**0
+ 14 .debug_ranges 00000018  00000000  00000000  00014bf5  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -317,7 +317,7 @@ _xpos += FONT_WIDTH;		// move pointer to the next character position
 // sends numeric character (Pin Number) to the LCD 
 // from binary 0 we send ASCII 1 ....
 void lcd_testpin(unsigned char temp) {
-   lcd_data(temp + '1' + TP_OFFSET - TP1);
+   lcd_data(temp + '1' + TP_OFFSET - TP_MIN);
      1b0:	f3 cf       	rjmp	.-26     	; 0x198 <lcd_data>
 
 000001b2 <lcd_spaces>:
@@ -2649,8 +2649,8 @@ void init_parts(void) {
      99a:	08 95       	ret
 
 0000099c <switch_tester_off>:
-void switch_tester_off(void)
-{
+  uart_newline();	// MAURO
+ #endif
  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
   lcd_powersave();			// set graphical display to power save mode
  #endif
@@ -3813,7 +3813,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   */
   wdt_reset();
      fea:	a8 95       	wdr
-  addr = &PinRLRHADCtab[LowPin-TP1];		// Address of combined RL / RH / ADC pin table
+  addr = &PinRLRHADCtab[LowPin-TP_MIN];		// Address of combined RL / RH / ADC pin table
      fec:	e6 2f       	mov	r30, r22
      fee:	f0 e0       	ldi	r31, 0x00	; 0
      ff0:	e2 58       	subi	r30, 0x82	; 130
@@ -3835,7 +3835,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   LoADCp = pgm_read_byte(addr);		// instruction for ADC Low-Pin, including | TXD_VAL
      ff8:	e4 90       	lpm	r14, Z
 
-  addr = &PinRLRHADCtab[TristatePin-TP1];
+  addr = &PinRLRHADCtab[TristatePin-TP_MIN];
      ffa:	e4 2f       	mov	r30, r20
      ffc:	f0 e0       	ldi	r31, 0x00	; 0
      ffe:	e2 58       	subi	r30, 0x82	; 130
@@ -3847,7 +3847,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   TriPinRH = TriPinRL + TriPinRL;			// instruction for TristatePin R_H
 #endif
 
-  addr = &PinRLRHADCtab[HighPin-TP1];
+  addr = &PinRLRHADCtab[HighPin-TP_MIN];
     1004:	e8 2f       	mov	r30, r24
     1006:	f0 e0       	ldi	r31, 0x00	; 0
     1008:	e2 58       	subi	r30, 0x82	; 130
@@ -5830,7 +5830,7 @@ void GetResistance(uint8_t HighPin, uint8_t LowPin)
   */
   wdt_reset();
     1b5e:	a8 95       	wdr
-  addr = &PinRLRHADCtab[LowPin-TP1];		// address of the combined RL / RH / ADC pin table
+  addr = &PinRLRHADCtab[LowPin-TP_MIN];		// address of the combined RL / RH / ADC pin table
     1b60:	e6 2f       	mov	r30, r22
     1b62:	f0 e0       	ldi	r31, 0x00	; 0
     1b64:	e2 58       	subi	r30, 0x82	; 130
@@ -5847,7 +5847,7 @@ void GetResistance(uint8_t HighPin, uint8_t LowPin)
   LoADCp = pgm_read_byte(addr);		// instruction for ADC Low-Pin, including | TXD_VAL
     1b6c:	24 91       	lpm	r18, Z
 
-  addr = &PinRLRHADCtab[HighPin-TP1];
+  addr = &PinRLRHADCtab[HighPin-TP_MIN];
     1b6e:	e8 2f       	mov	r30, r24
     1b70:	f0 e0       	ldi	r31, 0x00	; 0
     1b72:	e2 58       	subi	r30, 0x82	; 130
@@ -5878,7 +5878,7 @@ void GetResistance(uint8_t HighPin, uint8_t LowPin)
     1b8e:	c3 c1       	rjmp	.+902    	; 0x1f16 <GetResistance+0x3c8>
      return;	// no resistors are searched, if transistors are detected
   }
-  resnum = (LowPin - TP1 + HighPin - TP1 - 1);	// resistor-Number 0:1 = 0, 0:2 = 1, 1:2 = 2
+  resnum = (LowPin - TP_MIN + HighPin - TP_MIN - 1);	// resistor-Number 0:1 = 0, 0:2 = 1, 1:2 = 2
   // resistor measurement
   wdt_reset();
     1b90:	a8 95       	wdr
@@ -6381,7 +6381,7 @@ void GetResistance(uint8_t HighPin, uint8_t LowPin)
   if ((ptrans.count  + ntrans.count) > 0) {
      return;	// no resistors are searched, if transistors are detected
   }
-  resnum = (LowPin - TP1 + HighPin - TP1 - 1);	// resistor-Number 0:1 = 0, 0:2 = 1, 1:2 = 2
+  resnum = (LowPin - TP_MIN + HighPin - TP_MIN - 1);	// resistor-Number 0:1 = 0, 0:2 = 1, 1:2 = 2
     1e72:	9a 94       	dec	r9
     1e74:	98 0c       	add	r9, r8
            lrx1 = (lirx1 + lirx2) / 2;		//average of both R_L measurements
@@ -6884,7 +6884,7 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 #endif
 
 #ifdef AUTO_CAL
-  pin_combination = ((HighPin - TP1) * 3) + LowPin - TP1 - 1;	// coded Pin combination for capacity zero offset
+  pin_combination = ((HighPin - TP_MIN) * 3) + LowPin - TP_MIN - 1;	// coded Pin combination for capacity zero offset
     20d8:	8f ef       	ldi	r24, 0xFF	; 255
     20da:	86 0f       	add	r24, r22
     20dc:	9c 2f       	mov	r25, r28
@@ -6894,13 +6894,13 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     20e4:	80 93 4c 01 	sts	0x014C, r24
 #endif
 
-  HiPinR_L = pgm_read_byte(&PinRLRHADCtab[HighPin - TP1]);	//R_L mask for HighPin R_L load
+  HiPinR_L = pgm_read_byte(&PinRLRHADCtab[HighPin - TP_MIN]);	//R_L mask for HighPin R_L load
     20e8:	ec 2f       	mov	r30, r28
     20ea:	f0 e0       	ldi	r31, 0x00	; 0
     20ec:	e2 58       	subi	r30, 0x82	; 130
     20ee:	ff 4f       	sbci	r31, 0xFF	; 255
     20f0:	14 91       	lpm	r17, Z
-  LoPinR_L = pgm_read_byte(&PinRLRHADCtab[LowPin - TP1]);	//R_L mask for LowPin R_L load
+  LoPinR_L = pgm_read_byte(&PinRLRHADCtab[LowPin - TP_MIN]);	//R_L mask for LowPin R_L load
     20f2:	86 2f       	mov	r24, r22
     20f4:	90 e0       	ldi	r25, 0x00	; 0
     20f6:	fc 01       	movw	r30, r24
@@ -6908,11 +6908,11 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
     20fa:	ff 4f       	sbci	r31, 0xFF	; 255
     20fc:	f4 90       	lpm	r15, Z
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
-  HiPinR_H = pgm_read_byte((&PinRLRHADCtab[3])+HighPin-TP1);	//R_H mask for HighPin R_H load
-  LoADC = pgm_read_byte((&PinRLRHADCtab[6])+LowPin-TP1) | TXD_MSK;
+  HiPinR_H = pgm_read_byte((&PinRLRHADCtab[3])+HighPin-TP_MIN);	//R_H mask for HighPin R_H load
+  LoADC = pgm_read_byte((&PinRLRHADCtab[6])+LowPin-TP_MIN) | TXD_MSK;
 #else
   HiPinR_H = HiPinR_L + HiPinR_L;	//double for HighPin R_H load
-  LoADC = pgm_read_byte((&PinRLRHADCtab[3])+LowPin-TP1) | TXD_MSK;
+  LoADC = pgm_read_byte((&PinRLRHADCtab[3])+LowPin-TP_MIN) | TXD_MSK;
     20fe:	fc 01       	movw	r30, r24
     2100:	ef 57       	subi	r30, 0x7F	; 127
     2102:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -8449,16 +8449,16 @@ void ReadInductance(void) {
     29b4:	5c 01       	movw	r10, r24
         }
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
-        HiADC = pgm_read_byte((&PinRLRHADCtab[6])+rpins.pb[1]-TP1);	// Table of ADC Pins including | TXD_VAL
+        HiADC = pgm_read_byte((&PinRLRHADCtab[6])+rpins.pb[1]-TP_MIN);	// Table of ADC Pins including | TXD_VAL
 #else
-        HiADC = pgm_read_byte((&PinRLRHADCtab[3])+rpins.pb[1]-TP1);	// Table of ADC Pins including | TXD_VAL
+        HiADC = pgm_read_byte((&PinRLRHADCtab[3])+rpins.pb[1]-TP_MIN);	// Table of ADC Pins including | TXD_VAL
     29b6:	ea 2d       	mov	r30, r10
     29b8:	f0 e0       	ldi	r31, 0x00	; 0
     29ba:	ef 57       	subi	r30, 0x7F	; 127
     29bc:	ff 4f       	sbci	r31, 0xFF	; 255
     29be:	74 90       	lpm	r7, Z
 #endif
-        LoPinR_L = pgm_read_byte(&PinRLRHADCtab[rpins.pb[0]]-TP1);	//R_L mask for HighPin R_L load
+        LoPinR_L = pgm_read_byte(&PinRLRHADCtab[rpins.pb[0]]-TP_MIN);	//R_L mask for HighPin R_L load
     29c0:	8b 2d       	mov	r24, r11
     29c2:	90 e0       	ldi	r25, 0x00	; 0
     29c4:	fc 01       	movw	r30, r24
@@ -9177,9 +9177,9 @@ void ReadInductance(void) {
 00002dae <Retur2>:
     2dae:	66 2e       	mov	r6, r22
 
-#if TP1 > 0
-	subi	r22, TP1
-	subi	r24, TP1
+#if TP_MIN > 0
+	subi	r22, TP_MIN
+	subi	r24, TP_MIN
 #endif
 	mov	SelectLowPin, r22;
     2db0:	b8 2e       	mov	r11, r24
@@ -10130,16 +10130,16 @@ void GetVloss() {
      return;		// Voltage loss is already known (big Capacitor)
   }
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
-  LoADC = pgm_read_byte((&PinRLRHADCtab[6])+cap.ca-TP1) | TXD_MSK;
+  LoADC = pgm_read_byte((&PinRLRHADCtab[6])+cap.ca-TP_MIN) | TXD_MSK;
 #else
-  LoADC = pgm_read_byte((&PinRLRHADCtab[3])+cap.ca-TP1) | TXD_MSK;
+  LoADC = pgm_read_byte((&PinRLRHADCtab[3])+cap.ca-TP_MIN) | TXD_MSK;
     30ec:	f0 e0       	ldi	r31, 0x00	; 0
     30ee:	ef 57       	subi	r30, 0x7F	; 127
     30f0:	ff 4f       	sbci	r31, 0xFF	; 255
     30f2:	04 91       	lpm	r16, Z
     30f4:	e0 91 79 01 	lds	r30, 0x0179
 #endif
-  HiPinR_L = pgm_read_byte(&PinRLRHADCtab[cap.cb-TP1]);	//R_L mask for HighPin R_L load
+  HiPinR_L = pgm_read_byte(&PinRLRHADCtab[cap.cb-TP_MIN]);	//R_L mask for HighPin R_L load
     30f8:	f0 e0       	ldi	r31, 0x00	; 0
     30fa:	e2 58       	subi	r30, 0x82	; 130
     30fc:	ff 4f       	sbci	r31, 0xFF	; 255
@@ -10569,8 +10569,8 @@ void EE_check_init(void) {
           PartMode = PART_MODE_PNP;
     32ee:	b0 e1       	ldi	r27, 0x10	; 16
     32f0:	ab 2e       	mov	r10, r27
-
 end3:
+        uart_newline();		// MAURO  ('H')
   // the diode  is already shown on the LCD
 	if (ResistorsFound == 0)
 		goto tt_end;
@@ -11893,10 +11893,10 @@ TyUfAusgabe:
     3af0:	09 f4       	brne	.+2      	; 0x3af4 <main+0x8a6>
     3af2:	9f c0       	rjmp	.+318    	; 0x3c32 <main+0x9e4>
     3af4:	a7 b8       	out	0x07, r10	; 7
-	// POWER_OFF not selected, repeat measurement
 //  return 0;
 
 end3:
+        uart_newline();		// MAURO  ('H')
   // the diode  is already shown on the LCD
 	if (ResistorsFound == 0)
     3af6:	80 91 0e 01 	lds	r24, 0x010E
@@ -12035,11 +12035,11 @@ end3:
     3bc4:	01 1b       	sub	r16, r17
     3bc6:	11 23       	and	r17, r17
     3bc8:	11 f0       	breq	.+4      	; 0x3bce <main+0x980>
-    //   }
+          y = TP1;
+          z = TP3;
+       }
+#else
     // the following does the same as the above, but more cryptically (and in fewer instructions)
-       #if (TP2!=TP1+1 || TP3!=TP2+1)
-       #error code assumes TP1,2,3 are consecutive integers
-       #endif
        x = TP1+(ii>>1);
     3bca:	22 e0       	ldi	r18, 0x02	; 2
     3bcc:	01 c0       	rjmp	.+2      	; 0x3bd0 <main+0x982>
@@ -12051,6 +12051,7 @@ end3:
     3bd4:	0e 94 d5 00 	call	0x1aa	; 0x1aa <lcd_testpin>
     3bd8:	8f e5       	ldi	r24, 0x5F	; 95
     3bda:	90 e0       	ldi	r25, 0x00	; 0
+#endif
        lcd_testpin(x);  	//Pin-number 1
     3bdc:	0e 94 3a 01 	call	0x274	; 0x274 <lcd_fix_string>
     3be0:	80 2f       	mov	r24, r16

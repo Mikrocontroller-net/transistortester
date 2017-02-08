@@ -165,14 +165,14 @@ uint16_t GetESR(uint8_t hipin, uint8_t lopin) {
 
   }
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
-  LoADC = pgm_read_byte((&PinRLRHADCtab[6])+lopin-TP1) | TXD_MSK;
-  HiADC = pgm_read_byte((&PinRLRHADCtab[6])+hipin-TP1) | TXD_MSK;
+  LoADC = pgm_read_byte((&PinRLRHADCtab[6])+lopin-TP_MIN) | TXD_MSK;
+  HiADC = pgm_read_byte((&PinRLRHADCtab[6])+hipin-TP_MIN) | TXD_MSK;
 #else
-  LoADC = pgm_read_byte((&PinRLRHADCtab[3])+lopin-TP1) | TXD_MSK;
-  HiADC = pgm_read_byte((&PinRLRHADCtab[3])+hipin-TP1) | TXD_MSK;
+  LoADC = pgm_read_byte((&PinRLRHADCtab[3])+lopin-TP_MIN) | TXD_MSK;
+  HiADC = pgm_read_byte((&PinRLRHADCtab[3])+hipin-TP_MIN) | TXD_MSK;
 #endif
-  LoPinR_L = pgm_read_byte(&PinRLRHADCtab[lopin-TP1]);  //R_L mask for LowPin R_L load
-  HiPinR_L = pgm_read_byte(&PinRLRHADCtab[hipin-TP1]);	//R_L mask for HighPin R_L load
+  LoPinR_L = pgm_read_byte(&PinRLRHADCtab[lopin-TP_MIN]);  //R_L mask for LowPin R_L load
+  HiPinR_L = pgm_read_byte(&PinRLRHADCtab[hipin-TP_MIN]);	//R_L mask for HighPin R_L load
 
 #if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
     /* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
@@ -294,7 +294,7 @@ uint16_t GetESR(uint8_t hipin, uint8_t lopin) {
 #endif
    esrvalue = (sumvolt[2] * 10 * (unsigned long)RRpinMI) / (sumvolt[0]+sumvolt[2]);
    esrvalue += esrvalue / 14;		/* esrvalue + 7% */
-   esr0 = (int8_t)eeprom_read_byte(&EE_ESR_ZEROtab[hipin-TP1+lopin-TP1]);
+   esr0 = (int8_t)eeprom_read_byte(&EE_ESR_ZEROtab[hipin-TP_MIN+lopin-TP_MIN]);
    if (esrvalue > esr0) {
       esrvalue -= esr0;
    } else {

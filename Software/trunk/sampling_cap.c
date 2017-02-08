@@ -205,7 +205,7 @@ int32_t sampling_cap(byte HighPin, byte LowPin, byte opts)
    // note that the /8 is compensated for by the different bitshifts of sumxx and sumxy, and the +4 rounds this number properly
    if (!(opts&2)) 
    {
-      byte k = ((HighPin - TP1)*3) + LowPin - TP1 -1;
+      byte k = ((HighPin - TP_MIN)*3) + LowPin - TP_MIN -1;
       if (opts&1) c3-= eeprom_read_word(c_zero_tab2_hi+k);
       else c3-= eeprom_read_word(c_zero_tab2_lo+k);
    }

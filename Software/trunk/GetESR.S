@@ -162,9 +162,9 @@ GetESR:
 Retur2:
 #endif
 
-#if TP1 > 0
-	subi	r22, TP1
-	subi	r24, TP1
+#if TP_MIN > 0
+	subi	r22, TP_MIN
+	subi	r24, TP_MIN
 #endif
 	mov	SelectLowPin, r22;
 	mov	SelectHighPin, r24;

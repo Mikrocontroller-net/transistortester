@@ -47,10 +47,10 @@ ujt_exch_b:;
                     ntrans.b=Epin;
                     ntrans.c=B2pin;
                     // calculate eta
-                    ResistorChecked[ntrans.e - TP1 + ntrans.c - TP1 - 1] = 0;	// forget last resistance measurement
+                    ResistorChecked[ntrans.e - TP_MIN + ntrans.c - TP_MIN - 1] = 0;	// forget last resistance measurement
                     GetResistance(ntrans.c, ntrans.e);	// resistor value is in ResistorVal[resnum]
                     uint32_t v;
-                    uint32_t r=ResistorVal[ntrans.e - TP1 + ntrans.c - TP1 - 1];
+                    uint32_t r=ResistorVal[ntrans.e - TP_MIN + ntrans.c - TP_MIN - 1];
                     v=(r<<8)/(r+R_L_VAL);      // Vbb in units of supplyvoltage/256 ; perhaps should also take into account the about 20 ohm internal resistance?
                     max-=35;               // subtract about 0.7 volts (1 diode voltage drop) from the maximum emitter voltage seen; 35 is 0.7/5*256.
                     ntrans.gthvoltage=100ul*max/v;     // this is eta in percent, cf. http://www.allaboutcircuits.com/textbook/semiconductors/chpt-7/unijunction-transistor-ujt/
@@ -100,7 +100,7 @@ ujtdone:;
                 ntrans.c = diodes.Cathode[0];
              }
              if (ntrans.uBE > 1500) {
-                ResistorChecked[ntrans.e - TP1 + ntrans.c - TP1 - 1] = 0;	// forget last resistance measurement
+                ResistorChecked[ntrans.e - TP_MIN + ntrans.c - TP_MIN - 1] = 0;	// forget last resistance measurement
                 GetResistance(ntrans.c, ntrans.e);	// resistor value is in ResistorVal[resnum]
                 PartFound = PART_UJT;
              }

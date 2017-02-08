@@ -211,9 +211,7 @@
 	     ADC_DDR = 0;		//deactivate Software-UART
 	     Vext = W5msReadADC(TPext);	// read external voltage 
 	//     ADC_DDR = TXD_MSK;		//activate Software-UART 
-	 #ifdef WITH_UART
-	    uart_newline();		// MAURO replaced uart_putc(' ') by uart_newline()
-	 #endif
+	    uart_newline();		// MAURO replaced uart_putc(' ') by uart_newline(), 'Z'
 	 #if EXT_NUMERATOR <= (0xffff/U_VCC)
 	     Display_mV(Vext*EXT_NUMERATOR/EXT_DENOMINATOR,3);	// Display 3 Digits of this mV units
 	 #else
@@ -373,16 +371,16 @@
  #ifdef SamplingADC
       static const unsigned char eta_str[] MEM_TEXT = " eta=";
       lcd_next_line(0);
-      ResistorChecked[ntrans.e - TP1 + ntrans.c - TP1 - 1] = 0;	// forget last resistance measurement
+      ResistorChecked[ntrans.e - TP_MIN + ntrans.c - TP_MIN - 1] = 0;	// forget last resistance measurement
       GetResistance(ntrans.c, ntrans.e);	// resistor value is in ResistorVal[resnum]
-      DisplayValue(ResistorVal[ntrans.e - TP1 + ntrans.c - TP1 - 1],-1,LCD_CHAR_OMEGA,2);
+      DisplayValue(ResistorVal[ntrans.e - TP_MIN + ntrans.c - TP_MIN - 1],-1,LCD_CHAR_OMEGA,2);
       lcd_MEM_string(eta_str);		//"eta="
       DisplayValue(ntrans.gthvoltage,0,'%',3);
  #else /* ! SamplingADC */
       static const unsigned char R12_str[] MEM_TEXT = "R12=";
       lcd_next_line(0);
       lcd_MEM_string(R12_str);		//"R12="
-      DisplayValue(ResistorVal[ntrans.e - TP1 + ntrans.c - TP1 - 1],-1,LCD_CHAR_OMEGA,2);
+      DisplayValue(ResistorVal[ntrans.e - TP_MIN + ntrans.c - TP_MIN - 1],-1,LCD_CHAR_OMEGA,2);
       lcd_data(',');
       DisplayValue(((RR680PL * (unsigned long)(ADCconfig.U_AVCC - ntrans.uBE)) / ntrans.uBE)-RRpinPL,-1,LCD_CHAR_OMEGA,3);
  #endif	 /* SamplingADC */
@@ -485,6 +483,7 @@ showdiodecap:
   #else
         lcd_MEM_string(AT05volt+1);	// "@0-5V"
   #endif
+        uart_newline();			// MAURO Diode ('A')
  #else
   #warning Capacity measurement from high to low not possible for diodes without PULLUP_DISABLE option!
  #endif  /* PULLUP_DISABLE */
@@ -775,10 +774,12 @@ showdiodecap:
        lcd_space();
        lcd_MEM_string(Uf_str);			//"Uf="
        mVAusgabe(vak_diode_nr);
+       uart_newline();			// MAURO not verified ('D')
     } /* end if (vak_diode_nr < 5) */
 #endif
 #ifdef WITH_GRAPHICS
     PinLayoutLine('E','B','C'); 		//  Pin 1=E ...
+    uart_newline();			// MAURO OK BJT ('E')
 #endif
     goto tt_end;
     // end (PartFound == PART_TRANSISTOR)
@@ -980,6 +981,7 @@ showdiodecap:
        lcd_space();
        lcd_MEM_string(Uf_str);			//"Uf="
        mVAusgabe(0);
+       uart_newline();			// MAURO OK N-E-MOS/IGBT ('F')
     } /* end NumOfDiodes == 1 */
 #endif
 #ifdef WITH_GRAPHICS
@@ -988,6 +990,7 @@ showdiodecap:
     } else {
        PinLayoutLine('S','G','D'); 		//  Pin 1=...
     }
+       uart_newline();			// MAURO OK IGBT ('G')
 #endif
     goto tt_end;
   }  /* end (PartFound == PART_FET) */
@@ -1027,27 +1030,26 @@ showdiodecap:
           }
        }
        // ResistorVal[0] TP1:TP2, [1] TP1:TP3, [2] TP2:TP3
-
-    //   x = TP1;
-    //   y = TP3;
-    //   z = TP2;
-    //   if (ii == 1) {	/* TP1:TP3 is maximum */
-    //      x = TP1;
-    //      y = TP2;
-    //      z = TP3;
-    //   }
-    //   if (ii == 2) {	/* TP2:TP3 is maximum */
-    //      x = TP2;
-    //      y = TP1;
-    //      z = TP3;
-    //   }
+#if (TP2!=TP1+1 || TP3!=TP2+1)
+       x = TP1;
+       y = TP3;
+       z = TP2;
+       if (ii == 1) {	/* TP1:TP3 is maximum */
+          x = TP1;
+          y = TP2;
+          z = TP3;
+       }
+       if (ii == 2) {	/* TP2:TP3 is maximum */
+          x = TP2;
+          y = TP1;
+          z = TP3;
+       }
+#else
     // the following does the same as the above, but more cryptically (and in fewer instructions)
-       #if (TP2!=TP1+1 || TP3!=TP2+1)
-       #error code assumes TP1,2,3 are consecutive integers
-       #endif
        x = TP1+(ii>>1);
        y = TP3-ii;
        z = TP2+(ii>0);
+#endif
        lcd_testpin(x);  	//Pin-number 1
        lcd_MEM_string(Resistor_str);    // -[=]-
        lcd_testpin(y);		//Pin-number 2
@@ -1087,9 +1089,7 @@ showdiodecap:
   lcd_MEM_string(Bauteil);		//"Bauteil"
 #endif
 not_known:
-#ifdef WITH_UART	
    uart_newline();		// MAURO added
-#endif			
 #ifdef WITH_GRAPHICS
      lcd_big_icon(QUESTION);		// show big question mark
 #endif
@@ -1115,6 +1115,7 @@ TyUfAusgabe:
  #else
   Display_mV(ntrans.uBE,2);
  #endif
+  uart_newline();		// MAURO ('I')
 #endif
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - 
  tt_end:
@@ -1192,6 +1193,7 @@ shut_off:
 //  return 0;
 
 end3:
+        uart_newline();		// MAURO  ('H')
   // the diode  is already shown on the LCD
 	if (ResistorsFound == 0)
 		goto tt_end;
@@ -1241,6 +1243,12 @@ void init_parts(void) {
 
 void switch_tester_off(void)
 {
+ #ifdef WITH_UART
+  uart_putc('O');	// MAURO
+  uart_putc('F');	// MAURO
+  uart_putc('F');	// MAURO
+  uart_newline();	// MAURO
+ #endif
  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
   lcd_powersave();			// set graphical display to power save mode
  #endif

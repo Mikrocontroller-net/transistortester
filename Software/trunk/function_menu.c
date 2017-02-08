@@ -415,11 +415,7 @@ void message2line(uint8_t number) {
         lcd_MEM2_string(OFF_str);
      }
  lcd_clear_line();
- #ifdef WITH_UART	
- // if (_lcd_column>=LCD_LINE_LENGTH) {   //Mauro
-   uart_newline();                   // MAURO
- // }                                     //Mauro
- #endif 
+ uart_newline();                   // MAURO
 } /* end message2line() */
 
 /* ****************************************************************** */
@@ -513,10 +509,8 @@ void show_vext() {
 #else
      lcd_clear_line2();		// only one measurement use line 2
 #endif	/* TPex2 */
-#ifdef WITH_UART
      uart_newline();          // start of new measurement
      uart_newline();          // start of new measurement
-#endif
      lcd_MEM_string(Vext_str);          // Vext=
      Vext = W5msReadADC(TPext); // read external voltage 
 //     ADC_DDR = TXD_MSK;               //activate Software-UART 
@@ -528,9 +522,7 @@ void show_vext() {
 
 #ifdef TPex2
      lcd_clear_line2();
- #ifdef WITH_UART
      uart_newline();          // start of new measurement
- #endif
      lcd_MEM_string(Vext_str);          // Vext=
      Vext = W5msReadADC(TPex2); // read external voltage 2
   #if EXT_NUMERATOR <= (0xffff/U_VCC)

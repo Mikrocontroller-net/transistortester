@@ -22,7 +22,7 @@ uint8_t last_text_column;
 // sends numeric character (Pin Number) to the LCD 
 // from binary 0 we send ASCII 1 ....
 void lcd_testpin(unsigned char temp) {
-	lcd_data(temp + '1' + TP_OFFSET - TP1);
+	lcd_data(temp + '1' + TP_OFFSET - TP_MIN);
 }
 
 /* ******************************************************************************* */

@@ -813,6 +813,21 @@
  #endif
  #define PWM_MAX_COUNT 0x3ff
 #endif
+
+#if (TP1 < TP2) && (TP1 < TP3)
+ #define TP_MIN TP1
+#endif
+#if (TP2 < TP1) && (TP2 < TP3)
+ #define TP_MIN TP2
+#endif
+#if (TP3 < TP1) && (TP3 < TP2)
+ #define TP_MIN TP3
+#endif
+
+#ifndef WITH_UART
+ #define uart_newline()	// ignored
+#endif
+
 #if defined(LCD_SPI_OPEN_COL) && defined(WITH_ROTARY_SWITCH)
 // #if ((ROTARY_A_DDR == HW_LCD_RES_DDR) && (ROTARY_A_PIN == HW_LCD_RES_PIN)) || ((ROTARY_A_DDR == HW_LCD_EN_DDR) && (ROTARY_A_PIN == HW_LCD_EN_PIN)) || ((ROTARY_A_DDR == HW_LCD_RS_DDR) && (ROTARY_A_PIN == HW_LCD_RS_PIN)) || ((ROTARY_A_DDR == HW_LCD_B0_DDR) && (ROTARY_A_PIN == HW_LCD_B0_PIN)) || ((ROTARY_A_DDR == HW_LCD_CE_DDR) && (ROTARY_A_PIN == HW_LCD_CE_PIN)) 
 //  #warning Option WITH_ROTARY_SWITCH can not be used together with option LCD_SPI_OPEN_COL, if the ROTARY_A switch signals use the same port signals as the LCD.

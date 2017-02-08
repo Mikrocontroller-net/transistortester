@@ -59,17 +59,17 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 #endif
 
 #ifdef AUTO_CAL
-  pin_combination = ((HighPin - TP1) * 3) + LowPin - TP1 - 1;	// coded Pin combination for capacity zero offset
+  pin_combination = ((HighPin - TP_MIN) * 3) + LowPin - TP_MIN - 1;	// coded Pin combination for capacity zero offset
 #endif
 
-  HiPinR_L = pgm_read_byte(&PinRLRHADCtab[HighPin - TP1]);	//R_L mask for HighPin R_L load
-  LoPinR_L = pgm_read_byte(&PinRLRHADCtab[LowPin - TP1]);	//R_L mask for LowPin R_L load
+  HiPinR_L = pgm_read_byte(&PinRLRHADCtab[HighPin - TP_MIN]);	//R_L mask for HighPin R_L load
+  LoPinR_L = pgm_read_byte(&PinRLRHADCtab[LowPin - TP_MIN]);	//R_L mask for LowPin R_L load
 #if (((PIN_RL1 + 1) != PIN_RH1) || ((PIN_RL2 + 1) != PIN_RH2) || ((PIN_RL3 + 1) != PIN_RH3))
-  HiPinR_H = pgm_read_byte((&PinRLRHADCtab[3])+HighPin-TP1);	//R_H mask for HighPin R_H load
-  LoADC = pgm_read_byte((&PinRLRHADCtab[6])+LowPin-TP1) | TXD_MSK;
+  HiPinR_H = pgm_read_byte((&PinRLRHADCtab[3])+HighPin-TP_MIN);	//R_H mask for HighPin R_H load
+  LoADC = pgm_read_byte((&PinRLRHADCtab[6])+LowPin-TP_MIN) | TXD_MSK;
 #else
   HiPinR_H = HiPinR_L + HiPinR_L;	//double for HighPin R_H load
-  LoADC = pgm_read_byte((&PinRLRHADCtab[3])+LowPin-TP1) | TXD_MSK;
+  LoADC = pgm_read_byte((&PinRLRHADCtab[3])+LowPin-TP_MIN) | TXD_MSK;
 #endif
 
 #if DebugOut == 10

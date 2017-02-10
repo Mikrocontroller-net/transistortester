@@ -149,7 +149,6 @@ void lcd_next_line(uint8_t xx) {
    }
    lcd_set_cursor((uint8_t)(lcd_text_line * PAGES_PER_LINE), xx);
 #ifdef WITH_UART
-//   uart_putc(' ');
    uart_newline();		// start of new line
  #if WITH_UART == 2		// MAURO
    uart_putc('1'+lcd_text_line);	// MAURO
@@ -161,6 +160,8 @@ void lcd_next_line(uint8_t xx) {
 void lcd_next_line_wait(uint8_t xx) {
    lcd_next_line(xx);
    wait_for_key_5s_line2();		// wait 5s and clear last line
+   if (lcd_text_line > 2)
+     uart_newline();		// MAURO  ('H')
 }
 #endif
 

@@ -427,16 +427,18 @@ if (((test_mode & 0x0f) == 1) || (UnCalibrated == 2))
 // for full test or first time calibration, use external capacitor
 // Message C > 100nF at TP1 and TP3
 cap_found = 0;
+#if (TPCAP <= 0)
+lcd_clear();
+lcd_testpin(TP1);
+lcd_MEM_string(CapZeich);	// "-||-"
+lcd_testpin(TP3);
+lcd_MEM2_string(MinCap_str);	// " >100nF!"
+#endif
 for (ww=0;ww<64;ww++) {
   init_parts();
   #if (TPCAP >= 0)
   CalibrationCap();	// measure with internal calibration capacitor
   #else
-  lcd_clear();
-  lcd_testpin(TP1);
-  lcd_MEM_string(CapZeich);	// "-||-"
-  lcd_testpin(TP3);
-  lcd_MEM2_string(MinCap_str); // " >100nF!"
   PartFound = PART_NONE;
   ReadCapacity(TP3, TP1);	// look for capacitor > 100nF
   #endif
@@ -533,6 +535,7 @@ for (ww=0;ww<64;ww++) {
   }  /* end if (cap_found > 4) */
   lcd_line2();
   DisplayValue(cap.cval,cap.cpre,'F',4);
+  lcd_clear_line();
   lcd_refresh();		// write the pixels to display, ST7920 only
   wait_about200ms();			// wait additional time
 } // end for ww

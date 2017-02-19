@@ -2,7 +2,7 @@
 #include "Transistortester.h"
 #include "lcd-routines.h"
 
-#define MAX_CS 150	/* maximum key hold time in 10ms units  */
+#define MAX_CS 200	/* maximum key hold time in 10ms units  */
 
 /* *********************************************************** */
 /* wait max_time or previous key press */

@@ -142,7 +142,7 @@ void make_frequency() {
 #endif
      lcd_data('z');
      lcd_clear_line();
-     key_pressed = wait_for_key_ms(1500);	// check key and rotary encoder
+     key_pressed = wait_for_key_ms(2000);	// check key and rotary encoder
 #ifdef POWER_OFF
  #ifdef WITH_ROTARY_SWITCH
      if ((key_pressed != 0) || (rotary.incre > 0)) times = 0;	// reset counter, operator is active
@@ -150,7 +150,7 @@ void make_frequency() {
      if (key_pressed != 0)  times = 0;	// reset counter, operator is active
  #endif
 #endif
-     if(key_pressed >= 150) break;	// more than 1.4 seconds
+     if(key_pressed >= 200) break;	// more than 2.0 seconds
      if (key_pressed > 80) {	/* more than 0.8 seconds key press */
         // change of f_incre
         if (right) {

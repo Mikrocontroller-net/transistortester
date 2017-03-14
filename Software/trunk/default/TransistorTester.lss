@@ -380,7 +380,7 @@ void lcd_command(unsigned char temp1) {
 000001ee <lcd_line2>:
      1ee:	81 e0       	ldi	r24, 0x01	; 1
      1f0:	80 93 96 01 	sts	0x0196, r24
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163) || (LCD_ST_TYPE == 9341))
  ;
 #else
 	wait50us();		// wait at least 50us after every instruction for character LCD

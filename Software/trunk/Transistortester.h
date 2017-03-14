@@ -492,7 +492,7 @@ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR
 #endif
 
 #ifdef SamplingADC
- const unsigned char cap_for_l_meas_str[] MEM2_TEXT = {'1',LCD_CHAR_LINE1,LCD_CHAR_CAP,LCD_CHAR_LINE1,'3',' ','1','0','-','3','0','n','F','(','L',')',0};
+ const unsigned char cap_for_l_meas_str[] MEM2_TEXT = {'1',LCD_CHAR_LINE1,LCD_CHAR_CAP,LCD_CHAR_LINE1,'3',' ','4','-','3','0','n','F','(','L',')',0};
 #endif
 
 //End of EEPROM-Strings

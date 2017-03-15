@@ -40,7 +40,6 @@ static unsigned int peaksearch(unsigned int uu[], unsigned int *qptr, unsigned c
    unsigned char ipk;    // peak counter
    unsigned int firstpeak_sum;      // height of first peak
    unsigned int prevpeak_sum;       // height of previous peak
-   unsigned int totalpeak_sum;	// sum of peak heights including initial peak
    unsigned int sumpeak;        // sum of peaks (without initial peak)
    unsigned int firstpeak_x;     // time of first peak, with 6 bits of fraction
    unsigned int prevpeak_x;      // time of previous peak, with 6 bits of fraction
@@ -56,7 +55,6 @@ repeat:
    ipk=0;    // peak counter
    firstpeak_sum=0;      // height of first peak
    prevpeak_sum=0;       // height of previous peak
-   totalpeak_sum = 0;	// sum with initial peak
    sumpeak=0;        // sum of peaks
    firstpeak_x=0;     // time of first peak, with 6 bits of fraction
    prevpeak_x=0;      // time of previous peak, with 6 bits of fraction
@@ -72,8 +70,6 @@ repeat:
       delta = aa - bb;
 //    if (aa == 0)
       // the detection of zero is replaced by  detection of rising  (kubi)
-//      if ((sum_ab/64)+delta < 0) {
-//      if (bb > aa) 
       if (((int)(sum_ab/64)+delta) < 0) {
          sawzero=1;
       }
@@ -87,7 +83,9 @@ repeat:
       // hence the 6 bits of fraction in the peak location
       // on my atmega328p, in some cases most measured peak intervals differ by less than about 0.05, so 6 bits of fraction is just enough to not lose precision
 //      if (delta>0 && prevdelta<=0 && ii>2*dist-1) 
+
       if ((ipk < 2) && (ii > 160)) break;	// no chance to find a period
+
       if ((bb <= aa) && (sawzero == 1)) {
          // found (local) maximum
 //         xx = (ii<<6) - ((delta<<6)+(1<<5))/(delta-prevdelta);
@@ -95,12 +93,11 @@ repeat:
          if (uu[ii] != 0) xx -= ((delta<<6)+(1<<5))/(2*uu[ii]);
 //         if (maxpk>2-2) { uart_putc('E'); uart_int(x); uart_int(ipk); uart_int(sawzero); uart_int(dist); uart_newline(); }
 
-         totalpeak_sum += sum_ab;
          if (ipk != 0) {
             if (sum_ab < (3*dist)) break;  // stop if peak not significantly high
             sumpeak += sum_ab;
 #if (DEB_SAM == 5)
-            if (qptr) {
+            if (qptr) {	 /* report only the final peaks */
                lcd_set_cursor(6,0);
 	       uart_newline();
                lcd_data('i');
@@ -115,37 +112,28 @@ repeat:
             }
 #endif
             if (ipk==1) {
-               firstpeak_sum = sum_ab;
-               firstpeak_x = xx;
+               firstpeak_sum = sum_ab;		// amplitude sum of first peak
+               firstpeak_x = xx;		// position of first peak
 //            } else if (dist!=1) {
             } else {
             // sanity check: distance between peaks is expected to be 4*dist samples, so if >=8*dist it's suspicious
                unsigned char smp_per;
                smp_per = (xx - prevpeak_x)>>8;	// period with 4 sample units
                if (smp_per > (dist<<1)) {
-   //               break;
-//                  if (smp_per > 40) return 258<<6;  // no chance to find another peaks
                   dist = smp_per;		// found period / 4
                   goto repeat;
                }
             }
-//            if (!sawzero) {           // stop if the signal has not been zero since previous peak
-//               if (maxpk>2) break;
-// //           else goto skip;        // if we're still in preliminary search mode: just skip this peak hoping we'll find a real one later
-//               else continue;        // if we're still in preliminary search mode: just skip this peak hoping we'll find a real one later
-//            }
          }  /* ipk != 0 */
          sawzero=0;
          prevpeak_sum = sum_ab;
-//         if (maxpk>2) { myuart_putc('e'); myuart_putc(' '); uart_int(x-prevpeakx); uart_int(a+b); uart_int(x>>6); uart_newline(); }
          prevpeak_x = xx;
          ipk++;			// one more peak found
          if (ipk > maxpk) break;
       }
-//skip:
-//      prevdelta = delta;
-   } /* end for i */
+   } /* end for ii */
 
+   /* total data are analysed, ipk is now the count of peaks */
    if (ipk < 3) {
      per = 256<<6;	// set period illegal
      ipk = 0;

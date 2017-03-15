@@ -40,13 +40,13 @@ get_log:
  	lpm	r21, Z+
 ;  result = ((y2 - y1) * tabres ) / Log_Tab_Distance + y1; // interpolate
  	sub	r20, r28	;  (y2 - y1) 
-;;	sbc	r21, r29	;  hi8(y2 - y1) is allways zero
+	sbc	r21, r29	;  hi8(y2 - y1) 
  	mul	r20, r26	; * tabres   (maximum 19)
  	movw	r24, r0		;  r24:25 =  ((y2 - y1) * tabres )
-;;	mul	r20, r27	; hi8(tabres) allways zero
-;;	add	r25, r0
-;;	mul	r21, r26	; hi8(y2 - Y1) always zero
-;;	add	r25, r0
+	mul	r20, r27	; hi8(tabres) 
+	add	r25, r0
+	mul	r21, r26	; hi8(y2 - Y1) 
+	add	r25, r0
  	eor	r1, r1
  	movw	r22, r18	; Log_Tab_Distance
  	call	__udivmodhi4	;   ((y2 - y1) * tabres ) / Log_Tab_Distance

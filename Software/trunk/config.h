@@ -1057,5 +1057,5 @@ End of configuration
 #ifdef WITH_GRAPHICS
  #include "fonts/24x32_vertical_LSB.h"
 #endif
-
+// #define AUTO_LC_CAP 1  /* reread parallel capacity value for [RL] measurement */
 #endif /* not defined ADC_PORT */

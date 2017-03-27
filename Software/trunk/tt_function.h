@@ -112,7 +112,7 @@ int32_t sampling_cap(uint8_t HighPin, uint8_t LowPin, uint8_t opts);
 void sampling_lc(uint8_t LowPin, uint8_t HighPin);
 #define sampling_cap_pre -14
 void sampling_cap_calibrate(void);	// calibrate the sampling cap method
-void sampling_lc_calibrate(void);	// calibrate the sampling  LC method
+void sampling_lc_calibrate(uint8_t count);	// calibrate the sampling  LC method
 
 #ifdef WITH_XTAL
 void sampling_test_xtal(void);          // test presence of resonator or crystal between pin 1 and 3 (hardcoded)

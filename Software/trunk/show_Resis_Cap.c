@@ -246,6 +246,9 @@ void show_Resis13(void) {
         if (ResistorsFound != 0) {
            show_resis(TP1,TP3,1);
         } else {		/* no resistor found */
+ #if defined(SamplingADC) && defined(AUTO_LC_CAP)
+	   sampling_lc_calibrate(249);		// try a short time to fetch new capacity value
+ #endif
  #ifdef RMETER_WITH_L
            lcd_MEM_string(RESIS_13_str);
            lcd_MEM_string(RL_METER_str+4);	// " [R]" or "[RL]"

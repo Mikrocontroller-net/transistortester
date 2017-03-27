@@ -544,8 +544,8 @@ for (ww=0;ww<64;ww++) {
 
 ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples
 
-#ifdef SamplingADC
-  sampling_lc_calibrate();	// Cap for L-meas
+#if defined(SamplingADC) && !defined(AUTO_LC_CAP)
+  sampling_lc_calibrate(0);	// Cap for L-meas
 #endif
 
 

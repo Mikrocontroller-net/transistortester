@@ -161,9 +161,9 @@ CFLAGS += -DLCD_FG_COLOR=0xffff
 # choosen. With a font width below 8 more than 16 characters can be shown in one display line.
 #CFLAGS += -DFONT_5X8
 #CFLAGS += -DFONT_6X8
-CFLAGS += -DFONT_8X8
+#CFLAGS += -DFONT_8X8
 #CFLAGS += -DFONT_7X12
-#CFLAGS += -DFONT_8X12thin
+CFLAGS += -DFONT_8X12thin
 #CFLAGS += -DFONT_8X14
 #CFLAGS += -DFONT_8X15
 #CFLAGS += -DFONT_8X16
@@ -192,7 +192,7 @@ CFLAGS += -DWITH_SELFTEST
 # The T1 to T7 tests are usefull to find problems with your tester.
 # You can also disable the extended tests T1 to T7 with the option NO_TEST_T1_T7 to accelerate the calibration
 # for the atmega328 and atmega168.
-CFLAGS += -DNO_TEST_T1_T7
+#CFLAGS += -DNO_TEST_T1_T7
 
 # FREQUENCY_50HZ enables a 50 Hz frequency generator for up to one minute at the end of selftests.
 #CFLAGS += -DFREQUENCY_50HZ

@@ -149,7 +149,7 @@ End of configuration
 // All languages must be placed before the english text.
 // If none is actually selected, LANG_SELECTED is not set.
 #ifndef LANG_SELECTED		//default language is english
-   const unsigned char TestRunning[] MEM_TEXT = "Testing...";
+   const unsigned char TestRunning[] MEM_TEXT = "Testing.";
    const unsigned char BatWeak[] MEM_TEXT = "weak";
    const unsigned char BatEmpty[] MEM_TEXT = "empty!";
    const unsigned char TestFailed2[] MEM_TEXT = "damaged ";
@@ -159,7 +159,7 @@ End of configuration
    const unsigned char Thyristor[] MEM_TEXT = "Thyrist.";
    const unsigned char Unknown[] MEM_TEXT = " unknown";
    const unsigned char TestFailed1[] MEM_TEXT = "No, unknown, or";
-   const unsigned char OrBroken[] MEM_TEXT = "or damaged ";
+   const unsigned char Detected[] MEM_TEXT = " detected";
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'C'
  #ifdef WITH_SELFTEST

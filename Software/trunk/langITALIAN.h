@@ -1,6 +1,6 @@
 
 #if defined(LANG_ITALIAN)		//italiano
-   const unsigned char TestRunning[] MEM_TEXT = "Analizzo..."; 
+   const unsigned char TestRunning[] MEM_TEXT = "Analizzo"; 
    const unsigned char BatWeak[] MEM_TEXT = "debole";
    const unsigned char BatEmpty[] MEM_TEXT = "esaurita!"; 
    const unsigned char TestFailed2[] MEM_TEXT = "guasto ";	//"danneggiato "; 
@@ -10,7 +10,7 @@
    const unsigned char Thyristor[] MEM_TEXT = "SCR";
    const unsigned char Unknown[] MEM_TEXT = " ignoto";		//" sconosciuto.";
    const unsigned char TestFailed1[] MEM_TEXT = "Test fallito, o";
-   const unsigned char OrBroken[] MEM_TEXT = "o guasto ";	//"o danneggiato "; 
+   const unsigned char Detected[] MEM_TEXT = " detected";
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'C'	/* defines the character used for cathode */
  #ifdef WITH_SELFTEST

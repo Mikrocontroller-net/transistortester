@@ -1,5 +1,5 @@
 #if defined(LANG_HUNGARIAN)     //HUNGARIAN
-   const unsigned char TestRunning[] MEM_TEXT = "Meres..."; 
+   const unsigned char TestRunning[] MEM_TEXT = "Meres."; 
    const unsigned char BatWeak[] MEM_TEXT = "gyenge"; 
    const unsigned char BatEmpty[] MEM_TEXT = "ures!"; 
    const unsigned char TestFailed2[] MEM_TEXT = "hibas "; 
@@ -9,7 +9,7 @@
    const unsigned char Thyristor[] MEM_TEXT = "Tiriszt.";
    const unsigned char Unknown[] MEM_TEXT = " unknown"; // " ismeretlen"
    const unsigned char TestFailed1[] MEM_TEXT = "hibas vagy"; 
-   const unsigned char OrBroken[] MEM_TEXT = "nincs alkatresz ";
+   const unsigned char Detected[] MEM_TEXT = " detected";
    const unsigned char TestTimedOut[] MEM_TEXT = "Idotullepes!";
 
    #define Cathode_char 'C'

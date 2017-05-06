@@ -1,5 +1,5 @@
 #if defined(LANG_SLOVENE)                    //slovenian
-   const unsigned char TestRunning[] MEM_TEXT = "Testiranje..."; 
+   const unsigned char TestRunning[] MEM_TEXT = "Testiranje"; 
    const unsigned char BatWeak[] MEM_TEXT = "slaba!"; 
    const unsigned char BatEmpty[] MEM_TEXT = "prazna!"; 
    const unsigned char TestFailed2[] MEM_TEXT = "pokvarjen "; 
@@ -9,7 +9,7 @@
    const unsigned char Thyristor[] MEM_TEXT = "Tiristor";
    const unsigned char Unknown[] MEM_TEXT = " neznan"; 
    const unsigned char TestFailed1[] MEM_TEXT = "Ni, neznan, ali"; 
-   const unsigned char OrBroken[] MEM_TEXT = "ali zanic "; 
+   const unsigned char Detected[] MEM_TEXT = " detected";
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'C'
  #ifdef WITH_SELFTEST

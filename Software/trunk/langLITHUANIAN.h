@@ -1,5 +1,5 @@
 #if defined(LANG_LITHUANIAN) //Lithuanian
-   const unsigned char TestRunning[] MEM_TEXT = "Tikrinu..."; //"Testing...";
+   const unsigned char TestRunning[] MEM_TEXT = "Tikrinu"; //"Testing...";
    const unsigned char BatWeak[] MEM_TEXT = "silpna"; //"weak";
    const unsigned char BatEmpty[] MEM_TEXT = "negera"; //"empty!"
    const unsigned char TestFailed2[] MEM_TEXT = "sugedusi "; //"damaged ";
@@ -9,7 +9,7 @@
    const unsigned char Thyristor[] MEM_TEXT = "Tirist."; //"Thyristor";
    const unsigned char Unknown[] MEM_TEXT = " nezinoma"; //" unknown";
    const unsigned char TestFailed1[] MEM_TEXT = "Nezinoma arba"; //"Pajunkite detale" "No, unknown, or";
-   const unsigned char OrBroken[] MEM_TEXT = "sugedusi "; //"or damaged";
+   const unsigned char Detected[] MEM_TEXT = " detected";
    const unsigned char TestTimedOut[] MEM_TEXT = "Viso gero!"; //"Timeout!";
    #define Cathode_char 'C'
  #ifdef WITH_SELFTEST

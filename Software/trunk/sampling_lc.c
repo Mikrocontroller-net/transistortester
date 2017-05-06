@@ -7,6 +7,16 @@
 #include <stdlib.h>
 #include "Transistortester.h"
 
+// The PeakSearchMethod=0 tries to avoid the detection of the initial peak.
+// Therefore the flag sawzero is set to 0 at start and the detection is additionally 
+// blocked until the seak index ii has reached a value of more than 4*dist.
+// The PeakSearchMethod=1 allow the detection of the initial peak.
+// The flag sawzero is set to 1 at start, but the detected first peak is never
+// taking into account.
+// Therefore 3 detected peaks are required to build one period in this mode.
+
+#define PeakSearchMethod 0
+
 
 typedef uint8_t byte;
 
@@ -81,7 +91,13 @@ repeat:
    sumpeak=0;        // sum of peaks
    firstpeak_x=0;     // time of first peak, with 6 bits of fraction
    prevpeak_x=0;      // time of previous peak, with 6 bits of fraction
+#if PeakSearchMethod == 1
+ #define MinPK 2
    sawzero=1;                // flag: did we already encounter a zero?
+#else
+ #define MinPK 1
+   sawzero = 0;		// flag: did we allready encounter a growing signal?
+#endif
    prevdelta=1;
    mean_per = 256<<6;	// set period illegal
    for (ii=0;ii<255-dist;ii++) 
@@ -97,7 +113,12 @@ repeat:
         sum_ab = aa + bb;
         delta = aa - bb;
       // the detection of zero is replaced by  detection of rising  (kubi)
-        if (((int)(sum_ab/32)+delta) < 0) {
+#if PeakSearchMethod == 1
+        if (((int)(sum_ab/32)+delta) < 0)
+#else
+        if (((int)(sum_ab/4)+delta) < 0)
+#endif
+        {
            sawzero=1;
         }
 
@@ -130,16 +151,29 @@ repeat:
          uint16_t kdiv;
 //         kdiv = 2 * uu[ii];
          kdiv = delta - prevdelta;
+#if PeakSearchMethod == 1
          if (kdiv >= delta) xx -= (((long)delta * 64)+ 32) / kdiv;
+#else
+         if (kdiv >= delta) xx -= ((delta * 64)+ 32) / kdiv;
+#endif
 
-         if (ipk != 0) {
+#if PeakSearchMethod == 1
+         if (ipk != 0)
+#endif
+         {
             if (sum_ab < (3*dist)) break;  // stop if peak not significantly high
-            if (ipk==1) {
+#if PeakSearchMethod == 1
+            if (ipk==1)
+#else
+            if (ii < (dist*4)) goto illegal_peak;
+            if (ipk==0)
+#endif
+            {
                firstpeak_sum = sum_ab;		// amplitude sum of first peak
                firstpeak_x = xx;		// position of first peak
             } else {  // ipk > 1
                last_per = xx - prevpeak_x;	// length of last period
-               if ((ipk > 3) && (last_per > (mean_per + mean_per/2 + 32))) break;  // gap between peaks
+               if ((ipk > (MinPK+1)) && (last_per > (mean_per + mean_per/2 + 32))) break;  // gap between peaks
             // sanity check: distance between peaks is expected to be 4*dist samples
                unsigned char smp_per;
                smp_per = last_per>>8;	// period with 4 sample units
@@ -165,13 +199,16 @@ repeat:
             }
 #endif
          }  /* ipk != 0 */
-         sawzero=0;
          prevpeak_sum = sum_ab;		// save amplitude of last peak
          prevpeak_x = xx;		// save position of last peak
          ipk++;			// one more peak found
-         if (ipk > 2) {
-            mean_per = (prevpeak_x - firstpeak_x + ((ipk-2)>>1)) / (ipk-2);  // average period with rounding
+         if (ipk > MinPK) {
+            mean_per = (prevpeak_x - firstpeak_x + ((ipk-MinPK)>>1)) / (ipk-MinPK);  // average period with rounding
          }
+#if PeakSearchMethod != 1
+illegal_peak:
+#endif
+         sawzero=0;
          if (ipk > Maxpk) break;	// count of requested peaks is found
       }  /* end found maximum */
       prevdelta = delta;
@@ -185,7 +222,7 @@ repeat:
       // r is weighted average of peak2/peak1, peak3/peak2 and so on, weighed by respectively peak1, peak2 and so on
       // this can be calculated as r = (peak2+peak3+...+peak_m)/(peak1+peak2+peak_{m-1})
       rr = 0;
-      if (ipk > 2) {
+      if (ipk > MinPK) {
          unsigned int sumdiff = sumpeak - prevpeak_sum;
          rr = ((unsigned long)(sumpeak-firstpeak_sum)*1000)/sumdiff;
          // rr = exp(-pi/Q)  so Q = -pi/(ln(rr))

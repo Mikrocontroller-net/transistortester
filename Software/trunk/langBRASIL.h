@@ -1,5 +1,5 @@
 #if defined(LANG_BRASIL)					// Brazilian Portuguese
-   const unsigned char TestRunning[] MEM_TEXT = "Testando...";	//€€€€€€";
+   const unsigned char TestRunning[] MEM_TEXT = "Testando";	//€€€€€€";
    const unsigned char BatWeak[] MEM_TEXT = "fraca"; 		//€€€"; + 2
    const unsigned char BatEmpty[] MEM_TEXT = "acabou!"; 	//€€"; +2
    const unsigned char TestFailed2[] MEM_TEXT = "ou danificada..."; 	//€€€€";
@@ -9,7 +9,7 @@
    const unsigned char Thyristor[] MEM_TEXT = "Tiristor";
    const unsigned char Unknown[] MEM_TEXT = " O que? "; 	//€";
    const unsigned char TestFailed1[] MEM_TEXT = "Sem peca, ruim"; //€";
-   const unsigned char OrBroken[] MEM_TEXT = "danificada "; 	//€€";
+   const unsigned char Detected[] MEM_TEXT = " detected";
    const unsigned char TestTimedOut[] MEM_TEXT = "Tempo Esgotado!";
    #define Cathode_char 'K'
  #ifdef WITH_SELFTEST

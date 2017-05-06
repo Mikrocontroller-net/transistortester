@@ -1,5 +1,5 @@
 #if defined(LANG_DUTCH)                      //dutch
-   const unsigned char TestRunning[] MEM_TEXT = "Testen..."; 
+   const unsigned char TestRunning[] MEM_TEXT = "Testen."; 
    const unsigned char BatWeak[] MEM_TEXT = "laag"; 
    const unsigned char BatEmpty[] MEM_TEXT = "leeg!"; 
    const unsigned char TestFailed2[] MEM_TEXT = "defect "; 
@@ -9,7 +9,7 @@
    const unsigned char Thyristor[] MEM_TEXT = "Thyrist.";
    const unsigned char Unknown[] MEM_TEXT = " onbekend"; 
    const unsigned char TestFailed1[] MEM_TEXT = "Geen, onbekend,"; 
-   const unsigned char OrBroken[] MEM_TEXT = "of defect "; 
+   const unsigned char Detected[] MEM_TEXT = " detected";
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'C'
  #ifdef WITH_SELFTEST

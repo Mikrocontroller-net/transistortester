@@ -1,5 +1,5 @@
 #if defined(LANG_RUSSIAN)		//Russian
-   const unsigned char TestRunning[] MEM_TEXT = {'T','e','c',Cyr_t,Cyr_i,'p','o',Cyr_v,'a',Cyr_n,Cyr_i,'e','.','.','.',0}; //Тестирование...";
+   const unsigned char TestRunning[] MEM_TEXT = {'T','e','c',Cyr_t,Cyr_i,'p','o',Cyr_v,'a',Cyr_n,Cyr_i,'e',0}; //Тестирование...";
    const unsigned char BatWeak[] MEM_TEXT = {'C',Cyr_l,'a',Cyr_b,'a',Cyr_ja,0}; //слабая";
    const unsigned char BatEmpty[] MEM_TEXT = {Cyr_Z,'A','M','E','H','A',0}; //ЗАМЕНА";
    const unsigned char TestFailed2[] MEM_TEXT = {Cyr_p,'o',Cyr_v,'p','e',Cyr_zsch,Cyr_d,'.',' ',0}; //поврежд. ";
@@ -9,7 +9,8 @@
    const unsigned char Thyristor[] MEM_TEXT = {'T',Cyr_i,'p',Cyr_i,'c',Cyr_t,'o','p',0}; //Тиристор
    const unsigned char Unknown[] MEM_TEXT = {' ',Cyr_n,'e',Cyr_i,Cyr_z,Cyr_v,'e','c',Cyr_t,'.',0}; // неизвест.";
    const unsigned char TestFailed1[] MEM_TEXT = {'O',Cyr_t,'c','y',Cyr_t,'c',Cyr_t,Cyr_v,'y','e',Cyr_t,' ',Cyr_i,Cyr_l,Cyr_i,0}; //Отсутствует или";
-   const unsigned char OrBroken[] MEM_TEXT = {Cyr_p,'o',Cyr_v,'p','e',Cyr_zsch,Cyr_d,'e',Cyr_n,'a',' ',0}; //повреждена ";
+//   const unsigned char OrBroken[] MEM_TEXT = {Cyr_p,'o',Cyr_v,'p','e',Cyr_zsch,Cyr_d,'e',Cyr_n,'a',' ',0}; //повреждена ";
+   const unsigned char Detected[] MEM_TEXT = " detected";
    const unsigned char TestTimedOut[] MEM_TEXT = {'T','a',Cyr_j,Cyr_m,'a','y',Cyr_t,0}; //Таймаут
    #define Cathode_char 'C'
  #ifdef WITH_SELFTEST

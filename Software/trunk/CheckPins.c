@@ -959,6 +959,8 @@ widmes:
   ADC_PORT = TXD_VAL;		// all ADC outputs to Ground, keine Pull up
   R_DDR = 0;			// all resistor-outputs to Input
   R_PORT = 0;			// all resistor-outputs to Ground, no Pull up
+  lcd_data('.');		// report advance (suggested by Pieter-Tjerk)
+  lcd_refresh();
   return;
 
 //---------------------------------------------------------------------------

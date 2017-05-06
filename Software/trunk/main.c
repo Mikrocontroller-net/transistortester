@@ -284,7 +284,7 @@
 	//  if(((PartFound == PART_NONE) || (PartFound == PART_RESISTOR) || (PartFound == PART_DIODE)) ) {
 	  if(PartFound == PART_NONE) {
 	     // If no part is found yet, check separate if is is a capacitor
-	     lcd_data('C');
+//	     lcd_data('C');
 	     EntladePins();		// discharge capacities
 	     //measurement of capacities in all 3 combinations
 	     ReadCapacity(TP3, TP1);
@@ -568,9 +568,10 @@ showdiodecap:
      lcd_MEM_string(Bauteil);		//"Bauteil"
      lcd_MEM_string(Unknown); 		//" unbek."
      lcd_line2(); //2. row 
-     lcd_MEM_string(OrBroken); 		//"oder defekt "
      lcd_data(NumOfDiodes + '0');
+     lcd_data('*');
      lcd_MEM_string(AnKat_str);		//"->|-"
+     lcd_MEM_string(Detected);
      goto not_known;
      // end (PartFound == PART_DIODE)
   // ========================================

@@ -1,5 +1,5 @@
 #if defined(LANG_SPANISH)
-   const unsigned char TestRunning[] MEM_TEXT = "Testeando...";	
+   const unsigned char TestRunning[] MEM_TEXT = "Testeando";	
    const unsigned char BatWeak[] MEM_TEXT = "Poca bateria"; 	
    const unsigned char BatEmpty[] MEM_TEXT = "Sin bateria"; 	
    const unsigned char TestFailed2[] MEM_TEXT = "Pieza "; 	
@@ -9,7 +9,7 @@
    const unsigned char Thyristor[] MEM_TEXT = "Tiristor";
    const unsigned char Unknown[] MEM_TEXT = "No se ?"; 	
    const unsigned char TestFailed1[] MEM_TEXT = "Componente mal"; 
-   const unsigned char OrBroken[] MEM_TEXT = " o roto "; 
+   const unsigned char Detected[] MEM_TEXT = " detected";
    const unsigned char TestTimedOut[] MEM_TEXT = "Tiempo agotado!";
    #define Cathode_char 'K'
  #ifdef WITH_SELFTEST

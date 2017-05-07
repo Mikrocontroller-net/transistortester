@@ -9,7 +9,7 @@
    const unsigned char Thyristor[] MEM_TEXT = "Tiristor";
    const unsigned char Unknown[] MEM_TEXT = "No se ?"; 	
    const unsigned char TestFailed1[] MEM_TEXT = "Componente mal"; 
-   const unsigned char Detected[] MEM_TEXT = " detected";
+   const unsigned char Detected[] MEM_TEXT = " detecta";
    const unsigned char TestTimedOut[] MEM_TEXT = "Tiempo agotado!";
    #define Cathode_char 'K'
  #ifdef WITH_SELFTEST

@@ -257,6 +257,15 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
           ntrans.gthvoltage = 0;	//voltage GS (Source - Gate)
         }
         ntrans.current = (unsigned int)(((unsigned long)adc.lp1 * 10000) / RR680MI); // Id 1uA
+#ifdef SHOW_ICE
+ // Test for cutoff Voltage, idea from Pieter-Tjerk
+        R_DDR = LoPinRH | TriPinRH;
+	R_PORT = 0;			// Low + Tristate Pin with 470k to 0V
+	ADC_DDR = HiADCm;
+	ADC_PORT = HiADCp;		// High Pin to VCC
+	ntrans.ice0 = W10msReadADC(LowPin);
+        ntrans.ice0 -= ReadADC(TristatePin);	// Gate-Source Voltage
+#endif
         ntrans.count++;			// count as two, the inverse is identical
         goto saveNresult;		// save Pin numbers and exit
      }
@@ -295,6 +304,15 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
           ptrans.gthvoltage = 0;
         }
         ptrans.current = (unsigned int)(((unsigned long)(ADCconfig.U_AVCC - adc.hp1) * 10000) / RR680PL); // Id 1uA
+#ifdef SHOW_ICE
+//	Test for cutoff Voltage, idea from Pieter-Tjerk
+        ADC_PORT = TXD_VAL;		// direct outputs to GND
+        ADC_DDR = LoADCm;		//switch Low-Pin (assumed Drain) direct to GND,
+        R_DDR = TriPinRH | HiPinRH;	//High-Pin to output
+        R_PORT = TriPinRH | HiPinRH;	//High-Pin and Tristate-Pin across R_H to Vcc
+        ptrans.ice0 = W10msReadADC(TristatePin);	//measure voltage at assumed Source 
+        ptrans.ice0 -= ReadADC(HighPin);
+#endif
         ptrans.count++;			// count as two, the inverse is identical
         goto savePresult;		// save pin numbers and exit
      }

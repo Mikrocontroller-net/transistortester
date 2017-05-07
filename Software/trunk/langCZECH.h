@@ -17,7 +17,7 @@
 //const unsigned char TestFailed1[] MEM_TEXT = "Zadná, neznamá"; //€€";
    const unsigned char TestFailed1[] MEM_TEXT = {Cz_Z,Cz_a,'d','n',Cz_a,' ','n','e','z','n',Cz_a,'m',Cz_a,0}; //€€";
 //   const unsigned char OrBroken[] MEM_TEXT = {'n','e','b','o',' ','v','a','d','n',Cz_a,' ',0}; //€€";
-   const unsigned char Detected[] MEM_TEXT = " detected";
+   const unsigned char Detected[] MEM_TEXT = " detekuje";
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
    #define Cathode_char 'K'
  #ifdef WITH_SELFTEST

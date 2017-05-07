@@ -260,7 +260,11 @@
 	  AutoCheck(0x01);			//check, if selftest should be done, full selftest without MENU
 	 #endif
 	#endif
-	  lcd_line2();			//LCD position row2, column 1
+	#if FLASHEND > 0x1fff
+          lcd_clear_line2();			//LCD position row2, column 1
+        #else
+          lcd_line2();				//LCD position row2, column 1
+        #endif
 	  lcd_MEM_string(TestRunning);		//String: testing...
 	  lcd_refresh();			// write the pixels to display, ST7920 only
 	 #ifdef WITH_UART
@@ -929,6 +933,22 @@ showdiodecap:
        DisplayValue16(_trans->current,-6,'A',2);
        lcd_MEM_string(Vgs_str);		// "@Vg="
        Display_mV(_trans->gthvoltage,2);	//Gate-threshold voltage
+
+ #ifdef SHOW_ICE
+       // Display also the cutoff gate voltage, idea from Pieter-Tjerk
+       lcd_next_line(0);
+  #if LCD_LINES > 6
+       lcd_next_line(0);	// double line
+  #endif
+       lcd_data('I');
+  #if (LCD_LINE_LENGTH > 17)
+       lcd_data('d');
+  #endif
+       lcd_equal();			// lcd_data('=');
+       DisplayValue16(0,-5,'A',2);
+       lcd_MEM_string(Vgs_str);		// "@Vg="
+       Display_mV(_trans->ice0,2);	// cutoff Gate voltage
+ #endif
     }	/* end of enhancement or depletion mode WITH_GRAPHICS */
 #else	/* character display */
     if((PartMode&D_MODE) != D_MODE) {	//enhancement-MOSFET
@@ -960,6 +980,18 @@ showdiodecap:
        DisplayValue16(_trans->current,-6,'A',2);
        lcd_MEM_string(Vgs_str);		// "@Vg="
        Display_mV(_trans->gthvoltage,2);	//Gate-threshold voltage
+ #ifdef SHOW_ICE
+       // Display also the cutoff gate voltage, idea from Pieter-Tjerk
+       lcd_next_line_wait(0);
+       lcd_data('I');
+  #if (LCD_LINE_LENGTH > 17)
+       lcd_data('d');
+  #endif
+       lcd_equal();			// lcd_data('=');
+       DisplayValue16(0,-5,'A',2);
+       lcd_MEM_string(Vgs_str);		// "@Vg="
+       Display_mV(_trans->ice0,2);	// cutoff Gate voltage
+ #endif
     }
 #endif  /* WITH_GRAPHICS or without */
 

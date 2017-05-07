@@ -9,7 +9,7 @@
    const unsigned char Thyristor[] MEM_TEXT = "Tiriszt.";
    const unsigned char Unknown[] MEM_TEXT = " unknown"; // " ismeretlen"
    const unsigned char TestFailed1[] MEM_TEXT = "hibas vagy"; 
-   const unsigned char Detected[] MEM_TEXT = " detected";
+   const unsigned char Detected[] MEM_TEXT = " erzekeli";
    const unsigned char TestTimedOut[] MEM_TEXT = "Idotullepes!";
 
    #define Cathode_char 'C'

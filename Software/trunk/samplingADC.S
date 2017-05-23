@@ -31,7 +31,59 @@
 #define Lessdelay (256-2*TICS_PER_ADC_CLOCK)
 
 
-.section .text
+.section .progmem.gcc
+; We put this code not simply generically in .text, but in .progmem.gcc.
+; Gcc's linker script forces this section to be immediately after the interrupt vectors,
+; and it seems in case of the transistortester code nothing else ends up in this section.
+; We also put the genfreq code at the start of this file, so it will be the first thing
+; after the vectors. This guarantees that the condition on genfreq_jmpbase (see below) is satisfied.
+
+#ifdef WITH_XTAL
+genfreq:
+	; generate signal with frequency CPUclock / ( 8 + R11 + R10/256 )
+	; generate r19 periods
+	; to do this, we have a loop where we jump back to r27:31 in "normal" case, or (r27:31)-1 in case of "carry" of the fractional bits
+	mov	r19,r0
+        ldi	r27, lo8(gs(genfreq_jmpbase))
+        sub	r27,r11
+	ldi	r26,0      ; accumulated backlog
+	push	r30
+	push	r31
+        ldi     r31, hi8(gs(genfreq_jmpbase))
+;
+; NOTE: we assume that lo8(gs(genfreq_jmpbase)) > 8 so r31 never needs to be updated
+; this is guaranteed due to the placement in .progmem.gcc, see the above comment.
+;
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	mov	r30,r27
+genfreq_jmpbase:
+	AOUT	R_PORT, R18	;  = Rport_1
+	AOUT	R_PORT, R14	;  = Rport_0
+	dec	r19
+	breq	genfreq_end1
+	add	r26, r10
+	sbc	r30, r1
+        ijmp
+
+genfreq_end1:
+
+ 	AOUT	R_DDR, R16	;  R_DDR = Rddr_1	; switch to "active" state (relatively high impedance in case of crystal measurement) immediately after the last impulse, to preserve a positive DC component
+	pop	r31
+	pop	r30
+	sbrs 	r24,smplADC_sck		; should we short-circuit the DUT (crystal)?
+	rjmp genfreq_end
+	in 	r26, _SFR_IO_ADDR(ADC_DDR)
+	ori 	r26,(1<<TP1)|(1<<TP2)|(1<<TP3)
+	AOUT 	ADC_DDR,r26
+	rjmp genfreq_end
+#endif
+
 
 samplingADC:
 samplingADC_freqgen:
@@ -224,53 +276,6 @@ L11:	dec r26
 	pop	r31
 	pop	r30
 	rjmp	waitevent
-
-
-#ifdef WITH_XTAL
-genfreq:
-	; generate signal with frequency CPUclock / ( 8 + R11 + R10/256 )
-	; generate r19 periods
-	; to do this, we have a loop where we jump back to r27:31 in "normal" case, or (r27:31)-1 in case of "carry" of the fractional bits
-	mov	r19,r0
-        ldi	r27, lo8(gs(genfreq_jmpbase))
-        sub	r27,r11
-	ldi	r26,0      ; accumulated backlog
-	push	r30
-	push	r31
-	mov	r30,r27
-        ldi     r31, hi8(gs(genfreq_jmpbase))
-;
-; NOTE: we ASSUME that lo8(gs(genfreq_jmpbase)) > 8 so r31 never needs to be updated; there is NOTHING which guarantees this!
-;
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	mov	r30,r27
-genfreq_jmpbase:
-	AOUT	R_PORT, R18	;  = Rport_1
-	AOUT	R_PORT, R14	;  = Rport_0
-	dec	r19
-	breq	genfreq_end1
-	add	r26, r10
-	sbc	r30, r1
-        ijmp
-
-genfreq_end1:
-
- 	AOUT	R_DDR, R16	;  R_DDR = Rddr_1	; switch to "active" state (relatively high impedance in case of crystal measurement) immediately after the last impulse, to preserve a positive DC component
-	pop	r31
-	pop	r30
-	sbrs 	r24,smplADC_sck		; should we short-circuit the DUT (crystal)?
-	rjmp genfreq_end
-	in 	r26, _SFR_IO_ADDR(ADC_DDR)
-	ori 	r26,(1<<TP1)|(1<<TP2)|(1<<TP3)
-	AOUT 	ADC_DDR,r26
-	rjmp genfreq_end
-#endif
 
 
 backtosleep2:

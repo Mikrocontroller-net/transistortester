@@ -810,6 +810,7 @@ checkDiode:
   // component has current
   //Test if Diode
   ADC_PORT = TXD_VAL;
+  R_DDR = HiPinRH;              // enable resistor from HiPin to ground during the upcoming discharge, so if there's some leakage in the circuit (e.g., via protection diodes) this can't upset the discharge test
   for (ii=0;ii<200;ii++) {
      ADC_DDR = LoADCm | HiADCm; // discharge by short of Low and High side
      wait_about5ms();		// Low and Highpin to GND for discharge

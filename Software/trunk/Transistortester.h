@@ -207,7 +207,10 @@ End of configuration
  const unsigned char Bat_str[] MEM_TEXT = "Bat. ";
  const unsigned char OK_str[] MEM_TEXT = "OK";
 #if FLASHEND > 0x1fff
- const unsigned char DC_Pwr_Mode_str[] MEM_TEXT = "DC Pwr Mode";
+ #ifndef DC_PWR_TEXT 
+  #define DC_PWR_TEXT "DC Pwr Mode"
+ #endif
+ const unsigned char DC_Pwr_Mode_str[] MEM_TEXT = DC_PWR_TEXT;
 #endif
  const unsigned char mosfet_str[] MEM_TEXT = "-MOS";
  const unsigned char jfet_str[] MEM_TEXT = "JFET";

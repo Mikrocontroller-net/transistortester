@@ -89,12 +89,13 @@ COMMON uint8_t diode_sequence;
 
 typedef struct {
   unsigned long hfe;		//current amplification factor 
-  unsigned int uBE;		//B-E-voltage of the Transistor or RDS for E-MOS
+  unsigned int uBE;		//B-E-voltage of the Transistor or RDS for E-MOS; Idss for JFET
   unsigned int current;		// current of Drain in 1uA
-  unsigned int ice0;		// for BJT ICEO in 1uA
+  unsigned int ice0;		// for BJT ICEO in 1uA; for FET cut-off voltage in mV
   unsigned int gthvoltage;	//Gate-threshold voltage 
   				// for bipolar gthvoltage is ICEs in 1uA
  #define ices gthvoltage
+	// note: don't change the total size of the above fields, since the offsets of the following 3 fields are hard-coded in PinLayout.S
   uint8_t b,c,e;		//pins of the Transistor
   uint8_t count;
 }trans_t;

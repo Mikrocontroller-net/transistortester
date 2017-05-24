@@ -936,19 +936,21 @@ showdiodecap:
 
  #ifdef SHOW_ICE
        // Display also the cutoff gate voltage, idea from Pieter-Tjerk
-       lcd_next_line(0);
+       if (_trans->ice0<4800) { // can't trust cutoff voltage if close to 5V supply voltage, since then the transistor may not have been cut off at all
+          lcd_next_line(0);
   #if LCD_LINES > 6
-       lcd_next_line(0);	// double line
+          lcd_next_line(0);	// double line
   #endif
-       lcd_data('I');
+          lcd_data('I');
   #if (LCD_LINE_LENGTH > 17)
-       lcd_data('d');
+          lcd_data('d');
   #endif
-       lcd_equal();			// lcd_data('=');
-       DisplayValue16(0,-5,'A',2);
-       lcd_MEM_string(Vgs_str);		// "@Vg="
-       Display_mV(_trans->ice0,2);	// cutoff Gate voltage
+          lcd_equal();			// lcd_data('=');
+          DisplayValue16(0,-5,'A',2);
+          lcd_MEM_string(Vgs_str);		// "@Vg="
+          Display_mV(_trans->ice0,2);	// cutoff Gate voltage
  #endif
+       }
     }	/* end of enhancement or depletion mode WITH_GRAPHICS */
 #else	/* character display */
     if((PartMode&D_MODE) != D_MODE) {	//enhancement-MOSFET
@@ -982,15 +984,26 @@ showdiodecap:
        Display_mV(_trans->gthvoltage,2);	//Gate-threshold voltage
  #ifdef SHOW_ICE
        // Display also the cutoff gate voltage, idea from Pieter-Tjerk
-       lcd_next_line_wait(0);
-       lcd_data('I');
+       if (_trans->ice0<4800) { // can't trust cutoff voltage if close to 5V supply voltage, since then the transistor may not have been cut off at all
+          lcd_next_line_wait(0);
+          lcd_data('I');
   #if (LCD_LINE_LENGTH > 17)
-       lcd_data('d');
+          lcd_data('d');
   #endif
-       lcd_equal();			// lcd_data('=');
-       DisplayValue16(0,-5,'A',2);
-       lcd_MEM_string(Vgs_str);		// "@Vg="
-       Display_mV(_trans->ice0,2);	// cutoff Gate voltage
+          lcd_equal();			// lcd_data('=');
+          DisplayValue16(0,-5,'A',2);
+          lcd_MEM_string(Vgs_str);		// "@Vg="
+          Display_mV(_trans->ice0,2);	// cutoff Gate voltage
+       }
+ #endif
+ #ifdef FET_Idss
+       // display the I_DSS, if measured
+       if (_trans->uBE!=0) {
+          lcd_next_line_wait(0);
+          static const unsigned char str_Idss[] MEM_TEXT = "Idss=";
+          lcd_MEM_string(str_Idss);
+          DisplayValue16(_trans->uBE,-6,'A',2);
+       }
  #endif
     }
 #endif  /* WITH_GRAPHICS or without */

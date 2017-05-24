@@ -2,6 +2,30 @@
 #include <stdlib.h>
 #include "Transistortester.h"
 
+
+#ifdef FET_Idss
+uint16_t expand_FET_quadratic(uint16_t v, uint16_t i)
+// assuming a datapoint of Vgs=v, Id=i, tries to calculate Idss (i.e., Id at Vgs=0)
+// assumes ntrans.ice0 is Vpinch (i.e., Vgs at which Id=0)
+{
+   v=ntrans.ice0-v;
+   for (;;) {
+      uint8_t d;
+      d=v>>8;
+      if (d==0) return 0;   // prevent infinite loop
+      v+=d;      // increase v by 0.4 %;  unfortunately the compiler doesn't do this very smartly, insists on creating a 16-bit temporary variable for d
+      d=i>>8;
+      i+=d;     
+      i+=d;      // increase i by 0.8 %
+      if (d>(40000>>8)) return 0;       
+         // no Idss measurement if Idss exceeds 40 mA, the ATmega's maximum pin current
+         // note that this is actually quite safe, since by the time there's 40 mA running, the Vgs will be 40mA * 20 ohm = 0.8 V, so quite far from 0, so Id will be less than those 40 mA
+      if (v>ntrans.ice0) return i;      // V exceeds Vp, so we've reached Vgs=0 without Id exceeding 40 mA, so we can safely do the Idss measurement
+   }
+}
+#endif
+
+
 //******************************************************************
 void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   {
@@ -265,6 +289,26 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 	ADC_PORT = HiADCp;		// High Pin to VCC
 	ntrans.ice0 = W10msReadADC(LowPin);
         ntrans.ice0 -= ReadADC(TristatePin);	// Gate-Source Voltage
+ #ifdef FET_Idss
+        {
+           uint16_t v,i;
+           // extrapolate the quadratic relationship between Id and Vgs, to estimate Idss
+           i=expand_FET_quadratic(ntrans.gthvoltage,ntrans.current);
+           // i=0 if estimated Idss would exceed 40 mA, so don't measure then
+           if (i!=0) {
+               R_PORT = 0; 
+               R_DDR = TriPinRH;	// gate to ground via RH
+               ADC_PORT = HiADCp;       // drain to Vcc, source to gnd, both without resistors
+               ADC_DDR = HiADCm|LoADCp;
+               adc.lp2 = W10msReadADC(LowPin);	//measure voltage at the Source; this is the voltage drop across the pin's ~20 ohm internal resistance!
+               ADC_DDR = 0;             // disconnect drain and source immediately after measurement, since quite a lot of current may flow
+               // this is almost the Idss, since the gate-source voltage is almost 0 (only the voltage drop across that 20 ohm resistance)
+               i = (unsigned int)(((unsigned long)adc.lp2 * 10000) / pin_rmi); // Idss 1uA
+               i=expand_FET_quadratic(adc.lp2,i);
+           }
+           ntrans.uBE=i;
+        }
+ #endif
 #endif
         ntrans.count++;			// count as two, the inverse is identical
         goto saveNresult;		// save Pin numbers and exit

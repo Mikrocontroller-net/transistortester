@@ -575,7 +575,7 @@ showdiodecap:
      lcd_data(NumOfDiodes + '0');
      lcd_data('*');
      lcd_MEM_string(AnKat_str);		//"->|-"
-     lcd_MEM_string(Detected);
+     lcd_MEM_string(Detected);		//" detected"
      goto not_known;
      // end (PartFound == PART_DIODE)
   // ========================================
@@ -914,16 +914,16 @@ showdiodecap:
        DisplayValue16(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance
  #endif
     } else {   /* depletion mode */
- #if LCD_LINES > 6
-       lcd_next_line(TEXT_RIGHT_TO_ICON);	// Make sure to be under the icon
- #endif
        if ((PartMode&0x0f)  != PART_MODE_JFET) {     /* kein JFET */
           ReadCapacity(_trans->b,_trans->e);	//measure capacity
           lcd_show_Cg();	// show Cg=xxxpF
        }
-       lcd_next_line(0);	// single line
+       // set cursor below the icon
+  #define LINE_BELOW_ICON ((ICON_HEIGHT/8)/((FONT_HEIGHT+7)/8))
  #if LCD_LINES > 6
-       lcd_next_line(0);	// double line
+       lcd_set_cursor((LINE_BELOW_ICON + 1) * PAGES_PER_LINE,0);
+ #else
+       lcd_set_cursor(LINE_BELOW_ICON * PAGES_PER_LINE,0);
  #endif
        lcd_data('I');
  #if (LCD_LINE_LENGTH > 17)
@@ -937,10 +937,7 @@ showdiodecap:
  #ifdef SHOW_ICE
        // Display also the cutoff gate voltage, idea from Pieter-Tjerk
        if (_trans->ice0<4800) { // can't trust cutoff voltage if close to 5V supply voltage, since then the transistor may not have been cut off at all
-          lcd_next_line(0);
-  #if LCD_LINES > 6
-          lcd_next_line(0);	// double line
-  #endif
+          lcd_next_line_wait(0);
           lcd_data('I');
   #if (LCD_LINE_LENGTH > 17)
           lcd_data('d');
@@ -949,6 +946,15 @@ showdiodecap:
           DisplayValue16(0,-5,'A',2);
           lcd_MEM_string(Vgs_str);		// "@Vg="
           Display_mV(_trans->ice0,2);	// cutoff Gate voltage
+  #ifdef FET_Idss
+       // display the I_DSS, if measured
+       if (_trans->uBE!=0) {
+          lcd_next_line_wait(0);
+          static const unsigned char str_Idss[] MEM_TEXT = "Idss=";
+          lcd_MEM_string(str_Idss);
+          DisplayValue16(_trans->uBE,-6,'A',2);
+       }
+  #endif
  #endif
        }
     }	/* end of enhancement or depletion mode WITH_GRAPHICS */
@@ -995,8 +1001,7 @@ showdiodecap:
           lcd_MEM_string(Vgs_str);		// "@Vg="
           Display_mV(_trans->ice0,2);	// cutoff Gate voltage
        }
- #endif
- #ifdef FET_Idss
+  #ifdef FET_Idss
        // display the I_DSS, if measured
        if (_trans->uBE!=0) {
           lcd_next_line_wait(0);
@@ -1004,6 +1009,7 @@ showdiodecap:
           lcd_MEM_string(str_Idss);
           DisplayValue16(_trans->uBE,-6,'A',2);
        }
+  #endif
  #endif
     }
 #endif  /* WITH_GRAPHICS or without */

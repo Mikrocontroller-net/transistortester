@@ -5,8 +5,8 @@
 
 #ifdef FET_Idss
 uint16_t expand_FET_quadratic(uint16_t v0, uint16_t v1, uint16_t i)
-// assuming a datapoint of Vgs=v, Id=i, tries to calculate Idss (i.e., Id at Vgs=0)
-// assumes ntrans.ice0 is Vpinch (i.e., Vgs at which Id=0)
+// assuming a datapoint of Vgs=v1, Id=i, tries to calculate Idss (i.e., Id at Vgs=0)
+// v0 must be the Vgs at which Id=0
 {
    v1 = v0-v1;
    for (;;) {
@@ -294,7 +294,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
            uint16_t i16;
            // extrapolate the quadratic relationship between Id and Vgs, to estimate Idss
            i16 = expand_FET_quadratic(ntrans.ice0,ntrans.gthvoltage,ntrans.current);
-           // i=0 if estimated Idss would exceed 40 mA, so don't measure then
+           // i16=0 if estimated Idss would exceed 40 mA, so don't measure then
            if (i16 != 0) {
 //               R_PORT = 0; 
                R_DDR = TriPinRH;	// gate to ground via RH
@@ -361,7 +361,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
            uint16_t i16;
            // extrapolate the quadratic relationship between Id and Vgs, to estimate Idss
            i16 = expand_FET_quadratic(ptrans.ice0,ptrans.gthvoltage,ptrans.current);
-           // i=0 if estimated Idss would exceed 40 mA, so don't measure then
+           // i16=0 if estimated Idss would exceed 40 mA, so don't measure then
            if (i16 != 0) {
                R_PORT = TriPinRH; 
                R_DDR = TriPinRH;	// gate to VCC via RH

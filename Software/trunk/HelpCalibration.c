@@ -29,6 +29,7 @@
        if (sub_line == 0) lcd_clear();  // clear display, line_nr is 0 or 4
        lcd_set_cursor(sub_line*PAGES_PER_LINE ,0);
        uart_newline();
+       wdt_reset();
        line_nr = (line_nr + 1) % LCD_LINES;
        for (ii=0;ii<space_pos;ii++) {
          zeich = pgm_read_byte(&HelpCalibration_str[ii+jj]);

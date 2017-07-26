@@ -349,7 +349,7 @@ CFLAGS += -DBAT_POOR=6400
 # "DC_Pwr_Mode", where time limits of the additional functions are switched off.
 # The "DC_Pwr_Mode" is also started, if the battery voltage is detected below 0.9V
 # regardless to the state of the DC_PWR option.
-CFLAGS += -DDC_PWR=9500
+CFLAGS += -DDC_PWR=10500
 
 # Voltage divider for battery voltage measurement  10k / 3.3k = 133/33
 #CFLAGS += -DBAT_NUMERATOR=133

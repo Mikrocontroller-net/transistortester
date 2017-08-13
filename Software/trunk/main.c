@@ -215,7 +215,7 @@
 	 #if EXT_NUMERATOR <= (0xffff/U_VCC)
 	     Display_mV(Vext*EXT_NUMERATOR/EXT_DENOMINATOR,3);	// Display 3 Digits of this mV units
 	 #else
-	     Display_mV((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,3);	// Display 3 Digits of this mV units
+             DisplayValue((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);  // Display 3 Digits of this mV units
 	 #endif
 	     lcd_refresh();		// write the pixels to display, ST7920 only
 	     wait_about300ms();		// delay to read the Vext= message

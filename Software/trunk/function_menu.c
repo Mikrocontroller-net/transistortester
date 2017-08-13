@@ -517,7 +517,7 @@ void show_vext() {
   #if EXT_NUMERATOR <= (0xffff/U_VCC)
      Display_mV(Vext*EXT_NUMERATOR/EXT_DENOMINATOR,3); // Display 3 Digits of this mV units
   #else
-     Display_mV((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,3);  // Display 3 Digits of this mV units
+     DisplayValue((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);  // Display 3 Digits of this mV units
   #endif
 
 #ifdef TPex2
@@ -528,7 +528,7 @@ void show_vext() {
   #if EXT_NUMERATOR <= (0xffff/U_VCC)
      Display_mV(Vext*EXT_NUMERATOR/EXT_DENOMINATOR,3); // Display 3 Digits of this mV units
   #else
-     Display_mV((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,3);  // Display 3 Digits of this mV units
+     DisplayValue((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);  // Display 3 Digits of this mV units
   #endif
 #endif	/* TPex2 */
 #if defined(POWER_OFF) && defined(BAT_CHECK)

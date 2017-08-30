@@ -452,24 +452,37 @@
  #define Cz_y	0x1d
  #define Cz_z	0x1e
  #define Cz_Z	0x1f
-#else
-  // use ASCII replacements for czech characters
-  #define Cz_a	'a'
-  #define Cz_c	'c'
-  #define Cz_d	'd'
-  #define Cz_e	'e'
-  #define Cz_ee	'e'
-  #define Cz_i	'i'
-  #define Cz_n	'n'
-  #define Cz_o	'o'
-  #define Cz_r	'r'
-  #define Cz_s	's'
-  #define Cz_t	't'
-  #define Cz_u	'u'
-  #define Cz_uu	'u'
-  #define Cz_y	'y'
-  #define Cz_z	'z'
-  #define Cz_Z	'Z'
+ // Caractères accentues francais
+ #define Fr_a_grave	0x10
+ #define Fr_a_circ	0x11
+ #define Fr_e_aigu	0x12
+ #define Fr_e_circ	0x13
+ #define Fr_e_grave 0x14 
+#else 	
+ // use ASCII replacements for czech characters
+ #define Cz_a	'a'
+ #define Cz_c	'c'
+ #define Cz_d	'd'
+ #define Cz_e	'e'
+ #define Cz_ee	'e'
+ #define Cz_i	'i'
+ #define Cz_n	'n'
+ #define Cz_o	'o'
+ #define Cz_r	'r'
+ #define Cz_s	's'
+ #define Cz_t	't'
+ #define Cz_u	'u'
+ #define Cz_uu	'u'
+ #define Cz_y	'y'
+ #define Cz_z	'z'
+ #define Cz_Z	'Z'
+ // Caractères ASCII de remplacement pour accentues francais
+ #define Fr_a_grave	'a'
+ #define Fr_a_circ	'a'
+ #define Fr_e_aigu	'e'
+ #define Fr_e_circ	'e'
+ #define Fr_e_grave 'e' 
+
 #endif
 
 //defines for the big special "character" set, the graphical symbols

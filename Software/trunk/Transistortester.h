@@ -132,6 +132,7 @@ End of configuration
 
 /*Strings in PROGMEM or in EEprom
 */
+#include "langFRANCAIS.h"
 #include "langGERMAN.h"
 #include "langITALIAN.h"
 #include "langPOLISH.h"

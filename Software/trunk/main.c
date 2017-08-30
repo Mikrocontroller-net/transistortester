@@ -1132,7 +1132,7 @@ showdiodecap:
 
   lcd_MEM_string(TestFailed1); 	//"Kein,unbek. oder"
   lcd_line2(); //2. row 
-#if defined(LANG_ITALIAN)               //italiano
+#if defined(LANG_ITALIAN) || defined(LANG_FRANCAIS)	//italiano or francais
   lcd_MEM_string(Bauteil);		//"campione"
   lcd_space();
   lcd_MEM_string(TestFailed2); 		//"guasto "

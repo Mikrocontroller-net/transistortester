@@ -290,6 +290,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 	ntrans.ice0 = W10msReadADC(LowPin);
         ntrans.ice0 -= ReadADC(TristatePin);	// Gate-Source Voltage
  #ifdef FET_Idss
+    if ((PartMode&0x0f) == PART_MODE_JFET)
         {
            uint16_t i16;
            // extrapolate the quadratic relationship between Id and Vgs, to estimate Idss
@@ -357,6 +358,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         ptrans.ice0 = W10msReadADC(TristatePin);	//measure voltage at assumed Source 
         ptrans.ice0 -= ReadADC(HighPin);
  #ifdef FET_Idss
+        if ((PartMode&0x0f) == PART_MODE_JFET) 
         {
            uint16_t i16;
            // extrapolate the quadratic relationship between Id and Vgs, to estimate Idss

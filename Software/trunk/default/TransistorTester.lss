@@ -19,11 +19,11 @@ Idx Name          Größe     VMA       LMA       Datei-Off Ausr.
                   CONTENTS, READONLY
   7 .debug_aranges 00000428  00000000  00000000  00004dc8  2**3
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_info   00007111  00000000  00000000  000051f0  2**0
+  8 .debug_info   00007112  00000000  00000000  000051f0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_abbrev 000018ec  00000000  00000000  0000c301  2**0
+  9 .debug_abbrev 000018ec  00000000  00000000  0000c302  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_line   00001e6a  00000000  00000000  0000dbed  2**0
+ 10 .debug_line   00001e6a  00000000  00000000  0000dbee  2**0
                   CONTENTS, READONLY, DEBUGGING
  11 .debug_frame  00000690  00000000  00000000  0000fa58  2**2
                   CONTENTS, READONLY, DEBUGGING
@@ -11863,6 +11863,10 @@ TyUfAusgabe:
     3aee:	89 e4       	ldi	r24, 0x49	; 73
           lcd_show_Cg();	// show Cg=xxxpF
     3af0:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <lcd_data>
+             lcd_MEM_string(str_Idss);
+             DisplayValue16(_trans->uBE,-6,'A',2);
+          }
+  #endif
        }
        lcd_next_line_wait(0);		// line 2 or 3, if possible & wait and clear last line
     3af4:	0e 94 ee 00 	call	0x1dc	; 0x1dc <lcd_equal>
@@ -12196,7 +12200,7 @@ end3:
   lcd_line2(); //2. row 
     3d02:	8a e4       	ldi	r24, 0x4A	; 74
     3d04:	91 e0       	ldi	r25, 0x01	; 1
-#if defined(LANG_ITALIAN)               //italiano
+#if defined(LANG_ITALIAN) || defined(LANG_FRANCAIS)	//italiano or francais
   lcd_MEM_string(Bauteil);		//"campione"
   lcd_space();
   lcd_MEM_string(TestFailed2); 		//"guasto "

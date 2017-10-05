@@ -917,6 +917,15 @@ showdiodecap:
        if ((PartMode&0x0f)  != PART_MODE_JFET) {     /* kein JFET */
           ReadCapacity(_trans->b,_trans->e);	//measure capacity
           lcd_show_Cg();	// show Cg=xxxpF
+  #ifdef FET_Idss
+       } else { 	// it is a JFET
+          // display the I_DSS, if measured
+          if (_trans->uBE!=0) {
+             static const unsigned char str_Idss[] MEM_TEXT = "Idss=";
+             lcd_MEM_string(str_Idss);
+             DisplayValue16(_trans->uBE,-6,'A',2);
+          }
+  #endif
        }
        // set cursor below the icon
   #define LINE_BELOW_ICON ((ICON_HEIGHT/8)/((FONT_HEIGHT+7)/8))
@@ -946,15 +955,6 @@ showdiodecap:
           DisplayValue16(0,-5,'A',2);
           lcd_MEM_string(Vgs_str);		// "@Vg="
           Display_mV(_trans->ice0,2);	// cutoff Gate voltage
-  #ifdef FET_Idss
-       // display the I_DSS, if measured
-       if (_trans->uBE!=0) {
-          lcd_next_line_wait(0);
-          static const unsigned char str_Idss[] MEM_TEXT = "Idss=";
-          lcd_MEM_string(str_Idss);
-          DisplayValue16(_trans->uBE,-6,'A',2);
-       }
-  #endif
  #endif
        }
     }	/* end of enhancement or depletion mode WITH_GRAPHICS */
@@ -977,6 +977,16 @@ showdiodecap:
           lcd_next_line(0);		// line 2
           ReadCapacity(_trans->b,_trans->e);	//measure capacity
           lcd_show_Cg();	// show Cg=xxxpF
+  #ifdef FET_Idss
+       } else {     // it is a JFET
+          // display the I_DSS, if measured
+          if (_trans->uBE!=0) {
+             lcd_next_line(0);
+             static const unsigned char str_Idss[] MEM_TEXT = "Idss=";
+             lcd_MEM_string(str_Idss);
+             DisplayValue16(_trans->uBE,-6,'A',2);
+          }
+  #endif
        }
        lcd_next_line_wait(0);		// line 2 or 3, if possible & wait and clear last line
  #endif
@@ -1001,15 +1011,6 @@ showdiodecap:
           lcd_MEM_string(Vgs_str);		// "@Vg="
           Display_mV(_trans->ice0,2);	// cutoff Gate voltage
        }
-  #ifdef FET_Idss
-       // display the I_DSS, if measured
-       if (_trans->uBE!=0) {
-          lcd_next_line_wait(0);
-          static const unsigned char str_Idss[] MEM_TEXT = "Idss=";
-          lcd_MEM_string(str_Idss);
-          DisplayValue16(_trans->uBE,-6,'A',2);
-       }
-  #endif
  #endif
     }
 #endif  /* WITH_GRAPHICS or without */

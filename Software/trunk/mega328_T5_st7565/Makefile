@@ -214,6 +214,8 @@ CFLAGS += -DAUTO_CAL
 #CFLAGS += -DWITH_UJT
 # Option WITH_PUT enables additional tests for PUT (Programmable Unijunction Transistor)
 #CFLAGS += -DWITH_PUT
+# Option FET_Idss will measure the Idss parameter for FETs, if not estimated > 40mA.
+CFLAGS += -DFET_Idss
 
 # The WITH_AUTO_REF option enables reading of internal REF-voltage to get factors for the Capacity measuring.
 CFLAGS += -DWITH_AUTO_REF

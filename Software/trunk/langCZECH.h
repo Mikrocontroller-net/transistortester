@@ -29,7 +29,9 @@
  #ifdef WITH_MENU
    const unsigned char SELECTION_str[] MEM2_TEXT = "Vyber:";
    const unsigned char TESTER_str[] MEM2_TEXT = "Tranzistor";
+  #ifndef NO_FREQ_COUNTER
    const unsigned char FREQ_str[] MEM2_TEXT = "Frekvence";
+  #endif
 //const unsigned char VOLTAGE_str[] MEM2_TEXT = "Napìtí";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = {'N','a','p',Cz_ee,'t',Cz_i,0};
 //const unsigned char SHOW_str[] MEM2_TEXT = "Zobrazit údaje";	// "Show data"

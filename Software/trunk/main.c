@@ -909,9 +909,10 @@ showdiodecap:
        lcd_next_line(TEXT_RIGHT_TO_ICON);	// position text behind the icon, Line 3
        lcd_show_Cg();	// show Cg=xxxpF
  #ifdef SHOW_R_DS
-       lcd_next_line(TEXT_RIGHT_TO_ICON-1);	// position text behind the icon, Line 4
-       lcd_MEM_string(RDS_str);		// "RDS=
-       DisplayValue16(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance
+       lcd_show_rds(TEXT_RIGHT_TO_ICON-1); 	// show Rds at column behind the icon -1
+//       lcd_next_line(TEXT_RIGHT_TO_ICON-1);	// position text behind the icon, Line 4
+//       lcd_MEM_string(RDS_str);		// "RDS=
+//       DisplayValue16(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance
  #endif
     } else {   /* depletion mode */
        if ((PartMode&0x0f)  != PART_MODE_JFET) {     /* kein JFET */
@@ -957,6 +958,14 @@ showdiodecap:
           Display_mV(_trans->ice0,2);	// cutoff Gate voltage
  #endif
        }
+ #ifdef SHOW_R_DS
+       lcd_show_rds(0);                // show Drain-Source resistance at column 0
+//       if ((PartMode&0x0f) == PART_MODE_MOS) {     /* kein JFET or IGBT */
+//          lcd_next_line_wait(0);
+//          lcd_MEM_string(RDS_str);		// "RDS=
+//          DisplayValue16(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance
+//       }
+ #endif
     }	/* end of enhancement or depletion mode WITH_GRAPHICS */
 #else	/* character display */
     if((PartMode&D_MODE) != D_MODE) {	//enhancement-MOSFET
@@ -967,9 +976,10 @@ showdiodecap:
        lcd_MEM_string(vt_str);		// " Vt="
        Display_mV(_trans->gthvoltage,2);	//Gate-threshold voltage
   #ifdef SHOW_R_DS
-       lcd_next_line_wait(0);		// line 3, if possible & wait 5s and clear last line 
-       lcd_MEM_string(RDS_str);		// "RDS=
-       DisplayValue16(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance
+       lcd_show_rds(0);                // show Drain-Source resistance at column 0
+//       lcd_next_line_wait(0);		// line 3, if possible & wait 5s and clear last line 
+//       lcd_MEM_string(RDS_str);		// "RDS=
+//       DisplayValue16(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance
   #endif
     } else {
  #if FLASHEND > 0x1fff
@@ -1011,6 +1021,14 @@ showdiodecap:
           lcd_MEM_string(Vgs_str);		// "@Vg="
           Display_mV(_trans->ice0,2);	// cutoff Gate voltage
        }
+ #endif
+ #ifdef SHOW_R_DS
+       lcd_show_rds(0);                // show Drain-Source resistance at column 0
+//       if ((PartMode&0x0f) == PART_MODE_MOS) {     /* kein JFET or IGBT */
+//          lcd_next_line_wait(0);
+//          lcd_MEM_string(RDS_str);		// "RDS=
+//          DisplayValue16(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance
+//       }
  #endif
     }
 #endif  /* WITH_GRAPHICS or without */

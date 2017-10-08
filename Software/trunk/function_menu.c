@@ -59,30 +59,59 @@
 #else
  /* no PROCESSOR_TYP == 644 , 328 */
  #define MODE_TRANS 0		/* normal TransistorTester function */
- #define MODE_FREQ 1		/* frequency measurement */
- #define MODE_FGEN 2		/* frequency generator function */
- #define MODE_PWM 3		/* Pulse Width variation function */
- #define MODE_ESR 4		/* ESR measurement in circuit */
- #define MODE_RESIS 5		/* ResistorCheck at TP1:TP3 */
- #define MODE_CAP13 6		/* Capacitor check at TP1:TP3 */
- #define MODE_BIG_CAP_CORR 7	/* Correction for big caps */
- #define NNN 7
- #ifdef WITH_ROTARY_CHECK
-  #define MODE_ROTARY 8		/* Test Rotary Switch */
-  #undef NNN
-  #define NNN 8
-  #ifdef WITH_SELFTEST
-   #define MODE_SELFTEST 9	/* full selftest function with calibration */
+ #ifdef NO_FREQ_COUNTER
+  #define MODE_FREQ 67		/* frequency measurement */
+  #define MODE_FGEN 1		/* frequency generator function */
+  #define MODE_PWM 2		/* Pulse Width variation function */
+  #define MODE_ESR 3		/* ESR measurement in circuit */
+  #define MODE_RESIS 4		/* ResistorCheck at TP1:TP3 */
+  #define MODE_CAP13 5		/* Capacitor check at TP1:TP3 */
+  #define MODE_BIG_CAP_CORR 6	/* Correction for big caps */
+  #define NNN 6
+  #ifdef WITH_ROTARY_CHECK
+   #define MODE_ROTARY 7		/* Test Rotary Switch */
    #undef NNN
-   #define NNN 9
+   #define NNN 7
+   #ifdef WITH_SELFTEST
+    #define MODE_SELFTEST 8	/* full selftest function with calibration */
+    #undef NNN
+    #define NNN 8
+   #endif
+  #else
+   #ifdef WITH_SELFTEST
+    #define MODE_SELFTEST 7	/* full selftest function with calibration */
+    #undef NNN
+    #define NNN 7
+   #endif
   #endif
  #else
-  #ifdef WITH_SELFTEST
-   #define MODE_SELFTEST 8	/* full selftest function with calibration */
+  // with Frequency counter
+  #define MODE_FREQ 1		/* frequency measurement */
+  #define MODE_FGEN 2		/* frequency generator function */
+  #define MODE_PWM 3		/* Pulse Width variation function */
+  #define MODE_ESR 4		/* ESR measurement in circuit */
+  #define MODE_RESIS 5		/* ResistorCheck at TP1:TP3 */
+  #define MODE_CAP13 6		/* Capacitor check at TP1:TP3 */
+  #define MODE_BIG_CAP_CORR 7	/* Correction for big caps */
+  #define NNN 7
+  #ifdef WITH_ROTARY_CHECK
+   #define MODE_ROTARY 8		/* Test Rotary Switch */
    #undef NNN
    #define NNN 8
+   #ifdef WITH_SELFTEST
+    #define MODE_SELFTEST 9	/* full selftest function with calibration */
+    #undef NNN
+    #define NNN 9
+   #endif
+  #else
+   #ifdef WITH_SELFTEST
+    #define MODE_SELFTEST 8	/* full selftest function with calibration */
+    #undef NNN
+    #define NNN 8
+   #endif
   #endif
  #endif
+
  #ifdef WITH_VEXT
   #define MODE_VEXT (NNN+1)	/* external voltage measurement and zener voltage */
   #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
@@ -137,7 +166,9 @@ void do_menu(uint8_t func_number) {
 
 //    lcd_MEM2_string(DoMenu_str);	// "do menu "
 //    u2lcd(func_number);
+#ifndef NO_FREQ_COUNTER
     if (func_number == MODE_FREQ) GetFrequency(0);
+#endif
 #if PROCESSOR_TYP == 644
     if (func_number == MODE_HFREQ) GetFrequency(1);	// measure high frequency with 16:1 divider
     if (func_number == MODE_H_CRYSTAL) GetFrequency(5); // HF crystal input + 16:1 divider
@@ -379,7 +410,9 @@ uint8_t function_menu() {
 void message2line(uint8_t number) { 
      if (number > MODE_LAST) number -= (MODE_LAST + 1);
      if (number == MODE_TRANS) lcd_MEM2_string(TESTER_str);
+ #ifndef NO_FREQ_COUNTER
      if (number == MODE_FREQ) lcd_MEM2_string(FREQ_str);
+ #endif
  #if PROCESSOR_TYP == 644
      if (number == MODE_HFREQ) lcd_MEM2_string(HFREQ_str);
      if (number == MODE_H_CRYSTAL) lcd_MEM2_string(H_CRYSTAL_str);

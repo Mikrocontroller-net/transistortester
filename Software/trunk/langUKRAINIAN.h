@@ -23,7 +23,9 @@
 
    const unsigned char TESTER_str[] MEM2_TEXT = {'T','p','a',Cyr_n,Cyr_z,Cyr_i,'c',Cyr_t,'o','p',' ','T','e','c',Cyr_t,0}; //"TransistorT"
 
+  #ifndef NO_FREQ_COUNTER
    const unsigned char FREQ_str[] MEM2_TEXT = {Cyr_Tsch,'a','c',Cyr_t,'o',Cyr_t,'o',Cyr_m,'i','p',0};
+  #endif
 
    const unsigned char VOLTAGE_str[] MEM2_TEXT = {'B','o',Cyr_l,Cyr_ww,Cyr_t,Cyr_m,'e',Cyr_t,'p',0}; //"Voltage"
    const unsigned char SHOW_str[] MEM2_TEXT = {Cyr_P,'o',Cyr_k,'a',Cyr_z,'a',Cyr_t,Cyr_i,' ',Cyr_d,'a',Cyr_n,'i',0}; //"Show data";

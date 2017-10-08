@@ -319,5 +319,15 @@ void lcd_show_Cg(void) {
 	  lcd_data('?');
    }
 }
+#ifdef SHOW_R_DS
+void lcd_show_rds(uint8_t xpos)
+{
+       if ((PartMode&0x0f) == PART_MODE_MOS) {     /* kein JFET or IGBT */
+          lcd_next_line_wait(xpos);
+          lcd_MEM_string(RDS_str);		// "RDS=
+          DisplayValue16(_trans->uBE,-1,LCD_CHAR_OMEGA,2);	// Drain-Source resistance
+       }
+}
+#endif
 
 

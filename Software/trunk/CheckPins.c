@@ -17,7 +17,7 @@ uint16_t expand_FET_quadratic(uint16_t v0, uint16_t v1, uint16_t i)
       d = i>>8;
       i += d;     
       i += d;      // increase i by 0.8 %
-      if (d > (40000>>8)) return 0;       
+      if (d > (60000>>8)) return 0;       
          // no Idss measurement if Idss exceeds 40 mA, the ATmega's maximum pin current
          // note that this is actually quite safe, since by the time there's 40 mA running, the Vgs will be 40mA * 20 ohm = 0.8 V, so quite far from 0, so Id will be less than those 40 mA
       if (v1 > v0) return i;      // V exceeds Vp, so we've reached Vgs=0 without Id exceeding 40 mA, so we can safely do the Idss measurement
@@ -62,6 +62,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   uint8_t HiPinRH;		// mask to switch the HighPin with R_H
   uint8_t HiADCp;		// mask to switch the ADC port High-Pin
   uint8_t LoADCp;		// mask to switch the ADC port Low-Pin
+#ifdef SHOW_R_DS
+  uint8_t TriADCp;		// mask to switch the ADC port Tristate-Pin
+#endif
   uint8_t HiADCm;		// mask to switch the ADC DDR port High-Pin
   uint8_t LoADCm;		// mask to switch the ADC DDR port Low-Pin
   uint8_t PinMSK;
@@ -115,6 +118,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   TriPinRH = pgm_read_byte(addr);	// instruction for TristatePin R_H
 #else
   TriPinRH = TriPinRL + TriPinRL;			// instruction for TristatePin R_H
+#endif
+#ifdef SHOW_R_DS
+  addr += 3;			// address of PinADCtab[TristatePin]
+  TriADCp = pgm_read_byte(addr);	// instruction for ADC Tristate-Pin, including | TXD_VAL
 #endif
 
   addr = &PinRLRHADCtab[HighPin-TP_MIN];
@@ -310,6 +317,28 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
            ntrans.uBE = i16;
         }
  #endif
+ #ifdef SHOW_R_DS
+    if ((PartMode&0x0f) != PART_MODE_JFET)
+         {
+            // For depletion MOSFET we try to put the Gate to the same level as Source.
+            // The source level is higher than 0V because of the Port output resistance and current.
+            // When the Drain-Source resistance is low, we can get nearly the same voltage increase
+            // at the Gate with current from the 680 Ohm Port (RL).
+            ADC_PORT = TXD_VAL;
+            ADC_DDR = LoADCm | TriADCp;	//Low-Pin and Tristate-Pin fix to GND
+//            R_DDR = TriPinRL | HiPinRL;	// L-Resistor High-Pin and Tristate-Pin to output
+            R_DDR =  HiPinRL;	// L-Resistor High-Pin and Tristate-Pin to output
+            R_PORT = TriPinRL | HiPinRL;	//switch R_L for High-Pin and Tristate-Pin to VCC
+            adc.hp2 = W5msReadADC(HighPin);	//measure the voltage at the Drain  
+            adc.rhp = ADCconfig.U_AVCC - adc.hp2;	// voltage at the Drain resistor
+            adc.lp2 = ReadADC(LowPin);		// voltage at the Source 
+            if (adc.hp2 > adc.lp2) {
+                ntrans.uBE = RR680PL * (unsigned long)(adc.hp2 - adc.lp2) / adc.rhp; // DS resistance in 0.1 OHm
+            } else {
+                ntrans.uBE = 0;
+            }
+        }
+ #endif
 #endif
         ntrans.count++;			// count as two, the inverse is identical
         goto saveNresult;		// save Pin numbers and exit
@@ -376,6 +405,26 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
                i16 =expand_FET_quadratic(ptrans.ice0,adc.hp3,i16);
            }
            ptrans.uBE = i16;
+        }
+ #endif
+ #ifdef SHOW_R_DS
+    if ((PartMode&0x0f) != PART_MODE_JFET)
+        {
+            // For depletion MOSFET we try to put the Gate to the same level as Source.
+            // The source level is higher than 0V because of the Port output resistance and current.
+            // When the Drain-Source resistance is low, we can get nearly the same voltage increase
+            // at the Gate with current from the 680 Ohm Port (RL).
+            ADC_PORT = HiADCp | TriADCp;	//switch High-Pin and Tristate-Pin to VCC
+            ADC_DDR = HiADCm | TriADCp;		//switch High-Pin and Tristate-Pin to output
+            R_PORT = 0;			// switch R-Ports to 0
+            R_DDR = TriPinRL | HiPinRL;	// L-Resistor High-Pin and Tristate-Pin to output
+            adc.hp2 = W5msReadADC(HighPin);	//measure the voltage at the Source  
+            adc.lp1 = ReadADC(LowPin);		// voltage at the Drain 
+            if (adc.hp2 > adc.lp1) {
+                ptrans.uBE = RR680MI * (unsigned long)(adc.hp2 - adc.lp1) / adc.lp1; // DS resistance in 0.1 OHm
+            }   else {
+                ptrans.uBE = 0;
+            }
         }
  #endif
 #endif

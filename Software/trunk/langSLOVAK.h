@@ -20,7 +20,9 @@
  #ifdef WITH_MENU
    const unsigned char SELECTION_str[] MEM2_TEXT = "Vyber:";
    const unsigned char TESTER_str[] MEM2_TEXT = "Tester";	//"Tranzistor";
+  #ifndef NO_FREQ_COUNTER
    const unsigned char FREQ_str[] MEM2_TEXT = "Frekvencia";
+  #endif
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Napetie";
    const unsigned char SHOW_str[] MEM2_TEXT = "Informacie";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "Vypnut";

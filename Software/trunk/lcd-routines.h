@@ -39,6 +39,7 @@ void lcd_line4(void);
 
 unsigned char reverse_byte(unsigned char);
 void lcd_show_Cg(void);		// show Cg=xxxpF
+void lcd_show_rds(uint8_t xpos);      // show Rgs at column xpos
 // Graphics display only: Some drawing functions for graphics LCD
 void lcd_pgm_bitmap(const unsigned char * pbitmap,
                     unsigned char x, unsigned char y,

@@ -26,7 +26,8 @@
  #define PCINTx_vect PCINT2_vect
 #endif
 
-#ifdef WITH_MENU
+#if defined(WITH_MENU) && !defined(NO_FREQ_COUNTER)
+
 void GetFrequency(uint8_t range) {
   unsigned char taste;			// set if key is pressed during measurement
  #if PROCESSOR_TYP == 644

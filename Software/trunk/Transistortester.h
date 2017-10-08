@@ -171,7 +171,6 @@ End of configuration
  #ifdef WITH_MENU
    const unsigned char SELECTION_str[] MEM2_TEXT = "Selection:";
    const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
-   const unsigned char FREQ_str[] MEM2_TEXT = "Frequency";
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
    const unsigned char SHOW_str[] MEM2_TEXT = "Show data";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "Switch off";
@@ -188,6 +187,9 @@ End of configuration
    const unsigned char TURN_str[] MEM2_TEXT = "turn!";	
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Selftest";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "short Probes!";
+#ifndef NO_FREQ_COUNTER
+   const unsigned char FREQ_str[] MEM2_TEXT = "Frequency";
+#endif
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frequency > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF quartz";

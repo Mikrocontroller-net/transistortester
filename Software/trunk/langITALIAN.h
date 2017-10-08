@@ -21,7 +21,9 @@
  #ifdef WITH_MENU
    const unsigned char SELECTION_str[] MEM2_TEXT = "Selezione:";
    const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
+  #ifndef NO_FREQ_COUNTER
    const unsigned char FREQ_str[] MEM2_TEXT = "Frequenza";
+  #endif
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltaggio";
    const unsigned char SHOW_str[] MEM2_TEXT = "Mostra dati";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "Spegnere";

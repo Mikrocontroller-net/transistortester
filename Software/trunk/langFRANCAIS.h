@@ -21,7 +21,9 @@
  #ifdef WITH_MENU
    const unsigned char SELECTION_str[] MEM2_TEXT = {'S',Fr_e_aigu,'l','e','c','t','i','o','n',':',0};
    const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
+  #ifndef NO_FREQ_COUNTER
    const unsigned char FREQ_str[] MEM2_TEXT = {'F','r',Fr_e_aigu,'q','u','e','n','c','e',0};
+  #endif
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
    const unsigned char SHOW_str[] MEM2_TEXT = {'V','o','i','r',' ','d','o','n','n',Fr_e_aigu,'e','s',0};	
    const unsigned char OFF_str[] MEM2_TEXT = {'A','r','r',Fr_e_circ,'t',0};

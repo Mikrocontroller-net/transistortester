@@ -38,7 +38,7 @@ CFLAGS += -DWITH_MENU
 # graphical displays after the presentation of calibration data.
 # You can switch off the presentation of the icons and the font data by setting
 # the option NO_ICONS_DEMO to save flash memory and display time.
-#CFLAGS += -DNO_ICONS_DEMO
+CFLAGS += -DNO_ICONS_DEMO
 
 # The menu function can be easier controlled with a incremental encoder (rotary switch).
 # Both switches of the rotary switch can be connected with 1 kOhm resistors to PD1 and PD3.

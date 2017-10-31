@@ -25,6 +25,9 @@
 
   #ifndef NO_FREQ_COUNTER
    const unsigned char FREQ_str[] MEM2_TEXT = {Cyr_Tsch,'a','c',Cyr_t,'o',Cyr_t,'o',Cyr_m,'i','p',0};
+ #ifdef WITH_FREQUENCY_DIVIDER
+   const unsigned char FScaler_str[] MEM2_TEXT = "F-Scaler";
+ #endif
   #endif
 
    const unsigned char VOLTAGE_str[] MEM2_TEXT = {'B','o',Cyr_l,Cyr_ww,Cyr_t,Cyr_m,'e',Cyr_t,'p',0}; //"Voltage"

@@ -35,6 +35,8 @@ CFLAGS += -DWITH_MENU
 # For ATmega328 the menu function "rotary encoder check" is only enabled with the WITH_ROTARY_CHECK option.
 #CFLAGS += -DWITH_ROTARY_CHECK
 
+CFLAGS += -DWITH_FREQUENCY_DIVIDER
+
 # With the menu item "Show data" the used icons and the font data are displayed for
 # graphical displays after the presentation of calibration data.
 # You can switch off the presentation of the icons and the font data by setting

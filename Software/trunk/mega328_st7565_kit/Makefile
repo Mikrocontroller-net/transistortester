@@ -210,9 +210,9 @@ WITH_SamplingADC = 1
 # Option can be set only together with SamplingADC=1 and OP_MHZ=16
 #CFLAGS += -DWITH_XTAL 
 # Option WITH_UJT enables additional tests for UJT (UniJunction Transistor)
-#CFLAGS += -DWITH_UJT
+CFLAGS += -DWITH_UJT
 # Option WITH_PUT enables additional tests for PUT (Programmable Unijunction Transistor)
-#CFLAGS += -DWITH_PUT
+CFLAGS += -DWITH_PUT
 # Option FET_Idss will measure the Idss parameter for FETs, if not estimated > 40mA.
 CFLAGS += -DFET_Idss
 
@@ -232,7 +232,7 @@ CFLAGS += -DC_H_KORR=0
 # You can set WITH_UART to 2 to enable a special mode of serial output with line number in column 1.
 # If the option is deselected, PC3 can be used as external voltage input with a
 # 10:1 resistor divider.
-#CFLAGS += -DWITH_UART
+CFLAGS += -DWITH_UART
 
 # With option TQFP_ADC6 or/and TQFP_ADC7 you can use the additional pins of the TQFP or
 # the QFN package for external analog input. You should install a 10:1 voltage dividers

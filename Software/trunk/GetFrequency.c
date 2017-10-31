@@ -163,12 +163,22 @@ void GetFrequency(uint8_t range) {
         Display_Hz(ext_freq.dw*FREQ_DIV, 7);
         lcd_data('/');		// Frequency divider is activ
      }
- #else
-     Display_Hz(ext_freq.dw, 7);
- #endif
- #if PROCESSOR_TYP == 644
      lcd_space();
- #endif
+ #else
+     // ATmega328 ...
+  #ifdef WITH_FREQUENCY_DIVIDER
+     uint8_t freq_factor;
+     freq_factor = eeprom_read_byte((uint8_t *)&f_scaler);
+     Display_Hz(ext_freq.dw*freq_factor, 7);
+     lcd_space();
+     if (freq_factor != 1) {
+        lcd_data('/');
+        u2lcd(freq_factor);	// show the frequency scaler, if not 1
+     }
+  #else
+     Display_Hz(ext_freq.dw, 7);
+  #endif
+ #endif  /* PROCESSOR_TYP 644 or other */
      FREQINP_DDR &= ~(1<<FREQINP_PIN);	// switch frequency pin to input
      if (TCCR1B != 0) {
        // Exact 1000ms period is only with "end of period" from timer1 interrupt.
@@ -198,6 +208,7 @@ void GetFrequency(uint8_t range) {
         EIFR  |= (1<<INTF6);		// clear interrupt 6 flag
         PCMSK_FREQ |= (1<<PCINT_FREQ); // enable int6
 #else
+        // other than PROCESSOR_TYP 1280
         TCNT0 = 0;			// set counter 0 to zero
         ext_freq.dw = 0;		// reset counter to zero
         TIFR0 = (1<<TOV0);		// clear OV interrupt
@@ -206,7 +217,7 @@ void GetFrequency(uint8_t range) {
         pinchange_count = 0;
         PCIFR  = (1<<PCI_CLEAR_BIT);		// clear Pin Change Status
         PCICR  |= (1<<PCI_ENABLE_BIT);		// enable pin change interrupt
-#endif
+#endif  /* PROCESSOR_1280 or other */
         sei();
         PCMSK_FREQ |= (1<<PCINT_FREQ);	// monitor PD4 PCINT20 or PB0 PCINT8 pin change
         for (ii=0;ii<250;ii++) {
@@ -227,6 +238,9 @@ void GetFrequency(uint8_t range) {
 #endif
 //        lcd_clear_line2();
 //        wait50ms();		// let LCD flicker to 
+//	---------------------------------------
+//	Show the result from period measurement
+//	---------------------------------------
  #if (LCD_LINES > 3)
         lcd_line3();		// use line3 to report the period with 4-line LCD
  #else
@@ -241,16 +255,31 @@ void GetFrequency(uint8_t range) {
            ext_period = ext_period / FREQ_DIV;
         }
  #endif
+ #if (PROCESSOR_TYP != 644) && defined(WITH_FREQUENCY_DIVIDER)
+        ext_period /= freq_factor;
+ #endif
         if (pinchange_max > 127) {
            DisplayValue(ext_period,-11,'s',7);	// show period converted to 0.01ns units
         } else {
            //prevent overflow of 32-Bit
            DisplayValue((unsigned long)(ext_period/100),-9,'s',7);	// show period converted to 1ns units
         }
+ #if (PROCESSOR_TYP != 644) && defined(WITH_FREQUENCY_DIVIDER)
+        lcd_space();
+        if (freq_factor != 1) {
+           lcd_data('*');
+           u2lcd(freq_factor);		// show the frequency scaler, if not 1
+        }
+ #endif
+//	---------------------------------------
         if (ii == 250) {
            lcd_data('?');		// wait loop has regular finished
+					// probably the input frequency has changed
         } else {
            if (ext_period > 249500) {
+//	      ----------------------------------------------------
+//	      Show the frequency recalculated from measured period
+//	      ----------------------------------------------------
  #if (LCD_LINES > 3)
               lcd_line4();		// use line 4 of 4-line LCD to report the computed frequency
  #else
@@ -270,6 +299,14 @@ void GetFrequency(uint8_t range) {
               }
               lcd_data('z');
               FREQINP_DDR &= ~(1<<FREQINP_PIN);	// switch frequency pin to input
+ #if (PROCESSOR_TYP != 644) && defined(WITH_FREQUENCY_DIVIDER)
+              lcd_space();
+              if (freq_factor != 1) {
+                 lcd_data('/');
+                 u2lcd(freq_factor);	// show the frequency scaler, if not 1
+              }
+ #endif
+//	      ----------------------------------------------------
            }
         }
      }  /* end if 1 < ext_freq < FMAX_PERIOD */

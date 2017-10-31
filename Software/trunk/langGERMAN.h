@@ -22,6 +22,9 @@
    const unsigned char TESTER_str[] MEM2_TEXT = "Transistor";
   #ifndef NO_FREQ_COUNTER
    const unsigned char FREQ_str[] MEM2_TEXT = "Frequenz";
+ #ifdef WITH_FREQUENCY_DIVIDER
+   const unsigned char FScaler_str[] MEM2_TEXT = "F-Scaler";
+ #endif
   #endif
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Spannung";
    const unsigned char SHOW_str[] MEM2_TEXT = "Zeige Daten";	// "Show data"

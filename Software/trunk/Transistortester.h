@@ -189,6 +189,9 @@ End of configuration
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "short Probes!";
 #ifndef NO_FREQ_COUNTER
    const unsigned char FREQ_str[] MEM2_TEXT = "Frequency";
+ #ifdef WITH_FREQUENCY_DIVIDER
+   const unsigned char FScaler_str[] MEM2_TEXT = "F-Scaler";
+ #endif
 #endif
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frequency > 2MHz";
@@ -354,7 +357,7 @@ End of configuration
  const unsigned char Inductor_str[] MEM_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_INDUCTOR1, LCD_CHAR_INDUCTOR2,LCD_CHAR_LINE1,0};
 #endif
 #if defined (WITH_SELFTEST) || !defined (BAT_CHECK)
- const unsigned char VERSION_str[] MEM_TEXT = "Version1.13k";
+ const unsigned char VERSION_str[] MEM_TEXT = "Version 1.13k";
 #endif
 #ifdef SHOW_ICE
  const unsigned char ICE0_str[] MEM2_TEXT = "ICE0=";
@@ -519,6 +522,9 @@ const unsigned char RESIS_13_str[] MEM2_TEXT = {'1'+TP1,LCD_CHAR_LINE1, LCD_CHAR
   extern const unsigned char SELECTION_str[] MEM2_TEXT ;
   extern const unsigned char TESTER_str[] MEM2_TEXT ;
   extern const unsigned char FREQ_str[] MEM2_TEXT;
+ #ifdef WITH_FREQUENCY_DIVIDER
+   extern const unsigned char FScaler_str[] MEM2_TEXT;
+ #endif
   extern const unsigned char VOLTAGE_str[] MEM2_TEXT ;
   extern const unsigned char SHOW_str[] MEM2_TEXT ;
   extern const unsigned char OFF_str[] MEM2_TEXT ;

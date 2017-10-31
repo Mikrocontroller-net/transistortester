@@ -84,6 +84,12 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
   ADCconfig.Samples = R_ANZ_MESS;	// switch to special number of repetitions
 #endif
   #define MAX_REPEAT (700 / (5 + R_ANZ_MESS/8))
+#if FLASHEND > 0x1fff
+  for (ii=0; ii<NumOfDiodes; ii++) {
+     // never search a resistor at the same place, where a diode is detected
+     if ((diodes.Anode[ii] + diodes.Cathode[ii]) ==  (HighPin + LowPin)) goto testend;
+  }
+#endif
   ADC_PORT = TXD_VAL;
   ADC_DDR = LoADCp | TXD_MSK;		//switch Low-Pin to output (GND)
   R_DDR = HiPinRL;		//switch R_L port for High-Pin to output (VCC)
@@ -134,6 +140,7 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
   adc.lp2 = 0;
   for (ii=1;ii<MAX_REPEAT;ii++) {
      // wait until voltage is stable
+					// L--RL--RyyX--H
      adc.tp2 = W5msReadADC(HighPin);	//high voltage with load
      adc.lp1 = ReadADC(LowPin);		//voltage at the other end of Rx
      udiff = adc.lp1 - adc.lp2;
@@ -155,6 +162,7 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
   if (adc.tp2 < adc.lp1) {
      adc.tp2 = adc.lp1;
   }
+					// L--RH--RX--H
   R_DDR = LoPinRH;			//switch R_H for Low-Pin to GND
   adc.lp2 = W5msReadADC(LowPin);
 		
@@ -179,9 +187,9 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
         }
         // two measurements with R_H resistors (470k) are made:
         // lirx1 (measurement at HighPin)
-        lirx1 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)adc.hp2 / (ADCconfig.U_AVCC - adc.hp2);
+        lirx1 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)adc.hp2 / vcc_diff(adc.hp2);
         // lirx2 (measurement at LowPin)
-        lirx2 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)(ADCconfig.U_AVCC - adc.lp2) / adc.lp2;
+        lirx2 = (unsigned long)((unsigned int)R_H_VAL) * (unsigned long)vcc_diff(adc.lp2) / adc.lp2;
 #define U_INT_LIMIT (990*U_SCALE)		// 1V switch limit in ReadADC for atmega family
 #ifdef __AVR_ATmega8__
 #define FAKT_LOW 2		//resolution is about twice as good
@@ -206,12 +214,12 @@ uint8_t HiADCp;			// mask to switch the ADC port HighPin
         if (adc.tp1 > adc.hp1) {
            adc.hp1 = adc.tp1;		//diff negativ is illegal
         }
-        lirx1 =(unsigned long)RR680PL * (unsigned long)(adc.hp1 - adc.tp1) / (ADCconfig.U_AVCC - adc.hp1);
+        lirx1 =(unsigned long)RR680PL * (unsigned long)unsigned_diff(adc.hp1, adc.tp1) / vcc_diff(adc.hp1);
         if (adc.tp2 < adc.lp1) {
            adc.lp1 = adc.tp2;		//diff negativ is illegal
         }
         // lirx2 (Measurement at LowPin)
-        lirx2 =(unsigned long)RR680MI * (unsigned long)(adc.tp2 -adc.lp1) / adc.lp1;
+        lirx2 =(unsigned long)RR680MI * (unsigned long)unsigned_diff(adc.tp2, adc.lp1) / adc.lp1;
 
 #ifdef AUTOSCALE_ADC
         if (adc.hp1 < U_INT_LIMIT) {

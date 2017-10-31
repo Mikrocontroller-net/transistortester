@@ -125,46 +125,138 @@ ad1cbe:
 	.func  SerienDiodenAusgabe
 
 SerienDiodenAusgabe:
- 	push	r28
- 	push	r29
  	lds	r24, diode_sequence;	0x0102
  	swap	r24
  	andi	r24, 0x0F	; first = diode_sequence >> 4;
- 	ldi	r28, lo8(diodes)	;0x80
- 	ldi	r29, hi8(diodes)	;0x01
- 	add	r28, r24	; first
- 	adc	r29, zero_reg
- 	ld	r24, Y		;Anode
- 	RCALL	lcd_testpin	; lcd_testpin(diodes.Anode[first]);
- 	ldi	r24, lo8(AnKat_str)	;0xA3
- 	ldi	r25, hi8(AnKat_str)	;0x03
-#ifdef USE_EEPROM
-	.extern lcd_fix_string
- 	RCALL	lcd_fix_string	; lcd_PGM_string(AnKat_str);	//"->|-"
-#else
-	.extern lcd_pgm_string
- 	RCALL	lcd_pgm_string	; lcd_PGM_string(AnKat_str);	//"->|-"
-#endif
- 	ldd	r24, Y+6	; Cathode
- 	RCALL	lcd_testpin	; lcd_testpin(diodes.Cathode[first]);
- 	ldi	r24, lo8(AnKat_str)	;0xA3
- 	ldi	r25, hi8(AnKat_str)	;0x03
-#ifdef USE_EEPROM
- 	RCALL	lcd_fix_string	; lcd_PGM_string(AnKat_str);	//"->|-"
-#else
- 	RCALL	lcd_pgm_string	; lcd_PGM_string(AnKat_str);	//"->|-"
-#endif
- 	ldi	r28, lo8(diodes)	;0x80
- 	ldi	r29, hi8(diodes)	;0x01
+	rcall	DiodeSymbol_ApinCpin	;  1->|-2
+
  	lds	r24, diode_sequence;	0x0102
  	andi	r24, 0x03	; second = diode_sequence & 3;
- 	add	r28, r24
- 	adc	r29, zero_reg
- 	ldd	r24, Y+6	; Cathode
- 	RCALL	lcd_testpin	; lcd_testpin(diodes.Cathode[second]);
+ 	RCALL	DiodeSymbol_ACpin	;  ->|-3
  	lds	r24, diode_sequence;	x0102
  	rcall	UfAusgabe	; UfAusgabe(diode_sequence);
-    	pop	r29
-    	pop	r28
     	ret
+ .endfunc
+
+        .func	load_diodes_adr
+load_diodes_adr:
+ 	ldi	r30, lo8(diodes)	;0x80
+ 	ldi	r31, hi8(diodes)	;0x01
+ 	add	r30, r24	; [nn]
+ 	adc	r31, zero_reg
+	ret
+ .endfunc
+
+	.GLOBAL DiodeSymbol_withPins
+	.func	DiodeSymbol_withPins
+
+DiodeSymbol_withPins:
+#if FLASHEND > 0x1fff
+ // enough memory (>8k) to sort the pins
+        push    r28
+	rcall	load_diodes_adr
+ #if EBC_STYLE == 321
+  // the higher test pin number is left side
+	ld	r28, Z		; diodes.Anode[nn]
+	ldd	r25, Z+6	; diodes.Cathode[nn]
+	cp	r28, r25
+	brcc	cat_first1	; if (anode_nr > cathode_nr) {
+
+	rcall	DiodeSymbol_ApinCpin
+	rjmp	diode_fin
+
+//   } else {
+
+cat_first1:
+	rcall	DiodeSymbol_CpinApin
+ #else
+  // the higher test pin number is right side
+	ld	r25, Z
+	ldd	r28, Z+6	; if (anode_nr < cathode_nr) {
+	cp	r28, r25
+	brcc	cat_first2
+
+	rcall	DiodeSymbol_ApinCpin
+	rjmp	diode_fin
+
+//   } else {
+
+cat_first2:
+	rcall	DiodeSymbol_CpinApin
+ #endif
+#else
+	rcall	DiodeSymbol_ApinCpin
+#endif
+diode_fin:
+	rcall	lcd_space
+	pop	r28
+	ret
+ .endfunc
+
+	.GLOBAL DiodeSymbol_ApinCpin
+	.func	DiodeSymbol_ApinCpin
+
+DiodeSymbol_ApinCpin:
+	rcall	load_diodes_adr
+	push	r24
+ 	ld	r24, Z		;Anode
+ 	RCALL	lcd_testpin	; lcd_testpin(diodes.Anode[nn]);
+	pop	r24
+	rcall	DiodeSymbol_ACpin	; ->|-3
+        ret
+ .endfunc
+
+	.GLOBAL DiodeSymbol_ACpin
+	.func	DiodeSymbol_ACpin
+
+DiodeSymbol_ACpin:
+	push	r24
+ 	ldi	r24, lo8(AnKat_str)	;0xA3
+ 	ldi	r25, hi8(AnKat_str)	;0x03
+  #ifdef USE_EEPROM
+	.extern lcd_fix_string
+ 	RCALL	lcd_fix_string	; lcd_PGM_string(AnKat_str);	//"->|-"
+  #else
+	.extern lcd_pgm_string
+ 	RCALL	lcd_pgm_string	; lcd_PGM_string(AnKat_str);	//"->|-"
+  #endif
+	pop	r24
+	rcall	load_diodes_adr
+	ldd	r24, Z+6	; Cathode
+ 	RCALL	lcd_testpin	; lcd_testpin(diodes.Cathode[nn]);
+	ret
+ .endfunc
+
+	.GLOBAL DiodeSymbol_CpinApin
+	.func	DiodeSymbol_CpinApin
+
+DiodeSymbol_CpinApin:
+	rcall	load_diodes_adr
+	push	r24
+ 	ldd	r24, Z+6	;Cathode
+ 	RCALL	lcd_testpin	; lcd_testpin(diodes.Cathode[nn]);
+	pop	r24
+	rcall	DiodeSymbol_CApin	; -|<-3
+        ret
+ .endfunc
+
+	.GLOBAL DiodeSymbol_CApin
+	.func	DiodeSymbol_CApin
+
+DiodeSymbol_CApin:
+	push	r24
+ 	ldi	r24, lo8(KatAn_str)	;0xA3
+ 	ldi	r25, hi8(KatAn_str)	;0x03
+  #ifdef USE_EEPROM
+	.extern lcd_fix_string
+ 	RCALL	lcd_fix_string	; lcd_PGM_string(KatAn_str);	//"->|-"
+  #else
+	.extern lcd_pgm_string
+ 	RCALL	lcd_pgm_string	; lcd_PGM_string(KatAn_str);	//"->|-"
+  #endif
+	pop	r24
+	rcall	load_diodes_adr
+	ld	r24, Z		; Anode
+ 	RCALL	lcd_testpin	; lcd_testpin(diodes.Anode[nn]);
+	ret
  .endfunc

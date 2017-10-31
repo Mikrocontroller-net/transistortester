@@ -76,19 +76,19 @@ ujtdone:;
              ADC_PORT =  TXD_VAL;   // UJT B1 to GND
              R_PORT = pinmaskRL(ntrans.b) | pinmaskRL(diodes.Cathode[1]);	// UJT emitter and B2 with RL to VCC
              R_DDR = R_PORT;
-             v1 = ADCconfig.U_AVCC - W5msReadADC(diodes.Cathode[1]);			// read voltage at B2
+             v1 = vcc_diff(W5msReadADC(diodes.Cathode[1]));			// read voltage at B2
              R_PORT = pinmaskRL(diodes.Cathode[1]);	// UJT B2 with RL to VCC, emitter open
              R_DDR = R_PORT;
-             v0 = ADCconfig.U_AVCC - W5msReadADC(diodes.Cathode[1]);			// read voltage at B2
+             v0 = vcc_diff(W5msReadADC(diodes.Cathode[1]));			// read voltage at B2
              if (v0 < v1) v1 -= v0;
 
              R_PORT = pinmaskRL(ntrans.b) | pinmaskRL(diodes.Cathode[0]);	// UJT emitter and B2 with RL to VCC
              R_DDR = R_PORT;
              ADC_DDR = pinmaskADC(diodes.Cathode[1]);
-             v2 = ADCconfig.U_AVCC - W5msReadADC(diodes.Cathode[0]);			// read voltage at B2
+             v2 = vcc_diff(W5msReadADC(diodes.Cathode[0]));			// read voltage at B2
              R_PORT = pinmaskRL(diodes.Cathode[0]);	// UJT B2 with RL to VCC, emitter open
              R_DDR = R_PORT;
-             v0 = ADCconfig.U_AVCC - W5msReadADC(diodes.Cathode[0]);			// read voltage at B2
+             v0 = vcc_diff(W5msReadADC(diodes.Cathode[0]));			// read voltage at B2
              if (v0 < v2) v2 -= v0;
              if (v1 > v2) {
                 ntrans.uBE = v1;

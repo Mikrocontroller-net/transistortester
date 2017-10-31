@@ -106,3 +106,22 @@ unsigned int W20msReadADC (uint8_t Probe) {
   wait_about20ms();
   return (ReadADC(Probe));
 }
+
+uint16_t unsigned_diff(uint16_t v1, uint16_t v2)
+{
+  if (v1 > v2) return (v1 - v2);
+  else         return (0);
+}
+uint16_t abs_diff(uint16_t v1, uint16_t v2)
+{
+  if (v1 > v2) return (v1 - v2);
+  else         return (v2 - v1);
+}
+
+uint16_t vcc_diff(uint16_t v2)
+{
+  return unsigned_diff(ADCconfig.U_AVCC, v2);
+//  if (ADCconfig.U_AVCC > v2) return (ADCconfig.U_AVCC - v2);
+//  else         return (0);
+}
+

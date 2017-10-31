@@ -22,6 +22,9 @@
    const unsigned char TESTER_str[] MEM2_TEXT = "Tranzistor";
   #ifndef NO_FREQ_COUNTER
    const unsigned char FREQ_str[] MEM2_TEXT = "Frekvenca";
+ #ifdef WITH_FREQUENCY_DIVIDER
+   const unsigned char FScaler_str[] MEM2_TEXT = "F-Scaler";
+ #endif
   #endif
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
    const unsigned char SHOW_str[] MEM2_TEXT = "Prikazi podatke";	// "Show data"

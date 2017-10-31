@@ -38,6 +38,8 @@ CFLAGS += -DBAUDRATE=$(BAUD_RATE)
 # the normal transistor tester function and switch off the tester.
 CFLAGS += -DWITH_MENU
 
+CFLAGS += -DWITH_FREQUENCY_DIVIDER
+
 #CFLAGS += -DR_L_VAL=5600 -DR_H_VAL=100000
 
 # Select your language:
@@ -89,9 +91,9 @@ WITH_SamplingADC = 1
 # Option can be set only together with SamplingADC=1 and OP_MHZ=16
 #CFLAGS += -DWITH_XTAL 
 # Option WITH_UJT enables additional tests for UJT (UniJunction Transistor)
-#CFLAGS += -DWITH_UJT
+CFLAGS += -DWITH_UJT
 # Option WITH_PUT enables additional tests for PUT (Programmable Unijunction Transistor)
-#CFLAGS += -DWITH_PUT
+CFLAGS += -DWITH_PUT
 # Option FET_Idss will measure the Idss parameter for FETs, if not estimated > 40mA.
 CFLAGS += -DFET_Idss
 

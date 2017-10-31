@@ -60,7 +60,8 @@
  /* no PROCESSOR_TYP == 644 , 328 */
  #define MODE_TRANS 0		/* normal TransistorTester function */
  #ifdef NO_FREQ_COUNTER
-  #define MODE_FREQ 67		/* frequency measurement */
+  #define MODE_FREQ 68		/* frequency measurement */
+  #define MODE_FSCALER 67	/* scaler for frequency measurement */
   #define MODE_FGEN 1		/* frequency generator function */
   #define MODE_PWM 2		/* Pulse Width variation function */
   #define MODE_ESR 3		/* ESR measurement in circuit */
@@ -86,28 +87,57 @@
   #endif
  #else
   // with Frequency counter
-  #define MODE_FREQ 1		/* frequency measurement */
-  #define MODE_FGEN 2		/* frequency generator function */
-  #define MODE_PWM 3		/* Pulse Width variation function */
-  #define MODE_ESR 4		/* ESR measurement in circuit */
-  #define MODE_RESIS 5		/* ResistorCheck at TP1:TP3 */
-  #define MODE_CAP13 6		/* Capacitor check at TP1:TP3 */
-  #define MODE_BIG_CAP_CORR 7	/* Correction for big caps */
-  #define NNN 7
-  #ifdef WITH_ROTARY_CHECK
-   #define MODE_ROTARY 8		/* Test Rotary Switch */
-   #undef NNN
+  #ifdef WITH_FREQUENCY_DIVIDER
+   // frequency counter with selectable scaler
+   #define MODE_FSCALER 1	/* scaler for frequency measurement */
+   #define MODE_FREQ 2		/* frequency measurement */
+   #define MODE_FGEN 3		/* frequency generator function */
+   #define MODE_PWM 4		/* Pulse Width variation function */
+   #define MODE_ESR 5		/* ESR measurement in circuit */
+   #define MODE_RESIS 6		/* ResistorCheck at TP1:TP3 */
+   #define MODE_CAP13 7		/* Capacitor check at TP1:TP3 */
+   #define MODE_BIG_CAP_CORR 8	/* Correction for big caps */
    #define NNN 8
-   #ifdef WITH_SELFTEST
-    #define MODE_SELFTEST 9	/* full selftest function with calibration */
+   #ifdef WITH_ROTARY_CHECK
+    #define MODE_ROTARY 9		/* Test Rotary Switch */
     #undef NNN
     #define NNN 9
+    #ifdef WITH_SELFTEST
+     #define MODE_SELFTEST 10	/* full selftest function with calibration */
+     #undef NNN
+     #define NNN 10
+    #endif
+   #else
+    #ifdef WITH_SELFTEST
+     #define MODE_SELFTEST 9	/* full selftest function with calibration */
+     #undef NNN
+     #define NNN 9
+    #endif
    #endif
-  #else
-   #ifdef WITH_SELFTEST
-    #define MODE_SELFTEST 8	/* full selftest function with calibration */
+  #else		/* no frequency scaler */
+   #define MODE_FREQ 1		/* frequency measurement */
+   #define MODE_FGEN 2		/* frequency generator function */
+   #define MODE_PWM 3		/* Pulse Width variation function */
+   #define MODE_ESR 4		/* ESR measurement in circuit */
+   #define MODE_RESIS 5		/* ResistorCheck at TP1:TP3 */
+   #define MODE_CAP13 6		/* Capacitor check at TP1:TP3 */
+   #define MODE_BIG_CAP_CORR 7	/* Correction for big caps */
+   #define NNN 7
+   #ifdef WITH_ROTARY_CHECK
+    #define MODE_ROTARY 8		/* Test Rotary Switch */
     #undef NNN
     #define NNN 8
+    #ifdef WITH_SELFTEST
+     #define MODE_SELFTEST 9	/* full selftest function with calibration */
+     #undef NNN
+     #define NNN 9
+    #endif
+   #else
+    #ifdef WITH_SELFTEST
+     #define MODE_SELFTEST 8	/* full selftest function with calibration */
+     #undef NNN
+     #define NNN 8
+    #endif
    #endif
   #endif
  #endif
@@ -153,8 +183,12 @@
  #define MODE_OFF 66
 #endif
 
-#if LCD_LINES > 7
- #define MENU_LINES 6
+#ifndef MAX_MENU_LINES
+#define MAX_MENU_LINES 5
+#endif
+
+#if LCD_LINES > (MAX_MENU_LINES+1)
+ #define MENU_LINES MAX_MENU_LINES
 #else
  #define MENU_LINES (LCD_LINES-1)
 #endif
@@ -167,6 +201,9 @@ void do_menu(uint8_t func_number) {
 //    lcd_MEM2_string(DoMenu_str);	// "do menu "
 //    u2lcd(func_number);
 #ifndef NO_FREQ_COUNTER
+ #ifdef WITH_FREQUENCY_DIVIDER
+    if (func_number == MODE_FSCALER) setFScaler(); 	// set scaler to 1,2,4,8,16,32,64,128 
+ #endif
     if (func_number == MODE_FREQ) GetFrequency(0);
 #endif
 #if PROCESSOR_TYP == 644
@@ -412,6 +449,9 @@ void message2line(uint8_t number) {
      if (number == MODE_TRANS) lcd_MEM2_string(TESTER_str);
  #ifndef NO_FREQ_COUNTER
      if (number == MODE_FREQ) lcd_MEM2_string(FREQ_str);
+  #ifdef WITH_FREQUENCY_DIVIDER
+     if (number == MODE_FSCALER) lcd_MEM2_string(FScaler_str);
+  #endif
  #endif
  #if PROCESSOR_TYP == 644
      if (number == MODE_HFREQ) lcd_MEM2_string(HFREQ_str);
@@ -943,5 +983,68 @@ int8_t korr;
   } /* end for times */
 
   eeprom_write_byte((uint8_t *)(&big_cap_corr), (int8_t)korr);	// save korr value
-}
+}	/* end set_big_cap_corr() */
+ #if defined(WITH_FREQUENCY_DIVIDER) && !defined(NO_FREQ_COUNTER)
+ /* *************************************************** */
+ /* set the scaler value for frequency measurement      */
+ /* *************************************************** */
+void setFScaler(void) {
+uint8_t key_pressed;
+uint8_t korr;
+  // set the contrast value
+  message_key_released(FScaler_str);	// display freq-scaler and wait for key released
+  korr = eeprom_read_byte((uint8_t *)&f_scaler);
+  #ifdef POWER_OFF
+  uint8_t times;
+  for (times=0;times<240;)
+  #else
+  while (1)                     /* wait endless without option POWER_OFF */
+  #endif
+  {
+     lcd_line2();
+     DisplayValue16(korr,0,' ',3);
+     lcd_clear_line();		// clear to end of line
+     key_pressed = wait_for_key_ms(1600);
+  #ifdef POWER_OFF
+   #ifdef WITH_ROTARY_SWITCH
+     if ((key_pressed != 0) || (rotary.incre > 0)) times = 0;	// reset counter, operator is active
+   #else
+     if (key_pressed != 0)  times = 0;	// reset counter, operator is active
+   #endif
+  #endif
+     if(key_pressed >= 130) break;	// more than 1.3 seconds
+  #ifdef WITH_ROTARY_SWITCH
+     if (rotary.incre > FAST_ROTATION) break;		// fast rotation ends setting of korr
+     korr += rotary.count;		// increase or decrease the korr by rotary.count
+     for (;rotary.count!=0;) {
+        if (rotary.count < 0) {
+           rotary.count++;
+           korr = korr>>1;	// decrease the scaler by factor 2
+           if (korr == 0) korr = 128;
+        }
+        if (rotary.count > 0) {
+           rotary.count--;
+           korr = korr+korr;	// increases the scaler by factor 2
+           if (korr == 0) korr = 1;
+        }
+     }
+  #endif
+     if (key_pressed > 0) {
+        if (key_pressed > 40) {
+           korr = korr+korr;	// longer key press increases the scaler by factor 2
+           if (korr == 0) korr = 1;
+        } else {
+           korr = korr>>1;	// decrease the scaler by factor 2
+           if (korr == 0) korr = 128;
+        }
+     }
+     if (korr == 0) korr = 1;
+  #ifdef POWER_OFF
+     times = Pwr_mode_check(times);	// no time limit with DC_Pwr_mode
+  #endif
+  } /* end for times */
+
+  eeprom_write_byte((uint8_t *)(&f_scaler), (int8_t)korr);	// save korr value
+}	/* end setFScaler() */
+ #endif
 #endif  /* WITH_MENU */

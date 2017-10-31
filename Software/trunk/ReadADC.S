@@ -194,3 +194,42 @@ r2b02:
     	ret;
 
  .endfunc
+
+.func abs_diff
+.GLOBAL abs_diff
+abs_diff:
+	movw	r18, r22
+        sub	r18, r24
+	sbc	r19, r25
+	brcs	is_pl		; return v1-v2
+	movw	r24, r18
+	ret			; return v2-v1
+.endfunc
+
+.func vcc_diff
+.GLOBAL vcc_diff
+; uint16_t vcc_diff(uint16_t v2)	// computes unsigned_diff(ADCconfig.U_AVCC, v2)
+vcc_diff:
+	movw	r22, r24
+	lds	r24, ADCconfig+U_AVCC
+	lds	r25, ADCconfig+U_AVCC+1
+	; runs to function unsigned diff
+ .endfunc
+
+.func unsigned_diff
+.GLOBAL unsigned_diff
+; uint16_t unsigned_diff(uint16_t v1, uint16_t v2)  // computes v1-v2 if positive, otherwise returns 0
+
+unsigned_diff:
+	cp	r22, r24
+	cpc	r23, r25
+	brcc	no_pl
+is_pl:
+	sub	r24, r22
+	sbc	r25, r23
+	ret			; return v1-v2
+no_pl:
+	ldi	r24, 0
+	ldi	r25, 0
+	ret	;
+ .endfunc

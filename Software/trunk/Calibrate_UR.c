@@ -72,19 +72,19 @@ void Calibrate_UR(void) {
   ADC_PORT = 1<<TP1 | TXD_VAL;	//ADC-Port 1 to VCC
   ADC_DDR = 1<<TP1 | TXD_MSK;	//ADC-Pin  1 to output 0V
   R_DDR = 1<<PIN_RL1;		//Pin 1 to output and over R_L to GND
-  sum_rp = ADCconfig.U_AVCC - W5msReadADC(TP1);
+  sum_rp = vcc_diff(W5msReadADC(TP1));
 // - - - - - - - 
       
   ADC_PORT = 1<<TP2 | TXD_VAL;	//ADC-Port 2 to VCC
   ADC_DDR = 1<<TP2 | TXD_MSK;	//ADC-Pin  2 to output 0V
   R_DDR = 1<<PIN_RL2;		//Pin 2 to output and over R_L to GND
-  sum_rp += ADCconfig.U_AVCC - W5msReadADC(TP2);
+  sum_rp += vcc_diff(W5msReadADC(TP2));
 // - - - - - - - 
 
   ADC_PORT = 1<<TP3 | TXD_VAL;	//ADC-Port 3 to VCC
   ADC_DDR = 1<<TP3 | TXD_MSK;	//ADC-Pin  3 to output 0V
   R_DDR = 1<<PIN_RL3;		//Pin 3 to output and over R_L to GND
-  sum_rp += ADCconfig.U_AVCC - W5msReadADC(TP3);
+  sum_rp += vcc_diff(W5msReadADC(TP3));
 // - - - - - - - 
   ADC_DDR =  TXD_MSK;	//ADC-Pins to input
   ADC_PORT =  TXD_VAL;	//ADC-Ports to GND

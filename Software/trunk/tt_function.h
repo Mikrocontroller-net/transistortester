@@ -14,6 +14,11 @@ uint16_t GetESR(uint8_t hipin, uint8_t lopin);	//get ESR of capacitor
 void GetVloss(void);			//get Voltage loss of capacitor
 void GetIr(uint8_t HighPin, uint8_t LowPin);	// get residual current of diode
 void SerienDiodenAusgabe();		// output diodes as ->|-->|- with voltages
+void DiodeSymbol_withPins(uint8_t nn); // Output the diode symbol with pins like 1->|-3
+void DiodeSymbol_ApinCpin(uint8_t nn);	// output diode symbpl with pins 1->|-3
+void DiodeSymbol_ACpin(uint8_t nn);	// output diode symbpl with pins  ->|-3
+void DiodeSymbol_CpinApin(uint8_t nn);	// output diode symbpl with pins 1-|<-3
+void DiodeSymbol_CApin(uint8_t nn);	// output diode symbpl with pins  -|<-3
 void UfAusgabe(uint8_t bcdchar);	// Output of the threshold voltage(s) Uf
 void mVAusgabe(uint8_t nn);		// Output of the theshold voltage for Diode nn 
 void RvalOut(uint8_t nrr);		// Output of the resistor value(s)
@@ -77,6 +82,12 @@ void uart_int(uint16_t num);
 void CheckUJT(void);		// measure UJT
 void select_color(uint8_t xc);		// select color function 
 void switch_tester_off(void);		// switch power off
+uint8_t search_vak_diode(void);		// search the diode number of the diode connected to emitter and collector
+void mVOut(uint16_t vv);		// mV output for debug
+void setFScaler();			// ask for new frequency scaler
+uint16_t unsigned_diff(uint16_t v1, uint16_t v2);	// build difference v1-v2, but 0 instead of negative
+uint16_t vcc_diff(uint16_t v2);		// build ADCconfig.U_AVCC-v2
+uint16_t abs_diff(uint16_t v1, uint16_t v2);	// build absolute value of v1-v2
 
 #ifdef SamplingADC
 uint16_t samplingADC(   // code is in sampling_ADC.S

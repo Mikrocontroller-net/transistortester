@@ -187,7 +187,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   R_DDR = LoPinRL;		// resistor-Port Low-Pin to 0
   adc.lp_otr = W5msReadADC(LowPin);	//read voltage of Low-Pin  , without Gate current (+)
   R_DDR = 0;
-  wait5ms();	 			// release all current (clear TRIAC and Thyristor)
+  wait10ms();	 			// release all current (clear TRIAC and Thyristor)
   R_PORT = 0;
   R_DDR = LoPinRL | TriPinRL;		// start current again
   adc.lp2 = W5msReadADC(LowPin);	// lp2 is the voltage at 680 Ohm with - Gate
@@ -199,7 +199,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
      R_DDR = HiPinRL | TriPinRL;	// resistor-Port High-Pin and TriState-Pin to 1
      adc.hp1 = vcc_diff(W5msReadADC(HighPin));		// voltage at 680 Ohm with + Gate
      R_PORT = 0;			// clear Thyristor
-     wait5ms();				// release all current (clear TRIAC and Thyristor)
+     wait10ms();				// release all current (clear TRIAC and Thyristor)
      R_PORT = HiPinRL;			//resistor-Port High-Pin to +, TriState to 0
      adc.hp2 = vcc_diff(W5msReadADC(HighPin));	// voltage at 680 Ohm with - Gate
      R_DDR = HiPinRL;			// resistor-Port High-Pin to 1, TriState open
@@ -247,7 +247,13 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   }
 #endif
   if ((v_change_n < 288)  && (v_change_p < 288)) goto checkDiode; // no significant change
-  if ((v_change_n+150) > (v_change_p + adc.hp3)) {
+//  if ((v_change_n+150) > (v_change_p + adc.hp3))
+  if ((adc.hp2 + v_change_p) < (adc.vCEs + v_change_n))
+  {
+ #if DebugOut == 5
+     lcd_data('c');
+     lcd_data('N');
+ #endif
      adc.vCEs = adc.hp2;	// voltage at + 680 Ohm with - Gate
      adc.lp_otr = adc.hp3;	// voltage at + 680 Ohm with open Gate
   }
@@ -354,7 +360,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   #if DebugOut == 5
     lcd_line4();
     lcd_data('N');
-    lcd_data('J');
+    lcd_data('j');
     lcd_space();
   #endif
     if ((PartMode&0x0f) == PART_MODE_JFET)
@@ -406,6 +412,9 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         }
  #endif
 #endif  /* end SHOW_ICE */
+#if DebugOut == 5
+        lcd_data('#');
+#endif
         ntrans.count++;			// count as two, the inverse is identical
         goto saveNresult;		// save Pin numbers and exit
      }  /* end selfconducting N-channel  mode */
@@ -570,10 +579,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
  #endif
   if (adc.rhp > (100+adc.lp_otr)) {
 
-     tmp16 = adc.rhp;
-     if (tmp16 > adc.lp_otr) {
-        tmp16 -= adc.lp_otr;
-     }
+     tmp16 = unsigned_diff(adc.rhp, adc.lp_otr);	// subtract residual current
  #ifdef LONG_HFE
   #if DebugOut == 5
      lcd_data('H');	// PHcc
@@ -665,7 +671,8 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
            // to check this, make Tri-Pin (assumed base) high again; PNP will stop conducting, PUT won't
            R_PORT = TriPinRH;
            tmp16 = W10msReadADC(LowPin);	//measure voltage at LowPin (assumed Collector)
-           if (tmp16>=1024) {     // compiler could optimize this to an 8-bit compare, but doesn't :-(
+           if ((tmp16 >= 1024) && (PartFound < PART_TRANSISTOR)) { 
+              // compiler could optimize this to an 8-bit compare, but doesn't :-(
  #if DebugOut == 5
               lcd_data('P');
               lcd_data('U');
@@ -1042,8 +1049,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
       //Test if NPN Transistor or MOSFET
       ADC_DDR = LoADCm;	//Low-Pin to output 0V
  #if FLASHEND > 0x1fff
-      R_DDR = HiPinRL | TriPinRL;	//R_L port of Tristate-Pin (Basis) to output
-      R_PORT = HiPinRL | TriPinRL;	//R_L port of Tristate-Pin (Basis) to VCC
+//      R_DDR = HiPinRL | TriPinRL;	//R_L port of Tristate-Pin (Basis) to output
+//      R_PORT = HiPinRL | TriPinRL;	//R_L port of Tristate-Pin (Basis) to VCC
+      R_DDR =  TriPinRL;	//R_L port of Tristate-Pin (Basis) to output
+      R_PORT = TriPinRL;	//R_L port of Tristate-Pin (Basis) to VCC
       wait_about5ms();			// load gate capacitor
       R_DDR = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to output
       R_PORT = HiPinRL | TriPinRH;	//R_H port of Tristate-Pin (Basis) to VCC
@@ -1080,10 +1089,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   #endif
          //compute current amplification factor for common Emitter
          //hFE = B = Collector current / Base current
-         tmp16 = adc.rhp;
-         if (tmp16 > adc.lp_otr) {
-            tmp16 -= adc.lp_otr;
-         }
+         tmp16 = unsigned_diff(adc.rhp, adc.lp_otr);	// subtract residual current
          // e_hfe with 1% resolution for optocoupler
   #ifdef LONG_HFE
    #if DebugOut == 5
@@ -1365,8 +1371,10 @@ checkDiode:
 #endif
   volt_dif = adc.hp3/8;
   if (volt_dif > 200) volt_dif = 200;
+  if (adc.hp1 < 1000) tmp16 = adc.hp1/100;
+  else                tmp16 = adc.hp1/16;
 
-  if((adc.hp1 > 150) && (adc.hp1 < 4640) && (adc.hp2 < adc.hp1) && (adc.hp1 > (adc.hp3+volt_dif)) && (adc.hp3 > adc.hp1/100))
+  if((adc.hp1 > 150) && (adc.hp1 < 4640) && (adc.hp2 < adc.hp1) && (adc.hp1 > (adc.hp3+volt_dif)) && (adc.hp3 > tmp16))
      {
      //voltage is above 0,15V and below 4,64V => Ok
      // hp2 >= hp1 is only possible with capacitor, not with a diode, hp2 is measured with 470k

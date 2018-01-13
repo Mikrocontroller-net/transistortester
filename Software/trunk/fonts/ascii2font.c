@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
  int bittab1[16][80];	// bits for every line of bitmap
  int bittab2[16][80];	// bits for every line of bitmap
  
-#define vertical_offset 1
+#define vertical_offset 0
  if (vertical_offset != 0) {
    fprintf(stderr,"Vertikaler Offset %d\r\n",vertical_offset);
  }

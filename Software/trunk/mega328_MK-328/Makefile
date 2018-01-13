@@ -25,35 +25,155 @@ CFLAGS = -Wall
 # atmega2560: m2560	// see config.h for different port setting
 PARTNO = m328p
 
-# include HardwareSerial functions
-WITHOUT_LCD = 1
-BAUD_RATE = 115200
-CFLAGS += -DWITH_HARDWARE_SERIAL 
-#CFLAGS += -DBAUDRATE=115200
-CFLAGS += -DBAUDRATE=$(BAUD_RATE)
-
 # The WITH_MENU option enables a dialog to choose some additional functions.
 # Currently a frequency measurement at ATmega Pin PD4, a frequency generator at TP2 ,
 # the external voltage measurement and C+ESR measurement can be selected. Of course you can also return to
 # the normal transistor tester function and switch off the tester.
 CFLAGS += -DWITH_MENU
+#
+# For ATmega328 the menu function "rotary encoder check" is only enabled with the WITH_ROTARY_CHECK option.
+#CFLAGS += -DWITH_ROTARY_CHECK
 
-CFLAGS += -DWITH_FREQUENCY_DIVIDER
-CFLAGS += -DDebugOut=5
+# If the frequency counter function is not prepared at the board, you can deselect the function.
+CFLAGS += -DNO_FREQ_COUNTER
 
-#CFLAGS += -DR_L_VAL=5600 -DR_H_VAL=100000
+# With the menu item "Show data" the used icons and the font data are displayed for
+# graphical displays after the presentation of calibration data.
+# You can switch off the presentation of the icons and the font data by setting
+# the option NO_ICONS_DEMO to save flash memory and display time.
+CFLAGS += -DNO_ICONS_DEMO
+
+# The menu function can be easier controlled with a incremental encoder (rotary switch).
+# Both switches of the rotary switch can be connected with 1 kOhm resistors to PD1 and PD3.
+# The common contact of the two switches must be connected to GND.
+# You must also connect both switch contacts with two 10 kOhm resistors to VCC (pull up).
+# The best choise is a incremental encoder with Push Button. The button can be connected
+# parallel to the start key of the Transistor Tester.
+# A define of the WITH_ROTARY_SWITCH enable the support for this extension.
+# If your encoder has the same count of pulses at any switch as indexed positions (detent) for every turn,
+# you should set the WITH_ROTARY_SWITCH to 2 or 3.
+# If your encoder has twice the count of indexed positions, you should set the WITH_ROTARY_COUNT to 1.
+# For rotary encoder without indexed position or with an indexed position at every change of
+# the state of any switches (four times the count of pulses) you can set the
+# WITH_ROTARY_COUNT to 5 for getting the best resolution.
+# You can also use two separate push-buttons for Up and Down instead ot the rotary encoder.
+# You must set the WITH_ROTARY_SWITCH to 4 for the UP/DOWN push-buttons.
+#CFLAGS += -DWITH_ROTARY_SWITCH=2
+# the option CHANGE_ROTARY_DIRECTION changes the rotary direction by swap of switches
+#CFLAGS += -DCHANGE_ROTARY_DIRECTION
+# The best solution for connecting the rotary switch is PD1 and PD3, because this setting can be used
+# with character and ST7565 LCD. But the first draft has used PD2 instead of PD1.
+# To return to the old setting, you can override the PD1 default setting with the following setting:
+# CFLAGS += -DROTARY_2_PIN=PD2
 
 # Select your language:
 # Available languages are: LANG_BRASIL, LANG_CZECH, LANG_DUTCH, LANG_ENGLISH, LANG_GERMAN, LANG_HUNGARIAN, LANG_ITALIAN,
 #                          LANG_LITHUANIAN, LANG_POLISH, LANG_RUSSIAN , LANG_SLOVAK, LANG_SLOVENE, LANG_SPANISH, LANG_UKRAINIAN
 UI_LANGUAGE = LANG_ENGLISH
 
-# removed everything about LCD, Rotary ... excepted display size
+# The LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset.
+# This lcd-display don't have a character for Ohm and for µ (micro).
+# Russian language requires a LCD controller with russian characterset and option LCD_CYRILLIC!
+#CFLAGS += -DLCD_CYRILLIC
+
+# The LCD_DOGM option must be set for support of the DOG-M type of LCD modules with ST7036 controller.
+# For this LCD type the contrast must be set with software command.
+#CFLAGS += -DLCD_DOGM
 
 # Can be used with a 4x20 character display for better using the additional space.
 # Additional parameters, which are shown only short in row 2, will be shown in row 3 and 4 with this option.
-CFLAGS += -DFOUR_LINE_LCD=16
-CFLAGS += -DLCD_LINE_LENGTH=40
+CFLAGS += -DFOUR_LINE_LCD
+#CFLAGS += -DLCD_LINE_LENGTH=20
+
+# Some character display types have a different DD_RAM start adress for line 1. 
+# Usually the DD_RAM start address for line 1 is 0.
+# You can specify a different start address with the option DD_RAM_OFFSET
+#DD_RAM_OFFSET=128
+
+# The PAGE_MODE activates a moving line cursor for menu function selection together with FOUR_LINE_LCD
+# and WITH_ROTARY_SWITCH.
+# Without the PAGE_MODE option, the line cursor is fixed to line 3 and the text moves.
+#CFLAGS += -DPAGE_MODE
+
+
+# The LCD_ST7565 option must be set to support a 128x64 LCD graphics display
+# with ST7565 controller. It is controlled with a 1-bit interface (SPI or I2C)
+# The normal ST7565 controller will be supported by setting the WITH_LCD_ST7565 to 1 or 7565.
+# The special action for a simular SSD1306 controller can be activated by
+# setting the WITH_LCD_ST7565 variable to 1306.
+WITH_LCD_ST7565 = 1
+#WITH_LCD_ST7565 = 1306
+
+# Normally the ST7565 controller is connected with a SPI 4-wire interface, but
+# you can enable a I2C interface with address 0x3c for the SSD1306 controller 
+# by setting the LCD_INTERFACE_MODE to 2.
+# The SCL signal is available at PD5 (LCD-E, LCD-6), the SDA signal at PD2 (LCD-D6, LCD-13).
+# A pull up resistor of about 4.7k is required for both signals to 3.3V.
+# Please check, if your display module can also tolerate a 5V signal level.
+# For the ST7920 controller you can select the serial interface by setting the LCD_INTERFACE_MODE to 5 . 
+# ST7920-RW <--> PD2 , ST7920-E <--> PD5 , ST7920-PSB <--> GND , ST7920-RS <--> VCC , ST7920-RST <--> VCC
+# For the PDF8814 controller you can also select a 3 for the 3-line serial interface with RS (D/C) as first bit.
+# The RS (data/command) signal at PD1 is used as chip enable SCE.
+#CFLAGS += -DLCD_INTERFACE_MODE=2
+
+# With the option LCD_SPI_OPEN_COL the data signals of the SPI interface are not switched to VCC.
+# With option LCD_SPI_OPEN_COL the signals are switched to GND only, for high signals the pullup resistors
+# of the ATmega are used. For the RESET signal a external pull-up resistor is required, if the
+# option PULLUP_DISABLE is set. For the other signals the internal pullup resistors of the ATmega
+# are temporary used, even if option PULLUP_DISABLE is set.
+#CFLAGS += -DLCD_SPI_OPEN_COL
+
+# The I2C Address can be preset to a address of 0x3d instead of 0x3c by setting the constant LCD_I2C_ADDR.
+#CFLAGS += -DLCD_I2C_ADDR=0x3d
+
+# If LCD_ST7565 option is used: Set the resitor ratio for the internal
+# voltage regulator. Supported value range: 0..7.
+# Good values are e.g. 4 or 7. If unsure just have a try.
+LCD_ST7565_RESISTOR_RATIO = 4
+
+# If LCD_ST7565 option is set to 1: Flip the display's horizontal direction.
+CFLAGS += -DLCD_ST7565_H_FLIP=0
+# With LCD_ST7565_H_OFFSET you can specify a horizontal pixel offset to the display window.
+# The controller knows 132 horizontal pixel, the window shows only 128 pixel.
+# OFFSET values can vary for the connected display type to 0, 2 or 4.
+CFLAGS += -DLCD_ST7565_H_OFFSET=0
+# If LCD_ST7565 option is set to 1: Flip the display's vertical direction
+CFLAGS += -DLCD_ST7565_V_FLIP=0
+# The contrast value can be predefined with the constant VOLUME_VALUE
+# for ST7565 controller the value can be between 0 and 63, for the SSD1306 0 to 255 can be selected.
+CFLAGS += -DVOLUME_VALUE=55
+
+# You can specify a Y start line (vertical address) for the display output with the option LCD_ST7565_Y_START.
+# If your output start in the middle of the display, you can specify a Y_START of 32
+#CFLAGS += -DLCD_ST7565_Y_START=32
+
+# If option WITH_LCD_ST7565 is present one of the following fonts should be
+# choosen. With a font width below 8 more than 16 characters can be shown in one display line.
+#CFLAGS += -DFONT_5X8
+#CFLAGS += -DFONT_6X8
+#CFLAGS += -DFONT_8X8
+#CFLAGS += -DFONT_7X12
+CFLAGS += -DFONT_8X12thin
+#CFLAGS += -DFONT_8X14
+#CFLAGS += -DFONT_8X15
+#CFLAGS += -DFONT_8X16
+#CFLAGS += -DFONT_8X16thin
+
+# There are also different 24x32 pixel icons for presentation of the transistor symbols available.
+# you can select a special type with setting the ICON_TYPE.
+# Currently you can select 1 or 3 for one of two thin layouts for the icons.
+# You can also select two thick layouts for the icons by setting the ICON_TYPE to 2 or 0 (0=old style).
+CFLAGS += -DICON_TYPE=3
+
+# option BIG_TP makes the 123 for the test pins (beside the icon) bigger
+CFLAGS += -DBIG_TP
+# option INVERSE_TP inverse the 123 for the test pins (black on white)
+# the option INVERSE_TP disable the option BIG_TP because a frame is required
+#CFLAGS += -DINVERSE_TP
+
+# Option STRIP_GRID_BOARD selects different board-layout, do not set for standard board!
+# The connection of LCD is totally different for both versions.
+#CFLAGS += -DSTRIP_GRID_BOARD
 
 # The WITH_SELFTEST option enables selftest function (only for mega168 or mega328) including the calibration.
 # Normally the mega168 uses selftest without T1 to T7 to enable both hFE measurements.
@@ -92,9 +212,9 @@ WITH_SamplingADC = 1
 # Option can be set only together with SamplingADC=1 and OP_MHZ=16
 #CFLAGS += -DWITH_XTAL 
 # Option WITH_UJT enables additional tests for UJT (UniJunction Transistor)
-CFLAGS += -DWITH_UJT
+#CFLAGS += -DWITH_UJT
 # Option WITH_PUT enables additional tests for PUT (Programmable Unijunction Transistor)
-CFLAGS += -DWITH_PUT
+#CFLAGS += -DWITH_PUT
 # Option FET_Idss will measure the Idss parameter for FETs, if not estimated > 40mA.
 CFLAGS += -DFET_Idss
 
@@ -108,6 +228,7 @@ CFLAGS += -DREF_L_KORR=40
 # C_H_KORR defines a correction of 0.1% units for big capacitor measurement.
 # Positive values will reduce measurement results.
 CFLAGS += -DC_H_KORR=0
+
 
 # The WITH_UART option enables the software UART  (TTL level output at Pin PC3, 26).
 # You can set WITH_UART to 2 to enable a special mode of serial output with line number in column 1.
@@ -150,10 +271,10 @@ CFLAGS += -DESR_ZERO=20
 # NO_AREF_CAP tells your Software, that you have no Capacitor installed at pin AREF (21).
 # This enables a shorter wait-time for AUTOSCALE_ADC function.
 # A capacitor with 1nF can be used with the option NO_AREF_CAP set.
-#CFLAGS += -DNO_AREF_CAP
+CFLAGS += -DNO_AREF_CAP
 
 # The OP_MHZ option tells the software the Operating Frequency of your ATmega.
-OP_MHZ = 16
+OP_MHZ = 8
 
 # Restart from sleep mode will be delayed for 16384 clock tics with crystal mode.
 # Operation with the internal RC-Generator or external clock will delay the restart by only 6 clock tics.
@@ -162,7 +283,7 @@ OP_MHZ = 16
 
 # The USE_EEPROM option specify where you wish to locate fix text and tables.
 # If USE_EEPROM is unset, program memory (flash) is taken for fix text and tables.
-#CFLAGS += -DUSE_EEPROM
+CFLAGS += -DUSE_EEPROM
 
 # Setting EBC_STYPE will select the old style to present the order of Transistor connection (EBC=...).
 # Omitting the option will select the 123=... style.  Every point is replaced by a character identifying 
@@ -200,17 +321,17 @@ CFLAGS += -DANZ_MESS=25
 # but successfull measurements are allowed double of the specified number.
 #  You can specify up to 255 empty measurements (CFLAGS += -DPOWER_OFF=255).
 #CFLAGS += -DPOWER_OFF=5
-#CFLAGS += -DPOWER_OFF
+CFLAGS += -DPOWER_OFF
 
 # Option BAT_CHECK enables the Battery Voltage Check, otherwise the SW Version is displayed instead of Bat.
 # BAT_CHECK should be set for battery powered tester version.
-#CFLAGS += -DBAT_CHECK
+CFLAGS += -DBAT_CHECK
 
 # The BAT_OUT option enables Battery Voltage Output on LCD (if BAT_CHECK is selected).
 # If your 9V supply has a diode installed, use the BAT_OUT=600 form to specify the
 # threshold voltage of your diode to adjust the output value.
 # This threshold level is added to LCD-output and does not affect the voltage checking levels.
-#CFLAGS += -DBAT_OUT=150
+CFLAGS += -DBAT_OUT=150
 
 # To adjust the warning-level and poor-level of battery check to the capability of a
 # low drop voltage regulator, you can specify the Option BAT_POOR=5400 .
@@ -221,7 +342,7 @@ CFLAGS += -DANZ_MESS=25
 # The warning level is 0.1V higher than the specified poor level (<=1.3V).
 # Setting the poor level to low values is not recommended for rechargeable Batteries,
 # because this increase the danger for deep discharge!!
-#CFLAGS += -DBAT_POOR=6400
+CFLAGS += -DBAT_POOR=6400
 
 # You can set a upper battery voltage limit in mV units for battery operation mode.
 # The operation time of additional functions is limited with the battery operation mode. 
@@ -232,23 +353,22 @@ CFLAGS += -DANZ_MESS=25
 # CFLAGS += -DDC_PWR=9500
 
 # Voltage divider for battery voltage measurement  10k / 3.3k = 133/33
-#CFLAGS += -DBAT_NUMERATOR=133
-#CFLAGS += -DBAT_DENOMINATOR=33
+CFLAGS += -DBAT_NUMERATOR=133
+CFLAGS += -DBAT_DENOMINATOR=33
 # Voltage divider for the external zener voltage measurement 180k / 20k = 10/1
 #CFLAGS += -DEXT_NUMERATOR=10
 #CFLAGS += -DEXT_DENOMINATOR=1
 
 # The sleep mode of the ATmega168 or ATmega328 is normally used by the software to save current.
 # You can inhibit this with the option INHIBIT_SLEEP_MODE .
-INHIBIT_SLEEP_MODE = 1
-
+INHIBIT_SLEEP_MODE = 0
 
 
 # Select your programmer type, speed and port, if you wish to use avrdude.
 # setting for DIAMEX ALL_AVR, Atmel AVRISP-mkII
-#PROGRAMMER=avrisp2
-#BitClock=5.0
-#PORT=usb
+PROGRAMMER=avrispmkII
+BitClock=1.0
+PORT=usb
 # setting for USBasp
 #PROGRAMMER=usbasp
 #BitClock=20
@@ -256,13 +376,8 @@ INHIBIT_SLEEP_MODE = 1
 # setting for ARDUINO MEGA, requires bootloader
 #PROGRAMMER=wiring
 #PORT = /dev/ttyACM0
+#BitClock=5.0
 #AVRDUDE_BAUD = -b 115200 -D
-# setting for ARDUINO UNO, requires bootloader
-PROGRAMMER=arduino 
-#PORT = /dev/ttyUSB0
-PORT = /dev/ttyACM0
-BitClock=5.0
-AVRDUDE_BAUD = -b $(BAUD_RATE)
 # ********************** end of selectable options
 
 include ../setup.mk
@@ -313,4 +428,3 @@ get_log.o: ../get_log.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 include ../finish.mk
-

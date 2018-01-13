@@ -79,7 +79,11 @@
 	#ifndef INHIBIT_SLEEP_MODE
 	  // switch off unused Parts
 	 #if PROCESSOR_TYP == 644
+          #ifdef PRUSART1
 	  PRR0 = (1<<PRTWI) |  (1<<PRSPI) | (1<<PRUSART1);
+          #else
+	  PRR0 = (1<<PRTWI) |  (1<<PRSPI) ;
+          #endif
 	//  PRR1 =  (1<<PRTIM3) ;
 	 #elif PROCESSOR_TYP == 1280
 	  PRR0 = (1<<PRTWI) |  (1<<PRSPI) | (1<<PRUSART1);

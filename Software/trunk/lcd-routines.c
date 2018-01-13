@@ -353,6 +353,7 @@ _xpos += FONT_WIDTH;		// move pointer to the next character position
     	uart_putc(temp1);
  }
 #endif
+ wdt_reset();
 } /* end lcd_data() */
  
 // sends a command to the LCD

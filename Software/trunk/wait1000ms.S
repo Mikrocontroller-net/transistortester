@@ -308,21 +308,17 @@ waitinner1:
  #warning wait1000ms: WAST_TICS2 > 7, delay times may be wrong!
  #endif
 
+ #if WAST_TICS2 >= 6
+    rjmp .		/* two additional tics */
+ #endif
  #if WAST_TICS2 >= 4
-    push r1
-    pop  r1
-  #define WAST_TICS3 (WAST_TICS2 - 4)
- #else
-  #define WAST_TICS3 WAST_TICS2
+    rjmp .		/* two additional tics */
  #endif
- #if WAST_TICS3 > 2
-   nop	
+ #if WAST_TICS2 >= 2
+    rjmp .		/* two additional tics */
  #endif
- #if WAST_TICS3 > 1
-    nop	
- #endif
- #if WAST_TICS3 > 0
-    nop	
+ #if ((WAST_TICS2 / 2) * 2) < WAST_TICS2
+    nop			/* one additional tic */
  #endif
 
  ret

@@ -71,7 +71,21 @@ void GetFrequency(uint8_t range) {
 
  #else
   message_key_released(FREQ_str);	// Frequency: in line 1
- #endif
+  #ifdef WITH_FREQUENCY_DIVIDER
+  uint16_t freq_factor;
+  freq_factor = (1<<eeprom_read_byte((uint8_t *)&f_scaler));
+  if (freq_factor != 1) {
+   #if LCD_LINE_LENGTH > 20
+    #define SCALER_POSITION (20 - 5)	// not too wide right
+   #else
+    #define SCALER_POSITION (LCD_LINE_LENGTH - 5)
+   #endif
+     lcd_set_cursor(0 * PAGES_PER_LINE, SCALER_POSITION); 
+     lcd_data('/');
+     u2lcd(freq_factor);	// show the frequency scaler, if not 1
+  }
+  #endif	/* WITH_FREQUENCY_DIVIDER */
+ #endif		/* PROCESSOR_TYP */
   taste = 0;				// reset flag for key pressed
   for (mm=0;mm<240;mm++) {
      // *************************************************************************
@@ -167,14 +181,9 @@ void GetFrequency(uint8_t range) {
  #else
      // ATmega328 ...
   #ifdef WITH_FREQUENCY_DIVIDER
-     uint8_t freq_factor;
-     freq_factor = eeprom_read_byte((uint8_t *)&f_scaler);
+     uint16_t freq_factor;
+     freq_factor = (1<<eeprom_read_byte((uint8_t *)&f_scaler));
      Display_Hz(ext_freq.dw*freq_factor, 7);
-     lcd_space();
-     if (freq_factor != 1) {
-        lcd_data('/');
-        u2lcd(freq_factor);	// show the frequency scaler, if not 1
-     }
   #else
      Display_Hz(ext_freq.dw, 7);
   #endif
@@ -264,19 +273,12 @@ void GetFrequency(uint8_t range) {
            //prevent overflow of 32-Bit
            DisplayValue((unsigned long)(ext_period/100),-9,'s',7);	// show period converted to 1ns units
         }
- #if (PROCESSOR_TYP != 644) && defined(WITH_FREQUENCY_DIVIDER)
-        lcd_space();
-        if (freq_factor != 1) {
-           lcd_data('*');
-           u2lcd(freq_factor);		// show the frequency scaler, if not 1
-        }
- #endif
 //	---------------------------------------
         if (ii == 250) {
            lcd_data('?');		// wait loop has regular finished
 					// probably the input frequency has changed
         } else {
-           if (ext_period > 249500) {
+           if (ext_period > 46566) {
 //	      ----------------------------------------------------
 //	      Show the frequency recalculated from measured period
 //	      ----------------------------------------------------
@@ -293,19 +295,12 @@ void GetFrequency(uint8_t range) {
                  DisplayValue(freq_from_per,-6,'H',7);  // display with  0.000001 Hz resolution
               } else {
                  // prevent unsigned long overflow, scale to 0.0001 Hz
-                 // frequency in 0.0001Hz (1e11*1e4)/(0.01ns count)
-                 freq_from_per = (unsigned long long)(1000000000000000) / ext_period;
-                 DisplayValue(freq_from_per,-4,'H',7);  // display with  0.0001 Hz resolution
+                 // frequency in 0.001Hz (1e11*1e3)/(0.01ns count)
+                 freq_from_per = (unsigned long long)(100000000000000) / ext_period;
+                 DisplayValue(freq_from_per,-3,'H',7);  // display with  0.001 Hz resolution
               }
               lcd_data('z');
               FREQINP_DDR &= ~(1<<FREQINP_PIN);	// switch frequency pin to input
- #if (PROCESSOR_TYP != 644) && defined(WITH_FREQUENCY_DIVIDER)
-              lcd_space();
-              if (freq_factor != 1) {
-                 lcd_data('/');
-                 u2lcd(freq_factor);	// show the frequency scaler, if not 1
-              }
- #endif
 //	      ----------------------------------------------------
            }
         }

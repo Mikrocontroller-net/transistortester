@@ -202,7 +202,7 @@ void do_menu(uint8_t func_number) {
 //    u2lcd(func_number);
 #ifndef NO_FREQ_COUNTER
  #ifdef WITH_FREQUENCY_DIVIDER
-    if (func_number == MODE_FSCALER) setFScaler(); 	// set scaler to 1,2,4,8,16,32,64,128 
+    if (func_number == MODE_FSCALER) setFScaler(); 	// set scaler to 1,2,4,8,16,32,64,128,256,512
  #endif
     if (func_number == MODE_FREQ) GetFrequency(0);
 #endif
@@ -1002,7 +1002,7 @@ uint8_t korr;
   #endif
   {
      lcd_line2();
-     DisplayValue16(korr,0,' ',3);
+     DisplayValue16(1<<korr,0,' ',3);
      lcd_clear_line();		// clear to end of line
      key_pressed = wait_for_key_ms(1600);
   #ifdef POWER_OFF
@@ -1015,30 +1015,17 @@ uint8_t korr;
      if(key_pressed >= 130) break;	// more than 1.3 seconds
   #ifdef WITH_ROTARY_SWITCH
      if (rotary.incre > FAST_ROTATION) break;		// fast rotation ends setting of korr
-     korr += rotary.count;		// increase or decrease the korr by rotary.count
-     for (;rotary.count!=0;) {
-        if (rotary.count < 0) {
-           rotary.count++;
-           korr = korr>>1;	// decrease the scaler by factor 2
-           if (korr == 0) korr = 128;
-        }
-        if (rotary.count > 0) {
-           rotary.count--;
-           korr = korr+korr;	// increases the scaler by factor 2
-           if (korr == 0) korr = 1;
-        }
-     }
+     korr += rotary.count;		// increase or decrease korr by rotary.count
   #endif
      if (key_pressed > 0) {
         if (key_pressed > 40) {
-           korr = korr+korr;	// longer key press increases the scaler by factor 2
-           if (korr == 0) korr = 1;
+           korr += 1;	// longer key press increases the scaler by factor 2
         } else {
-           korr = korr>>1;	// decrease the scaler by factor 2
-           if (korr == 0) korr = 128;
+           korr -= 1;	// decrease the scaler by factor 2
         }
      }
-     if (korr == 0) korr = 1;
+     if (korr > 128) korr = 9;	// wrap around to 1<<korr = 512
+     if (korr > 9)	korr = 0;	// wrap around to 1<<korr = 1
   #ifdef POWER_OFF
      times = Pwr_mode_check(times);	// no time limit with DC_Pwr_mode
   #endif

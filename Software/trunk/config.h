@@ -55,9 +55,13 @@
  #define PROCESSOR_TYP 644
 #elif defined(__AVR_ATmega324P__)
  #define PROCESSOR_TYP 644
+#elif defined(__AVR_ATmega324PA__)
+ #define PROCESSOR_TYP 644
 #elif defined(__AVR_ATmega644__)
  #define PROCESSOR_TYP 644
 #elif defined(__AVR_ATmega644P__)
+ #define PROCESSOR_TYP 644
+#elif defined(__AVR_ATmega644PA__)
  #define PROCESSOR_TYP 644
 #elif defined(__AVR_ATmega1284__)
  #define PROCESSOR_TYP 644

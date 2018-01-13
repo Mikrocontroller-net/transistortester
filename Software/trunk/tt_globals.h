@@ -22,7 +22,7 @@
    const int8_t big_cap_corr EEMEM = C_H_KORR;	// default correction for big capacity measurement
  #if defined(WITH_FREQUENCY_DIVIDER) && !defined(NO_FREQ_COUNTER)
   #ifndef FREQ_SCALER
-   #define FREQ_SCALER 1
+   #define FREQ_SCALER 0		// 1<<0 = 1
   #endif
   const uint8_t f_scaler EEMEM = FREQ_SCALER;	// default scaler for frequency measurement
  #endif

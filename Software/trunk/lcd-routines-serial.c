@@ -204,7 +204,7 @@ void lcd_init(void) {
   // be > 4095, so switch back to non-u2x mode if the baud rate is too
   // low.
 
-        USR0A = 0;
+        UCSR0A = 0;
         UBRR0H = (uint8_t) (((F_CPU / 16 / BAUDRATE) - 1) >> 8);
         UBRR0L = (uint8_t) (((F_CPU / 16 / BAUDRATE) - 1));
  #else

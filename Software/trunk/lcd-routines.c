@@ -220,7 +220,6 @@ void lcd_restore_position(void) {
 #if (LCD_GRAPHIC_TYPE != 0) && (WITH_GRAPHICS != 0) 
 void lcd_big_icon(unsigned char temp1) {
  uint8_t *pfont;	// pointer to the start of font data
- uint8_t pos_nr;
  #define TP_WIDTH 8	/* specifies the width of the Test Port number */
  #define DIODE_WIDTH 5    /* diode is 8 pixel width, but TP overlap the diode images with 3 pixels */
  #if SCREEN_HEIGHT > 64
@@ -228,12 +227,11 @@ void lcd_big_icon(unsigned char temp1) {
  #else
   #define HALF_SCREEN_HEIGHT (SCREEN_HEIGHT / 2)
  #endif
- pfont = (uint8_t *) bigfont[temp1 & 0x0f];	// first byte of character data
- pos_nr = temp1 & 0x30;	// filter the position Information
+ pfont = (uint8_t *) bigfont[temp1 & 0x3f];	// first byte of character data
  icon_xx =  TP_WIDTH;		// left side 
- if ((pos_nr & 0x10) == 0) icon_xx += (SCREEN_WIDTH / (ONE_B/4)); // right side
+ if ((temp1 & 0x40) == 0) icon_xx += (SCREEN_WIDTH / (ONE_B/4)); // right side
  icon_yy = 0;
- if (pos_nr < 0x20) {
+ if ((temp1 & 0x80) == 0) {
    icon_yy = HALF_SCREEN_HEIGHT;	// lower half of display
    // shift lower icon position to the right
    icon_xx +=  (SCREEN_WIDTH / (ONE_B/4))  - ICON_WIDTH - TP_WIDTH - TP_WIDTH - DIODE_WIDTH;
@@ -1074,9 +1072,9 @@ unsigned char options, unsigned char width, unsigned char height) {
          }
   #if (LCD_ST_TYPE == 8812)
    #if (LCD_ST7565_V_FLIP == 1)
-         if (((options & OPT_VREVERSE) == OPT_VREVERSE))
+         if ((options & OPT_VREVERSE) == OPT_VREVERSE)
    #else
-         if (!(options & OPT_VREVERSE) == OPT_VREVERSE)
+         if (!((options & OPT_VREVERSE) == OPT_VREVERSE))
    #endif
   #else
    #if (LCD_ST7565_V_FLIP == 1)

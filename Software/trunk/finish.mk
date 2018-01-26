@@ -94,15 +94,15 @@ $(TARGET): $(OBJECTS)
 	-avr-objcopy $(HEX_EEPROM_FLAGS) -O ihex $< $@ || exit 0
 
 %.lss: $(TARGET)
-	avr-objdump -h -S $< > $@
+	$(AVR_TOOL/PATH)avr-objdump -h -S $< > $@
 
 size: ${TARGET}
 	@echo
 	@echo $(OP_MHZ) MHz operation configured.
-	@avr-size -C --mcu=${MCU} ${TARGET}
+	@$(AVR_TOOL/PATH)avr-size -C --mcu=${MCU} ${TARGET}
 
 ## Clean target
-.PHONY: clean
+.PHONY: size clean steril fuses fuses-crystal fuses-crystal-lp erase upload program flash eeprom eeread read verify upload_orig
 clean:
 	-rm -rf $(OBJECTS) $(PROJECT).elf dep/* $(PROJECT).hex $(PROJECT).eep $(PROJECT).lss $(PROJECT).map
 steril:
@@ -116,7 +116,7 @@ steril:
 
 # device programming
 # make fuses  call if you don't have installed a crystal
-SlowBitClock = 100
+SlowBitClock = 200
 fuses:
 	avrdude -c $(PROGRAMMER) -B $(SlowBitClock) $(AVRDUDE_BAUD) -p $(PARTNO) -P $(PORT)  $(FUSES_INT)
 

@@ -504,7 +504,7 @@
 #define DIODES_C_A_A_C 13
 #define RESISTORS 14
 // define the positioning bits for lcd_big_icon
-#define LCD_UPPER_LEFT 0x30
-#define LCD_UPPER_RIGHT 0x20
-#define LCD_LOWER_LEFT 0x10
+#define LCD_UPPER_LEFT 0xC0
+#define LCD_UPPER_RIGHT 0x80
+#define LCD_LOWER_LEFT 0x40
 #define LCD_LOWER_RIGHT 0x00

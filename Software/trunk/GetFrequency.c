@@ -8,7 +8,12 @@
 //=================================================================
 // measure frequency at external pin T0 (PD4@mega328 or PB0@mega644) with Counter 0
 //   for mega1280 or mega2560 the T3 (PE6) is used with Counter 3
-#define FMAX_PERIOD 25050
+#if F_CPU > 12000000
+ #define FMAX_PERIOD 50020
+#else
+// #define FMAX_PERIOD 25050
+ #define FMAX_PERIOD 33010
+#endif
 #define FMAX_INPUT 2004000
 #define FREQ_DIV 16
 

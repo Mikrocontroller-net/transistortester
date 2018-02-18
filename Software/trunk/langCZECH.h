@@ -2,13 +2,13 @@
 //const unsigned char TestRunning[] MEM_TEXT = "Probíhá meøení..";
    const unsigned char TestRunning[] MEM_TEXT = {'P','r','o','b',Cz_i,'h',Cz_a,' ','m',Cz_ee,Cz_r,'e','n',Cz_i,0};
 //const unsigned char BatWeak[] MEM_TEXT = "slabá"; //€€";
-   const unsigned char BatWeak[] MEM_TEXT = {'s','l','a','b',Cz_a,0}; //€€";
+   const unsigned char BatWeak[] MEM_TEXT = {'s','l','a','b',Cz_a,0}; //slabá";
 //const unsigned char BatEmpty[] MEM_TEXT = "vybitá";
    const unsigned char BatEmpty[] MEM_TEXT = {'v','y','b','i','t',Cz_a,0};
 //const unsigned char TestFailed2[] MEM_TEXT = "vadná "; //€€€€€€";
-   const unsigned char TestFailed2[] MEM_TEXT = {'v','a','d','n',Cz_a,' ',0}; //€€€€€€";
+   const unsigned char TestFailed2[] MEM_TEXT = {'v','a','d','n',Cz_a,' ',0}; //vadná";
 //const unsigned char Bauteil[] MEM_TEXT = "souèástka"; //€";
-   const unsigned char Bauteil[] MEM_TEXT = {'s','o','u',Cz_c,Cz_a,'s','t','k','a',0}; //€";
+   const unsigned char Bauteil[] MEM_TEXT = {'s','o','u',Cz_c,Cz_a,'s','t','k','a',0}; //souèástka";
 //const unsigned char Diode[] MEM_TEXT = "Dioda: ";
    const unsigned char Triac[] MEM_TEXT = "Triak";
    const unsigned char Thyristor[] MEM_TEXT = "Tyristor"; //€";
@@ -32,7 +32,7 @@
   #ifndef NO_FREQ_COUNTER
    const unsigned char FREQ_str[] MEM2_TEXT = "Frekvence";
  #ifdef WITH_FREQUENCY_DIVIDER
-   const unsigned char FScaler_str[] MEM2_TEXT = "F-Scaler";
+  const unsigned char FScaler_str[] MEM2_TEXT = {'f','-','p',Cz_r,'e','d','d',Cz_ee,'l','i',Cz_c,0};// " pøeddìliè"
  #endif
   #endif
 //const unsigned char VOLTAGE_str[] MEM2_TEXT = "Napìtí";

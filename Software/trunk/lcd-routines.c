@@ -212,9 +212,9 @@ void lcd_restore_position(void) {
 // send a 24x32 icon to one quarter of the screen
 // the number temp1 is the icon-number  from 0 to 15
 // with offset  0 the icon is written to the right lower quarter of the screen
-// with offset 16, 0x10 the icon is written to the left lower quarter of the screen
-// with offset 32, 0x20 the icon is written to the right upper quarter of the screen
-// with offset 48, 0x30 the icon is written to the left upper quarter of the screen
+// with offset  64, 0x40 the icon is written to the left lower quarter of the screen
+// with offset 128, 0x80 the icon is written to the right upper quarter of the screen
+// with offset 192, 0xC0 the icon is written to the left upper quarter of the screen
 // to the left of the quarter are at least 8 pixels free
 // to the right of the quarter are 16 pixels free  (8+24+16 < (SCREEN_WIDTH/2)
 #if (LCD_GRAPHIC_TYPE != 0) && (WITH_GRAPHICS != 0) 

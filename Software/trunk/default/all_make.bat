@@ -66,6 +66,8 @@ echo "SubDir mega328_MK-328"
 make steril
 cd ../mega328_T3_T4_st7565
 echo "SubDir mega328_T3_T4_st7565"
+cd ../mega328_T4_v2_st7565
+echo "SubDir mega328_T4_v2_st7565"
 make steril
 cd ../mega328_T5_st7565
 echo "SubDir mega328_T5_st7565"

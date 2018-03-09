@@ -744,6 +744,15 @@
         sts     \adr, \reg
      .endif
      .endm
+
+/* AIN input the specified IO-adr to reg */
+     .macro  AIN reg, adr
+     .if  _SFR_IO_REG_P(\adr)
+        in     \reg, _SFR_IO_ADDR(\adr)
+     .else
+        lds     \reg, \adr
+     .endif
+     .endm
  
 /* LDIZ load the address adr to the Z register R30:R31 */
      .macro LDIZ adr

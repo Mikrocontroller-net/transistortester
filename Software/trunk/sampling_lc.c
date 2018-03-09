@@ -410,7 +410,12 @@ noavg:;
    unsigned long vv;
    vv = (unsigned long)period;         // measured period with 6 fraction bits, before applying shift, is < 256*64 = 2^14
    vv = vv*vv;                            // vv < 2^28   ; this is (except for shift)  d<<12
-#if F_CPU==16000000UL
+#if F_CPU==20000000UL
+				// 1e21 / (2*pi*20e6)**2 / (8 * 1024)      = 7.730192844, which can be computed
+				// with a divide by 63 and a mul with 487 (= 7.730158) .
+				// with better accuracy 3610/467          (= 7.730192719)
+   vv = (vv/63)*487;
+#elif F_CPU==16000000UL
 //   vv=(vv>>10)*12368;		// vv < 2^32   ; is (d<<2)/(2*pi*fclock)^2 * 1e21 >>3
 				// that 12368 is calculated as 1/(2*pi*16e6)**2*1e21 /8, for 16 MHz CPU clock
 				// 1e21 / (2*pi*16e6)**2 / (8 * 1024)      = 12.07842632, which can be computed

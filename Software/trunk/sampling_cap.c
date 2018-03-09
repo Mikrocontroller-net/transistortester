@@ -103,7 +103,7 @@ int32_t sampling_cap(byte HighPin, byte LowPin, byte opts)
 //   memset(uu,0,sizeof(uu));
 
    // we'll do the least-squares calculation over samples N1..N2 (inclusive), excluding N3..(N4-1)
-#if MHZ_CPU==16
+#if MHZ_CPU>=16
    #define N1 70     // skip the initial part, which seems to behave a bit differently
    #define N2 230    // skip the last part where the sampling switch starts to affect the results
    #define N3 182    // skip the part just before sample 192 where the ADC mux switch slightly affects results
@@ -192,7 +192,7 @@ int32_t sampling_cap(byte HighPin, byte LowPin, byte opts)
    // at 16 MHz, and aiming for units of 10^{-14} Farad, the constant becomes 32768e14/16e6/R = 2048e8/R
    // for R=470000, this is 435744.68
    // if 8 MHz, we correct for the extra factor 2 in the bitshift of sumxx, so as to not lose bits
-#if MHZ_CPU==16
+#if MHZ_CPU>=16
    sumxx>>=3;   // bitshift such that sumxx fits in 16 bits
    sumxy>>=6;   // we shift sumxy by 3 bits more than sumxx because a few lines down we have an extra /8 to make things fit 
 #elif MHZ_CPU==8
@@ -200,7 +200,12 @@ int32_t sampling_cap(byte HighPin, byte LowPin, byte opts)
    sumxy>>=4;
 #endif
    unsigned long int c3;
+#if MHZ_CPU == 20
+   // at 20 MHz, and aiming for units of 10^{-14} Farad, the constant becomes 32768e14/20e6/R = 16384e7/R
+   c3 = sumxx*((uint32_t)(((16384000000./R_H_VAL)+4)/8))/sumxy;  // units of 0.01 pF
+#else
    c3 = sumxx*((uint32_t)(((20480000000./R_H_VAL)+4)/8))/sumxy;  // units of 0.01 pF
+#endif
    // the /8 is to make the (...) factor (about 435745) fit in 16 bits
    // note that the /8 is compensated for by the different bitshifts of sumxx and sumxy, and the +4 rounds this number properly
    if (!(opts&2)) 

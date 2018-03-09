@@ -146,6 +146,7 @@ End of configuration
 #include "langUKRAINIAN.h"
 #include "langHUNGARIAN.h"
 #include "langLITHUANIAN.h"
+#include "langDANISH.h"
 
 // All languages must be placed before the english text.
 // If none is actually selected, LANG_SELECTED is not set.

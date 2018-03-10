@@ -119,30 +119,38 @@ void GetFrequency(uint8_t range) {
      TCCR1A = 0;			// normal operation
 #define CNT1_END_VAL ((F_CPU / 256UL) + 1)
 #define CNT1_DIVIDER (1<<CS12)
-#if CNT1_END_VAL > 0xffff
+#if (CNT1_END_VAL > 0xffff) && (F_CPU == ((F_CPU / 1024UL) * 1024UL))
  #undef CNT1_END_VAL
  #undef CNT1_DIVIDER
  #define CNT1_END_VAL ((F_CPU / 1024UL) + 1)
  #define CNT1_DIVIDER ((1<<CS12) | (1<<CS10))
- #if F_CPU != ((F_CPU / 1024UL) * 1024UL)
-  #warning F_CPU can not be divided by 1024, measured frequency is wrong!
- #endif
 #else 
  #if F_CPU != ((F_CPU / 256UL) * 256UL)
   #warning F_CPU can not be divided by 256, measured frequency is wrong!
  #endif
 #endif
-     OCR1B = CNT1_END_VAL;		// set to 1 second  (counter 0 is started with 1)
+     OCR1B = (CNT1_END_VAL & 0xffff);	// set to 1 second  (counter 0 is started with 1)
      OCR1A = 1;				// start counter 0 with first count
      TCNT1 = 0;				// set counter to zero
      GTCCR  |= (1<<PSRSYNC);		// reset clock precounter
      TIFR1 = (1<<OCF1B) | (1<<OCF1A);	// clear Output compare match
+#if CNT1_END_VAL > 0xffff
+     TIMSK1 =  (1<<OCIE1A);		// enable the Compare A match interrupt
+#else
      TIMSK1 = (1<<OCIE1B) | (1<<OCIE1A);	// enable the Compare A match and Compare B match interrupt
+#endif
      sei();				// set interrupt enable
      TCCR1B = CNT1_DIVIDER;		// divide CPU clock by 256, start counter
      // both counter are running now, wait for counter 1 reach OCR1A
      for (ii=0;ii<50;ii++) {
         wait20ms();			// first count of counter 1 (<32us) has started the counter 0
+#if CNT1_END_VAL > 0xffff
+        TIMSK1 &=  ~(1<<OCIE1A);	// disable the Compare A match interrupt
+        if ((TIFR1 & (1<<TOV1)) != 0) {
+          TIFR1 = (1<<OCF1B)|(1<<TOV1);		// reset TOV1 Overflow and Output compare B match Flag
+          TIMSK1 = (1<<OCIE1B);		// enable the Compare B match interrupt
+        }
+#endif
         wdt_reset();
         if (!(RST_PIN_REG & (1<<RST_PIN))) taste = 1;	// user request stop of operation
 #if PROCESSOR_TYP == 1280

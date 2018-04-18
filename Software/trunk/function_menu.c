@@ -578,9 +578,9 @@ void show_vext() {
 #endif
   {
 #ifdef TPex2
-     lcd_clear_line1(); 	// 2 Vext measurements 
+     lcd_line1(); 	// 2 Vext measurements 
 #else
-     lcd_clear_line2();		// only one measurement use line 2
+     lcd_line2();		// only one measurement use line 2
 #endif	/* TPex2 */
      uart_newline();          // start of new measurement
      uart_newline();          // start of new measurement
@@ -592,9 +592,10 @@ void show_vext() {
   #else
      DisplayValue((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);  // Display 3 Digits of this mV units
   #endif
+     lcd_clear_line();		// clear to end of line
 
 #ifdef TPex2
-     lcd_clear_line2();
+     lcd_line2();
      uart_newline();          // start of new measurement
      lcd_MEM_string(Vext_str);          // Vext=
      Vext = W5msReadADC(TPex2); // read external voltage 2
@@ -603,6 +604,7 @@ void show_vext() {
   #else
      DisplayValue((unsigned long)Vext*EXT_NUMERATOR/EXT_DENOMINATOR,-3,'V',3);  // Display 3 Digits of this mV units
   #endif
+     lcd_clear_line();		// clear to end of line
 #endif	/* TPex2 */
 #if defined(POWER_OFF) && defined(BAT_CHECK)
      Bat_update(times);

@@ -4,25 +4,34 @@
 
 
 #ifdef FET_Idss
-uint16_t expand_FET_quadratic(uint16_t v0, uint16_t v1, uint16_t i)
-// assuming a datapoint of Vgs=v1, Id=i, tries to calculate Idss (i.e., Id at Vgs=0)
+uint16_t expand_FET_quadratic(uint16_t v0, uint16_t v1, uint16_t ii)
+// assuming a datapoint of Vgs=v1, Id=ii, tries to calculate Idss (i.e., Id at Vgs=0)
 // v0 must be the Vgs at which Id=0
 {
-   v1 = v0-v1;
+   // Quadratic current curve can be calculated by:
+   //  v1 = v0 - v1;
+   //  return (uint32_t)((uint16_t)((uint32_t)(ii * v0) / v1) * v0) / v1;
+   // But this simpler code need 100 bytes more flash than the following code!
+   uint8_t drv, dri;	// needed for rounding
+   v1 = v0 - v1;
+   drv = 0;
+   dri = 0;
    for (;;) {
-      uint8_t d;
-      d = v1>>8;
-      if (d==0) d = 1;		// prevent infinite loop
-      v1 += d;      // increase v by 0.4 %;  unfortunately the compiler doesn't do this very smartly, insists on creating a 16-bit temporary variable for d
-      d = i>>8;
-      i += d;     
-      i += d;      // increase i by 0.8 %
-      if (d > (60000>>8)) {
+      uint8_t dv, di;
+      dv = (v1 + drv) >> 8;
+      drv = (v1 + drv) & 0xff;		// remainder of voltage division by 256
+//      if (dv == 0) dv = 1;		// prevent infinite loop
+      v1 += dv;      // increase v by 0.4 %;  unfortunately the compiler doesn't do this very smartly, insists on creating a 16-bit temporary variable for d
+      di = (ii + dri) >> 8;
+      dri = (ii + dri) & 0xff;		// remainder of current division by 256
+      ii += di;     
+      ii += di;      // increase ii by 0.8 %
+      if (di > (60000>>8)) {
          return 0;       
       }
          // no Idss measurement if Idss exceeds 40 mA, the ATmega's maximum pin current
          // note that this is actually quite safe, since by the time there's 40 mA running, the Vgs will be 40mA * 20 ohm = 0.8 V, so quite far from 0, so Id will be less than those 40 mA
-      if (v1 > v0) return i;      // V exceeds Vp, so we've reached Vgs=0 without Id exceeding 40 mA, so we can safely do the Idss measurement
+      if (v1 > v0) return ii;      // V exceeds Vp, so we've reached Vgs=0 without Id exceeding 40 mA, so we can safely do the Idss measurement
    }
 }
 #endif
@@ -493,7 +502,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   #if DebugOut == 5
            DisplayValue(i16,-6,' ',3);
   #endif
-               i16 =expand_FET_quadratic(ptrans.ice0,adc.hp3,i16);
+//               i16 =expand_FET_quadratic(ptrans.ice0,adc.hp3,i16);
   #if DebugOut == 5
            DisplayValue(i16,-6,' ',3);
   #endif

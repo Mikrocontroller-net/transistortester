@@ -502,7 +502,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   #if DebugOut == 5
            DisplayValue(i16,-6,' ',3);
   #endif
-//               i16 =expand_FET_quadratic(ptrans.ice0,adc.hp3,i16);
+               i16 =expand_FET_quadratic(ptrans.ice0,adc.hp3,i16);
   #if DebugOut == 5
            DisplayValue(i16,-6,' ',3);
   #endif

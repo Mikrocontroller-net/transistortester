@@ -227,6 +227,9 @@ void lcd_big_icon(unsigned char temp1) {
  #else
   #define HALF_SCREEN_HEIGHT (SCREEN_HEIGHT / 2)
  #endif
+ #ifdef LCD_ICON_COLOR
+ lcd_fg_color.w = LCD_ICON_COLOR;
+ #endif
  pfont = (uint8_t *) bigfont[temp1 & 0x3f];	// first byte of character data
  icon_xx =  TP_WIDTH;		// left side 
  if ((temp1 & 0x40) == 0) icon_xx += (SCREEN_WIDTH / (ONE_B/4)); // right side
@@ -297,6 +300,14 @@ void lcd_write_word(unsigned int xx) {
 void lcd_data(unsigned char temp1) {
 /* -------------------------------------------------------------------------- */
 
+#ifdef LCD_ICON_COLOR
+ #ifdef LCD_CHANGE_COLOR
+ lcd_fg_color.b[0] = eeprom_read_byte(&EE_FG_COLOR1);
+ lcd_fg_color.b[1] = eeprom_read_byte(&EE_FG_COLOR2);
+ #else
+ lcd_fg_color.w = LCD_FG_COLOR;
+ #endif
+#endif
 _lcd_column++;
 #if (LCD_GRAPHIC_TYPE != 0)
  uint8_t *pfont;
@@ -576,8 +587,10 @@ void lcd_init(void) {
  #ifdef LCD_CHANGE_COLOR
    lcd_bg_color.b[0] = eeprom_read_byte(&EE_BG_COLOR1);
    lcd_bg_color.b[1] = eeprom_read_byte(&EE_BG_COLOR2);
+  #ifndef LCD_ICON_COLOR
    lcd_fg_color.b[0] = eeprom_read_byte(&EE_FG_COLOR1);
    lcd_fg_color.b[1] = eeprom_read_byte(&EE_FG_COLOR2);
+  #endif
  #endif
  #if LCD_SCREEN_ROTATE != 0
     lcd_write_data(0x3c);	 	// MV=exchange xy, ML=Vertical refresh, RGB=BGR color,MH=Refresh right to left
@@ -1226,7 +1239,7 @@ unsigned char options, unsigned char width, unsigned char height) {
             {
               if ((byte & 0x80) != 0) {
 	         // set pixel to foreground color
-  #ifdef LCD_CHANGE_COLOR
+  #if defined(LCD_CHANGE_COLOR) || defined(LCD_ICON_COLOR)
                  lcd_write_word(lcd_fg_color.w);	// 5 red / 6 green / 5 blue pixel 
    #if ONE_B == 16
                  lcd_write_word(lcd_fg_color.w);	// 5 red / 6 green / 5 blue pixel 

@@ -229,4 +229,10 @@ COMMON union {
   uint8_t b[2];
 } lcd_fg_color;
 #endif
+#if defined(LCD_ICON_COLOR)
+COMMON union {
+  uint16_t w;
+  uint8_t b[2];
+} lcd_fg2_color;
+#endif
 

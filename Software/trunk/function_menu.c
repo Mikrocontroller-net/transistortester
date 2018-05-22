@@ -901,8 +901,13 @@ uint8_t max_value;
      color[c_num] &= max_value;
      if (xcol == 0) {
         // foreground color
+ #ifdef LCD_ICON_COLOR
+        lcd_fg2_color.b[1] = (color[0] << 3) | (color[1] >> 3);
+        lcd_fg2_color.b[0] = ((color[1] & 7) << 5) | (color[2] & 0x1f);
+ #else
         lcd_fg_color.b[1] = (color[0] << 3) | (color[1] >> 3);
         lcd_fg_color.b[0] = ((color[1] & 7) << 5) | (color[2] & 0x1f);
+ #endif
      } else {
         lcd_bg_color.b[1] = (color[0] << 3) | (color[1] >> 3);
         lcd_bg_color.b[0] = ((color[1] & 7) << 5) | (color[2] & 0x1f);
@@ -923,8 +928,13 @@ uint8_t max_value;
 
 //  eeprom_write_byte((uint8_t *)(&EE_Volume_Value), (int8_t)contrast);	// save contrast value
   if (xcol == 0) {
+#ifdef LCD_ICON_COLOR
+     eeprom_write_byte((uint8_t *)(&EE_FG_COLOR1), (int8_t)lcd_fg2_color.b[0]);
+     eeprom_write_byte((uint8_t *)(&EE_FG_COLOR2), (int8_t)lcd_fg2_color.b[1]);
+#else
      eeprom_write_byte((uint8_t *)(&EE_FG_COLOR1), (int8_t)lcd_fg_color.b[0]);
      eeprom_write_byte((uint8_t *)(&EE_FG_COLOR2), (int8_t)lcd_fg_color.b[1]);
+#endif
   } else {
      eeprom_write_byte((uint8_t *)(&EE_BG_COLOR1), (int8_t)lcd_bg_color.b[0]);
      eeprom_write_byte((uint8_t *)(&EE_BG_COLOR2), (int8_t)lcd_bg_color.b[1]);

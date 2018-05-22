@@ -160,7 +160,7 @@ CFLAGS += -DLCD_BG_COLOR=0x7800
 CFLAGS += -DLCD_FG_COLOR=0xffff
 
 # You can also select a icon color  (format 5 bit red, 6 bit green, 5 bit blue)
-# If LCD_ICON_COLOR is not specified, the LCF_FG_COLOR is used
+# If LCD_ICON_COLOR is not specified, the LCD_FG_COLOR is used
 CFLAGS += -DLCD_ICON_COLOR=0x03ff
 
 # If option WITH_LCD_ST7565 is present one of the following fonts should be

@@ -302,8 +302,7 @@ void lcd_data(unsigned char temp1) {
 
 #ifdef LCD_ICON_COLOR
  #ifdef LCD_CHANGE_COLOR
- lcd_fg_color.b[0] = eeprom_read_byte(&EE_FG_COLOR1);
- lcd_fg_color.b[1] = eeprom_read_byte(&EE_FG_COLOR2);
+ lcd_fg_color.w = lcd_fg2_color.w;
  #else
  lcd_fg_color.w = LCD_FG_COLOR;
  #endif
@@ -587,7 +586,10 @@ void lcd_init(void) {
  #ifdef LCD_CHANGE_COLOR
    lcd_bg_color.b[0] = eeprom_read_byte(&EE_BG_COLOR1);
    lcd_bg_color.b[1] = eeprom_read_byte(&EE_BG_COLOR2);
-  #ifndef LCD_ICON_COLOR
+  #ifdef LCD_ICON_COLOR
+   lcd_fg2_color.b[0] = eeprom_read_byte(&EE_FG_COLOR1);
+   lcd_fg2_color.b[1] = eeprom_read_byte(&EE_FG_COLOR2);
+  #else
    lcd_fg_color.b[0] = eeprom_read_byte(&EE_FG_COLOR1);
    lcd_fg_color.b[1] = eeprom_read_byte(&EE_FG_COLOR2);
   #endif

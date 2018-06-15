@@ -363,8 +363,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
 	R_PORT = 0;			// Low + Tristate Pin with 470k to 0V
 	ADC_DDR = HiADCm;
 	ADC_PORT = HiADCp;		// High Pin to VCC
-	ntrans.ice0 = W10msReadADC(LowPin);
-        ntrans.ice0 -= ReadADC(TristatePin);	// Gate-Source Voltage
+	ntrans.ice0 = unsigned_diff(W10msReadADC(LowPin), ReadADC(TristatePin)); // Gate-Source Voltage
  #ifdef FET_Idss
   #if DebugOut == 5
     lcd_line4();
@@ -472,8 +471,6 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
         ADC_DDR = LoADCm;		//switch Low-Pin (assumed Drain) direct to GND,
         R_DDR = TriPinRH | HiPinRH;	//High-Pin to output
         R_PORT = TriPinRH | HiPinRH;	//High-Pin and Tristate-Pin across R_H to Vcc
-//        ptrans.ice0 = W10msReadADC(TristatePin);	//measure voltage at assumed Source 
-//        ptrans.ice0 -= ReadADC(HighPin);
         ptrans.ice0 = unsigned_diff(W10msReadADC(TristatePin), ReadADC(HighPin));	//measure voltage at assumed Source 
  #ifdef FET_Idss
   #if DebugOut == 5
@@ -1263,7 +1260,7 @@ checkDiode:
   adc.lp_otr = unsigned_diff(W5msReadADC(HighPin), ReadADC(LowPin));
   R_DDR = HiPinRH;              //switch R_H port for High-Pin output (VCC)
   R_PORT = HiPinRH;
-  adc.hp2 = W5msReadADC(HighPin);               // M--|<--HP--R_H--VCC
+  adc.hp2 = W5msReadADC(HighPin);               // GND--|<--HP--R_H--VCC
 
   R_DDR = HiPinRL;              //switch R_L port for High-Pin to output (VCC)
   R_PORT = HiPinRL;
@@ -1271,7 +1268,7 @@ checkDiode:
   adc.hp1 = unsigned_diff(W5msReadADC(HighPin), W5msReadADC(LowPin));
   R_DDR = HiPinRH;              //switch R_H port for High-Pin to output (VCC)
   R_PORT = HiPinRH;
-  adc.hp3 = W5msReadADC(HighPin);               // M--|<--HP--R_H--VCC
+  adc.hp3 = W5msReadADC(HighPin);               // GND--|<--HP--R_H--VCC
   if(adc.lp_otr > adc.hp1) {
       adc.hp1 = adc.lp_otr;	//the higher value wins
       adc.hp3 = adc.hp2;
@@ -1308,8 +1305,9 @@ checkDiode:
      mVOut(adc.lp_otr);
 #endif
  // if (adc.lp_otr > (adc.hp1+adc.hp1/8))
-  if (adc.lp_otr > (adc.hp1+200))
+  if (adc.lp_otr > (adc.hp1+20))
   {
+   // voltage increase is too high after twice the wait time, probably capacitor
 #if DebugOut == 5
      lcd_data('N');	// debug
      lcd_data('D');	// debug
@@ -1343,9 +1341,9 @@ checkDiode:
   R_DDR = HiPinRH;		//switch R_H port for High-Pin output (VCC)
   R_PORT = HiPinRH;
   ChargePin10ms(TriPinRL,1);	//discharge of P-Kanal-MOSFET gate
-  adc.hp2 = W5msReadADC(HighPin); 		// M--|<--HP--R_H--VCC
+  adc.hp2 = W5msReadADC(HighPin); 		// GND--|<--HP--R_H--VCC
   ChargePin10ms(TriPinRL,0);	//discharge for N-Kanal-MOSFET gate
-  adc.hp3 = W5msReadADC(HighPin);		// M--|<--HP--R_H--VCC
+  adc.hp3 = W5msReadADC(HighPin);		// GND--|<--HP--R_H--VCC
 
   /* check with higher current (R_L=680) */
   R_DDR = HiPinRL;		//switch R_L port for High-Pin to output (VCC)
@@ -1362,7 +1360,7 @@ checkDiode:
   } else {
       ChargePin10ms(TriPinRL,0);	//discharge for N-Kanal-MOSFET gate
   }
-  adc.hp2 = W5msReadADC(HighPin); 		// M--|<--HP--R_H--VCC
+  adc.hp2 = W5msReadADC(HighPin); 		// GND--|<--HP--R_H--VCC
  #endif
 #endif
 #if DebugOut == 5

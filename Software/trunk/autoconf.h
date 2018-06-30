@@ -3,10 +3,10 @@
        Automatic Configuration
 */
 
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163) || (LCD_ST_TYPE == 9341))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163) || (LCD_ST_TYPE == 9341) || (LCD_ST_TYPE == 1327))
 /* Define under which conditions a graphical display is supported. */
 /* The graphical display should support at least 128x64 pixels. */
- #if ((SCREEN_HEIGHT > 127) && (SCREEN_WIDTH > 255))
+ #if ((SCREEN_HEIGHT > 128) && (SCREEN_WIDTH > 255))
   #define ONE_B 16
  #else
   #define ONE_B 8

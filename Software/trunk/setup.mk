@@ -46,6 +46,9 @@ ifeq ($(WITH_LCD_ST7565),8814)
 CFLAGS += -DLCD_ST_TYPE=8814
 CFLAGS += -DLCD_ST7565_RESISTOR_RATIO=$(LCD_ST7565_RESISTOR_RATIO)
 endif
+ifeq ($(WITH_LCD_ST7565),1327)
+CFLAGS += -DLCD_ST_TYPE=1327
+endif
 
 ifeq ($(PARTNO),m8)
 MCU = atmega8
@@ -375,6 +378,9 @@ ifeq ($(WITH_LCD_ST7565),8814)
 OBJECTS += lcd-draw.o
 endif
 ifeq ($(WITH_LCD_ST7565),8812)
+OBJECTS += lcd-draw.o
+endif
+ifeq ($(WITH_LCD_ST7565),1327)
 OBJECTS += lcd-draw.o
 endif
 OBJECTS += swuart.o wait1000ms.o 

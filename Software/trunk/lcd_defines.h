@@ -304,6 +304,23 @@
 	#define ST_VPA 20
 
 /* *********************************************************************************************************** */
+#elif (LCD_ST_TYPE == 1327)
+//LCD-commands
+ 	#define CMD_CASET  0x15
+ 	#define CMD_RASET  0x75
+	#define CMD_SET_CONTRAST_CONTROL 0x81
+        #define CMD_DISPLAY_OFF 0xae
+	#define CMD_DISPLAY_ON 0xaf
+//Makros for LCD
+	#define lcd_write_data(data)                   _lcd_hw_write(0x01, data);
+	#define lcd_cursor_on()  // ignored
+	#define lcd_cursor_off() // ignored
+	#undef SCREEN_HEIGHT
+        #define SCREEN_HEIGHT 128
+	#undef SCREEN_WIDTH
+	#define SCREEN_WIDTH 128
+
+/* *********************************************************************************************************** */
 #else /* not ((LCD_ST_TYPE == 7565 || 1306 || 7920 || 7108 || 8812 || 8814 || 7735 || 9341 || 9163) */
 /* must be a character display! */
 	#define lcd_write_data(data)                   _lcd_hw_write(0x01, data); wait50us();

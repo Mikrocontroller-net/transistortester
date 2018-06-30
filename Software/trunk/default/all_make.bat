@@ -78,6 +78,12 @@ make steril
 cd ../mega328_ssd1306I2C
 echo "SubDir mega328_ssd1306I2C"
 make steril
+cd ../mega328_ssd1327SPI
+echo "SubDir mega328_ssd1306SPI"
+make steril
+cd ../mega328_ssd1327I2C
+echo "SubDir mega328_ssd1306I2C"
+make steril
 cd ../mega328_PCF8812
 echo "SubDir mega328_PCF8812"
 make steril

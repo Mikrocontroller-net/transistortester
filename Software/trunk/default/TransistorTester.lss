@@ -357,7 +357,7 @@ void lcd_command(unsigned char temp1) {
 
 000001da <lcd_command>:
      1da:	68 2f       	mov	r22, r24
-#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163) || (LCD_ST_TYPE == 9341))
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163) || (LCD_ST_TYPE == 9341) || (LCD_ST_TYPE == 1327))
  ;
 #else
 	wait50us();		// wait at least 50us after every instruction for character LCD
@@ -431,10 +431,10 @@ void lcd_command(unsigned char temp1) {
 00000236 <lcd_restore_position>:
      236:	60 91 00 01 	lds	r22, 0x0100	; 0x800100 <_edata>
      23a:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <last_text_line>
-       lcd_write_word(LCD_BG_COLOR);		// clear 5 red / 6 green / 5 blue pixels
+ #else
+       lcd_write_word(0);		// 4 black pixels
  #endif
      }
-   }
 #else
    lcd_command(CMD_CLEAR_DISPLAY);
      23e:	f1 cf       	rjmp	.-30     	; 0x222 <lcd_set_cursor>
@@ -734,7 +734,7 @@ void lcd_clear_line2(void) {
       }
    } /* end for page */
 /* ------------------------------------------------------------------------------- */
-#endif /* (LCD_ST_TYPE == 7565 || 1306 || 7108 || 7920 || 8812 || 8814 */
+#endif /* (LCD_ST_TYPE == 7565 || 1306 || 7108 || 7920 || 8812 || 8814 ... */
 }
      380:	7e df       	rcall	.-260    	; 0x27e <lcd_fix_string>
 /* ******************************************************************************* */

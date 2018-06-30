@@ -38,7 +38,7 @@ CFLAGS += -DWITH_MENU
 # graphical displays after the presentation of calibration data.
 # You can switch off the presentation of the icons and the font data by setting
 # the option NO_ICONS_DEMO to save flash memory and display time.
-#CFLAGS += -DNO_ICONS_DEMO
+CFLAGS += -DNO_ICONS_DEMO
 
 # The menu function can be easier controlled with a incremental encoder (rotary switch).
 # Both switches of the rotary switch can be connected with 1 kOhm resistors to PD1 and PD3.
@@ -99,7 +99,7 @@ CFLAGS += -DFOUR_LINE_LCD
 # The normal ST7565 controller will be supported by setting the WITH_LCD_ST7565 to 1 or 7565.
 # The special action for a simular SSD1306 controller can be activated by
 # setting the WITH_LCD_ST7565 variable to 1306.
-WITH_LCD_ST7565 = 7735
+WITH_LCD_ST7565 = 1327
 #WITH_LCD_ST7565 = 1306
 
 # Normally the ST7565 controller is connected with a SPI 4-wire interface, but
@@ -112,7 +112,7 @@ WITH_LCD_ST7565 = 7735
 # ST7920-RW <--> PD2 , ST7920-E <--> PD5 , ST7920-PSB <--> GND , ST7920-RS <--> VCC , ST7920-RST <--> VCC
 # For the PDF8814 controller you can also select a 3 for the 3-line serial interface with RS (D/C) as first bit.
 # The RS (data/command) signal at PD1 is used as chip enable SCE.
-#CFLAGS += -DLCD_INTERFACE_MODE=2
+CFLAGS += -DLCD_INTERFACE_MODE=2
 
 # With the option LCD_SPI_OPEN_COL the data signals of the SPI interface are not switched to VCC.
 # With option LCD_SPI_OPEN_COL the signals are switched to GND only, for high signals the pullup resistors
@@ -122,24 +122,21 @@ WITH_LCD_ST7565 = 7735
 #CFLAGS += -DLCD_SPI_OPEN_COL
 
 # The I2C Address can be preset to a address of 0x3d instead of 0x3c by setting the constant LCD_I2C_ADDR.
-#CFLAGS += -DLCD_I2C_ADDR=0x3d
+CFLAGS += -DLCD_I2C_ADDR=0x3d
 
 # If LCD_ST7565 option is used: Set the resitor ratio for the internal
 # voltage regulator. Supported value range: 0..7.
 # Good values are e.g. 4 or 7. If unsure just have a try.
 LCD_ST7565_RESISTOR_RATIO = 4
 
-# The option LCD_SCREEN_ROTATE exchange the horizontal and vertial axis.
-# This option is only possible, if horizontal/vertical exchange is supported by the controller.
-CFLAGS += -DLCD_SCREEN_ROTATE=1
 # If LCD_ST7565 option is set to 1: Flip the display's horizontal direction.
-CFLAGS += -DLCD_ST7565_H_FLIP=0
+CFLAGS += -DLCD_ST7565_H_FLIP=1
 # With LCD_ST7565_H_OFFSET you can specify a horizontal pixel offset to the display window.
 # The controller knows 132 horizontal pixel, the window shows only 128 pixel.
 # OFFSET values can vary for the connected display type to 0, 2 or 4.
-CFLAGS += -DLCD_ST7565_H_OFFSET=0
+#CFLAGS += -DLCD_ST7565_H_OFFSET=0
 # If LCD_ST7565 option is set to 1: Flip the display's vertical direction
-CFLAGS += -DLCD_ST7565_V_FLIP=1
+CFLAGS += -DLCD_ST7565_V_FLIP=0
 # The contrast value can be predefined with the constant VOLUME_VALUE
 # for ST7565 controller the value can be between 0 and 63, for the SSD1306 0 to 255 can be selected.
 #CFLAGS += -DVOLUME_VALUE=25
@@ -147,21 +144,6 @@ CFLAGS += -DLCD_ST7565_V_FLIP=1
 # You can specify a Y start line (vertical address) for the display output with the option LCD_ST7565_Y_START.
 # If your output start in the middle of the display, you can specify a Y_START of 32
 #CFLAGS += -DLCD_ST7565_Y_START=32
-
-
-# You can select the foreground and background color with a special menu, if you
-# set the LCD_CHANGE_COLOR option. When the value is set to 2, red and blue color is exchanged.
-CFLAGS += -DLCD_CHANGE_COLOR=2
-
-# You can select the background color (format 5 bit red, 6 bit green, 5 bit blue)
-CFLAGS += -DLCD_BG_COLOR=0x7800
-
-# You can select the foreground color (format 5 bit red, 6 bit green, 5 bit blue)
-CFLAGS += -DLCD_FG_COLOR=0xffff
-
-# You can also select a icon color  (format 5 bit red, 6 bit green, 5 bit blue)
-# If LCD_ICON_COLOR is not specified, the LCD_FG_COLOR is used
-CFLAGS += -DLCD_ICON_COLOR=0x03ff
 
 # If option WITH_LCD_ST7565 is present one of the following fonts should be
 # choosen. With a font width below 8 more than 16 characters can be shown in one display line.
@@ -217,7 +199,7 @@ CFLAGS += -DAUTO_CAL
 # Normally a long text is shown, which explains the steps of calibration.
 # You can prevent the long explanation by setting the SHORT_UNCAL_MSG option.
 # With this option set, only a hint of one line is shown.
-CFLAGS += -DSHORT_UNCAL_MSG
+#CFLAGS += -DSHORT_UNCAL_MSG
 
 # You can extend the measurement feature by use of a sampling mode for the ADC converter
 # to extend the resolution of capacity measurement to about 0.01pF.
@@ -250,7 +232,7 @@ CFLAGS += -DC_H_KORR=0
 # You can set WITH_UART to 2 to enable a special mode of serial output with line number in column 1.
 # If the option is deselected, PC3 can be used as external voltage input with a
 # 10:1 resistor divider.
-#CFLAGS += -DWITH_UART
+CFLAGS += -DWITH_UART
 
 # With option TQFP_ADC6 or/and TQFP_ADC7 you can use the additional pins of the TQFP or
 # the QFN package for external analog input. You should install a 10:1 voltage dividers
@@ -263,7 +245,7 @@ CFLAGS += -DC_H_KORR=0
 # is not used for serial output (WITH_UART option).
 # For ATmega644/1284 processor the UART has a separate pin.  Therefore the external input
 # at pin ADC3 can be enabled separate by setting the WITH_UART option.
-CFLAGS += -DWITH_VEXT
+#CFLAGS += -DWITH_VEXT
 
 #
 # If you want to measure Inductors with the resistance meter, you must specify

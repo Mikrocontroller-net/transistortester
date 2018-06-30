@@ -207,5 +207,7 @@ void ShowIcons(void) {
 
 }
  #endif  /* defined(SamplingADC) || (FLASHEND > 0x7fff)  */
+#else
+ #warning "no WITH_GRAPHICS" 
 #endif  /* WITH_GRAPHICS */
 

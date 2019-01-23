@@ -866,8 +866,9 @@ Die Punkte ,,CapErr'' zeigen die aus den Abbildungen \ref{fig:mega168all}, \ref{
 geschätzten Messfehler der einzelnen ATmega-Exemplare in Promille.
 Auffällig ist, wie die ,,CapErr'' Punkte den ,,diff2ref'' Punkten folgen.
 Deshalb zeigen die Punkte ,,diff'' die Differenz zwischen den jeweiligen ,,CapErr'' und ,,diff2ref'' Punkten.
-Mit einem mittleren Wert für diff kann man also einen guten Schätzwert für die Korrektur der Kondensatormessung aus der
-Differenz der Kondensatorspannung nach dem Laden zur internen Referenzspannung berechnen.
+Für die Korrektur der Kondensatormessung kann also die Differenz der Kondensator-Ladespannung zur internen Referenzspannung
+(,,diff2ref'') benutzt werden.
+Dabei kann zusätzlich der mittlere Wert der Differenzen zu den ,,CapErr'' Schätzungen (,,diff'') berücksichtigt werden.
 
 Im zweiten Teil der Abgleichprozedur muss also ein Kondensator hoher Güte zwischen Pin~1 und Pin~3 mit einer
 Kapazität zwischen \(100nF\) und \(20\mu F\) angeschlossen werden. 

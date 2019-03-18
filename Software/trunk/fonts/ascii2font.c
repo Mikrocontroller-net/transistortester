@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 {
  int width;
  int kk;	// loop counter
- int line;	// number of read ascii character bitmap
+// int line;	// number of read ascii character bitmap
  int ll;	
  int hh;
  int height;
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
    fprintf(stderr,"Vertikaler Offset %d\r\n",vertical_offset);
  }
     
- line = 0;
+// line = 0;
  height = 0;
  while (fgets(linebuf,256,stdin) != NULL) {
     for (ll=0;ll<256;ll++) {

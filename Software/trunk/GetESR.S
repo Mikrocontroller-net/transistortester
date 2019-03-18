@@ -283,7 +283,7 @@ store_cvn:
 	lpm	HiPinR_L, Z+;
 
 
-#if (PROCESSOR_TYP == 644) || (PROCESSOR_TYP == 1280)
+#if (PROCESSOR_TYP == 640) || (PROCESSOR_TYP == 1280)
 	    /* ATmega640/1280/2560 1.1V Reference with REFS0=0 */
 	//  SelectLowPin = (cap.ca | (1<<REFS1) | (0<<REFS0));	// switch ADC to LowPin, Internal Ref. 
 	ldi	r25, (1<<REFS1)|(0<<REFS0);	0x80

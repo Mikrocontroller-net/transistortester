@@ -1393,7 +1393,7 @@ unsigned char options, unsigned char width, unsigned char height) {
    for (; page <= pagemax; page+=4)
    { 
   #if (LCD_ST7565_H_FLIP == 1)
-      xx = (SCREEN_HEIGHT - x - width);
+      xx = (SCREEN_WIDTH - x - width);
   #else
       xx = x;
   #endif
@@ -1439,16 +1439,32 @@ unsigned char options, unsigned char width, unsigned char height) {
          {
            if ((byte & 0xc0) == 0xc0) {
              // set two pixels to foreground color
+  #ifdef LCD_CHANGE_COLOR
+             twobits = 0x00;
+  #else
              twobits = 0xff;
+  #endif
            } else if ((byte & 0xc0) == 0x80) {
 	     // set only first bit to foreground color
+  #ifdef LCD_CHANGE_COLOR
+             twobits = 0xf0;
+  #else
              twobits = 0x0f;
+  #endif
            } else if ((byte & 0xc0) == 0x40) {
 	     // set only second bit to foreground color
+  #ifdef LCD_CHANGE_COLOR
+             twobits = 0x0f;
+  #else
              twobits = 0xf0;
+  #endif
            } else {
 	     // set two pixels to background color
+  #ifdef LCD_CHANGE_COLOR
+             twobits = 0xff;
+  #else
              twobits = 0x00;
+  #endif
            }
            lcd_write_data(twobits);
            byte *= 4;		// next two bits to 2**7, 2**6 position

@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
               }
               tx += 5;
               ii++;
-            } else {
+            } else {  /* no "0x" */
               if ((tx[0] == '/') && (tx[1] == '*')) {
                 BitClearChar = ' ';
                 BitSetChar = 'O';
@@ -225,7 +225,7 @@ int main(int argc, char *argv[])
                 }
               }
             }
-         }
+         } /* end while(ii<anz) */
          fprintf(outfile," ");
          for (kk=0; kk<width; kk++) {
             if ( ((kk % 8) == 0) && (kk != 0) ) {
@@ -261,7 +261,7 @@ int main(int argc, char *argv[])
           }
          fprintf(outfile," \r\n");
          line_cnt[lev]++;
-      } else {
+      } else {  /* linebuf[0] != '{' */
         fprintf(outfile,"%s\r\n", linebuf);
         if ((strncmp(linebuf,"#ifdef",6)) == 0) {
           lev++;

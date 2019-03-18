@@ -350,9 +350,16 @@
  #define ON_PORT PORTA
  #define ON_PIN PA6      // This Pin is switched to high to switch power on
 #else		/* PROCESSOR_TYP, must be ATmega8|168|328 */
- #define ON_DDR DDRD
- #define ON_PORT PORTD
- #define ON_PIN PD6      // This Pin is switched to high to switch power on
+ #if STRIP_GRID_BOARD == 3
+  // special layout for Arduino Nano, dummy entry
+  #define ON_DDR DDRB
+  #define ON_PORT PORTB
+  #define ON_PIN 7     // non existing pin
+ #else
+  #define ON_DDR DDRD
+  #define ON_PORT PORTD
+  #define ON_PIN PD6      // This Pin is switched to high to switch power on
+ #endif
 #endif		/* PROCESSOR_TYP */
 
 /* ************************************************************************* */
@@ -386,6 +393,11 @@
   #else
    #define RST_PIN PD0     //Pin, is switched to low, if push button is pressed
   #endif
+ #elif STRIP_GRID_BOARD == 3
+ // special version for a Arduino Nano Layout
+  #define RST_PORT PORTC
+  #define RST_PIN_REG PINC
+  #define RST_PIN PC3     //Pin, is switched to low, if push button is pressed
  #else		/* no STRIP_GRID_BOARD */
  // normal layout version
   #define RST_PORT PORTD
@@ -528,6 +540,33 @@
    #define HW_LCD_RS_DDR          DDRD
    #define HW_LCD_RS_PORT         PORTD
    #define HW_LCD_RS_PIN          3
+
+   /* serial data input SI | SDA */
+   #define HW_LCD_B0_DDR          DDRD
+   #define HW_LCD_B0_PORT         PORTD
+   #define HW_LCD_B0_PIN          1
+
+   /* Chip Enable input */
+   #define HW_LCD_CE_DDR          DDRD
+   #define HW_LCD_CE_PORT         PORTD
+   #define HW_LCD_CE_PIN          5
+
+   #elif STRIP_GRID_BOARD == 4
+   // alternative connection of graphical LCD for the chinese KKmoon board
+   /* the Reset Pin, 0 = Reset */
+   #define HW_LCD_RES_DDR         DDRD
+   #define HW_LCD_RES_PORT        PORTD
+   #define HW_LCD_RES_PIN         3
+
+   /* serial clock input  (SCL) */
+   #define HW_LCD_EN_DDR          DDRD
+   #define HW_LCD_EN_PORT         PORTD
+   #define HW_LCD_EN_PIN          0
+
+   /* command / data switch  0=command 1=data */
+   #define HW_LCD_RS_DDR          DDRD
+   #define HW_LCD_RS_PORT         PORTD
+   #define HW_LCD_RS_PIN          2
 
    /* serial data input SI | SDA */
    #define HW_LCD_B0_DDR          DDRD
@@ -867,21 +906,39 @@
 				/* --------------------------------------------- */
  #else				/* PROCESSOR_TYP  ATmega8/168/328 with 4-bit parallel interface*/
   #ifdef STRIP_GRID_BOARD
+   #if STRIP_GRID_BOARD == 3
+  		/* special layout for Arduino Nano with 4-bit parallel interface mega328 */
+    #define HW_LCD_EN_PORT         PORTD
+    #define HW_LCD_EN_PIN          6
+ 
+    #define HW_LCD_RS_PORT         PORTD
+    #define HW_LCD_RS_PIN          7
+ 
+    #define HW_LCD_B4_PORT         PORTD
+    #define HW_LCD_B4_PIN          5
+    #define HW_LCD_B5_PORT         PORTD
+    #define HW_LCD_B5_PIN          4
+    #define HW_LCD_B6_PORT         PORTD
+    #define HW_LCD_B6_PIN          3
+    #define HW_LCD_B7_PORT         PORTD
+    #define HW_LCD_B7_PIN          2
+   #else
   		/* strip grid layout with 4-bit parallel interface and mega8/168/328 */
-   #define HW_LCD_EN_PORT         PORTD
-   #define HW_LCD_EN_PIN          5
+    #define HW_LCD_EN_PORT         PORTD
+    #define HW_LCD_EN_PIN          5
  
-   #define HW_LCD_RS_PORT         PORTD
-   #define HW_LCD_RS_PIN          7
+    #define HW_LCD_RS_PORT         PORTD
+    #define HW_LCD_RS_PIN          7
  
-   #define HW_LCD_B4_PORT         PORTD
-   #define HW_LCD_B4_PIN          4
-   #define HW_LCD_B5_PORT         PORTD
-   #define HW_LCD_B5_PIN          3
-   #define HW_LCD_B6_PORT         PORTD
-   #define HW_LCD_B6_PIN          2
-   #define HW_LCD_B7_PORT         PORTD
-   #define HW_LCD_B7_PIN          1
+    #define HW_LCD_B4_PORT         PORTD
+    #define HW_LCD_B4_PIN          4
+    #define HW_LCD_B5_PORT         PORTD
+    #define HW_LCD_B5_PIN          3
+    #define HW_LCD_B6_PORT         PORTD
+    #define HW_LCD_B6_PIN          2
+    #define HW_LCD_B7_PORT         PORTD
+    #define HW_LCD_B7_PIN          1
+   #endif
   #else		/* no STRIP_GRID_BOARD */
 		/* normal layout with 4-bit parallel interface and  mega8/168/328 */
    #define HW_LCD_EN_PORT         PORTD
@@ -991,22 +1048,33 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  #define TXD_MSK 0	/* no output for ADC port */
 #else
  // ATmega8/168/328
- #define SERIAL_PORT PORTC
- #define SERIAL_DDR DDRC
- #define SERIAL_BIT PC3 	//TxD-Pin of Software-UART; must be at Port C !
- #ifdef WITH_UART
-  #define TXD_MSK (1<<SERIAL_BIT)
-  #ifdef SWUART_INVERT
-   #define TXD_VAL 0
-  #else
-   #define TXD_VAL TXD_MSK
-  #endif
- #else	/* no WITH_UART */
- // If you use any pin of port C for output, you should define all used pins in TXD_MSK.
- // With TXD_VAL you can specify the default level of output pins for all port C output pins.
+ #if STRIP_GRID_BOARD == 3
+  // special layout for Arduino Nano, use TXD(PD1) for serial output
+  #define SERIAL_PORT PORTD
+  #define SERIAL_DDR DDRD
+  #define SERIAL_BIT PD1 	//TxD-Pin of Software-UART
+  // If you use any pin of port C for output, you should define all used pins in TXD_MSK.
+  // With TXD_VAL you can specify the default level of output pins for all port C output pins.
   #define TXD_MSK 0
   #define TXD_VAL 0
- #endif	/* WITH_UART */
+ #else
+  #define SERIAL_PORT PORTC
+  #define SERIAL_DDR DDRC
+  #define SERIAL_BIT PC3 	//TxD-Pin of Software-UART; must be at Port C !
+  #ifdef WITH_UART
+   #define TXD_MSK (1<<SERIAL_BIT)
+   #ifdef SWUART_INVERT
+    #define TXD_VAL 0
+   #else
+    #define TXD_VAL TXD_MSK
+   #endif
+  #else	/* no WITH_UART */
+  // If you use any pin of port C for output, you should define all used pins in TXD_MSK.
+  // With TXD_VAL you can specify the default level of output pins for all port C output pins.
+   #define TXD_MSK 0
+   #define TXD_VAL 0
+  #endif	/* WITH_UART */
+ #endif /* STRIP_GRID_BOARD */
 #endif	/* PROCESSOR_TYP */
 
  //define a default zero value for ESR measurement (0.01 Ohm units)

@@ -574,7 +574,11 @@ ad_2r:
 
 ;#define FAKTOR_ESR (580000/(PIN_RM+PIN_RP+R_L_VAL))	/* 80 */
 ;#define CAP_OFFSET (32000/(PIN_RM+PIN_RP+R_L_VAL))	/* 4 nF */
+ #if PROCESSOR_TYP == 644
+#define FAKTOR_ESR (30250/(PIN_RM+PIN_RP+R_L_VAL))	/* 4 */
+ #else
 #define FAKTOR_ESR (550000/(PIN_RM+PIN_RP+R_L_VAL))	/* 76 */
+ #endif
 #define CAP_OFFSET (38000/(PIN_RM+PIN_RP+R_L_VAL))	/* 5 nF */
  #if F_CPU == 16000000UL
 ;#define FAKTOR_ESR (920000/(PIN_RM+PIN_RP+R_L_VAL))     /* 127 */

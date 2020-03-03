@@ -11,4 +11,4 @@ labeled as "IDE" on PCB and has following pinout (from left to right):
         3) MISO
         4) MOSI
         5) +5V
-        7) GND
+        6) GND

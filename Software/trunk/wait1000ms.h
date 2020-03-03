@@ -30,11 +30,11 @@ void wait40us(void);
 void wait30us(void);
 void wait20us(void);
 void wait10us(void);
-// for 1 Mhz clock is  wait10us the last useable function!
+// for 1 MHz clock is  wait10us the last useable function!
 void wait5us(void);
 void wait4us(void);
 void wait3us(void);
 void wait2us(void);
-void wait1us(void); //only possible at clock frequency of 8Mhz
-void wait500ns(void); //only possible at clock frequency of 16Mhz
+void wait1us(void); //only possible at clock frequency of 8 MHz
+void wait500ns(void); //only possible at clock frequency of 16 MHz
 

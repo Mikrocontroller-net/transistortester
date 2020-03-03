@@ -9,6 +9,16 @@ ifeq ($(INHIBIT_SLEEP_MODE),1)
 CFLAGS += -DINHIBIT_SLEEP_MODE
 endif
 
+# Include current directory
+CFLAGS  += -I.
+
+# Path to generated files
+OBJDIR := ../Obj/$(PROJECT)
+DEPDIR := ../Obj/$(PROJECT)/dep
+
+TARGET = $(OBJDIR)/$(PROJECT).elf
+
+
 #Add some Defines if 128x64 controller ST7565 is used
 ifeq ($(WITH_LCD_ST7565),1)
 CFLAGS += -DLCD_ST_TYPE=7565
@@ -327,7 +337,7 @@ COMMON = -mmcu=$(MCU)
 CFLAGS += $(COMMON)
 CFLAGS += -gdwarf-2 -std=gnu99 -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 # CFLAGS += -maccumulate-args
-CFLAGS += -MD -MP -MT $(*F).o -MF dep/$(@F).d 
+CFLAGS += -MD -MP -MT $(*F).o -MF $(DEPDIR)/$(@F).d 
 
 ## Assembly specific flags
 ASMFLAGS = $(COMMON)
@@ -337,6 +347,10 @@ ASMFLAGS += -x assembler-with-cpp -Wa,-gdwarf2
 ## Linker flags
 LDFLAGS = $(COMMON)
 LDFLAGS +=  -Wl,--relax,-Map=$(PROJECT).map
+
+# remove unused code
+CFLAGS  += -ffunction-sections -fdata-sections
+LDFLAGS += -Wl,--gc-sections
 
 ## Intel Hex file production flags
 HEX_FLASH_FLAGS = -R .eeprom -R .fuse -R .lock -R .signature

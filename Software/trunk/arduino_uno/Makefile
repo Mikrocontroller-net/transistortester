@@ -3,9 +3,8 @@
 ###############################################################################
 
 ## General Flags
-PROJECT = TransistorTester
-TARGET = $(PROJECT).elf
-VPATH = ..:../bitmaps
+PROJECT = arduino_uno
+
 CC = avr-gcc
 
 CPP = avr-g++
@@ -268,50 +267,36 @@ AVRDUDE_BAUD = -b $(BAUD_RATE)
 
 include ../setup.mk
 
-########### Compile only Assembler source available 
-lcd_hw_4_bit.o: ../lcd_hw_4_bit.S $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-wait1000ms.o: ../wait1000ms.S $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-swuart.o: ../swuart.S $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
-########### Compile  Assembler source only, is time critical 
-GetESR.o: ../GetESR.S $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
-
 ########### Compile C or Assembler , Assembler saves more than 400 bytes flash
-GetRLmultip.o: ../GetRLmultip.S $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/GetRLmultip.o: ../GetRLmultip.S $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-UfAusgabe.o: ../UfAusgabe.S $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/UfAusgabe.o: ../UfAusgabe.S $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-RvalOut.o: ../RvalOut.S $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/RvalOut.o: ../RvalOut.S $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-PinLayout.o: ../PinLayout.S $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/PinLayout.o: ../PinLayout.S $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-RefVoltage.o: ../RefVoltage.S $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/RefVoltage.o: ../RefVoltage.S $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-i2lcd.o: ../i2lcd.S $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/i2lcd.o: ../i2lcd.S $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-ReadADC.o: ../ReadADC.S $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/ReadADC.o: ../ReadADC.S $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-sleep_5ms.o: ../sleep_5ms.S $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/sleep_5ms.o: ../sleep_5ms.S $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-wait_for_key_ms.o: ../wait_for_key_ms.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/wait_for_key_ms.o: ../wait_for_key_ms.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-get_log.o: ../get_log.S $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/get_log.o: ../get_log.S $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
 include ../finish.mk
 

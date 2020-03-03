@@ -1,91 +1,116 @@
+########### Compile only Assembler source available
+$(OBJDIR)/lcd_hw_4_bit.o: ../lcd_hw_4_bit.S $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
+
+$(OBJDIR)/wait1000ms.o: ../wait1000ms.S $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
+
+$(OBJDIR)/swuart.o: ../swuart.S $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
+
+########### Compile  Assembler source only, is time critical
+$(OBJDIR)/GetESR.o: ../GetESR.S $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
 ########### Compile C source only 
-lcd-routines.o: ../lcd-routines.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/lcd-routines.o: ../lcd-routines.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-lcd-draw.o: ../lcd-draw.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/lcd-draw.o: ../lcd-draw.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-DisplayValue.o: ../DisplayValue.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/DisplayValue.o: ../DisplayValue.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-function_menu.o: ../function_menu.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/function_menu.o: ../function_menu.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-message_key_released.o: ../message_key_released.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/message_key_released.o: ../message_key_released.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-ReadCapacity.o: ../ReadCapacity.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/ReadCapacity.o: ../ReadCapacity.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-CalibrationCap.o: ../CalibrationCap.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/CalibrationCap.o: ../CalibrationCap.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-ReadBigCap.o: ../ReadBigCap.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/ReadBigCap.o: ../ReadBigCap.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-ReadInductance.o: ../ReadInductance.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/ReadInductance.o: ../ReadInductance.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-Calibrate_UR.o: ../Calibrate_UR.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/Calibrate_UR.o: ../Calibrate_UR.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-CheckPins.o: ../CheckPins.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/CheckPins.o: ../CheckPins.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-GetResistance.o: ../GetResistance.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/GetResistance.o: ../GetResistance.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-GetVloss.o: ../GetVloss.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/GetVloss.o: ../GetVloss.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-GetFrequency.o: ../GetFrequency.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/GetFrequency.o: ../GetFrequency.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-CheckRotaryEncoder.o: ../CheckRotaryEncoder.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/CheckRotaryEncoder.o: ../CheckRotaryEncoder.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-Battery_check.o: ../Battery_check.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/Battery_check.o: ../Battery_check.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-main.o: ../main.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -D$(UI_LANGUAGE) -c  $<
+$(OBJDIR)/main.o: ../main.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -D$(UI_LANGUAGE) -c -o $@ $<
 
-ChargePin10ms.o: ../ChargePin10ms.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/ChargePin10ms.o: ../ChargePin10ms.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-EntladePins.o: ../EntladePins.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/EntladePins.o: ../EntladePins.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-EE_check_init.o: ../EE_check_init.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/EE_check_init.o: ../EE_check_init.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-ShowData.o: ../ShowData.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/ShowData.o: ../ShowData.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-show_Resis_Cap.o: ../show_Resis_Cap.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/show_Resis_Cap.o: ../show_Resis_Cap.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-sampling_cap.o: ../sampling_cap.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/sampling_cap.o: ../sampling_cap.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-sampling_lc.o: ../sampling_lc.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/sampling_lc.o: ../sampling_lc.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-sampling_xtal.o: ../sampling_xtal.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/sampling_xtal.o: ../sampling_xtal.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
-CheckUJT.o: ../CheckUJT.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/CheckUJT.o: ../CheckUJT.c $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
 ########### Compile assembler source only 
 
-samplingADC.o: ../samplingADC.S $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
+$(OBJDIR)/samplingADC.o: ../samplingADC.S $(MKFILES)
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
+	
+########### directories
+
+#$(OBJDIR):
+#      @mkdir -p $@
+
+# create directories, after makefile is parsed
+$(shell mkdir -p $(OBJDIR))
+$(shell mkdir -p $(DEPDIR))
+
+OBJFILES = $(addprefix $(OBJDIR)/, $(OBJECTS))
+
 
 ##Link
-$(TARGET): $(OBJECTS)
-	 $(CC) $(LDFLAGS) $(OBJECTS) $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $(TARGET)
+$(TARGET): $(OBJFILES)
+	$(CC) $(LDFLAGS) $(OBJFILES) $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $(TARGET)
 
 %.hex: $(TARGET)
 	avr-objcopy -O ihex $(HEX_FLASH_FLAGS)  $< $@
@@ -104,14 +129,18 @@ size: ${TARGET}
 ## Clean target
 .PHONY: size clean steril fuses fuses-crystal fuses-crystal-lp erase upload program flash eeprom eeread read verify upload_orig
 clean:
-	-rm -rf $(OBJECTS) $(PROJECT).elf dep/* $(PROJECT).hex $(PROJECT).eep $(PROJECT).lss $(PROJECT).map
+	-rm -rf $(OBJECTS) $(PROJECT).elf $(PROJECT).hex $(PROJECT).eep $(PROJECT).lss $(PROJECT).map
+	@rm -rf dep *.o  # old path and files
+	@rm -rf $(OBJDIR)
+
 steril:
+	-rm -rf $(PROJECT).hex $(PROJECT).eep
 	$(MAKE)
-	-rm -rf $(OBJECTS) $(PROJECT).elf dep/* $(PROJECT).lss $(PROJECT).map
+	-rm -rf $(PROJECT).elf $(PROJECT).lss $(PROJECT).map
 
 
 ## Other dependencies
--include $(shell mkdir dep 2>/dev/null) $(wildcard dep/*)
+-include $(shell mkdir $(DEPDIR) 2>/dev/null) $(wildcard $(DEPDIR)/*)
 
 
 # device programming

@@ -17,8 +17,8 @@ extern uint8_t ResistorChecked[3];	// 2, if resistor is checked in both directio
 extern  uint8_t ResistorsFound;	//Number of found resistors
 
  #if FLASHEND > 0x1fff
-   unsigned long inductor_lx;	// inductance 10uH or 100uH
-   int8_t inductor_lpre;	// prefix for inductance
+   extern unsigned long inductor_lx;	// inductance 10uH or 100uH
+   extern int8_t inductor_lpre;	// prefix for inductance
  #endif
 #endif
 

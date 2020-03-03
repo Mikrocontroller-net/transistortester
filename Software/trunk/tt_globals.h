@@ -149,7 +149,7 @@ COMMON struct cap_t {
   int8_t cpre;			//Prefix for capacitor value  -12=p, -9=n, -6=µ, -3=m
   int8_t cpre_max;		//Prefix of the biggest capacitor
 } cap;
-  unsigned int cell_mv[3];	//remaining load voltages after discharge cycle
+  COMMON unsigned int cell_mv[3];	//remaining load voltages after discharge cycle
 
 #ifndef INHIBIT_SLEEP_MODE
  /* with sleep mode we need a global ovcnt16 */

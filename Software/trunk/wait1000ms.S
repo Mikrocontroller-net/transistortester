@@ -114,7 +114,7 @@ wait200us:
 
 
 # RCALL_TICS specify the number of tics used for rcall and ret instruction
-#if FLASH_END > 0x1ffff
+#if FLASHEND > 0x1ffff
  /* special 3 byte return address takes two tics more */
  #define RCALL_TICS 9
 #else

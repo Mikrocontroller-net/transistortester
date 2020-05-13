@@ -17,19 +17,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   6 .debug_aranges 00000460  00000000  00000000  000041b8  2**3
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_info   0000730f  00000000  00000000  00004618  2**0
+  7 .debug_info   000072df  00000000  00000000  00004618  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 0000195c  00000000  00000000  0000b927  2**0
+  8 .debug_abbrev 0000195c  00000000  00000000  0000b8f7  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   00004cbe  00000000  00000000  0000d283  2**0
+  9 .debug_line   00004cbe  00000000  00000000  0000d253  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_frame  000006bc  00000000  00000000  00011f44  2**2
+ 10 .debug_frame  000006bc  00000000  00000000  00011f14  2**2
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_str    0000126e  00000000  00000000  00012600  2**0
+ 11 .debug_str    0000126a  00000000  00000000  000125d0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_loc    00003e07  00000000  00000000  0001386e  2**0
+ 12 .debug_loc    00003e07  00000000  00000000  0001383a  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_ranges 00000230  00000000  00000000  00017675  2**0
+ 13 .debug_ranges 00000230  00000000  00000000  00017641  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -10972,10 +10972,10 @@ void show_resis(byte pin1, byte pin2, byte how)
            lcd_testpin(pin2);
     3622:	8c 2f       	mov	r24, r28
     3624:	0e 94 f2 04 	call	0x9e4	; 0x9e4 <lcd_testpin>
-              if (_lcd_column<=LCD_LINE_LENGTH-4) {
                  lcd_MEM_string(RL_METER_str+(_lcd_column-6));	// " [R]" or "[RL]"
-              }
-           }
+           } else {
+                 lcd_clear_line();
+	   }
   #else
            lcd_clear_line();
     3628:	0e 94 9a 05 	call	0xb34	; 0xb34 <lcd_clear_line>
@@ -11016,7 +11016,7 @@ void show_resis(byte pin1, byte pin2, byte how)
            inductor_lpre = -1;		// prevent ESR measurement because Inductance is not tested
            RvalOut(ResistorList[0]);	// show Resistance, no ESR
  #endif
-}
+}  /* end show_resis() */
     3666:	cf 91       	pop	r28
     3668:	0f 91       	pop	r16
     366a:	08 95       	ret

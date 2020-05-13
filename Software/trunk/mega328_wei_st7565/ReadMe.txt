@@ -28,6 +28,21 @@ the USB connector once for operating with the accu.
 I recommend to charge the accu before first use.
 You should not use the accu with a voltage below 2.8V.  
 
+You can change the hardware and replace the start key with
+a rotary switch. Because both sides of the start key are connected,
+you have to cut three pcb-tracks and replace one of
+the tracks with a isolated wire to keep the start key function.
+One additional drill hole must be placed in the middle of the
+two holes at the outer board side for the common pin of the rotary switches.
+Take a look to the documentation for the details of connecting
+the rotary switch. You have to connect the two rotary switch
+connectors to PD1 (Pin 5) and PD3 (Pin 7) with 1 kOhm resistors.  
+The common pin of the rotary switch must be connected to GND and
+two 10 kOhm resistors are needed also to provide 5V power to the
+rotary switch connectors. Don't forget to enable the
+rotary switch support with option WITH_ROTARY_SWITCH in the Makefile,
+rebuild the software and reprogram the ATmega328.
+
 ===========================================================
 Please note, that another simular version labled VANVELL ELC
 is also available!

@@ -99,17 +99,10 @@ typedef uint8_t byte;
 // strings to fill out the topline with "[RL]" or "[ R]"
 // they include precisely enough extra space to start from the 7th position on the line
 // if already k characters more have been written, just add k to the starting address
-  #if RMETER_WITH_L
-// strings to fill out the topline with "[RL]" or "[ R]"
-// they include precisely enough extra space to start from the 7th position on the line
-// if already k characters more have been written, just add k to the starting address
-#ifdef RMETER_WITH_L
+  #ifdef RMETER_WITH_L
 const unsigned char RL_METER_str[] MEM2_TEXT = {' ',' ',' ',' ',' ',EXTRASPACES ' ','[','R','L',']',0};
-#else
-const unsigned char RL_METER_str[] MEM2_TEXT = {' ',' ',' ',' ',' ',EXTRASPACES ' ',' ','[','R',']',0};
-#endif
   #else
-const unsigned char RESIS_str_R2[] MEM2_TEXT = {' ',' ',' ',' ',' ',EXTRASPACES ' ',' ','[','R',']',0};
+const unsigned char RL_METER_str[] MEM2_TEXT = {' ',' ',' ',' ',EXTRASPACES ' ',' ','[','R',']',0};
   #endif
  #endif  /* FLASHEND > 0x3fff */
 
@@ -142,7 +135,7 @@ void show_resis(byte pin1, byte pin2, byte how)
 
            // second line: measured R value (but that goes on first line if lc_lx!=0), and measured inductance, if applicable
 
- #ifdef SamplingADC
+  #ifdef SamplingADC
            if (!lclx0) {  /* inductance measured by sampling method */
               lcd_space();
               RvalOut(ResistorList[0]);		// show Resistance, probably ESR, still on first line
@@ -150,12 +143,12 @@ void show_resis(byte pin1, byte pin2, byte how)
   #endif
  
   #if FLASHEND > 0x3fff
-           if (how) {
+           if ((how) && (_lcd_column<=LCD_LINE_LENGTH-4)) {
               // still need to write "[RL]" or "[R]" at the end of first line, if it fits
-              if (_lcd_column<=LCD_LINE_LENGTH-4) {
                  lcd_MEM_string(RL_METER_str+(_lcd_column-6));	// " [R]" or "[RL]"
-              }
-           }
+           } else {
+                 lcd_clear_line();
+	   }
   #else
            lcd_clear_line();
   #endif
@@ -211,7 +204,7 @@ void show_resis(byte pin1, byte pin2, byte how)
            inductor_lpre = -1;		// prevent ESR measurement because Inductance is not tested
            RvalOut(ResistorList[0]);	// show Resistance, no ESR
  #endif
-}
+}  /* end show_resis() */
 
 #endif //   FLASHEND > 0x1fff
 
@@ -228,11 +221,14 @@ void show_resis(byte pin1, byte pin2, byte how)
 void show_Resis13(void) {
   uint8_t key_pressed;
   message_key_released(RESIS_13_str);	// "1-|=|-3 .."
-#ifndef RMETER_WITH_L
-  lcd_set_cursor(0,6);
-  lcd_MEM_string(RL_METER_str);	// " [R]" or "[RL]"
-#endif
-#ifdef POWER_OFF
+ #ifdef RMETER_WITH_L  
+  lcd_set_cursor(0,10);
+  lcd_MEM_string(RL_METER_str+4);	// "[RL]"
+ #else
+  lcd_set_cursor(0,7);
+  lcd_MEM_string(RL_METER_str);		// " [R]" 
+ #endif
+ #ifdef POWER_OFF
   uint8_t times;
   for (times=0;times<250;) 
  #else
@@ -249,9 +245,11 @@ void show_Resis13(void) {
  #if defined(SamplingADC) && defined(AUTO_LC_CAP)
 	   sampling_lc_calibrate(249);		// try a short time to fetch new capacity value
  #endif
- #ifdef RMETER_WITH_L
            lcd_MEM_string(RESIS_13_str);
-           lcd_MEM_string(RL_METER_str+4);	// " [R]" or "[RL]"
+ #ifdef RMETER_WITH_L  
+           lcd_MEM_string(RL_METER_str+4);	// "[RL]"
+ #else	   
+           lcd_MEM_string(RL_METER_str);	// " [R]"
  #endif
            lcd_line2();
            lcd_data('?');		// too big

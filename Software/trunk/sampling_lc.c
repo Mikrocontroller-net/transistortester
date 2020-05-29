@@ -430,7 +430,7 @@ noavg:;
    vv = (vv/51)*616;
    shift++;                          // change shift variable to compensate for that later on
 #else
-   #error "CPU clocks other than 8 and 16 MHz not yet supported for SamplingADC"
+   #error "CPU clocks other than 8, 16  and 20 MHz not yet supported for SamplingADC"
    vv = 0;
 #endif
 //   vv/=lc_cpar;                          //          ; is (d<<2)/(2*pi*fclock)^2/c * 1e9 >>3
@@ -476,7 +476,7 @@ noavg:;
 #endif
       return;
    }
-#if F_CPU==16000000UL
+#if F_CPU>=16000000UL
    vv = (unsigned long)period<<1;
 #else
    vv = (unsigned long)period;

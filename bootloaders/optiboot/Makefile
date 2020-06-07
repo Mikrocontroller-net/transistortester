@@ -548,6 +548,10 @@ help:
 	@$(ECHO_CMD) " "
 	@$(ECHO_CMD) "You must allways specify a target AVR processor (AVR-ID) to build"
 	@$(ECHO_CMD) "a proper optiboot bootloader with any of the available options."
+	@$(ECHO_CMD) "Example:"
+	@$(ECHO_CMD) "make atmega328p LED_START_FLASHES=0 LED_DATA_FLASH=1"
+	@$(ECHO_CMD) "would deselect the binking LED at the bootloader start and"
+	@$(ECHO_CMD) "would use a bright LED when waiting for Rx data."
 	@$(ECHO_CMD) "Type make help2 for additional options!"
 help2:
 	@$(ECHO_CMD) "Additional options for building a optiboot:"

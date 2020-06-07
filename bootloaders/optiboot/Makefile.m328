@@ -332,18 +332,18 @@ xplained328p:
 #
 # ATmega168p [QFN32]
 #
-atmega168p_lp_isp: TARGET := atmega168p_lp
-atmega168p_lp_isp: MCU_TARGET := atmega168p
+atmega168p_lp: TARGET := atmega168p_lp
+atmega168p_lp: MCU_TARGET := atmega168p
 # 2.7V brownout
-atmega168p_lp_isp: HFUSE := DD
+atmega168p_lp: HFUSE := DD
 # Low power xtal (16MHz) 16KCK/14CK+65ms
-atmega168p_lp_isp: LFUSE := FF
+atmega168p_lp: LFUSE := FF
 # 512 byte boot
-atmega168p_lp_isp: EFUSE := FC
-atmega168p_lp_isp: VIRTUAL_BOOT_PARTITION := 1
+atmega168p_lp: EFUSE := FC
+atmega168p_lp: VIRTUAL_BOOT_PARTITION := 1
 export
-atmega168p_lp_isp: 
-	$(MAKE) atmega168 ISP=1
+atmega168p_lp: 
+	$(MAKE) atmega168
 
 
 #

@@ -268,6 +268,7 @@ t48/88     & CKDIV8   & CKOUT   &   -   & SUT   & \multicolumn{4}{c |}{CKSEL3:0}
     \hline
 t1634      & CKDIV8   & CKOUT   &   -   & SUT   & \multicolumn{4}{c |}{CKSEL3:0} \\
     \hline
+t26        & PLLCK    & CKOPT   & SUT1  & SUT0  & \multicolumn{4}{c |}{CKSEL3:0} \\
     \hline
     \end{tabular}
   \end{center}
@@ -279,46 +280,51 @@ t1634      & CKDIV8   & CKOUT   &   -   & SUT   & \multicolumn{4}{c |}{CKSEL3:0}
   \begin{center}
     \begin{tabular}{| l | c | c | c | c || c | c | c | c |}
     \hline
-   Typ     &   Bit 7  &  Bit 6  & Bit 5 & Bit 4 & Bit 3  & Bit 2  & Bit 1  & Bit 0 \\
+   Typ     &  Bit 7 &  Bit 6  & Bit 5 & Bit 4 & Bit 3  & Bit 2  & Bit 1  & Bit 0 \\
     \hline
     \hline
-m8        & RSTDISBL   & WDTON  & SPIEN  & CKOPT  & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOTRST \\
+m8        & RST-    & WDTON  & SPIEN  & CKOPT  & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOT-  \\
+          & DISBL   &        &        &        &        &       &        &                  RST    \\
     \hline
-m16/32    & OCDEN     & JTAGEN  & SPIEN  & CKOPT  & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOTRST \\
-m64/128   & OCDEN     & JTAGEN  & SPIEN  & CKOPT  & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOTRST \\
+m16/32    & OCDEN   & JTAGEN  & SPIEN  & CKOPT  & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOT- \\
+m64/128   & OCDEN   & JTAGEN  & SPIEN  & CKOPT  & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & RST   \\
     \hline
-m165/169  & OCDEN     & JTAGEN  & SPIEN  & WDTON & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOTRST \\
-m325/329  & OCDEN     & JTAGEN  & SPIEN  & WDTON & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOTRST \\
-m645/649  & OCDEN     & JTAGEN  & SPIEN  & WDTON & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOTRST \\
-m640      & OCDEN     & JTAGEN  & SPIEN  & WDTON & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOTRST \\
-m1280     & OCDEN     & JTAGEN  & SPIEN  & WDTON & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOTRST \\
-m2560     & OCDEN     & JTAGEN  & SPIEN  & WDTON & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOTRST \\
-m16U4     & OCDEN     & JTAGEN  & SPIEN  & WDTON & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOTRST \\
-m32U4     & OCDEN     & JTAGEN  & SPIEN  & WDTON & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOTRST \\
+m165/169  & OCDEN   & JTAGEN  & SPIEN  & WDTON & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOT- \\
+m325/329  & OCDEN   & JTAGEN  & SPIEN  & WDTON & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & RST \\
+m645/649  & OCDEN   & JTAGEN  & SPIEN  & WDTON & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOT- \\
+m640      & OCDEN   & JTAGEN  & SPIEN  & WDTON & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & RST \\
+m1280     & OCDEN   & JTAGEN  & SPIEN  & WDTON & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOT- \\
+m2560     & OCDEN   & JTAGEN  & SPIEN  & WDTON & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & RST \\
+m16U4     & OCDEN   & JTAGEN  & SPIEN  & WDTON & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOT- \\
+m32U4     & OCDEN   & JTAGEN  & SPIEN  & WDTON & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & RST \\
     \hline
-m328       & RSTDISBL   & DWEN  & SPIEN  & WDTON  & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOTRST \\
+m328      & RST-    & DWEN  & SPIEN  & WDTON  & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOT- \\
+          & DISBL   &        &        &        &        &       &        &                 RST   \\
     \hline
-m88/48     & RSTDISBL   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
-m168       & RSTDISBL   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
-90PWM2     & RSTDISBL   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
-90PWM3     & RSTDISBL   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
-t24/25     & RSTDISBL   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
-t261       & RSTDISBL   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
-t44/441    & RSTDISBL   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
-t461       & RSTDISBL   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
-t45/48     & RSTDISBL   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
-t84/841    & RSTDISBL   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
-t85/87     & RSTDISBL   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
-t88/861    & RSTDISBL   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
-t167       & RSTDISBL   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
-t1634      & RSTDISBL   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
+m88/48     & RST-   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
+m168       & DISBL  & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
+90PWM2     & RST-   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
+90PWM3     & DISBL  & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
+t24/25     & RST-   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
+t261       & DISBL  & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
+t44/441    & RST-   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
+t461       & DISBL  & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
+t45/48     & RST-   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
+t84/841    & DISBL  & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
+t85/87     & RST-   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
+t88/861    & DISBL  & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
+t167       & RST-   & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
+t1634      & DISBL  & DWEN   & SPIEN  & WDTON  & EESAVE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
     \hline
-t4313      &  DWEN   & EESAVE    & SPIEN   & WDTON  & \multicolumn{3}{c |}{BODLEVEL2:0} & RSTDISBL \\
-t2313      &  DWEN   & EESAVE    & SPIEN   & WDTON  & \multicolumn{3}{c |}{BODLEVEL2:0} & RSTDISBL \\
+t4313      &  DWEN  & EESAVE & SPIEN   & WDTON  & \multicolumn{3}{c |}{BODLEVEL2:0} & RST- \\
+t2313      &  DWEN  & EESAVE & SPIEN   & WDTON  & \multicolumn{3}{c |}{BODLEVEL2:0} & DISBL \\
     \hline
-m8U2       & DWEN  & RSRDISBL   & SPIEN  & WDTON  & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOTRST \\
-m16U2      & DWEN  & RSRDISBL   & SPIEN  & WDTON  & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOTRST \\
-m32U2      & DWEN  & RSRDISBL   & SPIEN  & WDTON  & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOTRST \\
+m8U2       & DWEN  & RST-    & SPIEN  & WDTON  & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOT- \\
+m16U2      & DWEN  & DISBL   & SPIEN  & WDTON  & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} & RST \\
+m32U2      & DWEN  &         & SPIEN  & WDTON  & EESAVE & \multicolumn{2}{c |}{BOOTSZ1:0} &      \\
+    \hline
+t26        &   -   &    -    &   -    & RST-   & SPIEN  & EE- & BOD- & BODEN \\
+           &       &         &        & DISBL  &        & SAVE & LEVEL &       \\
     \hline
     \end{tabular}
   \end{center}
@@ -335,34 +341,36 @@ m32U2      & DWEN  & RSRDISBL   & SPIEN  & WDTON  & EESAVE & \multicolumn{2}{c |
     \hline
 m64/128     &    -     &    -    &   -   &   -   &    -   &    -   & M103C  & WDTON   \\
     \hline
-m165/169    &    -     &    -    &   -   &   -   & \multicolumn{3}{c |}{BODLEVEL2:0} & RSTDISBL \\
-m325/329    &    -     &    -    &   -   &   -   & \multicolumn{3}{c |}{BODLEVEL2:0} & RSTDISBL \\
-m645/649    &    -     &    -    &   -   &   -   & \multicolumn{3}{c |}{BODLEVEL2:0} & RSTDISBL \\
-m640        &    -     &    -    &   -   &   -   & \multicolumn{3}{c |}{BODLEVEL2:0} & RSTDISBL \\
-m1280       &    -     &    -    &   -   &   -   & \multicolumn{3}{c |}{BODLEVEL2:0} & RSTDISBL \\
-m2560       &    -     &    -    &   -   &   -   & \multicolumn{3}{c |}{BODLEVEL2:0} & RSTDISBL \\
+m165/169    &    -     &    -    &   -   &   -   & \multicolumn{3}{c |}{BODLEVEL2:0} & RST-  \\
+m325/329    &    -     &    -    &   -   &   -   & \multicolumn{3}{c |}{BODLEVEL2:0} & DISBL \\
+m645/649    &    -     &    -    &   -   &   -   & \multicolumn{3}{c |}{BODLEVEL2:0} & RST-  \\
+m640        &    -     &    -    &   -   &   -   & \multicolumn{3}{c |}{BODLEVEL2:0} & DISBL \\
+m1280       &    -     &    -    &   -   &   -   & \multicolumn{3}{c |}{BODLEVEL2:0} & RST-  \\
+m2560       &    -     &    -    &   -   &   -   & \multicolumn{3}{c |}{BODLEVEL2:0} & DISBL \\
     \hline
-m48         &    -     &    -    &   -   &   -   &    -   &    -   &   -    & SELFPRGEN   \\
-t24/25      &    -     &    -    &   -   &   -   &    -   &    -   &    -   & SELFPRGEN   \\
-t261        &    -     &    -    &   -   &   -   &    -   &    -   &    -   & SELFPRGEN   \\
-t2313       &    -     &    -    &   -   &   -   &    -   &    -   &    -   & SELFPRGEN   \\
-t4313       &    -     &    -    &   -   &   -   &    -   &    -   &    -   & SELFPRGEN   \\
-t44/45      &    -     &    -    &   -   &   -   &    -   &    -   &    -   & SELFPRGEN   \\
-t461/48  &    -     &    -    &   -   &   -   &    -   &    -   &    -   & SELFPRGEN   \\
-t84/85      &    -     &    -    &   -   &   -   &    -   &    -   &    -   & SELFPRGEN   \\
-t861        &    -     &    -    &   -   &   -   &    -   &    -   &    -   & SELFPRGEN   \\
-t87/88      &    -     &    -    &   -   &   -   &    -   &    -   &    -   & SELFPRGEN   \\
-t167        &    -     &    -    &   -   &   -   &    -   &    -   &    -   & SELFPRGEN   \\
+m48         &    -     &    -    &   -   &   -   &    -   &    -   &   -    & SELF-   \\
+t24/25      &    -     &    -    &   -   &   -   &    -   &    -   &    -   & PRGEN   \\
+t261        &    -     &    -    &   -   &   -   &    -   &    -   &    -   & SELF-   \\
+t2313       &    -     &    -    &   -   &   -   &    -   &    -   &    -   & PRGEN   \\
+t4313       &    -     &    -    &   -   &   -   &    -   &    -   &    -   & SELF-   \\
+t44/45      &    -     &    -    &   -   &   -   &    -   &    -   &    -   & PRGEN   \\
+t461/48     &    -     &    -    &   -   &   -   &    -   &    -   &    -   & SELF-   \\
+t84/85      &    -     &    -    &   -   &   -   &    -   &    -   &    -   & PRGEN   \\
+t861        &    -     &    -    &   -   &   -   &    -   &    -   &    -   & SELF-   \\
+t87/88      &    -     &    -    &   -   &   -   &    -   &    -   &    -   & PRGEN   \\
+t167        &    -     &    -    &   -   &   -   &    -   &    -   &    -   &         \\
     \hline
-t441/841   & \multicolumn{3}{c |}{ULPOSCSEL2:1} & BODPD1 &  BODPD0 & \multicolumn{2}{c |}{BODACT1:0} & SELFPRGEN  \\
+t441/841   & \multicolumn{3}{c |}{ULPOSCSEL2:1} & BODPD1 &  BODPD0 & \multicolumn{2}{c |}{BODACT1:0} & SELF-  \\
+            &          &         &       &       &        &        &        & PRGEN   \\
     \hline
-t1634      &    -     &    -    &   -   & BODPD1 & BODPD0 & \multicolumn{2}{c |}{BODACT1:0} & SELFPRGEN   \\
+t1634      &    -     &    -    &   -   & BODPD1 & BODPD0 & \multicolumn{2}{c |}{BODACT1:0} & SELF-   \\
+            &          &         &       &       &        &        &        & PRGEN   \\
     \hline
-m168/88    &    -     &    -    &   -   &   -   &    -   & \multicolumn{2}{c |}{BOOTSZ1:0}  & BOOTRST   \\
-m328       &    -     &    -    &   -   &   -   &    -   & \multicolumn{2}{c |}{BOOTSZ1:0}  & BOOTRST   \\
+m168/88    &    -     &    -    &   -   &   -   &    -   & \multicolumn{2}{c |}{BOOTSZ1:0}  & BOOT-   \\
+m328       &    -     &    -    &   -   &   -   &    -   & \multicolumn{2}{c |}{BOOTSZ1:0}  & RST   \\
     \hline
-90PWM2     & PSC2RB   & PSC1RB  & PSC0RB  & PSCRV  & -   & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOTRST \\
-90PWM3     & PSC2RB   & PSC1RB  & PSC0RB  & PSCRV  & -   & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOTRST \\
+90PWM2     & PSC2RB   & PSC1RB  & PSC0RB  & PSCRV  & -   & \multicolumn{2}{c |}{BOOTSZ1:0} & BOOT- \\
+90PWM3     & PSC2RB   & PSC1RB  & PSC0RB  & PSCRV  & -   & \multicolumn{2}{c |}{BOOTSZ1:0} & RST \\
     \hline
 m8U2   &    -     &    -    &   -   &   -   & HWBE & \multicolumn{3}{c |}{BODLEVEL2:0} \\
 16U2   &    -     &    -    &   -   &   -   & HWBE & \multicolumn{3}{c |}{BODLEVEL2:0} \\

@@ -60,9 +60,8 @@ sowohl dezimal als auch sedezimal (hex) verarbeiten kann.
 \item [tr] kann Text-Zeichen ersetzen oder löschen.
 \end{description}
 
-Bisher ist die Funktion der Makefile nur mit einem Linux-System getestet.
-Wahrscheinlich ist die Benutzung unter Windows nur möglich,
-wenn das Cygwin Paket installiert wird.
+Bisher ist die Funktion der Makefile nur mit einem Linux-System und
+unter Windows7 mit installiertem Cygwin Paket getestet.
 
 Um die erzeugten Zwischendateien braucht man sich im Regelfall nicht zu kümmern. Hier
 möchte ich aber wenigstens die Namen und die Bedeutung erwähnen:
@@ -86,15 +85,16 @@ aus der Zahl der benötigten Speicherseiten.
 
 Die Steuerung des Ablaufs für die Generierung der Programmdaten aus
 dem Quellcode ist in der Makefile festgelegt.
-Außer der  Haupt Makefile gibt es noch weitere drei Erweiterungen
+Außer der  Haupt Makefile gibt es noch weitere Erweiterungen
 der Makefile, die automatisch von der Haupt Makefile integriert werden:
-Makefile.1284, Makefile.atmel, und Makefile.extras .
+Makefile.at90, Makefile.m16, Makefile.m169, Makefile.m328, Makefile.m640, Makefile.m644,
+Makefile.m645 und Makefile.tiny .
 Dabei können verschiedene Konfigurationen auch für einen Prozessortyp
-festgelegt worden sein. In der Tabelle~\ref{tab:processors} sind die derzeit vordefinierten
-Konfigurationen für AVR Prozessoren angegeben. Im Prinzip ist diese Liste natürlich erweiterbar.
+festgelegt worden sein. In der Tabelle~\ref{tab:processors} sind die einige der derzeit vordefinierten
+Konfigurationen für AVR Prozessoren angegeben. 
 Die einstellbaren Parameter sind aber auch in der Aufrufzeile des
 make Programms als Parameter oder auch als Umgebungsvariable der Shell
-einstellbar.
+einstellbar und haben Vorrang zu den Grundeinstellungen.
 
 \begin{table}[H]
   \begin{center}
@@ -123,14 +123,13 @@ einstellbar.
     \hline
        atmega644p & m644p & 16M  &  64K  & 256   & 512  &  F7   &  DE   &  05 \\
     \hline
-     atmega1284  & m1284  & 16M  & 128K  & 256   & 512  &  F7   &  DE   &  05 \\
      atmega1284p & m1284p & 16M  & 128K  & 256   & 512  &  F7   &  DE   &  05 \\
     \hline
      atmega1280  & m1280  & 16M  &  128K & 256   & 1K   &  FF   &  DE   &  05 \\
     \hline
     \end{tabular}
   \end{center}
-  \caption{Prozessor targets für optiboot Makefile}
+  \caption{einige Prozessor targets für optiboot Makefile}
   \label{tab:processors}
 \end{table}
 
@@ -210,7 +209,7 @@ und \ref{tab:options2}
     BAUD\_RATE     & BAUD\_         & Gibt die Baud-Rate für die serielle Kommunikation an. \\
                    &  RATE=9600      & Es werden immer 8 Datenbits ohne Parity verwendet. \\
                    &                & Werte unter 100 aktivieren eine Messung and Anpassung \\
-                   &                & der Baudrate.  \\
+                   &                & der Baudrate mit verschiedenen Verfahren.  \\
     \hline
     SOFT\_UART     & SOFT\_UART=1   & Wählt Software-Lösung für die serielle Kommunikation. \\
     \hline
@@ -241,8 +240,6 @@ und \ref{tab:options2}
                    &                & angeschlossene LED blinken. Bei der \\
                    &                & LED\_START\_FLASHES  Option  blinkt die LED die\\
                    &                & angegebene Anzahl vor dem Kommunikations-Start. \\
-                   &                & Mit der LED\_DATA\_FLASH Option leuchtet die \\
-                   &                & LED auch während des Wartens auf Daten. \\
     \hline
  LED\_DATA\_       & LED\_DATA\_    & Die Kontroll-LED leuchtet während des Wartens auf \\
       FLASH        &    FLASH=1     & Empfangsdaten der seriellen Kommunikation.\\
@@ -550,7 +547,7 @@ Die Abbildung~\ref{fig:onewire-simple} soll die einfachste Verbindung veranschau
 
 Das Problem besteht nun darin, daß die meistens full-duplex fähige externe serielle Schnittstelle
 die eigene Ausgabe zurückliest.
-Darauf ist das Kommunikationsprogramm auf der externen Seite im allgemeinen nicht vorbereitet.
+Darauf ist ein Kommunikationsprogramm wie avrdude auf der externen Seite im allgemeinen nicht vorbereitet.
 Es gibt nun die Möglichkeit, das Programm auf der externen Seite entsprechend anzupassen.
 Ich halte das für keine gute Idee, da die angepasste Version dann entweder keine Wartung
 mehr erhält oder es müßte die Änderung für neue Versionen ständig wiederholt werden.
@@ -646,7 +643,7 @@ Wenn die Einerstelle der Baudrate größer als 5 ist, wird der
 16-Bit Zähler mit der F\_CPU Frequenz gestartet.
 Bei der darauf folgenden 1-0 Flanke wird der Zählerstand abgelesen
 und halbiert als Frequenzteiler des UARTs genommen.
-Die Halbierung ist notwendig, weil die Zeit von 2 Datenbits gemessen wurde.
+Die Halbierung ist notwendig, weil die Zeit von 2 Datenbits (4-5) gemessen wurde.
 Eigentlich muß noch 1 vom Ergebnis für den Frequenzteiler abgezogen werden.
 Aber bei der Halbierung sollte gerundet werden, also 1 auf den Zählerstand
 addiert werden. Anstelle der Subtraktion der 1 vom Divisions-Ergebnis kann
@@ -672,7 +669,7 @@ Wie bei der einfachsten Form der Baudraten-Messung wird hier auf eine Prüfung
 der Bit-Wechselzeiten verzichet.
 Es wird nur weiter auf die nächste 0-1 Flanke des RX-Signals
 gewartet und erst dann der Zähler gelesen.
-Dadurch wird die Zeit von vier Datenbits gemessen, die dann für die Berechnung
+Dadurch wird die Zeit von vier Datenbits (4-7) gemessen, die dann für die Berechnung
 der Baudrate verwendet wird.
 Da die Zeiterfassung durch die Abfrage-Schleife (polling) unpräzise ist,
 wirkt dieser mögliche Zeitfehler weniger, wenn er durch vier statt durch
@@ -685,7 +682,7 @@ ankommt. Gegenüber der einfachsten Form werden nur 4 Byte mehr belegt.
 Hier wird die gleiche Methode der Baudraten-Bestimmung angewendet, wie bei
 der einfachsten Form. 
 Nur wird das mögliche Überlauf-Ereignis des Zählers zusätzlich
-überwacht, was die Abfrage-Schleifezusätzlich verlangsamt.
+überwacht, was die Abfrage-Schleife zusätzlich verlangsamt.
 Durch den längeren Schleifen-Zyklus wird die Zeitmessung weniger exakt als
 bei der Methode ohne Zeitüberwachung zu erwarten ist.
 Daher ist diese Version nicht bei der Verwendung hoher Baudraten zu empfehlen.
@@ -709,8 +706,9 @@ Die Messung der Baudrate erfolgt genau so wie bei der verbesserten Methode (\tex
 Nur wird wie bei der Methode \textless~50 beschrieben zusätzlich eine
 Begrenzung der Wartezeit durchgeführt.
 Weil der Zählerstand erst bei der 0-1 Flanke gelesen wird und da der Zählerüberlauf
-nur bei der 1-0 Flanke geprüft wird, ist die Zeit genau so inexakt wie
-bei der verbesserten Methode ohne die Zeitüberwachung.
+nur bei der 1-0 Flanke geprüft wird, ist die ermittelte Baud-Zeit nicht besser wie
+bei der verbesserten Methode ohne die Zeitüberwachung, die auch die
+Zeit von vier Datenbits (4-7) als Basis verwendet.
 
 \item {Aufwendige Form der Baudraten Messung, BAUD\_RATE \textless~80}
 
@@ -724,7 +722,7 @@ und der ersten Zählerlesung kleiner ist als die erste Zählerlesung.
 Für den richtigen Startpunkt ,,1'' ist das der Fall ((9b - 5b) < 5b).
 Für den falschen Startpunkt ,,3'' ist das aber leider auch der Fall
 ((9b - 6b) < 6b). 
-Mit großer Wahrscheinlichkeit ist das für den Startpunkt ,,3'' aber nicht der
+Mit großer Wahrscheinlichkeit ist das für den Startpunkt ,,2'' aber nicht der
 Fall ((9b -3b) < (3b+d)), wenn die Zeitverzögerung des zweiten Startbits ,,d''
 hinreichend klein ist. 
 Für den falschen Startpunkt ,,4'' hilft ohnehin nur eine Zeitüberwachung beim
@@ -749,7 +747,7 @@ Für die Berechnung des UART Frequenzteilers wird die Differenz der
 \item {Aufwendige Form der Baudraten Messung, BAUD\_RATE \textless~100}
 
 Alle Zeitlesungen und Kontrollen werden wie bei der Methode mit
-Baud\_RATE \textless~80) durchgeführt. Lediglich für die Berechnung
+Baud\_RATE \textless~80 durchgeführt. Lediglich für die Berechnung
 des UART Frequenzteilers wird die Zeit von 4 Bits benutzt.
 Somit ergibt sich für den richtigen Startpunkt ,,1'' die folgende
 Berechnung (9b-5b-2)/4 = (4b+2)/4-1.
@@ -803,8 +801,8 @@ Wenn ich nun eine abweichende Taktrate von \(7.6MHz\) annehme, ist
 der bestmögliche Teiler ebenfalls 32. Dadurch ergibt sich die Baudrate mit
 dem gleichen Fehler wie die Taktrate von \(237.5kHz\), in beiden Fällen sind es -5\%.
 Um wenigstens die untere Baud-Grenze mit der Software-UART Lösung überwinden
-zu können, wird bei allen vorgegebenen Baud-Werten unter 100, die ungerade sind
-eine Verzögerungsschleife mit 15-Bit benutzt. Leider beträgt dann die Durchlaufzeit
+zu können, wird bei allen vorgegebenen Baud-Werten unter 100, deren letzte Ziffer größer 5 ist,
+wird eine Verzögerungsschleife mit 15-Bit benutzt. Leider beträgt dann die Durchlaufzeit
 der Schleife dann 5 Takte. Durch den doppelten Aufruf der Verzögerungsschleife beträgt
 die Auflösung nur noch 10 Takte und damit etwas schlechter als die Hardware-UART
 Lösung durch den 8:1 Vorteiler.
@@ -822,7 +820,7 @@ durch die Abfrageschleife des RX-Signals entstehen kann.
    Option      & UART   & Baud    & \textless 4\% @ Baud &  \\
     \hline
     \hline
-    40-99      &  0     &  1949       &   80.0k  & HW\_UART  \\
+	    40-99      &  0     &  244 (488)  &   80.0k  & HW\_UART 2-Bit Time (4-Bit) \\
     \hline
     42         &  1     &  5151       &   81.6k  & Simple, 2-Bit Time, 8-Bit Delay  \\
     \hline
@@ -830,11 +828,11 @@ durch die Abfrageschleife des RX-Signals entstehen kann.
     \hline
     82         &  1     &  5151       &   81.6k  & Complex, 4-Bit Time, 8-Bit Delay  \\
     \hline
-    43         &  1     &  244       &   53.3k  &  Simple, 2-Bit Time, 15-Bit Delay\\
+    49         &  1     &  244       &   53.3k  &  Simple, 2-Bit Time, 15-Bit Delay\\
     \hline
-    63         &  1     &  1220       &   53.3k &  Complex, 2-Bit Time, 15-Bit Delay \\
+    69         &  1     &  1220       &   53.3k &  Complex, 2-Bit Time, 15-Bit Delay \\
     \hline
-    83         &  1     &  1220       &   53.3k & Complex, 4-Bit Time, 15-Bit Delay \\
+    89         &  1     &  1220       &   53.3k & Complex, 4-Bit Time, 15-Bit Delay \\
     \hline
     \end{tabular}
   \end{center}
@@ -877,37 +875,37 @@ ergänzt.
 
 \begin{table}[H]
   \begin{center}
-    \begin{tabular}{| c | c || c | c | c || c | c | c |}
+    \begin{tabular}{| c | c || c | c || c | c | c |}
     \hline
-   OSCCAL  & Freq. & HW-UART & \multicolumn{2}{c ||}{SW-UART} & HW-UART & \multicolumn{2}{c |}{SW-UART} \\
-   \_CORR  & kHz       & 57600   & \multicolumn{2}{c ||}{57600}  & 115200  & \multicolumn{2}{c |}{115200}  \\
-           &           & Mode 82 & Mode 82 & Mode 83 & Mode 56 & Mode 52 & Mode 53 \\
+   OSCCAL  & Freq. & HW-UART &  SW-UART & HW-UART & \multicolumn{2}{c |}{SW-UART} \\
+   \_CORR  & kHz       & 57600   & 57600  & 115200  & \multicolumn{2}{c |}{115200}  \\
+           &           & Mode 82 & Mode 82 & Mode 56 & Mode 52 & Mode 56 \\
     \hline
     \hline
-    20     &  7157   &  OK       &   OK    &   OK    &  Err    &  Err    &   Err \\
-    18     &  7217   &  OK       &   OK    &   OK    &  Err    &  Err    &   Err \\
+    20     &  7157   &  OK       &   OK    &  Err    &  Err    &   Err \\
+    18     &  7217   &  OK       &   OK    &  Err    &  Err    &   Err \\
     \hline
-    16     &  7318   &  OK       &   OK    &   OK    &  OK     &  OK     &   Err \\
-    14     &  7404   &  OK       &   OK    &   OK    &  OK     &  OK     &   OK  \\
+    16     &  7318   &  OK       &   OK    &  OK     &  OK     &   Err \\
+    14     &  7404   &  OK       &   OK    &  OK     &  OK     &   OK  \\
     \hline
-    12     &  7521   &  OK       &   OK    &   OK    &  OK     &  OK     &   OK  \\
-    10     &  7591   &  OK       &   OK    &   OK    &  OK     &  OK     &   OK  \\
+    12     &  7521   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+    10     &  7591   &  OK       &   OK    &  OK     &  OK     &   OK  \\
     \hline
-     8     &  7710   &  OK       &   OK    &   OK    &  OK     &  OK     &   OK  \\
-     6     &  7815   &  OK       &   OK    &   OK    &  Err    &  OK     &   OK  \\
+     8     &  7710   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+     6     &  7815   &  OK       &   OK    &  Err    &  OK     &   OK  \\
     \hline
-     4     &  7933   &  OK       &   OK    &   OK    &  Err    &  Err    &   Err \\
-     2     &  8012   &  OK       &   OK    &   OK    &  Err    &  OK     &   Err \\
+     4     &  7933   &  OK       &   OK    &  Err    &  Err    &   Err \\
+     2     &  8012   &  OK       &   OK    &  Err    &  OK     &   Err \\
     \hline
-     0     &  8141   &  OK       &   OK    &   OK    &  Err    &  OK     &   Err \\
-    -2     &  8247   &  OK       &   OK    &   OK    &  OK     &  OK     &   Err \\
+     0     &  8141   &  OK       &   OK    &  Err    &  OK     &   Err \\
+    -2     &  8247   &  OK       &   OK    &  OK     &  OK     &   Err \\
     \hline
-    -4     &  8390   &  OK       &   OK    &   OK    &  OK     &  OK     &   Err \\
-    -6     &  8485   &  OK       &   OK    &   OK    &  OK     &  OK     &   OK  \\
+    -4     &  8390   &  OK       &   OK    &  OK     &  OK     &   Err \\
+    -6     &  8485   &  OK       &   OK    &  OK     &  OK     &   OK  \\
     \hline
-    -8     &  8623   &  OK       &   OK    &   OK    &  OK     &  Err    &   OK  \\
-    -10    &  8745   &  OK       &   OK    &   OK    &  OK     &  OK     &   OK  \\
-    -12    &  8889   &  OK       &   OK    &   OK    &  Err    &  OK     &   OK  \\
+    -8     &  8623   &  OK       &   OK    &  OK     &  Err    &   OK  \\
+    -10    &  8745   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+    -12    &  8889   &  OK       &   OK    &  Err    &  OK     &   OK  \\
     \hline
     \end{tabular}
   \end{center}
@@ -921,8 +919,8 @@ auch die ungeraden OSCCAL\_CORR Einstellungen ohne erkennbare Schwierigkeiten ge
 Auch mit dem einfachsten Betriebsmodus 42 waren bei den geraden OSCCAL\_CORR
 Einstellungen der Tabelle keine Ausfälle zu verzeichnen.
 Erst bei der für diese CPU-Frequenz extrem hohen Baudrate von \(115.2k\) waren 
-für den Betriebsmodus 52 vier Ausfälle und mit dem Betriebsmodus 53 acht Ausfälle
-zu beobachten. Die Zunahme der Ausfälle bei Betriebsart 53 mit der 15-Bit Zeitschleife war
+für den Betriebsmodus 52 vier Ausfälle und mit dem Betriebsmodus 56 acht Ausfälle
+zu beobachten. Die Zunahme der Ausfälle bei Betriebsart 56 mit der 15-Bit Zeitschleife war
 wegen der groberen Rasterung der einstellbaren Zeiten zu erwarten.
 
 Ein Test mit einer chinesischen Arduino UNO Platine, die als USB-seriell Wandler einen
@@ -948,9 +946,9 @@ avr-gcc -g -Wall -Os -fno-split-wide-types -mrelax -mmcu=atmega328p \
         -DUART_RX=p -DUART_TX=p -DF_CPU=16000000 \
         -DHFUSE=hexDE -DLFUSE=hexFF \
         -DBOOT_PAGE_LEN=512 -c -o optiboot.o optiboot.S
-In file included from optiboot.S:254:0:
-pin_defs.h:195:5: warning: #warning "LED bit is set to default B5" [-Wcpp]
-In file included from optiboot.S:612:0:
+In file included from optiboot.S:260:0:
+led_defs.h:43:5: warning: #warning "LED bit is set to default B5" [-Wcpp]
+In file included from optiboot.S:619:0:
 init_uart_fix_baud.S:31:8: warning: #warning "BAUD_RATE error greater than 2%" [-Wcpp]
 --------------------------------------------------------------------------------
 BAUD RATE CHECK: Desired: 115200,  Real: 117647, UBRR = 16, Error=2.12%
@@ -959,7 +957,7 @@ BAUD RATE CHECK: Desired: 115200,  Real: 117647, UBRR = 16, Error=2.12%
 Boot Loader start address: 0x7E00 = 32256
 ###########################################
 
-16000000 Hz operation with Baudrate 115200 configured.
+16000000 Hz operation with Baudrate 115200 and EEprom support configured.
 avr-size optiboot.elf
    text	   data	    bss	    dec	    hex	filename
     476	      0	      0	    476	    1dc	optiboot.elf
@@ -984,10 +982,11 @@ avr-gcc -g -Wall -Os -fno-split-wide-types -mrelax -mmcu=atmega328p \
         -DUART_RX=p -DUART_TX=p -DF_CPU=16000000 \
         -DHFUSE=hexDE -DLFUSE=hexFF \
         -DBOOT_PAGE_LEN=512 -c -o optiboot.o optiboot.S
-In file included from optiboot.S:254:0:
-pin_defs.h:195:5: warning: #warning "LED bit is set to default B5" [-Wcpp]
-pin_defs.h:206:6: warning: #warning "SOFT_UART use Pin D0 as RX" [-Wcpp]
-pin_defs.h:216:6: warning: #warning "SOFT_UART use Pin D1 as TX" [-Wcpp]
+In file included from optiboot.S:258:0:
+pin_defs.h:175:6: warning: #warning "SOFT_UART use Pin D0 as RX" [-Wcpp]
+pin_defs.h:185:6: warning: #warning "SOFT_UART use Pin D1 as TX" [-Wcpp]
+In file included from optiboot.S:260:0:
+led_defs.h:43:5: warning: #warning "LED bit is set to default B5" [-Wcpp]
 --------------------------------------------------------------------------------
 BAUD RATE CHECK: Desired: 115200,  SoftUART_Real: 115107, Delay: 116*1, Error=-.07%
 --------------------------------------------------------------------------------
@@ -1036,7 +1035,7 @@ UART Minimum 976 Baud, Error surely less than 4% up to 160.0 kBaud
 Boot Loader start address: 0x7E00 = 32256
 ###########################################
 
-16000000 Hz operation with Auto-Baudrate configured.
+16000000 Hz operation with Auto-Baudrate and EEprom support configured.
 avr-size optiboot.elf
    text	   data	    bss	    dec	    hex	filename
     498	      0	      0	    498	    1f2	optiboot.elf
@@ -1059,20 +1058,20 @@ avr-gcc -g -Wall -Os -fno-split-wide-types -mrelax -mmcu=atmega328p \
         -DUART_RX=p -DUART_TX=p -DF_CPU=16000000 \
         -DHFUSE=hexDE -DLFUSE=hexFF \
         -DBOOT_PAGE_LEN=512 -c -o optiboot.o optiboot.S
-In file included from optiboot.S:254:0:
-pin_defs.h:195:5: warning: #warning "LED bit is set to default B5" [-Wcpp]
+In file included from optiboot.S:260:0:
+led_defs.h:43:5: warning: #warning "LED bit is set to default B5" [-Wcpp]
 --------------------------------------------------------------------------------
-Complex Baudrate measurement implemented in optiboot! (4-bit, CLK/8)
-UART Minimum 488 Baud, Error surely less than 4% up to 160.0 kBaud
+Complex Baudrate measurement implemented in optiboot! (4-bit, CLK/1)
+UART Minimum 976 Baud, Error surely less than 4% up to 160.0 kBaud
 --------------------------------------------------------------------------------
 ###########################################
 Boot Loader start address: 0x7C00 = 31744
 ###########################################
 
-16000000 Hz operation with Auto-Baudrate configured.
+16000000 Hz operation with Auto-Baudrate and EEprom support configured.
 avr-size optiboot.elf
    text	   data	    bss	    dec	    hex	filename
-    596	      0	      0	    596	    254	optiboot.elf
+    598	      0	      0	    598	    256	optiboot.elf
 Requires 2 Boot Pages, 512 Bytes each
 BOOTSZ=2
 avr-objdump -h -S optiboot.elf > optiboot_atmega328p.lst

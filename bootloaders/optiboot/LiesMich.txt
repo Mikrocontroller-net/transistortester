@@ -37,18 +37,22 @@ Eine Liste von Beispiel-Konfigurationen findet man in der makeall Datei.
 Die Makefile passt inzwischen die Fuses des AVR und die Lage des Bootloader
 Programms im Flash-Speicher automatisch an die Programmgrösse an.
 Die automatische Grössenanpassung sollte auf Linux-Systemen laufen,
-bei Windows Systemen ist es völlig ungetestet. Auf jeden Fall wäre
-die Installation von Unix Tools (cygwin?) erforderlich.
-Getestet habe ich diese Assemblerversion des optiboot Loaders nur mit einem
+bei Windows Systemen ist es bisher nur unter Windows7 und dem
+installierten Unix Tool Paket cygwin angetestet.
+Dazu muß der Pfad der cygwin Programme ( c:\Program Files (x86)\GnuWin32\bin )
+in der Path Variablen eingetragen werden.
+Unter Linux habe ich diese Assemblerversion des optiboot Loaders mit einem
 Arduino-UNO und -Nano Board sowie mit fast allen Prozessoren, die unterstützt
-werden (siehe Liste am Ende der LiesMich Datei). 
+werden (siehe Liste am Ende der LiesMich Datei) getestet. 
 Nur der AT90CAN64, der ATmega1280/2560, der ATmega16u4 und der ATmega8u2/16u2 ist ungetestet.
 
 
 Die optionale Software-UART Lösung für die serielle Kommunikation braucht etwas
 mehr Platz als die Nutzung einer vorhandenen seriellen Hardware-Schnittstelle,
 passt in allen getesten Fällen aber auch in die 510 Byte.
-Die oberen Baudraten sind mit der Software-Lösung meistens genauer einstellbar.
+Die oberen Baudraten sind mit der Software-Lösung meistens genauer einstellbar
+als bei der Hardware-Lösung. Mit der Software-UART Lösung können aber beliebige Port Pins
+zur Kommunikation genutzt werden.
 Bei 20MHz AVR Takt sind Baudraten ab 300 Baud einstellbar, bei niedrigeren Taktraten
 als 20 MHz sind auch noch kleinere Baud Werte mit SOFT_UART möglich.
 Mit dem Hardware UART des AVR sind bei 20MHz Takt 600 Baud einstellbar, bei 16MHz sind
@@ -65,7 +69,7 @@ Mit der VIRTUAL_BOOT_PARTITION Option kann der
 Reset Vektor auf dem Applikations Reset (0x0000) bleiben.
 Statt dessen  soll der Reset Interrupt-Vektor im Anwenderprogramm auf den Bootloaders
 umgelegt werden.
-Die Vektor-Addresse des Reset Vektors soll dann in einen anderen Interrupt Vektor
+Die Vektor-Adresse des Reset Vektors soll dann in einen anderen Interrupt Vektor
 eingetragen werden und vom Bootloader beim "Timeout" benutzt werden.
 Dabei werden die Programmdatem des Anwenderprogramms beim Flashen verändert und
 bei der anschliessenden Kontrolle (verify) als ursprünglich simuliert.
@@ -190,3 +194,5 @@ ATmega16u4/32u4
 ATmega8u2/16u2/32u2
 
 An Rückmeldungen zum Thema "Assembler Optiboot" wäre ich durchaus interessiert.
+Übrigens werden die Namen der wichtigsten Parameter beim Aufruf von make oder "make help"
+angezeigt!

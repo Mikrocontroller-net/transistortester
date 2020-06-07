@@ -147,18 +147,17 @@ STK500-1 = $(STK500) -e -d$(MCU_TARGET) -pf -vf -if$(PROGRAM)_$(TARGET).hex \
 STK500-2 = $(STK500) -d$(MCU_TARGET) -ms -q -lCF -LCF -cUSB -I200kHz -s -wt
 
 ifeq ($(OS), windows)
+# The real name for Windows7 is "Windows_NT" !!!
+# But you should add the GnuWin32_dir path to the Path (environment variable)
 GnuWin32_dir = C:\Program Files (x86)\GnuWin32\bin\
-# bc is available for Windows with the GnuWin32 project
-BC_CMD = $(GnuWin32_dir)bc -q
-# cat is available for Windows with the GnuWin32 project (coreutils) or can probably be replaced by type
-#CAT = type
+# bc, cat, cut, grep, tr, rm and bash is available for Windows with the GnuWin32 project
+BC_CMD = bc -q
 CAT_CMD = $(GnuWin32_dir)cat
-# cut is available for Windows with the GnuWin32 project (coreutils)
 CUT_CMD = $(GnuWin32_dir)cut
-# grep is available for Windows with the GnuWin32 project
 GREP_CMD = $(GnuWin32_dir)grep
-TR_CMD = $(GnuWin32_dir)tr
-RM_CMD = del
+TR_CMD = tr
+RM_CMD = rm
+BASH_CMD = $(GnuWin32_dir)bash
 else
 BC_CMD = bc -q
 CAT_CMD = cat
@@ -166,6 +165,7 @@ CUT_CMD = cut
 GREP_CMD = grep
 TR_CMD = tr
 RM_CMD = rm
+BASH_CMD = bash
 endif
 
 # echo should be available for Linux and Windows
@@ -300,6 +300,7 @@ CC         = $(GCCROOT)avr-gcc
 
 #
 # Include Makefile parts for different platforms, atmega168 is the first target in Makefile.m328
+all: help
 include Makefile.m328
 include Makefile.m16
 include Makefile.m169
@@ -376,11 +377,13 @@ AUTO_BAUD = $(shell $(ECHO_CMD) "$(BAUD_RATE) / 100" | $(BC_CMD))
 FORCE:
 
 export ECHO_CMD BC_CMD TR_CMD
-baudcheck: FORCE
-	- @$(CC) $(CFLAGS) $(COMMON_OPTIONS) \
+.PHONY: baudck_prepare
+baudcheck: baudck_prepare FORCE
+	@$(BASH_CMD) ./baudcheck.tmp.sh
+baudck_prepare: 
+	@$(CC) $(CFLAGS) $(COMMON_OPTIONS) \
 	 -DUART=0$(UART) -DSOFT_UART=0$(SOFT_UART) -DUART_RX=p$(UART_RX) -DUART_TX=p$(UART_TX) \
 	 -DF_CPU=$(AVR_FREQ) -E -o baudcheck.tmp.sh baudcheck.S
-	- @bash ./baudcheck.tmp.sh
 
 $(PROGRAM).o: $(PROGRAM).$(SOURCE_TYPE) FORCE
 ifeq ($(VIRTUAL_BOOT_PARTITION), 1)
@@ -408,9 +411,7 @@ ifdef ISP
 	$(SUB_MAKE) --warn-undefined-variables -r -f Makefile.isp do_isp
 else
 	
-#	@$(ECHO_CMD) "LFUSE=0x$(LFUSE)"
-#	@$(ECHO_CMD) "HFUSE=0x$(HFUSE)"
-#	@$(ECHO_CMD) "EFUSE=0x$(EFUSE)"
+	@$(ECHO_CMD) "Fuse Setting: LFUSE=0x$(LFUSE), HFUSE=0x$(HFUSE), EFUSE=0x$(EFUSE)"
 endif
 
 isp-stk500: $(PROGRAM).hex
@@ -461,18 +462,26 @@ $(PROGRAM).elf:  $(PROGRAM).o baudcheck  BL_StartAdr.dat
         -Wl,--section-start=.text=0x$(shell $(CAT_CMD) BL_StartAdr.dat) $(LDFLAGS) -o $(PROGRAM).elf $< $(LIBS)
 	- @$(ECHO_CMD)
 ifeq ($(AUTO_BAUD), 0)
+ ifeq ((SUPPORT_EEPROM), 0)
 	- @$(ECHO_CMD) $(AVR_FREQ) Hz operation with Auto-Baudrate configured.
+ else
+	- @$(ECHO_CMD) $(AVR_FREQ) Hz operation with Auto-Baudrate and EEprom support configured.
+ endif
 else
+ ifeq ((SUPPORT_EEPROM), 0)
 	- @$(ECHO_CMD) $(AVR_FREQ) Hz operation with Baudrate $(BAUD_RATE) configured.
+ else
+	- @$(ECHO_CMD) $(AVR_FREQ) Hz operation with Baudrate $(BAUD_RATE) and EEprom support configured.
+ endif
 endif
 	- $(SIZE) $(PROGRAM).elf
 
 # remove all generated files
-.PHONY: clean steril hex_copy hex_file
+.PHONY: clean steril hex_copy hex_file help help2
 clean:
 	@$(RM_CMD) -rf *.o *.elf *.lst *.map *.sym *.lss *.eep *.srec *.bin *.hex *.tmp.sh *.dat
 steril:
-	@$(RM_CMD) -rf *.o *.elf *.map *.sym *.tmp.sh *.dat $(PROGRAM).hex 
+	@$(RM_CMD) -rf *.o *.elf *.map *.sym *.tmp.sh *.dat *.ppp $(PROGRAM).hex 
 
 # With the Bootpages.dat file we can set the required BOOTSZ1 and BOOTSZ0 bits, which are
 # combined to BOOTSZ (0 for eight pages, 1 for four pages, 2 for two pages and 3 for one page)
@@ -484,8 +493,11 @@ ifeq ($(VIRTUAL_BOOT_PARTITION), 1)
 	- @$(ECHO_CMD) "3" > BOOTSZ.dat
 else
 	- @$(ECHO_CMD) "Requires $(shell $(CAT_CMD) BootPages.dat) Boot Pages, $(BOOT_PAGE_LEN) Bytes each"
-	- @$(ECHO_CMD) "BOOTSZ=$(shell $(ECHO_CMD) "pg_anz=(`$(SIZE) -C $(PROGRAM).elf | $(GREP_CMD) "Program:" | $(CUT_CMD) -c 10-16`/$(BOOT_PAGE_LEN) +1); 0 + (pg_anz<5) + (pg_anz<3) + (pg_anz<2)" | $(BC_CMD))"
-	- @$(ECHO_CMD)   "$(shell $(ECHO_CMD) "pg_anz=(`$(SIZE) -C $(PROGRAM).elf | $(GREP_CMD) "Program:" | $(CUT_CMD) -c 10-16`/$(BOOT_PAGE_LEN) +1); 0 + (pg_anz<5) + (pg_anz<3) + (pg_anz<2)" | $(BC_CMD))" > BOOTSZ.dat
+	- @$(SIZE) -C $(PROGRAM).elf | $(GREP_CMD) "Program:" | $(CUT_CMD) -c 10-16 | $(TR_CMD) -d "\n\r " > opti_size.dat
+	- @$(ECHO_CMD) /$(BOOT_PAGE_LEN)+1 >> opti_size.dat
+	- @$(CAT_CMD) opti_size.dat | $(BC_CMD) > pg_anz.dat
+	- @$(ECHO_CMD) "0+(`$(CAT_CMD) pg_anz.dat`<5)+(`$(CAT_CMD) pg_anz.dat`<3)+(`$(CAT_CMD) pg_anz.dat`<2)" | $(BC_CMD) > BOOTSZ.dat
+	- @$(ECHO_CMD) "BOOTSZ=`$(CAT_CMD) BOOTSZ.dat`"
 endif
 
 # copy the  .lst and .hex files to files which identify the target
@@ -507,6 +519,60 @@ endif
 	- @$(ECHO_CMD) "; MCU_TARGET = $(MCU_TARGET)" >> $(PROGRAM)_$(TARGET).lst
 	- @$(ECHO_CMD) "; AVR_FREQ= $(AVR_FREQ)" >> $(PROGRAM)_$(TARGET).lst
 	- @$(ECHO_CMD) "; BAUD_RATE=$(BAUD_RATE)" >> $(PROGRAM)_$(TARGET).lst
+
+help:
+	@$(ECHO_CMD) "Important options to build optiboot:"
+	@$(ECHO_CMD) "AVR_FREQ       specifies the operating frequency (Hz) of the target AVR."
+	@$(ECHO_CMD) " "
+	@$(ECHO_CMD) "BAUD_RATE      specifies the baud rate of the serial interface."
+	@$(ECHO_CMD) "               A value less than 100 select the baud rate measurement,"
+	@$(ECHO_CMD) "               less than 60 with a simpler method and less than 40"
+	@$(ECHO_CMD) "               additionally without a time limit."
+	@$(ECHO_CMD) " "
+	@$(ECHO_CMD) "UART           specifies the hardware UART number (0-3 if existing)."
+	@$(ECHO_CMD) " "
+	@$(ECHO_CMD) "LED_START_FLASHES specifies the number of times to flicker the LED"
+	@$(ECHO_CMD) "               before the serial communication starts. 0 means no flicker."
+	@$(ECHO_CMD) " "
+	@$(ECHO_CMD) "LED_DATA_FLASH let the LED light during serial character input wait."
+	@$(ECHO_CMD) " "
+	@$(ECHO_CMD) "LED            specifies with two characters the port and bit number."
+	@$(ECHO_CMD) "               LED=B5 will select bit 5 of port B."
+	@$(ECHO_CMD) " "
+	@$(ECHO_CMD) "SUPPORT_EEPROM select the EEprom support, if set to nonzero value"
+	@$(ECHO_CMD) " "
+	@$(ECHO_CMD) "ISP            will start avrdude for download of optiboot if set to 1."
+	@$(ECHO_CMD) "               2 will start a verify with avrdude,"
+	@$(ECHO_CMD) "               3 will read the complete flash to Read_<AVR-ID>.hex,"
+	@$(ECHO_CMD) "               4 will read the complete EEprom to Read_<AVR-ID>.eep."
+	@$(ECHO_CMD) " "
+	@$(ECHO_CMD) "You must allways specify a target AVR processor (AVR-ID) to build"
+	@$(ECHO_CMD) "a proper optiboot bootloader with any of the available options."
+	@$(ECHO_CMD) "Type make help2 for additional options!"
+help2:
+	@$(ECHO_CMD) "Additional options for building a optiboot:"
+	@$(ECHO_CMD) "SOFT_UART      select a software UART solution instead of the hardware UART."
+	@$(ECHO_CMD) " "
+	@$(ECHO_CMD) "UART_RX        specifies the port for software UART input."
+	@$(ECHO_CMD) " "
+	@$(ECHO_CMD) "UART_TX        specifies the port for software UART output."
+	@$(ECHO_CMD) " "
+	@$(ECHO_CMD) "C_SOURCE       set to 1 for C source instead of assembler version."
+	@$(ECHO_CMD) " "
+	@$(ECHO_CMD) "BIGBOOT        select additional memory for the bootloader to test"
+	@$(ECHO_CMD) "               the automatic selection of start address and the number"
+	@$(ECHO_CMD) "               of boot pages."
+	@$(ECHO_CMD) "VIRTUAL_BOOT_PARTITION changes two interrupt vector jmp addresses"
+	@$(ECHO_CMD) "               for starting the bootloader with the reset vector."
+	@$(ECHO_CMD) " "
+	@$(ECHO_CMD) "TIMEOUT_MS     select a time limit for receiving boot data in ms units."
+	@$(ECHO_CMD) " "
+	@$(ECHO_CMD) "OSCCAL_CORR    specifies a correction value for the OSCCAL Byte for the"
+	@$(ECHO_CMD) "               internal RC clock generator."
+	@$(ECHO_CMD) " "
+	@$(ECHO_CMD) "FORCE_RSTDISBL enables setting of the RSTDISBL bit to 0."
+	@$(ECHO_CMD) "               Otherwise compiling is aborted."
+
 
 
 # allways generate a $(PROGRAM)_$(TARGET).lst file, if a .hex file is generated from $(PROGRAM).elf

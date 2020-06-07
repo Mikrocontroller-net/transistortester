@@ -40,15 +40,16 @@ The Makefile make use of utilities, which determine the size of the bootloader p
 automatically and set the start address and the required fuses right
 according to the actual size.
 This kind of automatic is tested at a Linux system and should run at any Linux system.
-But it is completely untested for any Windows system.
+Additionally it is basically tested with Windows7 and the installed Unix-tools package cygwin.
 This optiboot bootloader is tested with a Arduino-UNO and -Nano board and with 
 nearly all supported processors (see the list at the end of this ReadMe2).
 Only the AT90CAN64, the ATmega1280/2560, the ATmega16u4 and the ATmega8u2/16u2 are untestet.
 
 The optional implementation of a software UART requires a little more space, but should
 also match to a 512 Byte boot partition.
-Lower baud rates can often better supported with the SOFT_UART option and you are free to
-select any present port pin for the serial input and output (assembly version only!).
+Lower baud rates can often better supported with the SOFT_UART option compared to
+the hardware UART. Additionally you are free to
+select any present port pin for the serial input and output.
 With a 20 MHz CPU you can select baud rates of 300 Baud and higher, with lower CPU clock rates
 you can even select lower baud rates.
 With the hardware solution and a 20 MHz CPU the lowest selectable standard serial rate is 600 baud,

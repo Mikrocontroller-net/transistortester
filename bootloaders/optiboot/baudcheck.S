@@ -95,7 +95,7 @@ $ECHO_CMD ----------------------------------------------------------------------
  #endif
  
  #if SOFT_UART > 0
-  #if ((BAUD_RATE - ((BAUD_RATE/2)*2)) == 1)
+  #if ((BAUD_RATE - ((BAUD_RATE/10)*10)) >= 5)
    // 15-bit delay 
    #if BAUD_RATE < 60
     #ifdef TWO_BIT_MEASURE

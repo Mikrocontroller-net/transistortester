@@ -60,9 +60,8 @@ values in decimal and hexadecimal values.
 \item [tr] can replace or erase characters.
 \end{description}
 
-Until now this function of the Makefile is only tested with a Linux system.
-Probably a use with the Windows system is only possible,
-if you install the Cygwin package.
+Until now this function of the Makefile is only tested with a Linux system
+and a Windows7 system together with a installed Cygwin package.
 
 You don't handle the different interim files in normal case.
 Here I would like to refer the names and the meaning:
@@ -88,15 +87,15 @@ if this file is used or not.
 
 The control of steps for generating the program data from
 the source code is defined in the Makefile.
-Except the main Makefile there are three additional extension Makefiles,
+Except the main Makefile there are additional extension Makefiles,
 which are included by the main Makefile:
-Makefile.1284, Makefile.atmel, and Makefile.extras .
+Makefile.at90, Makefile.m16, Makefile.m169, Makefile.m328, Makefile.m640, Makefile.m644,
+Makefile.m645 and Makefile.tiny.
 There can exist different configurations for the same processor type.
-The table~\ref{tab:processors} shows different basic configuration
+The table~\ref{tab:processors} shows some basic configuration
 for several target processors.
-In principle this list can be extended.
 You can select some parameters also with the make call or by setting
-a environment variable  of the shell.
+a environment variable  of the shell. These settings will replace the default selections.
 
 \begin{table}[H]
   \begin{center}
@@ -125,14 +124,13 @@ a environment variable  of the shell.
     \hline
        atmega644p & m644p & 16M  &  64K  & 256   & 512  &  F7   &  DE   &  05 \\
     \hline
-     atmega1284  & m1284  & 16M  & 128K  & 256   & 512  &  F7   &  DE   &  05 \\
      atmega1284p & m1284p & 16M  & 128K  & 256   & 512  &  F7   &  DE   &  05 \\
     \hline
      atmega1280  & m1280  & 16M  &  128K & 256   & 1K   &  FF   &  DE   &  05 \\
     \hline
     \end{tabular}
   \end{center}
-  \caption{Processor targets for optiboot Makefile}
+  \caption{some Processor targets for optiboot Makefile}
   \label{tab:processors}
 \end{table}
 
@@ -211,6 +209,8 @@ and \ref{tab:options2}
     \hline
     BAUD\_RATE     & BAUD\_         & Specifies the baud-rate for the serial communication. \\
                    &  RATE=9600     & Always 8 data bits without parity is used. \\
+                   &                & Values below 100 will select a measurement and adaptation \\
+                   &                & of the baudrate with different technique. \\
     \hline
     SOFT\_UART     & SOFT\_UART=1   & Select a software solution for the serial communication. \\
     \hline
@@ -239,8 +239,6 @@ and \ref{tab:options2}
                    &                & port B for the LED connection. With the option \\
                    &                & LED\_START\_FLASHES  this LED will flash the \\
                    &                & specified count before the communication start. \\
-                   &                & With the option LED\_DATA\_FLASH the LED will glow \\
-                   &                & during wait for serial input. \\
     \hline
  LED\_DATA\_       & LED\_DATA\_    & The control LED will glow during waiting for \\
       FLASH        &    FLASH=1     & serial input data. \\
@@ -546,7 +544,7 @@ The figure~\ref{fig:onewire-simple} should illustrate this simplest connection.
 
 Now is the problem, that the mostly full-duplex capable external interface will
 read back the own output.
-The communication program at the external side is usually unprepared for this condition.
+The communication program like avrdude at the external side is usually unprepared for this condition.
 One solution for this problem is to adapt the program at the external side to handle
 this read back.
 But I believe, that this is not a good idea, because this special version will 
@@ -643,7 +641,7 @@ After the Start bit detection the program waits to the next 0-1 slope
 and starts a 16-bit counter with the frequency F\_CPU/8 with the
 stating value -1. At the next 1-0 slope the counter value is read out
 and the half of this value is taken as frequency divider for the UART.
-The building of the half value is required because the time of two data bits
+The building of the half value is required because the time of two data bits (4-5)
 was measured.
 Normally 1 must be subtracted for the UART frequency divider.
 But when halving should be rounded, a 1 must be added before the halving.
@@ -652,7 +650,7 @@ Because also 2 can be subtracted from the counter result instead of
 counter result. In order to save computation steps, the subtraction (2-1=1)
 from the count is done by a start value of the counter of -1.
 
-This mmothod works well, if the bootloader is started automatically just
+This method works well, if the bootloader is started automatically just
 before the transmission by generating a reset pulse from the DTR (Data Terminal Ready)
 signal of the serial interface.
 You can also be successfull without the automatically generated Reset,
@@ -672,7 +670,7 @@ Same as the simple way of baud rate measurement this method does not
 check the correctness of the bit change sequence.
 But the software wait for the next 0-1 slope until the counter value
 is read.
-So this counter reading is the time of four data bits,
+		So this counter reading is the time of four data bits (4-7),
 which is then used for the baud rate determination.
 Because the time recording is slightly inexact because of the
 polling loop, the baud time result will be better with dividing by four
@@ -804,8 +802,8 @@ the best selectable divider is still 4.
 For this case the actual baud rate is now \(237.5kHz\) with the same
 error of -5\% as the base clock rate.
 To overcome at least the lower baud limit with the software UART solution,
-all odd baud rate selections below 100 will generate a code
-with a 15-bit delay loop.
+all baud rate selections between 20 and 59, where the last digit is greater 4,
+will generate a code with a 15-bit delay loop.
 Unfortunately the pass time of this loop is 5 tics for the 15-bit loop.
 Because of the double delay call for the full baud time,
 the resolution is only 10 tics and thereby more worth than the 
@@ -825,13 +823,13 @@ polling loops for the RX signal.
    Option      & UART   & Baud    & \textless 4\% @ Baud &  \\
     \hline
     \hline
-    20-99      &  0     &  1949       &   80.0k  & HW\_UART  \\
+	    20-99      &  0     &  244 (488)  &   80.0k  & HW\_UART (4-Bit Time) \\
     \hline
-    48         &  1     &  5151       &   81.6k  & Simple, 2-Bit Time, 8-Bit Delay  \\
+    42         &  1     &  5151       &   81.6k  & Simple, 2-Bit Time, 8-Bit Delay  \\
     \hline
-    68         &  1     &  5151       &   81.6k  & Complex, 2-Bit Time, 8-Bit Delay  \\
+    62         &  1     &  5151       &   81.6k  & Complex, 2-Bit Time, 8-Bit Delay  \\
     \hline
-    88         &  1     &  5151       &   81.6k  & Complex, 4-Bit Time, 8-Bit Delay  \\
+    82         &  1     &  5151       &   81.6k  & Complex, 4-Bit Time, 8-Bit Delay  \\
     \hline
     49         &  1     &  244       &   53.3k  &  Simple, 2-Bit Time, 15-Bit Delay\\
     \hline
@@ -881,35 +879,35 @@ specified (\(115.2 kBaud\)) was also done.
   \begin{center}
     \begin{tabular}{| c | c || c | c | c || c |  c | c |}
     \hline
-  OSCCAL  & Freq.    & HW-UART & \multicolumn{2}{c ||}{SW-UART} & HW-UART & \multicolumn{2}{c |}{SW-UART} \\
-   \_CORR  & kHz       & 57600   & \multicolumn{2}{c ||}{57600}  & 115200  & \multicolumn{2}{c |}{115200} \\
-           &           & Mode 82 & Mode 82 & Mode 83 & Mode 56 & Mode 52 & Mode 53 \\
+  OSCCAL  & Freq.    & HW-UART & SW-UART & HW-UART & \multicolumn{2}{c |}{SW-UART} \\
+   \_CORR  & kHz       & 57600   & 57600  & 115200  & \multicolumn{2}{c |}{115200} \\
+           &           & Mode 82 & Mode 82 & Mode 56 & Mode 52 & Mode 56 \\
     \hline
     \hline
-    20     &  7157   &  OK       &   OK    &   OK    &  Err    &  Err    &   Err \\
-    18     &  7217   &  OK       &   OK    &   OK    &  Err    &  Err    &   Err \\
+    20     &  7157   &  OK       &   OK    &  Err    &  Err    &   Err \\
+    18     &  7217   &  OK       &   OK    &  Err    &  Err    &   Err \\
     \hline
-    16     &  7318   &  OK       &   OK    &   OK    &  OK     &  OK     &   Err \\
-    14     &  7404   &  OK       &   OK    &   OK    &  OK     &  OK     &   OK  \\
+    16     &  7318   &  OK       &   OK    &  OK     &  OK     &   Err \\
+    14     &  7404   &  OK       &   OK    &  OK     &  OK     &   OK  \\
     \hline
-    12     &  7521   &  OK       &   OK    &   OK    &  OK     &  OK     &   OK  \\
-    10     &  7591   &  OK       &   OK    &   OK    &  OK     &  OK     &   OK  \\
+    12     &  7521   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+    10     &  7591   &  OK       &   OK    &  OK     &  OK     &   OK  \\
     \hline
-     8     &  7710   &  OK       &   OK    &   OK    &  OK     &  OK     &   OK  \\
-     6     &  7815   &  OK       &   OK    &   OK    &  Err    &  OK     &   OK  \\
+     8     &  7710   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+     6     &  7815   &  OK       &   OK    &  Err    &  OK     &   OK  \\
     \hline
-     4     &  7933   &  OK       &   OK    &   OK    &  Err    &  Err    &   Err \\
-     2     &  8012   &  OK       &   OK    &   OK    &  Err    &  OK     &   Err \\
+     4     &  7933   &  OK       &   OK    &  Err    &  Err    &   Err \\
+     2     &  8012   &  OK       &   OK    &  Err    &  OK     &   Err \\
     \hline
-     0     &  8141   &  OK       &   OK    &   OK    &  Err    &  OK     &   Err \\
-    -2     &  8247   &  OK       &   OK    &   OK    &  OK     &  OK     &   Err \\
+     0     &  8141   &  OK       &   OK    &  Err    &  OK     &   Err \\
+    -2     &  8247   &  OK       &   OK    &  OK     &  OK     &   Err \\
     \hline
-    -4     &  8390   &  OK       &   OK    &   OK    &  OK     &  OK     &   Err \\
-    -6     &  8485   &  OK       &   OK    &   OK    &  OK     &  OK     &   OK  \\
+    -4     &  8390   &  OK       &   OK    &  OK     &  OK     &   Err \\
+    -6     &  8485   &  OK       &   OK    &  OK     &  OK     &   OK  \\
     \hline
-    -8     &  8623   &  OK       &   OK    &   OK    &  OK     &  Err    &   OK  \\
-    -10    &  8745   &  OK       &   OK    &   OK    &  OK     &  OK     &   OK  \\
-    -12    &  8889   &  OK       &   OK    &   OK    &  Err    &  OK     &   OK  \\
+    -8     &  8623   &  OK       &   OK    &  OK     &  Err    &   OK  \\
+    -10    &  8745   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+    -12    &  8889   &  OK       &   OK    &  Err    &  OK     &   OK  \\
     \hline
     \end{tabular}
   \end{center}
@@ -922,8 +920,8 @@ any noticeable difficulties. The also checked simplest mode 42 has not shown
 any difficulties with the tested even OSCCAL\_CORR values of the table.
 
 Only at the extemely high baud rate of \(115,2k\) for this CPU frequency the operation
-mode 52 shows four failures and with the operation mode 53 eight failures are stated.
-The increase in failures in mode 53 with the 15-bit delay loop is expected and caused by
+mode 52 shows four failures and with the operation mode 56 eight failures are stated.
+The increase in failures in mode 56 with the 15-bit delay loop is expected and caused by
 the coarser grid of adjustable delay times.
 
 A test with a chinese Arduino UNO board, which use a CH340G chip as USB-serial converter,
@@ -950,9 +948,9 @@ avr-gcc -g -Wall -Os -fno-split-wide-types -mrelax -mmcu=atmega328p \
         -DUART_RX=p -DUART_TX=p -DF_CPU=16000000 \
         -DHFUSE=hexDE -DLFUSE=hexFF \
         -DBOOT_PAGE_LEN=512 -c -o optiboot.o optiboot.S
-In file included from optiboot.S:254:0:
-pin_defs.h:195:5: warning: #warning "LED bit is set to default B5" [-Wcpp]
-In file included from optiboot.S:612:0:
+In file included from optiboot.S:260:0:
+pin_defs.h:43:5: warning: #warning "LED bit is set to default B5" [-Wcpp]
+In file included from optiboot.S:619:0:
 init_uart_fix_baud.S:31:8: warning: #warning "BAUD_RATE error greater than 2%" [-Wcpp]
 --------------------------------------------------------------------------------
 BAUD RATE CHECK: Desired: 115200,  Real: 117647, UBRR = 16, Error=2.12%
@@ -961,7 +959,7 @@ BAUD RATE CHECK: Desired: 115200,  Real: 117647, UBRR = 16, Error=2.12%
 Boot Loader start address: 0x7E00 = 32256
 ###########################################
 
-16000000 Hz operation with Baudrate 115200 configured.
+16000000 Hz operation with Baudrate 115200 and EEprom support configured.
 avr-size optiboot.elf
    text	   data	    bss	    dec	    hex	filename
     476	      0	      0	    476	    1dc	optiboot.elf
@@ -986,10 +984,11 @@ avr-gcc -g -Wall -Os -fno-split-wide-types -mrelax -mmcu=atmega328p \
         -DUART_RX=p -DUART_TX=p -DF_CPU=16000000 \
         -DHFUSE=hexDE -DLFUSE=hexFF \
         -DBOOT_PAGE_LEN=512 -c -o optiboot.o optiboot.S
-In file included from optiboot.S:254:0:
-pin_defs.h:195:5: warning: #warning "LED bit is set to default B5" [-Wcpp]
-pin_defs.h:206:6: warning: #warning "SOFT_UART use Pin D0 as RX" [-Wcpp]
-pin_defs.h:216:6: warning: #warning "SOFT_UART use Pin D1 as TX" [-Wcpp]
+In file included from optiboot.S:258:0:
+pin_defs.h:175:6: warning: #warning "SOFT_UART use Pin D0 as RX" [-Wcpp]
+pin_defs.h:185:6: warning: #warning "SOFT_UART use Pin D1 as TX" [-Wcpp]
+In file included from optiboot.S:260:0:
+led_defs.h:43:5: warning: #warning "LED bit is set to default B5" [-Wcpp]
 --------------------------------------------------------------------------------
 BAUD RATE CHECK: Desired: 115200,  SoftUART_Real: 115107, Delay: 116*1, Error=-.07%
 --------------------------------------------------------------------------------
@@ -997,7 +996,7 @@ BAUD RATE CHECK: Desired: 115200,  SoftUART_Real: 115107, Delay: 116*1, Error=-.
 Boot Loader start address: 0x7E00 = 32256
 ###########################################
 
-16000000 Hz operation with Baudrate 115200 configured.
+16000000 Hz operation with Baudrate 115200 and EEprom support configured.
 avr-size optiboot.elf
    text	   data	    bss	    dec	    hex	filename
     496	      0	      0	    496	    1f0	optiboot.elf
@@ -1039,7 +1038,7 @@ UART Minimum 976 Baud, Error surely less than 4% up to 160.0 kBaud
 Boot Loader start address: 0x7E00 = 32256
 ###########################################
 
-16000000 Hz operation with Auto-Baudrate configured.
+16000000 Hz operation with Auto-Baudrate and EEprom support configured.
 avr-size optiboot.elf
    text	   data	    bss	    dec	    hex	filename
     498	      0	      0	    498	    1f2	optiboot.elf
@@ -1063,20 +1062,20 @@ avr-gcc -g -Wall -Os -fno-split-wide-types -mrelax -mmcu=atmega328p \
         -DUART_RX=p -DUART_TX=p -DF_CPU=16000000 \
         -DHFUSE=hexDE -DLFUSE=hexFF \
         -DBOOT_PAGE_LEN=512 -c -o optiboot.o optiboot.S
-In file included from optiboot.S:254:0:
-pin_defs.h:195:5: warning: #warning "LED bit is set to default B5" [-Wcpp]
+In file included from optiboot.S:260:0:
+led_defs.h:43:5: warning: #warning "LED bit is set to default B5" [-Wcpp]
 --------------------------------------------------------------------------------
-Complex Baudrate measurement implemented in optiboot! (4-bit, CLK/8)
-UART Minimum 488 Baud, Error surely less than 4% up to 160.0 kBaud
+Complex Baudrate measurement implemented in optiboot! (4-bit, CLK/1)
+UART Minimum 976 Baud, Error surely less than 4% up to 160.0 kBaud
 --------------------------------------------------------------------------------
 ###########################################
 Boot Loader start address: 0x7C00 = 31744
 ###########################################
 
-16000000 Hz operation with Auto-Baudrate configured.
+16000000 Hz operation with Auto-Baudrate and EEprom support configured.
 avr-size optiboot.elf
    text	   data	    bss	    dec	    hex	filename
-    596	      0	      0	    596	    254	optiboot.elf
+    598	      0	      0	    598	    256	optiboot.elf
 Requires 2 Boot Pages, 512 Bytes each
 BOOTSZ=2
 avr-objdump -h -S optiboot.elf > optiboot_atmega328p.lst

@@ -1,185 +1,58 @@
-Autor: Karl-Heinz Kübbeler   (kh_kuebbeler@web.de) , Mai 2016, Dez 2017
+Autor: Karl-Heinz Kübbeler   (kh_kuebbeler@web.de) , Mai 2016, Dez 2017, Jun 2020
 
-Dies ist eine Assemblerversion von optiboot Version 6.2!
-Der Platzbedarf konnte bei gleicher Funktionalität so minimiert werden,
-dass die EEprom Programmierung jetzt auch in der kleinen Version (510 Byte)
-möglich ist, weshalb die Option SUPPORT_EEPROM=1 bei der Assembler-Version
-standardmässig gewählt ist. 
-Die Taktfrequenz ist in der Makefile voreingestellt, kann aber mit
-der Option F_CPU=xxxxxxx beim make Aufruf eingestellt werden.
+Dies ist die Assembler-Version von dem Bootloader optiboot
+mit erweiterten Fähigkeiten:
 
-Beispiel:
-***********************************************
-make atmega328p AVR_FREQ=8000000 BAUD_RATE=9600
-***********************************************
-Hiermit werden die Bootloader Daten für einen ATmega328P bei 8 MHz Takt und
-einer seriellen Kommunikation mit 9600 Baud erzeugt.
+Kann den Flsh Speicher auch das EEprom beschreiben.
 
+Die Anpassung an unterschiedliche Programmlänge wird automatisch berücksichtigt.
+So braucht man bei den beim make Aufruf gewählten Sonderfunktionen und
+damit geänderter Programmlänge nicht um die Änderung der Fuse-Einstellung zu kümmern,
+wenn man den ISP=1 Parameter mit make zum Transferieren des bootloaders benutzt.
 
-Für einen Arduino UNO reicht der Aufruf für die Erzeugung der Programmdaten:
-***************
-make atmega328p
-***************
+Kann sowohl ein UART benutzen oder per Software simulieren.
+Mit der Software-Lösung sind die Tx und Rx Zuordnung zu den AVR-Pins frei wählbar.
+Die unterschiedliche Zugriffszeit auf die Ports wird dabei berücksichtigt.
 
-Durch den ähnlichen Aufruf:
-*******************
-make atmega328p_isp 
-*******************
-werden die Daten zum ISP-Programmiergerät übertragen und die Fuses programmiert.
-Man sollte beachten, dass der Flash Speicher vor der Programmierung 
-des Bootloader Codes komplett gelöscht wird. Jedes Applikationsprogramm
-muss nachher erneut über die serielle Schnittstelle in den Flash Speicher
-geschrieben werden.
-Vor dem Schreiben des Bootloaaders (make ..._isp Typ Aufruf) muss das 
-Programmiergerät in der Datei Makefile.isp eingetragen sein.
-Als Software für den ISP-Programmer wird normalerweise avrdude verwendet.
-Eine Liste von Beispiel-Konfigurationen findet man in der makeall Datei.
-Die Makefile passt inzwischen die Fuses des AVR und die Lage des Bootloader
-Programms im Flash-Speicher automatisch an die Programmgrösse an.
-Die automatische Grössenanpassung sollte auf Linux-Systemen laufen,
-bei Windows Systemen ist es bisher nur unter Windows7 und dem
-installierten Unix Tool Paket cygwin angetestet.
-Dazu muß der Pfad der cygwin Programme ( c:\Program Files (x86)\GnuWin32\bin )
-in der Path Variablen eingetragen werden.
-Unter Linux habe ich diese Assemblerversion des optiboot Loaders mit einem
-Arduino-UNO und -Nano Board sowie mit fast allen Prozessoren, die unterstützt
-werden (siehe Liste am Ende der LiesMich Datei) getestet. 
-Nur der AT90CAN64, der ATmega1280/2560, der ATmega16u4 und der ATmega8u2/16u2 ist ungetestet.
+Unterstützt eine Baudratenmessung und eine daraus automatisch gewählte Baudrate
+für die serielle Kommunikation mit dem PC.
 
+Kann auf AVRs installiert werden, die keine Hardware Bootloader Unterstützung haben.
+Dabei werden 2 Interrupt-Vektoren von jedem Anwenderprogramm verändert!
+Eine Programm Verifikation ist normalerweise trotzdem möglich,
+weil die Modifikationsdaten in den letzten Bytes des EEprom gesichert werden.
 
-Die optionale Software-UART Lösung für die serielle Kommunikation braucht etwas
-mehr Platz als die Nutzung einer vorhandenen seriellen Hardware-Schnittstelle,
-passt in allen getesten Fällen aber auch in die 510 Byte.
-Die oberen Baudraten sind mit der Software-Lösung meistens genauer einstellbar
-als bei der Hardware-Lösung. Mit der Software-UART Lösung können aber beliebige Port Pins
-zur Kommunikation genutzt werden.
-Bei 20MHz AVR Takt sind Baudraten ab 300 Baud einstellbar, bei niedrigeren Taktraten
-als 20 MHz sind auch noch kleinere Baud Werte mit SOFT_UART möglich.
-Mit dem Hardware UART des AVR sind bei 20MHz Takt 600 Baud einstellbar, bei 16MHz sind
-auch noch 300 Baud wählbar. Wenn die CPU Taktrate hoch genug ist, ist als Standardwert
-115200 Baud eine gute Wahl.
-Unter bestimmten Umständen ist auch 1 MBAUD mit der Hardware Schnittstelle wählbar.
+Kann mit einem AVR-Pin arbeiten für TX und Rx mit Software-UART und einer
+speziellen Hardware, die das Echo für den Sender (avrdude) unterdrückt.
+Näheres und einen Schaltungsvorschlag findet man in der
+PDF Dokumentation (../Doku/german/bootloader.pdf).
+Die Zwischen-Elektronik ist nur erforderlich damit das Ansteuerprogramm
+avrdude läuft. Der Bootloader braucht keine Zwischenelektronik.
 
-Bisher ist die VIRTUAL_BOOT_PARTITION nur mit den getesteten ATTinys geprüft.
-Bei allen Prozessoren ohne Bootpartition wird die VIRTUAL_BOOT_PARTITION Option
-automatisch gesetzt.
-Normalerweise wird der Start-Vektor mit den Fuses (BOOTRST-Bit) auf den 
-Boot Loader Reset eingestellt, aber der ATtiny84 hat diese Möglichkeit nicht.
-Mit der VIRTUAL_BOOT_PARTITION Option kann der
-Reset Vektor auf dem Applikations Reset (0x0000) bleiben.
-Statt dessen  soll der Reset Interrupt-Vektor im Anwenderprogramm auf den Bootloaders
-umgelegt werden.
-Die Vektor-Adresse des Reset Vektors soll dann in einen anderen Interrupt Vektor
-eingetragen werden und vom Bootloader beim "Timeout" benutzt werden.
-Dabei werden die Programmdatem des Anwenderprogramms beim Flashen verändert und
-bei der anschliessenden Kontrolle (verify) als ursprünglich simuliert.
-Bei späteren Kontrollen würden die veränderten Interrupt-Vektoren als Fehler gemeldet!
-Optiboot versucht das zu verhindern, indem die Original-Sprungadresse des Ersatzvektors
-in den letzten beiden EEprom-Bytes gesichert wird.
-Eine der Schwierigkeiten für den Bootloader besteht bei Flash-Speichergrössen
-von mehr als 8K darin, dass auf den Vektoradressen sowohl JMP als auch RJMP Befehle 
-benutzt werden können. 
-Derzeit geht der Bootloader davon aus, daß  bei mehr als 8 kByte Flash Speicher nur 
-JMP Befehle in der Interrupt Vektor Tabelle verwendet werden.
+Für alle unterstützten Prozessoren wird eine lauffähige Standard-Konfiguration
+gewählt. Die gewählten Eigenschaften kann man auf dem Terminal-Protokoll sehen.
+Die Eigenschaften kann man über Parameter beim make Aufruf ändern.
+Wichtige Einstellungen kann man sowohl auf dem Erstellungs-Protokoll auf
+dem Bildschirm und auch am Ende der .lst Datei.
 
-=======================================================================================
-Verwendete Optionen
-=======================================================================================
-AVR_FREQ		definiert die Frequenz (Hz), mit der der AVR Mikrocontroller laufen soll.
+Normalerweise läuft die Bildung des optiboot Bootloader auf einem Linux-System.
+Mit Hilfe des Cygwin64 Pakets sind die Makefiles auch auf Windows10 benutzbar.
+Siehe dazu auch help_files/Windows_benutzung.txt .
 
-BAUD_RATE		definiert die Baud Rate, mit der die serielle Schnittstelle laufen soll.
-			Bei Werten unter 100 Baud wird statt einer festen Baudrate eine
-			Messung der Baudrate von optiboot vorgenommen.
-			Wenn die Baudrate unter 60 angegeben wird, wird ein einfacheres
-			Messverfahren benutzt, um Speicherplatz zu sparen.
-			Wenn die Baudrate unter 40 angebeben wird, wird auf eine zusätzliche
-			Zeitüberwachung bei der Zeitmessung verzichtet.
-			
-
-SOFT_UART		gibt an, dass anstelle der Hardware UART-Schnittstelle eine Software-Lösung
-			benutzt werden soll. Damit können nahezu beliebige Bits für die
-			serielle Ein- Ausgabe benutzt werden.
-
-UART_RX			Hier können Sie das Eingabe Port Bit für die SOFT_UART Lösung angeben.
-			Sie müssen nur den verwendeten Pin mit zwei Zeichen angeben.
-			Das erste Zeichen muss ein Buchstabe in gross Schreibweise (A-L)
-			sein, der den verwendeten Port angibt. Das nachfolgende Zeichen
-			muss eine Ziffer (0-7) sein, die die Bit Nummer des Ports angibt.
-
-UART_TX			Wie bei der seriellen Eingabe (RX) kann auch das Ausgabe Port-Bit
-			für die serielle Ausgabe angegeben werden, wenn die SOFT_UART Option
-			gewählt ist. Das Format ist das gleiche wie bei der seriellen Eingabe.
-			Es ist auch die Angabe verschiedener Ports zulässig!
-
-UART			gibt die Nummer der verwendeten UART-Schnittstelle bei der Hardware UART
-			Lösung an. Möglich ist ein Wert von 0-3, wenn beim gewählten AVR vorhanden.
-
-LED_START_FLASHES	gibt an, wie oft die LED vor der seriellen Kommunikation blinken soll.
-			Bei 0 wird nicht geblinkt, bei 1 oder -1 nur einmal (ohne Programmschleife).
-			Negavive Vorgaben lassen die Blinkschleife sofort abbrechen,
-			wenn ankommende Daten auf dem RX Pin festgestellt werden.
-
-LED_DATA_FLASH		Lässt die LED beim Warten auf den Empfang ein serielles Zeichen aufleuchten.
-
-LED			gibt mit zwei Zeichen den Port und die Bit-Nummer (0-7) des LED-Ports an.
-			Das erste Zeichen ist der Port-Kennbuchstabe (A,B,C,D,E,F,G,H,J,K,L).
-
-C_SOURCE		gibt an, dass anstelle der Assembler-Version optiboot.S die C Quelle
-			verwendet werden soll (verbraucht mehr Platz im Flash).
-
-SUPPORT_EEPROM		gibt mit einem Wert ungleich 0 an, dass der Bootloader auch EEprom's
-			beschreiben können soll. Bei der Assembler Version ist die Funktion
-			standardmässig gewählt, kann aber mit SUPPORT_EEPROM=0 abgewählt werden.
-			Es kommt aber zu einer Fehlfunktion, wenn bei der fehlenden EEprom
-			Unterstützung trotzdem EEprom Daten vom Rechner übertragen werden!
-
-BIGBOOT			war früher erforderlich, um die Grösse von 512 Byte auf 1024 Byte umzustellen.
-			Die Grössenanpassung wird jetzt aber automatisch durchgeführt.
-			Deshalb kann diese Variable benutzt werden, um das optiboot Programm
-			künstlich grösser als erforderlich zu machen. Damit kann die automatische
-			Grössenanpassung getestet werden oder auch die Startadresse des
-			Bootloaders auf eine niedrigere Addresse zu legen.
-
-VIRTUAL_BOOT_PARTITION  Diese Option verändert zwei Interrupt Vektor Sprung-Adressen,
-			damit beim Reset der Bootloader gestartet wird.
-			Ein anderer Interrupt-Vektor wird dann benutzt, um die Original
-			Startadresse des Applikations-Programms zu sichern.
-			Der Sprungbefehl bzw. die Adresse von diesem Vektor wird in den
-			letzten beiden Bytes des EEprom-Speichers gesichert.
-			Damit ist eine Kontrolle der geladenen Flash-Daten (verify) so lange
-			möglich, wie die EEprom-Daten nicht vom Anwenderprogramm
-			überschrieben werden.
-
-TIMEOUT_MS		Diese Option gibt eine Zeitschranke in Millisekunden vor für den Empfang von Boot-Daten.
-			Nach dieser Zeit wird der Bootvorgang abgebrochen und versucht das Anwenderprogramm zu starten.
-			Mögliche Werte für TIMEOUT_MS sind 500, 1000, 2000, 4000 und 8000.
-			Der tatsächlich mögliche Wert kann abhängig vom Prozessor auf 2 Sekunden begrenzt sein.
-
-OSCCAL_CORR		Diese Option gibt einen Korrekturwert für das OSCCAL Byte des AVR-Prozessors an.
-			Der Wert ist nur wirksam, wenn der interne RC-Oszillator des AVR-Prozessors
-			benutzt wird, nicht bei Quarz-Betrieb.
-			Da die erzeugte Baudrate direkt vom Prozessortakt abhängt, ist eine kalibrierte
-			Taktfrequenz wichtig, damit der serielle Datentransfer gelingt.
-
-FORCE_RSTDISBL		Sie müssen diese Option auf 1 setzen, wenn Sie vorhaben, die RSTDISBL Funktion
-			in der HFUSE zu setzen. Das Setzen des RSTDISBL Bits (auf 0) wird vom optiboot
-			entdeckt and das Übersetzen wird abgebrochen, wenn diese Option nicht
-			gesetzt ist.
+Wahlweise kann man statt dem Assembler-Programm auch ein C-Programm für
+die Bildung des optiboot-Bootloaders benutzen. Dabei wird der Bootloader größer
+und braucht in der Regel mehr Bootloader-Speicherseiten. Aber es sind die
+meisten Funktionen auch mit dem C-Programm wählbar.
+In aller Regel ist aber die Assembler-Version besser getestet und sollte
+bevorzugt werden.
 
 
+Die Kurzbeschreibung Benutzung.txt sowie weiter hilfreiche Texte findet man nun
+im Unterverzeichnis help_files.
 
-Vorschlag:
-==========
-Beim optiboot Loader wird der Grund des Resets (MCUSR) im Register 2 an das Anwenderprogramm
-weitergereicht. Hier wäre zu überlegen, ob man zusätzlich nicht auch ein Hardware-Register
-des ATmega (z.B. GPIOR0) benutzt werden kann. Hier könnte auch ein C-Programm leicht zugreifen.
-Die GPIORx Register haben weiter keine Funktion und eignen sich nach meiner Meinung gut
-für solche Aufgaben.
-Bei Prozessoren ohne diese Register-Gruppe wird das Zähler Register OCR2
-als Alternative zu einem GPIORx Register benutzt werden.
 
-Liste der AVR-Prozessoren:
-==========================
+Liste der unterstützten AVR-Prozessoren:
+========================================
 ATmega8/16/32/64/128
 ATmega162/163
 ATmega164/324/644/1284 (P)

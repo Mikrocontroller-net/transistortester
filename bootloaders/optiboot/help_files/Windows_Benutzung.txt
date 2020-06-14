@@ -1,0 +1,79 @@
+Author: Karl-Heinz Kübbeler   (kh_kuebbeler@web.de) , Jun 2020
+
+Nutzung der Makefile unter Windows10
+====================================
+
+Für die Erzeugung der .hex Programmdaten des optiboot ist ein Tool-Paket
+für die AVR Prozessoren erforderlich.
+Ich empfehle die Installation der Arduino IDE, die alle benötigten
+Programme wie avr-gcc, avr-ld, avr-size und so weiter zur Verfügung stellt.
+Der Standard Installationspfad ist C:\Programme (x86)\ ,
+deswegen ist der Standard-Pfad zu den Programmen
+C:\Programme (x86)\Arduino\hardware\tools\avr\bin.
+Dieser Pfad sollte in der Systemvariablen Path eingetragen sein,
+damit die Tools auch in der Kommando-Zeile oder der Makefile ohne die Nennung
+des Ablageortes gefunden werden.
+
+Die automatische Berechnung von Bootloader Startaddresse sowie der
+Fuses für den AVR-Prozessor benötigt einige kleinerer Hilfprogramme,
+die aus der Linux (Unix) Welt kommen. Die benutzten Programme
+sind bc, cat, cut, echo, grep, make und  tr.
+Diese Programme sind im cygwin64 Paket für Windows enthalten.
+Beim Installationsprogramm von cygwin64 kann man Programme aussuchen,
+die zusätzlich zur Standardauswahl installiert werden sollen.
+Falls eins der benötigten Programme fehlt, kann man das Installationsprogramm
+erneut aufrufen und fehlende Programme auswählen.
+Als Installationsort sollte man C:\cygwin64 wählen und diesen Pfad in der
+Path Systemvarablen von Windos10 ergänzen.
+
+Nach der Installation von Cygwin64 sollten die benötigten Progamme
+sowie ein spezielles Cygwin64 Terminal aufrufbar sein.
+In diesem Terminal-Fenster ist die Kommando-Bedienung ganz wie in Linux.
+Allerdings wird für dieses Kommando-Fenster ein eigenes Home-Verzeichnis
+angelegt, welches im Fenster als /home/<Benutzerkennung> erscheint.
+Im Windows Dateisystem ist dieses Verzeichnis als C:\cygwin64\home\<Benutzerkennung>
+sichtbar.
+Das normale Windows Home-Verzeichnis heißt üblicherweise C:\Benutzer\<Benutzerkennung> .
+Dieses Windows-Verzeichnis erscheint im Cygwin64 Terminal als
+/cygdrive/c/Users/<Benutzerkennung> .
+Zusätzliche Laufwerke erscheinen ebenfalls im /cygdrive Verzeichnis unter ihrem 
+Kennbuchstaben wie beispielsweise e (/cygdrive/e) für einen eingesteckten USB-Stick.
+In Windows würde dieser Stick als E: angezeigt.
+Dies ist für das Cygwin64 Terminal konsequent, da das Linux System keine 
+Laufwerksbuchstaben mit folgendem Doppelpunkt kennt.
+Hier hat das Dateisystem mit allen Laufwerken eine gemeinsame Wurzel / .
+
+Man kann die über Cygwin64 installierten Programme auch über das Windows-Terminal
+aufrufen, völlig unabhängig von der Benutzung des Cygwin64 Terminals.
+Dazu muß der Pfad der cygwin Programme ( c:\cygwin64\bin\ )
+in der Path Variablen von Windows10 eingetragen werden.
+Dann kann die Bildung eines optiboot-Bootloaders ganz normal auch aus
+dem Windows-Terminal benutzt werden. Dazu muß man einfach mit dem
+Kommando cd (Change Directory) in das optiboot Verzeichnis wechseln
+(cd optiboot oder cd bootloaders\optiboot)
+und mit z.B. make atmega168 den Standard Bootloader für den ATmega168 mit
+dem Namen optiboot_atmega168.hex zu erzeugen.
+
+Wenn der eigene ISP-Programmer in der Datei Makefile.isp richtig für avrdude
+konfiguriert ist und der Programmer mit dem ATmega168 richtig angeschlossen ist,
+läßt sich der ATmega168 mit dem Kommando make atmega168 ISP=1 programmieren.
+Dabei werden nicht nur die Programmdaten von optiboot
+übertragen, sondern auch alle Fuses richtig gesetzt.
+Nach diesem Aufruf (mit ISP=1) ist der ATmega168 gelöscht und es befindet sich
+nur der einsatzbereite Bootloader darauf.
+Alle vorher vorhandenen Daten sind gelöscht!
+
+Zum Abschluß möchte ich hier mit einem Vergleich auf den drastischen
+Geschwindigkeitsunterschied bei der Erzeugung der Bootloader Dateien (.hex)
+zwischen Linux und Windows10 hinweisen.
+Wenn alle 79 Beispielkonfigurationen mit dem Kommando makeall übersetzt werden,
+dauert das auf meinem Arbeitsrechner gerade einmal 11 Sekunden,
+auf meinem Laptop etwa 20 Sekunden.
+Bei Windows dauert die gleiche Aktion auf der Windows Console (Eingabeaufforderung)
+mit dem gleichen Laptop 438 Sekunden, mehr als Faktor 20 mal so lange!!!
+Wenn man die Aktion auf dem Cygwin64 Terminal startet, dauert es sogar 536 Sekunden.
+Etwa die Hälfte der Zeit wird vom time Kommando hier als Systemzeit angezeigt.
+
+Linux hat hier wohl den Vorteil, daß es durch intensive Nutzung von Scripts
+auf die Nutzung vieler kleiner Werkzeuge (Tools) optimiert ist.
+Aber dieses Ergebnis überrascht mich.

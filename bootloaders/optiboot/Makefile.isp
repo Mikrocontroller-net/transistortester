@@ -39,12 +39,9 @@ AVRDUDE_ROOT ?= $(GCCROOT)
 # These are the parameters for a usb-based STK500v2 programmer.
 # Exact type unknown.  (historical Makefile values.)
 ISPTOOL	   = avrisp2
-ifeq ($(OS), Windows_NT)
-ISPPORT	   = COM6
-else
 ISPPORT	   =  /dev/ttyACM0
 #ISPPORT	   = usb
-endif
+#ISPPORT           = COM7
 ISPSPEED   = -b 115200
 #
 #
@@ -259,9 +256,9 @@ FuseSetPrint:	$(PROGRAM)_$(TARGET).hex $(PROGRAM)_$(TARGET).lst ispfuses.ppp
 	@$(ECHO_CMD) " "
 	@$(ECHO_CMD) "####### Start of Makefile.isp  for $(MCU_TARGET) #############"
 ifdef EFUSE
-	@$(ECHO_CMD) "   Fuses are preset to lfuse=0x$(LFUSE), hfuse=0x$(HFUSE), efuse=0x$(EFUSE)"
+	@$(ECHO_CMD) "   Fuses in Makefile.isp are set to lfuse=0x$(LFUSE), hfuse=0x$(HFUSE), efuse=0x$(EFUSE)"
 else
-	@$(ECHO_CMD) "   Fuses are preset to lfuse=0x$(LFUSE), hfuse=0x$(HFUSE))"
+	@$(ECHO_CMD) "   Fuses in Makefile.isp are set to lfuse=0x$(LFUSE), hfuse=0x$(HFUSE))"
 endif
 	@$(ECHO_CMD) "\n; ISPFUSES = $(shell $(CAT_CMD) ispfuses.ppp)" >> $(PROGRAM)_$(TARGET).lst
 

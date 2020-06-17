@@ -33,9 +33,6 @@
 # enter the parameters for the avrdude isp tool  -b19200
 #
 
-# Inherit avrdude paths from top-level makefile
-AVRDUDE_ROOT ?= $(GCCROOT)
-
 # These are the parameters for a usb-based STK500v2 programmer.
 # Exact type unknown.  (historical Makefile values.)
 ISPTOOL	   = avrisp2
@@ -51,9 +48,6 @@ ISPSPEED   = -b 115200
 #ISPPORT	= /dev/tty.usbmodemfd3141 
 #ISPSPEED 	= -b19200
 #
-# determine the bit clock (us) for avrdude
-BIT_CLOCK = $(shell $(ECHO_CMD) "scale=2;8000000/$(AVR_FREQ)+1" | $(BC_CMD))
-
 
 ifndef TARGET
  $(error the actual TARGET name is not known)
@@ -72,6 +66,10 @@ ifndef VIRTUAL_BOOT_PARTITION
 endif
 
 
+ECHO_CMD=echo
+CAT_CMD=cat
+BC_CMD=bc
+RM_CMD=rm
 # Not all chips have EFUSE.
 
 ifdef EFUSE
@@ -173,6 +171,9 @@ endif
 UC_HFUSE = $(shell $(ECHO_CMD) "$(HFUSE)" | $(TR_CMD) a-z A-Z)
 UC_EFUSE = $(shell $(ECHO_CMD) "$(EFUSE)" | $(TR_CMD) a-z A-Z)
 
+# determine the bit clock (us) for avrdude
+BIT_CLOCK = $(shell $(ECHO_CMD) "scale=2;8000000/$(AVR_FREQ)+1" | $(BC_CMD))
+
 #
 # avrdude commands to program the new bootloader, and protect the bootloader
 # space from accidental SPM writes.  Note: "ef" allows boot section to be read
@@ -229,25 +230,25 @@ endif
 # the right one is selected by the ispfuses.ppp file.
 
 ifeq ($(VIRTUAL_BOOT_PARTITION), 1)
-HPATCHFUSE.dat:	$(PROGRAM)_$(TARGET).hex BOOTSZ.dat
-	@$(ECHO_CMD) "$(shell $(ECHO_CMD) "obase=16;ibase=16;($(UC_HFUSE) - ($(UC_HFUSE) % 8) ) + ($(shell $(CAT_CMD) BOOTSZ.dat)*2) + 1" | $(BC_CMD))" > HPATCHFUSE.dat
+HPATCHFUSE.dat:	$(PROGRAM)_$(TARGET).hex 
+	@$(ECHO_CMD) "$(shell $(ECHO_CMD) "obase=16;ibase=16;($(UC_HFUSE) - ($(UC_HFUSE) % 8) ) + ($(BOOTSZ)*2) + 1" | $(BC_CMD))" > HPATCHFUSE.dat
 HFUSE.dat:	HPATCHFUSE.dat
 	@$(CAT_CMD) HPATCHFUSE.dat > HFUSE.dat
 else
-HPATCHFUSE.dat:	$(PROGRAM)_$(TARGET).hex BOOTSZ.dat
-	@$(ECHO_CMD) "$(shell $(ECHO_CMD) "obase=16;ibase=16;($(UC_HFUSE) - ($(UC_HFUSE) % 8) ) + ($(shell $(CAT_CMD) BOOTSZ.dat)*2) " | $(BC_CMD))" > HPATCHFUSE.dat
+HPATCHFUSE.dat:	$(PROGRAM)_$(TARGET).hex
+	@$(ECHO_CMD) "$(shell $(ECHO_CMD) "obase=16;ibase=16;($(UC_HFUSE) - ($(UC_HFUSE) % 8) ) + ($(BOOTSZ)*2) " | $(BC_CMD))" > HPATCHFUSE.dat
 HFUSE.dat:	HPATCHFUSE.dat
 	@$(CAT_CMD) HPATCHFUSE.dat > HFUSE.dat
 endif
 
 ifeq ($(VIRTUAL_BOOT_PARTITION), 1)
-EPATCHFUSE.dat:	$(PROGRAM)_$(TARGET).hex BOOTSZ.dat
-	@$(ECHO_CMD) "$(shell $(ECHO_CMD) "obase=16;ibase=16;(0$(UC_EFUSE) - (0$(UC_EFUSE) % 8) ) + ($(shell $(CAT_CMD) BOOTSZ.dat)*2) + 1" | $(BC_CMD))" > EPATCHFUSE.dat
+EPATCHFUSE.dat:	$(PROGRAM)_$(TARGET).hex 
+	@$(ECHO_CMD) "$(shell $(ECHO_CMD) "obase=16;ibase=16;(0$(UC_EFUSE) - (0$(UC_EFUSE) % 8) ) + ($(BOOTSZ)*2) + 1" | $(BC_CMD))" > EPATCHFUSE.dat
 EFUSE.dat:	EPATCHFUSE.dat
 	@$(CAT_CMD) EPATCHFUSE.dat > EFUSE.dat
 else
 EPATCHFUSE.dat:	$(PROGRAM)_$(TARGET).hex BOOTSZ.dat
-	@$(ECHO_CMD) "$(shell $(ECHO_CMD) "obase=16;ibase=16;(0$(UC_EFUSE) - (0$(UC_EFUSE) % 8) ) + ($(shell $(CAT_CMD) BOOTSZ.dat)*2)" | $(BC_CMD))" > EPATCHFUSE.dat
+	@$(ECHO_CMD) "$(shell $(ECHO_CMD) "obase=16;ibase=16;(0$(UC_EFUSE) - (0$(UC_EFUSE) % 8) ) + ($(BOOTSZ)*2)" | $(BC_CMD))" > EPATCHFUSE.dat
 EFUSE.dat:	EPATCHFUSE.dat
 	@$(CAT_CMD) EPATCHFUSE.dat > EFUSE.dat
 endif
@@ -263,20 +264,20 @@ endif
 	@$(ECHO_CMD) "\n; ISPFUSES = $(shell $(CAT_CMD) ispfuses.ppp)" >> $(PROGRAM)_$(TARGET).lst
 
 ifeq ($(USE_Edat), 1)
-FuseChangePrint: EFUSE.dat BL_StartAdr.dat
+FuseChangePrint: EFUSE.dat
 	@$(ECHO_CMD) "Bootloader EFUSE will be set to 0x$(shell $(CAT_CMD) EFUSE.dat) [0x$(EFUSE)]"
-	@$(ECHO_CMD) "BootLoader Start $(shell $(ECHO_CMD) "ibase=16; if (($(shell $(CAT_CMD) EFUSE.dat) % 2) == 0) print \"is enabled to 0x$(shell $(CAT_CMD) BL_StartAdr.dat) \" else print \"is NOT enabled, start at 0!\" " | $(BC_CMD)) "
+	@$(ECHO_CMD) "BootLoader Start $(shell $(ECHO_CMD) "ibase=16; if (($(shell $(CAT_CMD) EFUSE.dat) % 2) == 0) print \"is enabled to 0x$(BL_StartAdr) \" else print \"is NOT enabled, start at 0!\" " | $(BC_CMD)) "
 endif
 
 ifeq ($(USE_Edat), 0)
-FuseChangePrint: HFUSE.dat  BL_StartAdr.dat
+FuseChangePrint: HFUSE.dat
 	@$(ECHO_CMD) "Bootloader HFUSE will be set to 0x$(shell $(CAT_CMD) HFUSE.dat) [0x$(HFUSE)]"
-	@$(ECHO_CMD) "BootLoader Start $(shell $(ECHO_CMD) "ibase=16; if (($(shell $(CAT_CMD) HFUSE.dat) % 2) == 0) print \"is enabled to 0x$(shell $(CAT_CMD) BL_StartAdr.dat) \" else print \"is NOT enabled, start at 0!\" " | $(BC_CMD)) "
+	@$(ECHO_CMD) "BootLoader Start $(shell $(ECHO_CMD) "ibase=16; if (($(shell $(CAT_CMD) HFUSE.dat) % 2) == 0) print \"is enabled to 0x$(BL_StartAdr) \" else print \"is NOT enabled, start at 0!\" " | $(BC_CMD)) "
 endif
 
 ifeq ($(USE_Edat), 2)
-FuseChangePrint:  BL_StartAdr.dat
-	@$(ECHO_CMD) "BootLoader Start Address is 0x$(shell $(CAT_CMD) BL_StartAdr.dat), End address of application programs must remain below! "
+FuseChangePrint: 
+	@$(ECHO_CMD) "BootLoader Start Address is 0x$(BL_StartAdr), End address of application programs must remain below! "
 endif
 
 # There are certain complicated caused by the fact that the default state
@@ -295,35 +296,35 @@ endif
 # unused, avrdude would get confused.
 do_isp: $(PROGRAM)_$(TARGET).hex FuseSetPrint FuseChangePrint ispfuses.ppp HFUSE.dat $(EF_dep) 
 ifeq ($(ISP), 4)
-	@$(ECHO_CMD) "##### read complete EEprom from $(TARGET) to Read_$(TARGET).eep"
-	$(AVRDUDE_ROOT)avrdude $(AVRDUDE_CONF) -c $(ISPTOOL) -B $(BIT_CLOCK) \
+	@$(ECHO_CMD) "##### read complete EEprom from target $(TARGET) to Read_$(TARGET).eep"
+	avrdude $(AVRDUDE_CONF) -c $(ISPTOOL) -B $(BIT_CLOCK) \
               -p $(MCU_TARGET) -P $(ISPPORT) $(ISPSPEED) \
 	      -U eeprom:r:./Read_$(TARGET).eep:i
 else
  ifeq ($(ISP), 3)
-	@$(ECHO_CMD) "##### read complete flash from $(TARGET) to Read_$(TARGET).hex"
-	$(AVRDUDE_ROOT)avrdude $(AVRDUDE_CONF) -c $(ISPTOOL) -B $(BIT_CLOCK) \
+	@$(ECHO_CMD) "##### read complete flash from target $(TARGET) to Read_$(TARGET).hex"
+	avrdude $(AVRDUDE_CONF) -c $(ISPTOOL) -B $(BIT_CLOCK) \
               -p $(MCU_TARGET) -P $(ISPPORT) $(ISPSPEED) \
 	      -U flash:r:./Read_$(TARGET).hex:i
  else
   ifeq ($(ISP), 2)
         # verify mode
-	@$(ECHO_CMD) "##### verify the optiboot in $(TARGET)"
-	$(AVRDUDE_ROOT)avrdude $(AVRDUDE_CONF) -c $(ISPTOOL) -B $(BIT_CLOCK) \
+	@$(ECHO_CMD) "##### verify the optiboot at target $(TARGET)"
+	avrdude $(AVRDUDE_CONF) -c $(ISPTOOL) -B $(BIT_CLOCK) \
               -p $(MCU_TARGET) -P $(ISPPORT) $(ISPSPEED) \
 	      -U flash:v:$(PROGRAM)_$(TARGET).hex:i
   else
         # normal ISP programming mode. ISPFLASH set the Lock-Bits, if required.
-	@$(ECHO_CMD) "##### erase the $(TARGET) and set fuses"
-	$(AVRDUDE_ROOT)avrdude $(AVRDUDE_CONF) -c $(ISPTOOL) -B 200 \
+	@$(ECHO_CMD) "##### erase the target $(TARGET) and set fuses"
+	avrdude $(AVRDUDE_CONF) -c $(ISPTOOL) -B 200 \
               -p $(MCU_TARGET) -P $(ISPPORT) $(ISPSPEED) -q -q \
               $(shell $(CAT_CMD) ispfuses.ppp)
    ifeq ($(VIRTUAL_BOOT_PARTITION), 1)
-	@$(ECHO_CMD) "##### write the optiboot to $(TARGET)"
+	@$(ECHO_CMD) "##### write the optiboot to target $(TARGET)"
    else
-	@$(ECHO_CMD) "##### write the optiboot to $(TARGET) and set the lock bits"
+	@$(ECHO_CMD) "##### write the optiboot to target $(TARGET) and set the lock bits"
    endif
-	$(AVRDUDE_ROOT)avrdude $(AVRDUDE_CONF) -c $(ISPTOOL) -B $(BIT_CLOCK) \
+	avrdude $(AVRDUDE_CONF) -c $(ISPTOOL) -B $(BIT_CLOCK) \
               -p $(MCU_TARGET) -P $(ISPPORT) $(ISPSPEED) -D \
               $(shell $(CAT_CMD) ispflash.ppp)
 	@$(RM_CMD) HFUSE.dat EFUSE.dat ispfuses.ppp ispflash.ppp

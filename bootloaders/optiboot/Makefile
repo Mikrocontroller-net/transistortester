@@ -17,6 +17,22 @@
 # etc...
 #
 # Edit History
+# 20200615: kubi48: the Makefile has been reorganized, that the main task
+#                   to build a new .hex file ifor the selected target with
+#                   the choosed parameters is now done in the bash script
+#                   file build_hex.sh . This will make the Makefile more
+#                   readable and the script should run faster.
+#                   The build_hex.sh script will also call the script
+#                   program_target.sh for the handling with avrdude.
+#                   So the Makefile.isp is no longer required.
+#                   The build of all 79 sample configurations takes now
+#                   135 seconds at my Windows10 laptop, a little faster
+#                   as the previous version. But also the Linux system 
+#                   runs faster (now 6s, before about 10s),
+#                   the job runs faster in a Terminal window compared
+#                   to a console run.
+#                   Modification of the build process and improvement
+#                   of the screen logging is now easier to do.
 # 202006xx: kubi48: the Makefile has been tested at a Windows7 system to
 #                   build the optiboot hex file. If you will use the makedefault
 #                   or makeall batch files, you must rename them with the
@@ -87,9 +103,6 @@ override PROGRAM    = optiboot
 
 # default
 fixpath = $(1)
-#SUB_MAKE = @$(MAKE) --no-print-directory -p
-#SUB_MAKE = @$(MAKE) --no-print-directory --warn-undefined-variables
-SUB_MAKE = @$(MAKE) --no-print-directory 
 
 # no ENV set
 GCCROOT =
@@ -283,210 +296,34 @@ ifndef FLASH_ERASE_CNT
  FLASH_ERASE_CNT = 1
 endif
 
-
-SIZE_CMD          = $(GCCROOT)avr-size
-
-
 LDSECTIONS  = -Wl,--section-start=.version=0x$(shell $(ECHO_CMD) "obase=16;$(FLASH_SIZE)-2" | $(BC_CMD))
 
 # Override is only needed by avr-lib build system.
 override CFLAGS        = -g -Wall $(OPTIMIZE) -mmcu=$(MCU_TARGET) $(DEFS) -fno-diagnostics-show-caret
 override LDFLAGS       = -Wl,--relax -nostartfiles -nostdlib
 
-OBJCOPY        = $(GCCROOT)avr-objcopy
-OBJDUMP        = $(call fixpath,$(GCCROOT)avr-objdump)
-
-AUTO_BAUD = $(shell $(ECHO_CMD) "$(BAUD_RATE) / 100" | $(BC_CMD))
-
 #---------------------------------------------------------------------------
 #
 # Generic build instructions
 #
-.PHONY: baudcheck
+.PHONY: clean steril hex_file help help2 
 FORCE:
 
-baudcheck: baudcheck.tmp.sh 
-	@$(BASH_CMD) ./baudcheck.tmp.sh
-	@$(RM_CMD) ./baudcheck.tmp
+ export LFUSE HFUSE EFUSE TARGET BOOT_PAGE_LEN FLASH_SIZE FLASH_PAGE_SIZE
+ export VIRTUAL_BOOT_PARTITION BIGBOOT ISP
+ export LED LED_START_FLASHES LED_DATA_FLASH
+ export AVR_FREQ BAUD_RATE UART_RX UART_TX OSCCAL_CORR SOFT_UART
+ export MCU_TARGET PROGRAM AVRDUDE_CONF FORCE_RSTDISBL TIMEOUT_MS
 
-# remove \r from baudcheck.tmp to make a bash script
-baudcheck.tmp.sh: baudcheck.tmp
-	@$(CAT_CMD) baudcheck.tmp | $(TR_CMD) -d "\r" > baudcheck.tmp.sh
+hex_file: 
+	@bash build_hex.sh
 
-# the C preprocessor make the script file baudcheck.tmp from baudcheck.S with real Parameters
-baudcheck.tmp:  baudcheck.S
-	@$(CC) $(CFLAGS) $(COMMON_OPTIONS) \
-	 -DUART=0$(UART) -DSOFT_UART=0$(SOFT_UART) -DUART_RX=p$(UART_RX) -DUART_TX=p$(UART_TX) \
-	 -DECHO_CMD=$(ECHO_CMD) -DTR_CMD=$(TR_CMD) -DECHO_CMD=$(ECHO_CMD) -DBC_CMD=$(BC_CMD) \
-	 -DF_CPU=$(AVR_FREQ) -o baudcheck.tmp -E baudcheck.S
-
-
-$(PROGRAM).o: $(PROGRAM).$(SOURCE_TYPE) FORCE
-ifeq ($(VIRTUAL_BOOT_PARTITION), 1)
- ifdef save_vect_num
-	$(CC) $(CFLAGS) $(COMMON_OPTIONS) -DVIRTUAL_BOOT_PARTITION -Dsave_vect_num=$(save_vect_num) -DLED=p$(LED) \
-        -DUART=0$(UART) -DSOFT_UART=0$(SOFT_UART) -DUART_RX=p$(UART_RX) -DUART_TX=p$(UART_TX) -DF_CPU=$(AVR_FREQ) \
-        -DHFUSE=hex$(HFUSE) -DLFUSE=hex$(LFUSE) \
-        -DBOOT_PAGE_LEN=$(BOOT_PAGE_LEN) -c -o $@ $<
- else
-	$(CC) $(CFLAGS) $(COMMON_OPTIONS) -DVIRTUAL_BOOT_PARTITION -DLED=p$(LED) -DUART=0$(UART) -DSOFT_UART=0$(SOFT_UART) \
-        -DUART_RX=p$(UART_RX) -DUART_TX=p$(UART_TX) -DF_CPU=$(AVR_FREQ) \
-        -DHFUSE=hex$(HFUSE) -DLFUSE=hex$(LFUSE) \
-        -DBOOT_PAGE_LEN=$(BOOT_PAGE_LEN) -c -o $@ $<
- endif 
-else
-	$(CC) $(CFLAGS) $(COMMON_OPTIONS) -DLED=p$(LED) -DUART=0$(UART) -DSOFT_UART=0$(SOFT_UART) \
-        -DUART_RX=p$(UART_RX) -DUART_TX=p$(UART_TX) -DF_CPU=$(AVR_FREQ) \
-        -DHFUSE=hex$(HFUSE) -DLFUSE=hex$(LFUSE) \
-        -DBOOT_PAGE_LEN=$(BOOT_PAGE_LEN) -c -o $@ $<
-endif
-
- export LFUSE HFUSE EFUSE TARGET BOOT_PAGE_LEN FLASH_SIZE VIRTUAL_BOOT_PARTITION MCU_TARGET PROGRAM CAT_CMD AVRDUDE_CONF GCCROOT AVR_FREQ
-hex_file:  hex_copy
-ifdef ISP
-	$(SUB_MAKE) --warn-undefined-variables -r -f Makefile.isp do_isp
-else
-	
- ifndef EFUSE
-	@$(ECHO_CMD) "Fuse Setting: LFUSE=0x$(LFUSE), HFUSE=0x$(HFUSE)"
- else
-	@$(ECHO_CMD) "Fuse Setting: LFUSE=0x$(LFUSE), HFUSE=0x$(HFUSE), EFUSE=0x$(EFUSE)"
- endif
-endif
-
-
-#  we can determine the size of the loader with optiboot.o for Assembler source input,
-#  but for C source we need to do some optimizing  with the binder call (.elf).
-#  This call is done without the relolation of the .text section (instruction code).
-#  After computing the required size (and the possible relocation address),
-#  This x.elf is removed later.
-$(PROGRAM)x.elf: $(PROGRAM).o
-	@$(CC) $(CFLAGS) $(COMMON_OPTIONS) $(LDSECTIONS) $(LDFLAGS)  -o $(PROGRAM)x.elf $< $(LIBS)
-
-# BootPages.dat fetch the actual boot loader size from a interim $(PROGRAM)x.elf file, not from the
-# $(PROGRAM).o file. The ld program can do some optimizing for code generated from a C-source.
-# For code generated with the assembler there is no size difference between .o and .elf !
-# If 3 pages are required, number of pages is rounded to 4.
-# If more than 4 pages are required, the number of pages is rounded to 8.
-# Above 8 pages there is no round up. 
-# The ATtiny84 has no hardware feature for the bootloader like the ATmega family.
-# Therefore the "round up" is not required for the ATtiny84, but the BOOT_PAGE_LEN is 64 for
-# this processor, so the number of pages is more than 7 pages for the actual size of optiboot.
-BootPages.dat: $(PROGRAM)x.elf
-ifeq ($(VIRTUAL_BOOT_PARTITION), 1)
-	@$(ECHO_CMD) "(($(shell $(SIZE_CMD) -C $(PROGRAM)x.elf | $(GREP_CMD) "Program:" | $(CUT_CMD) -c 10-16)/$(FLASH_PAGE_SIZE)/$(FLASH_ERASE_CNT) +1)*$(FLASH_ERASE_CNT))" | $(BC_CMD) > BootPages.dat
-	
-else
-	@$(ECHO_CMD) "pg_anz=($(shell $(SIZE_CMD) -C $(PROGRAM)x.elf | $(GREP_CMD) "Program:" | $(CUT_CMD) -c 10-16)/$(BOOT_PAGE_LEN) +1); pg_anz + (pg_anz==3 ) + (pg_anz==5)*3 + (pg_anz==6)*2 + (pg_anz == 7)" | $(BC_CMD) > BootPages.dat
-	
-endif
-
-# With the file BootPages.dat and the $(BOOT_PAGE_LEN) or $(FLASH_PAGE_SIZE) we can compute the 
-# Start Address of the bootloader depending on the $(FLASH_SIZE) 
-BL_StartAdr.dat:  BootPages.dat
-ifeq ($(VIRTUAL_BOOT_PARTITION), 1)
-	@$(ECHO_CMD) "obase=16;$(FLASH_SIZE) - ($(shell $(CAT_CMD) BootPages.dat)*$(FLASH_PAGE_SIZE))" | $(BC_CMD) > BL_StartAdr.dat
-else
-	@$(ECHO_CMD) "obase=16;$(FLASH_SIZE) - ($(shell $(CAT_CMD) BootPages.dat)*$(BOOT_PAGE_LEN))" | $(BC_CMD) > BL_StartAdr.dat
-endif
-	@$(RM_CMD) $(PROGRAM)x.elf
-
-# Generate the final $(PROGRAM).elf file at the right Start Address,
-# which is the base to generate the $(PROGRAM)_$(TARGET).hex and $(PROGRAM)_$(TARGET).lst files.
-$(PROGRAM).elf:  $(PROGRAM).o baudcheck  BL_StartAdr.dat
-	- @$(ECHO_CMD) "###########################################"
-	- @$(ECHO_CMD) "Boot Loader start address: 0x$(shell $(CAT_CMD) BL_StartAdr.dat) = $(shell $(CAT_CMD) base_cmd BL_StartAdr.dat | $(BC_CMD))"
-	- @$(ECHO_CMD) "###########################################"
-	@$(CC) $(CFLAGS) $(COMMON_OPTIONS) $(LDSECTIONS) \
-        -Wl,--section-start=.text=0x$(shell $(CAT_CMD) BL_StartAdr.dat) $(LDFLAGS) -o $(PROGRAM).elf $< $(LIBS)
-	- @$(ECHO_CMD)
-ifeq ($(AUTO_BAUD), 0)
- ifeq ((SUPPORT_EEPROM), 0)
-	- @$(ECHO_CMD) $(AVR_FREQ) Hz operation with Auto-Baudrate configured.
- else
-	- @$(ECHO_CMD) $(AVR_FREQ) Hz operation with Auto-Baudrate and EEprom support configured.
- endif
-else
- ifeq ((SUPPORT_EEPROM), 0)
-	- @$(ECHO_CMD) $(AVR_FREQ) Hz operation with Baudrate $(BAUD_RATE) configured.
- else
-	- @$(ECHO_CMD) $(AVR_FREQ) Hz operation with Baudrate $(BAUD_RATE) and EEprom support configured.
- endif
-endif
 
 # remove all generated files
-.PHONY: clean steril hex_copy hex_file help help2 BOOTSZ_print BOOTSZ_finish
 clean:
 	@$(RM_CMD) -rf *.o *.elf *.lst *.map *.sym *.lss *.eep *.srec *.bin *.hex *.ppp *.tmp.sh *.dat
 steril:
 	@$(RM_CMD) -rf *.o *.elf *.map *.sym *.tmp.sh *.dat *.ppp $(PROGRAM).hex 
-
-BOOTSZ_finish: BOOTSZ_print
-	$(OBJCOPY) -j .text -j .data -j .version --set-section-flags .version=alloc,load -O ihex $(PROGRAM).elf $(PROGRAM)_$(TARGET).hex
-	$(OBJDUMP) -h -S $(PROGRAM).elf > $(PROGRAM)_$(TARGET).lst
-
-# With the Bootpages.dat file we can set the required BOOTSZ1 and BOOTSZ0 bits, which are
-# combined to BOOTSZ (0 for eight pages, 1 for four pages, 2 for two pages and 3 for one page)
-# This BOOTSZ.dat is taken by the Makefile.isp file to correct the HFUSE or EFUSE.
-# With option VIRTUAL_BOOT_PARTITION BOOTSZ.dat is allways set to 3
-# 
-ifeq ($(VIRTUAL_BOOT_PARTITION), 1)
- ifeq ($(BOOT_PAGE_LEN), 32)
-  BOOTLOADER_SECTION := 0
- endif
- ifeq ($(BOOT_PAGE_LEN), 64)
-  BOOTLOADER_SECTION := 0
- endif
- ifeq ($(BOOT_PAGE_LEN), 128)
-  BOOTLOADER_SECTION := 0
- endif
-BOOTSZ_print: $(PROGRAM).elf BL_StartAdr.dat
-	 $(SIZE_CMD) $(PROGRAM).elf
-# $(ECHO_CMD) "Requires $(shell $(CAT_CMD) BootPages.dat) Flash Pages, $(FLASH_PAGE_SIZE) Bytes each"
-	@$(ECHO_CMD) "Requires $(shell $(CAT_CMD) BootPages.dat) Flash Pages, $(FLASH_PAGE_SIZE)*$(FLASH_ERASE_CNT) Bytes each"
- ifeq ($(BOOTLOADER_SECTION), 0)
-	@$(ECHO_CMD) "No Boot Pages present!"
- else
-	@$(ECHO_CMD) "Boot Pages present, but No Boot Pages used!"
- endif
-	@$(ECHO_CMD) "3" > BOOTSZ.dat
-else
-opti_size.dat: $(PROGRAM).elf
- # opti_size.dat is the algorithm to get the number of pages
-	@$(SIZE_CMD) -C $(PROGRAM).elf | $(GREP_CMD) "Program:" | $(CUT_CMD) -c 10-16 | $(TR_CMD) -d "\n\r " > opti_size.dat
-	@$(ECHO_CMD) "/$(BOOT_PAGE_LEN)+1" >> opti_size.dat
-pg_anz.dat: opti_size.dat
- # now we can determine the number of pages in pg_anz.dat
-	@$(CAT_CMD) opti_size.dat | $(BC_CMD) > pg_anz.dat
-
-BOOTSZ.dat: $(PROGRAM).elf pg_anz.dat
-	@$(ECHO_CMD) "0+($(shell $(CAT_CMD) pg_anz.dat)<5)+($(shell $(CAT_CMD) pg_anz.dat)<3)+($(shell $(CAT_CMD) pg_anz.dat)<2)" | $(BC_CMD) > BOOTSZ.dat
-
-BOOTSZ_print: BOOTSZ.dat BootPages.dat BL_StartAdr.dat
-	 $(SIZE_CMD) $(PROGRAM).elf
-	@$(ECHO_CMD) "Requires $(shell $(CAT_CMD) pg_anz.dat) Boot Pages, $(BOOT_PAGE_LEN) Bytes each"
-	@$(ECHO_CMD) "BOOTSZ=$(shell $(CAT_CMD) BOOTSZ.dat), which means $(shell $(CAT_CMD) BootPages.dat) Boot Pages"
-endif
-
-# copy the  .lst and .hex files to files which identify the target
-# add some options to the end of the .lst file as comment
-hex_copy: BOOTSZ_finish 
-	- @$(ECHO_CMD) "; " >> $(PROGRAM)_$(TARGET).lst
-	- @$(ECHO_CMD) "; FORCE_WATCHDOG=$(FORCE_WATCHDOG)" >> $(PROGRAM)_$(TARGET).lst
-	- @$(ECHO_CMD) "; LED_START_FLASHES=$(LED_START_FLASHES)" >> $(PROGRAM)_$(TARGET).lst
-	- @$(ECHO_CMD) "; LED_DATA_FLASH=$(LED_DATA_FLASH)" >> $(PROGRAM)_$(TARGET).lst
-	- @$(ECHO_CMD) "; LED=$(LED)" >> $(PROGRAM)_$(TARGET).lst
-ifdef SOFT_UART
-	- @$(ECHO_CMD) "; SOFT_UART=$(SOFT_UART)" >> $(PROGRAM)_$(TARGET).lst
-	- @$(ECHO_CMD) "; UART_RX=$(UART_RX)" >> $(PROGRAM)_$(TARGET).lst
-	- @$(ECHO_CMD) "; UART_TX=$(UART_TX)" >> $(PROGRAM)_$(TARGET).lst
-endif
-	- @$(ECHO_CMD) "; UART=$(UART)" >> $(PROGRAM)_$(TARGET).lst
-	- @$(ECHO_CMD) "; SOURCE_TYPE=$(SOURCE_TYPE)" >> $(PROGRAM)_$(TARGET).lst
-	- @$(ECHO_CMD) "; SUPPORT_EEPROM=$(SUPPORT_EEPROM)" >> $(PROGRAM)_$(TARGET).lst
-	- @$(ECHO_CMD) "; MCU_TARGET = $(MCU_TARGET)" >> $(PROGRAM)_$(TARGET).lst
-	- @$(ECHO_CMD) "; AVR_FREQ= $(AVR_FREQ)" >> $(PROGRAM)_$(TARGET).lst
-	- @$(ECHO_CMD) "; BAUD_RATE=$(BAUD_RATE)" >> $(PROGRAM)_$(TARGET).lst
 
 help:
 	@$(ECHO_CMD) "Important options to build optiboot:"
@@ -516,8 +353,10 @@ help:
 	@$(ECHO_CMD) " "
 	@$(ECHO_CMD) "You must allways specify a target AVR processor (AVR-ID) to build"
 	@$(ECHO_CMD) "a proper optiboot bootloader with any of the available options."
+	@$(ECHO_CMD) " "
 	@$(ECHO_CMD) "Example:"
 	@$(ECHO_CMD) "make atmega328p LED_START_FLASHES=0 LED_DATA_FLASH=1"
+	@$(ECHO_CMD) " "
 	@$(ECHO_CMD) "would deselect the binking LED at the bootloader start and"
 	@$(ECHO_CMD) "would use a bright LED when waiting for Rx data."
 	@$(ECHO_CMD) "Type make help2 for additional options!"
@@ -545,13 +384,3 @@ help2:
 	@$(ECHO_CMD) "FORCE_RSTDISBL enables setting of the RSTDISBL bit to 0."
 	@$(ECHO_CMD) "               Otherwise compiling is aborted."
 
-
-
-# you can ignore the .version section with the following command
-#	$(OBJCOPY) -j .text -j .data -R .version -O ihex $< $(PROGRAM).hex
-
-%.srec: $(PROGRAM).elf 
-	$(OBJCOPY) -j .text -j .data -j .version --set-section-flags .version=alloc,load -O srec $< $@
-
-%.bin: $(PROGRAM).elf
-	$(OBJCOPY) -j .text -j .data -j .version --set-section-flags .version=alloc,load -O binary $< $@

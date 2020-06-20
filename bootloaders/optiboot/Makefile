@@ -17,6 +17,15 @@
 # etc...
 #
 # Edit History
+# 20200619: kubi48: The Name is changes in Aoptiboot now.
+#                   The terminal journal if build process can optionally
+#                   formatted with colors.
+#                   To prevent the warning message in the .h file,
+#                   the automatic choose of a default LED pin for the 
+#                   Life Signal of the bootloader is now set in the
+#                   auto_led.sh script, called by the script build_hex.sh .
+#                   For easier handling of the idifferent AVR controllers,
+#                   the pin equal models are summarized to one family name.
 # 20200615: kubi48: the Makefile has been reorganized, that the main task
 #                   to build a new .hex file ifor the selected target with
 #                   the choosed parameters is now done in the bash script
@@ -321,7 +330,7 @@ hex_file:
 
 # remove all generated files
 clean:
-	@$(RM_CMD) -rf *.o *.elf *.lst *.map *.sym *.lss *.eep *.srec *.bin *.hex *.ppp *.tmp.sh *.dat
+	@$(RM_CMD) -rf *.o *.elf *.lst *.log *.map *.sym *.lss *.eep *.srec *.bin *.hex *.ppp *.tmp.sh *.dat
 steril:
 	@$(RM_CMD) -rf *.o *.elf *.map *.sym *.tmp.sh *.dat *.ppp $(PROGRAM).hex 
 

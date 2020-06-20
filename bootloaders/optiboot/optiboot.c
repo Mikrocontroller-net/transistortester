@@ -631,6 +631,10 @@ int main(void) {
 #if (LED_START_FLASHES != 0) || (LED_DATA_FLASH > 0)
   /* Set LED pin as output */
   LED_DDR |= _BV(LEDbit);
+ #if ( (LED_DATA_FLASH & 0x04) > 0)
+   /* LED_DATA_FLASH=4 will put the light steady on */
+  LED_PORT |= _BV(LEDbit);
+ #endif
 #endif
 
   // Set up watchdog to trigger after 500ms

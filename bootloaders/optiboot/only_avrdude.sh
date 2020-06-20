@@ -2,6 +2,15 @@
 #
 # K.-H. Kübbeler (kh_kuebbeler@web.de)  Jun 2020
 # 
+# This only_avrdude.sh script only call the avrdude program with
+# the parameter list given in the variable DUDE_PARAMS .
+# Additionally the variable ISPPORT should be set to the port  of your
+# ISP-programmer.
+# After an error return from avrdude, a error message is shown.
+# At a Linux systen  the script find_serials.sh search for
+# serial devices. The accessability of the devices for you
+# are checked also.
+
 echo "avrdude ${DUDE_PARAMS}"
 avrdude ${DUDE_PARAMS}
 # avrdude can tell more about the operation with the -v option:
@@ -11,8 +20,9 @@ if (( ${DUDE_FAIL} != 0 ))
 then
   echo "#-#-#-#-#-#-#-#"
   echo "*** avrdude *** failed with return value ${DUDE_FAIL}!"
+  echo "#-#-#-#-#-#-#-#"
   echo "If avrdude has not started with the Programmer communication,"
-  echo "this can be caused by a wrong ISPPORT [currently:${ISPPORT}] setting!" 
+  echo "this can be caused by a wrong ISPPORT [now: ${ISPPORT}] setting!" 
   if [ "${OS}" = "Windows_NT" ]
   then
     echo "You can try to find any device with the device manager to check for"
@@ -23,14 +33,8 @@ then
     # only for Linux
     echo "Looking for serial Ports at your Linux system:"
     source ./find_serials.sh
-    echo " "
-    echo "If access to the right Port is not allowed , try to add ${USER} to the group of the device"
-    echo "with the command 'sudo usermod -aG dialout ${USER}' ,"
-    echo "where dialout is a sample name."
-    echo "Probably the supervisor or user Password is required for the command."
-    echo "If the access is allowed to the correct device, the usermod action is not required!"
   fi
-  echo "If the avrdude has started the communication to your taget with the ISP-programmer,"
+  echo "If the avrdude has started the communication to your target with the ISP-programmer,"
   echo "your ISPPORT setting should be OK. So you have to check the cable connection"
   echo "between the ISP-Programmer and your AVR target."
   echo "You should avoid the using of USB-Hubs with your ISP-Programmer!"

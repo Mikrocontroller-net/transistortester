@@ -241,12 +241,19 @@ UartDelay=$(( (8 * ((BAUD_SETTING) +1)) ))
 /*
  * Print a nice message containing the info we've calculated
  */
+BR_ERR=`echo "scale=2;(100*((${fcpu} / ${UartDelay}) - ${bps}) ) / ${bps}"| bc `
+if (( `echo "${BR_ERR} > 2"|bc` )) || (( `echo "${BR_ERR} < -2"|bc` )) ; then
+ BR_MSG=`echo ", ${Vfett}Difference=${BR_ERR}%${Vnormal}"`
+else
+ BR_MSG=`echo ", Difference=${BR_ERR}%"`
+fi
+BRC="${Vgelb}BAUD RATE CHECK:${Vnormal}"
  #if BAUD_RATE > 10000
-echo "BAUD RATE CHECK: Desired: ${bps},  Real: `echo "scale=0;(${fcpu} / ${UartDelay})" | bc `, UBRR = $BAUD_SETTING, Error=`echo "scale=2;(100*((${fcpu} / ${UartDelay}) - ${bps}) ) / ${bps}"| bc `%"
+echo "${BRC} Desired: ${bps},  Real: `echo "scale=0;(${fcpu} / ${UartDelay})" | bc `, UBRR = $BAUD_SETTING${BR_MSG}"
  #elif BAUD_RATE > 1000
-echo "BAUD RATE CHECK: Desired: ${bps},  Real: `echo "scale=1;(${fcpu} / ${UartDelay})" | bc `, UBRR = $BAUD_SETTING, Error=`echo "scale=2;(100*((${fcpu} / ${UartDelay}) - ${bps}) ) / ${bps}"| bc `%"
+echo "${BRC} Desired: ${bps},  Real: `echo "scale=1;(${fcpu} / ${UartDelay})" | bc `, UBRR = $BAUD_SETTING${BR_MSG}"
  #else
-echo "BAUD RATE CHECK: Desired: ${bps},  Real: `echo "scale=2;(${fcpu} / ${UartDelay})" | bc `, UBRR = $BAUD_SETTING, Error=`echo "scale=2;(100*((${fcpu} / ${UartDelay}) - ${bps}) ) / ${bps}"| bc `%"
+echo "${BRC} Desired: ${bps},  Real: `echo "scale=2;(${fcpu} / ${UartDelay})" | bc `, UBRR = $BAUD_SETTING${BR_MSG}"
  #endif
 #endif	/* SOFT_UART */
 #endif	/* BAUD_RATE < 100 */

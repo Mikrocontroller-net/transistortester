@@ -552,6 +552,10 @@ try_loader:
 /* But the LED Anode must be connected to the VCC side */
 #if (LED_START_FLASHES != 0) || (LED_DATA_FLASH > 0)
 	ASBI	LED_DDR, LEDbit			; set LED Port bit to output mode
+ #if ( (LED_DATA_FLASH & 0x04) > 0)
+   /* LED_DATA_FLASH=4 will put the light steady on */
+	ASBI	LED_PORT, LEDbit
+ #endif
 #endif
 
 #ifdef TIMEOUT_MS

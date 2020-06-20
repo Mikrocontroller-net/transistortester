@@ -21,14 +21,18 @@
     #if BAUD_ERROR >= 5
       #error "BAUD_RATE error less than -5%"
     #elif BAUD_ERROR >= 2
-      #warning "BAUD_RATE error less than -2%"
+      #if VerboseLev > 3
+        #warning "BAUD_RATE error less than -2%"
+      #endif
     #endif
   #else
     #define BAUD_ERROR (( 100*(BAUD_ACTUAL - BAUD_RATE) ) / BAUD_RATE)
     #if BAUD_ERROR >= 5
       #error "BAUD_RATE error greater than 5%"
     #elif BAUD_ERROR >= 2
-      #warning "BAUD_RATE error greater than 2%"
+      #if VerboseLev > 3
+        #warning "BAUD_RATE error greater than 2%"
+      #endif
     #endif
   #endif
 

@@ -51,7 +51,8 @@ logfile="${PROGRAM}_${TARGET}.log"
 AVR_MHZ="(`echo "scale=2;${AVR_FREQ} / 1000000" | bc` Mhz)"
 FREQ_OPER="Optiboot for ${Vgelb}${AVR_FREQ} Hz ${AVR_MHZ} operation${Vnormal}"
 EE_SUPPORT=" and ${Vinv}EEprom support${Vnormal} configured."
-echo "Build of ${FREQ_OPER}" > ${logfile}
+echo "###############################" > ${logfile}
+echo "Build of ${FREQ_OPER}" >> ${logfile}
 
 if (( ${BAUD_RATE} < 100 )) ; then
  if (( 0${SUPPORT_EEPROM} == 0 )) ; then
@@ -88,9 +89,9 @@ fi
 avr-gcc ${c_params}
 
 if (( $? == 0 )) ; then
- echo " .o build OK!" >> ${logfile}
+ echo " .o build : OK!" >> ${logfile}
 else
- echo " .o build FAILED!" >> ${logfile} ; exit 1
+ echo " .o build : FAILED!" >> ${logfile} ; exit 1
 fi
 
 #  we can determine the size of the loader with optiboot.o for Assembler source input,
@@ -105,9 +106,9 @@ if (( ${VerboseLev} > 3 )) ; then echo "${Vgreen}avr-gcc ${c_paramsx}${Vnormal}"
 avr-gcc ${c_paramsx}
 
 if (( $? == 0 )) ; then
- echo " x.elf build OK!" >> ${logfile}
+ echo " x.elf build : OK!" >> ${logfile}
 else
- echo " x.elf build FAILED!" >> ${logfile} ; exit 1
+ echo " x.elf build : FAILED!" >> ${logfile} ; exit 1
 fi
 
 # BootPages fetch the actual boot loader size from a interim ${PROGRAM}x.elf file, not from the
@@ -148,9 +149,9 @@ c_params="${CFLAGS} ${COMMON_OPTIONS} -DUART=0${UART} -DSOFT_UART=0${SOFT_UART} 
 avr-gcc ${c_params}
 
 if (( $? == 0 )) ; then
- echo " baudcheck.tmp.sh build OK!" >> ${logfile}
+ echo " baudcheck.tmp.sh build : OK!" >> ${logfile}
 else
- echo " baudcheck.tmp.sh build FAILED!" >> ${logfile}
+ echo " baudcheck.tmp.sh build : FAILED!" >> ${logfile}
 fi
 
 # remove \r from baudcheck.tmp to make a bash script
@@ -180,9 +181,9 @@ echo " "
 avr-size ${PROGRAM}.elf
 
 if (( $? == 0 )) ; then
- echo " avr-size run OK!" >> ${logfile}
+ echo " avr-size run : OK!" >> ${logfile}
 else
- echo " avr-size run FAILED!" >> ${logfile}
+ echo " avr-size run : FAILED!" >> ${logfile}
 fi
 
 if (( 0${VIRTUAL_BOOT_PARTITION} == 1 )) ; then
@@ -230,9 +231,9 @@ avr-objcopy -j .text -j .data -j .version --set-section-flags .version=alloc,loa
 avr-objdump -h -S ${PROGRAM}.elf > ${lstfile}
 
 if (( $? == 0 )) ; then
- echo " avr-objdump run OK!" >> ${logfile}
+ echo " avr-objdump run : OK!" >> ${logfile}
 else
- echo " avr-objdump run FAILED!" >> ${logfile}
+ echo " avr-objdump run : FAILED!" >> ${logfile}
 fi
 
 # copy the  .lst and .hex files to files which identify the target
@@ -267,7 +268,7 @@ echo "ISP=${ISP}" >> ${logfile}
 echo "SOFT_UART=${SOFT_UART}" >> ${logfile}
 echo "UART_RX=${UART_RX}" >> ${logfile}
 echo "UART_TX=${UART_TX}" >> ${logfile}
-echo "C_SOURCE=${C_SOURCE}" >> ${logfile}
+echo "C_SOURCE=${C_SOURCE} ,SOURCE_TYPE=${SOURCE_TYPE}" >> ${logfile}
 echo "BIGBOOT=${BIGBOOT}" >> ${logfile}
 echo "VIRTUAL_BOOT_PARTITION=${VIRTUAL_BOOT_PARTITION}" >> ${logfile}
 echo "TIMEOUT_MS=${TIMEOUT_MS}" >> ${logfile}

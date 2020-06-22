@@ -352,8 +352,8 @@ ifndef HFUSE
 attiny48: HFUSE := DD
 endif
 ifndef LFUSE
-# 8MHz crystal, 6CK/14CK + 64ms
-attiny48: LFUSE := FF
+# 8MHz internal, 6CK/14CK + 64ms
+attiny48: LFUSE := EE
 endif
 ifndef EFUSE
 # Self-programming enable

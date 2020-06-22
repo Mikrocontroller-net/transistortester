@@ -302,10 +302,11 @@
  #define TEST_OUTPUT 0
 #endif
 
-#if LED_START_FLASHES < 0
+#if LED_START_FLASHES > 0
  ; negative count of LED_START_FLASHES means a RX Pin monitoring!
  #define Check_RX 1
- #warning "LED flash loop with RX Pin monitoring!"
+#else
+ #warning "LED flash loop without RX Pin monitoring!"
 #endif
 
 #ifdef __AVR_ATmega163__

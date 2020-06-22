@@ -47,10 +47,11 @@ overview for the several target processors.
 
 The boot-loader start address and the required boot-loader size will
 be adapted automatically with the Makefile.
-For the calculation some interim files are created,
+For the calculation some interim variables are created,
 which is only possible together with some Linux tools:
 
 \begin{description}
+\item [bash] a powerfull command interpreter for running the script files.
 \item [bc] a simple calculator, which can operate with input and output-
 values in decimal and hexadecimal values.
 \item [cat] put the file content to the standard output.
@@ -63,24 +64,48 @@ values in decimal and hexadecimal values.
 Until now this function of the Makefile is only tested with a Linux system
 and a Windows7 system together with a installed Cygwin package.
 
-You don't handle the different interim files in normal case.
-Here I would like to refer the names and the meaning:
+Until now the functions of the Makefile is only tested with a Linux System and
+with Windows10 together with installed Cygwin64 and Arduino packages.
+The new optiboot system does not create .dat interim Files.
+
+Here are the names of the used script files:
 \begin{description}
-\item [BootPages.dat] hold the count of required pages by the boot-loader.
-For processors which support the boot-loader start feature, the value can be only 1, 2, 4, or 8 and
-specifies how many times the minimum size of the boot-loader area (tile) is used.
-With the virtual boot-loader support the number can be any value and
-specifies the count of required flash pages.
-\item [BOOTSZ.dat] hold a number between 0 and 3 for selection of the  BOOTSZ0 and BOOTSZ1 bits.
-\item [BL\_StartAdr.dat] hold the start address of the boot-loaders with hexadecimal format.
-The start address is computed with the flash size of the selected target processor and
-the count of required page or tile size.
-\item [EFUSE.dat] hold the value for the efuse in hexadecimal format.
-The Makefile determine depending of the target processor type,
-if this file is used or not.
-\item [HFUSE.dat] hold the value for the hfuse in hexadecimal format.
-The Makefile determine depending of the target processor type,
-if this file is used or not.
+\item [build\_hex.sh] take the settings from the Makefile and produce a
+	matching optiboot hex-file in Intel format.
+\item [program\_target.sh] is called from build\_hex.sh, to check iand correct
+the hfuse and efuse settings. 
+If the configuration result to another number of used bootpages, the BOOTSZ bits
+of the ATmega must be changed. The bits are depending on the AVR model
+in the hfuse or efuse byte, which does not make the correction easier.
+\item [only\_avrdude.sh] makes only one avrdude call with the variable
+DUDE\_PARAMS list of params.
+For check of the parameters the call is recordes at the terminal.
+If the avrdude call returns with an error, the script give some common hints
+for error search. At a Linux system a additional search of probably matching serial
+interfaces is done.
+\item [find\_serials.sh] will search possible interface named for USB-serial converters
+at a Linux system.
+For this tasks are matching chips available, which are most have a name beginning with
+/dev/ttyUSB . There are also some software emulations available at mikrocontrollers,
+which has a integrated USB ingterface. You cann access these Interfaces with
+names beginning with /tty/ACM .
+For each found Interface the script will check, if a access is possible for you.
+For that you must be a member in the group, which is allowed to access the
+interface (in most cases dialout).
+This script will only called from only\_avrdude, if avrdude returns with error.
+You can call this script also by command bash ./find\_serials.sh
+
+Dieser Script wird von only\_avrdude bei Fehler Rückkehr aufgerufen, man kann den
+Script auch mit bash ./find\_serials aufrufen.
+If at your terminal window  a bash command interpreter is running,
+you can also set the execution bit for the file and call the script directly
+with ./find\_serials.sh
+For a Windows system this scipt is useless, use the device manager of Windows instead.
+\item [baudcheck.tmp.sh] is created during the run of the build\_hex.sh script
+with a C-Preprocessor call from the baudcheck.S file.
+It is executed in the same run to give you information about the selected
+baud rate state.
+
 \end{description}
 
 \section{target selection for the optiboot Makefile}
@@ -227,7 +252,7 @@ and \ref{tab:options2}
     \hline
  LED\_START\_      & LED\_START\_   & Select a repetition count of flashing cycles for the \\
    FLASHES         &   FLASHES=3    & control LED. A count of 1 or -1 will only flash once \\
-                   &                & without a loop. Negative values will force a \\
+                   &                & without a loop. Negative values will switch off a \\
                    &                & additional check of the RX pin of the serial interface. \\
                    &                & The loop is interrupted immediately, if any incoming \\
                    &                & serial data is detected. Please note, that the start of \\
@@ -241,7 +266,12 @@ and \ref{tab:options2}
                    &                & specified count before the communication start. \\
     \hline
  LED\_DATA\_       & LED\_DATA\_    & The control LED will glow during waiting for \\
-      FLASH        &    FLASH=1     & serial input data. \\
+      FLASH        &    FLASH=1     & serial input data, if the value is 1. \\
+	           &                & If you set the variable to 4, the LED ist switch on \\
+		   &                & once at the beginning of the bootloader \\
+		   &                & So you can also see, that the bootloader has started, \\
+		   &                & but this setting to 4 with a zero LED\_START\_FLASHES \\
+		   &                & will save a lot of flash memory. \\
     \hline
  TIMEOUT\_MS       & TIMEOUT\_MS=2000 & This option specifies a time limit in ms units \\
                    &                  & for receiving boot data. After this time without \\
@@ -963,11 +993,12 @@ Boot Loader start address: 0x7E00 = 32256
 avr-size optiboot.elf
    text	   data	    bss	    dec	    hex	filename
     476	      0	      0	    476	    1dc	optiboot.elf
-Requires 1 Boot Pages, 512 Bytes each
-BOOTSZ=3
+Requires 1 Boot Pages, 512 Bytes each, which is 1.5% of Flash Memory
+BOOTSZ= 3, which means 1 Boot Pages
 avr-objdump -h -S optiboot.elf > optiboot_atmega328p.lst
 avr-objcopy -j .text -j .data -j .version --set-section-flags .version=alloc,load \
    -O ihex optiboot.elf optiboot_atmega328p.hex
+Fuse Setting: LFUSE=0xFF, HFUSE=0xDE, EFUSE=0xFD
 \end{verbatim}
 
 
@@ -1000,11 +1031,12 @@ Boot Loader start address: 0x7E00 = 32256
 avr-size optiboot.elf
    text	   data	    bss	    dec	    hex	filename
     496	      0	      0	    496	    1f0	optiboot.elf
-Requires 1 Boot Pages, 512 Bytes each
-BOOTSZ=3
+Requires 1 Boot Pages, 512 Bytes each, which is 1.5% of Flash Memory
+BOOTSZ= 3, which means 1 Boot Pages
 avr-objdump -h -S optiboot.elf > optiboot_atmega328p.lst
 avr-objcopy -j .text -j .data -j .version --set-section-flags .version=alloc,load \
    -O ihex optiboot.elf optiboot_atmega328p.hex
+Fuse Setting: LFUSE=0xFF, HFUSE=0xDE, EFUSE=0xFD
 \end{verbatim}
 
 Please note, that the software solution for the serial interface requires a little more flash memory,
@@ -1042,11 +1074,12 @@ Boot Loader start address: 0x7E00 = 32256
 avr-size optiboot.elf
    text	   data	    bss	    dec	    hex	filename
     498	      0	      0	    498	    1f2	optiboot.elf
-Requires 1 Boot Pages, 512 Bytes each
-BOOTSZ=3
+Requires 1 Boot Pages, 512 Bytes each, which is 1.5% of Flash Memory
+BOOTSZ= 3, which means 1 Boot Pages
 avr-objdump -h -S optiboot.elf > optiboot_atmega328p.lst
 avr-objcopy -j .text -j .data -j .version --set-section-flags .version=alloc,load \
  -O ihex optiboot.elf optiboot_atmega328p.hex
+Fuse Setting: LFUSE=0xFF, HFUSE=0xDE, EFUSE=0xFD
 \end{verbatim}
 
 
@@ -1081,6 +1114,7 @@ BOOTSZ=2
 avr-objdump -h -S optiboot.elf > optiboot_atmega328p.lst
 avr-objcopy -j .text -j .data -j .version --set-section-flags .version=alloc,load \
  -O ihex optiboot.elf optiboot_atmega328p.hex
+Fuse Setting: LFUSE=0xFF, HFUSE=0xDE, EFUSE=0xFD
 \end{verbatim}
 
 
@@ -1130,6 +1164,8 @@ The automatic baud rate selection is implemented by the optiboot bootloader,
 if you select a baud rate below 100 at the generation time.
 You can find more details about the automatic baud rate selection in
 subsection~\ref{sec:autobaud} at page~\pageref{sec:autobaud}.
+But you should keep in mind, that the deviation to the expected clock rate
+will also affect the application program ( if it will use a serial interface).
 
 In the following subsections I have analysed the correction of the
 RC clock frequency for some AVR examples.

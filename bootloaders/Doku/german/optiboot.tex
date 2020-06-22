@@ -51,6 +51,7 @@ automatisch in der Makefile angepasst. Für die Berechnungen werden
 einige Zwischendateien erzeugt, was nur zusammen
 mit den folgenden Linux Werkzeugen funktioniert:
 \begin{description}
+\item [bash] ein leistungsfähiger Kommandoprozessor für die Abarbeitung des Scripts. 
 \item [bc] ein einfacher Rechner, der die Eingabe- und Ausgabe-Werte
 sowohl dezimal als auch sedezimal (hex) verarbeiten kann.
 \item [cat] gibt den Inhalt von Dateien auf der Standard-Ausgabe aus.
@@ -61,24 +62,38 @@ sowohl dezimal als auch sedezimal (hex) verarbeiten kann.
 \end{description}
 
 Bisher ist die Funktion der Makefile nur mit einem Linux-System und
-unter Windows7 mit installiertem Cygwin Paket getestet.
+unter Windows10 mit installiertem Cygwin Paket zusammen mit den Arduino Paket getestet.
+Die ursprünglichen .dat Zwischendateien wurden inzwischen duech Variablen im 
+bash Script Dateien ersetzt. 
 
-Um die erzeugten Zwischendateien braucht man sich im Regelfall nicht zu kümmern. Hier
-möchte ich aber wenigstens die Namen und die Bedeutung erwähnen:
+Hier sind die Namen und die Bedeutung der Script Dateien aufgeführt.
 \begin{description}
-\item [BootPages.dat] enthält die Zahl der vom Bootloader benötigten Seiten.
-Bei Prozessoren mit Bootloader Unterstützung kann die Zahl nur 1, 2, 4 oder 8 sein und
-gibt an, das wie-vielfache der Mindest-Bootloadergröße verwendet wird.
-Bei der virtuellen Bootloader Seite kann die Zahl beliebig sein und gibt die Zahl der
-benötigten Flash-Speicherseiten an.
-\item [BOOTSZ.dat] enthält eine Zahl zwischen 0 und 3 für die Einstellung der BOOTSZ0 und BOOTSZ1 Bits.
-\item [BL\_StartAdr.dat] enthält die Startadresse des Bootloaders im sedezimal (hex) Format.
-Die Startadresse wird berechnet aus der Flash-Speichergröße des jeweiligen Zielprozessors und
-aus der Zahl der benötigten Speicherseiten.
-\item [EFUSE.dat] enthält im sedezimal Format der Wert für die efuse. Die Makefile entscheidet
- abhängig vom Zielprozessor, ob diese Datei verwendet wird.
-\item [HFUSE.dat] enthält im sedezimal Format der Wert für die hfuse. Die Makefile entscheidet
- abhängig vom Zielprozessor, ob diese Datei verwendet wird.
+\item [build\_hex.sh] erhält die Variablen von der Makefile, mit der dann ein passender
+optiboot Hex-Datei in Intel Format erzeugt wird.
+\item [program\_target] wird von build\_hex.sh aufgerufen, um die hfuse und efuse Einstellung
+zu überprüfen und zu korrigieren. Bei geänderter Anzahl der benutzten Bootpages
+müssen die BOOTSZ Bits des ATmega angepaßt werden. Die Bits liegen je nach AVR-Modell
+in dem hfuse oder efuse Byte, was die Korrektur nicht einfacher macht.
+\item [only\_avrdude.sh] enthält nur einen avrdude Aufruf mit der in der Variablen
+DUDE\_PARAMS Parameterliste. Zur Kontrolle wird der Aufruf auf dem Terminal protokolliert.
+Wenn avrdude bei der Rückkehr einen Fehler meldet, gibt der Script allgemeine Hinweise
+zur Fehlersuche aus. Bei einem Linux System wird auch nach eventuell passenden 
+seriellen Schnittstellen gesucht.
+\item [find\_serials.sh] Sucht in einem Linux System nach möglichen Namen für USB-Seriell
+Wandlern. Für diese Aufgabe gibt es passende Chips, die meist mit dem Namen /dev/ttyUSB
+beginnen. Es gibt auch Software-Emulationen auf MikroKontrollern, die eine USB-Schnittstelle
+integriert haben. Diese sind meist über einen Namen zugreifbar, der mit /dev/ttyACM beginnt.
+Es wird auch für jede gefundene Schnittstelle überprüft, ob ein Zugriff möglich ist.
+Dazu muß man als Benutzer in der Gruppe Mitglied sein, der diesen Gerät den Zugriff
+erlaubt (meist dialout).
+Dieser Script wird von only\_avrdude bei Fehler Rückkehr aufgerufen, man kann den
+Script auch mit bash ./find\_serials.sh aufrufen.
+Wenn man mit einer bash arbeitet, kann man sie ausführbar machen und direkt aufrufen
+mit ./find\_serials.sh.
+Bei Windows ist dieser Script nutzlos. Bein Windows muß man den Geräte Manager benutzen.
+\item [baudcheck.tmp.sh] wird während der Abarbeitung von build\_hex.sh durch einen
+C-Preprozessor Aufruf aus der Datei baudcheck.S erzeugt und ausgeführt, um Informationen
+über die gewählte Baudraten Einstellung zu geben.
 \end{description}
 
 \section{Zielvorgaben für optiboot Makefile}
@@ -229,11 +244,11 @@ und \ref{tab:options2}
    FLASHES         &   FLASHES=3    & für die Kontroll-LED.                            \\
                    &                & Bei 1 oder -1 wird nur einmal geblinkt ohne Wiederholung. \\
                    &                & Negative Vorgaben bewirken, daß in der Programmschleife \\
-                   &                & das RX Bit der seriellen Schnittstelle überwacht wird. \\
-                   &                & Sobald eingehende RX-Daten festgestellt werden, \\
-                   &                & wird die Schleife abgebrochen. Bitte beachten Sie, \\
-                   &                & daß das Blinken den Start des Anwenderprogramms \\
-                   &                & verzögert. \\
+                   &                & das RX Bit der seriellen Schnittstelle nicht überwacht wird. \\
+                   &                & Bei positiven Werten wird die Binkschleife sofort \\
+		   &                & abgebrochen, sobald eingehende RX-Daten festgestellt werden. \\
+                   &                & Bitte beachten Sie,daß das Blinken den Start des \\
+                   &                & Anwenderprogramms verzögert. \\
     \hline
  LED               & LED=B3         & Wählt das Port-Bit für die  Kontroll-LED. \\
                    &                & Beim Beispiel würde eine an das Bit 3 des Port B \\ 
@@ -243,6 +258,10 @@ und \ref{tab:options2}
     \hline
  LED\_DATA\_       & LED\_DATA\_    & Die Kontroll-LED leuchtet während des Wartens auf \\
       FLASH        &    FLASH=1     & Empfangsdaten der seriellen Kommunikation.\\
+	           &                & Ein Wert von 4 bewirkt, daß die LED nur beim Start \\
+		   &                & einmalig eingeschaltet wird. Hiermit kann kan auch \\
+		   &                & erkennen, daß der Bootloader gestartet wurde und \\
+		   &                & es wird viel weniger Platz im Programmspeicher verbraucht. \\
     \hline
  TIMEOUT\_MS       & TIMEOUT\_      & Diese Option gibt eine Zeitschranke in Millisekunden \\
                    &  MS=2000       & vor für den Empfang von Boot-Daten. Nach dieser Zeit\\
@@ -250,7 +269,7 @@ und \ref{tab:options2}
                    &                & Anwenderprogramm zu starten. Mögliche Werte für \\
                    &                & TIMEOUT\_MS sind 500, 1000, 2000, 4000 und 8000. \\
                    &                & Der tatsächlich mögliche Wert kann abhängig vom \\
-                   &                & Prozessor aus 2 Sekunden begrenzt sein. \\
+                   &                & Prozessor auf 2 Sekunden begrenzt sein. \\
                    &                & Wenn kein TIMEOUT\_MS angegeben wird, wird die \\
                    &                & Zeitschranke auf 1 Sekunde gesetzt. \\
     \hline
@@ -961,11 +980,12 @@ Boot Loader start address: 0x7E00 = 32256
 avr-size optiboot.elf
    text	   data	    bss	    dec	    hex	filename
     476	      0	      0	    476	    1dc	optiboot.elf
-Requires 1 Boot Pages, 512 Bytes each
-BOOTSZ=3
+Requires 1 Boot Pages, 512 Bytes each, which is 1.5% of Flash Memory
+BOOTSZ= 3, which means 1 Boot Pages
 avr-objdump -h -S optiboot.elf > optiboot_atmega328p.lst
 avr-objcopy -j .text -j .data -j .version --set-section-flags .version=alloc,load \
    -O ihex optiboot.elf optiboot_atmega328p.hex
+Fuse Setting: LFUSE=0xFF, HFUSE=0xDE, EFUSE=0xFD
 \end{verbatim}
 
 Wenn keine zusätzliche Option angegeben wird, wird eine Baudrate von 115200 mit einer Taktfrequenz von \(16 MHz\) gewählt.
@@ -998,11 +1018,12 @@ Boot Loader start address: 0x7E00 = 32256
 avr-size optiboot.elf
    text	   data	    bss	    dec	    hex	filename
     496	      0	      0	    496	    1f0	optiboot.elf
-Requires 1 Boot Pages, 512 Bytes each
-BOOTSZ=3
+Requires 1 Boot Pages, 512 Bytes each, which is 1.5% of Flash Memory
+BOOTSZ= 3, which means 1 Boot Pages
 avr-objdump -h -S optiboot.elf > optiboot_atmega328p.lst
 avr-objcopy -j .text -j .data -j .version --set-section-flags .version=alloc,load \
    -O ihex optiboot.elf optiboot_atmega328p.hex
+Fuse Setting: LFUSE=0xFF, HFUSE=0xDE, EFUSE=0xFD
 \end{verbatim}
 
 Beachten Sie bitte, daß die Software-Lösung für die serielle Schnittstelle etwas mehr flash-Speicher braucht,
@@ -1039,11 +1060,12 @@ Boot Loader start address: 0x7E00 = 32256
 avr-size optiboot.elf
    text	   data	    bss	    dec	    hex	filename
     498	      0	      0	    498	    1f2	optiboot.elf
-Requires 1 Boot Pages, 512 Bytes each
-BOOTSZ=3
+Requires 1 Boot Pages, 512 Bytes each, which is 1.5% of Flash Memory
+BOOTSZ= 3, which means 1 Boot Pages
 avr-objdump -h -S optiboot.elf > optiboot_atmega328p.lst
 avr-objcopy -j .text -j .data -j .version --set-section-flags .version=alloc,load \
  -O ihex optiboot.elf optiboot_atmega328p.hex
+Fuse Setting: LFUSE=0xFF, HFUSE=0xDE, EFUSE=0xFD
 \end{verbatim}
 
 Beim letzten Beispiel wurde die aufwendigste Methode der Baudraten-Messung
@@ -1072,11 +1094,12 @@ Boot Loader start address: 0x7C00 = 31744
 avr-size optiboot.elf
    text	   data	    bss	    dec	    hex	filename
     598	      0	      0	    598	    256	optiboot.elf
-Requires 2 Boot Pages, 512 Bytes each
-BOOTSZ=2
+Requires 2 Boot Pages, 512 Bytes each, which is 3.1% of Flash Memory
+BOOTSZ= 2, which means 2 Boot Pages
 avr-objdump -h -S optiboot.elf > optiboot_atmega328p.lst
 avr-objcopy -j .text -j .data -j .version --set-section-flags .version=alloc,load \
  -O ihex optiboot.elf optiboot_atmega328p.hex
+Fuse Setting: LFUSE=0xFF, HFUSE=0xDE, EFUSE=0xFD
 \end{verbatim}
 
 
@@ -1119,6 +1142,8 @@ Die automatische Baudraten-Anpassung wird immer dann eingebaut,
 wenn Sie bei der Erzeugung eine Baudrate unter 100 angeben.
 Näheres zur automatischen Baudraten-Anpassung finden Sie
 im Unterkapitel~\ref{sec:autobaud} aud Seite~\pageref{sec:autobaud}.
+Aber Sie sollten im Gedächtnis behalten, daß die Abweichung der Takt-Frequenz
+auch das Applikationsprogramm beeinflußt (wenn eine serielle Schnittstelle benutzt werden soll).
 
 In den folgenden Unterkapiteln werde ich einige AVR-Typen exemplarisch näher untersuchen.
 

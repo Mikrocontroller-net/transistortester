@@ -40,7 +40,10 @@ elif [ "${AVR_FAMILY}" = "attiny1634" ]  ; then
 LED="B1"
 
 elif [ "${AVR_FAMILY}" = "atmega1284" ] || [ "${AVR_FAMILY}" = "atmega32" ] ||
-     [ "${AVR_FAMILY}" = "atmega8535" ] ; then
+     [ "${AVR_FAMILY}" = "atmega8535" ] || [ "${AVR_FAMILY}" = "atmega8515" ] ; then
+LED="B0"
+
+elif [ "${AVR_FAMILY}" = "atmega162" ] ; then
 LED="B0"
 
 elif [ "${AVR_FAMILY}" = "at90can128" ] ; then
@@ -63,6 +66,9 @@ LED="B7"
 
 elif [ "${AVR_FAMILY}" = "atmega323" ] ; then
 LED="B0"
+
+elif [ "${AVR_FAMILY}" = "atmega163" ] ; then
+LED="B5"
 
 elif [ "${AVR_FAMILY}" = "atmega169" ] ; then
 LED="B5"

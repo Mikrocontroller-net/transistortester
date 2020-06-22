@@ -144,6 +144,28 @@ endif
 
 BAUD_RATE_CMD = -DBAUD_RATE=$(BAUD_RATE)
 
+# Allow some shorter Names
+ifndef SUPPORT_EEPROM
+ ifdef SUPPORT_EE
+  SUPPORT_EEPROM := $(SUPPORT_EE)
+ endif
+endif
+ifndef LED_START_FLASHES
+ ifdef LED_SF
+  LED_START_FLASHES := $(LED_SF)
+ endif
+endif
+ifndef LED_DATA_FLASH
+ ifdef LED_DF
+  LED_DATA_FLASH := $(LED_DF)
+ endif
+endif
+ifndef VIRTUAL_BOOT_PARTITION
+ ifdef VIRTUAL_BP
+  VIRTUAL_BOOT_PARTITION := $(VIRTUAL_BP)
+ endif
+endif
+
 COMMON_OPTIONS = $(BAUD_RATE_CMD) $(LED_START_FLASHES_CMD) $(BIGBOOT_CMD)
 COMMON_OPTIONS += $(LED_DATA_FLASH_CMD)
 ifdef TEST_OUTPUT
@@ -163,7 +185,6 @@ endif
 # Permit commands like "make atmega328 LED_START_FLASHES=10" to pass the
 # appropriate parameters ("-DLED_START_FLASHES=10") to gcc
 #
-
 #default source type is Assembler (S).
 # you can select a C source type with option "C_SOURCE=1"
 SOURCE_TYPE = S
@@ -262,7 +283,7 @@ CC         = $(GCCROOT)avr-gcc
 
 #
 # Include Makefile parts for different platforms, atmega168 is the first target in Makefile.m328
-all: help
+all: help help2
 include Makefile.m328
 include Makefile.m16
 include Makefile.m169
@@ -335,6 +356,7 @@ steril:
 	@$(RM_CMD) -rf *.o *.elf *.map *.sym *.tmp.sh *.dat *.ppp $(PROGRAM).hex 
 
 help:
+	@$(ECHO_CMD) "This is the build in help text for the optiboot Makefile (make help)"
 	@$(ECHO_CMD) "Important options to build optiboot:"
 	@$(ECHO_CMD) "AVR_FREQ       specifies the operating frequency (Hz) of the target AVR."
 	@$(ECHO_CMD) " "
@@ -369,8 +391,9 @@ help:
 	@$(ECHO_CMD) "would deselect the binking LED at the bootloader start and"
 	@$(ECHO_CMD) "would use a bright LED when waiting for Rx data."
 	@$(ECHO_CMD) "Type make help2 for additional options!"
+	@$(ECHO_CMD) " "
 help2:
-	@$(ECHO_CMD) "Additional options for building a optiboot:"
+	@$(ECHO_CMD) "Additional options for building a optiboot (make help2):"
 	@$(ECHO_CMD) "SOFT_UART      select a software UART solution instead of the hardware UART."
 	@$(ECHO_CMD) " "
 	@$(ECHO_CMD) "UART_RX        specifies the port for software UART input."
@@ -392,4 +415,5 @@ help2:
 	@$(ECHO_CMD) " "
 	@$(ECHO_CMD) "FORCE_RSTDISBL enables setting of the RSTDISBL bit to 0."
 	@$(ECHO_CMD) "               Otherwise compiling is aborted."
-
+pl:
+	@bash ./list_processors.sh

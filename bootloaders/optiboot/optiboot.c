@@ -392,10 +392,11 @@ void appStart(uint8_t rstFlags) __attribute__ ((naked));
  #define TEST_OUTPUT 0
 #endif
 
-#if LED_START_FLASHES < 0
- // negative count of LED_START_FLASHES means a RX Pin monitoring!
+#if LED_START_FLASHES > 0
+ // positive count of LED_START_FLASHES means a RX Pin monitoring!
  #define Check_RX 1
- #warning "LED flash loop with RX Pin monitoring!"
+#else
+ #warning "LED flash loop without RX Pin monitoring!"
 #endif
 
 #ifdef __AVR_ATmega163__
@@ -673,6 +674,7 @@ int main(void) {
  #if (LED_START_FLASHES > 1) 
   uint8_t count = LED_START_FLASHES;
   do {
+    /* count backwards */
     LED_PORT |= _BV(LEDbit);
     if (t1_delay()) goto RX_was_high;
     LED_PORT &= ~(_BV(LEDbit));
@@ -681,12 +683,14 @@ int main(void) {
  #elif (LED_START_FLASHES < -1)
   uint8_t count = LED_START_FLASHES;
   do {
+    /* count forewards */
     LED_PORT |= _BV(LEDbit);
     if (t1_delay()) goto RX_was_high;
     LED_PORT &= ~(_BV(LEDbit));
     if (t1_delay()) goto RX_was_high;
   } while (++count);
  #else
+    /* cycle only once */
     LED_PORT |= _BV(LEDbit);
     if (t1_delay()) goto RX_was_high;
     LED_PORT &= ~(_BV(LEDbit));

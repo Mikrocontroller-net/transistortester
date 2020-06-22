@@ -72,7 +72,8 @@ echo "Start building for AVR ${MCU_TARGET}:"
 
 source avr_family.sh  ; #build a name for AVR_FAMILY from MCU_TARGET
 source auto_led_pin.sh ; # find a LED preset for AVR_FAMILY
-
+# now the pin for LED should be known.
+source show_pin_nr.sh
 
 # Build of the first object file .o
 if (( 0${VIRTUAL_BOOT_PARTITION} == 1 )) ; then
@@ -164,9 +165,9 @@ rm -f ./baudcheck.tmp
 
 # Generate the final ${PROGRAM}.elf file at the right Start Address,
 # which is the base to generate the ${PROGRAM}_${TARGET}.hex and ${PROGRAM}_${TARGET}.lst files.
-echo "${Vgrau}###########################################"
+echo "${Vgrau}# # # # # # # # # # # # # # # # # # # # # #"
 echo "${Vnormal}Boot Loader start address: 0x${BL_StartAdr}${Vgrau} = `echo "ibase=16;${BL_StartAdr}" | bc`"
-echo "###########################################${Vnormal}"
+echo "# # # # # # # # # # # # # # # # # # # # # #${Vnormal}"
 c_paramf="${CFLAGS} ${COMMON_OPTIONS} ${LDSECTIONS} -Wl,--section-start=.text=0x${BL_StartAdr} ${LDFLAGS} -o ${PROGRAM}.elf ${PROGRAM}.o ${LIBS}"
   if (( ${VerboseLev} > 2 )) ; then echo "${Vgreen}avr-gcc ${c_paramf}${Vnormal}" ; fi
 avr-gcc ${c_paramf}

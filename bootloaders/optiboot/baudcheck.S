@@ -105,13 +105,13 @@ echo ---------------------------------------------------------------------------
    #endif
 
 UartMinDelay=$(( ((25*5)+(RCALL_TICS+1)*2 + LOOP_TICS) ))
-echo "SoftUART Minimum `echo "scale=0;(${fcpu} / ${UartDelay})" | bc ` Baud, Error surely less than 4% up to `echo "scale=1;(${fcpu} / $UartMinDelay / 1000)" | bc ` kBaud, Slow 15-Bit loop"
+echo "SoftUART Minimum `echo "scale=0;(${fcpu} / ${UartDelay})" | bc ` Baud, Difference surely less than 4% up to `echo "scale=1;(${fcpu} / $UartMinDelay / 1000)" | bc ` kBaud, Slow 15-Bit loop"
 
   #else		/* 8-bit delay */
 
 UartDelay=$(( ((255*3*2) + (RCALL_TICS*2)  + LOOP_TICS) ))
 UartMinDelay=$(( ((25*3)+(RCALL_TICS*2) + LOOP_TICS) ))
-echo "SoftUART Minimum `echo "scale=0;(${fcpu} / ${UartDelay})" | bc ` Baud, Error surely less than 4% up to `echo "scale=1;(${fcpu} / $UartMinDelay / 1000)" | bc ` kBaud, Fast 8-Bit loop"
+echo "SoftUART Minimum `echo "scale=0;(${fcpu} / ${UartDelay})" | bc ` Baud, Difference surely less than 4% up to `echo "scale=1;(${fcpu} / $UartMinDelay / 1000)" | bc ` kBaud, Fast 8-Bit loop"
   #endif
 
  #else		/* HW UART */
@@ -131,7 +131,7 @@ echo "SoftUART Minimum `echo "scale=0;(${fcpu} / ${UartDelay})" | bc ` Baud, Err
    #endif
   #endif
 
-echo "UART Minimum `echo "scale=0;(${fcpu} / ${UartDelay})" | bc ` Baud, Error surely less than 4% up to `echo "scale=1;(${fcpu} / (8*12500))" | bc ` kBaud"
+echo "UART Minimum `echo "scale=0;(${fcpu} / ${UartDelay})" | bc ` Baud, Difference surely less than 4% up to `echo "scale=1;(${fcpu} / (8*12500))" | bc ` kBaud"
 
  #endif
 
@@ -205,12 +205,13 @@ echo "UART Minimum `echo "scale=0;(${fcpu} / ${UartDelay})" | bc ` Baud, Error s
 delay_mul=$(( DelayMul ))
 clocks=$(( (CLOCKS_PER_BIT / DelayMul) ))
 UartDelay=$(( (((RCALL_TICS*2) + (CLOCKS_PER_BIT/DelayMul)) * DelayMul) + LOOP_TICS ))
+percent_msg=", Delay: ${clocks}*${delay_mul}, Difference=`echo "scale=2;(100*((${fcpu} / ${UartDelay})- ${bps}) ) / ${bps}"| bc `%"
  #if BAUD_RATE > 10000
-echo "BAUD RATE CHECK: Desired: ${bps},  SoftUART_Real: `echo "scale=0;(${fcpu} / ${UartDelay})" | bc `, Delay: ${clocks}*${delay_mul}, Error=`echo "scale=2;(100*((${fcpu} / ${UartDelay})- ${bps}) ) / ${bps}"| bc `%"
+echo "BAUD RATE CHECK: Desired: ${bps},  SoftUART_Real: `echo "scale=0;(${fcpu} / ${UartDelay})" | bc `${percent_msg}"
  #elif BAUD_RATE > 1000
-echo "BAUD RATE CHECK: Desired: ${bps},  SoftUART_Real: `echo "scale=1;(${fcpu} / ${UartDelay})" | bc `, Delay: ${clocks}*${delay_mul}, Error=`echo "scale=2;(100*((${fcpu} / ${UartDelay})- ${bps}) ) / ${bps}"| bc `%"
+echo "BAUD RATE CHECK: Desired: ${bps},  SoftUART_Real: `echo "scale=1;(${fcpu} / ${UartDelay})" | bc `${percent_msg}"
  #else
-echo "BAUD RATE CHECK: Desired: ${bps},  SoftUART_Real: `echo "scale=2;(${fcpu} / ${UartDelay})" | bc `, Delay: ${clocks}*${delay_mul}, Error=`echo "scale=2;(100*((${fcpu} / ${UartDelay})- ${bps}) ) / ${bps}"| bc `%"
+echo "BAUD RATE CHECK: Desired: ${bps},  SoftUART_Real: `echo "scale=2;(${fcpu} / ${UartDelay})" | bc `${percent_msg}"
  #endif
 #else
 // for hardware UART

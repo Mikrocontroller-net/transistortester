@@ -47,7 +47,10 @@ AVR_FAMILY="atmega1284"
 elif [ "${MCU_TARGET}" = "atmega16" ] || [ "${MCU_TARGET}" = "atmega16a" ] ||
    [ "${MCU_TARGET}" = "atmega32" ] || [ "${MCU_TARGET}" = "atmega32a" ] ; then
 AVR_FAMILY="atmega32"
-elif [ "${MCU_TARGET}" = "atmega8515" ] ||  [ "${MCU_TARGET}" = "atmega8535" ] ; then
+elif [ "${MCU_TARGET}" = "atmega8515" ] ; then
+AVR_FAMILY="atmega8515"
+
+elif [ "${MCU_TARGET}" = "atmega8535" ] ; then
 AVR_FAMILY="atmega8535"
 
 elif [ "${MCU_TARGET}" = "at90can32" ] ||  [ "${MCU_TARGET}" = "at90can64" ] ||
@@ -71,12 +74,12 @@ elif [ "${MCU_TARGET}" = "atmega64" ] ||  [ "${MCU_TARGET}" = "atmega64a" ] ||
    [ "${MCU_TARGET}" = "atmega128" ] ; then
 AVR_FAMILY="atmega128"
 
-elif [ "${MCU_TARGET}" = "atmega162" ] ||  [ "${MCU_TARGET}" = "atmega163" ] ||
-   [ "${MCU_TARGET}" = "atmega323" ] ; then
+elif [ "${MCU_TARGET}" = "atmega162" ] ; then
+AVR_FAMILY="atmega162"
+
+elif [ "${MCU_TARGET}" = "atmega163" ] || [ "${MCU_TARGET}" = "atmega323" ] ; then
 AVR_FAMILY="atmega323"
 
-elif [ "${MCU_TARGET}" = "atmega169" ] ||  [ "${MCU_TARGET}" = "atmega169p" ] ; then
-AVR_FAMILY="atmega169"
 
 elif [ "${MCU_TARGET}" = "atmega165" ] ||  [ "${MCU_TARGET}" = "atmega165p" ] ||
    [ "${MCU_TARGET}" = "atmega165a" ] || [ "${MCU_TARGET}" = "atmega165pa" ] || 
@@ -92,7 +95,8 @@ elif [ "${MCU_TARGET}" = "atmega3250" ] || [ "${MCU_TARGET}" = "atmega3250p" ] |
    [ "${MCU_TARGET}" = "atmega6450a" ] || [ "${MCU_TARGET}" = "atmega6450pa" ] ; then
 AVR_FAMILY="atmega6450"
 
-elif [ "${MCU_TARGET}" = "atmega329" ] || [ "${MCU_TARGET}" = "atmega329p" ] ||
+elif [ "${MCU_TARGET}" = "atmega169" ] ||  [ "${MCU_TARGET}" = "atmega169p" ] ||
+   [ "${MCU_TARGET}" = "atmega329" ] || [ "${MCU_TARGET}" = "atmega329p" ] ||
    [ "${MCU_TARGET}" = "atmega329a" ] || [ "${MCU_TARGET}" = "atmega329pa" ] ||
    [ "${MCU_TARGET}" = "atmega649" ] || [ "${MCU_TARGET}" = "atmega649p" ] ||
    [ "${MCU_TARGET}" = "atmega649a" ] ; then

@@ -275,6 +275,9 @@
  #define OPTIBOOT_CUSTOMVER 110
 #endif
 
+#if !defined(VIRTUAL_BOOT_PARTITION)
+ #define VIRTUAL_BOOT_PARTITION 0
+#endif
 
  /*
  * RAMSTART should be self-explanatory.  It's bigger on parts with a
@@ -302,7 +305,7 @@
  #define TEST_OUTPUT 0
 #endif
 
-#if LED_START_FLASHES > 0
+#if LED_START_FLASHES >= 0
  ; negative count of LED_START_FLASHES means a RX Pin monitoring!
  #define Check_RX 1
 #else
@@ -536,7 +539,7 @@ appStart:
 					; The reset cause  is in R2 and IO-Reg RESET_CAUSE
 	; application program should look to the RESET_CAUSE register directly instead
 
-#ifdef	VIRTUAL_BOOT_PARTITION
+#if	VIRTUAL_BOOT_PARTITION > 0
 	ldi	ZL, save_vect_addr/2		; // Jump to WDT vector (jmp or rjmp table)
 	eor	ZH, ZH
 #else
@@ -856,7 +859,7 @@ fill_buf:
 ee_wrlop:
      	wdr		; watchdogReset();
 	ld	r24, Y+			; *bufPtr++
- #if defined(VIRTUAL_BOOT_PARTITION)
+ #if VIRTUAL_BOOT_PARTITION > 0
 	rcall	wr_eeprom
  #else
  /* eeprom write is done only here, therefore without a rcall to save flash */
@@ -895,11 +898,13 @@ no_erase1:
         // So check that here
 	rcall	wait_flash_ready
 
-#ifdef VIRTUAL_BOOT_PARTITION
+#if VIRTUAL_BOOT_PARTITION > 0
  #if FLASHEND > 0x1ffff
   #error "Interrupt Vector Table can NOT be patched with more than 131072 byte flash!"
  #endif
+ #if VerboseLev > 2
  #warning "RESET vector will be patched!"
+ #endif
  #ifdef RAMPZ
 	eor	r3, r3		; clear r3 == no patch
 	AIN	r2, RAMPZ	; upper address bits in RAMPZ must be 0
@@ -1009,7 +1014,7 @@ wr_lop1:
 #if FLASHEND > 0x1ffff
 	AOUT	RAMPZ, r21	; save (probably)  updated RAMPZ
 #endif
-#ifdef VIRTUAL_BOOT_PARTITION
+#if VIRTUAL_BOOT_PARTITION > 0
 	; now we save the original content of the save_vect (r8:r9)
 	cp	r3, r1
 	breq	put_ok			; no patch was done
@@ -1045,7 +1050,7 @@ ck_READP:
 ee_rd_lop2:
 	sbiw	r26, 1		; length-1
 	brcs	next_adr_put_ok	;
- #ifdef VIRTUAL_BOOT_PARTITION
+ #if VIRTUAL_BOOT_PARTITION > 0
 	rcall	rd_eeprom	; Z+
  #else
   /* EEprom read is only required here without the VIRTUAL_BOOT_PARTITION */
@@ -1076,7 +1081,7 @@ flash_rd_lop:
 #endif
 #define LenDecrement 1
 
-#ifdef	VIRTUAL_BOOT_PARTITION
+#if	VIRTUAL_BOOT_PARTITION > 0
 	// Undo vector patch in bottom page so verify passes
  #undef LenDecrement 
  #define LenDecrement 2
@@ -1306,7 +1311,7 @@ gtch1:
 #endif	/* SOFT_UART */
 
 ;**********************************************************
-#if defined(VIRTUAL_BOOT_PARTITION)
+#if VIRTUAL_BOOT_PARTITION > 0
 /* Create function wr_eeprom */
 /* EEprom address is in register Z (r30,r31), data in r24 */
 /* Z is increased by 1 for every write cycle  */
@@ -1336,7 +1341,7 @@ rd_eeprom:
 #endif		/* VIRTUAL_BOOT_PARTITION */
 
 ;**********************************************************
-#if defined(VIRTUAL_BOOT_PARTITION) || defined(SUPPORT_EEPROM)
+#if (VIRTUAL_BOOT_PARTITION > 0) || defined(SUPPORT_EEPROM)
 /* Z hold the eeprom address, which is loaded to EEAR and afterwards increased by 1 */
 /* ASBIC can destroy content of register r0 */
 set_eeprom_adr:
@@ -1420,10 +1425,14 @@ boot_page_erase:
  ;	must do a page erage (page size is 16 bytes only)
   #if defined(__AVR_ATtiny1634__)
 	ldi	r20, 0x60	; the lower two bits of the page address t1634
-   #warning "4 page erase for t1634"
+   #if VerboseLev > 2
+    #warning "4 page erase for t1634"
+   #endif
   #else
 	ldi	r20, 0x30	; the lower two bits of the page address t841/t441.
-   #warning "4 page erase for t841/441"
+   #if VerboseLev > 2
+    #warning "4 page erase for t841/441"
+   #endif
   #endif
 	and	r20, r4
 	brne	no_erase4	; not a fourth page

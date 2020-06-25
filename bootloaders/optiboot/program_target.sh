@@ -235,7 +235,7 @@ fi
 if (( ${USE_Edat} == 1 ))
 then
   # correct the Bootloadersize in EFUSE
-  if (( 0${VIRTUAL_BOOT_PARTITION} == 1 ))
+  if (( 0${VIRTUAL_BOOT_PARTITION} > 0 ))
   then
     PEFUSE=`echo "obase=16;ibase=16;(0${UC_EFUSE} - (0${UC_EFUSE} % 8) ) + (${BOOTSZ}*2) + 1" | bc`
   else
@@ -272,7 +272,7 @@ then
 # Therefore both values (${PHFUSE} and ${PEFUSE}) are estimated, but
 # the right one is selected by the ${ISPFUSE}.
 
-  if (( 0${VIRTUAL_BOOT_PARTITION} == 1 ))
+  if (( 0${VIRTUAL_BOOT_PARTITION} > 0 ))
   then
     PHFUSE=`echo "obase=16;ibase=16;(${UC_HFUSE} - (${UC_HFUSE} % 8) ) + (${BOOTSZ}*2) + 1" | bc`
   else
@@ -307,7 +307,7 @@ if (( ${USE_Edat} == 0 ))
 then
   # most processors have the Bootloader bits BOOTSZ in the HFUSE.
   ISPFUSES="-e -u ${EFUSE_CMD} -U hfuse:w:0x${PHFUSE}:m -U lfuse:w:0x${LFUSE}:m"
-  if ((0${VIRTUAL_BOOT_PARTITION} == 1))
+  if ((0${VIRTUAL_BOOT_PARTITION} > 0))
   then
    ISPFLASH="-U flash:w:${PROGRAM}_${TARGET}.hex:i "
   else
@@ -319,7 +319,7 @@ fi
 if (( ${USE_Edat} == 1 ))
 then
   ISPFUSES=" -e -u -U efuse:w:0x${PEFUSE}:m -U hfuse:w:0x${HFUSE}:m -U lfuse:w:0x${LFUSE}:m"
-  if ((0${VIRTUAL_BOOT_PARTITION} == 1))
+  if ((0${VIRTUAL_BOOT_PARTITION} > 0))
   then
     ISPFLASH="-U flash:w:${PROGRAM}_${TARGET}.hex:i "
   else
@@ -369,7 +369,7 @@ then
     # Don't try the second Step, if avrdude fail!
     return ${DUDE_FAIL}
   fi
-  if (( 0${VIRTUAL_BOOT_PARTITION} == 1 ))
+  if (( 0${VIRTUAL_BOOT_PARTITION} > 0 ))
   then
     echo "##### write the optiboot to ${TARGET}"
   else

@@ -185,21 +185,21 @@ ispfuses.ppp: HFUSE.dat BOOTSZ.dat
 ifeq ($(USE_Edat), 0)
    # most processors have the Bootloader bits BOOTSZ in the HFUSE.
 	@$(ECHO_CMD) -n "-e -u $(EFUSE_CMD) -U hfuse:w:0x$(shell $(CAT_CMD) HFUSE.dat):m -U lfuse:w:0x$(LFUSE):m" > ispfuses.ppp
- ifeq ($(VIRTUAL_BOOT_PARTITION), 1)
-	@$(ECHO_CMD) -n "-U flash:w:$(PROGRAM)_$(TARGET).hex:i " > ispflash.ppp
- else
+ ifeq ($(VIRTUAL_BOOT_PARTITION), 0)
 # program bootloader and set lock bits
 	@$(ECHO_CMD) -n "-U flash:w:$(PROGRAM)_$(TARGET).hex:i -U lock:w:0xef:m" > ispflash.ppp
+ else
+	@$(ECHO_CMD) -n "-U flash:w:$(PROGRAM)_$(TARGET).hex:i " > ispflash.ppp
  endif
 endif
 
 ifeq ($(USE_Edat), 1)
 	@$(ECHO_CMD) -n "	-e -u -U efuse:w:0x$(shell $(CAT_CMD) EFUSE.dat):m -U hfuse:w:0x$(HFUSE):m -U lfuse:w:0x$(LFUSE):m" > ispfuses.ppp
- ifeq ($(VIRTUAL_BOOT_PARTITION), 1)
-	@$(ECHO_CMD) -n "-U flash:w:$(PROGRAM)_$(TARGET).hex:i " > ispflash.ppp
- else
+ ifeq ($(VIRTUAL_BOOT_PARTITION), 0)
 # program bootloader and set lock bits
 	@$(ECHO_CMD) -n "-U flash:w:$(PROGRAM)_$(TARGET).hex:i -U lock:w:0xef:m" > ispflash.ppp
+ else
+	@$(ECHO_CMD) -n "-U flash:w:$(PROGRAM)_$(TARGET).hex:i " > ispflash.ppp
  endif
 endif
 
@@ -231,26 +231,26 @@ endif
 # Therefore both values (HFUSE and EFUSE) are estimated, but
 # the right one is selected by the ispfuses.ppp file.
 
-ifeq ($(VIRTUAL_BOOT_PARTITION), 1)
-HPATCHFUSE.dat:	$(PROGRAM)_$(TARGET).hex 
-	@$(ECHO_CMD) "$(shell $(ECHO_CMD) "obase=16;ibase=16;($(UC_HFUSE) - ($(UC_HFUSE) % 8) ) + ($(BOOTSZ)*2) + 1" | $(BC_CMD))" > HPATCHFUSE.dat
-HFUSE.dat:	HPATCHFUSE.dat
-	@$(CAT_CMD) HPATCHFUSE.dat > HFUSE.dat
-else
+ifeq ($(VIRTUAL_BOOT_PARTITION), 0)
 HPATCHFUSE.dat:	$(PROGRAM)_$(TARGET).hex
 	@$(ECHO_CMD) "$(shell $(ECHO_CMD) "obase=16;ibase=16;($(UC_HFUSE) - ($(UC_HFUSE) % 8) ) + ($(BOOTSZ)*2) " | $(BC_CMD))" > HPATCHFUSE.dat
 HFUSE.dat:	HPATCHFUSE.dat
 	@$(CAT_CMD) HPATCHFUSE.dat > HFUSE.dat
+else
+HPATCHFUSE.dat:	$(PROGRAM)_$(TARGET).hex 
+	@$(ECHO_CMD) "$(shell $(ECHO_CMD) "obase=16;ibase=16;($(UC_HFUSE) - ($(UC_HFUSE) % 8) ) + ($(BOOTSZ)*2) + 1" | $(BC_CMD))" > HPATCHFUSE.dat
+HFUSE.dat:	HPATCHFUSE.dat
+	@$(CAT_CMD) HPATCHFUSE.dat > HFUSE.dat
 endif
 
-ifeq ($(VIRTUAL_BOOT_PARTITION), 1)
-EPATCHFUSE.dat:	$(PROGRAM)_$(TARGET).hex 
-	@$(ECHO_CMD) "$(shell $(ECHO_CMD) "obase=16;ibase=16;(0$(UC_EFUSE) - (0$(UC_EFUSE) % 8) ) + ($(BOOTSZ)*2) + 1" | $(BC_CMD))" > EPATCHFUSE.dat
+ifeq ($(VIRTUAL_BOOT_PARTITION), 0)
+EPATCHFUSE.dat:	$(PROGRAM)_$(TARGET).hex BOOTSZ.dat
+	@$(ECHO_CMD) "$(shell $(ECHO_CMD) "obase=16;ibase=16;(0$(UC_EFUSE) - (0$(UC_EFUSE) % 8) ) + ($(BOOTSZ)*2)" | $(BC_CMD))" > EPATCHFUSE.dat
 EFUSE.dat:	EPATCHFUSE.dat
 	@$(CAT_CMD) EPATCHFUSE.dat > EFUSE.dat
 else
-EPATCHFUSE.dat:	$(PROGRAM)_$(TARGET).hex BOOTSZ.dat
-	@$(ECHO_CMD) "$(shell $(ECHO_CMD) "obase=16;ibase=16;(0$(UC_EFUSE) - (0$(UC_EFUSE) % 8) ) + ($(BOOTSZ)*2)" | $(BC_CMD))" > EPATCHFUSE.dat
+EPATCHFUSE.dat:	$(PROGRAM)_$(TARGET).hex 
+	@$(ECHO_CMD) "$(shell $(ECHO_CMD) "obase=16;ibase=16;(0$(UC_EFUSE) - (0$(UC_EFUSE) % 8) ) + ($(BOOTSZ)*2) + 1" | $(BC_CMD))" > EPATCHFUSE.dat
 EFUSE.dat:	EPATCHFUSE.dat
 	@$(CAT_CMD) EPATCHFUSE.dat > EFUSE.dat
 endif
@@ -321,10 +321,10 @@ else
 	avrdude $(AVRDUDE_CONF) -c $(ISPTOOL) -B 200 \
               -p $(MCU_TARGET) -P $(ISPPORT) $(ISPSPEED) -q -q \
               $(shell $(CAT_CMD) ispfuses.ppp)
-   ifeq ($(VIRTUAL_BOOT_PARTITION), 1)
-	@$(ECHO_CMD) "##### write the optiboot to target $(TARGET)"
-   else
+   ifeq ($(VIRTUAL_BOOT_PARTITION), 0)
 	@$(ECHO_CMD) "##### write the optiboot to target $(TARGET) and set the lock bits"
+   else
+	@$(ECHO_CMD) "##### write the optiboot to target $(TARGET)"
    endif
 	avrdude $(AVRDUDE_CONF) -c $(ISPTOOL) -B $(BIT_CLOCK) \
               -p $(MCU_TARGET) -P $(ISPPORT) $(ISPSPEED) -D \

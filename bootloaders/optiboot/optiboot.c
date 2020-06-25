@@ -287,6 +287,10 @@
  #define OPTIBOOT_CUSTOMVER 110
 #endif
 
+#if !defined(VIRTUAL_BOOT_PARTITION)
+ #define VIRTUAL_BOOT_PARTITION 0
+#endif
+
 unsigned const int __attribute__((section(".version"))) 
 optiboot_version = 256*(OPTIBOOT_MAJVER + OPTIBOOT_CUSTOMVER) + OPTIBOOT_MINVER;
 
@@ -392,7 +396,7 @@ void appStart(uint8_t rstFlags) __attribute__ ((naked));
  #define TEST_OUTPUT 0
 #endif
 
-#if LED_START_FLASHES > 0
+#if LED_START_FLASHES >= 0
  // positive count of LED_START_FLASHES means a RX Pin monitoring!
  #define Check_RX 1
 #else
@@ -1091,7 +1095,7 @@ RX_was_high:		/* entry for detected Start bit during flashing */
         // So check that here
         boot_spm_busy_wait();
 
-#ifdef VIRTUAL_BOOT_PARTITION
+#if VIRTUAL_BOOT_PARTITION > 0
  #if FLASHEND > 8192
 /*
  * AVR with 4-byte ISR Vectors and "jmp"
@@ -1202,7 +1206,7 @@ RX_was_high:		/* entry for detected Start bit during flashing */
       /* TODO: putNch */
 #endif
         do {
-#ifdef VIRTUAL_BOOT_PARTITION
+#if VIRTUAL_BOOT_PARTITION > 0
         // Undo vector patch in bottom page so verify passes
             if (f_address == rstVect0) ch = rstVect0_sav;
             else if (f_address == rstVect1) ch = rstVect1_sav;

@@ -550,30 +550,21 @@ attiny461:
 # generic attiny261
 # let board specific change the frequency and fuses
 attiny261: TARGET := attiny261
-attiny261: override MCU_TARGET := attiny261
-attiny261: override FLASH_SIZE := 2048
-attiny261: override FLASH_PAGE_SIZE := 32
-attiny261: override BOOT_PAGE_LEN := 32
-attiny261: override VIRTUAL_BOOT_PARTITION := 1
-ifndef AVR_FREQ
-attiny261: AVR_FREQ := 8000000
-endif
-ifndef HFUSE
-# Brownout 2.7V
-attiny261: HFUSE := DD
-endif
-ifndef LFUSE
-# 8MHz internal, 6CK/14CK + 64ms
-attiny261: LFUSE := E2
-endif
-ifndef EFUSE
-# Self-programming enable
-attiny261: EFUSE := FE
-endif
+attiny261: MCU_TARGET := attiny261
+#ifndef HFUSE
+## Brownout 2.7V
+#attiny261: HFUSE := DD
+#endif
+#ifndef LFUSE
+## 8MHz internal, 6CK/14CK + 64ms
+#attiny261: LFUSE := E2
+#endif
+#ifndef EFUSE
+## Self-programming enable
+#attiny261: EFUSE := FE
+#endif
 attiny261: SOFT_UART := 1
-export
-attiny261:
-	$(SUB_MAKE) hex_file
+attiny261: hex_file
 
 
 #
@@ -582,33 +573,25 @@ attiny261:
 # generic attiny1634
 # let board specific change the frequency and fuses
 attiny1634: TARGET := attiny1634
-attiny1634: override MCU_TARGET := attiny1634
-attiny1634: override FLASH_SIZE := 16384
-attiny1634: override FLASH_PAGE_SIZE := 32
+attiny1634: MCU_TARGET := attiny1634
 # use the flash page size of tiny1634 to prevent unaligned Start-Address
 # but tiny1634 with a 32 byte page size, can only erase 4 pages (64 byte)
-attiny1634: override FLASH_ERASE_CNT = 4
-attiny1634: override BOOT_PAGE_LEN := 128
-attiny1634: override VIRTUAL_BOOT_PARTITION := 1
-ifndef AVR_FREQ
-attiny1634: AVR_FREQ := 8000000
-endif
-ifndef HFUSE
-# Brownout 2.7V
-attiny1634: HFUSE := DD
-endif
-ifndef LFUSE
-# 8MHz internal, 6CK + 16ms, no DIV8
-attiny1634: LFUSE := E2
-endif
-ifndef EFUSE
-# Self-programming enable
-attiny1634: EFUSE := FE
-endif
-attiny1634: BAUD_RATE := 57600
-export
-attiny1634:
-	$(SUB_MAKE) hex_file
+#ifndef AVR_FREQ
+#attiny1634: AVR_FREQ := 8000000
+#endif
+#ifndef HFUSE
+## Brownout 2.7V
+#attiny1634: HFUSE := DD
+#endif
+#ifndef LFUSE
+## 8MHz internal, 6CK + 16ms, no DIV8
+#attiny1634: LFUSE := E2
+#endif
+#ifndef EFUSE
+## Self-programming enable
+#attiny1634: EFUSE := FE
+#endif
+attiny1634: hex_file
 
 #
 # ATtiny4313
@@ -616,62 +599,40 @@ attiny1634:
 # generic attiny4313
 # let board specific change the frequency and fuses
 attiny4313: TARGET := attiny4313
-attiny4313: override MCU_TARGET := attiny4313
-attiny4313: override FLASH_SIZE := 4096
-attiny4313: override FLASH_PAGE_SIZE := 64
-# use the flash page size of tiny4313 to prevent unaligned Start-Address
-attiny4313: override BOOT_PAGE_LEN := 64
-attiny4313: override VIRTUAL_BOOT_PARTITION := 1
-ifndef AVR_FREQ
-attiny4313: AVR_FREQ := 8000000
-endif
-ifndef HFUSE
-# Brownout 2.7V
-attiny4313: HFUSE := DD
-endif
-ifndef LFUSE
-# 8MHz internal, 6CK + 16ms, no DIV8
-attiny4313: LFUSE := E4
-endif
-ifndef EFUSE
-# Self-programming enable
-attiny4313: EFUSE := FE
-endif
-attiny4313: BAUD_RATE := 57600
-export
-attiny4313:
-	$(SUB_MAKE) hex_file
+attiny4313: MCU_TARGET := attiny4313
+#ifndef HFUSE
+## Brownout 2.7V
+#attiny4313: HFUSE := DD
+#endif
+#ifndef LFUSE
+## 8MHz internal, 6CK + 16ms, no DIV8
+#attiny4313: LFUSE := E4
+#endif
+#ifndef EFUSE
+## Self-programming enable
+#attiny4313: EFUSE := FE
+#endif
+attiny4313: hex_file
 #
 # ATtiny2313
 ################################################
 # let board specific change the frequency and fuses
 attiny2313: TARGET := attiny2313
-attiny2313: override MCU_TARGET := attiny2313
-attiny2313: override FLASH_SIZE := 2048
-attiny2313: override FLASH_PAGE_SIZE := 32
-# use the flash page size of tiny4313 to prevent unaligned Start-Address
-attiny2313: override BOOT_PAGE_LEN := 32
-attiny2313: override VIRTUAL_BOOT_PARTITION := 1
-ifndef AVR_FREQ
-attiny2313: AVR_FREQ := 8000000
-endif
-ifndef HFUSE
-# Brownout 2.7V
-attiny2313: HFUSE := DD
-endif
-ifndef LFUSE
-# 8MHz internal, 6CK + 16ms, no DIV8
-attiny2313: LFUSE := E4
-endif
-ifndef EFUSE
-# Self-programming enable
-attiny2313: EFUSE := FE
-endif
-attiny2313: BAUD_RATE := 57600
+attiny2313: MCU_TARGET := attiny2313
+#ifndef HFUSE
+## Brownout 2.7V
+#attiny2313: HFUSE := DD
+#endif
+#ifndef LFUSE
+## 8MHz internal, 6CK + 16ms, no DIV8
+#attiny2313: LFUSE := E4
+#endif
+#ifndef EFUSE
+## Self-programming enable
+#attiny2313: EFUSE := FE
+#endif
 attiny2313: LED_START_FLASHES := 0
-export
-attiny2313:
-	$(SUB_MAKE) hex_file
+attiny2313: hex_file
 
 
 # 1MHz clocked platforms/boards
@@ -680,21 +641,19 @@ attiny2313:
 #
 
 luminet: TARGET := luminet
+luminet: MCU_TARGET := attiny84
 luminet: AVR_FREQ := 1000000
 # 1MHz internal oscillator, slowly rising power, requires AVR_FREQ set to 1000000
 luminet: LFUSE := 62
 luminet: BAUD_RATE := 9600
 luminet: LED_START_FLASHES := 0
-export
-luminet:
-	$(SUB_MAKE) attiny84
+luminet: hex_file
 
 digispark_t167: TARGET := digispark_t167
+digispark_t167: MCU_TARGET := attiny167
 digispark_t167: AVR_FREQ := 16000000
 digispark_t167: LFUSE := DF
 digispark_t167: LED := B1
 digispark_t167: BAUD_RATE := 52
-export
-digispark_t167:
-	$(SUB_MAKE) attiny167
+digispark_t167: hex_file
 

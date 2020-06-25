@@ -45,7 +45,24 @@ else
 fi
 
 
+if [ "${PROGRAM}" == "" ] ; then
+ PROGRAM="optiboot"
+fi
+if [ "${SOURCE_TYPE}" == "" ] ; then
+ SOURCE_TYPE="S"
+fi
+if [ "${SUPPORT_EEPROM}" == "" ] ; then
+ SUPPORT_EEPROM=1
+fi
+if [ "${MCU_TARGET}" == "" ] ; then
+ MCU_TARGET="${TARGET}"
+fi
+source get_avr_params.sh
+
+VersionAdr=`echo "obase=16;${FLASH_SIZE}-2" | bc`
 LIBS="-lc"
+LDSECTIONS="-Wl,--section-start=.version=0x${VersionAdr}"
+
 
 logfile="${PROGRAM}_${TARGET}.log"
 AVR_MHZ="(`echo "scale=2;${AVR_FREQ} / 1000000" | bc` Mhz)"
@@ -53,6 +70,8 @@ FREQ_OPER="Optiboot for ${Vgelb}${AVR_FREQ} Hz ${AVR_MHZ} operation${Vnormal}"
 EE_SUPPORT=" and ${Vinv}EEprom support${Vnormal} configured."
 echo "###############################" > ${logfile}
 echo "Build of ${FREQ_OPER}" >> ${logfile}
+
+echo " "
 
 if (( ${BAUD_RATE} < 100 )) ; then
  if (( 0${SUPPORT_EEPROM} == 0 )) ; then
@@ -68,22 +87,80 @@ else
  fi
 fi
 
-echo "Start building for AVR ${MCU_TARGET}:"
+echo " >>> Start building for AVR ${MCU_TARGET}:"
 
 source avr_family.sh  ; #build a name for AVR_FAMILY from MCU_TARGET
-source auto_led_pin.sh ; # find a LED preset for AVR_FAMILY
-# now the pin for LED should be known.
-source show_pin_nr.sh
+
+# set all required values and also the default values
+
+if [ "${LED_START_FLASHES}" = "" ] ; then
+  LED_START_FLASHES=3
+fi
+if [ "${TEST_OUTPUT}" = "" ] ; then
+  TEST_OUTPUT=0
+fi
+if [ "${INVERSE_UART}" = "" ] ; then
+  INVERSE_UART=0
+fi
+if [ "${BIGBOOT}" = "" ] ; then
+  BIGBOOT=0
+fi
+
+# the pin for LED should be known or set in the avr_pins/${AVR_FAMILY}.pins.
+source show_led_pin.sh
+
+OPTIMIZE="-Os -fno-split-wide-types -mrelax"
+CFLAGS="-g -Wall -Os -fno-split-wide-types -mrelax -mmcu=${MCU_TARGET} ${DEFS} -fno-diagnostics-show-caret"
+COMMON_OPTIONS="-DBAUD_RATE=${BAUD_RATE} -DLED_START_FLASHES=${LED_START_FLASHES}"
+if [ "${LED_DATA_FLASH}" != "" ] ; then
+  COMMON_OPTIONS="${COMMON_OPTIONS} -DLED_DATA_FLASH=${LED_DATA_FLASH}"
+fi
+if [ "${TIMEOUT_MS}" != "" ] ; then
+  COMMON_OPTIONS="${COMMON_OPTIONS} -DTIMEOUT_MS=${TIMEOUT_MS}"
+fi
+if [ "${OSCCAL_CORR}" != "" ] ; then
+  COMMON_OPTIONS="${COMMON_OPTIONS} -DTIMEOUT_MS=${OSCCAL_CORR}"
+fi
+XTRA_OPTIONS="-DSUPPORT_EEPROM=${SUPPORT_EEPROM}"
+if (( ${TEST_OUTPUT} != 0 )) ; then
+  XTRA_OPTIONS="${XTRA_OPTIONS} -DTEST_OUTPUT=1"
+fi
+if (( ${INVERSE_UART} != 0 )) ; then
+  XTRA_OPTIONS="${XTRA_OPTIONS} -DINVERSE_UART=1"
+fi
+if (( ${BIGBOOT} != 0 )) ; then
+  XTRA_OPTIONS="${XTRA_OPTIONS} -DBIGBOOT=${BIGBOOT}"
+fi
+if [ "${FORCE_WATCHDOG}" != "" ] ; then
+  XTRA_OPTIONS="${XTRA_OPTIONS} -DFORCE_WATCHDOG=1"
+fi
+if [ "${FORCE_RSTDISBL}" != "" ] ; then
+  XTRA_OPTIONS="${XTRA_OPTIONS} -DFORCE_RSTDISBL=1"
+fi
+if [ "${UART}" == "" ] ; then
+UART=0
+fi
+if (( ${UART} > ${my_uarts} )) && (( ${my_uarts} > 0 )); then
+  max_uart_nr=`echo "${my_uarts} - 1" | bc`
+  echo "${MPU_TARGET} has only ${my_uarts} UARTs, UART set to ${max_uart_nr}"
+  UART=${max_uart_nr}
+fi
+source show_rx_pin.sh
+source show_tx_pin.sh
+
+LDFLAGS="-Wl,--relax -nostartfiles -nostdlib"
+LDSECTIONS="-Wl,--section-start=.version=0x`echo "obase=16;${FLASH_SIZE}-2" | bc`"
 
 # Build of the first object file .o
-if (( 0${VIRTUAL_BOOT_PARTITION} == 1 )) ; then
- if (( 0${save_vect_num} == 0 )) ; then
-c_params="${CFLAGS} ${COMMON_OPTIONS} -DVIRTUAL_BOOT_PARTITION -DLED=p${LED} -DUART=0${UART} -DSOFT_UART=0${SOFT_UART} -DUART_RX=p${UART_RX} -DUART_TX=p${UART_TX} -DF_CPU=${AVR_FREQ} -DHFUSE=hex${HFUSE} -DLFUSE=hex${LFUSE} -DBOOT_PAGE_LEN=${BOOT_PAGE_LEN} -DVerboseLev=${VerboseLev} -c -o ${PROGRAM}.o ${PROGRAM}.${SOURCE_TYPE}"
+if (( 0${VIRTUAL_BOOT_PARTITION} > 0 )) ; then
+ FLASH_ERASE_CNT=${VIRTUAL_BOOT_PARTITION}
+ if [ "${save_vect_num}" = "" ] ; then
+c_params="${CFLAGS} ${COMMON_OPTIONS} ${XTRA_OPTIONS} -DVIRTUAL_BOOT_PARTITION=${VIRTUAL_BOOT_PARTITION}  -DLED=p${LED} -DUART=0${UART} -DSOFT_UART=0${SOFT_UART} -DUART_RX=p${UART_RX} -DUART_TX=p${UART_TX} -DF_CPU=${AVR_FREQ} -DHFUSE=hex${HFUSE} -DLFUSE=hex${LFUSE} -DBOOT_PAGE_LEN=${BOOT_PAGE_LEN} -DVerboseLev=${VerboseLev} -c -o ${PROGRAM}.o ${PROGRAM}.${SOURCE_TYPE}"
  else
-c_params="${CFLAGS} ${COMMON_OPTIONS} -DVIRTUAL_BOOT_PARTITION -Dsave_vect_num=${save_vect_num} -DLED=p${LED} -DUART=0${UART} -DSOFT_UART=0${SOFT_UART} -DUART_RX=p${UART_RX} -DUART_TX=p${UART_TX} -DF_CPU=${AVR_FREQ} -DHFUSE=hex${HFUSE} -DLFUSE=hex${LFUSE} -DBOOT_PAGE_LEN=${BOOT_PAGE_LEN} -DVerboseLev=${VerboseLev} -c -o ${PROGRAM}.o ${PROGRAM}.${SOURCE_TYPE}"
+c_params="${CFLAGS} ${COMMON_OPTIONS} ${XTRA_OPTIONS} -DVIRTUAL_BOOT_PARTITION=${VIRTUAL_BOOT_PARTITION}  -Dsave_vect_num=${save_vect_num} -DLED=p${LED} -DUART=0${UART} -DSOFT_UART=0${SOFT_UART} -DUART_RX=p${UART_RX} -DUART_TX=p${UART_TX} -DF_CPU=${AVR_FREQ} -DHFUSE=hex${HFUSE} -DLFUSE=hex${LFUSE} -DBOOT_PAGE_LEN=${BOOT_PAGE_LEN} -DVerboseLev=${VerboseLev} -c -o ${PROGRAM}.o ${PROGRAM}.${SOURCE_TYPE}"
  fi
 else
-c_params="${CFLAGS} ${COMMON_OPTIONS} -DLED=p${LED} -DUART=0${UART} -DSOFT_UART=0${SOFT_UART} -DUART_RX=p${UART_RX} -DUART_TX=p${UART_TX} -DF_CPU=${AVR_FREQ} -DHFUSE=hex${HFUSE} -DLFUSE=hex${LFUSE} -DBOOT_PAGE_LEN=${BOOT_PAGE_LEN} -DVerboseLev=${VerboseLev} -c -o ${PROGRAM}.o ${PROGRAM}.${SOURCE_TYPE}"
+c_params="${CFLAGS} ${COMMON_OPTIONS} ${XTRA_OPTIONS} -DLED=p${LED} -DUART=0${UART} -DSOFT_UART=0${SOFT_UART} -DUART_RX=p${UART_RX} -DUART_TX=p${UART_TX} -DF_CPU=${AVR_FREQ} -DHFUSE=hex${HFUSE} -DLFUSE=hex${LFUSE} -DBOOT_PAGE_LEN=${BOOT_PAGE_LEN} -DVerboseLev=${VerboseLev} -c -o ${PROGRAM}.o ${PROGRAM}.${SOURCE_TYPE}"
 fi
 
   if (( ${VerboseLev} > 1 )) ; then echo "${Vgreen}avr-gcc ${c_params}${Vnormal}"; fi
@@ -101,7 +178,7 @@ fi
 #  After computing the required size (and the possible relocation address),
 #  This x.elf is removed later.
 
-c_paramsx="${CFLAGS} ${COMMON_OPTIONS} ${LDSECTIONS} ${LDFLAGS} -o ${PROGRAM}x.elf ${PROGRAM}.o ${LIBS}"
+c_paramsx="${CFLAGS} ${COMMON_OPTIONS} ${XTRA_OPTIONS} ${LDSECTIONS} ${LDFLAGS} -o ${PROGRAM}x.elf ${PROGRAM}.o ${LIBS}"
 
 if (( ${VerboseLev} > 3 )) ; then echo "${Vgreen}avr-gcc ${c_paramsx}${Vnormal}" ; fi
 avr-gcc ${c_paramsx}
@@ -125,7 +202,7 @@ fi
 export prog_size=`avr-size -C ${PROGRAM}x.elf | grep "Program:" | cut -c 10-16`
 export pg_anz=`echo "${prog_size}/${BOOT_PAGE_LEN}+1" | bc`
 
-if (( 0${VIRTUAL_BOOT_PARTITION} == 1 )) ; then
+if (( 0${VIRTUAL_BOOT_PARTITION} > 0 )) ; then
  export BootPages=`echo "( ${prog_size}/${FLASH_PAGE_SIZE}/${FLASH_ERASE_CNT} +1) * ${FLASH_ERASE_CNT}" | bc`
 else
  export BootPages=`echo "${pg_anz} + (${pg_anz}==3 ) + (${pg_anz}==5)*3 + (${pg_anz}==6)*2 + (${pg_anz} == 7)" | bc`
@@ -134,7 +211,7 @@ fi
 
 # With the  BootPages and the ${BOOT_PAGE_LEN} or ${FLASH_PAGE_SIZE} we can compute the 
 # Start Address BL_StartAdr of the bootloader depending on the ${FLASH_SIZE} 
-if (( 0${VIRTUAL_BOOT_PARTITION} == 1 )) ; then
+if (( 0${VIRTUAL_BOOT_PARTITION} > 0 )) ; then
  export BL_StartAdr=`echo "obase=16;${FLASH_SIZE} - (${BootPages}*${FLASH_PAGE_SIZE})" | bc`
 else
  export BL_StartAdr=`echo "obase=16;${FLASH_SIZE} - (${BootPages}*${BOOT_PAGE_LEN})" | bc` 
@@ -187,7 +264,7 @@ else
  echo " avr-size run : FAILED!" >> ${logfile}
 fi
 
-if (( 0${VIRTUAL_BOOT_PARTITION} == 1 )) ; then
+if (( 0${VIRTUAL_BOOT_PARTITION} > 0 )) ; then
   RelVal=`echo "scale=1;${BootPages}*${FLASH_PAGE_SIZE}*100/${FLASH_SIZE}" | bc`
   RelMsg=`echo ", which is ${RelVal}% of Flash Memory"`
   size2know=`echo "${BootPages} * ${FLASH_PAGE_SIZE}" | bc`

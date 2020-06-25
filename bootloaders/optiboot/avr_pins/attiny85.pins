@@ -1,6 +1,7 @@
 # Pinbelegung des ATtiny85/45   8p-PDIP 8pSOIC 8pTSSOP 20p-QFN 20p-QFN
-# Aufbau Spalte1-3 Pinname <Tab> Feld 2 Gehäuse-Pin <Tab> Alternative Bedeutung <Tab> Board Pin-Nr.
-# 
+A# Aufbau Spalte1-3 Pinname <Tab> Feld 2 Gehäuse-Pin <Tab> Alternative Bedeutung <Tab> Board Pin-Nr.
+# dahinter gibt es noch eine Spalte für die Pin-Nummern,
+# die für Software-UADR verwendet werden sollen 
 pB5	1-PDIP8 1-QFN20	/RESET PCINT5 ADC0 dW	-
 pB3	2-PDIP8 2-QFN20	PCINT3 XTAL1 CLKI /OC1B ADC3	-
 p..	4-QFN20	DNC	-
@@ -11,13 +12,14 @@ p..	7-QFN20	DNC	-
 p-.	4-PDIP8 8-QFN20	GND	-
 p..	9-QFN20	DNC	-
 p..	10-QFN20	DNC	-
-pB0	5-PDIP8 11-QFN20	MOSI DI SDA AIN0 OC0A /OC1A AREF PCINT0	-
-pB1	6-PDIP8 12-QFN20	MISO DO AIN1 OC0B OC1A PCINT1	-
+pB0	5-PDIP8 11-QFN20	MOSI DI SDA AIN0 OC0A /OC1A AREF PCINT0	-	RXD
+pB1	6-PDIP8 12-QFN20	MISO DO AIN1 OC0B OC1A PCINT1	-	TXD
 p..	13-QFN20	DNC	-
-pB2	7-PDIP8 14-QFN20	SCK USCK SCL ADC1 T0 INT0 PCINT2	-
+pB2	7-PDIP8 14-QFN20	SCK USCK SCL ADC1 T0 INT0 PCINT2	-	LED
 p+.	8-PDIP8 15-QFN20	VCC	-
 p..	16-QFN20	DNC	-
 p..	17-QFN20	DNC	-
 p..	18-QFN20	DNC	-
 p..	19-QFN20	DNC	-
 p..	20-QFN20	DNC	-
+

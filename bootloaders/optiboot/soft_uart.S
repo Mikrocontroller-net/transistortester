@@ -188,7 +188,7 @@ PUT_CH :	/*  void putch(char ch) */
    #if	SOFT_UART_TX_PORT < (0x40 + __SFR_OFFSET)
 	in	r23, _SFR_IO_ADDR(SOFT_UART_TX_PORT)
    #else
-	lds	r23, _SFR_MEM_ADR(SOFT_UART_TX_PORT)
+	lds	r23, _SFR_MEM_ADDR(SOFT_UART_TX_PORT)
    #endif
   #endif
  #endif
@@ -222,7 +222,7 @@ PUT_LOP :
 	rjmp	TX_IS_SET		; 1+2+2 = 5
   #else
 	cbr	r23, SOFT_UART_TX_BIT	; 1+1
-	sts	_SFR_MEM_ADR(SOFT_UART_TX_PORT), r23	; 1+1+2 #### set Port Bit to 0
+	sts	_SFR_MEM_ADDR(SOFT_UART_TX_PORT), r23	; 1+1+2 #### set Port Bit to 0
 	rjmp	TX_IS_SET		; 1+1+2+2 = 6!!!!
   #endif
  #endif

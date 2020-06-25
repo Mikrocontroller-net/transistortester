@@ -5,12 +5,14 @@
 #a run of avr_family.sh is required to build the family name
 
 if [ "${LED}" != "" ] ; then
+ if (( ${VerboseLev} > 3 )) ; then echo "auto_led.sh return with LED=${LED}" ; fi
  return
 fi
 #LED is undefined!
 
 # first check, if a LED Pin is required
-if (( 0${LED_START_FLASHES} == 0 )) && (( 0${LED_DATA_FLASH} == 0 )) ; then
+if (( ${LED_START_FLASHES}0 == 0 )) && (( ${LED_DATA_FLASH}0 == 0 )) ; then
+ if (( ${VerboseLev} > 3 )) ; then echo "auto_led.sh return with no LED required" ; fi
  return ; # No setup for LED Port and Pin required
 fi
 #set to a default value, according to the processor
@@ -88,6 +90,6 @@ else
 return
 fi
  # LED was unset before and should be set now. Otherwise is the AVR-ID not found!
-echo "LED is set to ${LED} ${Vgrau}by auto_led.sh for processor ${MCU_TARGET}${Vnormal}"
+ if (( ${VerboseLev} > 2 )) ; then echo "LED is set to ${LED} ${Vgrau}by auto_led.sh for processor ${MCU_TARGET}${Vnormal}" ; fi
 
 

@@ -28,6 +28,10 @@
  #define SOFT_UART 0
 #endif
 
+#ifndef VIRTUAL_BOOT_PARTITION
+ #define VIRTUAL_BOOT_PARTITION 0
+#endif
+
 
 #include <avr/io.h>
 #include "short_port_codes.h"
@@ -452,8 +456,8 @@
 /* Sanguino support (and other 40pin DIP cpus) */
 #if defined(__AVR_ATmega164A__) || defined(__AVR_ATmega164P__) || \
     defined(__AVR_ATmega164PA__) || \
-    defined(__AVR_ATmega324__) || defined(__AVR_ATmega324P__) || \
-    defined(__AVR_ATmega324PA__) || \
+    defined(__AVR_ATmega324__) || defined(__AVR_ATmega324A__) || \
+    defined(__AVR_ATmega324P__) || defined(__AVR_ATmega324PA__) || \
     defined(__AVR_ATmega644__) || defined(__AVR_ATmega644P__) || \
     defined(__AVR_ATmega644A__) || defined(__AVR_ATmega644PA__) || \
     defined(__AVR_ATmega1284__) || defined(__AVR_ATmega1284P__) || \
@@ -1123,7 +1127,7 @@
 #endif
 
 /* Virtual boot partition support */
-#ifdef VIRTUAL_BOOT_PARTITION
+#if VIRTUAL_BOOT_PARTITION > 0
  #define rstVect0_sav (*(uint8_t*)(RAMSTART+SPM_PAGESIZE+4))
  #define rstVect1_sav (*(uint8_t*)(RAMSTART+SPM_PAGESIZE+5))
  #define saveVect0_sav (*(uint8_t*)(RAMSTART+SPM_PAGESIZE+6))
@@ -1164,22 +1168,22 @@
 
  #if !defined (save_vect_num)
   #if (defined (SPM_RDY_vect_num)) && ((SPM_RDY_vect_num * Vect2Byte) < SPM_PAGESIZE)
-   #ifndef NO_WARNING
+   #if !(defined(NO_WARNING)) && (VerboseLev > 3)
     #warning "SPM_RDY_vect_num is selected as save_vect_num for virtual boot partition!"
    #endif
    #define save_vect_num (SPM_RDY_vect_num)
   #elif (defined (EE_RDY_vect_num)) && ((EE_RDY_vect_num * Vect2Byte) < SPM_PAGESIZE)
-   #ifndef NO_WARNING
+   #if !(defined(NO_WARNING)) && (VerboseLev > 3)
     #warning "EE_RDY_vect_num is selected as save_vect_num for virtual boot partition!"
    #endif
    #define save_vect_num (EE_RDY_vect_num)
   #elif (defined (WDT_vect_num)) && ((WDT_vect_num * Vect2Byte) < SPM_PAGESIZE)
-   #ifndef NO_WARNING
+   #if !(defined(NO_WARNING)) && (VerboseLev > 3)
     #warning "WDT_vect_num is selected as save_vect_num for virtual boot partition!"
    #endif
    #define save_vect_num (WDT_vect_num)
   #elif (defined (UART_TX_vect_num)) && ((UART_TX_vect_num * Vect2Byte) < SPM_PAGESIZE)
-   #ifndef NO_WARNING
+   #if !(defined(NO_WARNING)) && (VerboseLev > 3)
     #warning "UART_TX_vect_num is selected as save_vect_num for virtual boot partition!"
    #endif
    #define save_vect_num (UART_TX_vect_num)

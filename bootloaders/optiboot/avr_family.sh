@@ -3,6 +3,8 @@
 # avr_family.sh build a family name for different pin equal MCU_TARGET
 
 #set to a default value, according to the processor
+# a explicit entry is only required if a group has more than one processor
+# with identical pin layout
 
 if [ "${MCU_TARGET}" = "attiny84" ] ||  [ "${MCU_TARGET}" = "attiny44" ] ||
    [ "${MCU_TARGET}" = "attiny24" ] ||  [ "${MCU_TARGET}" = "attiny84a" ] || 
@@ -31,13 +33,10 @@ elif [ "${MCU_TARGET}" = "attiny4313" ] ||  [ "${MCU_TARGET}" = "attiny2313" ] |
    [ "${MCU_TARGET}" = "attiny4313a" ] ||  [ "${MCU_TARGET}" = "attiny2313a" ] ; then
 AVR_FAMILY="attiny4313"
 
-elif [ "${MCU_TARGET}" = "attiny1634" ]  ; then
-AVR_FAMILY="attiny1634"
-
-elif [ "${MCU_TARGET}" = "atmega164a" ] || [ "${MCU_TARGET}" = "atmega164p" ] ||
-   [ "${MCU_TARGET}" = "atmega164pa" ]  || 
-   [ "${MCU_TARGET}" = "atmega324" ]    || [ "${MCU_TARGET}" = "atmega324p" ] || 
-   [ "${MCU_TARGET}" = "atmega324pa" ]  || 
+elif [ "${MCU_TARGET}" = "atmega164" ] || [ "${MCU_TARGET}" = "atmega164a" ] ||
+   [ "${MCU_TARGET}" = "atmega164p" ] || [ "${MCU_TARGET}" = "atmega164pa" ]  || 
+   [ "${MCU_TARGET}" = "atmega324" ] || [ "${MCU_TARGET}" = "atmega324a" ] ||
+   [ "${MCU_TARGET}" = "atmega324p" ] || [ "${MCU_TARGET}" = "atmega324pa" ]  || 
    [ "${MCU_TARGET}" = "atmega644" ]    || [ "${MCU_TARGET}" = "atmega644p" ] || 
    [ "${MCU_TARGET}" = "atmega644a" ]   || [ "${MCU_TARGET}" = "atmega644pa" ] || 
    [ "${MCU_TARGET}" = "atmega1284" ]   || [ "${MCU_TARGET}" = "atmega1284p" ] ||
@@ -47,11 +46,6 @@ AVR_FAMILY="atmega1284"
 elif [ "${MCU_TARGET}" = "atmega16" ] || [ "${MCU_TARGET}" = "atmega16a" ] ||
    [ "${MCU_TARGET}" = "atmega32" ] || [ "${MCU_TARGET}" = "atmega32a" ] ; then
 AVR_FAMILY="atmega32"
-elif [ "${MCU_TARGET}" = "atmega8515" ] ; then
-AVR_FAMILY="atmega8515"
-
-elif [ "${MCU_TARGET}" = "atmega8535" ] ; then
-AVR_FAMILY="atmega8535"
 
 elif [ "${MCU_TARGET}" = "at90can32" ] ||  [ "${MCU_TARGET}" = "at90can64" ] ||
    [ "${MCU_TARGET}" = "at90can128" ] ; then
@@ -73,9 +67,6 @@ AVR_FAMILY="atmega32u4"
 elif [ "${MCU_TARGET}" = "atmega64" ] ||  [ "${MCU_TARGET}" = "atmega64a" ] ||
    [ "${MCU_TARGET}" = "atmega128" ] ; then
 AVR_FAMILY="atmega128"
-
-elif [ "${MCU_TARGET}" = "atmega162" ] ; then
-AVR_FAMILY="atmega162"
 
 elif [ "${MCU_TARGET}" = "atmega163" ] || [ "${MCU_TARGET}" = "atmega323" ] ; then
 AVR_FAMILY="atmega323"
@@ -123,9 +114,10 @@ elif [ "${MCU_TARGET}" = "atmega48" ] || [ "${MCU_TARGET}" = "atmega48p" ] ||
    [ "${MCU_TARGET}" = "atmega328p" ] ; then
 AVR_FAMILY="atmega328"
 else
-echo "Warning, ${MCU_TARGET} is not found by avr_family.sh"
-AVR_FAMILY="unknown"
+  if (( ${VerboseLev} > 3 )) ; then echo "Warning, no AVR_FAMILY found for ${MCU_TARGET} by avr_family.sh" ; fi
+  AVR_FAMILY="${MCU_TARGET}"
 fi
+if (( ${VerboseLev} > 3 )) ; then echo "AVR_FAMILY set to ${AVR_FAMILY} for ${MCU_TARGET} in avr_family.sh" ; fi
 
 
 

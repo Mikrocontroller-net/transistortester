@@ -75,7 +75,7 @@ optiboot:
 	rcall	watchdogConfig		; WATCHDOG_OFF (or _4S if FORCE_WATCHDOG)
     1e1a:	dd d0       	rcall	.+442    	; 0x1fd6 <watchdogConfig>
 
-#ifdef	VIRTUAL_BOOT_PARTITION
+#if	VIRTUAL_BOOT_PARTITION > 0
 	ldi	ZL, save_vect_addr/2		; // Jump to WDT vector (jmp or rjmp table)
 	eor	ZH, ZH
 #else
@@ -494,7 +494,7 @@ ee_wrlop:
     1eea:	a8 95       	wdr
 	ld	r24, Y+			; *bufPtr++
     1eec:	89 91       	ld	r24, Y+
- #if defined(VIRTUAL_BOOT_PARTITION)
+ #if VIRTUAL_BOOT_PARTITION > 0
 	rcall	wr_eeprom
  #else
  /* eeprom write is done only here, therefore without a rcall to save flash */
@@ -636,7 +636,7 @@ ee_rd_lop2:
     1f32:	11 97       	sbiw	r26, 0x01	; 1
 	brcs	next_adr_put_ok	;
     1f34:	50 f0       	brcs	.+20     	; 0x1f4a <next_adr_put_ok>
- #ifdef VIRTUAL_BOOT_PARTITION
+ #if VIRTUAL_BOOT_PARTITION > 0
 	rcall	rd_eeprom	; Z+
  #else
   /* EEprom read is only required here without the VIRTUAL_BOOT_PARTITION */
@@ -851,7 +851,7 @@ gtch1:
 
 00001fa0 <set_eeprom_adr>:
 ;**********************************************************
-#if defined(VIRTUAL_BOOT_PARTITION) || defined(SUPPORT_EEPROM)
+#if (VIRTUAL_BOOT_PARTITION > 0) || defined(SUPPORT_EEPROM)
 /* Z hold the eeprom address, which is loaded to EEAR and afterwards increased by 1 */
 /* ASBIC can destroy content of register r0 */
 set_eeprom_adr:
@@ -922,7 +922,7 @@ boot_page_erase:
 ;	rcall	wait_flash_ready
     	movw	ZL, r4		; __boot_page_erase_short((uint16_t)(void*)address)
     1fc6:	f2 01       	movw	r30, r4
-   #warning "4 page erase for t841/441"
+   #endif
   #endif
 	and	r20, r4
 	brne	no_erase4	; not a fourth page
@@ -985,10 +985,10 @@ watchdogConfig:
 ; FORCE_WATCHDOG=
 ; LED_START_FLASHES=0
 ; LED_DATA_FLASH=
-; LED=
-; UART=
+; LED=B5
+; UART=0
 ; SOURCE_TYPE=S
 ; SUPPORT_EEPROM=1
 ; MCU_TARGET = atmega8
-; AVR_FREQ= 16000000 
+; AVR_FREQ= 16000000
 ; BAUD_RATE=56

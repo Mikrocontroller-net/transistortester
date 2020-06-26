@@ -8,7 +8,7 @@
 # You can convert the name of the target processor in MCI_TARGET to
 # AVR_FAMILY with avr_family.sh .
 
-if (( ${LED_START_FLASHES} == 0 )) && (( ${LED_DATA_FLASH} == 0)) ; then
+if (( ${LED_START_FLASHES}0 == 0 )) && (( ${LED_DATA_FLASH}0 == 0 )) ; then
   echo "${Vgrau}LED-Pin not used!${Vnormal}"
 else
   if [ "${LED}" = "" ] ; then

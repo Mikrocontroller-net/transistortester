@@ -9,7 +9,7 @@ if (( 0${VerboseLev} == 0 )) ; then
   VerboseLev=2
 fi
 
-# wITH_COLORS=1, color + bold + reverse is use to format the screen output
+# WITH_COLORS=1, color + bold + reverse is use to format the screen output
 # WITH_COLORS=0, unformatted output to the scrrenn
 if (( 0${WITH_COLORS} == 0 )) ; then
   WITH_COLORS=1

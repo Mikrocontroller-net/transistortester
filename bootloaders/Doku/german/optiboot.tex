@@ -44,12 +44,114 @@ der Wert 0 den acht-fachen Speicherbereich vor.
 Die Tabelle~\ref{tab:bootsz} auf Seite~\pageref{tab:bootsz} gibt einen
 Überblick für verschiedene Zielprozessoren.
 
+\section{Eigenschaften der Assemblerversion von optiboot}
+
+Um viele Fallstricke bei der Erzeugung eines lauffähigen Bootloaders zu umgehen,
+wurde die Erzeugung der Bootloader Datei weitgehend automatisiert.
+Zusätzlich werden Einstellungen auch geprüft und die Erzeugung mit
+einer entsprechenden Fehlermeldung abgebrochen,
+wenn beispielweise die gewählte Betriebsfrequenz (AVR\_FREQ) nicht zu der
+mit den Fuses (CKSEL,CKDIV8) eingestellten Möglichkeiten für den Takt paßt.
+Ein Empfang von Programmdaten für optiboot ist derzeit nur über eine serielle Schnittstelle möglich.\\
+
+Hier sind einige der Fähigkeiten aufgelistet:
+\begin{itemize}
+
+\item {Unterstützt das Laden von Daten in den EEprom Speicher.}
+
+\item {Passt in den meisten Fällen in 512 Byte Flash-Speicher.}
+
+\item {Die Anpassung der Programmgröße und die Änderung der notwendigen Fuses wird automatisch vorgenommen.}
+
+\item {Die von der Programmgröße und dem AVR Modell abhängige Startaddresse wird
+	automatisch berechnet und auf dem Bildschirm angezeigt.}
+
+\item {Alle beim jeweiligen AVR-Prozessor vorhandenen seriellen Schnittstellen
+	können frei gewählt werden. Als Standard wird immer das erste UART
+	benutzt.}
+
+\item {Kann die serielle Schnittstelle über Software emulieren.
+	Damit werden auch ATtiny Prozessoren ohne UART unterstützt.
+	Außerdem können die TX und RX Pins bei SOFT\_UART völlig frei gewählt werden.}
+
+\item {Kann auch für AVRs ohne Bootloader Unterstützung benutzt werden.\\
+	Diese VIRTUAL\_BOOT\_PARTITION Fähigkeit kann natürlich auch
+	für AVRs benutzt werden, die die Bootloader Unterstützung besitzen.
+	Das optiboot Programm wird dabei größer, kann aber dann auf jeder
+	Flash-Speicher Seite starten.}
+
+\item {Unterstützt eine große Zahl von AVRs, wobei fast alle auf Funktion getestet wurden.}
+
+\item {Läßt eine angeschlossene LED standardmäßig drei mal blinken (LED\_START\_FLASHES=3).
+	Bei eintreffenden seriellen Daten wird das Blinken aber sofort abgebrochen.}
+
+\item {Anstelle des LED-Blinkens beim Start kann man auch die LED aufleuchten lassen, wenn 
+	auf serielle Daten gewartet wird (LED\_DATA\_FLASH=1).
+       Auch ein Dauerleuchten der LED kann mit LED\_DATA\_FLASH=4 gewählt werden.
+       Dabei geht die LED erst durch den Watchdog-Reset wieder aus.}
+
+\item {Kann eine automatische Baudraten-Anpassung vornehmen.
+	Dabei wird die Baudzeit aus dem ersten empfangenen Datenbyte gemessen. 
+	Verschiedene Methoden der Baudzeit-Messung können dabei ausgewählt werden.
+	Wenn der so konfigurierte optiboot noch in 512 Byte Flash passen soll,
+	muß die LED Blink Funktion beim Programmstart abgewählt werden.}
+
+\item {Bei der SOFT\_UART Lösung kann die serielle Kommunikation auch über nur einen AVR Pin 
+	durchgeführt werden. Bei Benutzung des Hardware UARTs ist das nicht sinnvoll, da RXD und TXD Pin
+	hier fest vergeben sind.}
+
+\item {Für die Erzeugung des optiboot Bootloaders können wahlweise auch angepaßte C-Quellen
+	benutzt werden. Die meisten Funktionen sind auch hier möglich.
+	Natürlich wird das erzeugte optiboot Programm größer!}
+
+\item {Die Länge des erzeugten Programms ist nur abhängig vom gewählten AVR-Prozessor
+	und den ausgesuchten Optionen.
+	Die Version des avr-gcc Kompilers spielt keine Rolle wenn die Assembler Quellen benutzt werden.
+	Dies macht eine nachträgliche Kontrolle (Verify) des installierten Bootloaders
+	einfacher, selbst mit einem anderen PC.}
+
+\item {Unterstützt die Anpassung der Oszillator-Frequenz für den AVR internen RC-Oszillator.}
+
+\item {Die Länge der Bildschirmausgabe bei der Erzeugung von optiboot kann mit der Systemvariablen
+	VerboseLev verändert werden. Der Wert kann zwischen 1 und 4 liegen, wobei 2 der Standardwert ist.}
+
+\item {Die Bildschirmausgabe kann mit der Systemvariablen WITH\_COLORS=1 bunter gestaltet werden.
+	Mit WITH\_COLORS=2 wird reiner Text ausgegeben}
+
+\item {Die Erzeugung des optiboot Programms wird in einer Bash Script Datei gesteuert, wobei die
+	Text-Datei avr\_params.def die notwendigen Daten für alle unterstützten AVR-Prozessoren liefert.
+	In dieser avr\_params.def Datei sind auch für jeden unterstützten Prozessor Standard-Werte
+	für die Fuses, Arbeitsfrequenz und Baudrate festgelegt.}
+
+\item {Die für die jeweiligen Prozessoren verfügbaren Pinbelegungen findet die Script Datei 
+	in dem avr\_pins Verzeichnis in einer passenden Datei. Hier werden bei Bedarf auch
+	Standardwerte für die von SOFT\_UART benutzten Pins und für die LED gefunden.}
+
+\item {Die Erzeugung des optiboot Programms läuft unter Linux mit installierten avr Paketen.
+	Eine Erzeugung unter Windows10 ist möglich,
+	wenn zusätzlich zum Arduino Paket Programmpakete installiert sind,
+	die die bei der Erzeugung erforderlichen Programme wie bash, bc, echo und andere zur Verfügung stellt.
+	Geprüft habe ich das Cygwin64 Paket auf einen Windows10 Laptop mit vorher installierten Arduino Paket.}
+
+\item {Die bei der Programmerzeugung gewählten Parameter werden sowohl am Ende einer .lst Datei
+	als auch in einer .log Datei festgehalten.}
+
+\item {Das Laden des optiboot Programms in den jeweiligen AVR Prozessor kann automatisch mit dem
+	Programm avrdude und einem angeschlossenem ISP-Programmer erfolgen.
+	Dazu ist nur die zusätzliche Eingabe von ISP=1 beim make Aufruf erforderlich.
+	Die zusätzliche Eingabe ISP=2 würde eine Verifikation mit avrdude bewirken.
+	Mit ISP=3 wird der gesamte Programmspeicher (Flash) des angeschlossenen AVR ausgelesen.
+	Mit ISP=4 wird der gesamte EEprom-Speicher des angeschlossenen AVR ausgelesen.}
+
+\end{itemize}
+
 \section{Automatische Größenanpassung in der optiboot Makefile}
 
 Die Bootloader Startadresse und die benötigte Bootloadergröße wird
-automatisch in der Makefile angepasst. Für die Berechnungen werden
-einige Zwischendateien erzeugt, was nur zusammen
+automatisch in dem von der Makefile aufgerufenem bash script build\_hex.sh angepasst.
+Für die Berechnungen werden einige Variable erzeugt, was nur zusammen
 mit den folgenden Linux Werkzeugen funktioniert:
+
 \begin{description}
 \item [bash] ein leistungsfähiger Kommandoprozessor für die Abarbeitung des Scripts. 
 \item [bc] ein einfacher Rechner, der die Eingabe- und Ausgabe-Werte
@@ -61,27 +163,36 @@ sowohl dezimal als auch sedezimal (hex) verarbeiten kann.
 \item [tr] kann Text-Zeichen ersetzen oder löschen.
 \end{description}
 
-Bisher ist die Funktion der Makefile nur mit einem Linux-System und
+Bisher ist die Funktion des bash Scipts nur mit einem Linux-System und
 unter Windows10 mit installiertem Cygwin Paket zusammen mit den Arduino Paket getestet.
-Die ursprünglichen .dat Zwischendateien wurden inzwischen duech Variablen im 
-bash Script Dateien ersetzt. 
 
 Hier sind die Namen und die Bedeutung der Script Dateien aufgeführt.
 \begin{description}
+
 \item [build\_hex.sh] erhält die Variablen von der Makefile, mit der dann ein passender
 optiboot Hex-Datei in Intel Format erzeugt wird.
-\item [program\_target] wird von build\_hex.sh aufgerufen, um die hfuse und efuse Einstellung
+Der build\_hex.sh Script ruft die weitere Shell Scripte  get\_avr\_params.sh,
+avr\_family.sh, show\_led\_pin.sh, show\_rx\_pin.sh und show\_tx\_pin.sh auf.
+Wenn die Variable ISP gesetzt ist, wird auch der Script program\_target.sh
+aufgerufen.
+
+\item [program\_target.sh] wird von build\_hex.sh aufgerufen, um die hfuse und efuse Einstellung
 zu überprüfen und zu korrigieren. Bei geänderter Anzahl der benutzten Bootpages
 müssen die BOOTSZ Bits des ATmega angepaßt werden. Die Bits liegen je nach AVR-Modell
 in dem hfuse oder efuse Byte, was die Korrektur nicht einfacher macht.
+Nach erfolgten Korrekturen wird das Programm avrdude mit dem Script only\_avrdude.sh aufgerufen,
+um den AVR mit dem optiboot Bootloader zu beschreiben und alle Fuses zu setzen.
+
 \item [only\_avrdude.sh] enthält nur einen avrdude Aufruf mit der in der Variablen
 DUDE\_PARAMS Parameterliste. Zur Kontrolle wird der Aufruf auf dem Terminal protokolliert.
 Wenn avrdude bei der Rückkehr einen Fehler meldet, gibt der Script allgemeine Hinweise
 zur Fehlersuche aus. Bei einem Linux System wird auch nach eventuell passenden 
 seriellen Schnittstellen gesucht.
+
 \item [find\_serials.sh] Sucht in einem Linux System nach möglichen Namen für USB-Seriell
-Wandlern. Für diese Aufgabe gibt es passende Chips, die meist mit dem Namen /dev/ttyUSB
-beginnen. Es gibt auch Software-Emulationen auf MikroKontrollern, die eine USB-Schnittstelle
+Wandlern. Für diese Aufgabe gibt es passende Chips, die auf Linux Systemen meist mit dems
+Namen /dev/ttyUSB beginnen.
+Es gibt auch Software-Emulationen auf Mikrokontrollern, die eine USB-Schnittstelle
 integriert haben. Diese sind meist über einen Namen zugreifbar, der mit /dev/ttyACM beginnt.
 Es wird auch für jede gefundene Schnittstelle überprüft, ob ein Zugriff möglich ist.
 Dazu muß man als Benutzer in der Gruppe Mitglied sein, der diesen Gerät den Zugriff
@@ -91,25 +202,48 @@ Script auch mit bash ./find\_serials.sh aufrufen.
 Wenn man mit einer bash arbeitet, kann man sie ausführbar machen und direkt aufrufen
 mit ./find\_serials.sh.
 Bei Windows ist dieser Script nutzlos. Bein Windows muß man den Geräte Manager benutzen.
+
+\item [get\_avr\_params.sh] findet für den mit MCU\_TARGET spezifizierten AVR Prozessor
+alle benötigten Parameter wie Flashgröße, die Größe der Flash-Seiten und die Größe einer
+Bootloader Seite. Zusätzlich werden auch einige Parameter wie Betriebsfrequenz,
+Baudrate und die Belegung der Fuses besetzt, wenn nicht anders vom Nutzer gewünscht.
+Die Quelle für diese Vorbesetzungen ist die Datei avr\_params.def .
+
+\item [avr\_family.sh] buildet einen Gruppennamen für AVR-Prozessoren mit gleicher
+Pinbelegung. Normalerweise ist der Gruppenname identisch mit dem AVR Prozessorname
+mit dem größten Speicher (atmega328 für atmega168 oder atmega88).
+
+\item [show\_led\_pin.sh] findet den Pin für die LED, der für diesen Prozessor
+oder die Gruppe als Standard vorgegeben ist und protokolliert diese Wahl
+auf dem Terminal. Wenn der Bediener einen anderen Pin gewählt hat, wird dieser
+Pin protokolliert.
+Ohne die Benutzerwahl wird der Pin aus einer avr\_pins/<group>.pins Datei entnommen.
+
+\item [show\_rx\_pin.sh] protokolliert den gewählten  RX Pin für die eingehenden seriellen Daten.
+Ohne eine spezielle Benutzerwahl bei SOFT\_UART wird der Pin aus einer avr\_pins/<group>.pins Datei entnommen.
+
+\item [show\_tx\_pin.sh] protokolliert den gewählten TX Pin für die Ausgabe der seriellen Daten.
+Ohne eine spezielle Benutzerwahl bei SOFT\_UART wird der Pin aus einer avr\_pins/<group>.pins Datei entnommen.
+
 \item [baudcheck.tmp.sh] wird während der Abarbeitung von build\_hex.sh durch einen
 C-Preprozessor Aufruf aus der Datei baudcheck.S erzeugt und ausgeführt, um Informationen
 über die gewählte Baudraten Einstellung zu geben.
+
 \end{description}
 
 \section{Zielvorgaben für optiboot Makefile}
 
-Die Steuerung des Ablaufs für die Generierung der Programmdaten aus
-dem Quellcode ist in der Makefile festgelegt.
-Außer der  Haupt Makefile gibt es noch weitere Erweiterungen
-der Makefile, die automatisch von der Haupt Makefile integriert werden:
-Makefile.at90, Makefile.m16, Makefile.m169, Makefile.m328, Makefile.m640, Makefile.m644,
-Makefile.m645 und Makefile.tiny .
-Dabei können verschiedene Konfigurationen auch für einen Prozessortyp
-festgelegt worden sein. In der Tabelle~\ref{tab:processors} sind die einige der derzeit vordefinierten
+Es können verschiedene Konfigurationen auch für einen Prozessortyp
+festgelegt wnd In der Tabelle~\ref{tab:processors} sind die einige der derzeit vordefinierten
 Konfigurationen für AVR Prozessoren angegeben. 
 Die einstellbaren Parameter sind aber auch in der Aufrufzeile des
 make Programms als Parameter oder auch als Umgebungsvariable der Shell
 einstellbar und haben Vorrang zu den Grundeinstellungen.
+Es gibt zwei Haupt Variabalennamen, die dem bash Script build\_hex.sh übergeben
+werden, TARGET und MCU\_TARGET . Die Variable MCU\_TARGET muß dabei
+einen legalen AVR Prozessor Name enthalten. Die Variable TARGET kann mit einem frei wählbaren
+Namen belegt werden, ist aber üblicherweise identisch dem MCU\_TARGET Namen oder
+ist der Name einer Platine mit diesem Prozessor.
 
 \begin{table}[H]
   \begin{center}
@@ -959,33 +1093,31 @@ Das erste Beispiel ist die Bildung eines Bootloaders für den beliebten ATmega32
 
 \begin{verbatim}
 optiboot $ make atmega328p
-avr-gcc -g -Wall -Os -fno-split-wide-types -mrelax -mmcu=atmega328p \
- -fno-diagnostics-show-caret -DBAUD_RATE=115200 -DLED_START_FLASHES=3 \
- -DSUPPORT_EEPROM=1 -DLED=p -DUART=0 -DSOFT_UART=0 \
-        -DUART_RX=p -DUART_TX=p -DF_CPU=16000000 \
-        -DHFUSE=hexDE -DLFUSE=hexFF \
-        -DBOOT_PAGE_LEN=512 -c -o optiboot.o optiboot.S
-In file included from optiboot.S:260:0:
-led_defs.h:43:5: warning: #warning "LED bit is set to default B5" [-Wcpp]
-In file included from optiboot.S:619:0:
-init_uart_fix_baud.S:31:8: warning: #warning "BAUD_RATE error greater than 2%" [-Wcpp]
---------------------------------------------------------------------------------
-BAUD RATE CHECK: Desired: 115200,  Real: 117647, UBRR = 16, Error=2.12%
---------------------------------------------------------------------------------
-###########################################
-Boot Loader start address: 0x7E00 = 32256
-###########################################
 
-16000000 Hz operation with Baudrate 115200 and EEprom support configured.
-avr-size optiboot.elf
+Optiboot for 16000000 Hz (16.00 Mhz) operation with Baudrate 115200 and EEprom \
+  support configured.
+ >>> Start building for AVR atmega328p:
+LED-Pin PB5 use Pin 19-PDIP28 17-TQFP32, with special functions: SCK PCINT5
+RX-Pin PD0 use Pin 2-PDIP28 30-TQFP32, with special functions: PCINT16 RXD
+TX-Pin PD1 use Pin 3-PDIP28 31-TQFP32, with special functions: PCINT17 TXD
+avr-gcc -g -Wall -Os -fno-split-wide-types -mrelax -mmcu=atmega328p  \
+ -fno-diagnostics-show-caret -DBAUD_RATE=115200 -DLED_START_FLASHES=3 \
+ -DSUPPORT_EEPROM=1 -DLED=pB5 -DUART=00 -DSOFT_UART=0 -DUART_RX=pD0 -DUART_TX=pD1 \
+ -DF_CPU=16000000 -DHFUSE=hexDE -DLFUSE=hexFF -DBOOT_PAGE_LEN=512 \
+ -DVerboseLev=2 -c -o optiboot.o optiboot.S
+
+--------------------------------------------------------------------------------
+BAUD RATE CHECK: Desired: 115200,  Real: 117647, UBRR = 16, Difference=2.12%
+--------------------------------------------------------------------------------
+# # # # # # # # # # # # # # # # # # # # # #
+Boot Loader start address: 0x7E00 = 32256
+# # # # # # # # # # # # # # # # # # # # # #
+
    text	   data	    bss	    dec	    hex	filename
-    476	      0	      0	    476	    1dc	optiboot.elf
-Requires 1 Boot Pages, 512 Bytes each, which is 1.5% of Flash Memory
-BOOTSZ= 3, which means 1 Boot Pages
-avr-objdump -h -S optiboot.elf > optiboot_atmega328p.lst
-avr-objcopy -j .text -j .data -j .version --set-section-flags .version=alloc,load \
-   -O ihex optiboot.elf optiboot_atmega328p.hex
-Fuse Setting: LFUSE=0xFF, HFUSE=0xDE, EFUSE=0xFD
+    488	      0	      0	    488	    1e8	optiboot.elf
+Requires 1 Boot Page of 512 Bytes, which is 1.5% of Flash Memory
+BOOTSZ=3, which means 1 Boot Pages
+
 \end{verbatim}
 
 Wenn keine zusätzliche Option angegeben wird, wird eine Baudrate von 115200 mit einer Taktfrequenz von \(16 MHz\) gewählt.
@@ -996,34 +1128,31 @@ für die serielle Schnittstelle.
 
 \begin{verbatim}
 optiboot $ make atmega328p SOFT_UART=1
+
+Optiboot for 16000000 Hz (16.00 Mhz) operation with Baudrate 115200 and EEprom \
+  support configured.
+ >>> Start building for AVR atmega328p:
+LED-Pin PB5 use Pin 19-PDIP28 17-TQFP32, with special functions: SCK PCINT5
+RX-Pin PD0 use Pin 2-PDIP28 30-TQFP32, with special functions: PCINT16 RXD
+TX-Pin PD1 use Pin 3-PDIP28 31-TQFP32, with special functions: PCINT17 TXD
 avr-gcc -g -Wall -Os -fno-split-wide-types -mrelax -mmcu=atmega328p \
  -fno-diagnostics-show-caret -DBAUD_RATE=115200 -DLED_START_FLASHES=3 \
- -DSUPPORT_EEPROM=1 -DLED=p -DUART=0 -DSOFT_UART=01 \
-        -DUART_RX=p -DUART_TX=p -DF_CPU=16000000 \
-        -DHFUSE=hexDE -DLFUSE=hexFF \
-        -DBOOT_PAGE_LEN=512 -c -o optiboot.o optiboot.S
-In file included from optiboot.S:258:0:
-pin_defs.h:175:6: warning: #warning "SOFT_UART use Pin D0 as RX" [-Wcpp]
-pin_defs.h:185:6: warning: #warning "SOFT_UART use Pin D1 as TX" [-Wcpp]
-In file included from optiboot.S:260:0:
-led_defs.h:43:5: warning: #warning "LED bit is set to default B5" [-Wcpp]
---------------------------------------------------------------------------------
-BAUD RATE CHECK: Desired: 115200,  SoftUART_Real: 115107, Delay: 116*1, Error=-.07%
---------------------------------------------------------------------------------
-###########################################
-Boot Loader start address: 0x7E00 = 32256
-###########################################
+ -DSUPPORT_EEPROM=1 -DLED=pB5 -DUART=00 -DSOFT_UART=01 -DUART_RX=pD0 -DUART_TX=pD1 \
+ -DF_CPU=16000000 -DHFUSE=hexDE -DLFUSE=hexFF -DBOOT_PAGE_LEN=512 \
+ -DVerboseLev=2 -c -o optiboot.o optiboot.S
 
-16000000 Hz operation with Baudrate 115200 configured.
-avr-size optiboot.elf
+--------------------------------------------------------------------------------
+BAUD RATE CHECK: Desired: 115200, SoftUART_Real: 115107, Delay: 116*1, Difference=-.07%
+--------------------------------------------------------------------------------
+# # # # # # # # # # # # # # # # # # # # # #
+Boot Loader start address: 0x7E00 = 32256
+# # # # # # # # # # # # # # # # # # # # # #
+
    text	   data	    bss	    dec	    hex	filename
-    496	      0	      0	    496	    1f0	optiboot.elf
-Requires 1 Boot Pages, 512 Bytes each, which is 1.5% of Flash Memory
-BOOTSZ= 3, which means 1 Boot Pages
-avr-objdump -h -S optiboot.elf > optiboot_atmega328p.lst
-avr-objcopy -j .text -j .data -j .version --set-section-flags .version=alloc,load \
-   -O ihex optiboot.elf optiboot_atmega328p.hex
-Fuse Setting: LFUSE=0xFF, HFUSE=0xDE, EFUSE=0xFD
+    508	      0	      0	    508	    1fc	optiboot.elf
+Requires 1 Boot Page of 512 Bytes, which is 1.5% of Flash Memory
+BOOTSZ=3, which means 1 Boot Pages
+
 \end{verbatim}
 
 Beachten Sie bitte, daß die Software-Lösung für die serielle Schnittstelle etwas mehr flash-Speicher braucht,
@@ -1041,31 +1170,32 @@ Die letzten beiden Beispiele zeigen jeweils eine Konfiguration mit der neuen aut
 Um Platz im Speicher zu sparen, wurde beim ersten Beispiel die LED-Blinkfunktion abgewählt.
 
 \begin{verbatim}
-optiboot $ make atmega328p LED_START_FLASHES=0 BAUD_RATE=52
+
+Optiboot for 16000000 Hz (16.00 Mhz) operation with Auto-Baudrate and EEprom \
+  support configured.
+ >>> Start building for AVR atmega328p:
+LED-Pin not used!
+RX-Pin PD0 use Pin 2-PDIP28 30-TQFP32, with special functions: PCINT16 RXD
+TX-Pin PD1 use Pin 3-PDIP28 31-TQFP32, with special functions: PCINT17 TXD
 avr-gcc -g -Wall -Os -fno-split-wide-types -mrelax -mmcu=atmega328p \
  -fno-diagnostics-show-caret -DBAUD_RATE=52 -DLED_START_FLASHES=0 \
- -DSUPPORT_EEPROM=1 -DLED=p -DUART=0 -DSOFT_UART=0 \
-        -DUART_RX=p -DUART_TX=p -DF_CPU=16000000 \
-        -DHFUSE=hexDE -DLFUSE=hexFF \
-        -DBOOT_PAGE_LEN=512 -c -o optiboot.o optiboot.S
+ -DSUPPORT_EEPROM=1 -DLED=p -DUART=00 -DSOFT_UART=0 -DUART_RX=pD0 -DUART_TX=pD1 \
+ -DF_CPU=16000000 -DHFUSE=hexDE -DLFUSE=hexFF -DBOOT_PAGE_LEN=512 \
+ -DVerboseLev=2 -c -o optiboot.o optiboot.S
+
 --------------------------------------------------------------------------------
 Simple Baudrate measurement with time limit implemented in optiboot! (4-bit, CLK/8)
-UART Minimum 976 Baud, Error surely less than 4% up to 160.0 kBaud
+UART Minimum 976 Baud, Difference surely less than 4% up to 160.0 kBaud
 --------------------------------------------------------------------------------
-###########################################
+# # # # # # # # # # # # # # # # # # # # # #
 Boot Loader start address: 0x7E00 = 32256
-###########################################
+# # # # # # # # # # # # # # # # # # # # # #
 
-16000000 Hz operation with Auto-Baudrate and EEprom support configured.
-avr-size optiboot.elf
    text	   data	    bss	    dec	    hex	filename
     498	      0	      0	    498	    1f2	optiboot.elf
-Requires 1 Boot Pages, 512 Bytes each, which is 1.5% of Flash Memory
-BOOTSZ= 3, which means 1 Boot Pages
-avr-objdump -h -S optiboot.elf > optiboot_atmega328p.lst
-avr-objcopy -j .text -j .data -j .version --set-section-flags .version=alloc,load \
- -O ihex optiboot.elf optiboot_atmega328p.hex
-Fuse Setting: LFUSE=0xFF, HFUSE=0xDE, EFUSE=0xFD
+Requires 1 Boot Page of 512 Bytes, which is 1.5% of Flash Memory
+BOOTSZ=3, which means 1 Boot Pages
+
 \end{verbatim}
 
 Beim letzten Beispiel wurde die aufwendigste Methode der Baudraten-Messung
@@ -1074,32 +1204,32 @@ gewählt, da mit der LED-Blink Funktion ohnehin die Grenze von 512 Byte
 
 \begin{verbatim}
 optiboot $ make atmega328p BAUD_RATE=82
+
+Optiboot for 16000000 Hz (16.00 Mhz) operation with Auto-Baudrate and EEprom \
+  support configured.
+ >>> Start building for AVR atmega328p:
+LED-Pin PB5 use Pin 19-PDIP28 17-TQFP32, with special functions: SCK PCINT5
+RX-Pin PD0 use Pin 2-PDIP28 30-TQFP32, with special functions: PCINT16 RXD
+TX-Pin PD1 use Pin 3-PDIP28 31-TQFP32, with special functions: PCINT17 TXD
 avr-gcc -g -Wall -Os -fno-split-wide-types -mrelax -mmcu=atmega328p \
  -fno-diagnostics-show-caret -DBAUD_RATE=82 -DLED_START_FLASHES=3 \
- -DSUPPORT_EEPROM=1 -DLED=p -DUART=0 -DSOFT_UART=0 \
-        -DUART_RX=p -DUART_TX=p -DF_CPU=16000000 \
-        -DHFUSE=hexDE -DLFUSE=hexFF \
-        -DBOOT_PAGE_LEN=512 -c -o optiboot.o optiboot.S
-In file included from optiboot.S:260:0:
-led_defs.h:43:5: warning: #warning "LED bit is set to default B5" [-Wcpp]
+ -DSUPPORT_EEPROM=1 -DLED=pB5 -DUART=00 -DSOFT_UART=0 -DUART_RX=pD0 -DUART_TX=pD1 \
+ -DF_CPU=16000000 -DHFUSE=hexDE -DLFUSE=hexFF -DBOOT_PAGE_LEN=512 \
+ -DVerboseLev=2 -c -o optiboot.o optiboot.S
+
 --------------------------------------------------------------------------------
 Complex Baudrate measurement implemented in optiboot! (4-bit, CLK/1)
-UART Minimum 976 Baud, Error surely less than 4% up to 160.0 kBaud
+UART Minimum 976 Baud, Difference surely less than 4% up to 160.0 kBaud
 --------------------------------------------------------------------------------
-###########################################
+# # # # # # # # # # # # # # # # # # # # # #
 Boot Loader start address: 0x7C00 = 31744
-###########################################
+# # # # # # # # # # # # # # # # # # # # # #
 
-16000000 Hz operation with Auto-Baudrate and EEprom support configured.
-avr-size optiboot.elf
    text	   data	    bss	    dec	    hex	filename
-    598	      0	      0	    598	    256	optiboot.elf
+    610	      0	      0	    610	    262	optiboot.elf
 Requires 2 Boot Pages, 512 Bytes each, which is 3.1% of Flash Memory
-BOOTSZ= 2, which means 2 Boot Pages
-avr-objdump -h -S optiboot.elf > optiboot_atmega328p.lst
-avr-objcopy -j .text -j .data -j .version --set-section-flags .version=alloc,load \
- -O ihex optiboot.elf optiboot_atmega328p.hex
-Fuse Setting: LFUSE=0xFF, HFUSE=0xDE, EFUSE=0xFD
+BOOTSZ=2, which means 2 Boot Pages
+
 \end{verbatim}
 
 
@@ -1141,7 +1271,7 @@ können Sie auch die automatische Baudraten-Anpassung von Optiboot benutzen.
 Die automatische Baudraten-Anpassung wird immer dann eingebaut,
 wenn Sie bei der Erzeugung eine Baudrate unter 100 angeben.
 Näheres zur automatischen Baudraten-Anpassung finden Sie
-im Unterkapitel~\ref{sec:autobaud} aud Seite~\pageref{sec:autobaud}.
+im Unterkapitel~\ref{sec:autobaud} auf Seite~\pageref{sec:autobaud}.
 Aber Sie sollten im Gedächtnis behalten, daß die Abweichung der Takt-Frequenz
 auch das Applikationsprogramm beeinflußt (wenn eine serielle Schnittstelle benutzt werden soll).
 

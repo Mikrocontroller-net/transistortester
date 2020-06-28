@@ -51,7 +51,7 @@ if (( $? == 0 )) ; then
   unset rx_layout
 else
   echo "list_rx_pin.sh has not found ${rx_grep_txt} in avr_pins/${AVR_FAMILY}.pins"
-  echo "List of availavle pins for ${AVR_FAMILY} group:"
+  echo "List of available pins for ${AVR_FAMILY} group:"
   grep "^p[A-N][0-7]" avr_pins/${AVR_FAMILY}.pins
   exit 1
 fi

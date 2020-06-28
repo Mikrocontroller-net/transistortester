@@ -167,7 +167,14 @@ PUT_CH :	/*  void putch(char ch) */
 	; r24 hold the data for serial output
 	; use r22, r23, r25
 	DOUBLE_DELAY_CALL
+	DOUBLE_DELAY_CALL_X1	; trick for delay without loop
+	DOUBLE_DELAY_CALL_X2	; trick for delay without loop
+	DOUBLE_DELAY_CALL_X3	; trick for delay without loop
+
 	DOUBLE_DELAY_CALL
+	DOUBLE_DELAY_CALL_X1	; trick for delay without loop
+	DOUBLE_DELAY_CALL_X2	; trick for delay without loop
+	DOUBLE_DELAY_CALL_X3	; trick for delay without loop
 ;	SINGLE_DELAY_CALL	; work simular to a second half stop bit
 				; this can help to prevent framing error, if the
 				; baudrate has a error of 2% or more
@@ -202,6 +209,9 @@ PUT_CH :	/*  void putch(char ch) */
 PUT_LOP :
  #if QuickStopBit > 0
 	DOUBLE_DELAY_CALL 	; takes 2*(7 + UART_B_VALUE*3 + UART_R_VALUE clock tics)
+	DOUBLE_DELAY_CALL_X1	; trick for delay without loop
+	DOUBLE_DELAY_CALL_X2	; trick for delay without loop
+	DOUBLE_DELAY_CALL_X3	; trick for delay without loop
  #endif
 	brcc	SET_BIT		; 1/2 clock tics
 ;############### clear the TX bit #######################
@@ -252,6 +262,9 @@ PUT_LOP :
 TX_IS_SET :
  #if QuickStopBit == 0
 	DOUBLE_DELAY_CALL 	; takes 2*(7 + UART_B_VALUE*3 + UART_R_VALUE clock tics)
+	DOUBLE_DELAY_CALL_X1	; trick for delay without loop
+	DOUBLE_DELAY_CALL_X2	; trick for delay without loop
+	DOUBLE_DELAY_CALL_X3	; trick for delay without loop
  #endif
  #if INVERSE_UART > 0
 	sec			; 5+1 set carry for stop bit
@@ -319,6 +332,9 @@ WAIT_START :
 	ldi	r22, 9		; load the loopcounter behind the RX_pin observation
  #endif
 	SINGLE_DELAY_CALL	; wait half BAUD time
+	SINGLE_DELAY_CALL_X1	; trick for delay without loop
+	SINGLE_DELAY_CALL_X2	; trick for delay without loop
+	SINGLE_DELAY_CALL_X3	; trick for delay without loop
 ;  Last inp should be (LOOP_TICS-2) before without additional delay.
 ;  Because of the wait-loop time the RX change can be between 0 and 3 clock tics before the inp.
 ;  For (LOOP_TICS == 9) we have to get a 7 clocks delay without the half baud time delay.
@@ -328,6 +344,9 @@ WAIT_START :
 ;	rcall	direct_return0		; some clock ticks are missing to the half delay time
 GET_NEXT_BIT :
 	DOUBLE_DELAY_CALL 	; takes 2*(7 + UART_B_VALUE*3 + UART_R_VALUE clock tics)
+	DOUBLE_DELAY_CALL_X1	; trick for delay without loop
+	DOUBLE_DELAY_CALL_X2	; trick for delay without loop
+	DOUBLE_DELAY_CALL_X3	; trick for delay without loop
   #if INVERSE_UART > 0
 	sec			; 1 set carry
   #else

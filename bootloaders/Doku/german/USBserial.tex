@@ -493,3 +493,129 @@ für das angewählte Interface eingestellt werden können.
   \label{tab:mega16xbaudh}
 \end{table}
 
+\section{Der Pololu USB AVR Programmer v2.1}
+
+Bei meinem Linux System werden bei eingestecktem Pololu Programmer zwei serielle
+Schnittstellen erkannt, /dev/ttyACM0 und /dev/ttyACM1 .
+Mit der ersten serielle Schnittstelle wird die ISP-Schnittstelle angesteuert.
+Die zweite Schnittstelle /dev/ttyACM1 steht zur freien Verfügung.
+Die Signale der seriellen Schnittstelle sind auf einer zusätzlichen
+Buchsenleiste verfügbar (TX, RX, B=DTR, A=frei).
+
+Die Ergebnisse meiner Untersuchungen der zusätzlichen seriellen Schnittstelle 
+habe ich für den unteren Baud-Bereich
+in der Tabelle~\ref{tab:pololubaudl} festgehalten.
+Ab 300 Baud macht der Pololu ein gutes Bild, alle von stty akzeptierten
+Baudraten werden sehr gut eingehalten.
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c | c | c || c |}
+    \hline
+    getestete  & stty  & gemessene  & AVR UBBR  \\
+    BaudRate   & speed & BaudRate  & @16MHz \\
+    \hline
+    \hline
+         75    &  75   & \bf{415} &         \\
+    \hline
+        110    &  110  & \bf{275}  &         \\
+    \hline
+        134    &  134  & \bf{500} &        \\
+    \hline
+        150    & 150   & \bf{830} &         \\
+    \hline
+        300    & 300   & 300      &        \\
+    \hline
+        600    & 600   &  600     &   3332  \\
+    \hline
+        900    & Error &   -      &   2221 \\
+    \hline
+       1200    & 1200  &  1200    &    832  \\
+    \hline
+       1800    & 1800  &  1800    &    555 \\
+    \hline
+       2400    & 2400  &  2400    &    416  \\
+    \hline
+       3600    & Error &    -     &    277  \\
+    \hline
+       4800    & 4800  &  4800    &    207  \\
+    \hline
+       7200    & Error &    -     &    138  \\
+    \hline
+       9600    & 9600  &   9600   &    207  \\
+    \hline
+      14400    & Error &    -     &    138  \\
+    \hline
+      19200    & 19200  &  19200  &    103  \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{geprüfte Baudraten der Pololu seriellen Schnittstelle im unteren Baud-Bereich}
+  \label{tab:pololubaudl}
+\end{table}
+
+
+Bei den in der Tabelle~\ref{tab:pololubaudh} gezeigten Ergebnissen ist bei allen
+von stty akzeptierten Baudraten nur 576000 unbrauchbar wegen zu hoher Abweichung.
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c | c | c || c |}
+    \hline
+    getestete  & stty  & gemessene  & AVR UBBR  \\
+    BaudRate   & speed & BaudRate  & @16MHz \\
+    \hline
+    \hline
+    \hline
+      28800  &  Error   &   -       &    68 \\
+    \hline
+      33600  &  Error   &   -       &    59  \\
+    \hline
+      38400  &  38400   &  38.32k  &    51  \\
+    \hline
+      51200  &  Error   &   -       &    38,  0.16\%  \\
+    \hline
+      56000  &  Error   &   -       &    35, -0.79\%  \\
+    \hline
+      57600  &  57600   &  58.86k    &    34, -0.79\%  \\
+    \hline
+      64000  &  Error   &   -       &    30,  0.80\%  \\
+    \hline
+      76800  &  Error   &   -       &    25, 0.16\%  \\
+    \hline
+     115200  &  115200  &  115.28k   &    16, 2.12\%  \\
+    \hline
+     128000  &  Error   &   -       &    15, -2.34\%  \\
+    \hline
+     153600  &  Error   &   -       &    12, 0.16\%  \\
+    \hline
+     230400  &  230400  &  230.56k   &    8, -3.54\%  \\
+    \hline
+     250000  &  Error   &   -       &    7, 0.00\%  \\
+    \hline
+     256000  &  Error   &   -       &    7, -2.34\%  \\
+    \hline
+    (460800) &  460800  & 461.6k &    -, >5\%  \\
+    \hline
+     500000  &  500000  &  500.0k   &    3, 0.00\%  \\
+    \hline
+    (576000)  & 576000 & \bf{541.8k}  &    -, >5\%  \\
+    \hline
+    (921600) &  921600  & 923.9k &    -, >5\%  \\
+    \hline
+   (1000000) & 1000000 &   998.8k    &    1, 0.00\%  \\
+    \hline
+   (1200000) &  Error   &   -        &   -, >5\%  \\
+    \hline
+   (1500000) & 1500000  & 1501.2k &   -, >5\%  \\
+    \hline
+    2000000  & 2000000 &   2000k   & 0, 0.00\%  \\
+    \hline
+   (3000000) & 3000000 &  3000k &   -, >5\%   \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{geprüfte Baudraten der Pololu seriellen Schnittstelle im oberen Baud-Bereich}
+  \label{tab:pololubaudh}
+\end{table}
+

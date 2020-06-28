@@ -712,12 +712,6 @@ atmega164p: MCU_TARGET := atmega164p
 atmega164p: hex_file
 
 ################################################
-# generic atmega164a
-atmega164: TARGET := atmega164
-atmega164: MCU_TARGET := atmega164
-atmega164: hex_file
-
-################################################
 # generic atmega324a
 atmega324a: TARGET := atmega324a
 atmega324a: MCU_TARGET := atmega324a

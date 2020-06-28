@@ -37,7 +37,7 @@ else
     unset pin_desc
   else
     echo "list_led_pin.sh has not found \"${led_grep_txt}\" in avr_pins/${AVR_FAMILY}.pins"
-    echo "List of availavle pins for ${AVR_FAMILY} group:"
+    echo "List of available pins for ${AVR_FAMILY} group:"
     grep "^p[A-N][0-7]" avr_pins/${AVR_FAMILY}.pins
     exit 1
   fi

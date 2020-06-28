@@ -51,7 +51,7 @@ if (( $? == 0 )) ; then
   unset tx_layout
 else
   echo "list_tx_pin.sh has not found ${tx_grep_txt} in avr_pins/${AVR_FAMILY}.pins"
-  echo "List of availavle pins for ${AVR_FAMILY} group:"
+  echo "List of available pins for ${AVR_FAMILY} group:"
   grep "^p[A-N][0-7]" avr_pins/${AVR_FAMILY}.pins
   exit 1
 fi

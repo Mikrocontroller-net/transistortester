@@ -14,12 +14,13 @@ die in der AVR061~\cite{stk500} von Atmel veröffentlicht wurde.
 
 \section{Änderungen und Weiterentwicklung von Version 6.2}
 Im wesentlichen habe ich das komplette Programm in die Assembler-
-Sprache umgeschrieben und die Makefile so angepasst, daß die Programmlänge
+Sprache umgeschrieben und mit einem bash Shell Script die Erzeugung
+der .hex file so umgebaut, daß die Programmlänge
 automatisch weiterverarbeitet wird und damit die Startadresse
 des Bootloaders sowie die Fuses des ATmega richtig eingestellt werden.
 Die eingeschlagene Lösung erzeugt während der Abarbeitung der Einzelschritte
-für die Erzeugung des Programmcodes für den Bootloader noch weitere
-kleine Dateien, welche in den nachfolgenden Schritten für die Anpassung
+für die Erzeugung des Programmcodes für den Bootloader Variablen,
+welche in den nachfolgenden Schritten für die Anpassung
 der Start-Adresse und der Fuses erforderlich sind.
 Die Startadresse für den jeweiligen Zielprozessor ist abhängig von
 der vorhandenen Flash-Speichergröße,
@@ -54,8 +55,11 @@ wenn beispielweise die gewählte Betriebsfrequenz (AVR\_FREQ) nicht zu der
 mit den Fuses (CKSEL,CKDIV8) eingestellten Möglichkeiten für den Takt paßt.
 Ein Empfang von Programmdaten für optiboot ist derzeit nur über eine serielle Schnittstelle möglich.\\
 
-Hier sind einige der Fähigkeiten aufgelistet:
+Hier sind einige der Fähigkeiten des optiboot Programms aufgelistet:
+
 \begin{itemize}
+
+\item {Unterstützt eine große Zahl von AVRs, wobei fast alle auf Funktion getestet wurden.}
 
 \item {Unterstützt das Laden von Daten in den EEprom Speicher.}
 
@@ -74,13 +78,21 @@ Hier sind einige der Fähigkeiten aufgelistet:
 	Damit werden auch ATtiny Prozessoren ohne UART unterstützt.
 	Außerdem können die TX und RX Pins bei SOFT\_UART völlig frei gewählt werden.}
 
+\item {Bei der SOFT\_UART Lösung kann die serielle Kommunikation auch über nur einen AVR Pin 
+	durchgeführt werden. Bei Benutzung des Hardware UARTs ist das nicht sinnvoll, da RXD und TXD Pin
+	hier fest vergeben sind.}
+
+\item {Kann eine automatische Baudraten-Anpassung vornehmen.
+	Dabei wird die Baudzeit aus dem ersten empfangenen Datenbyte gemessen. 
+	Verschiedene Methoden der Baudzeit-Messung können dabei ausgewählt werden.
+	Wenn der so konfigurierte optiboot noch in 512 Byte Flash passen soll,
+	muß die LED Blink Funktion beim Programmstart abgewählt werden.}
+
 \item {Kann auch für AVRs ohne Bootloader Unterstützung benutzt werden.\\
 	Diese VIRTUAL\_BOOT\_PARTITION Fähigkeit kann natürlich auch
 	für AVRs benutzt werden, die die Bootloader Unterstützung besitzen.
 	Das optiboot Programm wird dabei größer, kann aber dann auf jeder
 	Flash-Speicher Seite starten.}
-
-\item {Unterstützt eine große Zahl von AVRs, wobei fast alle auf Funktion getestet wurden.}
 
 \item {Läßt eine angeschlossene LED standardmäßig drei mal blinken (LED\_START\_FLASHES=3).
 	Bei eintreffenden seriellen Daten wird das Blinken aber sofort abgebrochen.}
@@ -89,16 +101,6 @@ Hier sind einige der Fähigkeiten aufgelistet:
 	auf serielle Daten gewartet wird (LED\_DATA\_FLASH=1).
        Auch ein Dauerleuchten der LED kann mit LED\_DATA\_FLASH=4 gewählt werden.
        Dabei geht die LED erst durch den Watchdog-Reset wieder aus.}
-
-\item {Kann eine automatische Baudraten-Anpassung vornehmen.
-	Dabei wird die Baudzeit aus dem ersten empfangenen Datenbyte gemessen. 
-	Verschiedene Methoden der Baudzeit-Messung können dabei ausgewählt werden.
-	Wenn der so konfigurierte optiboot noch in 512 Byte Flash passen soll,
-	muß die LED Blink Funktion beim Programmstart abgewählt werden.}
-
-\item {Bei der SOFT\_UART Lösung kann die serielle Kommunikation auch über nur einen AVR Pin 
-	durchgeführt werden. Bei Benutzung des Hardware UARTs ist das nicht sinnvoll, da RXD und TXD Pin
-	hier fest vergeben sind.}
 
 \item {Für die Erzeugung des optiboot Bootloaders können wahlweise auch angepaßte C-Quellen
 	benutzt werden. Die meisten Funktionen sind auch hier möglich.
@@ -110,9 +112,23 @@ Hier sind einige der Fähigkeiten aufgelistet:
 	Dies macht eine nachträgliche Kontrolle (Verify) des installierten Bootloaders
 	einfacher, selbst mit einem anderen PC.}
 
-\item {Unterstützt die Anpassung der Oszillator-Frequenz für den AVR internen RC-Oszillator.}
+\item {Unterstützt die Anpassung der Oszillator-Frequenz für den AVR internen RC-Oszillator.
+ 	Dadurch ist auch in Problemfällen die Benutzung eines Bootloaders mit fester Baudrate möglich.}
 
-\item {Die Länge der Bildschirmausgabe bei der Erzeugung von optiboot kann mit der Systemvariablen
+\item {Das Laden des optiboot Programms in den jeweiligen AVR Prozessor kann automatisch mit dem
+	Programm avrdude und einem angeschlossenem ISP-Programmer erfolgen.
+	Dazu ist nur die zusätzliche Eingabe von ISP=1 beim make Aufruf erforderlich.
+	Die zusätzliche Eingabe ISP=2 würde eine Verifikation mit avrdude bewirken.
+	Mit ISP=3 wird der gesamte Programmspeicher (Flash) des angeschlossenen AVR ausgelesen.
+	Mit ISP=4 wird der gesamte EEprom-Speicher des angeschlossenen AVR ausgelesen.}
+
+\end{itemize}
+
+Die nachfolgenden Fähigkeiten beziehen sich nur auf den Herstellungsprozess des Bootloaders:
+
+\begin{itemize}
+
+\item {Der Umfang der Bildschirmausgabe bei der Erzeugung von optiboot kann mit der Systemvariablen
 	VerboseLev verändert werden. Der Wert kann zwischen 1 und 4 liegen, wobei 2 der Standardwert ist.}
 
 \item {Die Bildschirmausgabe kann mit der Systemvariablen WITH\_COLORS=1 bunter gestaltet werden.
@@ -135,13 +151,6 @@ Hier sind einige der Fähigkeiten aufgelistet:
 
 \item {Die bei der Programmerzeugung gewählten Parameter werden sowohl am Ende einer .lst Datei
 	als auch in einer .log Datei festgehalten.}
-
-\item {Das Laden des optiboot Programms in den jeweiligen AVR Prozessor kann automatisch mit dem
-	Programm avrdude und einem angeschlossenem ISP-Programmer erfolgen.
-	Dazu ist nur die zusätzliche Eingabe von ISP=1 beim make Aufruf erforderlich.
-	Die zusätzliche Eingabe ISP=2 würde eine Verifikation mit avrdude bewirken.
-	Mit ISP=3 wird der gesamte Programmspeicher (Flash) des angeschlossenen AVR ausgelesen.
-	Mit ISP=4 wird der gesamte EEprom-Speicher des angeschlossenen AVR ausgelesen.}
 
 \end{itemize}
 

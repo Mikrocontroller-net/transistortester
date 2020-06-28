@@ -6,8 +6,8 @@ AllEEprom="SUPPORT_EEPROM"
 # If you change the XTRA_OPT option name from SOFT_UART to somewhat unrecognized by optiboot,
 #   the option is switched off!!
 #XTRA_OPT="C_SOURCE"
-#XTRA_OPT="SOFT_UART"
-XTRA_OPT="SFT_UART"
+XTRA_OPT="SOFT_UART"
+#XTRA_OPT="SFT_UART"
 #  buildable platforms of somewhat questionable support level
 echo " "; echo "***** make lilypad ******"
 make lilypad $AllEEprom=1 $XTRA_OPT=1
@@ -35,6 +35,10 @@ echo " "; echo "***** make atmega32 ******"
 make atmega32 $AllEEprom=1 $XTRA_OPT=1
 echo " "; echo "***** make atmega88p ******"
 make atmega88p $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make atmega48 ******"
+make atmega48 $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make atmega48p ******"
+make atmega48p $AllEEprom=1 $XTRA_OPT=1
 echo " "; echo "***** make atmega168p ******"
 make atmega168p $AllEEprom=1 $XTRA_OPT=1
 
@@ -54,6 +58,8 @@ echo " "; echo "***** make atmega8 ******"
 make atmega8 $AllEEprom=1 $XTRA_OPT=1
 echo " "; echo "***** make atmega168 ******"
 make atmega168 $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make atmega168a ******"
+make atmega168a $AllEEprom=1 $XTRA_OPT=1
 echo " "; echo "***** make atmega328 ******"
 make atmega328 $AllEEprom=1 $XTRA_OPT=1
 echo " "; echo "***** make atmega328p ******"
@@ -67,17 +73,27 @@ make atmega164a $AllEEprom=1 $XTRA_OPT=1
 echo " "; echo "***** make atmega164p ******"
 make atmega164p $AllEEprom=1 $XTRA_OPT=1
 #
+echo " "; echo "***** make atmega324a ******"
+make atmega324a $AllEEprom=1 $XTRA_OPT=1
 echo " "; echo "***** make atmega324p ******"
 make atmega324p $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make atmega324pa ******"
+make atmega324pa $AllEEprom=1 $XTRA_OPT=1
 #
 echo " "; echo "***** make atmega644 ******"
 make atmega644 $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make atmega644a ******"
+make atmega644a $AllEEprom=1 $XTRA_OPT=1
 echo " "; echo "***** make atmega644p ******"
 make atmega644p $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make atmega644pa ******"
+make atmega644pa $AllEEprom=1 $XTRA_OPT=1
 #
 echo " "; echo "***** make atmega1284p ******"
 make atmega1284p $AllEEprom=1 $XTRA_OPT=1
 #
+echo " "; echo "***** make atmega165 ******"
+make atmega165 $AllEEprom=1 $XTRA_OPT=1
 echo " "; echo "***** make atmega165a ******"
 make atmega165a $AllEEprom=1 $XTRA_OPT=1
 echo " "; echo "***** make atmega165p ******"
@@ -85,21 +101,33 @@ make atmega165p $AllEEprom=1 $XTRA_OPT=1
 #
 echo " "; echo "***** make atmega325 ******"
 make atmega325 $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make atmega325a ******"
+make atmega325a $AllEEprom=1 $XTRA_OPT=1
 echo " "; echo "***** make atmega325p ******"
 make atmega325p $AllEEprom=1 $XTRA_OPT=1
 #
 echo " "; echo "***** make atmega3250 ******"
 make atmega3250 $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make atmega3250a ******"
+make atmega3250a $AllEEprom=1 $XTRA_OPT=1
 echo " "; echo "***** make atmega3250p ******"
 make atmega3250p $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make atmega3250pa ******"
+make atmega3250pa $AllEEprom=1 $XTRA_OPT=1
 #
 echo " "; echo "***** make atmega645 ******"
 make atmega645 $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make atmega645a ******"
+make atmega645a $AllEEprom=1 $XTRA_OPT=1
 echo " "; echo "***** make atmega645p ******"
 make atmega645p $AllEEprom=1 $XTRA_OPT=1
 #
 echo " "; echo "***** make atmega6450 ******"
 make atmega6450 $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make atmega6450a ******"
+make atmega6450a $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make atmega6450p ******"
+make atmega6450p $AllEEprom=1 $XTRA_OPT=1
 #
 echo " "; echo "***** make atmega169 ******"
 make atmega169 $AllEEprom=1 $XTRA_OPT=1
@@ -160,32 +188,46 @@ make atmega8535 $AllEEprom=1 $XTRA_OPT=1
 #
 echo " "; echo "***** make attiny84 ******"
 make attiny84 $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make attiny44 ******"
+make attiny44 $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make attiny24 ******"
+make attiny24 $AllEEprom=1 $XTRA_OPT=1
 #
 echo " "; echo "***** make attiny85 ******"
 make attiny85 $AllEEprom=1 $XTRA_OPT=1
-#
-echo " "; echo "***** make attiny87 ******"
-make attiny87 $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make attiny45 ******"
+make attiny45 $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make attiny25 ******"
+make attiny25 $AllEEprom=1 $XTRA_OPT=1
 #
 echo " "; echo "***** make attiny167 ******"
 make attiny167 $AllEEprom=1 $XTRA_OPT=1
-#
-echo " "; echo "***** make attiny48 ******"
-make attiny48 $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make attiny87 ******"
+make attiny87 $AllEEprom=1 $XTRA_OPT=1
 #
 echo " "; echo "***** make attiny88 ******"
 make attiny88 $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make attiny48 ******"
+make attiny48 $AllEEprom=1 $XTRA_OPT=1
 #
 echo " "; echo "***** make attiny841 ******"
 make attiny841 $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make attiny441 ******"
+make attiny441 $AllEEprom=1 $XTRA_OPT=1
 echo " "; echo "***** make attiny861 ******"
 make attiny861 $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make attiny461 ******"
+make attiny461 $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make attiny261 ******"
+make attiny261 $AllEEprom=1 $XTRA_OPT=1
 #
 echo " "; echo "***** make attiny1634 ******"
 make attiny1634 $AllEEprom=1 $XTRA_OPT=1
 #
 echo " "; echo "***** make attiny4313 ******"
 make attiny4313 $AllEEprom=1 $XTRA_OPT=1
+echo " "; echo "***** make attiny2313 ******"
+make attiny2313 $AllEEprom=1 $XTRA_OPT=1
 #
 echo " "; echo "***** make at90can32 ******"
 make at90can32 $AllEEprom=1 $XTRA_OPT=1

@@ -39,80 +39,132 @@
 #define CLOCKS_PER_BIT ((F_CPU-((((2*RCALL_TICS+LOOP_TICS)*2-1)*BAUD_RATE)/2))/BAUD_RATE)
 ; CLOCKS_PER_BIT is now the total clock tics required for matching the BAUD time.
 #if CLOCKS_PER_BIT < 0
+ ; single delay is too slow, can not be used
  #undef CLOCKS_PER_BIT_NO_RCALL
  #define CLOCKS_PER_BIT_NO_RCALL ((F_CPU-(((LOOP_TICS*2-1)*BAUD_RATE)/2))/BAUD_RATE)
- #if CLOCKS_PER_BIT_NO_RCALL == 0
+ #if CLOCKS_PER_BIT_NO_RCALL < 0
   #error " No additional delay to Soft_UART loop time"
  #endif
- #if CLOCKS_PER_BIT_NO_RCALL > 4
-  #undef DOUBLE_DELAY_CALL
-  #if CLOCKS_PER_BIT_NO_RCALL >= RCALL_TICS
-   #undef REST_TICS_DD
-   #define REST_TICS_DD (CLOCKS_PER_BIT_NO_RCALL - RCALL_TICS)
-   #if REST_TICS_DD == 0
-    #define DOUBLE_DELAY_CALL  rcall direct_return0
-   #elif REST_TICS_DD == 1
-    #define DOUBLE_DELAY_CALL  rcall direct_return0 \
-	nop
-   #elif REST_TICS_DD == 2
-    #define DOUBLE_DELAY_CALL  rcall direct_return0 \
-	rjmp	.
-   #elif TEST_TICS_DD == 3
-    #define DOUBLE_DELAY_CALL  rcall direct_return0 \
-	rjmp	. \
-	nop
-   #elif REST_TICS_DD == 4
-    #define DOUBLE_DELAY_CALL  rcall direct_return0 \
-	rjmp	. \
-	rjmp	. 
-   #elif REST_TICS_DD == 5
-    #define DOUBLE_DELAY_CALL  rcall direct_return0 \
-	rjmp	. \
-	rjmp	. \
-	nop
-   #elif REST_TICS_DD == 6
-    #define DOUBLE_DELAY_CALL  rcall direct_return0 \
-	rjmp	. \
-	rjmp	. \
-	rjmp	. 
-   #else
-    #error " Baud rate not supported by Soft-UART"
-   #endif
-   #undef TOTAL_TICS_SD
-   #define TOTAL_TICS_SD (((CLOCKS_PER_BIT_NO_RCALL + LOOP_TICS) / 2) - 4)
-   #if TOTAL_TICS_SD < 2
-    #error " Baud rate Not supported by Soft-UART < 2"
-   #endif
-   #undef SINGLE_DELAY_CALL
-   #if TOTAL_TICS_SD <= 2
-    #define SINGLE_DELAY_CALL  rjmp	.
-   #elif TOTAL_TICS_SD == 3
-    #define SINGLE_DELAY_CALL  rjmp	. \
-	nop
-   #elif TOTAL_TICS_SD == 4
-    #warning " TOTAL_TICS_SD == 4"
-    #define SINGLE_DELAY_CALL  rjmp	.  
-//    #define SINGLE_DELAY_CALL  rjmp	.  
-//	rjmp	.
-   #elif TOTAL_TICS_SD == 5
-    #define SINGLE_DELAY_CALL  rjmp	. \
-	rjmp	. \
-	nop
-   #elif TOTAL_TICS_SD == 6
-    #define SINGLE_DELAY_CALL  rjmp	. \
-	rjmp	. \
-	rjmp	. 
-   #else
-    #error " Baud rate Not supported by Soft-UART"
-   #endif
-  #endif 	/*  CLOCKS_PER_BIT_NO_RCALL >= RCALL_TICS */
+ #undef DOUBLE_DELAY_CALL
+ #undef DOUBLE_DELAY_CALL_X1
+ #undef DOUBLE_DELAY_CALL_X2
+ #undef DOUBLE_DELAY_CALL_X3
+ #if CLOCKS_PER_BIT_NO_RCALL >= RCALL_TICS
+  ; double_delay can use a rcall
+  #define DOUBLE_DELAY_CALL      rcall direct_return0
+  #undef REST_TICS_DD
+  #define REST_TICS_DD (CLOCKS_PER_BIT_NO_RCALL-RCALL_TICS)
+ #elif CLOCKS_PER_BIT_NO_RCALL >= 2
+  #define DOUBLE_DELAY_CALL   rjmp	.
+  #undef REST_TICS_DD
+  #define REST_TICS_DD  (CLOCKS_PER_BIT_NO_RCALL -2)
+ #elif CLOCKS_PER_BIT_NO_RCALL == 1
+  #define DOUBLE_DELAY_CALL	nop
+  #undef REST_TICS_DD
+  #define REST_TICS_DD 0
+ #elif CLOCKS_PER_BIT_NO_RCALL == 0
+  #define DOUBLE_DELAY_CALL	; no delay
+  #undef REST_TICS_DD
+  #define REST_TICS_DD 0
+ #endif
+ ; we can handle up to 6 additional tics (3* rjmp) for rest time
+ #if REST_TICS_DD == 0
+  #define DOUBLE_DELAY_CALL_X1   ;
+  #define DOUBLE_DELAY_CALL_X2   ;
+  #define DOUBLE_DELAY_CALL_X3   ;
+ #elif REST_TICS_DD == 1
+  #define DOUBLE_DELAY_CALL_X1   nop
+  #define DOUBLE_DELAY_CALL_X2   ;
+  #define DOUBLE_DELAY_CALL_X3   ;
+ #elif REST_TICS_DD == 2
+  #define DOUBLE_DELAY_CALL_X1   rjmp	.
+  #define DOUBLE_DELAY_CALL_X2   ;
+  #define DOUBLE_DELAY_CALL_X3   ;
+ #elif REST_TICS_DD == 3
+  #define DOUBLE_DELAY_CALL_X1   rjmp	.
+  #define DOUBLE_DELAY_CALL_X2   nop
+  #define DOUBLE_DELAY_CALL_X3   ;
+ #elif REST_TICS_DD == 4
+  #define DOUBLE_DELAY_CALL_X1   rjmp	.
+  #define DOUBLE_DELAY_CALL_X2   rjmp	.
+  #define DOUBLE_DELAY_CALL_X3   ;
+ #elif REST_TICS_DD == 5
+  #define DOUBLE_DELAY_CALL_X1   rjmp	.
+  #define DOUBLE_DELAY_CALL_X2   rjmp	.
+  #define DOUBLE_DELAY_CALL_X3   nop
+ #elif REST_TICS_DD == 6
+  #define DOUBLE_DELAY_CALL_X1   rjmp	.
+  #define DOUBLE_DELAY_CALL_X2   rjmp	.
+  #define DOUBLE_DELAY_CALL_X3   rjmp	.
  #else
-  #error "Baudrate is too high for this CPU clock frequency, please select a lower Baudrate!"
- #endif 	/* CLOCKS_PER_BIT_NO_RCALL > 4 */
+   #error " Baud rate not supported by Soft-UART"
+ #endif
+
+
+ #undef TOTAL_TICS_SD
+ #define TOTAL_TICS_SD (((CLOCKS_PER_BIT_NO_RCALL + LOOP_TICS) / 2) - 4)
+ #undef SINGLE_DELAY_CALL
+ #undef SINGLE_DELAY_CALL_X1
+ #undef SINGLE_DELAY_CALL_X2
+ #undef SINGLE_DELAY_CALL_X3
+ #if TOTAL_TICS_SD < 0
+  #error " Baud rate Not supported by Soft-UART < 0"
+ #endif
+ ; we can handle between 0 and 8 additional tics (4* rjmp) for single delay
+ ; the longest rcall/ret is mega2560 with 9 tics!!!
+ #if TOTAL_TICS_SD == 0
+# dummy instructions
+  #define SINGLE_DELAY_CALL     ;
+  #define SINGLE_DELAY_CALL_X1  ;
+  #define SINGLE_DELAY_CALL_X2  ;
+  #define SINGLE_DELAY_CALL_X3  ;
+ #elif TOTAL_TICS_SD == 1
+  #define SINGLE_DELAY_CALL     nop
+  #define SINGLE_DELAY_CALL_X1  ;
+  #define SINGLE_DELAY_CALL_X2  ;
+  #define SINGLE_DELAY_CALL_X3  ;
+ #elif TOTAL_TICS_SD == 2
+  #define SINGLE_DELAY_CALL     rjmp	.
+  #define SINGLE_DELAY_CALL_X1  ;
+  #define SINGLE_DELAY_CALL_X2  ;
+  #define SINGLE_DELAY_CALL_X3  ;
+ #elif TOTAL_TICS_SD == 3
+  #define SINGLE_DELAY_CALL     rjmp	.
+  #define SINGLE_DELAY_CALL_X1  nop
+  #define SINGLE_DELAY_CALL_X2  ;
+  #define SINGLE_DELAY_CALL_X3  ;
+ #elif TOTAL_TICS_SD == 4
+  #define SINGLE_DELAY_CALL     rjmp	.
+  #define SINGLE_DELAY_CALL_X1  rjmp	. 
+  #define SINGLE_DELAY_CALL_X2  ;
+  #define SINGLE_DELAY_CALL_X3  ;
+ #elif TOTAL_TICS_SD == 5
+  #define SINGLE_DELAY_CALL     rjmp	.
+  #define SINGLE_DELAY_CALL_X1  rjmp	. 
+  #define SINGLE_DELAY_CALL_X2  nop
+  #define SINGLE_DELAY_CALL_X3  ;
+ #elif TOTAL_TICS_SD == 6
+  #define SINGLE_DELAY_CALL     rjmp	.
+  #define SINGLE_DELAY_CALL_X1  rjmp	. 
+  #define SINGLE_DELAY_CALL_X2  rjmp	. 
+  #define SINGLE_DELAY_CALL_X3  ;
+ #elif TOTAL_TICS_SD == 7
+  #define SINGLE_DELAY_CALL     rjmp	.
+  #define SINGLE_DELAY_CALL_X1  rjmp	. 
+  #define SINGLE_DELAY_CALL_X2  rjmp	. 
+  #define SINGLE_DELAY_CALL_X3  nop
+ #elif TOTAL_TICS_SD == 8
+  #define SINGLE_DELAY_CALL     rjmp	.
+  #define SINGLE_DELAY_CALL_X1  rjmp	. 
+  #define SINGLE_DELAY_CALL_X2  rjmp	. 
+  #define SINGLE_DELAY_CALL_X3  rjmp  .
+ #else
+  #error " Baud rate Not supported by Soft-UART"
+ #endif
  #define BASE_DELAY_CALL no_delay
 
 #else	
- /* CLOCKS_PER_BIT >= 0 */
+ /* CLOCKS_PER_BIT with rcall >= 0 */
  #define UART_B_VALUE ((CLOCKS_PER_BIT)/6)	/* this is the required loop counter */
  #define UART_R_VALUE ((CLOCKS_PER_BIT/2) - (UART_B_VALUE*3))	/* the remainder tics not serviced */
  #if UART_B_VALUE > 255
@@ -190,7 +242,13 @@
  #undef DOUBLE_DELAY_ADDR
  #undef SINGLE_DELAY_ADDR
  #undef DOUBLE_DELAY_CALL
+ #define DOUBLE_DELAY_CALL_X1  ; xtra delay not required with loop
+ #define DOUBLE_DELAY_CALL_X2  ; xtra delay not required with loop
+ #define DOUBLE_DELAY_CALL_X3  ; xtra delay not required with loop
  #undef SINGLE_DELAY_CALL
+ #define SINGLE_DELAY_CALL_X1  ; xtra delay not required with loop
+ #define SINGLE_DELAY_CALL_X2  ; xtra delay not required with loop
+ #define SINGLE_DELAY_CALL_X3  ; xtra delay not required with loop
  #undef BASE_DELAY_CALL
  #define NEW_DELAY_CODE_REQUIRED
  #if (CLOCKS_PER_BIT * DelayMul) == BIT_CLOCKS_0

@@ -632,7 +632,7 @@ no_pll:
 
 #if SOFT_UART > 0
  #if (UART_TX_DDR == UART_RX_DDR) && (UART_TX_BIT == UART_RX_BIT)
-  #if INVERSE_UART > 1
+  #if INVERSE_UART > 0
    #warning "One Pin UART can not be used with INVERSE_UART !"
    #undef INVERSE_UART
    #define INVERSE_UART 0
@@ -642,7 +642,7 @@ no_pll:
 	ACBI	UART_TX_DDR, UART_TX_BIT	; set TX DDR bit as input, High level with Pull-Up
  #else
 	; initialize the TX output, normal mode
-  #if INVERSE_UART > 1
+  #if INVERSE_UART > 0
 	ACBI	UART_TX_PORT, UART_TX_BIT	; set TX bit to low
   #else
 	ASBI	UART_TX_PORT, UART_TX_BIT	; set TX bit to high

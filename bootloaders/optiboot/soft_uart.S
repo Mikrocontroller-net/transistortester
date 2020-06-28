@@ -200,12 +200,8 @@ PUT_CH :	/*  void putch(char ch) */
   #endif
  #endif
 
- #if INVERSE_UART > 0
-	clc			; clear carry for start bit
- #else
 	com	r24
 	sec			; set carry for start bit
- #endif
 PUT_LOP :
  #if QuickStopBit > 0
 	DOUBLE_DELAY_CALL 	; takes 2*(7 + UART_B_VALUE*3 + UART_R_VALUE clock tics)
@@ -213,7 +209,11 @@ PUT_LOP :
 	DOUBLE_DELAY_CALL_X2	; trick for delay without loop
 	DOUBLE_DELAY_CALL_X3	; trick for delay without loop
  #endif
+ #if INVERSE_UART > 0
+	brcs	SET_BIT		; 1/2 clock tics
+ #else
 	brcc	SET_BIT		; 1/2 clock tics
+ #endif
 ;############### clear the TX bit #######################
  #ifdef UART_ONE_WIRE
  ; special output, set DDR Bit to 1, which enable a 0 output
@@ -266,12 +266,7 @@ TX_IS_SET :
 	DOUBLE_DELAY_CALL_X2	; trick for delay without loop
 	DOUBLE_DELAY_CALL_X3	; trick for delay without loop
  #endif
- #if INVERSE_UART > 0
-	sec			; 5+1 set carry for stop bit
-	ror	r24		; 5+1+1 shift right with carry
- #else
-	lsr	r24		; 5+1
- #endif
+	lsr	r24		; 5+1 shift right with 0
 	dec	r22		; 5+1+1 decrement don't touch the carry
 	brne	PUT_LOP 	; 5+1+1+2 = 9, total 9 +(2*7) = 23 Clock tics
      	wdr		; watchdogReset();
@@ -371,9 +366,6 @@ e       in      r25, _SFR_IO_ADDR(SOFT_UART_RX_PIN)	; 1+1
 	dec	r22		; 3+1+1 or 4+1+1
 	breq	FIN_RX		; 3+1+1+1 or 4+1+1+1
 	ror	r24		; 6 or 7
-  #if INVERSE_UART > 0
-	nop			; 7 or 8 for invers mode
-  #endif
 	rjmp	GET_NEXT_BIT	; 7+2 + 2*7 clock tics (22 + UART_B_VALUE*6 + UART_R_VALUE*2)
 FIN_RX :
 #if 0

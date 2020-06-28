@@ -386,8 +386,12 @@ and \ref{tab:options2}
                    &                & The example select bit 1 of PORTD as serial output. \\
                    &                & You can use this option only with the software UART. \\
     \hline
+   INVERSE\_UART  & INVERSE\_UART=1 & Inverse the logic level for RX and TX data.\\
+	           &                & This option can only used with software UART. \\
+    \hline
     UART           & UART=1         & Select a hardware UART used for the serial communication \\
                    &                & You can only select a UART if more than one is present. \\
+		   &		    & This option will also change the default setting for SOFT\_UART.\\
     \hline
  LED\_START\_      & LED\_START\_   & Select a repetition count of flashing cycles for the \\
    FLASHES         &   FLASHES=3    & control LED. A count of 1 or -1 will only flash once \\

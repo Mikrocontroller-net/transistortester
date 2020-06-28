@@ -1234,6 +1234,8 @@ help2:
 	@$(ECHO_CMD) " "
 	@$(ECHO_CMD) "C_SOURCE       set to 1 for C source instead of assembler version."
 	@$(ECHO_CMD) " "
+	@$(ECHO_CMD) "INVERSE_UART   set to 1 for inverting the level of RX and TX signals, only"
+	@$(ECHO_CMD) "               with SOFT_UART possible."
 	@$(ECHO_CMD) "BIGBOOT        select additional memory for the bootloader to test"
 	@$(ECHO_CMD) "               the automatic selection of start address and the number"
 	@$(ECHO_CMD) "               of boot pages."

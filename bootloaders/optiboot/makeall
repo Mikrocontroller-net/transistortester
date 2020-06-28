@@ -6,8 +6,8 @@ AllEEprom="SUPPORT_EEPROM"
 # If you change the XTRA_OPT option name from SOFT_UART to somewhat unrecognized by optiboot,
 #   the option is switched off!!
 #XTRA_OPT="C_SOURCE"
-XTRA_OPT="SOFT_UART"
-#XTRA_OPT="SFT_UART"
+#XTRA_OPT="SOFT_UART"
+XTRA_OPT="SFT_UART"
 #  buildable platforms of somewhat questionable support level
 echo " "; echo "***** make lilypad ******"
 make lilypad $AllEEprom=1 $XTRA_OPT=1

@@ -383,9 +383,21 @@ BASE_DELAY_CALL :
  ; with the Auto-Baud function we use allways the same delay function
   #if !defined(BIT_CLOCKS_A)
    #undef DOUBLE_DELAY_CALL
+   #undef DOUBLE_DELAY_CALL_X1
+   #undef DOUBLE_DELAY_CALL_X2
+   #undef DOUBLE_DELAY_CALL_X3
    #undef SINGLE_DELAY_CALL
+   #undef SINGLE_DELAY_CALL_X1
+   #undef SINGLE_DELAY_CALL_X2
+   #undef SINGLE_DELAY_CALL_X3
    #define DOUBLE_DELAY_CALL rcall	double_uartDelay_a
+   #define DOUBLE_DELAY_CALL_X1   ;
+   #define DOUBLE_DELAY_CALL_X2   ;
+   #define DOUBLE_DELAY_CALL_X3   ;
    #define SINGLE_DELAY_CALL rcall	single_uartDelay_a
+   #define SINGLE_DELAY_CALL_X1  ;
+   #define SINGLE_DELAY_CALL_X2  ;
+   #define SINGLE_DELAY_CALL_X3  ;
    #define BIT_CLOCKS_A 1
 double_uartDelay_a:
 	rcall	single_uartDelay_a	; after first call runs to uartDelay and returns to DOUBLE_DELAY_CALL 

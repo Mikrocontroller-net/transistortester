@@ -381,7 +381,11 @@ und \ref{tab:options2}
     \hline
     UART           & UART=1         & Wählt für die  serielle Schnittstelle des Chips. \\
                    &                & Eine Auswahl setzt das Vorhandensein mehrerer \\
-                   &                & Schnittstellen voraus. \\
+                   &                & Schnittstellen voraus, funktioniert dann aber auch \\
+		   &                & mit SOFT\_UART. \\
+    \hline
+    INVERSE\_UART  & INVERSE\_UART=1 & Invertiert die Pegel von RX und TX Signalen. \\
+	           &                & Die Option kann nur bei Software UART benutzt werden.\\
     \hline
  LED\_START\_      & LED\_START\_   & Wählt für die Anzahl der Blink-Zyklen \\
    FLASHES         &   FLASHES=3    & für die Kontroll-LED.                            \\

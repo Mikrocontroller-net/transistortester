@@ -47,10 +47,10 @@ wt_rx0low:
 RX_was_high:
 
 #if BAUD_RATE < 60
- #if ((BAUD_RATE - ((BAUD_RATE/20)*20)) < 10)
-  #define TWO_BIT_MEASURE
- #else
+ #if ((BAUD_RATE - ((BAUD_RATE/20)*20)) > 9)
   #undef TWO_BIT_MEASURE
+ #else
+  #define TWO_BIT_MEASURE
  #endif
  #if ((BAUD_RATE - ((BAUD_RATE/10)*10)) < 5) && (SOFT_UART == 0)
   #define START_COUNTER_COMMAND  (1<<CS11)	/* run counter at F_CPU/8 speed */

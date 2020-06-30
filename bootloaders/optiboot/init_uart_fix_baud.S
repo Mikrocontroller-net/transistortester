@@ -1,4 +1,8 @@
   ; setup the correct BAUD_RATE divider for Clock-frequency F_CPU
+  ; using of 2 Stop Bit make the transfer more stable,
+  ; usually this effects only the transmitter TX
+  #undef TWOSTOP
+  #define TWOSTOP 1
   #define BAUD_DIV (((F_CPU / 4 / BAUD_RATE) - 1) / 2)
   #if BAUD_DIV > 255
    #undef BAUD_DIV
@@ -36,14 +40,14 @@
     #endif
   #endif
 
-  #if ((BAUD_DIV < 3) && (BAUD_ERROR != 0))  || (BAUD_DIV < 1)
+  #if ((BAUD_DIV < 3) && (BAUD_ERROR != 0))  || (BAUD_DIV < 0)
     // permit high bitrates (ie 1Mbps@16MHz) if error is zero
     #error "Unachievable baud rate (too fast) BAUD_RATE"
   #endif // baud rate fastn check
   #include "report_baud_div.h"
   #if defined(UART_SRC) && defined(UART_SEL)
 	; version for m8, m16, m32 for example (with double function UCSRC)
-	ldi	r25, (1<<UART_SEL)|(1<<UCSZ01)|(1<<UCSZ00)	; config UART
+	ldi	r25, (1<<UART_SEL)|(TWOSTOP<<USBS0)|(1<<UCSZ01)|(1<<UCSZ00)	; config UART
 	AOUT	UART_SRC, r25
   	; This processor family has no double register for the 12-bit scaler
 	ldi	r25, lo8(BAUD_DIV)	; 0x10
@@ -55,7 +59,7 @@
   #else
     /* no ATmega8_16_32 */
    #if !defined(__AVR_ATmega163__) && !defined(__AVR_ATtiny87__) && !defined(__AVR_ATtiny167__)
-	ldi	r25, (1<<UCSZ00)|(1<<UCSZ01)	;0x06
+	ldi	r25, (TWOSTOP<<USBS0)|(1<<UCSZ00)|(1<<UCSZ01)	;0x06
 	AOUT	UART_SRC, r25
    #endif
 	ldi	r25, lo8(BAUD_DIV)	; 0x10

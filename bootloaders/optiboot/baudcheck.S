@@ -48,38 +48,46 @@ fcpu=`echo F_CPU | tr -d LU`
  */
 echo --------------------------------------------------------------------------------
 #if BAUD_RATE < 100
- #if (BAUD_RATE < 25) && (SOFT_UART == 0)
+ #if (BAUD_RATE < 25) 
  echo  "Simple Baudrate measurement implemented in optiboot! (2-bit, CLK/8)"
   #define TWO_BIT_MEASURE
   #undef FULL_SPEED_CLK
+
  #elif BAUD_RATE < 30
  echo  "Simple Baudrate measurement implemented in optiboot! (2-bit, CLK/1)"
   #define TWO_BIT_MEASURE
   #define FULL_SPEED_CLK
- #elif (BAUD_RATE < 35) && (SOFT_UART == 0)
+
+ #elif (BAUD_RATE < 35)
  echo  "Simple Baudrate measurement implemented in optiboot! (4-bit, CLK/8)"
   #undef TWO_BIT_MEASURE
   #undef FULL_SPEED_CLK
+
  #elif BAUD_RATE < 40
  echo  "Simple Baudrate measurement implemented in optiboot! (4-bit, CLK/1)"
   #undef TWO_BIT_MEASURE
   #define FULL_SPEED_CLK
- #elif (BAUD_RATE < 45) && (SOFT_UART == 0)
+
+ #elif (BAUD_RATE < 45)
  echo  "Simple Baudrate measurement with time limit implemented in optiboot! (2-bit, CLK/8)"
   #define TWO_BIT_MEASURE
   #undef FULL_SPEED_CLK
+
  #elif BAUD_RATE < 50
  echo  "Simple Baudrate measurement with time limit implemented in optiboot! (2-bit, CLK/1)"
   #define TWO_BIT_MEASURE
   #define FULL_SPEED_CLK
- #elif (BAUD_RATE < 55) && (SOFT_UART == 0)
+
+ #elif (BAUD_RATE < 55) 
  echo  "Simple Baudrate measurement with time limit implemented in optiboot! (4-bit, CLK/8)"
   #undef TWO_BIT_MEASURE
   #undef FULL_SPEED_CLK
+
  #elif BAUD_RATE < 60
  echo  "Simple Baudrate measurement with time limit implemented in optiboot! (4-bit, CLK/1)"
   #undef TWO_BIT_MEASURE
   #define FULL_SPEED_CLK
+
  #elif BAUD_RATE < 80
  echo "Complex Baudrate measurement implemented in optiboot! (2-bit, CLK/1)"
   #define TWO_BIT_MEASURE
@@ -91,7 +99,7 @@ echo ---------------------------------------------------------------------------
  #endif
  
  #if SOFT_UART > 0
-  #if ((BAUD_RATE - ((BAUD_RATE/10)*10)) >= 5)
+  #if ((BAUD_RATE - ((BAUD_RATE/2)*2)) != 0)
    // 15-bit delay 
    #if BAUD_RATE < 60
     #ifdef TWO_BIT_MEASURE

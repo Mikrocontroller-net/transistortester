@@ -401,7 +401,7 @@ BASE_DELAY_CALL :
    #define BIT_CLOCKS_A 1
 double_uartDelay_a:
 	rcall	single_uartDelay_a	; after first call runs to uartDelay and returns to DOUBLE_DELAY_CALL 
-   #if ((BAUD_RATE - ((BAUD_RATE/10)*10)) >= 5)
+   #if ((BAUD_RATE - ((BAUD_RATE/2)*2)) != 0)
    // slow 15 bit loop, 5 tics per count
 single_uartDelay_a:
 	mov	r25, r10	; use the count from auto-baud in r10:11

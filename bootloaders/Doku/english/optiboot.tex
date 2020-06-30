@@ -644,11 +644,12 @@ makes no error because of the ''NOP'' compensation. Thus the error stays below 1
 The higher baud rates tend to get higher error for the transmission time, because
 the time frame of the CPU clock does not match to the desired baud time.
 The hardware UART has then the same problem, if it use the same CPU-clock.
-If you wish to generate a baud rate of 230400 with a CPU clock rate of \(8 MHz\),
-you can use either 34 tics with a baud time of \(4.25\mu s\) or
-35 tics with a baud time of \(4.375\mu s\).
-For the first case your baud time is \(2.08\%\) too short, for the
-second case the baud time is \(0.8\%\) too long.
+If you wish to generate a baud rate of 230400 with a CPU clock rate of \(16 MHz\),
+your UART can operate with \(2 MHz\) in the best case.
+So you can use either 8 tics with a baud time of \(4\mu s\) or
+9 tics with a baud time of \(4.5\mu s\).
+For the first case your baud time is \(7.84\%\) too short, for the
+second case the baud time is \(3.68\%\) too long.
 
 \subsection{Using more than one serial interface}
 
@@ -942,6 +943,43 @@ You can select the SOFT\_UART function together with the automatic
 baud rate detection (BAUD\_RATE \textless 100) only for the
 assembler version of optiboot, not for the C-version.
 
+The following table summarize the different options:
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c | c | c | c | c | c |}
+    \hline
+   BAUD\_RATE  & Bit    & Clock  & Time  & Check \\
+               & Base  & Base & Limit &       &  \\
+    \hline
+    \hline
+    20-24      &  2     & clk/8 &   -  & simple \\
+    \hline
+    25-29      &  2     &  clk  &   -  & simple \\
+    \hline
+    30-34      &  4     & clk/8 &   -  & simple  \\
+    \hline
+    35-39      &  4     &  clk  &   -  & simple  \\
+    \hline
+    40-44      &  2     & clk/8 &   Yes  & simple \\
+    \hline
+    45-49      &  2     &  clk  &   Yes  & simple \\
+    \hline
+    50-54      &  4     & clk/8 &   Yes  & simple  \\
+    \hline
+    55-59      &  4     &  clk  &   Yes  & simple  \\
+    \hline
+    60-79      &  2     &  clk  &   -  & complex \\
+    \hline
+    80-99      &  4     &  clk &   -  & complex \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{Setting options for the baud rate measurement.}
+  \label{tab:AutoBaudControl}
+\end{table}
+
+
 There are some differencies and special features for the baud rate measuring
 together with the Soft UART solution compared to the hardware UART solution.
 Usually a 8-Bit counter loop is used to generate the delay for the half baud time.
@@ -952,8 +990,9 @@ the resolution is doubled too.
 With a known fixed baud rate this error will be compensated by extra instructions.
 But this is impossible, if the baud rate  is unknown in advance.
 To get the best possible rounding of the selected baud rate,
-the time measurement is done with the 16-bit counter at the full CPU clock rate (F\_CPU).
-For the hardware UART the counter can be used with F\_CPU/8.
+the time measurement should be done with the 16-bit counter at the full CPU clock rate (F\_CPU).
+For the hardware UART the counter can be used with F\_CPU/8, because the UART
+use a identical clock rate and the time is measured for 2 or 4 bits.
 
 The use of a 8-bit delay loop result to a upper limit of the baud time
 depending on the CPU clock rate.
@@ -975,7 +1014,7 @@ the best selectable divider is still 4.
 For this case the actual baud rate is now \(237.5kHz\) with the same
 error of -5\% as the base clock rate.
 To overcome at least the lower baud limit with the software UART solution,
-all baud rate selections between 20 and 59, where the last digit is greater 4,
+all baud rate selections between 20 and 99, which are odd-numbered,
 will generate a code with a 15-bit delay loop.
 Unfortunately the pass time of this loop is 5 tics for the 15-bit loop.
 Because of the double delay call for the full baud time,
@@ -1054,7 +1093,7 @@ specified (\(115.2 kBaud\)) was also done.
     \hline
   OSCCAL  & Freq.    & HW-UART & SW-UART & HW-UART & \multicolumn{2}{c |}{SW-UART} \\
    \_CORR  & kHz       & 57600   & 57600  & 115200  & \multicolumn{2}{c |}{115200} \\
-           &           & Mode 82 & Mode 82 & Mode 56 & Mode 52 & Mode 56 \\
+           &           & Mode 82 & Mode 82 & Mode 56 & Mode 52 & Mode 57 \\
     \hline
     \hline
     20     &  7157   &  OK       &   OK    &  Err    &  Err    &   Err \\
@@ -1093,8 +1132,8 @@ any noticeable difficulties. The also checked simplest mode 42 has not shown
 any difficulties with the tested even OSCCAL\_CORR values of the table.
 
 Only at the extemely high baud rate of \(115,2k\) for this CPU frequency the operation
-mode 52 shows four failures and with the operation mode 56 eight failures are stated.
-The increase in failures in mode 56 with the 15-bit delay loop is expected and caused by
+mode 52 shows four failures and with the operation mode 57 eight failures are stated.
+The increase in failures in mode 57 with the 15-bit delay loop is expected and caused by
 the coarser grid of adjustable delay times.
 
 A test with a chinese Arduino UNO board, which use a CH340G chip as USB-serial converter,

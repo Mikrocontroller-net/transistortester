@@ -632,10 +632,11 @@ also 0.13\%. Probleme mit der Einhaltung der Baudrate bestehen also eher für ho
 weil die Übertragungszeit für ein Bit nicht zum vorgegebenen Zeitraster durch den CPU-Takt paßt.
 Das gleiche Problem hat dann aber auch die Hardware UART-Schnittstelle.
 Ein Beispiel erläutert das Problem.
-Wenn man mit \(8 MHz\) CPU-Taktrate eine Baudrate von 230400 erzeugen möchte, 
-kann man entweder 34 Takte mit einer Taktzeit von \(4.25\mu s\) oder 35 Takte
-mit einer Baud-Zeit von \(4.375\mu s\) verwenden. Im ersten Fall ist die Baud-Zeit
-um \(2.08\%\) zu kurz, im zweiten Fall ist die Baud-Zeit um \(0.8\%\) zu lang.
+Wenn man mit \(16 MHz\) CPU-Taktrate eine Baudrate von 230400 erzeugen möchte, 
+stehen für das UART im besten Fall \(2 MHz\) Takt zur Verfügung.
+kann man entweder 8 Takte mit einer Taktzeit von \(4 \mu s\) oder 9 Takte (UBRR=8)
+mit einer Baud-Zeit von \(4.5\mu s\) verwenden. Im ersten Fall ist die Baud-Zeit
+um \(7.84\%\) zu kurz, im zweiten Fall ist die Baud-Zeit um \(3.68\%\) zu lang.
 
 
 \subsection{Benutzung von mehr als einer seriellen Schnittstelle}
@@ -936,18 +937,56 @@ der Assembler-Version des Optiboot Programms benutzt werden.
 Die C-Variante unterstützt die Baudratenmessung mit der automatischen Einstellung
 der Baudrate nur für einen Hardware-UART.
 
+Die nachfolgende Tabelle faßt die verschiedenen Möglichkeiten noch einmal zusammen:
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c | c | c | c | c | c |}
+    \hline
+   BAUD\_RATE  & Bit    & Zeit  & Time  & Kontrolle \\
+               & Anzahl & Basis & Limit &       &  \\
+    \hline
+    \hline
+    20-24      &  2     & clk/8 &   -  & simpel \\
+    \hline
+    25-29      &  2     &  clk  &   -  & simpel \\
+    \hline
+    30-34      &  4     & clk/8 &   -  & simpel  \\
+    \hline
+    35-39      &  4     &  clk  &   -  & simpel  \\
+    \hline
+    40-44      &  2     & clk/8 &   Ja  & simpel \\
+    \hline
+    45-49      &  2     &  clk  &   Ja  & simpel \\
+    \hline
+    50-54      &  4     & clk/8 &   Ja  & simpel  \\
+    \hline
+    55-59      &  4     &  clk  &   Ja  & simpel  \\
+    \hline
+    60-79      &  2     &  clk  &   -  & Komplex \\
+    \hline
+    80-99      &  4     &  clk &   -  & Komplex \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{Einstellmöglichkeit für die Baudratenbestimmung.}
+  \label{tab:AutoBaudControl}
+\end{table}
+
 Bei der Baudratenmessung für die Software UART Funktion bestehen einige Unterschiede
 und Besonderheiten gegenüber der Lösungen für die Hardware UART Schnittstelle.
 Normalerweise  für wird für die halbe Baud-Zeit ein 8-Bit Zähler in einer
 Verzögerungsschleife benutzt. Mit diesem Zähler kann die Anzahl der CPU-Takte für die
 Verzögerung wegen der Schleifen-Durchlaufzeit nur auf 3 Takte genau eingestellt werden. 
 Wegen des doppelten Aufrufs der Schleife für die volle Baud-Zeit muß man 
-die Auflösung ebenfalls verdoppeln.. Bei einer fest gewählten
+die Auflösung ebenfalls verdoppeln, also 6 Takte. Bei einer fest gewählten
 Baudrate wird der dadurch entstehende Fehler im Programm ausgeglichen. 
 Das ist hier nicht möglich, da die Baudrate ja nicht im voraus bekannt ist.
 Um auf jeden Fall die bestmögliche Rundung des eingestellten Wertes zu ermöglichen,
-wird für die Zeitmessung der Zähler bei der vollen CPU-Taktrate (F\_CPU) betrieben.
-Für den Hardware-UART reicht für den Zähler ein Betrieb mit F\_CPU/8.
+wird für die Zeitmessung der Zähler besser bei der vollen CPU-Taktrate (F\_CPU) betrieben.
+Für den Hardware-UART reicht für den Zähler ein Betrieb mit F\_CPU/8, 
+da die gleiche Frequenz auch vom UART benutzt wird und die Zeit von
+2 oder 4 Takten gemessen wird.
 
 Bedingt durch den 8-Bit Zähler ergibt sich abhängig von der CPU-Taktrate
 eine maximale Verzögerungszeit und damit eine Mindest-Baudrate, die
@@ -967,7 +1006,7 @@ Wenn ich nun eine abweichende Taktrate von \(7.6MHz\) annehme, ist
 der bestmögliche Teiler ebenfalls 32. Dadurch ergibt sich die Baudrate mit
 dem gleichen Fehler wie die Taktrate von \(237.5kHz\), in beiden Fällen sind es -5\%.
 Um wenigstens die untere Baud-Grenze mit der Software-UART Lösung überwinden
-zu können, wird bei allen vorgegebenen Baud-Werten unter 100, deren letzte Ziffer größer 5 ist,
+zu können, wird bei allen vorgegebenen Baud-Werten unter 100, die ungerade sind,
 wird eine Verzögerungsschleife mit 15-Bit benutzt. Leider beträgt dann die Durchlaufzeit
 der Schleife dann 5 Takte. Durch den doppelten Aufruf der Verzögerungsschleife beträgt
 die Auflösung nur noch 10 Takte und damit etwas schlechter als die Hardware-UART
@@ -1045,7 +1084,7 @@ ergänzt.
     \hline
    OSCCAL  & Freq. & HW-UART &  SW-UART & HW-UART & \multicolumn{2}{c |}{SW-UART} \\
    \_CORR  & kHz       & 57600   & 57600  & 115200  & \multicolumn{2}{c |}{115200}  \\
-           &           & Mode 82 & Mode 82 & Mode 56 & Mode 52 & Mode 56 \\
+           &           & Mode 82 & Mode 82 & Mode 56 & Mode 52 & Mode 57 \\
     \hline
     \hline
     20     &  7157   &  OK       &   OK    &  Err    &  Err    &   Err \\
@@ -1085,8 +1124,8 @@ auch die ungeraden OSCCAL\_CORR Einstellungen ohne erkennbare Schwierigkeiten ge
 Auch mit dem einfachsten Betriebsmodus 42 waren bei den geraden OSCCAL\_CORR
 Einstellungen der Tabelle keine Ausfälle zu verzeichnen.
 Erst bei der für diese CPU-Frequenz extrem hohen Baudrate von \(115.2k\) waren 
-für den Betriebsmodus 52 vier Ausfälle und mit dem Betriebsmodus 56 acht Ausfälle
-zu beobachten. Die Zunahme der Ausfälle bei Betriebsart 56 mit der 15-Bit Zeitschleife war
+für den Betriebsmodus 52 vier Ausfälle und mit dem Betriebsmodus 57 acht Ausfälle
+zu beobachten. Die Zunahme der Ausfälle bei Betriebsart 57 mit der 15-Bit Zeitschleife war
 wegen der groberen Rasterung der einstellbaren Zeiten zu erwarten.
 
 Ein Test mit einer chinesischen Arduino UNO Platine, die als USB-seriell Wandler einen

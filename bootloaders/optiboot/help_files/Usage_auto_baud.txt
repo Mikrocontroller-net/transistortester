@@ -1,0 +1,58 @@
+Autor: Karl-Heinz Kübbeler   (kh_kuebbeler@web.de) , Jul 2020
+
+A automatic baud rate determinattion can be selected by specifying
+a BAUD_RATE below 100.
+
+The number of bits used for the baud rate calculation and the use of an additional
+check of the received character are determined with each group of ten.
+The following list gives you an overview:
+
+Area	 Bits  time limit   data check
+10-19	 9	-		-
+20-29	 2	-		-
+30-39	 4	yes		-
+40-49	 2	yes		-
+50-59	 4	yes		-
+60-69	 2	yes		yes
+70-79	 4	yes		yes
+80-89	 9	yes		yes
+
+All settings of the baud rate with the last digit in the range 0-4 will select
+a 16-Bit counter with a clock divided by factor 8 for time measurements.
+The other settings with the last digit between 5 and 9 use a 16-Bit counter
+at full CPU clock rate.
+
+All automatic selected baud rates can be used with present hardware UARTs or
+with a software solution for the UART.
+Of course the optiboot programs with a automatic baud rate selection are
+bigger than the programs with a fixed baud rate selection.
+Die implementation of the software UART will nedd additional memory,
+which will exxed the 512 byte limit in most cases.
+
+The following table give you an overview about the setting options with software UART:
+
+BAUD_RATE	No. of cycles	Resolution	Comment
+last digit	delay loop pass	Time measurement
+
+  0		  6/8		  8/CLK		Slow calculation, 8 cycles only for 9 Bit
+  1		  10		  8/CLK
+  2		   6		  8/CLK
+  3		  16		  8/CLK		Increased number of cacles for a loop pass
+  4		   8		  8/CLK		Increased number of cacles for a loop pass
+
+  5		  10		  1/CLK		Slow calculation, 8 cycles only for 9 Bit
+  5		   6		  1/CLK
+  7		  10		  1/CLK
+  8		   8		  1/CLK		Increased number of cacles for a loop pass
+  9		  16		  1/CLK		Increased number of cacles for a loop pass
+
+With the slow calculation for the pass count of the delay loop (last digit 0 and 5)
+for the serial communication the risk is high, that the calculation is too slow to
+end before the Stop-Bit has finished and the transmission of next Rx data has allready
+started without preparing the receiver.
+To prevent this situation, the other methods use either an accelerated subtract loop
+for the devision or shift instructions if the divisor is a power of two.
+The use of shift instruction for the division can be easier done with the increased
+number of cycles for a loop pass (last digits 3,4,8,9).
+Unfortunately, the solution with the shift commands only results in the shorter program
+if no more than 2 shift operations are needed.

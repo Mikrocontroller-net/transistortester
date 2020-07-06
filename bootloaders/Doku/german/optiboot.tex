@@ -937,35 +937,53 @@ der Assembler-Version des Optiboot Programms benutzt werden.
 Die C-Variante unterstützt die Baudratenmessung mit der automatischen Einstellung
 der Baudrate nur für einen Hardware-UART.
 
-Die nachfolgende Tabelle faßt die verschiedenen Möglichkeiten noch einmal zusammen:
+Die nachfolgende Tabelle~ref{tab:AutoBaudControl} faßt die verschiedenen Möglichkeiten noch einmal zusammen.
+Die angegebenen Programmgrößen in Bytes beziehen sich auf einen  ATmega328 ohne LED Blinkfunktion, aber mit
+EEprom Unterstützung. Die Programmgrößen in Klammern ergeben sich beim Betrieb der seriellen Schnittstelle mit
+Software.
 
 \begin{table}[H]
   \begin{center}
     \begin{tabular}{| c | c | c | c | c | c |}
     \hline
-   BAUD\_RATE  & Bit    & Zeit  & Time  & Kontrolle \\
-               & Anzahl & Basis & Limit &       &  \\
+	    BAUD\_RATE  & Bit    & Zeit  & Time  & Kontrolle & mega328 \\
+			& Anzahl & Basis & Limit &           & Größe (HW)\\
     \hline
     \hline
-    20-24      &  2     & clk/8 &   -  & simpel \\
+	    10-14      &  9     & clk/8 &   -  & simpel   & 500  \\
     \hline
-    25-29      &  2     &  clk  &   -  & simpel \\
+	    15-19      &  9     & clk   &   -  & simpel   & 502  \\
     \hline
-    30-34      &  4     & clk/8 &   -  & simpel  \\
+	    20-24      &  2     & clk/8 &   -  & simpel   & 488  \\
     \hline
-    35-39      &  4     &  clk  &   -  & simpel  \\
+	    25-29      &  2     &  clk  &   -  & simpel   & 494  \\
     \hline
-    40-44      &  2     & clk/8 &   Ja  & simpel \\
+	    30-34      &  4     & clk/8 &   -  & simpel   & 492  \\
     \hline
-    45-49      &  2     &  clk  &   Ja  & simpel \\
+	    35-39      &  4     &  clk  &   -  & simpel   & 494  \\
     \hline
-    50-54      &  4     & clk/8 &   Ja  & simpel  \\
+	    40-44      &  2     & clk/8 &  Ja  & simpel   & 494  \\
     \hline
-    55-59      &  4     &  clk  &   Ja  & simpel  \\
+	    45-49      &  2     &  clk  &  Ja  & simpel   & 500  \\
     \hline
-    60-79      &  2     &  clk  &   -  & Komplex \\
+	    50-54      &  4     & clk/8 &  Ja  & simpel   & 498  \\
     \hline
-    80-99      &  4     &  clk &   -  & Komplex \\
+	    55-59      &  4     &  clk  &  Ja  & simpel   & 500  \\
+    \hline
+    \hline
+	    60-64      &  2     & clk/8 &  Ja  & Komplex  & 544  \\
+    \hline
+	    65-69      &  2     & clk   &  Ja  & Komplex  & 550  \\
+    \hline
+	    70-74      &  4     & clk/8 &  Ja  & Komplex  & 548  \\
+    \hline
+	    75-79      &  4     & clk   &  Ja  & Komplex  & 550  \\
+    \hline
+	    80-84      &  9     & clk/8 &  Ja  & Komplex  & 558  \\
+	    90-94      &        &       &      &          &     \\
+    \hline 
+	    85-89      &  9     & clk   &  Ja  & Komplex  & 560 \\
+	    95-99      &        &       &      &          &     \\
     \hline
     \end{tabular}
   \end{center}
@@ -1021,23 +1039,27 @@ durch die Abfrageschleife des RX-Signals entstehen kann.
   \begin{center}
     \begin{tabular}{| c | c | c | c | c | c |}
     \hline
-   BAUD\_RATE  & SOFT\_ & Minimum & BAUD-Err & Kommentar  \\
+   BAUD\_RATE  & SOFT\_ & Minimum & BAUD-Err   & Kommentar  \\
    Option      & UART   & Baud    & \textless 4\% @ Baud &  \\
     \hline
+  20-29,40-49  &  0     &  244      &   80.0k  & HW\_UART 2-Bit Zeit  \\
+    60-69      &        &           &          &                    \\
     \hline
-	    40-99      &  0     &  244 (488)  &   80.0k  & HW\_UART 2-Bit Time (4-Bit) \\
+  30-39,50-59  &  0     &  488      &   80.0k  & HW\_UART 4-Bit Zeit  \\
     \hline
-    42         &  1     &  5151       &   81.6k  & Simple, 2-Bit Time, 8-Bit Delay  \\
+  10-19,70-99  &  0     &  1098     &   80.0k  & HW\_UART 9-Bit Zeit  \\
     \hline
-    62         &  1     &  5151       &   81.6k  & Complex, 2-Bit Time, 8-Bit Delay  \\
+    42         &  1     &  5151     &   81.6k  & Simple, 2-Bit Zeit, 8-Bit Schleife  \\
     \hline
-    82         &  1     &  5151       &   81.6k  & Complex, 4-Bit Time, 8-Bit Delay  \\
+    62         &  1     &  5151     &   81.6k  & Complex, 2-Bit Zeit, 8-Bit Schleife  \\
     \hline
-    49         &  1     &  244       &   53.3k  &  Simple, 2-Bit Time, 15-Bit Delay\\
+    82         &  1     &  5151     &   81.6k  & Complex, 4-Bit Zeit, 8-Bit Schleife  \\
     \hline
-    69         &  1     &  1220       &   53.3k &  Complex, 2-Bit Time, 15-Bit Delay \\
+    47         &  1     &  244      &   53.3k  &  Simple, 2-Bit Zeit, 15-Bit Schleife\\
     \hline
-    89         &  1     &  1220       &   53.3k & Complex, 4-Bit Time, 15-Bit Delay \\
+    67         &  1     &  1220     &   53.3k  &  Complex, 2-Bit Zeit, 15-Bit Schleife \\
+    \hline
+    87         &  1     &  1220     &   53.3k  & Complex, 4-Bit Zeit, 15-Bit Schleife \\
     \hline
     \end{tabular}
   \end{center}
@@ -1054,20 +1076,68 @@ Bei Benutzung der Hardware-UART Schnittstelle sind unabhängig der gewählten
 Option für die Messung die Standard Baudraten 1200, 2400, 4800, 9600, 19200,
 38400 und 57600 benutzbar.
 Höhere Baudraten sind nicht mehr sicher bei der Benutzung, obwohl
-auch \(115.6kBaud\) bei Tests oft funktionierte.
+auch \(115.2kBaud\) bei Tests oft funktionierte.
 Ebenso war ein Test mit 115.2 kBaud bei \(16 MHz\) Quarz-Betrieb erfolgreich,
 selbst bei Benutzung der Software UART Lösung mit der 15-Bit Verzögerungsschleife.
 Wenn für die Software-UART Lösung die 8-Bit Verzögerungsschleife benutzt wird,
 kann die Baudrate 1200, 2400 und 4800 nicht benutzt werden.
 Erst bei Benutzung der 15-Bit Verzögerungsschleife sind die unteren Baudraten
 mit Software UART benutzbar.
-Der Unterschied zwischen der 49 und der 69 bzw. 89 Einstellung ergibt
+Der Unterschied zwischen der 47 und der 67 bzw. 87 Einstellung ergibt
 sich durch den verwendeten 16-Bit Zähler. Bei der Einstellung 49 wird nur
 die Zeit von 2 Datenbits gemessen, bei den Einstellungen über 59 wird
 die komplette Byte-Sequenz vom Start-Bit bis zum Stop-Bit mit dem 16-Bit Zähler gemessen.
 Baudraten unter 9600 Baud werden wahrscheinlich aber ohnehin eher selten benutzt.
 Die Bereiche für die Baudrate verschieben sich natürlich mit der verwendeten
 Taktrate für den Prozessor.
+
+Für die Software UART Schnittstelle ergeben sich zahlreiche Einstellmöglichkeiten,
+die einerseits die Messung der Baudzeit betreffen, aber auch die Art der
+Verzögerungsberechnung betreffen.
+In der Tabelle~\ref{tab:AutoBaudLen328} sind die resultierenden Programmlängen des Bootloaders für
+einen  ATmega328 gegenüber gestellt. Die Programme in den Spalten \_0 und \_5, also alle 
+mit den Ziffern 0 oder 5 endenden Baudraten, sind leider in der Praxis nicht benutzbar.
+Der Grund ist, daß die Division durch fortlaufende Subtraktion zu langsam ist, um sicher
+in der Zeit des Stop-Bits fertig zu werden. Dann wird der Anfang des nächsten Start-Bits
+möglicherweise verpasst. Abhilfe würde hier schaffen, wenn der Sender der Daten (avrdude)
+die Daten mit 2 Stopp-Bits senden würde.
+Weil das so nicht vorgesehen ist, benutzen die anderen Spalten eine beschleunigte Subtraktions-Schleife,
+die dann aber ein längeres Programm bewirkt.
+Wenn möglich wird statt der Subtraktions-Schleife die schnellere Schiebe-Operationen
+für die Division durch 2-er Potenzen benutzt. Um das zu ermöglichen, sind in den Spalten
+\_3, \_4, \_8 und \_9 die Anzahl der Takte für einen Durchlauf der Verzögerungszeit-Schleife
+auf 2-er Potenzen verlängert (8T oder 16T). Leider ergibt sich nur dann ein kürzeres Programm,
+wenn die Anzahl der Schiebe-Operationen kleiner als 3 ist und damit auf eine Scheife verzichtet
+werden kann.
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c | c | c| c | c | c || c | c | c | c | c |}
+    \hline
+    BAUD\_RATE  &  \_0 & \_1   &  \_2 & \_3   & \_4    &  \_5  &  \_6  &   \_7 &  \_8   &  \_9 \\
+    ,Meßbasis   & 6T/8T &  10T &  6T  &  16T  &  8T    &  10T  &  6T   &  10T  &   8T   &  16T \\
+    \hline
+       & \multicolumn{5}{c ||}{ simple CLK/8}    &  \multicolumn{5}{c |}{simple CLK/1}      \\
+    \hline
+   1\_ , 9Bit   & 510  & 524   & 516  & 528   & 516    &  522  &  518  &  528  &  520   &  532 \\
+   2\_ , 2Bit   & 512  & 528  & 518 & 520 & \textbf{506} & 518 & 514 & 524 & \textbf{512} & 522 \\
+   3\_ , 4Bit   & 508  & 524  & 514 & 522 & \textbf{510} & 520 &  516  &  528  &  514   & 532 \\
+   4\_ , 2Bit   & 518  & 534  & 524 & 526 & \textbf{512} & 524 &  520  &  530  &  518   & 528 \\
+   5\_ , 4Bit   & 514  & 530   & 520  & 528   & 516    &  526  &  522  &  534  &  520   &  538 \\
+    \hline
+      & \multicolumn{5}{c ||}{ komplex CLK/8}    &  \multicolumn{5}{c |}{komplex CLK/1}      \\
+    \hline
+   6\_ , 2Bit   & 572  & 588   & 578  & 580   & 576    &  578  &  574  &  584  &  572   &  582 \\
+   7\_ , 4Bit   & 570  & 586   & 576  & 590   & 578    &  580  &  576  &  588  &  580   &  592 \\
+   8\_ , 9Bit   & 572  & 586   & 578  & 590   & 578    &  584  &  580  &  590  &  582   &  594 \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{Bootloader-Programmlängen mit automatischer Baudratenwahl für Software UART}
+  \label{tab:AutoBaudLen328}
+\end{table}
+
+
 
 Abschließend möchte ich die Ergebnisse von Tests mit einen ATmega1281 bei etwa \(8MHz\)
 RC-Oszillator Frequenz vorstellen, die ich bei und oberhalb der garantierten Baudrate

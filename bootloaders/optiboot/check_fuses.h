@@ -208,7 +208,7 @@
  #endif
 
  #if ((BLFUSE & 0x0f) == 2)
-  #if (CK_FREQ < 7300000) || (CK_FREQ > 8100000)
+  #if (CK_FREQ < 7200000) || (CK_FREQ > 8800000)
    #error "Int RC mode, wrong Lfuse setting for this frequency (ATmega...8)!"
   #endif
  #endif

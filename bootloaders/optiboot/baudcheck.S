@@ -48,92 +48,95 @@ fcpu=`echo F_CPU | tr -d LU`
  */
 echo --------------------------------------------------------------------------------
 #if BAUD_RATE < 100
- #if (BAUD_RATE < 25) 
- echo  "Simple Baudrate measurement implemented in optiboot! (2-bit, CLK/8)"
-  #define TWO_BIT_MEASURE
-  #undef FULL_SPEED_CLK
 
- #elif BAUD_RATE < 30
- echo  "Simple Baudrate measurement implemented in optiboot! (2-bit, CLK/1)"
-  #define TWO_BIT_MEASURE
-  #define FULL_SPEED_CLK
-
- #elif (BAUD_RATE < 35)
- echo  "Simple Baudrate measurement implemented in optiboot! (4-bit, CLK/8)"
-  #undef TWO_BIT_MEASURE
-  #undef FULL_SPEED_CLK
-
- #elif BAUD_RATE < 40
- echo  "Simple Baudrate measurement implemented in optiboot! (4-bit, CLK/1)"
-  #undef TWO_BIT_MEASURE
-  #define FULL_SPEED_CLK
-
- #elif (BAUD_RATE < 45)
- echo  "Simple Baudrate measurement with time limit implemented in optiboot! (2-bit, CLK/8)"
-  #define TWO_BIT_MEASURE
-  #undef FULL_SPEED_CLK
-
- #elif BAUD_RATE < 50
- echo  "Simple Baudrate measurement with time limit implemented in optiboot! (2-bit, CLK/1)"
-  #define TWO_BIT_MEASURE
-  #define FULL_SPEED_CLK
-
- #elif (BAUD_RATE < 55) 
- echo  "Simple Baudrate measurement with time limit implemented in optiboot! (4-bit, CLK/8)"
-  #undef TWO_BIT_MEASURE
-  #undef FULL_SPEED_CLK
-
- #elif BAUD_RATE < 60
- echo  "Simple Baudrate measurement with time limit implemented in optiboot! (4-bit, CLK/1)"
-  #undef TWO_BIT_MEASURE
-  #define FULL_SPEED_CLK
-
- #elif BAUD_RATE < 80
- echo "Complex Baudrate measurement implemented in optiboot! (2-bit, CLK/1)"
-  #define TWO_BIT_MEASURE
-  #define FULL_SPEED_CLK
+ #if (BAUD_RATE-((BAUD_RATE/20)*20)) < 10 
+  #define Bits2Measure 2
  #else
- echo "Complex Baudrate measurement implemented in optiboot! (4-bit, CLK/1)"
-  #undef TWO_BIT_MEASURE
-  #define FULL_SPEED_CLK
+  #define Bits2Measure 4
+ #endif
+
+ #if (BAUD_RATE >= 80) || (BAUD_RATE < 20)
+  #undef Bits2Measure
+  #define Bits2Measure 9
+ #endif
+
+ #if (BAUD_RATE-((BAUD_RATE/10)*10)) < 5 
+  #define CounterClockDiv 8
+ #else
+  #define CounterClockDiv 1
+ #endif
+
+ #if BAUD_RATE >= 60
+  #define Method "Complex"
+ #else
+  #define Method "Simple"
+ #endif
+
+ B2M=Bits2Measure
+ CCD=CounterClockDiv
+ MTD=Method
+
+ #if BAUD_RATE >= 40 && (Baud_RATE < 60) 
+  echo "${MTD} Baudrate measurement with time limit implemented in optiboot! (${B2M}-bit, Clk/${CCD})"
+ #else
+  echo "${MTD} Baudrate measurement implemented in optiboot! (${B2M}-bit, Clk/${CCD})"
  #endif
  
  #if SOFT_UART > 0
+  #define Remainder5 (BAUD_RATE - ((BAUD_RATE/5)*5))
   #if ((BAUD_RATE - ((BAUD_RATE/2)*2)) != 0)
    // 15-bit delay 
-   #if BAUD_RATE < 60
-    #ifdef TWO_BIT_MEASURE
-     UartDelay=$(( (65535/2) ))
-    #else
-     UartDelay=$(( (65535/4) ))
-    #endif
+   // With 15 bit delay loop you can get a max delay of 32767*2*5 tics for 1 bit,
+   // so the time measure counter gives allways the max periode for 2-9 bits,
+   // if it runs at full speed or clk/8 speed (65535*8)<(32767*10*2).
+   #if (Remainder5 > 2)
+    #define TICS_PER_LOOP_PASS 8
    #else
-    // With full check (10 bits)
-    UartDelay=$(( (65535/10) ))
+    #define TICS_PER_LOOP_PASS 5
+   #endif
+   #if BAUD_RATE < 60
+     UartDelay=$(( (65535* CounterClockDiv / Bits2Measure ) ))
+   #else
+    // With full check (9 bits)
+    UartDelay=$(( (65535* CounterClockDiv / 9) ))
    #endif
 
-UartMinDelay=$(( ((25*5)+(RCALL_TICS+1)*2 + LOOP_TICS) ))
-echo "SoftUART Minimum `echo "scale=0;(${fcpu} / ${UartDelay})" | bc ` Baud, Difference surely less than 4% up to `echo "scale=1;(${fcpu} / $UartMinDelay / 1000)" | bc ` kBaud, Slow 15-Bit loop"
+TicsN=$(( TICS_PER_LOOP_PASS * 2 ))
+UartMinDelay=$(( ((25*TICS_PER_LOOP_PASS)+(RCALL_TICS+1)*2 + LOOP_TICS) ))
+echo "SoftUART Minimum `echo "scale=0;(${fcpu} / ${UartDelay})" | bc ` Baud, Difference surely less than 4% up to `echo "scale=1;(${fcpu} / $UartMinDelay / 1000)" | bc ` kBaud, Slow 15-Bit loop with N*${TicsN} cycles"
 
   #else		/* 8-bit delay */
+   #if ((Bits2Measure == 9) && (CounterClockDiv == 8)) || (Remainder5 > 2)
+    #define TICS_PER_LOOP_PASS 4         /* special case 9 Bit measurement and clk/8 Counter */
+   #else
+    #define TICS_PER_LOOP_PASS 3
+   #endif
 
-UartDelay=$(( ((255*3*2) + (RCALL_TICS*2)  + LOOP_TICS) ))
-UartMinDelay=$(( ((25*3)+(RCALL_TICS*2) + LOOP_TICS) ))
-echo "SoftUART Minimum `echo "scale=0;(${fcpu} / ${UartDelay})" | bc ` Baud, Difference surely less than 4% up to `echo "scale=1;(${fcpu} / $UartMinDelay / 1000)" | bc ` kBaud, Fast 8-Bit loop"
+UartDelay=$(( ((255*TICS_PER_LOOP_PASS*2) + (RCALL_TICS*2)  + LOOP_TICS) ))
+UartMinDelay=$(( ((25*TICS_PER_LOOP_PASS)+(RCALL_TICS*2) + LOOP_TICS) ))
+TicsN=$(( TICS_PER_LOOP_PASS * 2 ))
+echo "SoftUART Minimum `echo "scale=0;(${fcpu} / ${UartDelay})" | bc ` Baud, Difference surely less than 4% up to `echo "scale=1;(${fcpu} / $UartMinDelay / 1000)" | bc ` kBaud, Fast 8-Bit loop with N*${TicsN} cycles"
   #endif
 
  #else		/* HW UART */
+  // UART run with clk/8 and max period is 4096 tics.
+  // Max total clk tics for 9 bits 4096*8*9=294912,
+  // max total clk tics for 4 bits 4096*8*4=131072,
+  // which is more than a 16 bit counter can take.
+  // So the time measurement with the 16 Bit counter limits
+  // the lower baud, when it runs at full speed.
   #if BAUD_RATE < 60
    // simple mode
-   #ifdef TWO_BIT_MEASURE
-    UartDelay=$(( (65535/2) ))
+   #if (Bits2Measure > 2) && (CounterClockDiv == 1)
+    UartDelay=$(( (65535/ Bits2Measure ) ))
    #else
-    UartDelay=$(( (65535/4) ))
+    UartDelay=$(( (8*4096) ))
    #endif
   #else
    // full 10-bit check
-   #ifdef FULL_SPEED_CLK
-    UartDelay=$(( (65535/4) ))
+   #if CounterClockDiv == 1
+    // always the time of 9 bits is analysed
+    UartDelay=$(( (65535/ 9 ) ))
    #else
     UartDelay=$(( (8*4096) ))
    #endif
@@ -141,9 +144,10 @@ echo "SoftUART Minimum `echo "scale=0;(${fcpu} / ${UartDelay})" | bc ` Baud, Dif
 
 echo "UART Minimum `echo "scale=0;(${fcpu} / ${UartDelay})" | bc ` Baud, Difference surely less than 4% up to `echo "scale=1;(${fcpu} / (8*12500))" | bc ` kBaud"
 
- #endif
+ #endif		/* SW HW UART */
 
 #else 	/* BAUD_RATE >= 100) */
+
 #if SOFT_UART > 0
  #define DelayMul 1
  #define CLOCKS_PER_BIT ((F_CPU-((((2*RCALL_TICS+LOOP_TICS)*2-1)*BAUD_RATE)/2))/BAUD_RATE)

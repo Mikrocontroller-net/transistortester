@@ -1467,15 +1467,6 @@ nochange:
 #endif
 
 ;**********************************************************
-;	rcall wait_timeout  set the watch dog timer to 16ms and wait for reset
-wait_timeout:
-     	ldi	r20, WATCHDOG_16MS
-	rcall	watchdogConfig	;  watchdogConfig(WATCHDOG_16MS) 
-lop77:
-    	rjmp	lop77		; endless loop, watch Dog will reset!
-
-
-;**********************************************************
 ;	rcall watchdogConfig set the watch dog timer to the time specified by r20
 ;	use r21
 watchdogConfig: 
@@ -1563,6 +1554,15 @@ wt_ov0:
      	wdr		; watchdogReset();  /* prevent watch dog timeout during flashing the LED */
 	ret
 #endif		/* LED_FLASHES */
+
+;**********************************************************
+;	rcall wait_timeout  set the watch dog timer to 16ms and wait for reset
+wait_timeout:
+     	ldi	r20, WATCHDOG_16MS
+	rcall	watchdogConfig	;  watchdogConfig(WATCHDOG_16MS) 
+lop77:
+    	rjmp	lop77		; endless loop, watch Dog will reset!
+
 
 ;-------------------------------------------------------------------------------------
 #if (BIGBOOT > 0)

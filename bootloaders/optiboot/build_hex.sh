@@ -45,16 +45,23 @@ else
 fi
 
 
-if [ "${PROGRAM}" == "" ] ; then
+if [ "${PROGRAM}" = "" ] ; then
  PROGRAM="optiboot"
 fi
-if [ "${SOURCE_TYPE}" == "" ] ; then
+
+if [ "${C_SOURCE}" = "" ] || (( ${C_SOURCE}0 == 0 )) ; then
  SOURCE_TYPE="S"
+ if [ "${SUPPORT_EEPROM}" = "" ] ; then
+  SUPPORT_EEPROM=1
+ fi
+else
+ SOURCE_TYPE="c"
+ if [ "${SUPPORT_EEPROM}" = "" ] ; then
+  SUPPORT_EEPROM=0
+ fi
 fi
-if [ "${SUPPORT_EEPROM}" == "" ] ; then
- SUPPORT_EEPROM=1
-fi
-if [ "${MCU_TARGET}" == "" ] ; then
+
+if [ "${MCU_TARGET}" = "" ] ; then
  MCU_TARGET="${TARGET}"
 fi
 source get_avr_params.sh
@@ -74,13 +81,13 @@ echo "Build of ${FREQ_OPER}" >> ${logfile}
 echo " "
 
 if (( ${BAUD_RATE} < 100 )) ; then
- if (( 0${SUPPORT_EEPROM} == 0 )) ; then
+ if (( ${SUPPORT_EEPROM}0 == 0 )) ; then
    echo "${FREQ_OPER} with ${Vgelb}Auto-Baudrate${Vnormal} configured."
  else
    echo "${FREQ_OPER} with ${Vgelb}Auto-Baudrate${Vnormal}${EE_SUPPORT}"
  fi
 else
- if (( 0${SUPPORT_EEPROM} == 0 )) ; then
+ if (( ${SUPPORT_EEPROM}0 == 0 )) ; then
    echo "${FREQ_OPER} with ${Vgelb}Baudrate ${BAUD_RATE}${Vnormal} configured."
  else
    echo "${FREQ_OPER} with ${Vgelb}Baudrate ${BAUD_RATE}${Vnormal}${EE_SUPPORT}"
@@ -119,7 +126,7 @@ if [ "${TIMEOUT_MS}" != "" ] ; then
   COMMON_OPTIONS="${COMMON_OPTIONS} -DTIMEOUT_MS=${TIMEOUT_MS}"
 fi
 if [ "${OSCCAL_CORR}" != "" ] ; then
-  COMMON_OPTIONS="${COMMON_OPTIONS} -DTIMEOUT_MS=${OSCCAL_CORR}"
+  COMMON_OPTIONS="${COMMON_OPTIONS} -DOSCCAL_CORR=${OSCCAL_CORR}"
 fi
 XTRA_OPTIONS="-DSUPPORT_EEPROM=${SUPPORT_EEPROM}"
 if (( ${TEST_OUTPUT} != 0 )) ; then
@@ -137,7 +144,7 @@ fi
 if [ "${FORCE_RSTDISBL}" != "" ] ; then
   XTRA_OPTIONS="${XTRA_OPTIONS} -DFORCE_RSTDISBL=1"
 fi
-if [ "${UART}" == "" ] ; then
+if [ "${UART}" = "" ] ; then
 UART=0
 fi
 if (( ${UART} > ${my_uarts} )) && (( ${my_uarts} > 0 )); then
@@ -200,10 +207,10 @@ fi
 # this processor, so the number of pages is more than 7 pages for the actual size of optiboot.
 
 export prog_size=`avr-size -C ${PROGRAM}x.elf | grep "Program:" | cut -c 10-16`
-export pg_anz=`echo "${prog_size}/${BOOT_PAGE_LEN}+1" | bc`
+export pg_anz=`echo "(${prog_size}-1)/${BOOT_PAGE_LEN}+1" | bc`
 
 if (( 0${VIRTUAL_BOOT_PARTITION} > 0 )) ; then
- export BootPages=`echo "( ${prog_size}/${FLASH_PAGE_SIZE}/${FLASH_ERASE_CNT} +1) * ${FLASH_ERASE_CNT}" | bc`
+	export BootPages=`echo "( (${prog_size}-1)/${FLASH_PAGE_SIZE}/${FLASH_ERASE_CNT} +1) * ${FLASH_ERASE_CNT}" | bc`
 else
  export BootPages=`echo "${pg_anz} + (${pg_anz}==3 ) + (${pg_anz}==5)*3 + (${pg_anz}==6)*2 + (${pg_anz} == 7)" | bc`
 fi

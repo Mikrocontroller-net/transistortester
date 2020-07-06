@@ -17,6 +17,14 @@
 # etc...
 #
 # Edit History
+# 20200706: kubi48: Now you can use 2 bits, 4 bits and 9 bits are time source
+#                   for the baud rate determination.
+#                   You can select to measure the time source with a full CPU clock rate
+#                   or with a factor 8 slower clock rate.
+#                   For the Software UART you can use 10 different methods to
+#                   compute and set delay loop parameters.
+#                   So you can choose a total of 80 different settings for the
+#                   Software UART solution.
 # 20200625: kubi48: The default setting for LED pin, and also the
 #                   TX and RX pin for processors without the Hardware UART,
 #                   are now defined in the avr_pins/AVR_FAMILY.pins
@@ -1176,6 +1184,7 @@ FORCE:
  export LED LED_START_FLASHES LED_DATA_FLASH
  export AVR_FREQ BAUD_RATE UART_RX UART_TX OSCCAL_CORR SOFT_UART
  export MCU_TARGET PROGRAM AVRDUDE_CONF FORCE_RSTDISBL TIMEOUT_MS
+ export SOURCE_TYPE
 
 hex_file: 
 	@bash build_hex.sh

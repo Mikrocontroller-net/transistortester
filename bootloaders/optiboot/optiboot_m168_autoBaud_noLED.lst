@@ -60,7 +60,7 @@ optiboot:
 	ldi	r20, WATCHDOG_TIME	; _OFF or _4S depending on FORCE_WATCHDOG
     3e10:	40 e0       	ldi	r20, 0x00	; 0
 	rcall	watchdogConfig		; WATCHDOG_OFF (or _4S if FORCE_WATCHDOG)
-    3e12:	ea d0       	rcall	.+468    	; 0x3fe8 <watchdogConfig>
+    3e12:	e7 d0       	rcall	.+462    	; 0x3fe2 <watchdogConfig>
 
 #if	VIRTUAL_BOOT_PARTITION > 0
 	ldi	ZL, save_vect_addr/2		; // Jump to WDT vector (jmp or rjmp table)
@@ -84,7 +84,7 @@ optiboot:
     3e1a:	4e e0       	ldi	r20, 0x0E	; 14
 #endif
 	rcall	watchdogConfig
-    3e1c:	e5 d0       	rcall	.+458    	; 0x3fe8 <watchdogConfig>
+    3e1c:	e2 d0       	rcall	.+452    	; 0x3fe2 <watchdogConfig>
 #endif
 
 #if FLASHEND > 0x1ffff
@@ -116,9 +116,9 @@ wt_rx0low:
     3e26:	fe cf       	rjmp	.-4      	; 0x3e24 <wt_rx0low>
 
 00003e28 <RX_was_high>:
-#if !defined(TIFR1) && defined(TIFR)
  #define TIFR1 TIFR
 #endif
+
 
 #if SOFT_UART == 0
 	ldi	r24, UART_SCALER8	; double speed mode
@@ -146,26 +146,25 @@ wt_rx0low:
 	AOUT	CNT16_CNTL, r1
     3e3c:	10 92 84 00 	sts	0x0084, r1	; 0x800084 <__TEXT_REGION_LENGTH__+0x7e0084>
 
-00003e40 <wt_rx0s>:
+#if BAUD_RATE < 60
+  ; simple detection of the baud-rate
 ; wait, if the UART-RX-Bit is low
+	ldi	r24, START_COUNTER_COMMAND	; start command for counter with /8 scaler or full speed
+    3e40:	81 e0       	ldi	r24, 0x01	; 1
+
+00003e42 <wt_rx0s>:
 wt_rx0s:
  #if INVERSE_UART > 0
 	ASBIS	UART_RX_PIN, UART_RX_BIT	; Look if RX is still low, INVERSE
  #else
 	ASBIC	UART_RX_PIN, UART_RX_BIT	; Look if RX is still high
-    3e40:	48 99       	sbic	0x09, 0	; 9
+    3e42:	48 99       	sbic	0x09, 0	; 9
  #endif
 	rjmp	wt_rx0s
-    3e42:	fe cf       	rjmp	.-4      	; 0x3e40 <wt_rx0s>
-	; Position 4: 1B+Delay
-	; I see no easy way to prevent the wrong baud-rate detection for each
-	; of the possible start conditions. So we check here only a upper time limit
-	; for the position 4 for saving flash memory (BAUD_RATE > 39).
-	; A full plausibility check is done for a Boot-Page size of more than 512 Byte.
-	ldi	r24, START_COUNTER_COMMAND	; start command for counter with /8 scaler or full speed
-    3e44:	81 e0       	ldi	r24, 0x01	; 1
+    3e44:	fe cf       	rjmp	.-4      	; 0x3e42 <wt_rx0s>
 
 00003e46 <wt_rx1s>:
+ #endif
 wt_rx1s:
  #if INVERSE_UART > 0
 	ASBIC	UART_RX_PIN, UART_RX_BIT	; Look if RX is still high
@@ -176,8 +175,11 @@ wt_rx1s:
 	rjmp	wt_rx1s
     3e48:	fe cf       	rjmp	.-4      	; 0x3e46 <wt_rx1s>
 	; begin of first "1" data bit is found after S0000, if it was a STK_GET_SYNC, 0x30
-	AOUT	CNT16_CCRB, r24		; Start counter 1 with /8 scaler
+ #if (Bits2Measure == 2) || (Bits2Measure == 4)
+	AOUT	CNT16_CCRB, r24		; Start counter 1 with or without /8 scaler for 2 or 4 Bit measure
     3e4a:	80 93 81 00 	sts	0x0081, r24	; 0x800081 <__TEXT_REGION_LENGTH__+0x7e0081>
+ #endif
+
  #if BAUD_RATE > 39
 	; the optional time-limit check is only done, if the BAUD_RATE is set > 39 
   #if TIFR1 < (0x20 + __SFR_OFFSET)
@@ -185,9 +187,9 @@ wt_rx1s:
     3e4e:	b0 9a       	sbi	0x16, 0	; 22
 
 00003e50 <wt_rx0bs>:
-	AOUT	TIFR1, r26		; clear OV-Flag
   #endif
  #endif	/* BAUD_RATE > 39 */
+
 wt_rx0bs:
  #if BAUD_RATE > 39
 	ASBIC	TIFR1, TOVFLAG	; Look if time limit is reached, OV Flag
@@ -216,8 +218,8 @@ wt_rx1bs:
 	rjmp	wt_rx1bs
     3e5a:	fe cf       	rjmp	.-4      	; 0x3e58 <wt_rx1bs>
 
- #ifndef TWO_BIT_MEASURE
-	AIN	r24, CNT16_CNTL			; read counter after second '0' bit is finished
+ #if (Bits2Measure == 4) || (Bits2Measure == 9)
+	AIN	r24, CNT16_CNTL		; read counter after second '0' bit is finished, 4-Bit or 9-Bit time
     3e5c:	80 91 84 00 	lds	r24, 0x0084	; 0x800084 <__TEXT_REGION_LENGTH__+0x7e0084>
 	AIN	r25, CNT16_CNTH
     3e60:	90 91 85 00 	lds	r25, 0x0085	; 0x800085 <__TEXT_REGION_LENGTH__+0x7e0085>
@@ -229,7 +231,7 @@ wt_rx1bs:
 	sbiw	r24, 24		; (four_bit_time - 24) / 32, faster selection than correct round up
     3e64:	48 97       	sbiw	r24, 0x18	; 24
     #endif
-	ldi	r28, 5		; divide by 32
+	ldi	r28, 5		; divide by 32 is done with 5 shifts in a loop
     3e66:	c5 e0       	ldi	r28, 0x05	; 5
 
 00003e68 <div4lop1>:
@@ -242,17 +244,17 @@ div4lop1:
     3e6c:	ca 95       	dec	r28
 	brne	div4lop1
     3e6e:	e1 f7       	brne	.-8      	; 0x3e68 <div4lop1>
+	ror	r24		; rotate through carry
 	lsr	r25
 	ror	r24		; rotate through carry
-   #endif	/* FULLSPEED_CTR */
-  #endif	/* TWO_BIT_MEASURE */
+   #endif	/* CounterClockDiv */
 	; now we can start the UART
-	AOUT	UART_SRRL, r24		; set the UART divider
-    3e70:	80 93 c4 00 	sts	0x00C4, r24	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7e00c4>
 	AOUT	UART_SRRH, r25
-    3e74:	90 93 c5 00 	sts	0x00C5, r25	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7e00c5>
+    3e70:	90 93 c5 00 	sts	0x00C5, r25	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7e00c5>
+	AOUT	UART_SRRL, r24		; set the UART divider
+    3e74:	80 93 c4 00 	sts	0x00C4, r24	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7e00c4>
 
-#if SOFT_UART == 0
+#if SOFT_UART == 0 
  #ifdef UART_ONE_WIRE
 	ldi	r24, UART_ENABLE_RX
  #else
@@ -733,7 +735,7 @@ ck_LEAVE:
 	ldi	r20, WATCHDOG_16MS	; 0x08
     3f78:	48 e0       	ldi	r20, 0x08	; 8
 	rcall	watchdogConfig
-    3f7a:	36 d0       	rcall	.+108    	; 0x3fe8 <watchdogConfig>
+    3f7a:	33 d0       	rcall	.+102    	; 0x3fe2 <watchdogConfig>
 
 00003f7c <ver_put>:
 ver_put:
@@ -768,7 +770,7 @@ verifySpace:		/* void verifySpace(void) { */
        	breq	no_to
     3f8a:	09 f0       	breq	.+2      	; 0x3f8e <no_to>
      	rcall	wait_timeout		;wait_timeout();
-    3f8c:	2a d0       	rcall	.+84     	; 0x3fe2 <wait_timeout>
+    3f8c:	30 d0       	rcall	.+96     	; 0x3fee <wait_timeout>
 
 00003f8e <no_to>:
 no_to:
@@ -933,45 +935,45 @@ no_erase4:
 	ret
     3fe0:	08 95       	ret
 
-00003fe2 <wait_timeout>:
-#endif
-
-;**********************************************************
-;	rcall wait_timeout  set the watch dog timer to 16ms and wait for reset
-wait_timeout:
-     	ldi	r20, WATCHDOG_16MS
-    3fe2:	48 e0       	ldi	r20, 0x08	; 8
-	rcall	watchdogConfig	;  watchdogConfig(WATCHDOG_16MS) 
-    3fe4:	01 d0       	rcall	.+2      	; 0x3fe8 <watchdogConfig>
-
-00003fe6 <lop77>:
-lop77:
-    	rjmp	lop77		; endless loop, watch Dog will reset!
-    3fe6:	ff cf       	rjmp	.-2      	; 0x3fe6 <lop77>
-
-00003fe8 <watchdogConfig>:
+00003fe2 <watchdogConfig>:
 watchdogConfig: 
 #ifndef WDTCSR
  #define WDTCSR  WDTCR
 #endif
 #if defined(WDCE)
     	ldi	r21, (1<<WDCE) | (1<<WDE)	; 0x18
-    3fe8:	58 e1       	ldi	r21, 0x18	; 24
+    3fe2:	58 e1       	ldi	r21, 0x18	; 24
 	AOUT	WDTCSR, r21	; (1<<WDCE) | (1<<WDE) ; watchdogConfig(x);
-    3fea:	50 93 60 00 	sts	0x0060, r21	; 0x800060 <__TEXT_REGION_LENGTH__+0x7e0060>
+    3fe4:	50 93 60 00 	sts	0x0060, r21	; 0x800060 <__TEXT_REGION_LENGTH__+0x7e0060>
  #else
     	ldi	r21, (1<<WDE)	; 0x08
 	AOUT	WDTCSR, r21	; (1<<WDE) ; watchdogConfig(x);
  #endif
 #endif
        	AOUT	WDTCSR, r20		; WDTCSR = x;
-    3fee:	40 93 60 00 	sts	0x0060, r20	; 0x800060 <__TEXT_REGION_LENGTH__+0x7e0060>
+    3fe8:	40 93 60 00 	sts	0x0060, r20	; 0x800060 <__TEXT_REGION_LENGTH__+0x7e0060>
        	ret
-    3ff2:	08 95       	ret
+    3fec:	08 95       	ret
+
+00003fee <wait_timeout>:
+#endif		/* LED_FLASHES */
+
+;**********************************************************
+;	rcall wait_timeout  set the watch dog timer to 16ms and wait for reset
+wait_timeout:
+     	ldi	r20, WATCHDOG_16MS
+    3fee:	48 e0       	ldi	r20, 0x08	; 8
+	rcall	watchdogConfig	;  watchdogConfig(WATCHDOG_16MS) 
+    3ff0:	f8 df       	rcall	.-16     	; 0x3fe2 <watchdogConfig>
+
+00003ff2 <lop77>:
+lop77:
+    	rjmp	lop77		; endless loop, watch Dog will reset!
+    3ff2:	ff cf       	rjmp	.-2      	; 0x3ff2 <lop77>
 ; 
 ; FORCE_WATCHDOG=
 ; LED_START_FLASHES=0
-; LED_DATA_FLASH=0
+; LED_DATA_FLASH=
 ; LED=
 ; UART=0
 ; SOURCE_TYPE=S

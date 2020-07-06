@@ -166,16 +166,7 @@ PUT_CH :	/*  void putch(char ch) */
  #endif
 	; r24 hold the data for serial output
 	; use r22, r23, r25
-	DOUBLE_DELAY_CALL
-	DOUBLE_DELAY_CALL_X1	; trick for delay without loop
-	DOUBLE_DELAY_CALL_X2	; trick for delay without loop
-	DOUBLE_DELAY_CALL_X3	; trick for delay without loop
-
-	DOUBLE_DELAY_CALL
-	DOUBLE_DELAY_CALL_X1	; trick for delay without loop
-	DOUBLE_DELAY_CALL_X2	; trick for delay without loop
-	DOUBLE_DELAY_CALL_X3	; trick for delay without loop
-;	SINGLE_DELAY_CALL	; work simular to a second half stop bit
+	SINGLE_DELAY_CALL	; work simular to a second half stop bit
 				; this can help to prevent framing error, if the
 				; baudrate has a error of 2% or more
 	ldi	r22, 10		; counter for the serial bit output

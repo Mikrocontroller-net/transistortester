@@ -1,0 +1,58 @@
+Autor: Karl-Heinz Kübbeler   (kh_kuebbeler@web.de) , Jul 2020
+
+Die automatische Baudraten-Anpassung wird gewählt, indem bei der BAUD_RATE Variablen
+ein Wert unter 100 angegeben wird.
+
+Mit jeder Zehnergruppe der Baudraten Einstellung wird die Anzahl der verwendeten Bitss
+für die Baudraten-Berechnung und die Benutzung einer zusätzlichen Kontrolle
+des empfangenen Zeichens bestimmt.
+Die nachfolgende Liste gibt einen Überblick:
+
+Bereich Bits  Zeitüberwachung  Kontrolle
+10-19	 9	-		-
+20-29	 2	-		-
+30-39	 4	mit		-
+40-49	 2	mit		-
+50-59	 4	mit		-
+60-69	 2	mit		mit
+70-79	 4	mit		mit
+80-89	 9	mit		mit
+
+Alle Vorgaben der Baudrate mit der letzten Ziffer 0-4 benutzen einem 16-Bit Zähler mit
+Faktor 8 geteiltem Takt der CPU, die übrigen mit Ziffer 5-9 benutzen den 16-Bit Zähler
+mit voller Taktrate ohne Vorteiler.
+
+Alle automatisch gewählten Baudraten können mit den vorhandenen Hardware UARTs benutzt werden,
+oder auch mit einer Software UART Lösung. Natürlich sind die erzeugten Optiboot-Programme
+schon wegen der Baudratenmessung größer als der Standard mit fester Baudrate.
+Die Software-UART Lösung braucht nochmal zusätzlichen Speicher, was bei den meisten
+Einstellmöglichkeiten mehr als 512 Byte braucht.
+
+Die folgende Tabelle gibt einen Überblick über die Einstell-Möglichkeiten mit Software UART:
+
+Endziffer	Schleifen-	Auflösung	Kommentar
+		taktzahl	Meßzeit
+
+  0		  6/8		  8/CLK		langsame Berechnung, 8 Takte nur bei 9 Bit
+  1		  10		  8/CLK
+  2		   6		  8/CLK
+  3		  16		  8/CLK		Erhöhte Taktzahl eines Schleifendurchlaufs
+  4		   8		  8/CLK		Erhöhte Taktzahl eines Schleifendurchlaufs
+
+  5		  10		  1/CLK		langsame Berechnung, 8 Takte nur bei 9 Bit
+  5		   6		  1/CLK
+  7		  10		  1/CLK
+  8		   8		  1/CLK		Erhöhte Taktzahl eines Schleifendurchlaufs
+  9		  16		  1/CLK		Erhöhte Taktzahl eines Schleifendurchlaufs
+
+Bei der langsamen Berechnung der Durchlaufzahl (Endziffer 0 und 5) für die Verzögerungszeit
+der seriellen Datenkommunikation  besteht die Gefahr, daß die Berechnung länger dauert als
+die Übertragung des Stop-Bits des empfangenen Zeichens. Somit kann das nächste Rx Zeichen
+schon gestartet sein bevor die Schnittstelle bereit ist.
+
+Um das zu verhindern, benutzen die anderen Methoden entweder eine beschleunigte
+Subtraktions-Schleife für die Division oder auch Schiebe-Befehle, wenn der Divisor
+eine Zweierpotenz ist. Die Benutzung der Division mit Schiebe-Befehlen wird durch eine
+erhöhte Taktzahl des Schleifendurchlaufs erleichtert (Endziffern 3,4,8,9).
+Leider ergibt die Lösung mit den Schiebe-Befehlen nur dann das kürzere Programm,
+wenn nicht mehr als 2 Schiebeoperationen gebraucht werden.

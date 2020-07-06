@@ -943,35 +943,54 @@ You can select the SOFT\_UART function together with the automatic
 baud rate detection (BAUD\_RATE \textless 100) only for the
 assembler version of optiboot, not for the C-version.
 
-The following table summarize the different options:
+The following table~ref{tab:AutoBaudControl} summarize the different options.
+The specified program sizes in bytes refer to an ATmega328 without LED flashing function,
+but with the EEprom support.
+The program sizes in brackets result from the operation of the serial interface with software.
 
 \begin{table}[H]
   \begin{center}
     \begin{tabular}{| c | c | c | c | c | c |}
     \hline
-   BAUD\_RATE  & Bit    & Clock  & Time  & Check \\
-               & Base  & Base & Limit &       &  \\
+    BAUD\_RATE  & Bit   & Clock  & Time  & Check & mega328\\
+		& Base  & Base   & Limit &       & size (HW) \\
     \hline
     \hline
-    20-24      &  2     & clk/8 &   -  & simple \\
+	    10-14      &  9     & clk/8 &   -    & simple  & 500  \\
     \hline
-    25-29      &  2     &  clk  &   -  & simple \\
+	    15-19      &  9     &  clk  &   -    & simple  & 502  \\
     \hline
-    30-34      &  4     & clk/8 &   -  & simple  \\
+	    20-24      &  2     & clk/8 &   -    & simple  & 488  \\
     \hline
-    35-39      &  4     &  clk  &   -  & simple  \\
+	    25-29      &  2     &  clk  &   -    & simple  & 494  \\
     \hline
-    40-44      &  2     & clk/8 &   Yes  & simple \\
+	    30-34      &  4     & clk/8 &   -    & simple  & 492  \\
     \hline
-    45-49      &  2     &  clk  &   Yes  & simple \\
+	    35-39      &  4     &  clk  &   -    & simple  & 494  \\
     \hline
-    50-54      &  4     & clk/8 &   Yes  & simple  \\
+	    40-44      &  2     & clk/8 &   Yes  & simple  & 494  \\
     \hline
-    55-59      &  4     &  clk  &   Yes  & simple  \\
+	    45-49      &  2     &  clk  &   Yes  & simple  & 500  \\
     \hline
-    60-79      &  2     &  clk  &   -  & complex \\
+	    50-54      &  4     & clk/8 &   Yes  & simple  & 498  \\
     \hline
-    80-99      &  4     &  clk &   -  & complex \\
+	    55-59      &  4     &  clk  &   Yes  & simple  & 500  \\
+    \hline
+    \hline
+	    60-64      &  2     &  clk/8 &  Yes  & complex & 544  \\
+    \hline
+	    65-69      &  2     &  clk   &  Yes  & complex & 550  \\
+    \hline
+	    70-74      &  4     &  clk/8 &  Yes  & complex & 548  \\
+    \hline
+	    75-79      &  4     &  clk   &  Yes  & complex & 550  \\
+    \hline
+	    80-84      &  9     &  clk/8 &  Yes  & complex & 558  \\
+	    90-94      &        &        &       &         &      \\
+    \hline
+	    85-89      &  9     &  clk   &  Yes  & complex & 560  \\
+	    95-99      &        &        &       &         &     \\
+
     \hline
     \end{tabular}
   \end{center}
@@ -1031,23 +1050,28 @@ polling loops for the RX signal.
   \begin{center}
     \begin{tabular}{| c | c | c | c | c | c |}
     \hline
-   BAUD\_RATE  & SOFT\_ & Minimum & BAUD-Err & Comment  \\
-   Option      & UART   & Baud    & \textless 4\% @ Baud &  \\
+   BAUD\_RATE  & SOFT\_ & Minimum   & BAUD-Err & Comment  \\
+   Option      & UART   & Baud      & \textless 4\% @ Baud &  \\
     \hline
     \hline
-	    20-99      &  0     &  244 (488)  &   80.0k  & HW\_UART (4-Bit Time) \\
+  20-29,40-49  &  0     &  244      &   80.0k  & HW\_UART 2-Bit Time  \\
+    60-69      &        &           &          &                    \\
     \hline
-    42         &  1     &  5151       &   81.6k  & Simple, 2-Bit Time, 8-Bit Delay  \\
+  30-39,50-59  &  0     &  488      &   80.0k  & HW\_UART 4-Bit Time  \\
     \hline
-    62         &  1     &  5151       &   81.6k  & Complex, 2-Bit Time, 8-Bit Delay  \\
+  10-19,70-99  &  0     &  1098     &   80.0k  & HW\_UART 9-Bit Time  \\
     \hline
-    82         &  1     &  5151       &   81.6k  & Complex, 4-Bit Time, 8-Bit Delay  \\
+    42         &  1     &  5151     &   81.6k  &  Simple, 2-Bit Time, 8-Bit Loop  \\
     \hline
-    49         &  1     &  244       &   53.3k  &  Simple, 2-Bit Time, 15-Bit Delay\\
+    62         &  1     &  5151     &   81.6k  & Complex, 2-Bit Time, 8-Bit Loop  \\
     \hline
-    69         &  1     &  1220       &   53.3k &  Complex, 2-Bit Time, 15-Bit Delay \\
+    82         &  1     &  5151     &   81.6k  & Complex, 4-Bit Time, 8-Bit Loop  \\
     \hline
-    89         &  1     &  1220       &   53.3k & Complex, 4-Bit Time, 15-Bit Delay \\
+    49         &  1     &  244      &   53.3k  &  Simple, 2-Bit Time, 15-Bit Loop \\
+    \hline
+    69         &  1     &  1220     &   53.3k  & Complex, 2-Bit Time, 15-Bit Loop \\
+    \hline
+    89         &  1     &  1220     &   53.3k  & Complex, 4-Bit Time, 15-Bit Loop \\
     \hline
     \end{tabular}
   \end{center}
@@ -1076,6 +1100,52 @@ with the counter. For selections above 59 the complete byte sequence is
 measured from the Start bit to the Stop bit with the 16-bit counter.
 Probably baud rated below 9600 are rarely used anyway.
 Of course the limits of the baud rates change with other processor clock rate.
+
+There are numerous setting options for the UART interface software, which on the
+one hand relate to the measurement base of the baud time, but also relate to the type
+of delay calculation.
+In the table~\ref{tab:AutoBaudLen328} the program lengthes of the bootloade are shown
+for a ATmega328 target processor.
+Unfortunately the programs in the colums labled with \_0 and \_5, this means all
+Baud rate selections ending with the digit 0 or 5, are practical unusable.
+The reason herefore is, that the division operation by successive subtraction
+is too slow to finish before the serial data stop bit ends.
+A workaround would be to let the transmitter of the data (avrdude) send all data with 2 stop bits.
+Because this is not intended, the other columns use an accelerated subtraction loop,
+which then causes a longer program.
+If possible, the faster shift operation for division by powers of 2 is used instead of the subtraction loop.
+To enable this shift operations, the colums labled with \_3, \_4, \_8 and \_9 
+has increased the number of cycles for one delay loop pass (8T or 16T, T for tics).
+Unfortunately the program length is only shorter compared to the subtraction loop,
+if the count of shift operation is below 3, which would spare the loop operation for the shifts.
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c | c | c| c | c | c || c | c | c | c | c |}
+    \hline
+    BAUD\_RATE  &  \_0 & \_1   &  \_2 & \_3   & \_4    &  \_5  &  \_6  &   \_7 &  \_8   &  \_9 \\
+    ,Measurement base   & 6T/8T &  10T &  6T  &  16T  &  8T    &  10T  &  6T   &  10T  &   8T   &  16T \\
+    \hline
+       & \multicolumn{5}{c ||}{ simple CLK/8}    &  \multicolumn{5}{c |}{simple CLK/1}      \\
+    \hline
+   1\_ , 9Bit   & 510  & 524   & 516  & 528   & 516    &  522  &  518  &  528  &  520   &  532 \\
+   2\_ , 2Bit   & 512  & 528  & 518 & 520 & \textbf{506} & 518 & 514 & 524 & \textbf{512} & 522 \\
+   3\_ , 4Bit   & 508  & 524  & 514 & 522 & \textbf{510} & 520 &  516  &  528  &  514   & 532 \\
+   4\_ , 2Bit   & 518  & 534  & 524 & 526 & \textbf{512} & 524 &  520  &  530  &  518   & 528 \\
+   5\_ , 4Bit   & 514  & 530   & 520  & 528   & 516    &  526  &  522  &  534  &  520   &  538 \\
+    \hline
+      & \multicolumn{5}{c ||}{ komplex CLK/8}    &  \multicolumn{5}{c |}{komplex CLK/1}      \\
+    \hline
+   6\_ , 2Bit   & 572  & 588   & 578  & 580   & 576    &  578  &  574  &  584  &  572   &  582 \\
+   7\_ , 4Bit   & 570  & 586   & 576  & 590   & 578    &  580  &  576  &  588  &  580   &  592 \\
+   8\_ , 9Bit   & 572  & 586   & 578  & 590   & 578    &  584  &  580  &  590  &  582   &  594 \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{Bootloader program length with automatic Baud rate selection for Software UART}
+  \label{tab:AutoBaudLen328}
+\end{table}
+
 
 Finally I would like to show the results from tests, which I have done with
 a ATmega1281 with the internal \(8MHz\) RC-generator clock at a specified baud rate

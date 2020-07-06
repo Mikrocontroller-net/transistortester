@@ -709,7 +709,7 @@ int main(void) {
  #endif
  // this is the Auto Baud section
  // Time of RX bit change is measured with a 16-Bit counter
- #if BAUD_RATE >= 50
+ #if BAUD_RATE >= 40
 next_try:
  #endif
   wdt_reset();
@@ -727,6 +727,7 @@ RX_was_high:		/* entry for detected Start bit during flashing */
   #define CNT16_CCRB TCCR1B
   #define CNT16_OCREGH OCR1AH
   #define CNT16_OCREGL OCR1AL
+  #define TOVFLAG TOV1
   #define OCFLAG OCF1A
  #elif defined(TCNT0H)
   #define CNT16_CNTH TCNT0H
@@ -735,6 +736,7 @@ RX_was_high:		/* entry for detected Start bit during flashing */
   #define CNT16_CCRB TCCR0B
   #define CNT16_OCREGL OCR0A
   #define CNT16_OCREGH OCR0B
+  #define TOVFLAG TOV0
   #define OCFLAG OCF0A
  #else
   #error "Auto Baud mode requires a 16-Bit counter !"
@@ -750,58 +752,113 @@ RX_was_high:		/* entry for detected Start bit during flashing */
   uint16_t w;
  } cnt16_t;
 
- #if BAUD_RATE < 60
-  CNT16_CNTH = -1;
-  CNT16_CNTL = -1;
+
+ #if ((BAUD_RATE - ((BAUD_RATE/10)*10)) < 5)
+  #define START_COUNTER_COMMAND  (1<<CS11)       /* run counter at F_CPU/8 speed */
+  #define CounterClockDiv 8
  #else
-  CNT16_CNTH = 0;
-  CNT16_CNTL = 0;
+  // Full speed measurement, selected by BAUD_RATE or by SOFT_UART
+  #define START_COUNTER_COMMAND  (1<<CS10)       /* run counter at full F_CPU speed */
+  #define CounterClockDiv 1
+ #endif
+
+ #if (BAUD_RATE < 80) && (BAUD_RATE > 19)
+  #if ((BAUD_RATE - ((BAUD_RATE/20)*20)) > 9)
+   #define Bits2Measure  4
+  #else
+   #define Bits2Measure  2
+  #endif
+ #else   /* BAUD_RATE >= 80  || BAUD_RATE < 20 */
+  #undef Bits2Measure
+  #define Bits2Measure 9
  #endif
 
  #if BAUD_RATE < 60
   // short version of the Auto-Baud time measurement, only one time is measured.
   // this version will get wrong baud rate, if a wrong start bit is detected.
   cnt16_t baud_t1;
- #if INVERSE_UART > 0
-  while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);		// wait until RX is not 0, Start Bit, INVERSE
-  while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0 );	// wait until RX is not 1, S0000 sequence, INVERSE
- #else
-  while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0 );	// wait until RX is not 1, Start Bit
-  while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);		// wait until RX is not 0, S0000 sequence
- #endif
-
-  CNT16_CCRB = _BV(CS11);		// start counter with /8 scaler
-  #if BAUD_RATE > 49
-  CNT16_OCREGH = (4864/256);
-  CNT16_OCREGL = 0;
-  TIFR1 |= (1<<OCFLAG);
-   #if INVERSE_UART > 0
-  do {
-    if ((TIFR1 & (1<<OCFLAG)) != 0) goto next_try;
-  } while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);	// wait until RX is not 0, S000011 sequence finished, INVERSE
-   #else
-  do {
-    if ((TIFR1 & (1<<OCFLAG)) != 0) goto next_try;
-  } while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0);	// wait until RX is not 1, S000011 sequence finished
+  #if BAUD_RATE > 39
+  TIFR1 |= (1<<TOVFLAG);
+  #endif
+  CNT16_CNTH = 0;
+  CNT16_CNTL = 0;
+  #if INVERSE_UART > 0
+   while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);		// wait until RX is not 0, Start Bit, INVERSE
+   #if Bits2Measure == 9
+    CNT16_CCRB = START_COUNTER_COMMAND;		// start counter with or without /8 scaler at Start Bit
    #endif
+
+   while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0 );	// wait until RX is not 1, S0000 sequence, INVERSE
+  #else
+   while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0 );	// wait until RX is not 1, Start Bit finished
+   #if Bits2Measure == 9
+    CNT16_CCRB = START_COUNTER_COMMAND;		// start counter with /8 scaler or without
+   #endif
+  while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);		// wait until RX is not 0, S0000 sequence
+  #endif
+
+  #if (Bits2Measure == 4) || (Bits2Measure == 2)
+   CNT16_CCRB = START_COUNTER_COMMAND;		// start counter with /8 scaler or without
+  #endif
+
+  #if BAUD_RATE > 39		/* with time limit */
+   #if INVERSE_UART > 0
+   do {
+     if ((TIFR1 & (1<<TOVFLAG)) != 0) goto next_try;
+   } while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);	// wait until RX is not 0, S000011 sequence finished, INVERSE
+   #else
+   do {
+     if ((TIFR1 & (1<<TOVFLAG)) != 0) goto next_try;
+   } while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0);	// wait until RX is not 1, S000011 sequence finished
+   #endif
+
   #else
    #if INVERSE_UART > 0
-  while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);	// wait until RX is not 0, S000011 sequence finished, INVERSE
+    while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);	// wait until RX is not 0, S000011 sequence finished, INVERSE
    #else
-  while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0);	// wait until RX is not 1, S000011 sequence finished
+    while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0);	// wait until RX is not 1, S000011 sequence finished
    #endif
-  #endif
-  baud_t1.b[0] = CNT16_CNTL;
-  baud_t1.b[1] = CNT16_CNTH;
-  baud_t1.w = baud_t1.w / 2;
-  // transmission of the byte is not finished, we must wait for the last two "0" bits
-   #if INVERSE_UART > 0
-  while(UART_RX_PIN & _BV(UART_RX_BIT) != 0);	// wait until RX is not 1, S00001100 sequence finished, INVERSE
-   #else
-  while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);	// wait until RX is not 0, S00001100 sequence finished
-   #endif
-   UART_SRRL = baud_t1.b[0];
+
+  #endif	/* BAUD_RATE > 39, Time limit */
+  #if (Bits2Measure == 2)
+   baud_t1.b[0] = CNT16_CNTL;		// S000011 - S0000
+   baud_t1.b[1] = CNT16_CNTH;
+   baud_t1.w = (baud_t1.w - (8/CounterClockDiv))/ (2*8/CounterClockDiv);
    UART_SRRH = baud_t1.b[1];
+   UART_SRRL = baud_t1.b[0];
+  #endif
+
+  // transmission of the byte is not finished, we must wait for the last two "0" bits
+  #if INVERSE_UART > 0
+   while(UART_RX_PIN & _BV(UART_RX_BIT) != 0);	// wait until RX is not 1, S00001100 sequence finished, INVERSE
+  #else
+   while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);	// wait until RX is not 0, S00001100 sequence finished
+  #endif
+
+  #if (Bits2Measure == 4)
+    baud_t1.b[0] = CNT16_CNTL;		// S00001100 - S0000
+    baud_t1.b[1] = CNT16_CNTH;
+    baud_t1.w = (baud_t1.w - (2*8/CounterClockDiv))/ (4*8/CounterClockDiv);
+    UART_SRRH = baud_t1.b[1];
+    UART_SRRL = baud_t1.b[0];
+  #endif
+  #if (Bits2Measure == 9)
+    baud_t1.b[0] = CNT16_CNTL;
+    baud_t1.b[1] = CNT16_CNTH;
+//   baud_t1.w = (baud_t1.w - (5*8/CounterClockDiv))/ (9*8/CounterClockDiv);
+    cnt16_t baud_t2;
+    cnt16_t tt2;
+    baud_t1.w -= (5*8/CounterClockDiv);
+    baud_t2.w = -1;
+    do {
+     baud_t2.w++;
+     tt2.w = baud_t1.w - (9*8/CounterClockDiv);
+     if (tt2.b[1] > baud_t1.b[1]) break;
+     baud_t1.w = tt2.w;
+    } while (1) ;
+    UART_SRRH = baud_t2.b[1];
+    UART_SRRL = baud_t2.b[0];
+  #endif
 
 
  #else		/* BAUD_RATE >= 60 */
@@ -818,11 +875,14 @@ RX_was_high:		/* entry for detected Start bit during flashing */
   cnt16_t baud_t1;
   cnt16_t baud_t2;
   cnt16_t baud_t3;
-   #if INVERSE_UART > 0
-  while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);	// wait until RX is not 0, Start Bit, INVERSE
-   #else
-  while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0);	// wait until RX is not 1, Start Bit
-   #endif
+  TIFR1 |= (1<<TOVFLAG);
+  CNT16_CNTH = 0;
+  CNT16_CNTL = 0;
+  #if INVERSE_UART > 0
+   while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);	// wait until RX is not 0, Start Bit, INVERSE
+  #else
+   while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0);	// wait until RX is not 1, Start Bit
+  #endif
   // first 1/0 RX bit change detected
   // If we begin now with the time measurement, we get the following result
   // for the next three bit changes:
@@ -834,68 +894,70 @@ RX_was_high:		/* entry for detected Start bit during flashing */
   // Delay means a long time delay, because the sender of the RX data will wait for a reply!
   // The best way to solve the Delay problem with Position 4 is to monitor
   // the counter time for exceed of a 4*(2B) limit.
-  CNT16_CCRB = _BV(CS11);		// start counter with /8 scaler
-   #if INVERSE_UART > 0
-  while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0);	// wait until RX is not 1, S0000 sequence, INVERSE
-   #else
-  while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);	// wait until RX is not 0, S0000 sequence
-   #endif
+  CNT16_CCRB = START_COUNTER_COMMAND;		// start counter with /8 scaler or without
+  #if INVERSE_UART > 0
+   while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0);	// wait until RX is not 1, S0000 sequence, INVERSE
+  #else
+   while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);	// wait until RX is not 0, S0000 sequence
+  #endif
   baud_t1.b[0] = CNT16_CNTL;	// time of S0000
   baud_t1.b[1] = CNT16_CNTH;
 
-  baud_t2.w = baud_t1.w * 4;
-  CNT16_OCREGH = baud_t2.b[1];
-  CNT16_OCREGL = baud_t2.b[0];
-  TIFR1 |= (1<<OCFLAG);
-   #if INVERSE_UART > 0
-  do {
-    if ((TIFR1 & (1<<OCFLAG)) != 0) goto next_try;
-  } while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);	// wait until RX is not 0, S000011 sequence finished, INVERSE
-   #else
-  do {
-    if ((TIFR1 & (1<<OCFLAG)) != 0) goto next_try;
-  } while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0);	// wait until RX is not 1, S000011 sequence finished
-   #endif
+  #if INVERSE_UART > 0
+   do {
+     if ((TIFR1 & (1<<TOVFLAG)) != 0) goto next_try;
+   } while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);	// wait until RX is not 0, S000011 sequence finished, INVERSE
+  #else
+   do {
+     if ((TIFR1 & (1<<TOVFLAG)) != 0) goto next_try;
+   } while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0);	// wait until RX is not 1, S000011 sequence finished
+  #endif
   baud_t2.b[0] = CNT16_CNTL;	// time of S000011
   baud_t2.b[1] = CNT16_CNTH;
 
-   #if INVERSE_UART > 0
-  while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0);	// wait until RX is not 1, S00001100 sequence, INVERSE
-   #else
-  while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);	// wait until RX is not 0, S00001100 sequence finished
-   #endif
+  #if INVERSE_UART > 0
+   while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0);	// wait until RX is not 1, S00001100 sequence, INVERSE
+  #else
+   while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);	// wait until RX is not 0, S00001100 sequence finished
+  #endif
   baud_t3.b[0] = CNT16_CNTL;	// time of S00001100
   baud_t3.b[1] = CNT16_CNTH;
 
   // check the measured time sequence
-  if (((baud_t3.w - baud_t1.w) > baud_t1.w) || ((baud_t3.w - baud_t2.w) > (baud_t2.w - baud_t1.w + 4))) {
+  if (((baud_t3.w - baud_t1.w) > baud_t1.w) || ((baud_t3.w - baud_t2.w) > (baud_t2.w - baud_t1.w + (32/CounterClockDiv)))) {
   //  S00001100   - S0000                        S00001100 - S000011         S000011 - S0000 +
   //            1100              S0000                   00                         11+
     // wrong sync, data bit was detected as Start bit.
-   #if INVERSE_UART > 0
-    while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);	// wait until RX is not 0, INVERSE
-   #else
-    while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0);	// wait until RX is not 1
-   #endif
-    goto next_try;
+   goto next_try;
   }
-  #if BAUD_RATE >= 80 
-  baud_t3.w = (baud_t3.w - baud_t1.w - 2) / 4;	// (S00001100-S0000-2)/4 = (1100 - 2) / 4
-  #else   /* no FOUR_BIT_MODE */
-  if ((baud_t3.w - baud_t1.w) > baud_t1.w) {
-   #if INVERSE_UART > 0
-    while((UART_RX_PIN & _BV(UART_RX_BIT)) == 0);	// wait until RX is not 1, INVERSE
-   #else
-    while((UART_RX_PIN & _BV(UART_RX_BIT)) != 0);	// wait until RX is not 1
-   #endif
-    goto next_try;
-  }
-  baud_t3.w = (baud_t3.w - baud_t2.w - 1) / 2;	// (S00001100-S000011-1)/2 = (00 -2) / 2
-  #endif   /* BAUD_RATE >= 80 */
 
-  UART_SRRL = baud_t3.b[0];
-  UART_SRRH = baud_t3.b[1];
- #endif		/* BOOT_PAGE_LEN < 1024 */
+  #if (Bits2Measure == 2)
+   baud_t1.w = (baud_t3.w - baud_t2.w - 8/CounterClockDiv) / (16/CounterClockDiv);	// S00001100-S000011
+   UART_SRRH = baud_t1.b[1];
+   UART_SRRL = baud_t1.b[0];
+  #endif
+  #if (Bits2Measure == 4)
+   baud_t1.w = (baud_t3.w - baud_t1.w - (2*8/CounterClockDiv))/ (4*8/CounterClockDiv); //S00001100-S0000
+   UART_SRRH = baud_t1.b[1];
+   UART_SRRL = baud_t1.b[0];
+  #endif
+  #if (Bits2Measure == 9)
+//   baud_t2.w = (baud_t3.w - (5*8/CounterClockDiv))/ (9*8/CounterClockDiv);	// S00001100
+   cnt16_t tt3;
+   baud_t3.w -= (5*8/CounterClockDiv);
+   baud_t2.w = -1;
+   do {
+    baud_t2.w++;
+    tt3.w = baud_t3.w - (9*8/CounterClockDiv);
+    if (tt3.b[1] > baud_t3.b[1]) break;
+    baud_t3.w = tt3.w;
+   } while (1);
+   UART_SRRH = baud_t2.b[1];
+   UART_SRRL = baud_t2.b[0];
+  #endif
+
+ #endif		/* BAUD_RATE < 60  */
+
  #ifdef LINCR
   #ifdef UART_ONE_WIRE
   LINCR = (1<<LENA)|(1<<LCMD2)|(1<<LCMD1);	// enable Rx
@@ -911,7 +973,8 @@ RX_was_high:		/* entry for detected Start bit during flashing */
   #ifdef LINDAT
   LINDAT = 0;		// init TX ready flag
   #endif
- #endif
+ #endif   /* LINCR */
+
  #if TEST_OUTPUT == 0
 //   verifySpace();
 //   putch(STK_OK);
@@ -925,7 +988,7 @@ RX_was_high:		/* entry for detected Start bit during flashing */
 //-------------------------------------------------------------------------------------------------
 
 #if TEST_OUTPUT == 1
- #warning "optiboot with test output only!"
+ #warning "optiboot with test output only!!!  You can only measure the baud rate!"
     /* only a test output for baud rate check, the bootloader will not work with this */
    for (;;) {
     putch('U');         // produce a 01010101 pattern for test
@@ -1491,15 +1554,15 @@ void verifySpace(void) {
   putch(STK_INSYNC);
 }
 
+void watchdogConfig(uint8_t x) {
+  WDTCSR = _BV(WDCE) | _BV(WDE);
+  WDTCSR = x;
+}
+
 void wait_timeout(void) {
   watchdogConfig(WATCHDOG_16MS);      // shorten WD timeout
   while (1);			      // and busy-loop so that WD causes
     				      //  a reset and app start.
-}
-
-void watchdogConfig(uint8_t x) {
-  WDTCSR = _BV(WDCE) | _BV(WDE);
-  WDTCSR = x;
 }
 
 void appStart(uint8_t rstFlags) {
@@ -1521,6 +1584,7 @@ void appStart(uint8_t rstFlags) {
     "clr r31\n"
     "ijmp\n"::[rstvec] "M"(appstart_vec)
   );
+
 #if BIGBOOT >= 128
  #include "wast_128bytes.h"
 #endif

@@ -24,7 +24,7 @@
 // AVR305 equation: #define UART_B_VALUE (((F_CPU/BAUD_RATE)-23)/6)
 
 #include "set_loop_tics.h"	/* set LOOP_TICS and RCALL_TICS */
-// loop requires 9,10 or 11 tics, rcall 7 or 9 tics
+// loop requires 9 or 10 tics, rcall 7 or 9 tics
 
 ; Now we know all clocktics needed for generating the bit sequence,
 ; let's take a look, how many clock tics must be wasted with a loop to get the BAUD time.
@@ -406,20 +406,42 @@ double_uartDelay_a:
 single_uartDelay_a:
 	mov	r25, r10	; use the count from auto-baud in r10:11
 	mov	r0, r11		; use r0 for upper bits
+    #if (TICS_PER_LOOP_PASS == 8) || (TICS_PER_LOOP_PASS == 6)
 count_lower:
-	dec	r25		; 1
-	brne	next_lower	; 1,2
-	dec	r0		; 1, higher bits
-	brpl	count_lower	; 1,2
+     #if TICS_PER_LOOP_PASS == 8
+	rjmp	.		; +2 =2
+     #endif
+	nop			; +1 =3
+	dec	r25		; +1 =4
+	brne	next_lower	; +1,+2 =5 / 6
+	dec	r0		; +1,  = 6 higher bits
+	brpl	count_lower	; +1,+2 = 8
 	ret			; lower bits are counted to 0 and higher bits are -1
 next_lower:
-	rjmp	count_lower	; 2
+	rjmp	count_lower	; +2 =8
+    #else
+        ; normal 15 bit loop with TICS_PER_LOOP_PASS 5
+count_lower:
+	dec	r25		; +1  =1
+	brne	next_lower	; +1,+2 = 2 / 3
+	dec	r0		; +1, = 3 higher bits
+	brpl	count_lower	; +1,+2  =5
+	ret			; lower bits are counted to 0 and higher bits are -1
+next_lower:
+	rjmp	count_lower	; +2 = 5
+    #endif
    #else
    // fast 8 bit loop, 3 tics per count
 single_uartDelay_a:
 	mov	r25, r10	; use the count from auto-baud in r10
+    #if TICS_PER_LOOP_PASS == 4		/* special case 9 Bit measurement and clk/8 Counter */
+        nop
+	dec	r25		; important: dec don't change the carry!
+	brne	.-6
+    #else
 	dec	r25		; important: dec don't change the carry!
 	brne	.-4
+    #endif
 	ret
    #endif
   #endif

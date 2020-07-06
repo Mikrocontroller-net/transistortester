@@ -62,12 +62,12 @@
 	ldi	r25, (TWOSTOP<<USBS0)|(1<<UCSZ00)|(1<<UCSZ01)	;0x06
 	AOUT	UART_SRC, r25
    #endif
-	ldi	r25, lo8(BAUD_DIV)	; 0x10
-	AOUT	UART_SRRL, r25
    #if (BAUD_DIV/256) != 0
 	ldi	r25, hi8(BAUD_DIV)	; 0x10
 	AOUT	UART_SRRH, r25
    #endif
+	ldi	r25, lo8(BAUD_DIV)	; 0x10
+	AOUT	UART_SRRL, r25
   #endif	/* defined(UCSRC) && defined(URSEL) */
   #ifdef UART_ONE_WIRE
 	ldi	r24, UART_ENABLE_RX

@@ -381,6 +381,10 @@ void appStart(uint8_t rstFlags) __attribute__ ((naked));
 #define buff    ((uint8_t*)(RAMSTART))
 
 
+#if !defined(NO_EARLY_PAGE_ERASE)
+ #define NO_EARLY_PAGE_ERASE 0
+#endif
+
 #ifndef SUPPORT_EEPROM
  #define SUPPORT_EEPROM 0
 #endif
@@ -1087,7 +1091,7 @@ RX_was_high:		/* entry for detected Start bit during flashing */
 
 #if SUPPORT_EEPROM > 0
       uint8_t desttype = getch() - 'E';	/* desttype = 0, if EEprom */
- #if NRWWSTART != 0
+ #if (NRWWSTART != 0) || (NO_EARLY_PAGE_ERASE != 0)
         // If we are in RWW section, immediately start page erase
   #if defined(WRPP_PIN) && defined(WRPP_BIT)
       if ((desttype != 0) && (f_address < NRWWSTART) && (WRPP_PIN & _BV(WRPP_BIT) == 0)) {
@@ -1101,7 +1105,7 @@ RX_was_high:		/* entry for detected Start bit during flashing */
  #endif
 #else	/* no EEprom Support */
       getch();			/* dummy type */
- #if NRWWSTART != 0
+ #if (NRWWSTART != 0) || (NO_EARLY_PAGE_ERASE != 0)
         // If we are in RWW section, immediately start page erase
   #if defined(WRPP_PIN) && defined(WRPP_BIT)
       if ((f_address < NRWWSTART) && (WRPP_PIN & _BV(WRPP_BIT) == 0)) {
@@ -1169,9 +1173,13 @@ RX_was_high:		/* entry for detected Start bit during flashing */
 	boot_page_erase((uint16_t)(void*)f_address);
  #endif
 #else
+ #if (NRWWSTART != 0) && (NO_EARLY_PAGE_ERASE == 0)
         if ((f_address) >= NRWWSTART) {
            boot_page_erase((uint16_t)(void*)f_address);
         }
+ #else
+        boot_page_erase((uint16_t)(void*)f_address);
+ #endif
 #endif
 
         // If only a partial page is to be programmed, the erase might not be complete.

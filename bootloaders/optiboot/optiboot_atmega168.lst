@@ -335,12 +335,12 @@ ck_PP:
 
     // PROGRAM PAGE - we support flash and optional EEPROM programming
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//#if (SUPPORT_EEPROM > 0) && (NRWWSTART != 0)
-#if (NRWWSTART != 0)
-    	breq	no_pg_erase	; if (type)
+#if (NRWWSTART != 0) || (NO_EARLY_PAGE_ERASE != 0)
+    	breq	no_pg_erase	; if (type) // no early page erase for EEprom
     3ea4:	21 f0       	breq	.+8      	; 0x3eae <no_pg_erase>
-#endif
-#if NRWWSTART != 0
+	ASBIS	WRPP_PIN,WRPP_BIT
+	rjmp	no_pg_erase	; Hardware Write Protect emulation
+ #endif
   ; if NRWWSTART is zero, no RWW section is present. Never erase the page
   ; at this early state.
 	ldi	r24, hi8(NRWWSTART) ; 0x70
@@ -380,6 +380,10 @@ fill_buf:
 	; SRAM of ATmega is filled with data
 	rcall	verifySpace	; check Sync_CRC_EOP, putch(STK_INSYNC)
     3ebc:	4b d0       	rcall	.+150    	; 0x3f54 <verifySpace>
+  #warning "optiboot is compiled with a write protect bit at a input pin !!!"
+	ASBIS	WRPP_PIN,WRPP_BIT
+	rjmp	put_ok		; Hardware Write Protect emulation
+ #endif
 #if SUPPORT_EEPROM > 0
 	cpse	r6, r1		; r6 == 0, is EEprom write
     3ebe:	61 10       	cpse	r6, r1
@@ -418,11 +422,11 @@ ee_wrlop:
     3ed2:	28 c0       	rjmp	.+80     	; 0x3f24 <put_ok>
 
 00003ed4 <write_flash>:
-
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 write_flash:
-#if NRWWSTART != 0
+#if (NRWWSTART != 0) && (NO_EARLY_PAGE_ERASE == 0)
   ; If NRWWSTART is zero, boot_page_erase must be called every time here!
+  ; if NO_EARLY_PAGE_ERASE is set, the page is never erased before data input , programming is slow!
 	ldi	r24, hi8(NRWWSTART) ; 0x70
     3ed4:	88 e3       	ldi	r24, 0x38	; 56
 	cp	r5, r24			; hi8(NRWWSTART) lo8(NRWWSTART) is allways zero

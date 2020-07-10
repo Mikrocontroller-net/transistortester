@@ -48,6 +48,12 @@ ifdef ETC_CONF
  AVRDUDE_CONF += -C /etc/avrdude.conf
 endif
 
+ifdef TWO_STOP_BITS
+ ifneq ($(TWO_STOP_BITS),0)
+ AVRDUDE_CONF += -S 
+ endif
+endif
+
 CFLAGS += -mcall-prologues
 # you can set the EFUSE_VAL to 0xfc or to 0x04, if your avrdude mask out the unused bits
 

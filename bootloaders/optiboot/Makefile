@@ -1185,6 +1185,7 @@ FORCE:
  export AVR_FREQ BAUD_RATE UART_RX UART_TX OSCCAL_CORR SOFT_UART
  export MCU_TARGET PROGRAM AVRDUDE_CONF FORCE_RSTDISBL TIMEOUT_MS
  export SOURCE_TYPE
+ export WRITE_PROTECT_PIN
 
 hex_file: 
 	@bash build_hex.sh
@@ -1258,5 +1259,9 @@ help2:
 	@$(ECHO_CMD) " "
 	@$(ECHO_CMD) "FORCE_RSTDISBL enables setting of the RSTDISBL bit to 0."
 	@$(ECHO_CMD) "               Otherwise compiling is aborted."
+	@$(ECHO_CMD) " "
+	@$(ECHO_CMD) "NO_EARLY_PAGE_ERASE will disable the early page erase before data fetch."
+	@$(ECHO_CMD) "              So the programming of flash is about 30% slower,"
+	@$(ECHO_CMD) "              but this option will save 14 bytes optiboot space."
 pl:
 	@bash ./list_processors.sh

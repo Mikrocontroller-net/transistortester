@@ -82,8 +82,8 @@ echo ---------------------------------------------------------------------------
   echo "${MTD} Baudrate measurement implemented in optiboot! (${B2M}-bit, Clk/${CCD})"
  #endif
  
+ #define Remainder5 (BAUD_RATE - ((BAUD_RATE/5)*5))
  #if SOFT_UART > 0
-  #define Remainder5 (BAUD_RATE - ((BAUD_RATE/5)*5))
   #if ((BAUD_RATE - ((BAUD_RATE/2)*2)) != 0)
    // 15-bit delay 
    // With 15 bit delay loop you can get a max delay of 32767*2*5 tics for 1 bit,

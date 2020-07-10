@@ -118,7 +118,6 @@
 
 #ifndef QuickStopBit
  #define QuickStopBit 1		/* set the option by default */
-; #define QuickStopBit 0		/* reset the option by default */
 #endif
 
 
@@ -167,8 +166,9 @@ PUT_CH :	/*  void putch(char ch) */
 	; r24 hold the data for serial output
 	; use r22, r23, r25
 	SINGLE_DELAY_CALL	; work simular to a second half stop bit
-				; this can help to prevent framing error, if the
-				; baudrate has a error of 2% or more
+	SINGLE_DELAY_CALL_X1	; this can help to prevent framing error, if the
+	SINGLE_DELAY_CALL_X2	; baudrate has a error of 2% or more
+	SINGLE_DELAY_CALL_X3
 	ldi	r22, 10		; counter for the serial bit output
 ;	ldi	r19, 0
  #ifdef UART_ONE_WIRE

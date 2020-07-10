@@ -901,7 +901,6 @@
 
 
 // setup for UART_RX
-//#if SOFT_UART > 0
  #if ((UART_RXX & 0xff) > 7) || ((UART_RXX >> 8) > 12) || ((UART_RXX & 0xff00) == 0)
   #error "Unrecognized UART_RX name.  Should be like 'B5'"
   #error "You can only select a existing port for the target processor!"
@@ -911,12 +910,7 @@
   #error "Unrecognized UART_TX name.  Should be like 'B5'"
   #error "You can only select a existing port for the target processor!"
  #endif
- // UART_RX_BIT must be set to the bit number of the selected Port.
- // This is allways given by the lower Byte of the previous definition
- #define UART_RX_BIT (UART_RXX & 0x07)
- // the same must be set for the TX_BIT
- #define UART_TX_BIT (UART_TXX & 0x07)
-//#else		/* Hardware UART */
+
 #if SOFT_UART == 0
  /*
   * Handle devices with up to 4 uarts (eg m1280.)  Rather inelegantly.
@@ -1003,114 +997,118 @@
 #endif		/* SOFT_UART > 0 */
 
 
-//#if SOFT_UART > 0
  // setup the Port definitions for UART_RX
- #if (UART_RXX & 0xff00) == pB0
+#if (UART_RXX & 0xff00) == pB0
   #define UART_RX_DDR     DDRB
   #define UART_RX_PORT    PORTB
   #define UART_RX_PIN     PINB
- #elif (UART_RXX & 0xff00) == pC0
+#elif (UART_RXX & 0xff00) == pC0
   #define UART_RX_DDR     DDRC
   #define UART_RX_PORT    PORTC
   #define UART_RX_PIN     PINC
- #elif (UART_RXX & 0xff00) == pD0
+#elif (UART_RXX & 0xff00) == pD0
   #define UART_RX_DDR     DDRD
   #define UART_RX_PORT    PORTD
   #define UART_RX_PIN     PIND
- #elif (UART_RXX & 0xff00) == pE0
+#elif (UART_RXX & 0xff00) == pE0
   #define UART_RX_DDR     DDRE
   #define UART_RX_PORT    PORTE
   #define UART_RX_PIN     PINE
- #elif (UART_RXX & 0xff00) == pF0
+#elif (UART_RXX & 0xff00) == pF0
   #define UART_RX_DDR     DDRF
   #define UART_RX_PORT    PORTF
   #define UART_RX_PIN     PINF
- #elif (UART_RXX & 0xff00) == pG0
+#elif (UART_RXX & 0xff00) == pG0
   #define UART_RX_DDR     DDRG
   #define UART_RX_PORT    PORTG
   #define UART_RX_PIN     PING
- #elif (UART_RXX & 0xff00) == pH0
+#elif (UART_RXX & 0xff00) == pH0
   #define UART_RX_DDR     DDRH
   #define UART_RX_PORT    PORTH
   #define UART_RX_PIN     PINH
- #elif (UART_RXX & 0xff00) == pJ0
+#elif (UART_RXX & 0xff00) == pJ0
   #define UART_RX_DDR     DDRJ
   #define UART_RX_PORT    PORTJ
   #define UART_RX_PIN     PINJ
- #elif (UART_RXX & 0xff00) == pK0
+#elif (UART_RXX & 0xff00) == pK0
   #define UART_RX_DDR     DDRK
   #define UART_RX_PORT    PORTK
   #define UART_RX_PIN     PINK
- #elif (UART_RXX & 0xff00) == pL0
+#elif (UART_RXX & 0xff00) == pL0
   #define UART_RX_DDR     DDRL
   #define UART_RX_PORT    PORTL
   #define UART_RX_PIN     PINL
- #elif (UART_RXX & 0xff00) == pA0
+#elif (UART_RXX & 0xff00) == pA0
   #define UART_RX_DDR     DDRA
   #define UART_RX_PORT    PORTA
   #define UART_RX_PIN     PINA
  
- #else
+#else
   #error -------------------------------------------
   #error Unrecognized UART_RX name.  Should be like "B5"
   #error -------------------------------------------
- #endif
-//#endif 		/* SOFT_UART > 0 */
+#endif
+
+ // UART_RX_BIT must be set to the bit number of the selected Port.
+ // This is allways given by the lower Byte of the previous definition
+ #define UART_RX_BIT (UART_RXX & 0x07)
 
 
-//#if SOFT_UART > 0
  // setup the Port definitions for UART_TX
- #if (UART_TXX & 0xff00) == pB0
+#if (UART_TXX & 0xff00) == pB0
   #define UART_TX_DDR     DDRB
   #define UART_TX_PORT    PORTB
   #define UART_TX_PIN     PINB
- #elif (UART_TXX & 0xff00) == pC0
+#elif (UART_TXX & 0xff00) == pC0
   #define UART_TX_DDR     DDRC
   #define UART_TX_PORT    PORTC
   #define UART_TX_PIN     PINC
- #elif (UART_TXX & 0xff00) == pD0
+#elif (UART_TXX & 0xff00) == pD0
   #define UART_TX_DDR     DDRD
   #define UART_TX_PORT    PORTD
   #define UART_TX_PIN     PIND
- #elif (UART_TXX & 0xff00) == pE0
+#elif (UART_TXX & 0xff00) == pE0
   #define UART_TX_DDR     DDRE
   #define UART_TX_PORT    PORTE
   #define UART_TX_PIN     PINE
- #elif (UART_TXX & 0xff00) == pF0
+#elif (UART_TXX & 0xff00) == pF0
   #define UART_TX_DDR     DDRF
   #define UART_TX_PORT    PORTF
   #define UART_TX_PIN     PINF
- #elif (UART_TXX & 0xff00) == pG0
+#elif (UART_TXX & 0xff00) == pG0
   #define UART_TX_DDR     DDRG
   #define UART_TX_PORT    PORTG
   #define UART_TX_PIN     PING
- #elif (UART_TXX & 0xff00) == pH0
+#elif (UART_TXX & 0xff00) == pH0
   #define UART_TX_DDR     DDRH
   #define UART_TX_PORT    PORTH
   #define UART_TX_PIN     PINH
- #elif (UART_TXX & 0xff00) == pJ0
+#elif (UART_TXX & 0xff00) == pJ0
   #define UART_TX_DDR     DDRJ
   #define UART_TX_PORT    PORTJ
   #define UART_TX_PIN     PINJ
- #elif (UART_TXX & 0xff00) == pK0
+#elif (UART_TXX & 0xff00) == pK0
   #define UART_TX_DDR     DDRK
   #define UART_TX_PORT    PORTK
   #define UART_TX_PIN     PINK
- #elif (UART_TXX & 0xff00) == pL0
+#elif (UART_TXX & 0xff00) == pL0
   #define UART_TX_DDR     DDRL
   #define UART_TX_PORT    PORTL
   #define UART_TX_PIN     PINL
- #elif (UART_TXX & 0xff00) == pA0
+#elif (UART_TXX & 0xff00) == pA0
   #define UART_TX_DDR     DDRA
   #define UART_TX_PORT    PORTA
   #define UART_TX_PIN     PINA
  
- #else
+#else
   #error -------------------------------------------
   #error Unrecognized UART_TX name.  Should be like "B5"
   #error -------------------------------------------
- #endif
-//#endif 		/* SOFT_UART > 0 */
+#endif
+
+ // UART_TX_BIT must be set to the bit number of the selected Port.
+ // This is allways given by the lower Byte of the previous definition
+ #define UART_TX_BIT (UART_TXX & 0x07)
 
 #if (UART_TXX == UART_RXX)
  #define UART_ONE_WIRE 
@@ -1125,6 +1123,72 @@
   #endif
  #endif
 #endif
+
+#if defined(WRITE_PROTECT_PIN) && (WRITE_PROTECT_PIN != p)
+ #define WRITE_PROTECT_PP WRITE_PROTECT_PIN
+
+ // setup the Port definitions for a write Protect Pin
+ #if (WRITE_PROTECT_PP & 0xff00) == pB0
+  #define WRPP_DDR     DDRB
+  #define WRPP_PORT    PORTB
+  #define WRPP_PIN     PINB
+ #elif (WRITE_PROTECT_PP & 0xff00) == pC0
+  #define WRPP_DDR     DDRC
+  #define WRPP_PORT    PORTC
+  #define WRPP_PIN     PINC
+ #elif (WRITE_PROTECT_PP & 0xff00) == pD0
+  #define WRPP_DDR     DDRD
+  #define WRPP_PORT    PORTD
+  #define WRPP_PIN     PIND
+ #elif (WRITE_PROTECT_PP & 0xff00) == pE0
+  #define WRPP_DDR     DDRE
+  #define WRPP_PORT    PORTE
+  #define WRPP_PIN     PINE
+ #elif (WRITE_PROTECT_PP & 0xff00) == pF0
+  #define WRPP_DDR     DDRF
+  #define WRPP_PORT    PORTF
+  #define WRPP_PIN     PINF
+ #elif (WRITE_PROTECT_PP & 0xff00) == pG0
+  #define WRPP_DDR     DDRG
+  #define WRPP_PORT    PORTG
+  #define WRPP_PIN     PING
+ #elif (WRITE_PROTECT_PP & 0xff00) == pH0
+  #define WRPP_DDR     DDRH
+  #define WRPP_PORT    PORTH
+  #define WRPP_PIN     PINH
+ #elif (WRITE_PROTECT_PP & 0xff00) == pJ0
+  #define WRPP_DDR     DDRJ
+  #define WRPP_PORT    PORTJ
+  #define WRPP_PIN     PINJ
+ #elif (WRITE_PROTECT_PP & 0xff00) == pK0
+  #define WRPP_DDR     DDRK
+  #define WRPP_PORT    PORTK
+  #define WRPP_PIN     PINK
+ #elif (WRITE_PROTECT_PP & 0xff00) == pL0
+  #define WRPP_DDR     DDRL
+  #define WRPP_PORT    PORTL
+  #define WRPP_PIN     PINL
+ #elif (WRITE_PROTECT_PP & 0xff00) == pA0
+  #define WRPP_DDR     DDRA
+  #define WRPP_PORT    PORTA
+  #define WRPP_PIN     PINA
+ 
+ #else
+  #error -------------------------------------------
+  #error Unrecognized WRITE_PROTECT_PIN name.  Should be like "B5"
+  #error -------------------------------------------
+ #endif
+#else
+  // Write protect bit not specified
+ #undef WRPP_PORT
+ #undef WRPP_DDR
+ #undef WRPP_BIT
+#endif
+
+#if ((WRITE_PROTECT_PP & 0xff) > 7)
+  #error "Unrecognized WRITE_PROTECT_PIN number.  Should be like 'B5'"
+#endif
+#define WRPP_BIT (WRITE_PROTECT_PP & 0x07)
 
 /* Virtual boot partition support */
 #if VIRTUAL_BOOT_PARTITION > 0

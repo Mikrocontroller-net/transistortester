@@ -108,6 +108,20 @@
 /*                                                        */
 /**********************************************************/
 
+/************************************************************/
+/* Please read the ReadMe2.txt file for new features of     */
+/* this special Assembler version of optiboot!              */
+/* The BIG_BOOT option is now only used to make the program */
+/* optiboot bigger. The settings for different program      */
+/* length is done automatically by a bash script.   */
+/* This version support the EEprom write by default and     */
+/* the program will usually fit into a 512 byte boot page.  */
+/* Only with special options like automatic baud rate selection */
+/* and software UART the space of the 512 byte boot page is */
+/* insufficient                                             */   
+/* A few bytes can be saved by setting the option           */
+/* NO_EARLY_PAGE_ERASE, by the programming is slower.       */
+
 
 /**********************************************************/
 /*                                                        */
@@ -277,6 +291,10 @@
 
 #if !defined(VIRTUAL_BOOT_PARTITION)
  #define VIRTUAL_BOOT_PARTITION 0
+#endif
+
+#if !defined(NO_EARLY_PAGE_ERASE)
+ #define NO_EARLY_PAGE_ERASE 0
 #endif
 
  /*
@@ -822,11 +840,15 @@ is_PROG:
 
     // PROGRAM PAGE - we support flash and optional EEPROM programming
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//#if (SUPPORT_EEPROM > 0) && (NRWWSTART != 0)
-#if (NRWWSTART != 0)
-    	breq	no_pg_erase	; if (type)
+#if (NRWWSTART != 0) || (NO_EARLY_PAGE_ERASE != 0)
+    	breq	no_pg_erase	; if (type) // no early page erase for EEprom
 #endif
-#if NRWWSTART != 0
+#if (NRWWSTART != 0) && (NO_EARLY_PAGE_ERASE == 0)
+ #if defined(WRPP_PIN) && defined(WRPP_BIT)
+; 	Check for write_protect bit, if set, rjmp no_pg_erase
+	ASBIS	WRPP_PIN,WRPP_BIT
+	rjmp	no_pg_erase	; Hardware Write Protect emulation
+ #endif
   ; if NRWWSTART is zero, no RWW section is present. Never erase the page
   ; at this early state.
 	ldi	r24, hi8(NRWWSTART) ; 0x70
@@ -850,6 +872,12 @@ fill_buf:
 
 	; SRAM of ATmega is filled with data
 	rcall	verifySpace	; check Sync_CRC_EOP, putch(STK_INSYNC)
+; 	Check for write_protect bit, if set, rjmp put_ok
+ #if defined(WRPP_PIN) && defined(WRPP_BIT)
+  #warning "optiboot is compiled with a write protect bit at a input pin !!!"
+	ASBIS	WRPP_PIN,WRPP_BIT
+	rjmp	put_ok		; Hardware Write Protect emulation
+ #endif
 #if SUPPORT_EEPROM > 0
 	cpse	r6, r1		; r6 == 0, is EEprom write
 	rjmp	write_flash	; if (!type)
@@ -874,6 +902,7 @@ ee_wrlop:
 	; eeprom write is finished
 	rjmp	put_ok		; putch(STK_OK); rjmp get_nextp
 #else
+	; without eeprom support
 	cpse	r6, r1		; r6 = 0, is EEprom write
 	rjmp	write_flash	; if (!type)
 	rjmp	put_ok		; putch(STK_OK); rjmp get_nextp ; simulate OK
@@ -881,8 +910,9 @@ ee_wrlop:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 write_flash:
-#if NRWWSTART != 0
+#if (NRWWSTART != 0) && (NO_EARLY_PAGE_ERASE == 0)
   ; If NRWWSTART is zero, boot_page_erase must be called every time here!
+  ; if NO_EARLY_PAGE_ERASE is set, the page is never erased before data input , programming is slow!
 	ldi	r24, hi8(NRWWSTART) ; 0x70
 	cp	r5, r24			; hi8(NRWWSTART) lo8(NRWWSTART) is allways zero
 	brlo	no_erase1

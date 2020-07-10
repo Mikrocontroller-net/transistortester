@@ -416,16 +416,6 @@ and \ref{tab:options2}
 		   &                & but this setting to 4 with a zero LED\_START\_FLASHES \\
 		   &                & will save a lot of flash memory. \\
     \hline
- TIMEOUT\_MS       & TIMEOUT\_MS=2000 & This option specifies a time limit in ms units \\
-                   &                  & for receiving boot data. After this time without \\
-                   &                  & data the boot process is aborted and the \\
-                   &                  & processor tries to start the user program. \\
-                   &                  & Possible values for TIMEOUT\_MS are 500, 1000, 2000, \\
-                   &                  & 4000 and 8000. The efffective value can be limited \\
-                   &                  & to 2s because of processor limits for the watchdog. \\
-                   &                  & If no TIMEOUT\_MS is specified, the time limit is \\
-                   &                  & set to 1 second. \\
-    \hline
     \end{tabular}
   \end{center}
   \caption{Important options for the optiboot Makefile}
@@ -442,9 +432,9 @@ was calibrated.
 In addition here is also described the gradient of frequency change with operating voltage,
 temperature and OSCCAL modification.
 
-More options are listed in table~\ref{tab:options2} . 
-Some of these options are only interesting for software checks and
-for processors without the boot-loader support.
+More options are listed in tables~\ref{tab:options2} and~\ref{tab:options3}. 
+Some of these options are only interesting for software checks, the frequency adjusting of
+the RC-generator and for processors without the boot-loader support.
 
 \begin{table}[H]
   \begin{center}
@@ -453,6 +443,16 @@ for processors without the boot-loader support.
    Name of        & Example        & Function                                            \\
    the Option     &                &                                                     \\
     \hline
+    \hline
+ TIMEOUT\_MS       & TIMEOUT\_MS=2000 & This option specifies a time limit in ms units \\
+                   &                  & for receiving boot data. After this time without \\
+                   &                  & data the boot process is aborted and the \\
+                   &                  & processor tries to start the user program. \\
+                   &                  & Possible values for TIMEOUT\_MS are 500, 1000, 2000, \\
+                   &                  & 4000 and 8000. The efffective value can be limited \\
+                   &                  & to 2s because of processor limits for the watchdog. \\
+                   &                  & If no TIMEOUT\_MS is specified, the time limit is \\
+                   &                  & set to 1 second. \\
     \hline
     SUPPORT\_      & SUPPORT\_      & Select the EEprom read and write function for the  \\
     EEPROM         &  EEPROM=1      & boot-loader. If the assembly language is selected as \\
@@ -465,6 +465,20 @@ for processors without the boot-loader support.
  C\_SOURCE         & C\_SOURCE=1    & Select the C language as source instead of the  \\
                    &                & assembly language (option 0 = assembly).\\
                    &                & The assembly version requires less program space. \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{More options for the optiboot Makefile}
+  \label{tab:options2}
+\end{table}
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c | c | l |}
+    \hline
+   Name of        & Example        & Function                                            \\
+   the Option     &                &                                                     \\
+    \hline
     \hline
  BIGBOOT           & BIGBOOT=512    & Select additional space usage for the compiled \\
                    &                & program. This is used only for tests of the \\
@@ -488,10 +502,21 @@ VIRTUAL\_          & VIRTUAL\_       & Changes the interrupt vector table of a u
                    &                & selected processor clock is important for a successful \\
                    &                & serial communication. The value must be between -15 and +15. \\
     \hline
+ NO\_EARLY\_       &  NO\_EARLY\_   & Prevents the erasing of the flash page before the data \\
+ PAGE\_ERASE       & PAGE\_ERASE=1  & is received via the serial interface. \\
+                   &                & Programming the flash with this option is about 30\% slower, \\
+                   &                & because the deletion otherwise runs parallel to the \\
+		   &                & data reception. But the time loss is not so significant, \\
+                   &                & because the also carried out data verification takes about \\
+		   &                & the same time and is uneffected. This saves about 14 bytes \\
+		   &                & of space on the bootloader side of the optiboot, which \\
+		   &                & in practice can also mean that the space requirement  \\
+		   &                & can be halved due to the AVR technology. \\
+    \hline
     \end{tabular}
   \end{center}
   \caption{More options for the optiboot Makefile}
-  \label{tab:options2}
+  \label{tab:options3}
 \end{table}
 
 \section{Usage of optiboot without a boot-loader area}
@@ -1054,24 +1079,26 @@ polling loops for the RX signal.
    Option      & UART   & Baud      & \textless 4\% @ Baud &  \\
     \hline
     \hline
-  20-29,40-49  &  0     &  244      &   80.0k  & HW\_UART 2-Bit Time  \\
-    60-69      &        &           &          &                    \\
+  10-14,20-34  &  0     &  244      &   80.0k  & HW\_UART 2-Bit Time  \\
+  40-54,60-64  &        &           &          & or CLK/8 measurement    \\
+  70-74,80-84  &        &           &          &                         \\
     \hline
-  30-39,50-59  &  0     &  488      &   80.0k  & HW\_UART 4-Bit Time  \\
+  35-39,55-59  &  0     &  488      &   80.0k  & HW\_UART 4-Bit Time, CLK  \\
     \hline
-  10-19,70-99  &  0     &  1098     &   80.0k  & HW\_UART 9-Bit Time  \\
+  15-19,65-69  &  0     &  1098     &   80.0k  & HW\_UART 9-Bit Time, CLK  \\
+  75-79,85-89  &        &           &          &                         \\
     \hline
     42         &  1     &  5151     &   81.6k  &  Simple, 2-Bit Time, 8-Bit Loop  \\
     \hline
     62         &  1     &  5151     &   81.6k  & Complex, 2-Bit Time, 8-Bit Loop  \\
     \hline
-    82         &  1     &  5151     &   81.6k  & Complex, 4-Bit Time, 8-Bit Loop  \\
+    72         &  1     &  5151     &   81.6k  & Complex, 4-Bit Time, 8-Bit Loop  \\
     \hline
-    49         &  1     &  244      &   53.3k  &  Simple, 2-Bit Time, 15-Bit Loop \\
+    47         &  1     &  244      &   53.3k  &  Simple, 2-Bit Time, 15-Bit Loop \\
     \hline
-    69         &  1     &  1220     &   53.3k  & Complex, 2-Bit Time, 15-Bit Loop \\
+    67         &  1     &  1220     &   53.3k  & Complex, 2-Bit Time, 15-Bit Loop \\
     \hline
-    89         &  1     &  1220     &   53.3k  & Complex, 4-Bit Time, 15-Bit Loop \\
+    77         &  1     &  1220     &   53.3k  & Complex, 4-Bit Time, 15-Bit Loop \\
     \hline
     \end{tabular}
   \end{center}
@@ -1118,6 +1145,8 @@ To enable this shift operations, the colums labled with \_3, \_4, \_8 and \_9
 has increased the number of cycles for one delay loop pass (8T or 16T, T for tics).
 Unfortunately the program length is only shorter compared to the subtraction loop,
 if the count of shift operation is below 3, which would spare the loop operation for the shifts.
+But you can save 14 bytes of flash with the option NO\_EARLY\_PAGE\_ERASE , so that about
+30 versions more match to a 512 byte limit.
 
 \begin{table}[H]
   \begin{center}
@@ -1162,34 +1191,35 @@ specified (\(115.2 kBaud\)) was also done.
     \begin{tabular}{| c | c || c | c | c || c |  c | c |}
     \hline
   OSCCAL  & Freq.    & HW-UART & SW-UART & HW-UART & \multicolumn{2}{c |}{SW-UART} \\
-   \_CORR  & kHz       & 57600   & 57600  & 115200  & \multicolumn{2}{c |}{115200} \\
+   \_CORR  & MHz       & 57600   & 57600  & 115200  & \multicolumn{2}{c |}{115200} \\
            &           & Mode 82 & Mode 82 & Mode 56 & Mode 52 & Mode 57 \\
     \hline
     \hline
-    20     &  7157   &  OK       &   OK    &  Err    &  Err    &   Err \\
-    18     &  7217   &  OK       &   OK    &  Err    &  Err    &   Err \\
+    20     &  7.18   &  OK       &   OK    &  Err    &  Err    &   Err \\
+    18     &  7.22   &  OK       &   OK    &  Err    &  Err    &   Err \\
     \hline
-    16     &  7318   &  OK       &   OK    &  OK     &  OK     &   Err \\
-    14     &  7404   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+    16     &  7.35   &  OK       &   OK    &  OK     &  OK     &   Err \\
+    14     &  7.45   &  OK       &   OK    &  OK     &  OK     &   OK  \\
     \hline
-    12     &  7521   &  OK       &   OK    &  OK     &  OK     &   OK  \\
-    10     &  7591   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+    12     &  7.56   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+    10     &  7.63   &  OK       &   OK    &  OK     &  OK     &   OK  \\
     \hline
-     8     &  7710   &  OK       &   OK    &  OK     &  OK     &   OK  \\
-     6     &  7815   &  OK       &   OK    &  Err    &  OK     &   OK  \\
+     8     &  7.75   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+     6     &  7.84   &  OK       &   OK    &  Err    &  OK     &   Err \\
     \hline
-     4     &  7933   &  OK       &   OK    &  Err    &  Err    &   Err \\
-     2     &  8012   &  OK       &   OK    &  Err    &  OK     &   Err \\
+     4     &  7.98   &  OK       &   OK    &  Err    &  Err    &   Err \\
+     2     &  8.04   &  OK       &   OK    &  Err    &  OK     &   Err \\
     \hline
-     0     &  8141   &  OK       &   OK    &  Err    &  OK     &   Err \\
-    -2     &  8247   &  OK       &   OK    &  OK     &  OK     &   Err \\
+     0     &  8.18   &  OK       &   OK    &  OK     &  OK     &   Err \\
+    -2     &  8.29   &  OK       &   OK    &  OK     &  OK     &   Err \\
     \hline
-    -4     &  8390   &  OK       &   OK    &  OK     &  OK     &   Err \\
-    -6     &  8485   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+    -4     &  8.42   &  OK       &   OK    &  OK     &  OK     &   Err \\
+    -6     &  8.51   &  OK       &   OK    &  OK     &  OK     &   OK  \\
     \hline
-    -8     &  8623   &  OK       &   OK    &  OK     &  Err    &   OK  \\
-    -10    &  8745   &  OK       &   OK    &  OK     &  OK     &   OK  \\
-    -12    &  8889   &  OK       &   OK    &  Err    &  OK     &   OK  \\
+    -8     &  8.64   &  OK       &   OK    &  OK     &  Err    &   OK  \\
+    -10    &  8.77   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+    -12    &  8.92   &  OK       &   OK    &  Err    &  OK     &   OK  \\
+
     \hline
     \end{tabular}
   \end{center}
@@ -1280,7 +1310,7 @@ Boot Loader start address: 0x7E00 = 32256
 # # # # # # # # # # # # # # # # # # # # # #
 
    text    data     bss     dec     hex filename
-    508       0       0     508     1fc optiboot.elf
+    506       0       0     506     1fc optiboot.elf
 Requires 1 Boot Page of 512 Bytes, which is 1.5% of Flash Memory
 BOOTSZ=3, which means 1 Boot Pages
 
@@ -1337,7 +1367,7 @@ was selected because the limit of 512 byte would be exceeded with
 selecting the LED flashing and the simplest measurement method (534 byte).
 
 \begin{verbatim}
-optiboot $ make atmega328p BAUD_RATE=82
+optiboot $ make atmega328p BAUD_RATE=76
 
 Optiboot for 16000000 Hz (16.00 Mhz) operation with Auto-Baudrate and EEprom \
   support configured.
@@ -1353,14 +1383,14 @@ avr-gcc -g -Wall -Os -fno-split-wide-types -mrelax -mmcu=atmega328p \
 
 --------------------------------------------------------------------------------
 Complex Baudrate measurement implemented in optiboot! (4-bit, CLK/1)
-UART Minimum 976 Baud, Difference surely less than 4% up to 160.0 kBaud
+UART Minimum 2197 Baud, Difference surely less than 4% up to 160.0 kBaud
 --------------------------------------------------------------------------------
 # # # # # # # # # # # # # # # # # # # # # #
 Boot Loader start address: 0x7C00 = 31744
 # # # # # # # # # # # # # # # # # # # # # #
 
    text    data     bss     dec     hex filename
-    610       0       0     610     262 optiboot.elf
+    612       0       0     612     262 optiboot.elf
 Requires 2 Boot Pages, 512 Bytes each, which is 3.1% of Flash Memory
 BOOTSZ=2, which means 2 Boot Pages
 

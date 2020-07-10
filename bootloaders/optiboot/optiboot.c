@@ -1089,17 +1089,29 @@ RX_was_high:		/* entry for detected Start bit during flashing */
       uint8_t desttype = getch() - 'E';	/* desttype = 0, if EEprom */
  #if NRWWSTART != 0
         // If we are in RWW section, immediately start page erase
+  #if defined(WRPP_PIN) && defined(WRPP_BIT)
+      if ((desttype != 0) && (f_address < NRWWSTART) && (WRPP_PIN & _BV(WRPP_BIT) == 0)) {
+         boot_page_erase((uint16_t)(void*)f_address);	// early page erase
+      }
+  #else
       if ((desttype != 0) && (f_address < NRWWSTART)) {
          boot_page_erase((uint16_t)(void*)f_address);	// early page erase
       }
+  #endif
  #endif
 #else	/* no EEprom Support */
       getch();			/* dummy type */
  #if NRWWSTART != 0
         // If we are in RWW section, immediately start page erase
+  #if defined(WRPP_PIN) && defined(WRPP_BIT)
+      if ((f_address < NRWWSTART) && (WRPP_PIN & _BV(WRPP_BIT) == 0)) {
+         boot_page_erase((uint16_t)(void*)f_address);	// early page erase
+      }
+  #else
       if (f_address < NRWWSTART) {
          boot_page_erase((uint16_t)(void*)f_address);	// early page erase
       }
+  #endif
  #endif
 #endif 
 
@@ -1110,6 +1122,14 @@ RX_was_high:		/* entry for detected Start bit during flashing */
 
       // Read command terminator, start reply
       verifySpace();
+#if defined(WRPP_PIN) && defined(WRPP_BIT)
+  #warning "optiboot is compiled with a write protect bit at input pin !!!"
+      // for write_protect bit is set, skip programming,  put_ok
+      if (WPPP_PIN & _BV(WRPP_BIT) != 0) {
+        putch(STK_OK);
+        continue;
+      }
+#endif
 
 #if SUPPORT_EEPROM > 0
       if (!desttype) {	/* EEPROM */

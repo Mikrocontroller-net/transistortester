@@ -284,7 +284,9 @@ then
   else
     echo "Bootloader HFUSE will be changed to 0x${PHFUSE} instead of 0x${HFUSE}!!!"
   fi
-  if (( (${PHFUSE}&1) == 0 ))
+  Hlobit=`echo "ibase=16;${PHFUSE} % 2" | bc`
+  echo "Hlobit= ${Hlobit}"
+  if (( ${Hlobit} == 0 ))
   then
     echo "BootLoader Start is enabled to 0x${BL_StartAdr}, `echo "ibase=16;${BL_StartAdr}"| bc`"
   else

@@ -365,9 +365,12 @@ und \ref{tab:options2}
                    &                & Das Beispiel gibt eine Frequenz von 8 MHz an. \\
     \hline
     BAUD\_RATE     & BAUD\_         & Gibt die Baud-Rate für die serielle Kommunikation an. \\
-                   &  RATE=9600      & Es werden immer 8 Datenbits ohne Parity verwendet. \\
-                   &                & Werte unter 100 aktivieren eine Messung and Anpassung \\
+                   &  RATE=9600     & Es werden immer 8 Datenbits ohne Parity verwendet. \\
+                   &                & Werte \textless~100 aktivieren eine Messung and Anpassung \\
                    &                & der Baudrate mit verschiedenen Verfahren.  \\
+		   &                & Der Vorteil besteht darin, daß man problemlos auf eine \\
+		   &                & niedrigere Baudrate ausweichen kann, wenn Probleme \\
+		   &                & mit einer hohen Baudrate auftauchen. \\
     \hline
     SOFT\_UART     & SOFT\_UART=1   & Wählt Software-Lösung für die serielle Kommunikation. \\
     \hline
@@ -376,26 +379,26 @@ und \ref{tab:options2}
                    &                & Bit 0 des D Ports für den seriellen Eingang.\\
     \hline
     UART\_TX        & UART\_TX=D1   & Gibt den Port und die Bitnummer für die seriellen  \\
-                   &                & Sendedaten an.  Das Beispiel nimmt                 \\
-                   &                & Bit 1 des D Ports für den seriellen Ausgang.\\
+                   &                & Sendedaten an.  Das Beispiel nimmt Bit 1 des D Ports \\
+                   &                & für den seriellen Ausgang.\\
     \hline
     UART           & UART=1         & Wählt für die  serielle Schnittstelle des Chips. \\
                    &                & Eine Auswahl setzt das Vorhandensein mehrerer \\
                    &                & Schnittstellen voraus, funktioniert dann aber auch \\
 		   &                & mit SOFT\_UART. \\
     \hline
-    INVERSE\_UART  & INVERSE\_UART=1 & Invertiert die Pegel von RX und TX Signalen. \\
-	           &                & Die Option kann nur bei Software UART benutzt werden.\\
+    INVERSE\_UART  & INVERSE\_UART=1 & Invertiert die Pegel von RX und TX Signalen. Die \\
+	           &                & Option kann nur bei Software UART benutzt werden.\\
     \hline
  LED\_START\_      & LED\_START\_   & Wählt für die Anzahl der Blink-Zyklen \\
-   FLASHES         &   FLASHES=3    & für die Kontroll-LED.                            \\
-                   &                & Bei 1 oder -1 wird nur einmal geblinkt ohne Wiederholung. \\
-                   &                & Negative Vorgaben bewirken, daß in der Programmschleife \\
-                   &                & das RX Bit der seriellen Schnittstelle nicht überwacht wird. \\
-                   &                & Bei positiven Werten wird die Binkschleife sofort \\
-		   &                & abgebrochen, sobald eingehende RX-Daten festgestellt werden. \\
-                   &                & Bitte beachten Sie,daß das Blinken den Start des \\
-                   &                & Anwenderprogramms verzögert. \\
+   FLASHES         &   FLASHES=3    & für die Kontroll-LED. Bei 1 oder -1 wird nur einmal \\
+                   &                & geblinkt ohne Wiederholung. Negative Vorgaben \\
+                   &                & bedeuten, daß in der Programmschleife das RX Bit der \\
+                   &                & seriellen Schnittstelle nicht überwacht wird. Bei \\ 
+                   &                & positiven Werten wird die Binkschleife sofort \\
+		   &                & abgebrochen, sobald eingehende RX-Daten festgestellt \\
+                   &                & werden. Bitte beachten Sie,daß das Blinken den Start \\
+                   &                & des Anwenderprogramms verzögert. \\
     \hline
  LED               & LED=B3         & Wählt das Port-Bit für die  Kontroll-LED. \\
                    &                & Beim Beispiel würde eine an das Bit 3 des Port B \\ 
@@ -406,19 +409,10 @@ und \ref{tab:options2}
  LED\_DATA\_       & LED\_DATA\_    & Die Kontroll-LED leuchtet während des Wartens auf \\
       FLASH        &    FLASH=1     & Empfangsdaten der seriellen Kommunikation.\\
 	           &                & Ein Wert von 4 bewirkt, daß die LED nur beim Start \\
-		   &                & einmalig eingeschaltet wird. Hiermit kann kan auch \\
+		   &                & einmalig eingeschaltet wird. Hiermit kann man auch \\
 		   &                & erkennen, daß der Bootloader gestartet wurde und \\
-		   &                & es wird viel weniger Platz im Programmspeicher verbraucht. \\
-    \hline
- TIMEOUT\_MS       & TIMEOUT\_      & Diese Option gibt eine Zeitschranke in Millisekunden \\
-                   &  MS=2000       & vor für den Empfang von Boot-Daten. Nach dieser Zeit\\
-                   &                & wird der Bootvorgang abgebrochen und versucht, das \\
-                   &                & Anwenderprogramm zu starten. Mögliche Werte für \\
-                   &                & TIMEOUT\_MS sind 500, 1000, 2000, 4000 und 8000. \\
-                   &                & Der tatsächlich mögliche Wert kann abhängig vom \\
-                   &                & Prozessor auf 2 Sekunden begrenzt sein. \\
-                   &                & Wenn kein TIMEOUT\_MS angegeben wird, wird die \\
-                   &                & Zeitschranke auf 1 Sekunde gesetzt. \\
+		   &                & es wird viel weniger Platz im Programmspeicher \\
+		   &                & gebraucht. \\
     \hline
     \end{tabular}
   \end{center}
@@ -436,8 +430,8 @@ prinzipielle Verlauf der Frequenzänderung mit der Betriebsspannung, mit der Tem
 mit OSCCAL-Änderung beschrieben. 
 
 
-Weitere Optionen sind in der Tabelle~\ref{tab:options2} aufgezählt. 
-Diese Optionen sind nur für Software-Untersuchungen, die Frequenzkalibration des RC-Generators
+Weitere Optionen sind in den Tabellen~\ref{tab:options2} und~\ref{tab:options3} aufgezählt. 
+Diese Optionen sind meist nur für Software-Untersuchungen, die Frequenzkalibration des RC-Generators
  und für Prozessoren ohne Bootloader-Bereich interessant.
 
 \begin{table}[H]
@@ -447,6 +441,16 @@ Diese Optionen sind nur für Software-Untersuchungen, die Frequenzkalibration de
    Name der        & Beispiel       & Funktion                                            \\
     Option         &                &                                                     \\
     \hline
+    \hline
+ TIMEOUT\_MS       & TIMEOUT\_      & Diese Option gibt eine Zeitschranke in Millisekunden \\
+                   &  MS=2000       & vor für den Empfang von Boot-Daten. Nach dieser Zeit\\
+                   &                & wird der Bootvorgang abgebrochen und versucht, das \\
+                   &                & Anwenderprogramm zu starten. Mögliche Werte für \\
+                   &                & TIMEOUT\_MS sind 500, 1000, 2000, 4000 und 8000. \\
+                   &                & Der tatsächlich mögliche Wert kann abhängig vom \\
+                   &                & Prozessor auf 2 Sekunden begrenzt sein. \\
+                   &                & Wenn kein TIMEOUT\_MS angegeben wird, wird die \\
+                   &                & Zeitschranke auf 1 Sekunde gesetzt. \\
     \hline
     SUPPORT\_      & SUPPORT\_      & Wählt für das Bootloader-Programm die Lese- und Schreib- \\
     EEPROM         &  EEPROM=1      & Funktion für EEproms. Wenn als Quelle das Assembler- \\
@@ -460,6 +464,20 @@ Diese Optionen sind nur für Software-Untersuchungen, die Frequenzkalibration de
  C\_SOURCE         & C\_SOURCE=1    & Wählt als Programmquelle das C-Programm anstelle des  \\
                    &                & Assembler-Programms (0 = Assembler).\\
                    &                & Die Assembler Version benötigt weniger Speicherplatz. \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{Weitere Optionen für die optiboot Makefile}
+  \label{tab:options2}
+\end{table}
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c | c | l |}
+    \hline
+   Name der        & Beispiel       & Funktion                                            \\
+    Option         &                &                                                     \\
+    \hline
     \hline
  BIGBOOT           & BIGBOOT=512    & Wählt zusätzlichen Speicherverbrauch für das Bootloader- \\
                    &                & Programm. Das dient nur zum Test der automatischen \\
@@ -483,10 +501,22 @@ VIRTUAL\_          & VIRTUAL\_       &  Ändert die Programmdaten eines Anwender
                    &                & Prozessortakt für eine erfolgreiche serielle Kommunikation \\
                    &                & wichtig. Der Wert sollte zwischen -20 und +20 liegen. \\
     \hline
+NO\_EARLY\_        &  NO\_EARLY\_   & Verhindert das Löschen der Flash Seite bevor die \\
+PAGE\_ERASE        & PAGE\_ERASE=1  & Daten über die serielle Schnittstelle empfangen sind. \\
+                   &                & Da das Löschen sonst parallel zum Datenempfang abläuft, \\
+                   &                & ist das programmieren des Flashs mit dieser Option \\
+                   &                & um etwa 30\% langsamer ist. Da der normalerweise auch \\
+		   &                & durchgeführte Datenvergleich (verify) etwa genau so viel \\
+                   &                & Zeit braucht, ist der Zeitverlust nicht so erheblich. \\
+                   &                & Dafür spart man beim optiboot Bootloader etwa 14 Bytes \\
+		   &                & Platz in der Bootloader-Seite, was wegen der AVR-Technik \\
+		   &                & in der Praxis auch eine Halbierung des Platzbedarfs \\
+		   &                & bedeuten kann. \\
+    \hline
     \end{tabular}
   \end{center}
   \caption{Weitere Optionen für die optiboot Makefile}
-  \label{tab:options2}
+  \label{tab:options3}
 \end{table}
 
 \section{Benutzung von optiboot ohne Bootloader-Bereich}
@@ -1042,24 +1072,26 @@ durch die Abfrageschleife des RX-Signals entstehen kann.
    BAUD\_RATE  & SOFT\_ & Minimum & BAUD-Err   & Kommentar  \\
    Option      & UART   & Baud    & \textless 4\% @ Baud &  \\
     \hline
-  20-29,40-49  &  0     &  244      &   80.0k  & HW\_UART 2-Bit Zeit  \\
-    60-69      &        &           &          &                    \\
+  10-14,20-34  &  0     &  244      &   80.0k  & HW\_UART 2-Bit Zeit  \\
+  40-54,60-64  &        &           &          & oder CLK/8 Messung         \\
+  70-74,80-84  &        &           &          &                            \\
     \hline
-  30-39,50-59  &  0     &  488      &   80.0k  & HW\_UART 4-Bit Zeit  \\
+  35-39,55-59  &  0     &  488      &   80.0k  & HW\_UART 4-Bit Zeit, CLK \\
     \hline
-  10-19,70-99  &  0     &  1098     &   80.0k  & HW\_UART 9-Bit Zeit  \\
+  15-19,65-69  &  0     &  1098     &   80.0k  & HW\_UART 9-Bit Zeit, CLK \\
+  75-69,85-89  &        &           &          &                          \\
     \hline
     42         &  1     &  5151     &   81.6k  & Simple, 2-Bit Zeit, 8-Bit Schleife  \\
     \hline
     62         &  1     &  5151     &   81.6k  & Complex, 2-Bit Zeit, 8-Bit Schleife  \\
     \hline
-    82         &  1     &  5151     &   81.6k  & Complex, 4-Bit Zeit, 8-Bit Schleife  \\
+    72         &  1     &  5151     &   81.6k  & Complex, 4-Bit Zeit, 8-Bit Schleife  \\
     \hline
     47         &  1     &  244      &   53.3k  &  Simple, 2-Bit Zeit, 15-Bit Schleife\\
     \hline
     67         &  1     &  1220     &   53.3k  &  Complex, 2-Bit Zeit, 15-Bit Schleife \\
     \hline
-    87         &  1     &  1220     &   53.3k  & Complex, 4-Bit Zeit, 15-Bit Schleife \\
+    77         &  1     &  1220     &   53.3k  & Complex, 4-Bit Zeit, 15-Bit Schleife \\
     \hline
     \end{tabular}
   \end{center}
@@ -1083,7 +1115,7 @@ Wenn für die Software-UART Lösung die 8-Bit Verzögerungsschleife benutzt wird
 kann die Baudrate 1200, 2400 und 4800 nicht benutzt werden.
 Erst bei Benutzung der 15-Bit Verzögerungsschleife sind die unteren Baudraten
 mit Software UART benutzbar.
-Der Unterschied zwischen der 47 und der 67 bzw. 87 Einstellung ergibt
+Der Unterschied zwischen der 47 und der 67 bzw. 77 Einstellung ergibt
 sich durch den verwendeten 16-Bit Zähler. Bei der Einstellung 49 wird nur
 die Zeit von 2 Datenbits gemessen, bei den Einstellungen über 59 wird
 die komplette Byte-Sequenz vom Start-Bit bis zum Stop-Bit mit dem 16-Bit Zähler gemessen.
@@ -1153,34 +1185,34 @@ ergänzt.
     \begin{tabular}{| c | c || c | c || c | c | c |}
     \hline
    OSCCAL  & Freq. & HW-UART &  SW-UART & HW-UART & \multicolumn{2}{c |}{SW-UART} \\
-   \_CORR  & kHz       & 57600   & 57600  & 115200  & \multicolumn{2}{c |}{115200}  \\
+   \_CORR  & MHz       & 57600   & 57600  & 115200  & \multicolumn{2}{c |}{115200}  \\
            &           & Mode 82 & Mode 82 & Mode 56 & Mode 52 & Mode 57 \\
     \hline
     \hline
-    20     &  7157   &  OK       &   OK    &  Err    &  Err    &   Err \\
-    18     &  7217   &  OK       &   OK    &  Err    &  Err    &   Err \\
+    20     &  7.18   &  OK       &   OK    &  Err    &  Err    &   Err \\
+    18     &  7.22   &  OK       &   OK    &  Err    &  Err    &   Err \\
     \hline
-    16     &  7318   &  OK       &   OK    &  OK     &  OK     &   Err \\
-    14     &  7404   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+    16     &  7.35   &  OK       &   OK    &  OK     &  OK     &   Err \\
+    14     &  7.45   &  OK       &   OK    &  OK     &  OK     &   OK  \\
     \hline
-    12     &  7521   &  OK       &   OK    &  OK     &  OK     &   OK  \\
-    10     &  7591   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+    12     &  7.56   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+    10     &  7.63   &  OK       &   OK    &  OK     &  OK     &   OK  \\
     \hline
-     8     &  7710   &  OK       &   OK    &  OK     &  OK     &   OK  \\
-     6     &  7815   &  OK       &   OK    &  Err    &  OK     &   OK  \\
+     8     &  7.75   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+     6     &  7.84   &  OK       &   OK    &  Err    &  OK     &   Err \\
     \hline
-     4     &  7933   &  OK       &   OK    &  Err    &  Err    &   Err \\
-     2     &  8012   &  OK       &   OK    &  Err    &  OK     &   Err \\
+     4     &  7.98   &  OK       &   OK    &  Err    &  Err    &   Err \\
+     2     &  8.04   &  OK       &   OK    &  Err    &  OK     &   Err \\
     \hline
-     0     &  8141   &  OK       &   OK    &  Err    &  OK     &   Err \\
-    -2     &  8247   &  OK       &   OK    &  OK     &  OK     &   Err \\
+     0     &  8.18   &  OK       &   OK    &  OK     &  OK     &   Err \\
+    -2     &  8.29   &  OK       &   OK    &  OK     &  OK     &   Err \\
     \hline
-    -4     &  8390   &  OK       &   OK    &  OK     &  OK     &   Err \\
-    -6     &  8485   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+    -4     &  8.42   &  OK       &   OK    &  OK     &  OK     &   Err \\
+    -6     &  8.51   &  OK       &   OK    &  OK     &  OK     &   OK  \\
     \hline
-    -8     &  8623   &  OK       &   OK    &  OK     &  Err    &   OK  \\
-    -10    &  8745   &  OK       &   OK    &  OK     &  OK     &   OK  \\
-    -12    &  8889   &  OK       &   OK    &  Err    &  OK     &   OK  \\
+    -8     &  8.64   &  OK       &   OK    &  OK     &  Err    &   OK  \\
+    -10    &  8.77   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+    -12    &  8.92   &  OK       &   OK    &  Err    &  OK     &   OK  \\
     \hline
     \end{tabular}
   \end{center}
@@ -1194,7 +1226,7 @@ auch die ungeraden OSCCAL\_CORR Einstellungen ohne erkennbare Schwierigkeiten ge
 Auch mit dem einfachsten Betriebsmodus 42 waren bei den geraden OSCCAL\_CORR
 Einstellungen der Tabelle keine Ausfälle zu verzeichnen.
 Erst bei der für diese CPU-Frequenz extrem hohen Baudrate von \(115.2k\) waren 
-für den Betriebsmodus 52 vier Ausfälle und mit dem Betriebsmodus 57 acht Ausfälle
+für den Betriebsmodus 52 vier Ausfälle und mit dem Betriebsmodus 57 neun Ausfälle
 zu beobachten. Die Zunahme der Ausfälle bei Betriebsart 57 mit der 15-Bit Zeitschleife war
 wegen der groberen Rasterung der einstellbaren Zeiten zu erwarten.
 
@@ -1271,7 +1303,7 @@ Boot Loader start address: 0x7E00 = 32256
 # # # # # # # # # # # # # # # # # # # # # #
 
    text	   data	    bss	    dec	    hex	filename
-    508	      0	      0	    508	    1fc	optiboot.elf
+    506	      0	      0	    506	    1fc	optiboot.elf
 Requires 1 Boot Page of 512 Bytes, which is 1.5% of Flash Memory
 BOOTSZ=3, which means 1 Boot Pages
 
@@ -1292,6 +1324,8 @@ Die letzten beiden Beispiele zeigen jeweils eine Konfiguration mit der neuen aut
 Um Platz im Speicher zu sparen, wurde beim ersten Beispiel die LED-Blinkfunktion abgewählt.
 
 \begin{verbatim}
+optiboot $ make atmega328p BAUD_RATE=52 LED_START_FLASHES=0
+
 
 Optiboot for 16000000 Hz (16.00 Mhz) operation with Auto-Baudrate and EEprom \
   support configured.
@@ -1325,7 +1359,7 @@ gewählt, da mit der LED-Blink Funktion ohnehin die Grenze von 512 Byte
 überschritten würde (534 Bytes).
 
 \begin{verbatim}
-optiboot $ make atmega328p BAUD_RATE=82
+optiboot $ make atmega328p BAUD_RATE=76
 
 Optiboot for 16000000 Hz (16.00 Mhz) operation with Auto-Baudrate and EEprom \
   support configured.
@@ -1341,14 +1375,14 @@ avr-gcc -g -Wall -Os -fno-split-wide-types -mrelax -mmcu=atmega328p \
 
 --------------------------------------------------------------------------------
 Complex Baudrate measurement implemented in optiboot! (4-bit, CLK/1)
-UART Minimum 976 Baud, Difference surely less than 4% up to 160.0 kBaud
+UART Minimum 2197 Baud, Difference surely less than 4% up to 160.0 kBaud
 --------------------------------------------------------------------------------
 # # # # # # # # # # # # # # # # # # # # # #
 Boot Loader start address: 0x7C00 = 31744
 # # # # # # # # # # # # # # # # # # # # # #
 
    text	   data	    bss	    dec	    hex	filename
-    610	      0	      0	    610	    262	optiboot.elf
+    612	      0	      0	    612	    262	optiboot.elf
 Requires 2 Boot Pages, 512 Bytes each, which is 3.1% of Flash Memory
 BOOTSZ=2, which means 2 Boot Pages
 

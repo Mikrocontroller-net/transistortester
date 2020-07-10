@@ -144,6 +144,12 @@ fi
 if [ "${FORCE_RSTDISBL}" != "" ] ; then
   XTRA_OPTIONS="${XTRA_OPTIONS} -DFORCE_RSTDISBL=1"
 fi
+if [ "${WRITE_PROTECT_PIN}" != "" ] ; then
+	XTRA_OPTIONS="${XTRA_OPTIONS} -DWRITE_PROTECT_PIN=p${WRITE_PROTECT_PIN}"
+fi
+if [ "${NO_EARLY_PAGE_ERASE}" != "" ] ; then
+	XTRA_OPTIONS="${XTRA_OPTIONS} -DNO_EARLY_PAGE_ERASE=${NO_EARLY_PAGE_ERASE}"
+fi
 if [ "${UART}" = "" ] ; then
 UART=0
 fi
@@ -154,7 +160,7 @@ if (( ${UART} > ${my_uarts} )) && (( ${my_uarts} > 0 )); then
 fi
 source show_rx_pin.sh
 source show_tx_pin.sh
-
+source show_write_protect.sh
 LDFLAGS="-Wl,--relax -nostartfiles -nostdlib"
 LDSECTIONS="-Wl,--section-start=.version=0x`echo "obase=16;${FLASH_SIZE}-2" | bc`"
 
@@ -360,6 +366,12 @@ echo "TIMEOUT_MS=${TIMEOUT_MS}" >> ${logfile}
 echo "OSCCAL_CORR=${OSCCAL_CORR}" >> ${logfile}
 echo "FORCE_RSTDISBL=${FORCE_RSTDISBL}" >> ${logfile}
 echo "save_vect_num=${save_vect_num}" >> ${logfile}
+if [ "${WRITE_PROTECT_PIN}" != "" ] ; then
+echo "WRITE_PROTECT_PIN=p${WRITE_PROTECT_PIN}" >> ${logfile}
+fi
+if [ "${NO_EARLY_PAGE_ERASE}" != "" ] ; then
+echo "NO_EARLY_PAGE_ERASE=${NO_EARLY_PAGE_ERASE}" >> ${logfile}
+fi
 echo " " >> ${logfile}
 echo "Bootloader use ${size2know} Bytes of Flash," >> ${logfile}
 echo "so the Application must use less than 0x${BL_StartAdr} Bytes of Flash " >> ${logfile}

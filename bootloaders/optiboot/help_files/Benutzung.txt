@@ -178,6 +178,13 @@ FORCE_RSTDISBL		Sie müssen diese Option auf 1 setzen, wenn Sie vorhaben, die RS
 			entdeckt and das Übersetzen wird abgebrochen, wenn diese Option nicht
 			gesetzt ist.
 
+NO_EARLY_PAGE_ERASE     Wenn diese Option gesetzt ist, benutzt optiboot nicht die Möglichkeit,
+                        während des Datenempfangs die Flash-Speicherseite zu löschen. 
+                        Das macht das Beschreiben des Flash-Speichers etwa 30% langsamer,
+                        aber dafür kann das optiboot Programm 14 Byte kürzer werden.
+			Der Geschwindigkeitsverlust wirkt sich in der Praxix noch weniger aus,
+                        da die Daten in der Regel auch zurückgelesen und gepüft werden.
+
 
 
 Vorschlag:

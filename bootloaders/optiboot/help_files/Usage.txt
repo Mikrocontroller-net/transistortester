@@ -189,6 +189,14 @@ FORCE_RSTDISBL		You can set this option to 1, if you plan to set the RSTDISBL fe
 			The setting of the RSTDISBL bit (to 0) is detected by optiboot and
 			the compiling is aborted without the setting of this option. 
 
+NO_EARLY_PAGE_ERASE     The optiboot program does not use the feature, that the flash memory erase
+	                can be done during the data receive, if this option is set.
+			This will make the write to flash about 30% slower,
+                        but you cam probably save 14 bytes of memory for the bootloader code.
+                        The loss of speed has even less of an impact in practice, since the data
+                        is usually also read back and checked.
+
+
 Recommendation:
 ===============
 The optiboot loader transfer the original content of the MCUSR register to the application

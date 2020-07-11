@@ -760,20 +760,21 @@ A corresponding circuit suggestion is shown in figure~\ref{fig:onewire}
 \label{fig:onewire}
 \end{figure}
 
-With the first two NAND gates of the HCF4093 a flip-flop is build,
-which is set or reset by the two other NAND gates of this chip.
-The switching signals are get from from signals of a chain of inverting buffers
-with Schmitt-trigger inputs (HC7414).
-For one of this signals a additional C-R circuit (\(120 pF\) and \(3.3 k\Omega\) is
-required to prevent switching at the wrong edge.
-The flip-flop is switched with the 1-0 edge of the two transmission sides.
-This changeover is only required at the edge of the start bit.
-But additional switching with data bits will not hurt, if the flip-flop
-is already in the right state.
-When the external interface sends, the reception of the own data with the
-external receiver is prevented. The external RX signal remains at high level.
-With this additional circuit no software adaption is necessary.
-You can use avrdude for example for the bootloader.
+The TX data from the PC are transfered directly with the \(1 k\Omega\) resistor
+to the combined RX/TX input pin of the AVR.
+If the AVR sends data back to the PC, the output can be switch the level close to 0V,
+because the \(1k \Omega\) resistor can not avoid this, even though the
+PC's TX level remains switched to VCC level.
+The date are passed with the both NAND gates of the HEF4093 chip to the PC's RX input a little bit delayed.
+The 0V level of the PC's TX signal will prevent this 
+The 0V level on the PC-TX prevents exactly this passing on of data and the RX level remains at VCC,
+i.e. on the idle signal of the serial transmission.
+Problems are given only by the signal change of the PC-TX signal. 
+The circuit consisting of a diode, two resistors and a \(18 pF\) capacitor forward the falling edge faster
+to NAND input 6 than the rising edge.
+only two NAND gates are required for the function. the other two NAND gates are used for a optional
+display of TX/RX activity.
+With this circuit you can use an unchanged transfer program like avrdude for example.
 The circuit is largely independent of the selected baud rate.
 I expect only problems with very high baud rates.
 At 115200 baud the circuit operates well. Much higher baud rates can 

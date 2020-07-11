@@ -505,7 +505,7 @@ NO\_EARLY\_        &  NO\_EARLY\_   & Verhindert das Löschen der Flash Seite be
 PAGE\_ERASE        & PAGE\_ERASE=1  & Daten über die serielle Schnittstelle empfangen sind. \\
                    &                & Da das Löschen sonst parallel zum Datenempfang abläuft, \\
                    &                & ist das programmieren des Flashs mit dieser Option \\
-                   &                & um etwa 30\% langsamer ist. Da der normalerweise auch \\
+                   &                & um etwa 30\% langsamer. Da der normalerweise auch \\
 		   &                & durchgeführte Datenvergleich (verify) etwa genau so viel \\
                    &                & Zeit braucht, ist der Zeitverlust nicht so erheblich. \\
                    &                & Dafür spart man beim optiboot Bootloader etwa 14 Bytes \\
@@ -761,19 +761,18 @@ Ein entsprechender Schaltungsvorschlag zeigt die Abbildung~\ref{fig:onewire}.
 \label{fig:onewire}
 \end{figure}
 
-Mit den zwei ersten NAND Gattern des HCF4093 wird ein Flip-Flop gebildet,
-welches von den zwei weiteren NAND Gattern dieses Bausteins
-in den einen oder anderen Zustand geschaltet wird. Die Schaltsignale werden von
-einer Kette von invertierenden Buffern mit Schmitt-Trigger Eingängen (HC7414) abgegriffen.
-An einer Stelle ist ein zusätzliches C-R Glied (\(120 pF\) und \(3.3 k\Omega\) erforderlich,
-um ein Schalten bei einer unerwünschten Flanke zu verhindern.
-Umgeschaltet wird jeweils mit einer 1-0 Flanke der beiden Sendeseiten.
-Erforderlich ist diese Umschaltung nur bei der Flanke des Startbits.
-Aber ein zusätzliches Schalten durch Datenbits schadet nicht, wenn das Flip-Flop schon im
-richtigen Zustand ist. Wenn die externe Schnittstelle sendet, wird der Empfang der
-Daten über den externen Empfänger verhindert. Das externe RX-Signal bleibt auf High Pegel.
-Mit dieser Zusatzschaltung ist keine Software-Anpassung notwendig. Für den
-Bootloader kann zum Beispiel das avrdude Programm benutzt werden.
+Die Tx Daten des PC werden über den \(1k \Omega\) Widerstand an den Empfänger des AVR weitergereicht.
+Wenn der AVR Daten zurücksendet, kann dieser den Pegel nahe 0V schalten, weil der \(1k \Omega\) Widerstand
+das nicht verhindern kann, obwohl der TX Pegel des PC's auf VCC geschaltet bleibt. Über die beiden
+Nand-Gatter des HEF4093 werden die Daten etwas verzögert an den PC RX Eingang weitergereicht.
+Über den 0V Pegel der PC-TX Seite wird genau dieses Weiterreichen der Daten verhindert und der
+RX Pegel bleibt auf VCC, also auf dem Ruhesignal der seriellen Übertragung.
+Probleme machen eigentlich nur die Flankenwechsel des TX-Signals. Deshalb wird mit der
+Schaltung aus Diode, zwei Widerständen und einem \(18 pF\) Kondensator die runtergehende Flanke
+schneller zum NAND-Eingang 6 weitergeleitet als die raufgehende Flanke.
+Nur zwei NAND Gatter sind für die Funktion erforderlich, die anderen beiden werden nur
+zur Anzeiger der RX/TX Aktivität benutzt.
+Mit dieser Schaltung kann man ein unverändertes Übertragungsprogramm wie avrdude benutzen.
 Die Schaltung ist weitgehend unabhängig von der benutzen Baudrate.
 Lediglich bei sehr hohen Baud-Raten erwarte ich Probleme. Bei 115200 Baud läuft die Schaltung
 aber einwandfrei. Sehr viel höhere Baudraten sind bei der Softwarelösung sowieso
@@ -1140,7 +1139,8 @@ für die Division durch 2-er Potenzen benutzt. Um das zu ermöglichen, sind in d
 \_3, \_4, \_8 und \_9 die Anzahl der Takte für einen Durchlauf der Verzögerungszeit-Schleife
 auf 2-er Potenzen verlängert (8T oder 16T). Leider ergibt sich nur dann ein kürzeres Programm,
 wenn die Anzahl der Schiebe-Operationen kleiner als 3 ist und damit auf eine Scheife verzichtet
-werden kann.
+werden kann. Man kann aber mit der Option NO\_EARLY\_PAGE\_ERASE 14 bytes zusätzlich einzusparen
+und damit etwa 30 Varianten mehr in 512 Byte Flash unterbringen.
 
 \begin{table}[H]
   \begin{center}

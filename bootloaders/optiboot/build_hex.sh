@@ -359,7 +359,11 @@ else
  BOOTSZ=`echo "0+(${pg_anz}<5)+(${pg_anz}<3)+(${pg_anz}<2)" | bc`
 
  RelVal=`echo "scale=1;${pg_anz}*${BOOT_PAGE_LEN}*100/${FLASH_SIZE}" | bc`
- RelMsg=`echo ", which is ${RelVal}% of Flash Memory"`
+ if [ "${LANGUAGE}" == "de_DE" ] ; then
+  RelMsg=`echo ", das ist ${RelVal}% des Flash Speichers"`
+ else
+  RelMsg=`echo ", which is ${RelVal}% of Flash Memory"`
+ fi
  size2know=`echo "${pg_anz} * ${BOOT_PAGE_LEN}" | bc`
  if (( ${pg_anz} > 1 )) ; then
   if [ "${LANGUAGE}" == "de_DE" ] ; then

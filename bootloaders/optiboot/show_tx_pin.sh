@@ -35,23 +35,42 @@ tx_zeile=`grep --color=never "${tx_grep_txt}" avr_pins/${AVR_FAMILY}.pins` 2> /d
 if (( $? == 0 )) ; then
   if [ "${UART_TX}" = "" ] ; then
      ntx=`echo ${tx_zeile} | cut -c2-3`
-     if (( ${VerboseLev} > 2 )) ; then echo "UART_TX set to ${ntx} in list_rx_tx_pins.sh" ; fi
+     if (( ${VerboseLev} > 2 )) ; then
+       if [ "${LANGUAGE}" == "de_DE" ] ; then
+         echo "UART_TX wird in list_tx_pins.sh auf ${ntx} gesetzt." 
+       else
+         echo "UART_TX set to ${ntx} in list_tx_pins.sh." 
+       fi
+     fi
      UART_TX=${ntx}
      unset ntx
   fi
   tx_desc=`echo "${tx_zeile}" | cut -f3`
   tx_layout=`echo "${tx_zeile}" | cut -f2`
-  echo -n "${Vgrau}TX-Pin ${Vnormal}P${UART_TX} ${Vgrau}use Pin ${Vnormal}${tx_layout}"
-  if [ "${tx_desc}" = "-" ] || [ "${tx_desc}" = "" ] ; then
-   echo " "
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+    echo -n "${Vgrau}TX-Pin ${Vnormal}P${UART_TX} ${Vgrau}benutzt Pin ${Vnormal}${tx_layout}"
   else
-   echo "${Vgrau}, with special functions: ${Vnormal}${tx_desc}"
+    echo -n "${Vgrau}TX-Pin ${Vnormal}P${UART_TX} ${Vgrau}use Pin ${Vnormal}${tx_layout}"
+  fi
+  if [ "${tx_desc}" = "-" ] || [ "${tx_desc}" = "" ] ; then
+   echo "."
+  else
+   if [ "${LANGUAGE}" == "de_DE" ] ; then
+     echo "${Vgrau}, mit Spezialfunktionen: ${Vnormal}${tx_desc}."
+   else
+     echo "${Vgrau}, with special functions: ${Vnormal}${tx_desc}."
+   fi
   fi
   unset tx_desc
   unset tx_layout
 else
-  echo "list_tx_pin.sh has not found ${tx_grep_txt} in avr_pins/${AVR_FAMILY}.pins"
-  echo "List of available pins for ${AVR_FAMILY} group:"
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+    echo "list_tx_pin.sh hat ${rx_grep_txt} in avr_pins/${AVR_FAMILY}.pins nicht gefunden."
+    echo "Liste der verfügbaren Pinne der ${AVR_FAMILY} Gruppe:"
+  else
+    echo "list_tx_pin.sh has not found ${tx_grep_txt} in avr_pins/${AVR_FAMILY}.pins"
+    echo "List of available pins for ${AVR_FAMILY} group:"
+  fi
   grep "^p[A-N][0-7]" avr_pins/${AVR_FAMILY}.pins
   exit 1
 fi

@@ -73,8 +73,16 @@ LDSECTIONS="-Wl,--section-start=.version=0x${VersionAdr}"
 
 logfile="${PROGRAM}_${TARGET}.log"
 AVR_MHZ="(`echo "scale=2;${AVR_FREQ} / 1000000" | bc` Mhz)"
-FREQ_OPER="Optiboot for ${Vgelb}${AVR_FREQ} Hz ${AVR_MHZ} operation${Vnormal}"
-EE_SUPPORT=" and ${Vinv}EEprom support${Vnormal} configured."
+if [ "${LANGUAGE}" == "de_DE" ] ; then
+ FREQ_OPER="Optiboot für ${Vgelb}${AVR_FREQ} Hz ${AVR_MHZ} Betrieb${Vnormal}"
+else
+ FREQ_OPER="Optiboot for ${Vgelb}${AVR_FREQ} Hz ${AVR_MHZ} operation${Vnormal}"
+fi
+if [ "${LANGUAGE}" == "de_DE" ] ; then
+ EE_SUPPORT=" und ${Vinv}EEprom Unterstützung${Vnormal} konfiguriert."
+else
+ EE_SUPPORT=" and ${Vinv}EEprom support${Vnormal} configured."
+fi
 echo "###############################" > ${logfile}
 echo "Build of ${FREQ_OPER}" >> ${logfile}
 
@@ -82,19 +90,39 @@ echo " "
 
 if (( ${BAUD_RATE} < 100 )) ; then
  if (( ${SUPPORT_EEPROM}0 == 0 )) ; then
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+   echo "${FREQ_OPER} mit ${Vgelb}automatischer Baudrate${Vnormal} konfiguriert."
+  else
    echo "${FREQ_OPER} with ${Vgelb}Auto-Baudrate${Vnormal} configured."
+  fi
  else
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+   echo "${FREQ_OPER} mit ${Vgelb}automatischer Baudrate${Vnormal}${EE_SUPPORT}"
+  else
    echo "${FREQ_OPER} with ${Vgelb}Auto-Baudrate${Vnormal}${EE_SUPPORT}"
+  fi
  fi
 else
  if (( ${SUPPORT_EEPROM}0 == 0 )) ; then
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+   echo "${FREQ_OPER} mit ${Vgelb}Baudrate ${BAUD_RATE}${Vnormal} konfiguriert."
+  else
    echo "${FREQ_OPER} with ${Vgelb}Baudrate ${BAUD_RATE}${Vnormal} configured."
+  fi
  else
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+   echo "${FREQ_OPER} mit ${Vgelb}Baudrate ${BAUD_RATE}${Vnormal}${EE_SUPPORT}"
+  else
    echo "${FREQ_OPER} with ${Vgelb}Baudrate ${BAUD_RATE}${Vnormal}${EE_SUPPORT}"
+  fi
  fi
 fi
 
-echo " >>> Start building for AVR ${MCU_TARGET}:"
+if [ "${LANGUAGE}" == "de_DE" ] ; then
+ echo " >>> Starte optiboot für AVR ${MCU_TARGET} erstellen:"
+else
+ echo " >>> Start building optiboot for AVR ${MCU_TARGET}:"
+fi
 
 source avr_family.sh  ; #build a name for AVR_FAMILY from MCU_TARGET
 
@@ -199,7 +227,8 @@ avr-gcc ${c_paramsx}
 if (( $? == 0 )) ; then
  echo " x.elf build : OK!" >> ${logfile}
 else
- echo " x.elf build : FAILED!" >> ${logfile} ; exit 1
+ echo " x.elf build : FAILED!" >> ${logfile} 
+ exit 1
 fi
 
 # BootPages fetch the actual boot loader size from a interim ${PROGRAM}x.elf file, not from the
@@ -256,7 +285,11 @@ rm -f ./baudcheck.tmp
 # Generate the final ${PROGRAM}.elf file at the right Start Address,
 # which is the base to generate the ${PROGRAM}_${TARGET}.hex and ${PROGRAM}_${TARGET}.lst files.
 echo "${Vgrau}# # # # # # # # # # # # # # # # # # # # # #"
-echo "${Vnormal}Boot Loader start address: 0x${BL_StartAdr}${Vgrau} = `echo "ibase=16;${BL_StartAdr}" | bc`"
+if [ "${LANGUAGE}" == "de_DE" ] ; then
+ echo "${Vnormal}Urlader Startadresse: 0x${BL_StartAdr}${Vgrau} = `echo "ibase=16;${BL_StartAdr}" | bc`"
+ else
+ echo "${Vnormal}Boot Loader start address: 0x${BL_StartAdr}${Vgrau} = `echo "ibase=16;${BL_StartAdr}" | bc`"
+fi
 echo "# # # # # # # # # # # # # # # # # # # # # #${Vnormal}"
 c_paramf="${CFLAGS} ${COMMON_OPTIONS} ${LDSECTIONS} -Wl,--section-start=.text=0x${BL_StartAdr} ${LDFLAGS} -o ${PROGRAM}.elf ${PROGRAM}.o ${LIBS}"
   if (( ${VerboseLev} > 2 )) ; then echo "${Vgreen}avr-gcc ${c_paramf}${Vnormal}" ; fi
@@ -279,22 +312,46 @@ fi
 
 if (( 0${VIRTUAL_BOOT_PARTITION} > 0 )) ; then
   RelVal=`echo "scale=1;${BootPages}*${FLASH_PAGE_SIZE}*100/${FLASH_SIZE}" | bc`
-  RelMsg=`echo ", which is ${RelVal}% of Flash Memory"`
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+   RelMsg=`echo ", das ist ${RelVal}% des Flash Speichers"`
+  else
+   RelMsg=`echo ", which is ${RelVal}% of Flash Memory"`
+  fi
   size2know=`echo "${BootPages} * ${FLASH_PAGE_SIZE}" | bc`
   if (( ${BootPages} > 1 )) ; then
-   echo -n "Requires ${BootPages} Flash Pages, ${FLASH_PAGE_SIZE} Bytes each${RelMsg}"
+   if [ "${LANGUAGE}" == "de_DE" ] ; then
+    echo -n "Benötigt ${BootPages} Flash Seiten, je ${FLASH_PAGE_SIZE} Bytes${RelMsg}"
+   else
+    echo -n "Requires ${BootPages} Flash Pages, ${FLASH_PAGE_SIZE} Bytes each${RelMsg}"
+   fi
   else
-   echo -n "Requires ${BootPages} Flash Page of ${FLASH_PAGE_SIZE} Bytes${RelMsg}"
+   if [ "${LANGUAGE}" == "de_DE" ] ; then
+    echo -n "Benötigt ${BootPages} Flash Seite mit ${FLASH_PAGE_SIZE} Bytes${RelMsg}"
+   else
+    echo -n "Requires ${BootPages} Flash Page of ${FLASH_PAGE_SIZE} Bytes${RelMsg}"
+   fi
   fi
  if (( 0${FLASH_ERASE_CNT} > 1 )) ; then
+   if [ "${LANGUAGE}" == "de_DE" ] ; then
+    echo ", Gruppe von ${FLASH_ERASE_CNT} Seiten löschbar"
+   else
     echo ", Cluster of ${FLASH_ERASE_CNT} Pages erasable"
+   fi
  else
     echo " "
  fi
  if (( ${BOOT_PAGE_LEN} < 129)) ; then
-   echo "No Boot Pages present!"
+   if [ "${LANGUAGE}" == "de_DE" ] ; then
+    echo "Keine Boot Seiten vorhanden!"
+   else
+    echo "No Boot Pages present!"
+   fi
  else
-   echo "Boot Pages present, but No Boot Pages used!"
+   if [ "${LANGUAGE}" == "de_DE" ] ; then
+    echo "Boot Seiten vorhanden, werden aber nicht benutzt!"
+   else
+    echo "Boot Pages present, but No Boot Pages used!"
+   fi
  fi
  BOOTSZ=3 
 else
@@ -305,11 +362,22 @@ else
  RelMsg=`echo ", which is ${RelVal}% of Flash Memory"`
  size2know=`echo "${pg_anz} * ${BOOT_PAGE_LEN}" | bc`
  if (( ${pg_anz} > 1 )) ; then
-  echo "Requires ${pg_anz} Boot Pages, ${BOOT_PAGE_LEN} Bytes each${RelMsg}"
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+   echo -n "Benötigt ${pg_anz} Boot Seiten, je ${BOOT_PAGE_LEN} Bytes${RelMsg}"
+   echo "${Vinv}BOOTSZ=${BOOTSZ}${Vnormal}, das bedeutet ${Vinv}${pg_anz} Boot Seiten${Vnormal}"
+  else
+   echo -n "Requires ${pg_anz} Boot Pages, ${BOOT_PAGE_LEN} Bytes each${RelMsg}"
+   echo "${Vinv}BOOTSZ=${BOOTSZ}${Vnormal}, which means ${Vinv}${pg_anz} Boot Pages${Vnormal}"
+  fi
  else
-  echo "Requires ${pg_anz} Boot Page of ${BOOT_PAGE_LEN} Bytes${RelMsg}"
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+   echo "Benötigt ${pg_anz} Boot Seite mit ${BOOT_PAGE_LEN} Bytes${RelMsg}"
+   echo "${Vinv}BOOTSZ=${BOOTSZ}${Vnormal}, das bedeutet ${Vinv}${pg_anz} Boot Seite${Vnormal}"
+  else
+   echo "Requires ${pg_anz} Boot Page of ${BOOT_PAGE_LEN} Bytes${RelMsg}"
+   echo "${Vinv}BOOTSZ=${BOOTSZ}${Vnormal}, which means ${Vinv}${pg_anz} Boot Page${Vnormal}"
+  fi
  fi
- echo "${Vinv}BOOTSZ=${BOOTSZ}${Vnormal}, which means ${Vinv}${BootPages} Boot Pages${Vnormal}"
 fi
 
 # generate a new .hex and .lst file from the right .elf

@@ -43,17 +43,35 @@ ISPSPEED="-b 115200"
 
 if [ "${TARGET}" = "" ]
 then
- echo "Error! the actual TARGET name is not known"
- echo "Please call this script only inside the build_hex script, called from Makefile"
+ if [ "${LANGUAGE}" == "de_DE" ] ; then
+  echo "Fehler! Das Ziel TARGET ist nicht bekannt."
+  echo "Bitte rufen Sie diesen Script nur über den build_hex.sh Script auf,"
+  echo "der über die Makefile aufgerufen wird."
+ else
+  echo "Error! the actual TARGET name is not known"
+  echo "Please call this script only inside the build_hex script, called from Makefile"
+ fi
  exit 1
 fi
 if [ "${FLASH_SIZE}" = "" ]
 then
- echo "Error! This script should only be called from inside the build_hex script, called from Makefile"; exit 1
+ if [ "${LANGUAGE}" == "de_DE" ] ; then
+  echo "Fehler! Dieser Script sollte nur vom build_hex.sh Script aufgerufen werden,"
+  echo "welcher über die Makefile aufgerufen wird."
+ else
+  echo "Error! This script should only be called from inside the build_hex script, called from Makefile"
+ fi
+ exit 1
 fi
 if [ "${BOOT_PAGE_LEN}" = "" ]
 then
- echo "Error! This script should only be called from inside the build_hex script, called from Makefile"; exit 1
+ if [ "${LANGUAGE}" == "de_DE" ] ; then
+  echo "Fehler! Dieser Script sollte nur vom build_hex.sh Script aufgerufen werden,"
+  echo "welcher über die Makefile aufgerufen wird."
+ else
+  echo "Error! This script should only be called from inside the build_hex script, called from Makefile"
+ fi
+ exit 1
 fi
 #
 
@@ -65,14 +83,22 @@ BIT_CLOCK=`echo "scale=2;8000000/${AVR_FREQ}+1" | bc`
 # Check, if there are only some special request to do, not program the target!
 if (( ${ISP} == 4 ))
 then
-  echo "##### read complete EEprom from ${TARGET} to Read_${TARGET}.eep"
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+   echo "##### Lies das komplette EEprom von ${TARGET} nach Read_${TARGET}.eep"
+  else
+   echo "##### read complete EEprom from ${TARGET} to Read_${TARGET}.eep"
+  fi
   export DUDE_PARAMS=" ${AVRDUDE_CONF} -c ${ISPTOOL} -B ${BIT_CLOCK} -p ${MCU_TARGET} -P ${ISPPORT} ${ISPSPEED} -U eeprom:r:./Read_${TARGET}.eep:i"
   source ./only_avrdude.sh
   exit
 fi
 if (( ${ISP} == 3 ))
 then
-  echo "##### read complete flash from ${TARGET} to Read_${TARGET}.hex"
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+   echo "##### Lied den kompletten Flash Speicher von ${TARGET} nach  Read_${TARGET}.hex"
+  else
+   echo "##### read complete flash from ${TARGET} to Read_${TARGET}.hex"
+  fi
   export DUDE_PARAMS="${AVRDUDE_CONF} -c ${ISPTOOL} -B ${BIT_CLOCK} -p ${MCU_TARGET} -P ${ISPPORT} ${ISPSPEED} -U flash:r:./Read_${TARGET}.hex:i"
   source ./only_avrdude.sh
   exit
@@ -80,7 +106,11 @@ fi
 if (( ${ISP} == 2 ))
 then
   # verify mode
-  echo "##### verify the optiboot in ${TARGET}"
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+   echo "##### Verify das optiboot Programm in ${TARGET}"
+  else
+   echo "##### verify the optiboot in ${TARGET}"
+  fi
   export DUDE_PARAMS="${AVRDUDE_CONF} -c ${ISPTOOL} -B ${BIT_CLOCK} -p ${MCU_TARGET} -P ${ISPPORT} ${ISPSPEED} -U flash:v:${PROGRAM}_${TARGET}.hex:i"
   source ./only_avrdude.sh
   exit
@@ -89,13 +119,25 @@ fi
 if (( ${ISP} == 1 ))
 then
   echo " "
-  echo "####### Start of program_target.sh for ${MCU_TARGET} #############"
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+   echo "####### Start von program_target.sh für ${MCU_TARGET} #############"
+  else
+   echo "####### Start of program_target.sh for ${MCU_TARGET} #############"
+  fi
 else
-  echo "##### program_target.sh can handle only ISP values from 1 to 4 ######"
-  echo "ISP=1 for transfering optiboot to the ${TARGET}"
-  echo "ISP=2 for verifying optiboot at the ${TARGET}"
-  echo "ISP=3 to read the complete Flash memory of ${TARGET}"
-  echo "ISP=4 to read the complete EEprom memory of ${TARGET}"
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+   echo "##### program_target.sh kann nur ISP Werte von 1 bis 4 bearbeiten ######"
+   echo "ISP=1 installiert optiboot auf ${TARGET}"
+   echo "ISP=2 prüft optiboot auf ${TARGET}"
+   echo "ISP=3 liest den kompletten Flash Speicher von ${TARGET}"
+   echo "ISP=4 liest den kompletten EEprom Speicher von ${TARGET}"
+  else
+   echo "##### program_target.sh can handle only ISP values from 1 to 4 ######"
+   echo "ISP=1 for transfering optiboot to the ${TARGET}"
+   echo "ISP=2 for verifying optiboot at the ${TARGET}"
+   echo "ISP=3 to read the complete Flash memory of ${TARGET}"
+   echo "ISP=4 to read the complete EEprom memory of ${TARGET}"
+  fi
   exit 1
 fi
 
@@ -227,9 +269,17 @@ UC_EFUSE=`echo "${EFUSE}" | tr a-z A-Z`
 
 if [ "${EFUSE}" = "" ]
 then
-  echo "   Fuses in program_target.sh are set to lfuse=0x${LFUSE}, hfuse=0x${HFUSE})"
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+   echo "   Die Fuses in program_target.sh sind gesetzt auf lfuse=0x${LFUSE}, hfuse=0x${HFUSE})"
+  else
+   echo "   The fuses in program_target.sh are set to lfuse=0x${LFUSE}, hfuse=0x${HFUSE})"
+  fi
 else
-  echo "   Fuses in program_target.sh are set to lfuse=0x${LFUSE}, hfuse=0x${HFUSE}, efuse=0x${EFUSE}"
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+   echo "   Die Fuses in program_target.sh sind gesetzt auf lfuse=0x${LFUSE}, hfuse=0x${HFUSE}, efuse=0x${EFUSE}"
+  else
+   echo "   The fuses in program_target.sh are set to lfuse=0x${LFUSE}, hfuse=0x${HFUSE}, efuse=0x${EFUSE}"
+  fi
 fi
 
 if (( ${USE_Edat} == 1 ))
@@ -243,15 +293,31 @@ then
   fi
   if [ "${PEFUSE}" = "${EFUSE}" ]
   then
-    echo "Bootloader EFUSE will be set to 0x${PEFUSE}, OK"
+    if [ "${LANGUAGE}" == "de_DE" ] ; then
+     echo "Bootloader EFUSE wird auf 0x${PEFUSE} gesetzt, OK"
+    else
+     echo "Bootloader EFUSE will be set to 0x${PEFUSE}, OK"
+    fi
   else
-    echo "Bootloader EFUSE will be changed to 0x${PEFUSE} instead of 0x${EFUSE}!!!"
+    if [ "${LANGUAGE}" == "de_DE" ] ; then
+     echo "Bootloader EFUSE wird auf 0x${PEFUSE} gesetzt anstelle von 0x${EFUSE}!!!"
+    else
+     echo "Bootloader EFUSE will be changed to 0x${PEFUSE} instead of 0x${EFUSE}!!!"
+    fi
   fi
   if (( (${PEFUSE}&1) == 0 ))
   then
-    echo "BootLoader Start is enabled to 0x${BL_StartAdr}, `echo "ibase=16;${BL_StartAdr}"| bc`"
+    if [ "${LANGUAGE}" == "de_DE" ] ; then
+     echo "BootLoader Start ist gesetzt auf 0x${BL_StartAdr}, `echo "ibase=16;${BL_StartAdr}"| bc`"
+    else
+     echo "BootLoader Start is enabled to 0x${BL_StartAdr}, `echo "ibase=16;${BL_StartAdr}"| bc`"
+    fi
   else
-    echo "BootLoader Start is NOT enabled, start at 0!"
+    if [ "${LANGUAGE}" == "de_DE" ] ; then
+     echo "Bootloader Startadresse wird nicht benutzt, Start auf Adresse 0!"
+    else
+     echo "BootLoader Start is NOT enabled, start at address 0!"
+    fi
   fi
 fi
 
@@ -280,23 +346,42 @@ then
   fi
   if [ "${PHFUSE}" = "${HFUSE}" ]
   then
-    echo "Bootloader HFUSE will be set to 0x${PHFUSE}, OK!"
+    if [ "${LANGUAGE}" == "de_DE" ] ; then
+     echo "Bootloader HFUSE wird auf 0x${PHFUSE} gesetzt, OK!"
+    else
+     echo "Bootloader HFUSE will be set to 0x${PHFUSE}, OK!"
+    fi
   else
-    echo "Bootloader HFUSE will be changed to 0x${PHFUSE} instead of 0x${HFUSE}!!!"
+    if [ "${LANGUAGE}" == "de_DE" ] ; then
+     echo "Bootloader HFUSE wird auf 0x${PHFUSE} anstelle von 0x${HFUSE} gesetzt!!!"
+    else
+     echo "Bootloader HFUSE will be changed to 0x${PHFUSE} instead of 0x${HFUSE}!!!"
+    fi
   fi
   Hlobit=`echo "ibase=16;${PHFUSE} % 2" | bc`
-  echo "Hlobit= ${Hlobit}"
   if (( ${Hlobit} == 0 ))
   then
-    echo "BootLoader Start is enabled to 0x${BL_StartAdr}, `echo "ibase=16;${BL_StartAdr}"| bc`"
+    if [ "${LANGUAGE}" == "de_DE" ] ; then
+     echo "BootLoader Startadresse ist gesetzt auf 0x${BL_StartAdr}, `echo "ibase=16;${BL_StartAdr}"| bc`"
+    else
+     echo "BootLoader Start is enabled to 0x${BL_StartAdr}, `echo "ibase=16;${BL_StartAdr}"| bc`"
+    fi
   else
-    echo "BootLoader Start is NOT enabled, start at 0!"
+    if [ "${LANGUAGE}" == "de_DE" ] ; then
+     echo "Bootloader Startadresse wird nicht benutzt, Start auf Adresse 0!"
+    else
+     echo "BootLoader Start is NOT enabled, start at 0!"
+    fi
   fi
 fi
 
 if (( ${USE_Edat} == 2 ))
 then
-  echo "BootLoader Start Address is 0x${BL_StartAdr}, End address of application programs must remain below! "
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+   echo "BootLoader Startadresse ist 0x${BL_StartAdr}, Ende Adresse des Anwenderprogramms muß darunter bleiben! "
+  else
+   echo "BootLoader Start address is 0x${BL_StartAdr}, End address of application programs must remain below! "
+  fi
 fi
 
 
@@ -338,7 +423,11 @@ then
   ISPFLASH="-U flash:w:${PROGRAM}_${TARGET}.hex:i"
   if ((0${VIRTUAL_BOOT_PARTITION} == 0))
   then
-   echo ">>>>> Processor ${MCU_TARGET} requires a Bootloader with option VIRTUAL_BOOT_PARTITION ! <<<<<"
+   if [ "${LANGUAGE}" == "de_DE" ] ; then
+    echo ">>>>> Prozessor ${MCU_TARGET} braucht einen Bootloader mit der Option VIRTUAL_BOOT_PARTITION ! <<<<<"
+   else
+    echo ">>>>> Processor ${MCU_TARGET} requires a Bootloader with option VIRTUAL_BOOT_PARTITION ! <<<<<"
+   fi
    exit 1
   fi
 fi
@@ -362,7 +451,11 @@ if (( ${ISP} == 1 ))
 then
   echo "\n; ISPFUSES = ${ISPFUSES}" >> ${PROGRAM}_${TARGET}.lst
   # normal ISP programming mode. ISPFLASH set the Lock-Bits, if required.
-  echo "##### erase the ${TARGET} and set fuses"
+  if [ "${LANGUAGE}" == "de_DE" ] ; then
+   echo "##### Lösche den ${TARGET} und setze die Fuses"
+  else
+   echo "##### erase the ${TARGET} and set fuses"
+  fi
   export DUDE_PARAMS="${AVRDUDE_CONF} -c ${ISPTOOL} -B 200 -p ${MCU_TARGET} -P ${ISPPORT} ${ISPSPEED} -q -q ${ISPFUSES}"
   source ./only_avrdude.sh
   DUDE_FAIL=$?
@@ -373,9 +466,17 @@ then
   fi
   if (( 0${VIRTUAL_BOOT_PARTITION} > 0 ))
   then
-    echo "##### write the optiboot to ${TARGET}"
+    if [ "${LANGUAGE}" == "de_DE" ] ; then
+     echo "##### Schreibe den optiboot Bootloader auf ${TARGET}"
+    else
+     echo "##### write the optiboot bootloader to ${TARGET}"
+    fi
   else
-     echo "##### write the optiboot to ${TARGET} and set the lock bits"
+    if [ "${LANGUAGE}" == "de_DE" ] ; then
+     echo "##### Schreibe den optiboot Bootloader auf ${TARGET} und setze die Lock Bits"
+    else
+     echo "##### write the optiboot bootloader to ${TARGET} and set the lock bits"
+    fi
   fi
   export DUDE_PARAMS="${AVRDUDE_CONF} -c ${ISPTOOL} -B ${BIT_CLOCK} -p ${MCU_TARGET} -P ${ISPPORT} ${ISPSPEED} -D ${ISPFLASH}"
   source ./only_avrdude.sh

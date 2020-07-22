@@ -102,10 +102,6 @@ Hier sind einige der Fähigkeiten des optiboot Programms aufgelistet:
        Auch ein Dauerleuchten der LED kann mit LED\_DATA\_FLASH=4 gewählt werden.
        Dabei geht die LED erst durch den Watchdog-Reset wieder aus.}
 
-\item {Für die Erzeugung des optiboot Bootloaders können wahlweise auch angepaßte C-Quellen
-	benutzt werden. Die meisten Funktionen sind auch hier möglich.
-	Natürlich wird das erzeugte optiboot Programm größer!}
-
 \item {Die Länge des erzeugten Programms ist nur abhängig vom gewählten AVR-Prozessor
 	und den ausgesuchten Optionen.
 	Die Version des avr-gcc Kompilers spielt keine Rolle wenn die Assembler Quellen benutzt werden.
@@ -127,6 +123,10 @@ Hier sind einige der Fähigkeiten des optiboot Programms aufgelistet:
 Die nachfolgenden Fähigkeiten beziehen sich nur auf den Herstellungsprozess des Bootloaders:
 
 \begin{itemize}
+
+\item {Für die Erzeugung des optiboot Bootloaders können wahlweise auch angepaßte C-Quellen
+	benutzt werden. Die meisten Funktionen sind auch hier möglich.
+	Natürlich wird das erzeugte optiboot Programm größer!}
 
 \item {Der Umfang der Bildschirmausgabe bei der Erzeugung von optiboot kann mit der Systemvariablen
 	VerboseLev verändert werden. Der Wert kann zwischen 1 und 4 liegen, wobei 2 der Standardwert ist.}
@@ -458,12 +458,6 @@ Diese Optionen sind meist nur für Software-Untersuchungen, die Frequenzkalibrat
                    &                & ohne gesetzte Option eingeschaltet, kann aber abgeschaltet\\
                    &                & werden, wenn die SUPPORT\_EEPROM Option auf 0 \\
                    &                & gesetzt wird. \\
-                   &                & Bei der C-Quelle muß die Funktion mit der Option \\
-                   &                & eingeschaltet werden (Standard = aus). \\
-    \hline
- C\_SOURCE         & C\_SOURCE=1    & Wählt als Programmquelle das C-Programm anstelle des  \\
-                   &                & Assembler-Programms (0 = Assembler).\\
-                   &                & Die Assembler Version benötigt weniger Speicherplatz. \\
     \hline
     \end{tabular}
   \end{center}
@@ -478,6 +472,12 @@ Diese Optionen sind meist nur für Software-Untersuchungen, die Frequenzkalibrat
    Name der        & Beispiel       & Funktion                                            \\
     Option         &                &                                                     \\
     \hline
+    \hline
+ C\_SOURCE         & C\_SOURCE=1    & Wählt als Programmquelle das C-Programm anstelle des  \\
+                   &                & Assembler-Programms (0 = Assembler).\\
+                   &                & Die Assembler Version benötigt weniger Speicherplatz. \\
+                   &                & Bei der C-Quelle muß die Funktion SUPPORT\_EEPROM extra \\
+                   &                & eingeschaltet werden (Standard = aus). \\
     \hline
  BIGBOOT           & BIGBOOT=512    & Wählt zusätzlichen Speicherverbrauch für das Bootloader- \\
                    &                & Programm. Das dient nur zum Test der automatischen \\

@@ -86,9 +86,9 @@ Below are some of the features listed for the optiboot bootloader:
 	the optiboot program data within 512 byte Flash.}
 
 \item {Can be used with AVRs without the bootloader support.\\
-        This VIRTUAL\_BOOT\_PARTITION feature of course also
+        This VIRTUAL\_BOOT\_PARTITION feature can of course also
 	be used for AVRs, which has the bootloader support.
-	The optiboot program  gets bigger, but can then start at every flash memory page.}
+	The optiboot program gets bigger, but can then start at every flash memory page.}
 
 \item {By default, a connected LED flashes three times (LED\_START\_FLASHES=3).
 	When serial data arrives, the blinking is stopped immediately.}
@@ -97,11 +97,6 @@ Below are some of the features listed for the optiboot bootloader:
 	for serial data (LED\_DATA\_FLASH=1).
        By setting LED\_DATA\_FLASH=4 you call select a permanent lit LED.
 		The watchdog reset will turn the LED off in this case.}
-
-\item {You can also choose the adapted C-sources to generate the optiboot bootloader.
-	Most of the features are possible with this selection also.
-	Of course the generated optiboot program will be bigger!
-	Please note, that you have to select the EEprom support with the C-source.}
 
 \item {The length of the generated optiboot depends only on the selected AVR processor and the selected options.
 	The version of the installed avr-gcc has no effect, if you use the assembler source.
@@ -112,11 +107,23 @@ Below are some of the features listed for the optiboot bootloader:
 	For some problematic processors this feature enables the use of a
 	bootloader with a fix baud rate.}
 
+\item {Installing the optiboot bootloader at a respective AVR can be done with the program avrdude and
+	a connected ISP-programmer.
+	To initiate this task only a additional ISP=1 is required at the make call.
+	With a ISP=2 at the make call you can operate a verify run of avrdude.
+	Additionally a read out of the total flash memory of the AVR is possible
+	with ISP=3. A ISP=4 will read the complete EEprom data from your AVR processor.}
+
 \end{itemize}
 
 The next features affects only the build process of the boot bootloader:
 
 \begin{itemize}
+
+\item {You can also choose the adapted C-sources to generate the optiboot bootloader.
+	Most of the features are possible with this selection also.
+	Of course the generated optiboot program will be bigger!
+	Please note, that you have to select the EEprom support with the C-source.}
 
 \item {The amount of the screen output iduring the generating of the optiboot program
 	can be adjusted with the system variable VerboseLev. 
@@ -145,13 +152,6 @@ The next features affects only the build process of the boot bootloader:
 \item {The selected parameters for the generating of the optiboot bootloader are logged at the
 	end of the .lst file and also in a separate .log file.
 	You can see the report with the command cat <filename>.log .}
-
-\item {Installing the optiboot bootloader at a respective AVR can be done with the program avrdude and
-	a connected ISP-programmer.
-	To initiate this task only a additional ISP=1 is required at the make call.
-	With a ISP=2 at the make call you can operate a verify run of avrdude.
-	Additionally a read out of the total flash memory of the AVR is possible
-	with ISP=3. A ISP=4 will read the complete EEprom data from your AVR processor.}
 
 \end{itemize}
 
@@ -969,7 +969,7 @@ You can select the SOFT\_UART function together with the automatic
 baud rate detection (BAUD\_RATE \textless 100) only for the
 assembler version of optiboot, not for the C-version.
 
-The following table~ref{tab:AutoBaudControl} summarize the different options.
+The following table~\ref{tab:AutoBaudControl} summarize the different options.
 The specified program sizes in bytes refer to an ATmega328 without LED flashing function,
 but with the EEprom support.
 The program sizes in brackets result from the operation of the serial interface with software.

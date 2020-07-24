@@ -38,6 +38,7 @@ if (( $? == 0 )) ; then
   elif (( 0${VIRTUAL_BOOT_PARTITION} != 1 )) ; then
     VIRTUAL_BOOT_PARTITION=0
   fi
+  unset my_vb
   if (( ${my_uarts} == 0 )) ; then
     SOFT_UART=1
     if (( ${VerboseLev} > 3 )) ; then echo "SOFT_UART=1 is set in get_avr_params.sh, no Hardware!" ; fi
@@ -47,24 +48,31 @@ if (( $? == 0 )) ; then
     AVR_FREQ=${my_frq}
     if (( ${VerboseLev} > 3 )) ; then echo "set AVR_FREQ to default ${AVR_FREQ} in get_avr_params.sh" ; fi
   fi
+  unset my_frq
   if [ "${BAUD_RATE}" == "" ] ; then
     BAUD_RATE=${my_bd}
     if (( ${VerboseLev} > 3 )) ; then echo "set BAUD_RATE to default ${BAUD_RATE} in get_avr_params.sh" ; fi
   fi
+  unset my_bd
   if [ "${HFUSE}" == "" ] ; then
     HFUSE=${my_hf}
     if (( ${VerboseLev} > 3 )) ; then echo "set HFUSE to default ${HFUSE} in get_avr_params.sh" ; fi
   fi
+  unset my_hf
   if [ "${LFUSE}" == "" ] ; then
     LFUSE=${my_lf}
     if (( ${VerboseLev} > 3 )) ; then echo "set LFUSE to default ${LFUSE} in get_avr_params.sh" ; fi
   fi
+  unset my_lf
   if [ "${EFUSE}" == "" ] ; then
-    if [ "${myef}" != "-" ] ; then
-          EFUSE=${my_lf}
+    if [ "${my_ef}" != "-" ] ; then
+          EFUSE=${my_ef}
 	  if (( ${VerboseLev} > 3 )) ; then echo "set EFUSE to default ${EFUSE} in get_avr_params.sh" ; fi
+    else
+	  EFUSE=""
     fi
   fi
+  unset my_ef
 else
  echo "File avr_params.def not found!"
 fi

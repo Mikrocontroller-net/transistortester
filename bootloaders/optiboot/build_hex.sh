@@ -186,6 +186,21 @@ if (( ${UART} > ${my_uarts} )) && (( ${my_uarts} > 0 )); then
   echo "${MPU_TARGET} has only ${my_uarts} UARTs, UART set to ${max_uart_nr}"
   UART=${max_uart_nr}
 fi
+# Check input format for LFUSE, HFUSE, EFUSE
+if (( ${#LFUSE} != 2 )) ; then
+  echo "Only two hex digits are accepted for LFUSE setting!"
+  exit 1
+fi
+if (( ${#HFUSE} != 2 )) ; then
+  echo "Only two hex digits are accepted for HFUSE setting!"
+  exit 1
+fi
+if [ "${EFUSE}" != "" ] ; then
+  if (( ${#EFUSE} != 2 )) ; then
+    echo "Only two hex digits are accepted for EFUSE setting!"
+    exit 1
+  fi
+fi
 source show_rx_pin.sh
 source show_tx_pin.sh
 source show_write_protect.sh
@@ -196,12 +211,12 @@ LDSECTIONS="-Wl,--section-start=.version=0x`echo "obase=16;${FLASH_SIZE}-2" | bc
 if (( 0${VIRTUAL_BOOT_PARTITION} > 0 )) ; then
  FLASH_ERASE_CNT=${VIRTUAL_BOOT_PARTITION}
  if [ "${save_vect_num}" = "" ] ; then
-c_params="${CFLAGS} ${COMMON_OPTIONS} ${XTRA_OPTIONS} -DVIRTUAL_BOOT_PARTITION=${VIRTUAL_BOOT_PARTITION}  -DLED=p${LED} -DUART=0${UART} -DSOFT_UART=0${SOFT_UART} -DUART_RX=p${UART_RX} -DUART_TX=p${UART_TX} -DF_CPU=${AVR_FREQ} -DHFUSE=hex${HFUSE} -DLFUSE=hex${LFUSE} -DBOOT_PAGE_LEN=${BOOT_PAGE_LEN} -DVerboseLev=${VerboseLev} -c -o ${PROGRAM}.o ${PROGRAM}.${SOURCE_TYPE}"
+c_params="${CFLAGS} ${COMMON_OPTIONS} ${XTRA_OPTIONS} -DVIRTUAL_BOOT_PARTITION=${VIRTUAL_BOOT_PARTITION}  -DLED=p${LED} -DUART=0${UART} -DSOFT_UART=0${SOFT_UART} -DUART_RX=p${UART_RX} -DUART_TX=p${UART_TX} -DF_CPU=${AVR_FREQ} -DHFUSE=hex${HFUSE^^} -DLFUSE=hex${LFUSE^^} -DBOOT_PAGE_LEN=${BOOT_PAGE_LEN} -DVerboseLev=${VerboseLev} -c -o ${PROGRAM}.o ${PROGRAM}.${SOURCE_TYPE}"
  else
-c_params="${CFLAGS} ${COMMON_OPTIONS} ${XTRA_OPTIONS} -DVIRTUAL_BOOT_PARTITION=${VIRTUAL_BOOT_PARTITION}  -Dsave_vect_num=${save_vect_num} -DLED=p${LED} -DUART=0${UART} -DSOFT_UART=0${SOFT_UART} -DUART_RX=p${UART_RX} -DUART_TX=p${UART_TX} -DF_CPU=${AVR_FREQ} -DHFUSE=hex${HFUSE} -DLFUSE=hex${LFUSE} -DBOOT_PAGE_LEN=${BOOT_PAGE_LEN} -DVerboseLev=${VerboseLev} -c -o ${PROGRAM}.o ${PROGRAM}.${SOURCE_TYPE}"
+c_params="${CFLAGS} ${COMMON_OPTIONS} ${XTRA_OPTIONS} -DVIRTUAL_BOOT_PARTITION=${VIRTUAL_BOOT_PARTITION}  -Dsave_vect_num=${save_vect_num} -DLED=p${LED} -DUART=0${UART} -DSOFT_UART=0${SOFT_UART} -DUART_RX=p${UART_RX} -DUART_TX=p${UART_TX} -DF_CPU=${AVR_FREQ} -DHFUSE=hex${HFUSE^^} -DLFUSE=hex${LFUSE^^} -DBOOT_PAGE_LEN=${BOOT_PAGE_LEN} -DVerboseLev=${VerboseLev} -c -o ${PROGRAM}.o ${PROGRAM}.${SOURCE_TYPE}"
  fi
 else
-c_params="${CFLAGS} ${COMMON_OPTIONS} ${XTRA_OPTIONS} -DLED=p${LED} -DUART=0${UART} -DSOFT_UART=0${SOFT_UART} -DUART_RX=p${UART_RX} -DUART_TX=p${UART_TX} -DF_CPU=${AVR_FREQ} -DHFUSE=hex${HFUSE} -DLFUSE=hex${LFUSE} -DBOOT_PAGE_LEN=${BOOT_PAGE_LEN} -DVerboseLev=${VerboseLev} -c -o ${PROGRAM}.o ${PROGRAM}.${SOURCE_TYPE}"
+c_params="${CFLAGS} ${COMMON_OPTIONS} ${XTRA_OPTIONS} -DLED=p${LED} -DUART=0${UART} -DSOFT_UART=0${SOFT_UART} -DUART_RX=p${UART_RX} -DUART_TX=p${UART_TX} -DF_CPU=${AVR_FREQ} -DHFUSE=hex${HFUSE^^} -DLFUSE=hex${LFUSE^^} -DBOOT_PAGE_LEN=${BOOT_PAGE_LEN} -DVerboseLev=${VerboseLev} -c -o ${PROGRAM}.o ${PROGRAM}.${SOURCE_TYPE}"
 fi
 
   if (( ${VerboseLev} > 1 )) ; then echo "${Vgreen}avr-gcc ${c_params}${Vnormal}"; fi

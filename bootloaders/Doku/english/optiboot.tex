@@ -105,7 +105,7 @@ Below are some of the features listed for the optiboot bootloader:
 
 \item {Supports the frequency adjustment of the build in AVR RC-oscillator.
 	For some problematic processors this feature enables the use of a
-	bootloader with a fix baud rate.}
+	bootloader with a fix baud rate in this operation mode.}
 
 \item {Installing the optiboot bootloader at a respective AVR can be done with the program avrdude and
 	a connected ISP-programmer.
@@ -300,7 +300,7 @@ but is usually same as the MCU\_TARGET of specify a board name.
 
 All size values are shown in byte units, the values for fuses are shown with hexadecimal values.
 The frequency values must be specified in Hz units, 16M is the same as 16000000 Hz.
-The standard baud rate of the serial interface is 115200 in most cases.
+The standard baud rate of the serial interface is 115200 in most cases for the \(16 MHz\) operation.
 
 Additional to the universal processor configurations you can also select
 configurations for special boards or operational environment.
@@ -356,8 +356,8 @@ the option UART (UART=1 for the second present UART).
 For the hardware UART interfaces the pins for transmit and receive are fixed
 to the specific pins. For the serial communication with software you can
 select any pins, which are able to do digital input and output.
-More details for the available options you can find in the tables~\ref{tab:options1}
-and \ref{tab:options2}
+More details for the available options you can find in the tables~\ref{tab:options1},
+\ref{tab:options2} and \ref{tab:options3}
 
 \begin{table}[H]
   \begin{center}
@@ -465,6 +465,15 @@ the RC-generator and for processors without the boot-loader support.
  C\_SOURCE         & C\_SOURCE=1    & Select the C language as source instead of the  \\
                    &                & assembly language (option 0 = assembly).\\
                    &                & The assembly version requires less program space. \\
+    \hline
+   LFUSE           & LFUSE=EF       & Specifies a desired value for the AVR Low Fuse.\\
+	           &                & Only two Hex characters are allowed.\\
+    \hline
+   HFUSE           & HFUSE=D9       & Specifies a desired value for the AVR High Fuse.\\
+	           &                & Only two Hex characters are allowed.\\
+    \hline
+   EFUSE           & EFUSE=FC       & Specifies a desired value for the AVR Extended Fuse.\\
+	           &                & Only two Hex characters are allowed.\\
     \hline
     \end{tabular}
   \end{center}
@@ -831,7 +840,7 @@ is the coding of the control character CRC\_EOP.
 
 \begin{itemize}
 
-\item {Simplest way of baud rate measurement, BAUD\_RATE \textless~30}
+\item {Simplest way of baud rate measurement, BAUD\_RATE 20-29}
 
 The simplest form of baud rate measurement doesn't take into account
 the wrong start bit choise.
@@ -864,7 +873,7 @@ which is specified from the watchdog timer.
 When the watchdog timer triggers a reset, usually the user program is started.
 Only if no user program has been loaded yet, the boot loader starts again for a retry.
 
-\item {Improved way of baud rate measurement, BAUD\_RATE \textless~40}
+\item {Improved way of baud rate measurement, BAUD\_RATE 30-39}
 
 Same as the simple way of baud rate measurement this method does not
 check the correctness of the bit change sequence.
@@ -879,7 +888,7 @@ For that reason this method should be prefered, if little flash memory
 use is important. This improved method use only 4 byte more than the
 simple way.
 
-\item {Simplest way of baud rate measurement with time limit, BAUD\_RATE \textless~50}
+\item {Simplest way of baud rate measurement with time limit, BAUD\_RATE 40-49}
 
 The same method as the simplest way is used for this method.
 Only a additional limitation for the timer value is used here.
@@ -898,17 +907,17 @@ For this reason the time limit of the watchdog timer must be greater
 as the time delay for repeating the STK\_GET\_SYNC sequence
 without a answer to the previous STK\_GET\_SYNC sequence.
 
-\item {Improved way of baud rate measurement with time limit, BAUD\_RATE \textless~60}
+\item {Improved way of baud rate measurement with time limit, BAUD\_RATE 50-59}
 
 The baud rate measuring is done in the same way as described for the
-improved way (\textless 40).
-Simular to the method ''\textless 50'' the wait time for the 1-0 slope
+improved way (30-39).
+Simular to the method ''40-49'' the wait time for the 1-0 slope
 is limited to the overflow of the 16-bit counter.
 But because the counter value is normally read at the next 0-1 slope,
 the result is equal to the improved way without the time limit.
 
 
-\item {Complex way of baud rate measurement, BAUD\_RATE \textless~80}
+\item {Complex check of baud rate measurement, BAUD\_RATE 60-69}
 
 With this method the counter is started immediately with the detection
 of a Start bit and the counter value is read with every of the
@@ -943,13 +952,28 @@ For setting the correct UART frequency divider, the difference between
 the third counter reading and the second counter reading is divided by 2
 (9b-7b-1)/2 = (2b+1)/2-1.
 
-\item {Aufwendige Form der Baudraten Messung, BAUD\_RATE \textless~100}
+\item {Complex check of baudrate measuring, BAUD\_RATE 70-79}
 
 All counter readings and checks are done in the same way as the
-BAUD\_RATE \textless~80 method. Only the calculation of
+BAUD\_RATE 60-69 method. Only the calculation of
 the UART divider is based on the time of four bits instead of two bits.
 Consequently the equation for the correct starting position
 look like (9b-5b-2)/4 = (4b+2//4-1.
+
+\item {Complex check of baudrate measuring, BAUD\_RATE 80-89}
+
+All counter readings and checks are done in the same way as the
+BAUD\_RATE 60-69 method. Only the calculation of
+the UART divider is based on the time of nine bits instead of two bits.
+Consequently the equation for the correct starting position
+look like (9b-4)/9 = (9b+5)/9-1.
+
+\item {Simple way of baud rate measurement, BAUD\_RATE 10-19}
+
+With this selection the time of 9 serial bits is measured without checks
+to build the baud rate.
+Usually the measurement of the time of 4 serial data bits should be sufficient
+to determine the baud rate.
 
 \end{itemize}
 
@@ -1323,7 +1347,6 @@ But the hardware UART has the advantage, that the input and output could be done
 short disturbance of the input signal.
 For the software serial interface you can specify every digital IO-pin for input (UART\_RX) and output (UART\_TX). 
 In this example the feature is used to automatically select the RX and TX of the hardware UART.
-Please ignore the three warning messages, which tell you about the automatic selection.
 The automatic IO-pin selection depends on the selected processor type and the selected UART number, if more than
 one UART is available.
 

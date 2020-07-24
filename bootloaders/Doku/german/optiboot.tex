@@ -293,7 +293,7 @@ ist der Name einer Platine mit diesem Prozessor.
 
 Alle Angaben für Größen sind in Bytes angegeben, die Werte für die Fuses sind die sedezimalen
 Werte (hex). Die Frequenz-werte werden in Hz angegeben, 16M entspricht also 16000000 Hz.
-Die Standard Baud-Rate für die serielle Schnittstelle beträgt immer 115200.
+Die Standard Baud-Rate für die serielle Schnittstelle beträgt bei \(16 MHz\) Betrieb meistens 115200.
 
 Neben den universellen Konfigurationen gibt es auch Konfigurationen für bestimmte
 Platinen oder Arbeitsumgebungen.
@@ -349,8 +349,8 @@ Bei der Hardware UART Schnittstelle sind die Pins für Empfangen (RX) und Senden
 fest verknüpft. Bei der Software-Lösung für die serielle Schnittstelle sind alle Pins
 des AVR Prozessors frei für die serielle Kommunikation wählbar. Die einzige Bedingung
 ist, daß die Pins für digitale Eingabe (RX) beziehungsweise Ausgabe (TX) geeignet sind.
-Näheres zu den möglichen Optionen findet man in der Übersicht~\ref{tab:options1}
-und \ref{tab:options2}
+Näheres zu den möglichen Optionen findet man in der Übersicht~\ref{tab:options1}, \ref{tab:options2}
+und \ref{tab:options3}
 
 \begin{table}[H]
   \begin{center}
@@ -459,6 +459,15 @@ Diese Optionen sind meist nur für Software-Untersuchungen, die Frequenzkalibrat
                    &                & werden, wenn die SUPPORT\_EEPROM Option auf 0 \\
                    &                & gesetzt wird. \\
     \hline
+    LFUSE          & LFUSE=EF       & Gibt einen Wunschwert für das Setzen der Low Fuse des AVRs vor.\\
+                   &                & Es dürfen nur zwei Hex Zeichen angegeben werden. \\
+    \hline
+    HFUSE          & HFUSE=D9       & Gibt einen Wunschwert für das Setzen der High Fuse des AVRs vor.\\
+                   &                & Es dürfen nur zwei Hex Zeichen angegeben werden. \\
+    \hline
+    EFUSE          & EFUSE=FC       & Gibt einen Wunschwert für das Setzen der Extended Fuse des AVRs vor.\\
+                   &                & Es dürfen nur zwei Hex Zeichen angegeben werden. \\
+    \hline
     \end{tabular}
   \end{center}
   \caption{Weitere Optionen für die optiboot Makefile}
@@ -504,7 +513,7 @@ VIRTUAL\_          & VIRTUAL\_       &  Ändert die Programmdaten eines Anwender
 NO\_EARLY\_        &  NO\_EARLY\_   & Verhindert das Löschen der Flash Seite bevor die \\
 PAGE\_ERASE        & PAGE\_ERASE=1  & Daten über die serielle Schnittstelle empfangen sind. \\
                    &                & Da das Löschen sonst parallel zum Datenempfang abläuft, \\
-                   &                & ist das programmieren des Flashs mit dieser Option \\
+                   &                & ist das Programmieren des Flashs mit dieser Option \\
                    &                & um etwa 30\% langsamer. Da der normalerweise auch \\
 		   &                & durchgeführte Datenvergleich (verify) etwa genau so viel \\
                    &                & Zeit braucht, ist der Zeitverlust nicht so erheblich. \\
@@ -828,15 +837,15 @@ die Kodierung des Steuerzeichen CRC\_EOP.
 
 \begin{itemize}
 
-\item {Einfachste Form der Baudraten Messung, BAUD\_RATE \textless~30}
+\item {Einfachste Form der Baudraten Messung, BAUD\_RATE 20-29}
 
 Die einfachste Form der Baudraten-Messung beachtet die Möglichkeit der
 falschen Startbit Wahl überhaupt nicht. Es wird fest davon ausgegangen,
 daß das erkannt Startbit zum STK\_\-GET\_\-SYNC Zeichen gehört.
 Nach der Startbit Erkennung wird bis zur nächsten 0-1 Flanke gewartet
-und dann ein 16-Bit Zähler mit der Frequenz F\_CPU/8 bei -1 gestartet.
-Wenn die Einerstelle der Baudrate größer als 5 ist, wird der
-16-Bit Zähler mit der F\_CPU Frequenz gestartet.
+und dann ein 16-Bit Zähler mit der Frequenz F\_CPU/8 bei 0 gestartet.
+Wenn die Einerstelle der Baudrate größer als 4 angegeben wird, wird der
+16-Bit Zähler jedoch mit der F\_CPU Frequenz gestartet.
 Bei der darauf folgenden 1-0 Flanke wird der Zählerstand abgelesen
 und halbiert als Frequenzteiler des UARTs genommen.
 Die Halbierung ist notwendig, weil die Zeit von 2 Datenbits (4-5) gemessen wurde.
@@ -859,7 +868,7 @@ Wenn der Watchdog-Timer einen Reset auslöst, wird normalerweise das Anwenderpro
 gestartet. Nur wenn noch kein Anwenderprogramm geladen wurde,
 startet der Bootloader erneut und versucht es noch einmal.
 
-\item {Verbesserte Form der Baudraten Messung, BAUD\_RATE \textless~40}
+\item {Verbesserte Form der Baudraten Messung, BAUD\_RATE 30-39}
 
 Wie bei der einfachsten Form der Baudraten-Messung wird hier auf eine Prüfung
 der Bit-Wechselzeiten verzichet.
@@ -873,7 +882,7 @@ zwei geteilt wird.
 Daher sollte diese Form immer dann gewählt werden, wenn es auf wenig Speicherbelegung
 ankommt. Gegenüber der einfachsten Form werden nur 4 Byte mehr belegt.
 
-\item {Einfachste Form der Baudraten Messung mit Zeitüberwachung, BAUD\_RATE \textless~50}
+\item {Einfachste Form der Baudraten Messung mit Zeitüberwachung, BAUD\_RATE 40-49}
 
 Hier wird die gleiche Methode der Baudraten-Bestimmung angewendet, wie bei
 der einfachsten Form. 
@@ -896,17 +905,17 @@ mehr gestartet würde. Deshalb muß die Zeit für den Watchdog-Timer größer
 sein als die Zeit bis zur Wiederholung der STK\_GET\_SYNC Sequenz
 ohne eine Antwort auf die vorausgehende STK\_GET\_SYNC Sequenz.
 
-\item {Verbesserte Form der Baudraten Messung mit Zeitüberwachung, BAUD\_RATE \textless~60}
+\item {Verbesserte Form der Baudraten Messung mit Zeitüberwachung, BAUD\_RATE 50-59}
 
-Die Messung der Baudrate erfolgt genau so wie bei der verbesserten Methode (\textless~40).
-Nur wird wie bei der Methode \textless~50 beschrieben zusätzlich eine
+Die Messung der Baudrate erfolgt genau so wie bei der verbesserten Methode 30-39).
+Nur wird wie bei der Methode 40-49 beschrieben zusätzlich eine
 Begrenzung der Wartezeit durchgeführt.
 Weil der Zählerstand erst bei der 0-1 Flanke gelesen wird und da der Zählerüberlauf
 nur bei der 1-0 Flanke geprüft wird, ist die ermittelte Baud-Zeit nicht besser wie
 bei der verbesserten Methode ohne die Zeitüberwachung, die auch die
 Zeit von vier Datenbits (4-7) als Basis verwendet.
 
-\item {Aufwendige Form der Baudraten Messung, BAUD\_RATE \textless~80}
+\item {Aufwendige Form der Baudraten Messung, BAUD\_RATE 60-69}
 
 Bei dieser Methode wird der Zähler mit der Erkennung eines Start-Bits
 sofort bei 0 gestartet und bei den folgenden 3 Bitwechseln der Zählerstand
@@ -940,13 +949,26 @@ reserviert sind (Bootloader Page Size).
 Für die Berechnung des UART Frequenzteilers wird die Differenz der
 3. Zählerlesung und der 2. Zählerlesung halbiert (9b-7b-1)/2 = (2b+1)/2-1.
 
-\item {Aufwendige Form der Baudraten Messung, BAUD\_RATE \textless~100}
+\item {Aufwendige Form der Baudraten Messung, BAUD\_RATE 70-79}
 
 Alle Zeitlesungen und Kontrollen werden wie bei der Methode mit
-Baud\_RATE \textless~80 durchgeführt. Lediglich für die Berechnung
+Baud\_RATE 60-69 durchgeführt. Lediglich für die Berechnung
 des UART Frequenzteilers wird die Zeit von 4 Bits benutzt.
 Somit ergibt sich für den richtigen Startpunkt ,,1'' die folgende
 Berechnung (9b-5b-2)/4 = (4b+2)/4-1.
+
+\item {Aufwendige Form der Baudraten Messung, BAUD\_RATE 80-89}
+Alle Zeitlesungen und Kontrollen werden wie bei der Methode mit
+Baud\_RATE 60-69 durchgeführt. Lediglich für die Berechnung
+des UART Frequenzteilers wird die Zeit von 9 Bits benutzt.
+Somit ergibt sich für den richtigen Startpunkt ,,1'' die folgende
+Berechnung (9b-4)/9 = (9b+5)/9-1.
+
+\item {Einfachste Form der Baudraten Messung, BAUD\_RATE 10-19}
+Die Zeitmessung von 9 seriell übertragenen Bits ist auch ohne Kontrolle
+der Daten möglich. 
+Eigentlich sollte aber die Zeitmessung von 4 Bits ausreichend sein.
+
 
 \end{itemize}
 
@@ -959,14 +981,14 @@ das LED-Blinken gewählt wird.
 Bei einigen Prozessoren kann als Zusatzfunktion noch die LED\_DATA\_FLASH
 gewählt werden ohne die 512 Byte Grenze zu überschreiten. 
 Wenn die Grenze von 512 Byte wegen benötigter Funktionen ohnehin überschritten
-wird, sind auch mit der Baudratenmessung alle Funktionen im Prinzip
-wieder möglich. 
+wird, sind auch mit der Baudratenmessung alle Zusatzfunktionen 
+wieder problemlos wählbar, da dann der doppeltre Platz von 1024 Byte zur Verfügung steht. 
 Zusammen mit der SOFT\_UART Funktion kann die Baudratenbestimmung nur mit
 der Assembler-Version des Optiboot Programms benutzt werden.
 Die C-Variante unterstützt die Baudratenmessung mit der automatischen Einstellung
 der Baudrate nur für einen Hardware-UART.
 
-Die nachfolgende Tabelle~ref{tab:AutoBaudControl} faßt die verschiedenen Möglichkeiten noch einmal zusammen.
+Die nachfolgende Tabelle~\ref{tab:AutoBaudControl} faßt die verschiedenen Möglichkeiten noch einmal zusammen.
 Die angegebenen Programmgrößen in Bytes beziehen sich auf einen  ATmega328 ohne LED Blinkfunktion, aber mit
 EEprom Unterstützung. Die Programmgrößen in Klammern ergeben sich beim Betrieb der seriellen Schnittstelle mit
 Software.
@@ -1316,7 +1338,6 @@ Aber der Hardware-UART hat den Vorteil, daß Eingang und Ausgang gleichzeitig be
 außerdem ist die Hardware-Lösung fehlertoleranter gegenüber kurzen Störungen des Eingangssignals.
 Für die serielle Schnittstelle mit Software kann jeder digitale IO-Pin als Eingang (UART\_RX) und als Ausgang (UART\_TX)
 gewählt werden. In diesem Beispiel wird die Fähigkeit benutzt, automatisch die IO-Pins des Hardware-UART's zu wählen.
-Die drei ,,warning'' Meldungen, die Sie über diese automatische Wahl informieren, können Sie ignorieren.
 Die automatische Wahl der IO-Pins hängt vom gewählten Prozessor-Typ und von der gewählten UART Nummer ab,
 wenn mehr als ein UART zur Verfügung steht.
 

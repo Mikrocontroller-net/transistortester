@@ -586,6 +586,7 @@ atmega32u4: hex_file
 ################################################
 # Virtual boot block test
 virboot8: TARGET := virboot8
+virboot8: VIRTUAL_BOOT_PARTITION := 1
 virboot8: save_vect_num := EE_RDY_vect_num
 virboot8: MCU_TARGET := atmega8
 virboot8: HFUSE := C9

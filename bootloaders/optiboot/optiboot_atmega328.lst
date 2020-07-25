@@ -335,7 +335,7 @@ ck_PP:
 
     // PROGRAM PAGE - we support flash and optional EEPROM programming
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-#if (NRWWSTART != 0) || (NO_EARLY_PAGE_ERASE != 0)
+#if (NRWWSTART != 0) && (NO_EARLY_PAGE_ERASE == 0)
     	breq	no_pg_erase	; if (type) // no early page erase for EEprom
     7ea4:	21 f0       	breq	.+8      	; 0x7eae <no_pg_erase>
 	ASBIS	WRPP_PIN,WRPP_BIT

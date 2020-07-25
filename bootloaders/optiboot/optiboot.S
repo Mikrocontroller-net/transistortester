@@ -840,10 +840,8 @@ is_PROG:
 
     // PROGRAM PAGE - we support flash and optional EEPROM programming
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-#if (NRWWSTART != 0) || (NO_EARLY_PAGE_ERASE != 0)
-    	breq	no_pg_erase	; if (type) // no early page erase for EEprom
-#endif
 #if (NRWWSTART != 0) && (NO_EARLY_PAGE_ERASE == 0)
+    	breq	no_pg_erase	; if (type) // no early page erase for EEprom
  #if defined(WRPP_PIN) && defined(WRPP_BIT)
 ; 	Check for write_protect bit, if set, rjmp no_pg_erase
 	ASBIS	WRPP_PIN,WRPP_BIT

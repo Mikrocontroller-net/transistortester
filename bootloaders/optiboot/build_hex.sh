@@ -260,7 +260,7 @@ export prog_size=`avr-size -C ${PROGRAM}x.elf | grep "Program:" | cut -c 10-16`
 export pg_anz=`echo "(${prog_size}-1)/${BOOT_PAGE_LEN}+1" | bc`
 
 if (( 0${VIRTUAL_BOOT_PARTITION} > 0 )) ; then
-	export BootPages=`echo "( (${prog_size}-1)/${FLASH_PAGE_SIZE}/${FLASH_ERASE_CNT} +1) * ${FLASH_ERASE_CNT}" | bc`
+ export BootPages=`echo "( (${prog_size}-1)/${FLASH_PAGE_SIZE}/${FLASH_ERASE_CNT} +1) * ${FLASH_ERASE_CNT}" | bc`
 else
  export BootPages=`echo "${pg_anz} + (${pg_anz}==3 ) + (${pg_anz}==5)*3 + (${pg_anz}==6)*2 + (${pg_anz} == 7)" | bc`
 fi
@@ -373,28 +373,28 @@ else
 # no virtual boot page
  BOOTSZ=`echo "0+(${pg_anz}<5)+(${pg_anz}<3)+(${pg_anz}<2)" | bc`
 
- RelVal=`echo "scale=1;${pg_anz}*${BOOT_PAGE_LEN}*100/${FLASH_SIZE}" | bc`
+ RelVal=`echo "scale=1;${BootPages}*${BOOT_PAGE_LEN}*100/${FLASH_SIZE}" | bc`
  if [ "${LANGUAGE}" == "de_DE" ] ; then
   RelMsg=`echo ", das ist ${RelVal}% des Flash Speichers"`
  else
   RelMsg=`echo ", which is ${RelVal}% of Flash Memory"`
  fi
- size2know=`echo "${pg_anz} * ${BOOT_PAGE_LEN}" | bc`
+ size2know=`echo "${BootPages} * ${BOOT_PAGE_LEN}" | bc`
  if (( ${pg_anz} > 1 )) ; then
   if [ "${LANGUAGE}" == "de_DE" ] ; then
-   echo -n "Benötigt ${pg_anz} Boot Seiten, je ${BOOT_PAGE_LEN} Bytes${RelMsg}"
-   echo "${Vinv}BOOTSZ=${BOOTSZ}${Vnormal}, das bedeutet ${Vinv}${pg_anz} Boot Seiten${Vnormal}"
+   echo "Benötigt ${BootPages} Boot Seiten, je ${BOOT_PAGE_LEN} Bytes${RelMsg}"
+   echo "${Vinv}BOOTSZ=${BOOTSZ}${Vnormal}, das bedeutet ${Vinv}${BootPages} Boot Seiten${Vnormal}"
   else
-   echo -n "Requires ${pg_anz} Boot Pages, ${BOOT_PAGE_LEN} Bytes each${RelMsg}"
-   echo "${Vinv}BOOTSZ=${BOOTSZ}${Vnormal}, which means ${Vinv}${pg_anz} Boot Pages${Vnormal}"
+   echo "Requires ${pg_anz} Boot Pages, ${BOOT_PAGE_LEN} Bytes each${RelMsg}"
+   echo "${Vinv}BOOTSZ=${BOOTSZ}${Vnormal}, which means ${Vinv}${BootPages} Boot Pages${Vnormal}"
   fi
  else
   if [ "${LANGUAGE}" == "de_DE" ] ; then
    echo "Benötigt ${pg_anz} Boot Seite mit ${BOOT_PAGE_LEN} Bytes${RelMsg}"
-   echo "${Vinv}BOOTSZ=${BOOTSZ}${Vnormal}, das bedeutet ${Vinv}${pg_anz} Boot Seite${Vnormal}"
+   echo "${Vinv}BOOTSZ=${BOOTSZ}${Vnormal}, das bedeutet ${Vinv}${BootPages} Boot Seite${Vnormal}"
   else
    echo "Requires ${pg_anz} Boot Page of ${BOOT_PAGE_LEN} Bytes${RelMsg}"
-   echo "${Vinv}BOOTSZ=${BOOTSZ}${Vnormal}, which means ${Vinv}${pg_anz} Boot Page${Vnormal}"
+   echo "${Vinv}BOOTSZ=${BOOTSZ}${Vnormal}, which means ${Vinv}${BootPages} Boot Page${Vnormal}"
   fi
  fi
 fi

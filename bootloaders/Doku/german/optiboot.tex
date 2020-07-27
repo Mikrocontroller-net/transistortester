@@ -786,6 +786,15 @@ Die Schaltung ist weitgehend unabhängig von der benutzen Baudrate.
 Lediglich bei sehr hohen Baud-Raten erwarte ich Probleme. Bei 115200 Baud läuft die Schaltung
 aber einwandfrei. Sehr viel höhere Baudraten sind bei der Softwarelösung sowieso
 oft nicht möglich.
+Die Abbildung~\ref{fig:onewire2} zeigt eine alternative Schaltung mit einem 74HC14 Hex Inverter mit Schmitt-Trigger Eingängen.
+
+\begin{figure}[H]
+\centering
+\scalebox{0.5}{\includegraphics[]{../FIG/OneWire2.eps}}
+\caption{Alternative Schaltung zur Unterdrückung des Echos}
+\label{fig:onewire2}
+\end{figure}
+
 
 \subsection{Benutzung der automatischen Baudraten-Bestimmung}
 \label{sec:autobaud}

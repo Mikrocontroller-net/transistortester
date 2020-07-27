@@ -1,7 +1,7 @@
 LISTE3 = ../FIG/boot_pages.eps 	../FIG/avr_block.eps ../FIG/port.eps ../FIG/ablauf.eps
 LISTE3 += ../FIG/VectorMove.eps ../FIG/ISP.eps ../FIG/UM232.eps
 LISTE3 += ../FIG/uart_putch_timing.eps ../FIG/uart_getch_timing.eps
-LISTE3 += ../FIG/OneWire.eps ../FIG/OneWire_simple.eps ../FIG/AutoBaud.eps
+LISTE3 += ../FIG/OneWire.eps ../FIG/OneWire2.eps ../FIG/OneWire_simple.eps ../FIG/AutoBaud.eps
 
 all: bootloader.pdf
 	
@@ -27,6 +27,8 @@ all: bootloader.pdf
 ../FIG/uart_putch_timing.eps: ../FIG/uart_putch_timing.fig
 	fig2eps $<
 ../FIG/OneWire.eps: ../FIG/OneWire.fig
+	fig2eps $<
+../FIG/OneWire2.eps: ../FIG/OneWire2.fig
 	fig2eps $<
 ../FIG/OneWire_simple.eps: ../FIG/OneWire_simple.fig
 	fig2eps $<

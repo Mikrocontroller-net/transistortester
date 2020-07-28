@@ -19,7 +19,13 @@
  #warning "Debug output of the lower bits of baud rate measurement to port "
 #endif
 
-#define TWO_STOP_BITS 1		/* 1 = output with two Stop bits to Tx */
+#ifndef TWO_STOP_BITS
+ #if TEST_OUTPUT == 1
+  #define TWO_STOP_BITS 0		/* 0 = output with one Stop for test output 0101010101 */
+ #else
+  #define TWO_STOP_BITS 1		/* 1 = output with two Stop bits to Tx */
+ #endif
+#endif
  ; The divide operation is done with shift, is possible (/2 /4 /8 ...)
  ; Other divides  (/6, /9, /10 are done with subtracts in a loop
  ; This give a small Program code, but the operation is slow, so that the

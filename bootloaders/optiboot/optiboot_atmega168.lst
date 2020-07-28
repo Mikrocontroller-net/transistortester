@@ -116,7 +116,7 @@ optiboot:
   #else
     /* no ATmega8_16_32 */
    #if !defined(__AVR_ATmega163__) && !defined(__AVR_ATtiny87__) && !defined(__AVR_ATtiny167__)
-	ldi	r25, (TWOSTOP<<USBS0)|(1<<UCSZ00)|(1<<UCSZ01)	;0x06
+	ldi	r25, (TWO_STOP_BITS<<USBS0)|(1<<UCSZ00)|(1<<UCSZ01)	;0x06
     3e2a:	9e e0       	ldi	r25, 0x0E	; 14
 	AOUT	UART_SRC, r25
     3e2c:	90 93 c2 00 	sts	0x00C2, r25	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7e00c2>

@@ -129,7 +129,7 @@ optiboot:
   #include "report_baud_div.h"
   #if defined(UART_SRC) && defined(UART_SEL)
 	; version for m8, m16, m32 for example (with double function UCSRC)
-	ldi	r25, (1<<UART_SEL)|(TWOSTOP<<USBS0)|(1<<UCSZ01)|(1<<UCSZ00)	; config UART
+	ldi	r25, (1<<UART_SEL)|(TWO_STOP_BITS<<USBS0)|(1<<UCSZ01)|(1<<UCSZ00)	; config UART
     1e30:	9e e8       	ldi	r25, 0x8E	; 142
 	AOUT	UART_SRC, r25
     1e32:	90 bd       	out	0x20, r25	; 32

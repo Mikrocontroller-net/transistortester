@@ -165,10 +165,13 @@ PUT_CH :	/*  void putch(char ch) */
  #endif
 	; r24 hold the data for serial output
 	; use r22, r23, r25
+ #if (TWO_STOP_BITS == 1)
+  /* output only a additional 1/2 Stop Bit */
 	SINGLE_DELAY_CALL	; work simular to a second half stop bit
 	SINGLE_DELAY_CALL_X1	; this can help to prevent framing error, if the
 	SINGLE_DELAY_CALL_X2	; baudrate has a error of 2% or more
 	SINGLE_DELAY_CALL_X3
+ #endif
 	ldi	r22, 10		; counter for the serial bit output
 ;	ldi	r19, 0
  #ifdef UART_ONE_WIRE

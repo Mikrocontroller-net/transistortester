@@ -98,18 +98,16 @@ $(OBJDIR)/samplingADC.o: ../samplingADC.S $(MKFILES)
 	
 ########### directories
 
-#$(OBJDIR):
-#      @mkdir -p $@
-
-# create directories, after makefile is parsed
-$(shell mkdir -p $(OBJDIR))
-$(shell mkdir -p $(DEPDIR))
+# create directories
+directories:
+	mkdir -p $(OBJDIR)
+	mkdir -p $(DEPDIR)
 
 OBJFILES = $(addprefix $(OBJDIR)/, $(OBJECTS))
 
 
 ##Link
-$(TARGET): $(OBJFILES)
+$(TARGET): directories $(OBJFILES)
 	$(CC) $(LDFLAGS) $(OBJFILES) $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $(TARGET)
 
 %.hex: $(TARGET)
@@ -127,7 +125,7 @@ size: ${TARGET}
 	@$(AVR_TOOL/PATH)avr-size -C --mcu=${MCU} ${TARGET}
 
 ## Clean target
-.PHONY: size clean steril fuses fuses-crystal fuses-crystal-lp erase upload program flash eeprom eeread read verify upload_orig
+.PHONY: directories size clean steril fuses fuses-crystal fuses-crystal-lp erase upload program flash eeprom eeread read verify upload_orig
 clean:
 	-rm -rf $(OBJECTS) $(PROJECT).elf $(PROJECT).hex $(PROJECT).eep $(PROJECT).lss $(PROJECT).map
 	@rm -rf dep *.o  # old path and files

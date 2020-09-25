@@ -97,11 +97,12 @@ $(OBJDIR)/samplingADC.o: ../samplingADC.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 	
 ########### directories
-
+deleteobj:
+	rm -rf $(OBJDIR)
 # create directories
-directories:
-	mkdir -p $(OBJDIR)
-	mkdir -p $(DEPDIR)
+directories: deleteobj
+	mkdir $(OBJDIR)
+	mkdir $(DEPDIR)
 
 OBJFILES = $(addprefix $(OBJDIR)/, $(OBJECTS))
 
@@ -127,14 +128,14 @@ size: ${TARGET}
 ## Clean target
 .PHONY: directories size clean steril fuses fuses-crystal fuses-crystal-lp erase upload program flash eeprom eeread read verify upload_orig
 clean:
-	-rm -rf $(OBJECTS) $(PROJECT).elf $(PROJECT).hex $(PROJECT).eep $(PROJECT).lss $(PROJECT).map
+	-rm -f $(OBJECTS) $(PROJECT).elf $(PROJECT).hex $(PROJECT).eep $(PROJECT).lss $(PROJECT).map
 	@rm -rf dep *.o  # old path and files
 	@rm -rf $(OBJDIR)
 
 steril:
-	-rm -rf $(PROJECT).hex $(PROJECT).eep
+	-rm -f $(PROJECT).hex $(PROJECT).eep
 	$(MAKE)
-	-rm -rf $(PROJECT).elf $(PROJECT).lss $(PROJECT).map
+	-rm -f $(PROJECT).elf $(PROJECT).lss $(PROJECT).map
 
 
 ## Other dependencies

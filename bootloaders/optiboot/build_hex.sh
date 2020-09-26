@@ -49,6 +49,10 @@ if [ "${PROGRAM}" = "" ] ; then
  PROGRAM="optiboot"
 fi
 
+if [ "${LED_START_FLASHES}" = "" ] ; then
+ LED_START_FLASHES=3
+fi
+
 if [ "${C_SOURCE}" = "" ] || (( ${C_SOURCE}0 == 0 )) ; then
  SOURCE_TYPE="S"
  if [ "${SUPPORT_EEPROM}" = "" ] ; then
@@ -100,6 +104,22 @@ if (( ${BAUD_RATE} < 100 )) ; then
    echo "${FREQ_OPER} mit ${Vgelb}automatischer Baudrate${Vnormal}${EE_SUPPORT}"
   else
    echo "${FREQ_OPER} with ${Vgelb}Auto-Baudrate${Vnormal}${EE_SUPPORT}"
+  fi
+ fi
+ if (( ${BAUD_RATE} < 20 )) || (( ${BAUD_RATE} > 59 )) ; then
+  if (( ${LED_START_FLASHES} < -1 )) ; then
+   if [ "${LANGUAGE}" == "de_DE" ] ; then
+    echo "Ohne Überwachung der seriellen Empfangsdaten die LED bitte nur einmal blinken lassen!"
+   else
+    echo "Without monitoring the serial input you should flash the LED only once!"
+   fi
+  fi
+  if (( ${LED_START_FLASHES} > 2 )) ; then
+   if [ "${LANGUAGE}" == "de_DE" ] ; then
+    echo "Bei dieser Autobaud Betriebsart sollten Sie die LED bitte nur maximal 2x blinken lassen!"
+   else
+    echo "With this Autobaud operating mode you should only let the LED flash a maximum of 2 times!"
+   fi
   fi
  fi
 else
@@ -177,6 +197,9 @@ if [ "${WRITE_PROTECT_PIN}" != "" ] ; then
 fi
 if [ "${NO_EARLY_PAGE_ERASE}" != "" ] ; then
 	XTRA_OPTIONS="${XTRA_OPTIONS} -DNO_EARLY_PAGE_ERASE=${NO_EARLY_PAGE_ERASE}"
+fi
+if [ "${TWO_STOP_BITS}" != "" ] ; then
+	XTRA_OPTIONS="${XTRA_OPTIONS} -DTWO_STOP_BITS=${TWO_STOP_BITS}"
 fi
 if [ "${UART}" = "" ] ; then
 UART=0
@@ -435,7 +458,7 @@ echo "; BAUD_RATE=${BAUD_RATE}" >> ${lstfile}
 
 echo "${PROGRAM} for ${TARGET} with AVR ${MCU_TARGET}" >> ${logfile}
 echo "Parameter Settings:" >> ${logfile}
-echo "AVR_FREQ=${AVRFREQ}" >> ${logfile}
+echo "AVR_FREQ=${AVR_FREQ}" >> ${logfile}
 echo "BAUD_RATE=${BAUD_RATE}" >> ${logfile}
 echo "UART=${UART}" >> ${logfile}
 echo "LED_START_FLASHES=${LED_START_FLASHES}" >> ${logfile}
@@ -454,10 +477,11 @@ echo "OSCCAL_CORR=${OSCCAL_CORR}" >> ${logfile}
 echo "FORCE_RSTDISBL=${FORCE_RSTDISBL}" >> ${logfile}
 echo "save_vect_num=${save_vect_num}" >> ${logfile}
 if [ "${WRITE_PROTECT_PIN}" != "" ] ; then
-echo "WRITE_PROTECT_PIN=p${WRITE_PROTECT_PIN}" >> ${logfile}
+echo "WRITE_PROTECT_PIN=${WRITE_PROTECT_PIN}" >> ${logfile}
 fi
 if [ "${NO_EARLY_PAGE_ERASE}" != "" ] ; then
 echo "NO_EARLY_PAGE_ERASE=${NO_EARLY_PAGE_ERASE}" >> ${logfile}
+echo "TWO_STOP_BITS=${TWO_STOP_BITS}" >> ${logfile}
 fi
 echo " " >> ${logfile}
 echo "Bootloader use ${size2know} Bytes of Flash," >> ${logfile}

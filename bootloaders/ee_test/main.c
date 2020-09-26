@@ -76,6 +76,12 @@ void uart_newline(void) {
   wdt_reset();
 }
 #endif
+#if SOFT_UART < 0
+/* dummy putch output */
+ void putch(char ch) {
+  GPIOR0 = ch;
+}
+#endif
 #if FLASHEND > 2048
 
 const unsigned char PrefixTab[] PROGMEM = { 'f','p','n','u','m',0,'k','M'}; // f,p,n,u,m,-,k,M
@@ -363,7 +369,8 @@ int main(void) {
         putch('(');
         uart_string(itoa(BAUD_DIV,outval,10));
         putch(')');
-#else
+#endif
+#if SOFT_UART > 0
 	uart_mem_string(SW_UART);
 #endif
         uart_newline();

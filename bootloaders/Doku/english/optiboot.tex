@@ -1025,39 +1025,39 @@ The program sizes in brackets result from the operation of the serial interface 
 		& Base  & Base   & Limit &       & size (HW) \\
     \hline
     \hline
-	    10-14      &  9     & clk/8 &   -    & simple  & 500  \\
+	    10-14      &  9     & clk/8 &   -    & simple  & 502  \\
     \hline
 	    15-19      &  9     &  clk  &   -    & simple  & 502  \\
     \hline
-	    20-24      &  2     & clk/8 &   -    & simple  & 488  \\
+	    20-24      &  2     & clk/8 &   -    & simple  & 490  \\
     \hline
 	    25-29      &  2     &  clk  &   -    & simple  & 494  \\
     \hline
-	    30-34      &  4     & clk/8 &   -    & simple  & 492  \\
+	    30-34      &  4     & clk/8 &   -    & simple  & 494  \\
     \hline
 	    35-39      &  4     &  clk  &   -    & simple  & 494  \\
     \hline
-	    40-44      &  2     & clk/8 &   Yes  & simple  & 494  \\
+	    40-44      &  2     & clk/8 &   Yes  & simple  & 496  \\
     \hline
 	    45-49      &  2     &  clk  &   Yes  & simple  & 500  \\
     \hline
-	    50-54      &  4     & clk/8 &   Yes  & simple  & 498  \\
+	    50-54      &  4     & clk/8 &   Yes  & simple  & 500  \\
     \hline
 	    55-59      &  4     &  clk  &   Yes  & simple  & 500  \\
     \hline
     \hline
-	    60-64      &  2     &  clk/8 &  Yes  & complex & 544  \\
+	    60-64      &  2     &  clk/8 &  Yes  & complex & 550  \\
     \hline
-	    65-69      &  2     &  clk   &  Yes  & complex & 550  \\
+	    65-69      &  2     &  clk   &  Yes  & complex & 554  \\
     \hline
-	    70-74      &  4     &  clk/8 &  Yes  & complex & 548  \\
+	    70-74      &  4     &  clk/8 &  Yes  & complex & 554  \\
     \hline
-	    75-79      &  4     &  clk   &  Yes  & complex & 550  \\
+	    75-79      &  4     &  clk   &  Yes  & complex & 554  \\
     \hline
-	    80-84      &  9     &  clk/8 &  Yes  & complex & 558  \\
+	    80-84      &  9     &  clk/8 &  Yes  & complex & 564  \\
 	    90-94      &        &        &       &         &      \\
     \hline
-	    85-89      &  9     &  clk   &  Yes  & complex & 560  \\
+	    85-89      &  9     &  clk   &  Yes  & complex & 564  \\
 	    95-99      &        &        &       &         &     \\
 
     \hline
@@ -1129,8 +1129,9 @@ polling loops for the RX signal.
     \hline
   35-39,55-59  &  0     &  488      &   80.0k  & HW\_UART 4-Bit Time, CLK  \\
     \hline
-  15-19,65-69  &  0     &  1098     &   80.0k  & HW\_UART 9-Bit Time, CLK  \\
-  75-79,85-89  &        &           &          &                         \\
+  15-19,85-89  &  0     &  1098     &   80.0k  & HW\_UART 9-Bit Time, CLK  \\
+  25-29,45-49  &        &           &          & HW\_UART 2-Bit Time, CLK \\
+  65-69,75-79  &        &           &          & HW\_UART 2/4-Bit Time, CLK \\
     \hline
     42         &  1     &  5151     &   81.6k  &  Simple, 2-Bit Time, 8-Bit Loop  \\
     \hline
@@ -1182,7 +1183,8 @@ Baud rate selections ending with the digit 0 or 5, are practical unusable.
 The reason herefore is, that the division operation by successive subtraction
 is too slow to finish before the serial data stop bit ends.
 A workaround would be to let the transmitter of the data (avrdude) send all data with 2 stop bits.
-Because this is not intended, the other columns use an accelerated subtraction loop,
+Because this is not intended by the avrdude version 6.3,
+the other columns use an accelerated subtraction loop,
 which then causes a longer program.
 If possible, the faster shift operation for division by powers of 2 is used instead of the subtraction loop.
 To enable this shift operations, the colums labled with \_3, \_4, \_8 and \_9 
@@ -1201,17 +1203,17 @@ But you can save 14 bytes of flash with the option NO\_EARLY\_PAGE\_ERASE , so t
     \hline
        & \multicolumn{5}{c ||}{ simple CLK/8}    &  \multicolumn{5}{c |}{simple CLK/1}      \\
     \hline
-   1\_ , 9Bit   & 510  & 524   & 516  & 528   & 516    &  522  &  518  &  528  &  520   &  532 \\
-   2\_ , 2Bit   & 512  & 528  & 518 & 520 & \textbf{506} & 518 & 514 & 524 & \textbf{512} & 522 \\
-   3\_ , 4Bit   & 508  & 524  & 514 & 522 & \textbf{510} & 520 &  516  &  528  &  514   & 532 \\
-   4\_ , 2Bit   & 518  & 534  & 524 & 526 & \textbf{512} & 524 &  520  &  530  &  518   & 528 \\
-   5\_ , 4Bit   & 514  & 530   & 520  & 528   & 516    &  526  &  522  &  534  &  520   &  538 \\
+   1\_ , 9Bit   & 512  & 526   & 518  & 530   & 518    &  522  &  518  &  528  &  520   &  532 \\
+   2\_ , 2Bit   & 514  & 530  & 520 & 522 & \textbf{508} & 518 & 514 & 524 & \textbf{512} & 522 \\
+   3\_ , 4Bit   & 510  & 526  & 516 & 524 & \textbf{512} & 520 &  516  &  528  &  514   & 532 \\
+   4\_ , 2Bit   & 520  & 536  & 526 & 528     & 514    & 524 &  520  &  530  &  518   & 528 \\
+   5\_ , 4Bit   & 516  & 532   & 522  & 530   & 518    &  526  &  522  &  534  &  520   &  538 \\
     \hline
       & \multicolumn{5}{c ||}{ komplex CLK/8}    &  \multicolumn{5}{c |}{komplex CLK/1}      \\
     \hline
-   6\_ , 2Bit   & 572  & 588   & 578  & 580   & 576    &  578  &  574  &  584  &  572   &  582 \\
-   7\_ , 4Bit   & 570  & 586   & 576  & 590   & 578    &  580  &  576  &  588  &  580   &  592 \\
-   8\_ , 9Bit   & 572  & 586   & 578  & 590   & 578    &  584  &  580  &  590  &  582   &  594 \\
+   6\_ , 2Bit   & 574  & 590   & 580  & 582   & 578    &  578  &  574  &  584  &  572   &  582 \\
+   7\_ , 4Bit   & 572  & 588   & 578  & 592   & 580    &  580  &  576  &  588  &  580   &  592 \\
+   8\_ , 9Bit   & 574  & 588   & 580  & 592   & 580    &  584  &  580  &  590  &  582   &  594 \\
     \hline
     \end{tabular}
   \end{center}
@@ -1291,8 +1293,29 @@ This board could run with \(115.2kBaud\) and also with \(230.4kBaud\).
 Probably the reason is, that both processors (ATmega328p and Mega16U2)
 use a real baud rate of \(250kBaud\).
 
+\subsection{Special features of the serial interface}
 
-\section{Some examples of building a optiboot bootloader}
+Usually optiboot send the serial data with a prolongate stop bit.
+The hardware UART switch on a second stop bit for transmitted data and the
+software solution use a additional half stop bit.
+This seems to be usefull with little differences of the baud rate between sender and receiver,
+because there is more time for the receiver to synchronize with the next start bit.
+The PC side with avrdude version 6.3 could send data with two stop bits.
+So I had pached the sources for avrdude to add this feature with the additional option -S.
+But unfortunately this feature is missing with avrdude.
+
+You can disable the two stop bit selection of optiboot with the option TWO\_STOP\_BITS=0.
+The difference in speed is insignificant, so I would recommend to use the longer stop bit.\\
+
+The software for the serial interface (SOFT\_UART=1) use the delay time for the stop bits
+at the begin of the serial transmission. With that feature the program has more time
+at the end of transmission to prepare the receiving of serial data.
+You can also disable this feature with the option QuickStopBit=0. But I know no problems
+or disadvantages with this feature, not even when operating with just one pin.
+
+
+
+\section{Some examples of building a optiboot bootloader}\label{Examples}
 
 The first example is the building of a bootloader for the popular ATmega328P:
 
@@ -2302,3 +2325,569 @@ at90can128 &         8M & 0xE2  & 38.4k &  0  & 8303k &  3  & 7922k  & 2  & 8057
   \caption{Possible OSCCAL\_CORR selections for the AT90CAN family}
   \label{tab:t90canfreq}
 \end{table}
+
+
+\section{Examination of the cooperation with USB-serial converters}
+
+\subsection{Preface to the test environment}
+At first the environment for the series tests of the behavior of automatic baud rate adjustment
+are bad. The baud rate of the AVR-UART interface can be selected only with great steps for
+higher baud rates. Also the choise of baud rates for the different USB-serial chips is limited
+by the chip and the capability of the driver.
+With the AVR processors it is possible to detune the clock frequency of the local RC generator
+with OSCCAL, but the result of the detuning vary with each particular model.
+The resulting oscillating frequency of the local RC generator can be measured,
+but the step size of the detuning cannot be changed to get a specific frequency exactly.
+I know only one way out of this difficulty is to use a external clock source for the AVR processor.
+For this reason I got the relatively inexpensive Kkmoon FY6900 function generator,
+which can generate almost any waveform with frequencies up to 60 MHz.
+Of course, this function generator can also generate square-wave signals, which can serve as
+a clock for the AVR.
+The function generator can be operated both via the front panel and via a USB interface.
+The USB interface consists of an internal CH341 USB-serial converter, so that no special USB driver is required.
+The control can be done with well-documented ASCII character strings.
+iThis fulfills the essential requirements for systematic tests of the interaction between avrdude,
+the USB-serial converter and the optiboot bootloader.
+In particular, the behavior of the automatic baud rate adjustment should be examined more intensively.
+For this, downloads with avrdude should be repeated with different clock frequencies,
+so that problems are detected.
+I choosed a number of 40 repititions as a acceptable compromise between expenditure of time and
+statistical significance.
+Since 41 different frequencies are to be examined with the automatic baud rate adjustment,
+there are already 1640 write processes for one variant.
+With more than 10 of these variants, the guaranteed number of cycles of the AVR flash memory would be exceeded.
+Since I didn't want to examine the cycle stability of the AVR flash memory,
+I provided a write protection pin in the optiboot software for this.
+This additional function of optiboot is only useful for these examinations, therefore this
+option (WRITE\_PROTECT\_PIN) is not further documented.
+
+\subsection{Autobaud measurements with different USB-Serial chips}
+
+The data for the results presented here were generated with the bash script file test\_download
+in the subdirectory ee\_test and then combined in .tab files in the directory Doku/results with an editor.
+In the course of the investigations, an improvement in the baud rate measurement with the divided clock frequency
+could be built into optiboot.
+The improvement consists of resetting the prescaler for the AVR's counters.
+The other source of error for the time measurement is caused by the query loop for the RX data pin and
+results to at least 3 clocks for each measuring point.
+But first I will show the count of errors with different USB-serial chips with 40 downloads for
+each clock frequency between 14 MHz and 18 MHz with a step size of 100 kHz and a baud rate of 115200.
+A total of 1640 downloads of 10 kByte with avrdude was the base for each table entry.
+A special modified avrdude program was used for these tests,
+which can select a serial output with two stop bits with the new parameter -S.
+The differences of the avrdude sources are notices in the file ee\_test/avrdude.diff.
+
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c || c | c | c | c | c | c | c | c | }
+    \hline
+          & FT232 & FT232 & CH340 & CP2102 & CP2104 & PL2303 & Pololu & Arduino \\
+ Baud rate & RL    & Clone &       &        &       & TA     & AVR    & UNO     \\
+    \hline
+    \hline
+    22    &  0    &  1    &  40   &   0    &   0    &  0     &  264   &   0    \\
+    26    &  0    &  0    &  69   &   0    &   0    &  0     &  250   &   0    \\
+    62    &  150  &  181  &  186  &   95   &   155  &  145   &  521   &   129  \\
+    \hline
+    32    &  0    &  0    &  72   &   0    &   0    &  0     &  217   &   0    \\
+    36    &  0    &  0    &  12   &   0    &   0    &  0     &  261   &   0    \\
+    72    &  10   &  44   &  24   &   4    &   4    &  3     &  427   &   0    \\
+    76    &  1    &  0    &  2    &   0    &   0    &  0     &  331   &   0    \\
+    \hline
+    12    &  0    &  0    &  7    &   0    &   0    &  0     &  281   &   0    \\
+    82    &  0    &  0    &  7    &   0    &   0    &  0     &  285   &   0    \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{Error rate of 1640 downloads with 10 kByte each using the HW-UART}
+  \label{tab:HWautoErrs}
+\end{table}
+
+As a reminder, the key for the Optiboot auto baud rate setting should be mentioned here.
+Settings 22, 26 and 62 all select a 2-bit time measurement.
+With settings 22 and 62 the counter, which is used for the time measuring,
+works with /8 frequency prescaler,
+only with setting 26 the counter runs at full clock rate.\\
+
+Correspondingly, the settings 32, 36, 72 and 76 select a 4-bit time measurement.
+With settings 32 and 72 a counter with /8 frequency prescaler is used,
+settings 36 and 76 use a counter without prescaler for the time measurement.
+The other two settings 12 and 82 use 9 bits for time measurement,
+both with the /8 prescaler for the counter.\\
+
+The other two settings 12 and 82 use 9 bits for time measurement,
+both with the /8 prescaler for the counter. \\
+
+The USB-serial converter FT232 appears twice in the table \ref{tab:HWautoErrs}, once as FT232RL,s
+the original chip from Future Technology Devices International Limited (FTDI) and once as FT232clone,
+a Chinese replica of unknown origin with the serial number A50285BI.
+The replicas usually have the same serial number. The original chips all have a different serial number.
+From the outside, the replicated chips are difficult to identify because the manufacturer's logo FTDI was copied also.
+The examined Chinese replica achieved similarly good test results as the original chips. \\
+
+You can see in the table \ref{tab:HWautoErrs}, that the number of errors in the autobaud settings 62, 72 and 82 are noticeably high.
+The reason is that the counter with the /8 prescaler for the additional checks is already started with the start bit of
+the serial receive data and the state is further only read for the time measurement.
+
+As a result, the condition of the prescaler during the actual time measurement is undefined.
+With settings 22 and 32, the counter is started with a prescaler reset with the first data bit used for measurement.
+As a result, the time measurement gains measurement reliability.
+Settings 26, 36 and 76 use the counter without a prescaler and therefore 
+the problem with the undefined prescaler does not exist here.
+I would like to mention here that earlier versions of the optiboot autobaud measurement with settings 22 and 32
+would result to simular high error rates as the settings 62 and 72, because the prescaler was never reset.
+With normal use, you can expect fewer problems with autobaud than with this tests,
+because the clock frequency of the AVR is better suited to the desired baud rate.
+The tests here are designed to show the limits of the automatic baud rate adjustment. \\
+
+Two USB-serial converters stand out in the table \ref{tab:HWautoErrs} with a higher error rate,
+the CH340 and the Pololu AVR.
+In order to detect the reason, further measurements were made with a fixed UBBR divider,
+which are shown in the next subsection.
+
+\subsection{Measurement of USB-serial converters mit fixed optiboot baud rate}
+For this tests, the optiboot baud rate was fixed to 115200
+at a clock rate of 16 MHz.
+The USB-serial converters speed is always set to 115200 baud.
+The clock frequency of the ATmega has been increased from 14.7 MHz in 100 kHz steps
+to 17.1 MHz instead of the fixed 16 MHz.
+The optiboot baud rate changes proportionally with the change in frequency.
+For the tests downloads of 10 kByte each with avrdude are repested 40 times for each frequency.
+The number of unsuccessful attempts for each frequency are recorded in a table from the script file test\_download.
+From the tables obtained in this way for the various USB-serial converters, an editor was used to create
+an overall table for the test series with 1 stop bit (Doku/results/HWfix\_1\_115200\_USBserial\_0.tab)
+and for the test series with 2 stop bits (Doku/results/HWfix\_1\_115200\_USBserial\_1.tab).
+The table \ref{tab:HWfixErrs} was then created from these tables.
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c || c | c | c || c | c | c |}
+    \hline
+              & \multicolumn{3}{c ||}{115200 Baud, 2 Stop Bits} & \multicolumn{3}{c |}{115200 Baud, 1 Stop Bit} \\
+    USB-Seriell  & Mindest- & Maximal- & Frequenz- & Mindest- & Maximal- & Frequenz- \\
+    Typ          & Frequenz & Frequenz & Bereich   & Frequenz & Frequenz & Bereich \\
+    \hline
+    FT232RL      & 15.1 MHz & 16.5 MHz & 9.3\%     & 15.4 MHz & 16.5 MHz & 7.9\% \\
+    FT232clone   & 15.2 MHz & 16.5 MHz & 8.7\%     & 15.5 MHz & 16.5 MHz & 7.2\% \\
+    CH340G       & 15.1 MHz & 16.1 MHz & 6.8\%     & 15.4 MHz & 16.1 MHz & 5.0\% \\
+    CP2102       & 15.0 MHz & 16.4 MHz & 9.3\%     & 15.3 MHz & 16.4 MHz & 7.5\% \\
+    CP2104       & 15.1 MHz & 16.6 MHz & 10\%      & 15.3 MHz & 16.6 MHz & 8.6\% \\
+    PL2303TA     & 15.1 MHz & 16.6 MHz & 10\%      & 15.1 MHz & 16.6 MHz & 10\% \\
+    PololuAVR    & 15.4 MHz & 16.5 MHz & 7.5\%     & 15.4 MHz & 16.5 MHz & 7.5\% \\
+    ArduinoUNO   & 15.4 MHz & 16.6 MHz & 8.1\%     & 15.7 MHz & 16.6 MHz & 6.2\% \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{Usable clock frequency range with Hardware-UART}
+  \label{tab:HWfixErrs}
+\end{table}
+
+A permissible deviation of the baud rate of $\pm 4\%$ was expected with this tests,
+resulting to a total area of 8\%.
+Only two USB-serial converters, the CP2104 and the PL2303TA, match to the expected 8\% area with
+the normal 1 stop bit operation.
+With 2 stop bits selected for the serial interface, the FT232 converters, the CP2102, CP2104 and PL2303TA converters
+as well as the Arduino UNO reach the expected 8\% range.
+The CH340G converter significantly improves the usable area to 6.8\%, but remains below 8\%.
+The PololuAVR and the PL2303TA shows no reaction to increasing the number of stop bits from 1 to 2.
+But the time measurement with the Linux command ''time'' of the output of more than 10000 characters 
+results to about 10\% more time usage with the selection of 2 stop bits instead of 1 stop bit.
+The PololuAVR does not show any significant time change with this test.
+So I assume,  that the interaction between driver and chip does not work with the PololuAVR.\\
+
+In any case, the possible cause for the poor performance of the CH340G chip and the PololuAVR 
+in table \ref{tab:HWautoErrs} on page \pageref{tab:HWautoErrs} is found.
+With the PololuAVR you should consider that it is designed as an ISP programmer
+and the USB-serial converter is only an additional function.\\
+The clear front runners in this special comparative test are the CP2104 from Silicon Laboratories Inc. and
+the PL2303TA from Prolific Technology Inc. ,
+which also achieved better values in this test than the FT232RL from Future Technology Devices International.
+According to the data sheet, the FT232RL supports a maximum baud rate of 3 Mbaud,
+the PL2303TA even 6 Mbaud,
+which neither the CP2102 (1 Mbaud) nor the test winner CP2104 (2 Mbaud) can achieve according to the data sheet.\\
+
+In addition, I also examined the work area of the USB-serial converter in conjunction with the
+software UART solution from optiboot.
+The software uses about 1.5 stop bits when sending data,
+the USB-serial converters use either 1 (Doku/results/SWfix\_1\_115200\_USBserial\_0.tab) or
+2 stop bits (Doku/results/SWfix\_1\_115200\_USBserial\_0.tab).
+The results are summarized in the table \ref{tab:SWfixErrs}.
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c || c | c | c || c | c | c |}
+    \hline
+              & \multicolumn{3}{c ||}{115200 Baud, 2 Stop Bits} & \multicolumn{3}{c |}{115200 Baud, 1 Stop Bit} \\
+    USB-Seriell  & Minimum- & Maximum- & Frequency- & Minimum- & Maximum- & Frequency- \\
+    Typ          & Frequency & Frequency & area   & Frequency & Frequency & area \\
+    \hline
+    FT232RL      & 15.3 MHz & 16.8 MHz & 9.8\%     & 15.5 MHz & 16.8 MHz & 8.7\% \\
+    FT232clone   & 15.4 MHz & 16.9 MHz & 9.8\%     & 15.55 MHz & 16.9 MHz & 9.0\% \\
+    CH340G       & 15.2 MHz & 16.5 MHz & 8.5\%     & 15.5 MHz & 16.5 MHz & 6.8\% \\
+    CP2102       & 15.2 MHz & 16.7 MHz & 10\%      & 15.5 MHz & 16.8 MHz & 8.7\% \\
+    CP2104       & 15.2 MHz & 16.9 MHz & 11.2\%    & 15.3 MHz & 16.9 MHz & 10.6\% \\
+    PL2303TA     & 15.3 MHz & 16.9 MHz & 10.6\%    & 15.4 MHz & 16.9 MHz & 10\% \\
+    PololuAVR    & 15.5 MHz & 16.9 MHz & 9.3\%     & 15.5 MHz & 16.9 MHz & 9.3\% \\
+    ArduinoUNO   & 15.4 MHz & 16.9 MHz & 10\%      & 15.8 MHz & 16.9 MHz & 7.5\% \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{Usable clock frequency range with Software-UART}
+  \label{tab:SWfixErrs}
+\end{table}
+
+All measurement series with the software UART solution show a larger frequency range without errors compared to hardware UART operation from the table \ref{tab:HWfixErrs}.
+This is probably due to the fact that the software solution only scans the input signal per bit once and tries to place
+this reading in the middle of the transmission time expected with the baud rate.
+The hardware UART solution of the AVR processors use 3 samples per data bit.
+In the "Double Speed Mode" used here, scan numbers 4, 5 and 6 of the 8 scans are used for each data bit or stop bit.
+The three scans before (1-3) and the two after (7-8) are not used.
+At least 2 samples of the 3 used readings must result in a 1 for the stop bit sampling, otherwise a "framing" error is generated.
+This oversampling process copes better with disturbed transmission, but allows less tolerance in the baud rate.\\
+
+I have not found any more detailed information about the type of scanning of the serial data of any USB-serial converter.
+But I assume that they all use a form of oversampling similar to the AVR-UART interface.
+However, the scanning method of the individual USB-serial converters must differ.
+There is no other way to explain the different test results because the optiboot side was the same for all test candidates.
+
+\subsection{Extreme test with 115200 Baud at 8 MHz clock}
+
+The wide baud rate range for a functioning serial communication of some USB-serial converters has encouraged me
+to investigate the behavior of the autobaud function in practice for a baud rate of 115200 baud at a clock rate of 8 MHz.
+For this I have chosen the USB-serial converter with the greatest baud rate tolerance, the CP2104.
+I provided the ATmega1281 used for the tests with an optiboot bootloader with Autobaud mode 32 without the LED flashing.
+In the Autobaud group 30-39, 4 data bits are used to measure the baud rate.
+With this setting 40 downloads of 10 kByte with avdrude for 41 frequencies from 7 MHz to 9 MHz in 50 kHz steps were done.
+To evaluate the result, the same series of measurements was repeated with a fixed baud rate of optiboot.
+The baud setting to 111111 generates an UBRR setting of the hardware UART to 8,
+with the selection 125 kBaud a UBRR setting of 7 is used.
+Of course the actual baud rate changes proportionally with the frequency change.
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c  r || c | c | c | c | c | c |}
+    \hline
+    & Type     & \multicolumn{5}{c |}{CP2104}          & CH340G \\
+    & Mode   &  HW32 & HW111111 & HW125000 & SW32 & SW34 & HW32 \\
+Frequency  & Period & auto & UBRR=8 & UBRR=7 & auto & auto & auto \\
+    \hline
+7000000  &    &  40   &  40      &   40     &  0   &  0   &  40 \\
+7050000  &    &  40   &  40      &   40     &  0   &  0   &  40 \\
+7100000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+7150000  &    &  0    &  40      &   0      &  4   &  0   &  0 \\
+    \hline
+7200000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+7250000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+7300000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+7350000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+    \hline
+7400000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+7450000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+7500000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+7550000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+    \hline
+7600000  &    &  0    &  40      &   0      &  0   &  7   &  40 \\
+7650000  &    &  0    &  40      &   0      &  0   &  40  &  40 \\
+7700000  &    &  0    &  40      &   0      &  0   &  40  &  40 \\
+7750000  &    &  0    &  40      &   0      &  0   &  0   &  40 \\
+    \hline
+7800000  &    &  16   &  40      &   0      &  0   &  0   &  40 \\
+7850000  &    &  40   &  40      &   40     &  0   &  0   &  40 \\
+7900000  &    &  40   &  40      &   40     &  0   &  0   &  40 \\
+7950000  &    &  40   &  40      &   40     &  0   &  0   &  40 \\
+    \hline
+8000000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+8050000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+8100000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+8150000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+    \hline
+8200000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+8250000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+8300000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+8350000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+    \hline
+8400000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+8450000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+8500000  &    &  0    &  0       &   40     &  0   &  24  &  0 \\
+8550000  &    &  0    &  0       &   40     &  0   &  40  &  40 \\
+    \hline
+8600000  &    &  0    &  0       &   40     &  0   &  0   &  40 \\
+8650000  &    &  0    &  0       &   40     &  0   &  0   &  40 \\
+8700000  &    &  0    &  0       &   40     &  0   &  0   &  40 \\
+8750000  &    &  15   &  0       &   40     &  0   &  0   &  40 \\
+    \hline
+8800000  &    &  40   &  40      &   40     &  0   &  0   &  40 \\
+8850000  &    &  0    &  40      &   40     &  0   &  0   &  0 \\
+8900000  &    &  0    &  40      &   40     &  0   &  0   &  0 \\
+8950000  &    &  0    &  40      &   40     &  0   &  0   &  0 \\
+9000000  &    &  0    &  40      &   40     &  0   &  0   &  0 \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{Error rate of the extreme tests with 115200 Baud and 8 MHz clock}
+  \label{tab:ExtremErrs}
+\end{table}
+
+All test results in the table \ref{tab:ExtremErrs} represent the number of failed attempts at the
+respective clock rate (column 1) of 40 download attempts of 10 kByte with avrdude.
+The USB-serial converters always use 2 stop bits for these tests.
+The unsuccessful attempts for a CP2104 USB-serial converter are recorded in the first data column.
+The PL2303TA chip has shown the same result for this test.
+As you can see there are three total failures between 7850 kHz and 7950 kHz,
+none of the 40 downloads worked.
+The explanation is provided in the next two columns.
+The 40 downloads were attempted for the entire frequency range with the constant UART
+divider setting 9 (UBRR = 8) and 8 (UBRR = 7).
+Neither of the two settings works for the frequencies 7850 kHz to 7950 kHz.
+However, no further setting can be selected between UBRR=7 and UBRR=8.
+It is therefore clear why no Autobaud variant can work here.
+With these preconditions it is simply not possible to set the desired baud rate of 115200
+with these clock frequencies with sufficient accuracy.
+The partial failure of the download at 7800 kHZ with the Autobaud variant 32
+is probably due to the uncertainty of the baud rate measurement.\\
+
+In the fourth data column, the download was attempted with the same settings with the software UART solution from optiboot.
+The table \ref{tab:SWfixErrs} on page \pageref{tab:SWfixErrs} with the software UART showed a larger 
+Frequency working range compared to the CP2104 hardware UART tests in table \ref{tab:HWfixErrs} on page \pageref{tab:HWfixErrs}.
+In addition, the delay time of the software UART is formed with waiting loops that allow a setting of multiples of 6 tics.
+Due to the pre-divider of the hardware UART, the UBRR setting results to delay times with multiples of 8 clock tics.
+Both circumstances lead to the fact that with the CP2104 the software solution shows only 4 unsuccessful download attempts
+in the entire frequency range at the clock frequency 7150 kHz, a really amazing result!
+Above a clock rate of 7200 kHz, the baud rate 115200 can be used without restriction with this CP2104 USB-serial converter,
+when the 2 stop bit operation and software UART of the optiboot with BAUD\_RATE=32 is used.\\
+
+As a further test with the software UART solution from optiboot, I tested the BAUD\_RATE=34 setting.
+With this setting, the delay loop is lengthened by one clock, so that only a multiple of 8 clocks can be selected here,
+just like the hardware UART can do.
+This option only exist, because it result to a slightly shorter optiboot program.
+Although this software UART setting has exactly the same multiple of 8 clocks for the period as the hardware UART,
+the result is slightly better here.
+This is probably due to the already mentioned larger frequency working range of the CP2104 converter
+with optiboot in software UART operation.
+In addition, the critical area here is not as close to the selected working frequency of 8 MHz as with the hardware UART.\\
+
+In the 6th and last data column I tested the same measurement as in the first data column with the CH340G converter.
+You see significantly more frequencies with total failures of the download attempts here,
+what the investigation in table \ref{tab:HWfixErrs} on page \pageref{tab:HWfixErrs} expected.
+
+\subsection{Extreme test with 230400 Baud at 16 MHz clock rate}
+
+After the preliminary investigations at 8 MHz clock and 115200 baud, I also examined all
+available USB-serial converters with 230400 baud and an autobaud setting 32 of the AVR.
+The baud rate is calculated from the transmission time for 4 data bits.
+A counter with / 8 prescaler is used to measure the time.
+The clock of the AVR was starting in steps of 100 kHz
+at 14 MHz increased to 18 MHz.
+40 downloads of 10 kByte each with the modified avrdude (2 stop bits) are tried for each frequency.
+The table \ref{tab:ExtremErrs16} shows the results for the existing USB-serial converters.
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c | c | c | c | c | c | c | c | c |}
+    \hline
+\multicolumn{1}{| r |}{Typ}  & FT232   &  FT232 & CH340G & CP2102 & CP2104 & PL2303 & Pololu & Arduino \\
+Frequenz       &  RL     &  clone &        &        &        & TA     & AVR    &  UNO \\
+    \hline
+14000000       &  40     &  40    &  40    & 40     & 40     & 40     & 40     & 0 \\
+14100000       &  40     &  40    &  40    & 40     & 40     & 40     & 40     & 0 \\
+14200000       &  4      &  40    &  0     & 0      & 0      & 0      & 40     & 0 \\
+14300000       &  0      &  0     &  0     & 0      & 0      & 0      & 40     & 0 \\
+14400000       &  0      &  0     &  0     & 0      & 0      & 0      & 40     & 0 \\
+14500000       &  0      &  0     &  1     & 0      & 0      & 0      & 0      & 0 \\
+14600000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 0 \\
+14700000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 0 \\
+14800000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 0 \\
+14900000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 40 \\
+%              & FT232   &  FT232 & CH340G & CP2102 & CP2104 & PL2303 & Pololu & Arduino \\
+    \hline
+15000000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 40 \\
+15100000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 40 \\
+15200000       &  0      &  0     &  40    & 0      & 0      & 0      & 0      & 40 \\
+15300000       &  0      &  0     &  40    & 0      & 0      & 0      & 0      & 40 \\
+15400000       &  0      &  0     &  40    & 0      & 0      & 0      & 0      & 0 \\
+15500000       &  0      &  0     &  40    & 40     & 0      & 0      & 0      & 0 \\
+15600000       &  35     &  23    &  40    & 40     & 19     & 15     & 40     & 0 \\
+15700000       &  40     &  40    &  40    & 40     & 40     & 40     & 40     & 0 \\
+15800000       &  40     &  40    &  40    & 40     & 40     & 40     & 40     & 0 \\
+15900000       &  40     &  40    &  40    & 0      & 40     & 40     & 40     & 0 \\
+    \hline
+16000000       &  0      &  29    &  0     & 0      & 0      & 0      & 40     & 0 \\
+16100000       &  0      &  0     &  0     & 0      & 1      & 0      & 40     & 0 \\
+16200000       &  0      &  0     &  0     & 0      & 0      & 0      & 40     & 0 \\
+16300000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 0 \\
+16400000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 0 \\
+16500000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 0 \\
+16600000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 0 \\
+16700000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 40 \\
+16800000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 40 \\
+16900000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 40 \\
+    \hline
+17000000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 40 \\
+17100000       &  0      &  0     &  40    & 0      & 0      & 0      & 0      & 0 \\
+17200000       &  0      &  0     &  40    & 0      & 0      & 0      & 0      & 0 \\
+17300000       &  0      &  0     &  40    & 0      & 0      & 0      & 0      & 0 \\
+17400000       &  0      &  0     &  40    & 8      & 0      & 0      & 0      & 0 \\
+17500000       &  18     &  4     &  40    & 40     & 18     & 20     & 17     & 0 \\
+17600000       &  40     &  40    &  40    & 40     & 40     & 40     & 40     & 0 \\
+17700000       &  40     &  40    &  0     & 0      & 0      & 0      & 40     & 0 \\
+17800000       &  0      &  6     &  0     & 0      & 0      & 0      & 40     & 0 \\
+17900000       &  0      &  0     &  0     & 0      & 0      & 0      & 40     & 0 \\
+18000000       &  0      &  0     &  0     & 0      & 0      & 0      & 40     & 0 \\
+    \hline
+\multicolumn{1}{|r|}{Total:} &  337    &  382   &  641   & 328    & 278    & 275    & 697    & 360 \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{Error rate of the extreme test with 230400 Baud at 16 MHz Clock}
+  \label{tab:ExtremErrs16}
+\end{table}
+
+Again the CP2104 and the PL2303 show the fewest failures in the table \ ref {tab: ExtremErrs16}
+over the entire frequency range.
+The serial output of the USB-serial converter was operated with two stop bits in this investigation
+and the optiboot bootloader worked with the hardware UART.
+If the software UART from optiboot had been used, the result would have been even better.
+Unfortunately, apart from the Arduino UNO with the ATmega16U2 as a USB-serial converter,
+all other USB-serial converters show failures just below the clock rate 16 MHz.
+The FT232clone itself has problems with the download even at 16 MHz, with the Pololu
+an entire frequency range around 16 MHz cannot be used.
+Almost all USB-serial converters try to adhere to the baud rate of 230400 as precisely as possible,
+which works quite well because of the higher internal clock rate of around 48 MHz to 96 MHz.
+In contrast, the ATmega16U2 uses a baud rate of 222222, the same as generated by the ATmega1281
+used for the tests at 16 MHz.
+This is the reason why the Mega16U2 installed on the Arduino UNO shows no problems with the download
+to the ATmega1281 in the clock frequency range around 16 MHz. \\
+
+If the existing USB-serial converter supports operation with 250000 baud,
+this setting is probably more favorable with an AVR clock rate of 16 MHz,
+since this baud rate can be generated without any deviation.
+With an optiboot with the autobaud function, you can simply try out if the higher baud rate is possible.
+
+
+\subsection{Summary and recommendations}
+\begin{itemize}
+
+\item{USB-Serial converters} \\
+The USB-serial converter FT232RL, CP2102, CP2104 and also the ATMega16U2 used by an Arduino UNO board variant 
+has shown good results with the tests.
+For a new purchase, I would recommend the CP2104, which operates with the largest baud rate range
+at the 115200 baud setting in the tests.
+With the PL2303 module I had difficulties during the tests, the Linux driver reported errors and
+the results of the tests were inconsistent.
+I also had to retrofit a DTR output pin because this pin was missing on my module.
+Only after I swapped the PL2303HX chip for a PL2303TA did the results improve.
+The GND (Pin 7) of the PL2303TA chip also had to be rewired on the board.
+After refitting the PL2303 modul I get the same good results as CP2104 did with the PL2303TA.
+Actually I noticed some Chinese offers of a Arduino Nano clone build with the PL2303TA chip instead of the usual CH340G.
+
+\item{2 stop bits} \\
+The extensive tests, which are summarized in the tables \ref{tab:HWfixErrs} on page \pageref{tab:HWfixErrs} and 
+\ref{tab:SWfixErrs} on page \pageref{tab:SWfixErrs}, showed that the use of a second stop bit for the transmit data 
+increases the usable baud rate difference significantly.
+This shows that the occurrence of unfavorable baud rate combinations with 2 stop bits is reduced.
+Unfortunately the standard avrdude with version 6.3 does not allow the use of a second stop bit.
+You can try to patch the avrdude version 6.3 sources with the diff documentation in the
+file ee\_test/avrdude.diff.
+The loss of speed is insignificant, you gain more speed, if you can select a higher baud rate instead.
+
+\item{Selection of a automatic baud mode} \\
+With the last improvement of the autobaud function, the simplest measurement of the baud rate
+with the setting BAUD\_RATE=22 can also be used with good results.
+This is interesting because this version uses the least amount of memory.
+Unfortunately, one more assembler command is required for this useful improvement (prescaler reset),
+so that 2 bytes of flash are more used for all autobaud modes with clock prescaler
+for the counter (One-digit of the baud rate \textless 5).
+The memory consumption is nevertheless lower compared to using the counter at full clock rate
+(One-digit of the baud rate \textgreater 4).
+\textbf {I recommend measuring the baud rate over 4 data bits (mode 32).} The additional control
+function of mode 52 can be omitted.
+The use of full control of the data byte with baud rate \textgreater 59 is not recommended,
+especially when using the counter with prescaler, the baud rate measurements are significantly worse.
+The measurement of the baud rate over 9 bits (BAUD\_RATE=12) can be used without restrictions,
+but the measurement over 4 bits is completely sufficient and requires less memory.
+
+\item{Usage of software UART} \\
+There are several reasons that make the use of the software UART solution necessary,
+such as using other pins for serial communication or one-pin communication (same selection for RX and TX pin).
+The autobaud function can also be used in this case.
+Because both the software UART solution and the autobaud function require more flash memory,
+it is becoming more and more difficult to fit the optiboot in 512 bytes flash.
+Of course you don't have to worry about the 512 byte limit,
+if the target processor has a larger bootloader page such as 1024 bytes.
+You should try the configurations of optiboot to fit in 512 byte flash with make calls without the ISP option or with
+the ISP option set to 0.
+You can try out the different options until you find a suitable configuration that fits in 512 bytes.
+By the way, the size of the bootloader page of the target processor is displayed in the terminal log 
+with every make call that specifies a target processor.\\
+
+First you should switch off the blinking function of the LED with LED\_START\_FLASHES=0 in order to save space.
+If you absolutely need something to light up, you can use the LED\_DATA\_FLASH=4 function,
+because it only needs 4 bytes of flash instead of the 56 bytes of the flashing function.
+The table \ref{tab:AutoBaudLen328} on page \pageref{tab:AutoBaudLen328} gives advance information
+about the memory required for all setting options.\\
+With the option NO\_EARLY\_PAGE\_ERASE=1 additional 14 bytes can be saved,
+whereby this only makes the loading of the user program a little slower.\\
+You should leave the possibility of writing data to the EEprom enabled, if possible.
+Switching off the function is also possible with SUPPORT\_EEPROM=0, but saves only about 24 bytes.\\
+
+If more interference is to be expected in the transmission, for example because longer cables are used,
+the hardware UART should be used if possible and higher baud rates should be avoided.
+	
+
+\end{itemize}
+
+\section{Final remark}
+
+When I started working on converting optiboot to assembler and installing EEprom support,
+I had no idea how much could be examined and expanded here.
+The first task was to build an optiboot that supports loading EEprom data and fit to 512 bytes of flash.
+That seemed a manageable effort to me.\\
+
+But there was also the support of many AVR processors to be built in,
+which  had to be purchased first.
+The different bootloader page sizes and flash page sizes had to be taken into account.
+Of course everything also had to be tested too.
+Many processors with many options results to many program variants with different program lengths,
+which are now always automatically taken into account.
+This avoids incorrect setting of the AVR fuses for all supported processors.\\
+The software UART solution has been optimized so that it works well and can now also operate with one IO pin.
+The automatic baud rate adjustment (autobaud) was installed and tested.
+Many autobaud variants can now be selected, whereby the autobaud function works with both,
+the hardware UART and the software UART solution of optiboot.\\
+
+
+The possibility of adjusting the internal RC oscillator as a clock for the supported AVRs was examined
+and the setting option OSCCAL\_CORR was integrated in optiboot.\\
+
+The 512 byte limit for the flash is a particular challenge when combining autobaud and software UART,
+even if you deselect the LED flashing function.
+Of course, optiboot also runs if more than 512 bytes are required.
+The limit was only my goal, I wanted to integrate most functions into the 512 bytes.
+With the option NO\_EARLY\_PAGE\_ERASE a way was found to save a few bytes if necessary.
+This makes the flash writing a little slower, but if, for example,
+a higher baud rate can be selected in the autobaud mode, this is more than compensated.
+The advantage of the autobaud function is that you can try out the higher baud rate such as 115200 baud at 8 MHz.
+If that doesn't work, you can switch to a lower baud rate without changing the bootloader.\\
+
+So I was able to prove in extensive test series that a larger deviation of the baud rate is tolerated
+from avrdude with the use of a second stop bit for the transmitted serial data.
+It is a little surprising that this has not been noticed so far.
+Otherwise the second stop bit should at least be selectable as an option from avrdude.\\
+
+Even when I thought there was nothing more to improve, I got the idea to reset the frequency prescaler
+for counters during the final tests of the autobaud function with various USB-to-serial converters.
+This is rarely used because the prescaler is shared by all integrated counters.
+But here in optiboot this function can be used and leads to a reduction in autobaud time measure errors
+if the counter is used with /8 prescaler.\\
+
+I am sorry that the many setting options for optiboot are confusing for a user.
+As far as possible, I have taken over the options of the C version from Peter Knight ands
+Bill Westfield to make it easier for users of the original version of optiboot.
+Otherwise I hope that the examples from chapter \ref{Examples} on page \pageref{Examples} facilitate the first introduction.
+In addition, a make call with the desired target processor as a parameter is sufficient
+to generate an executable optiboot as a .hex file.
+The terminal log shows which setting has been selected.
+That is always a matching clock frequency and a (fixed) baud rate preselected for this specific processor.\\
+If necessary, the presettings can of course be changed with options.
+

@@ -1185,7 +1185,7 @@ FORCE:
  export LED LED_START_FLASHES LED_DATA_FLASH
  export AVR_FREQ BAUD_RATE UART_RX UART_TX OSCCAL_CORR SOFT_UART
  export MCU_TARGET PROGRAM AVRDUDE_CONF FORCE_RSTDISBL TIMEOUT_MS
- export SOURCE_TYPE
+ export SOURCE_TYPE TWO_STOP_BITS
  export WRITE_PROTECT_PIN
 
 hex_file: 
@@ -1302,7 +1302,7 @@ ifeq ("$(LANGUAGE)", "de_DE")
 	@$(ECHO_CMD) "                Die Option wird nur für Tests der Längenanpassung sinnvoll."
 	@$(ECHO_CMD) " "
 	@$(ECHO_CMD) "VIRTUAL_BOOT_PARTITION ändert zwei Interrupt Vektoren des Anwenderprogramms,"
-	@$(ECHO_CMD) "                um einen Bootloader auch ohne die Bootloader Ünterstützung des"
+	@$(ECHO_CMD) "                um einen Bootloader auch ohne die Bootloader Unterstützung des"
 	@$(ECHO_CMD) "                AVR Prozessor (ATtiny) zu ermöglichen."
 	@$(ECHO_CMD) " "
 	@$(ECHO_CMD) "TIMEOUT_MS      gibt eine Zeitobergrenze in ms für das Warten auf serielle"

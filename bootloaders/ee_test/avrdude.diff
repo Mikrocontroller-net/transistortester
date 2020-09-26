@@ -1,0 +1,199 @@
+diff -r avrdude-6.3_2stop/arduino.c avrdude-6.3/arduino.c
+87,88c87
+<   pinfo.serinfo.baud = pgm->baudrate? pgm->baudrate: 115200;
+<   pinfo.serinfo.twostopbits = pgm->twostopbits;
+---
+>   pinfo.baud = pgm->baudrate? pgm->baudrate: 115200;
+
+diff -r avrdude-6.3_2stop/avr910.c avrdude-6.3/avr910.c
+373,374c373
+<   pinfo.serinfo.baud = pgm->baudrate;
+<   pinfo.serinfo.twostopbits = pgm->twostopbits;
+---
+>   pinfo.baud = pgm->baudrate;
+
+diff -r avrdude-6.3_2stop/buspirate.c avrdude-6.3/buspirate.c
+430,431c430
+< 	pinfo.serinfo.baud = pgm->baudrate;
+<         pinfo.serinfo.twostopbits = pgm->twostopbits;
+---
+> 	pinfo.baud = pgm->baudrate;
+
+diff -r avrdude-6.3_2stop/butterfly.c avrdude-6.3/butterfly.c
+394,395c394
+<   pinfo.serinfo.baud = pgm->baudrate;
+<   pinfo.serinfo.twostopbits = pgm->twostopbits;
+---
+>   pinfo.baud = pgm->baudrate;
+
+diff -r avrdude-6.3_2stop/doc/avrdude.texi avrdude-6.3/doc/avrdude.texi
+598,600d597
+< @item -S
+< Enable two Stop bit operation of the serial port for the transmitted data.
+< 
+
+diff -r avrdude-6.3_2stop/jtagmkI.c avrdude-6.3/jtagmkI.c
+556c556
+<         serial_setspeed(&pgm->fd, pgm->baudrate, pgm->twostopbits);
+---
+>         serial_setspeed(&pgm->fd, pgm->baudrate);
+651c651
+<     pinfo.serinfo.baud = baudtab[i].baud;
+---
+>     pinfo.baud = baudtab[i].baud;
+653c653
+<                       progname, pinfo.serinfo.baud);
+---
+>                       progname, pinfo.baud);
+700c700
+<         serial_setspeed(&pgm->fd, pgm->baudrate, pgm->twostopbits);
+---
+>         serial_setspeed(&pgm->fd, pgm->baudrate);
+
+diff -r avrdude-6.3_2stop/jtagmkII.c avrdude-6.3/jtagmkII.c
+1313c1313
+< 	serial_setspeed(&pgm->fd, pgm->baudrate, pgm->twostopbits);
+---
+> 	serial_setspeed(&pgm->fd, pgm->baudrate);
+1496c1496
+<   pinfo.serinfo.baud = 19200;
+---
+>   pinfo.baud = 19200;
+1548c1548
+<   pinfo.serinfo.baud = 19200;
+---
+>   pinfo.baud = 19200;
+1600c1600
+<   pinfo.serinfo.baud = 19200;
+---
+>   pinfo.baud = 19200;
+1653c1653
+<   pinfo.serinfo.baud = 19200;
+---
+>   pinfo.baud = 19200;
+1706c1706
+<   pinfo.serinfo.baud = 19200;
+---
+>   pinfo.baud = 19200;
+1759c1759
+<   pinfo.serinfo.baud = 19200;
+---
+>   pinfo.baud = 19200;
+3336,3337c3336
+<   pinfo.serinfo.baud = 19200;
+<   pinfo.serinfo.twostopbits = 0;
+---
+>   pinfo.baud = 19200;
+
+diff -r avrdude-6.3_2stop/libavrdude.h avrdude-6.3/libavrdude.h
+531,532d530
+<   struct
+<   {
+534,535d531
+<   short twostopbits;
+<   } serinfo;
+551c547
+<   int (*setspeed)(union filedescriptor *fd, long baud, short twostopbits);
+---
+>   int (*setspeed)(union filedescriptor *fd, long baud);
+687d682
+<   char twostopbits;	      /* added for selectable two TX stop bits */
+
+diff -r avrdude-6.3_2stop/main.c avrdude-6.3/main.c
+127d126
+<  "  -S                         use two Stop bits for serial transmitter.\n"
+341d339
+<   int     two_stop_bits; /* Use two stop bits for serial output 1=use 0=not */
+422d419
+<   two_stop_bits = 0;       /* default is only 1 stop bit for serial output */
+468c465
+<   while ((ch = getopt(argc,argv,"?b:B:c:C:DeE:Fi:l:np:OP:qsStU:uvVx:yY:")) != -1) {
+---
+>   while ((ch = getopt(argc,argv,"?b:B:c:C:DeE:Fi:l:np:OP:qstU:uvVx:yY:")) != -1) {
+597,600d593
+< 
+<       case 'S' : /* use 2 Stop Bits for serial output */
+<         two_stop_bits = 1;
+<         break;
+947,948d939
+< 
+<   pgm->twostopbits = two_stop_bits;	/* set two_stop_bits for serial TX */
+
+diff -r avrdude-6.3_2stop/ser_posix.c avrdude-6.3/ser_posix.c
+99c99
+< static int ser_setspeed(union filedescriptor *fd, long baud, short twostopbits)
+---
+> static int ser_setspeed(union filedescriptor *fd, long baud)
+128,132c128
+<   if (twostopbits == 1) {
+<     termios.c_cflag = (CS8 | CSTOPB | CREAD | CLOCAL);
+<   } else {
+<     termios.c_cflag = (CS8 | CREAD | CLOCAL);
+<   }
+---
+>   termios.c_cflag = (CS8 | CREAD | CLOCAL);
+287c283
+<   rc = ser_setspeed(fdp, pinfo.serinfo.baud, pinfo.serinfo.twostopbits);
+---
+>   rc = ser_setspeed(fdp, pinfo.baud);
+
+diff -r avrdude-6.3_2stop/ser_win32.c avrdude-6.3/ser_win32.c
+100c100
+< static int ser_setspeed(union filedescriptor *fd, long baud, short twostopbits)
+---
+> static int ser_setspeed(union filedescriptor *fd, long baud)
+116,118d115
+< 		if (twostopbits == 1) {
+< 		dcb.StopBits = TWOSTOPBIT;
+< 		} else {
+120d116
+< 		}
+290c286
+< 	if (ser_setspeed(fdp, pinfo.serinfo.baud, pinfo.serinfo.twostopbits) != 0)
+---
+> 	if (ser_setspeed(fdp, pinfo.baud) != 0)
+
+diff -r avrdude-6.3_2stop/stk500.c avrdude-6.3/stk500.c
+660,661c660
+<   pinfo.serinfo.baud = pgm->baudrate? pgm->baudrate: 115200;
+<   pinfo.serinfo.twostopbits = pgm->twostopbits;
+---
+>   pinfo.baud = pgm->baudrate? pgm->baudrate: 115200;
+
+diff -r avrdude-6.3_2stop/stk500v2.c avrdude-6.3/stk500v2.c
+1610c1610
+<   union pinfo pinfo = { .serinfo.baud = 115200 };
+---
+>   union pinfo pinfo = { .baud = 115200 };
+1615c1615
+<     pinfo.serinfo.baud = pgm->baudrate;
+---
+>     pinfo.baud = pgm->baudrate;
+1678c1678
+<   union pinfo pinfo = { .serinfo.baud = 115200 };
+---
+>   union pinfo pinfo = { .baud = 115200 };
+1683c1683
+<     pinfo.serinfo.baud = pgm->baudrate;
+---
+>     pinfo.baud = pgm->baudrate;
+3389c3389
+<   pinfo.serinfo.baud = 19200;
+---
+>   pinfo.baud = 19200;
+3500,3501c3500
+<   pinfo.serinfo.baud = 19200;
+<   pinfo.serinfo.twostopbits = pgm->twostopbits;
+---
+>   pinfo.baud = 19200;
+3579c3578
+<   pinfo.serinfo.baud = 19200;
+---
+>   pinfo.baud = 19200;
+
+diff -r avrdude-6.3_2stop/wiring.c avrdude-6.3/wiring.c
+153,154c153
+<   pinfo.serinfo.baud = pgm->baudrate ? pgm->baudrate: 115200;
+<   pinfo.serinfo.twostopbits = pgm->twostopbits;
+---
+>   pinfo.baud = pgm->baudrate ? pgm->baudrate: 115200;

@@ -8,12 +8,13 @@
  ; use register r10:r11, r12:r13, r22:r23, r24:r25, r26:r27, r28:r29
 
 ; Settings for dignostic
-//#define SHOW_BAUD 11		/* output of LSB Baud at PORTA if 1, PORTB if 2 PORTC if 3 */
+; #define SHOW_BAUD 13		/* output of LSB Baud at PORTA if 1, PORTB if 2 PORTC if 3 */
 ;				/* 1,2,3 show the LSB UBRR setting for hardware UART */
 ;				/*  and the LSB bits for software UART delay loop */
 ;				/* 11,12,13 show the LSB bits of the time measurement */
 ;				/*  source (2 or 4 bits) for the baud setting */
 #define SHOW_BAUD_MSK 0xff	/* with this mask you can exclude bits for output */
+
 
 #ifdef SHOW_BAUD
  #warning "Debug output of the lower bits of baud rate measurement to port "
@@ -95,9 +96,11 @@ RX_was_high:
 #endif
 
 #if Bits2Measure == 2
- #if CounterClockDiv == 1
+ #if (CounterClockDiv == 1) || (BAUD_RATE < 60)
   #warning "The use of 4-Bit time measurement is recommended!"
  #else
+  /* For BAUD_RATE >= 60 the Counter-prescaler is reset with the Start-Bit, so the prescaler is not */
+  /* well defined at the begin of the two data bits, which are base of measurement. */
   #warning "Measurement of 2-Bit-time with /8 counter is not reliable, you should select 4-Bit"
  #endif
 #endif
@@ -231,21 +234,31 @@ nokorr:
 
   ; use the 16-Bit counter to measure Baud time
   ; prepare the counter 1
+ #if (CounterClockDiv == 8) && defined(GTCCR)
+	ldi	r24, (1<<TSM)|(1<<PSRSYNC)
+        AOUT    GTCCR, r24		; reset Prescaler, stop Counters
+ #else
 	AOUT	CNT16_CCRB, r1		; Stop counter 1 
+ #endif
 	AOUT	CNT16_CNTH, r1		; set initial counter to 0
 	AOUT	CNT16_CNTL, r1
 
 #if BAUD_RATE < 60
   ; simple detection of the baud-rate
 ; wait, if the UART-RX-Bit is low
+ #if (CounterClockDiv == 8) && defined(GTCCR)
+        ldi	r24, START_COUNTER_COMMAND      ; start counter with /8 scaler, but is still stopped
+	AOUT	CNT16_CCRB, r24		; Start counter 1 with /8 scaler for 9-Bit measure, still stopped
+ #else
 	ldi	r24, START_COUNTER_COMMAND	; start command for counter with /8 scaler or full speed
-wt_rx0s:
+ #endif
+wt_rx0l:
  #if INVERSE_UART > 0
 	ASBIS	UART_RX_PIN, UART_RX_BIT	; Look if RX is still low, INVERSE
  #else
 	ASBIC	UART_RX_PIN, UART_RX_BIT	; Look if RX is still high
  #endif
-	rjmp	wt_rx0s
+	rjmp	wt_rx0l
 	; Probably start bit is found, at least a 1 to 0 transition.
 	; STK500 protocol send a '3'=0x30 followed by ' '=0x20.
 	; P is a pause condition (STOP bit = 1) and S is a START bit (0), 
@@ -276,7 +289,11 @@ wt_rx0s:
 
 	; begin of Start bit is found 
  #if (Bits2Measure == 9) 
+  #if (CounterClockDiv == 8) && defined(GTCCR)
+	AOUT	GTCCR, r1		; start prescaler and counters
+  #else
 	AOUT	CNT16_CCRB, r24		; Start counter 1 with or without /8 scaler for 9-Bit measure
+  #endif
  #endif
 wt_rx1s:
  #if INVERSE_UART > 0
@@ -287,7 +304,11 @@ wt_rx1s:
 	rjmp	wt_rx1s
 	; begin of first "1" data bit is found after S0000, if it was a STK_GET_SYNC, 0x30
  #if (Bits2Measure == 2) || (Bits2Measure == 4)
-	AOUT	CNT16_CCRB, r24		; Start counter 1 with or without /8 scaler for 2 or 4 Bit measure
+  #if (CounterClockDiv == 8) && defined(GTCCR)
+	AOUT	GTCCR, r1		; start prescaler and counters
+  #else
+	AOUT	CNT16_CCRB, r24		; Start counter 1 with or without /8 scaler for 2-Bit or 4-Bit measure
+  #endif
  #endif
 
  #if BAUD_RATE > 39
@@ -350,7 +371,7 @@ wt_rx1bs:
 
  #if SOFT_UART > 0		/* determine baud rate after simple check */
 
-  #if (Bits2Measure == 2) || (Bits2Measure == 4)
+  #if (Bits2Measure == 2) || (Bits2Measure == 4)	/* SW UART, Mode<60 */
    #if Bits2Measure == 2
     #if CounterClockDiv != 1
      #warning "optiboot can get the baud rate better with full speed counter or 4-bit mode for Software-UART!"
@@ -421,7 +442,7 @@ divlop2:
    #endif	/* TicsPerNLoopPass */
   #endif	/* Bits2Measure == 2  || Bits2Measure == 4 */
 
-  #if Bits2Measure == 9
+  #if Bits2Measure == 9		/* SW UART, Mode<60 */
 	; full check, we use a nine bit time (S00001100) for baud-rate calculation.
 	; simple check, we have measured the count of cpu-tics for nine RX bits
    #define TicsPer9LoopPass (((TICS_PER_LOOP_PASS*2*9)+(CounterClockDiv/2))/CounterClockDiv) /* 2 loop calls for every Tx bit, /9 for 9 bit time */
@@ -461,17 +482,14 @@ divlop9:
 
  #else		/* for Hardware UART */
 
-  #if Bits2Measure == 2
+  #if Bits2Measure == 2    /* HW-UART, Mode<60 */
 	; because we have measured the time of two bits,
 	; we must divide by 2 and subtract 1 to get the final UBRR
 	; ((two_bit_time + 1) / 2) - 1  is equal to
 	; (two_bit_time - 1) / 2  
    #if CounterClockDiv == 1
-    #if (BAUD_RATE - ((BAUD_RATE/20)*20) < 10)
-	sbiw	r24, 12		; (two_bit_time - 12) / 16, faster selection than correct round up
-    #else
-	sbiw	r24, 15		; (two_bit_time - 15) / 16, faster selection than correct round up
-    #endif
+;	sbiw	r24, 8		; (four_bit_time - 8) / 16, correct round up, but many errors with CH340
+	sbiw	r24, 7		; (two_bit_time - 7) / 16, slower selection than correct round up
 	ldi	r28, 4		; divide by 16 can be done with 4 shifts in a loop
 div2lop1:
 	lsr	r25
@@ -488,20 +506,21 @@ div2lop1:
 	AOUT	UART_SRRL, r24		; set the UART divider
   #endif	/* Bits2Measure == 2 */
 
-  #if Bits2Measure == 4
+  #if Bits2Measure == 4    /* HW-UART, Mode<60 */
 	; because we have measured the time of FOUR bits,
 	; we must divide by 4 and subtract 1 to get the final UBRR
 	; ((two_bit_time + 2) / 4) - 1  is equal to
 	; (two_bit_time - 2) / 4  
    #if CounterClockDiv == 1
-;	sbiw	r24, 16		; (four_bit_time - 16) / 32
-    #if defined(__AVR_ATtiny87__) || defined(__AVR_ATtiny167__)
-	sbiw	r24, 28		; (four_bit_time - 28) / 32, faster selection than correct round up
-    #elif defined(__AVR_ATmega162__)
-	sbiw	r24, 19		; (four_bit_time - 19) / 32, faster selection than correct round up
-    #else
-	sbiw	r24, 24		; (four_bit_time - 24) / 32, faster selection than correct round up
-    #endif
+;    #if defined(__AVR_ATtiny87__) || defined(__AVR_ATtiny167__)
+;	sbiw	r24, 28		; (four_bit_time - 28) / 32, faster selection than correct round up
+;    #elif defined(__AVR_ATmega162__)
+;	sbiw	r24, 19		; (four_bit_time - 19) / 32, faster selection than correct round up
+;   #else
+;	sbiw	r24, 16		; (four_bit_time - 16) / 32, correct round up, but many errors with CH340
+	sbiw	r24, 14		; (four_bit_time - 14) / 32, slower baud than correct round up, 12 Err CH340
+;	sbiw	r24, 12		; (four_bit_time - 14) / 32, slower baud than correct round up, 0 Err CH340, but err with FT232
+;   #endif
 	ldi	r28, 5		; divide by 32 is done with 5 shifts in a loop
 div4lop1:
 	lsr	r25
@@ -509,8 +528,8 @@ div4lop1:
 	dec	r28
 	brne	div4lop1
    #else	/* measured with /8 counter clock */
-;	sbiw	r24, 2		; (two_bit_time - 2) / 4
-	sbiw	r24, 3		; (two_bit_time - 3) / 4, faster selection than with correct round up
+	sbiw	r24, 2		; (two_bit_time - 2) / 4, correct round up
+;	sbiw	r24, 3		; (two_bit_time - 3) / 4, faster selection than with correct round up
 				; divide by 4 can be done with two shifts without a loop
 	lsr	r25
 	ror	r24		; rotate through carry
@@ -522,15 +541,21 @@ div4lop1:
 	AOUT	UART_SRRL, r24		; set the UART divider
   #endif	/* Bits2Measure == 4 */
 
-  #if Bits2Measure == 9
+  #if Bits2Measure == 9    /* HW-UART, Mode<60 */
 
-	; full check, we have allready the time of 9 Bit (S0001100) in r24:25
-	; because we have measured the time of four bits,
+	; we have allready the time of 9 Bit (S0001100) in r24:25
+	; because we have measured the time of nine bits,
 	; we must divide by 9 to get the final UBRR
 	; ((nine_bit_time + 5) / 9) - 1  is equal to
 	; (nine_bit_time - 4) / 9 
     #define MinTics9Bit (9*8/CounterClockDiv)
+   #if (UART_START_FLASHES < -2) || (UART_START_FLASHES > 2)
+     ; Usually more than two flashes take more time than the delay of first data byte send from PC.
+     ; So more than 22 clock tics are used before the counter starts
+	sbiw	r24, ((4*8+4-22)/CounterClockDiv)	; (nine_bit_time - (4.5*8)-22) / (8*9), correct round up
+   #else
 	sbiw	r24, (4*8/CounterClockDiv)	; (nine_bit_time - (4*8)) / (8*9), faster selection than correct round up
+   #endif
 	; speed up the subtract loop for div with double value subtracts
     #if FastDiv == 1
      #warning "Division operation by successive subtraction is probably too slow to finish before the Stop bit ends"
@@ -572,7 +597,12 @@ divlop9f:
 
   ;------------------------------------------------------------------------------------
   ; you assume enough space for exact analye for BAUD_RATE >= 60
+ #if (CounterClockDiv == 8) && defined(GTCCR)
+        ldi	r24, START_COUNTER_COMMAND      ; start counter with /8 scaler, but is still stopped
+	AOUT	CNT16_CCRB, r24		; Start counter 1 with /8 scaler for 9-Bit measure, still stopped
+ #else
 	ldi	r24, START_COUNTER_COMMAND	; start command for counter with /8 scaler or full speed
+ #endif
 wt_rx0l:
  #if INVERSE_UART > 0
 	ASBIS	UART_RX_PIN, UART_RX_BIT	; Look if RX is still low
@@ -598,7 +628,11 @@ wt_rx0l:
 	; The best way to solve this problem is to monitor the counter time for
 	; exceed of a 4*(2B) limit.
 
-	AOUT	CNT16_CCRB, r24		; Start counter 1 with /8 scaler, begin measurement
+  #if (CounterClockDiv == 8) && defined(GTCCR)
+	AOUT	GTCCR, r1		; start prescaler and counters
+  #else
+	AOUT	CNT16_CCRB, r24		; Start counter 1 with or without /8 scaler, begin measurement
+  #endif
 wt_rx1l:
  #if INVERSE_UART > 0
 	ASBIC	UART_RX_PIN, UART_RX_BIT	; Look if RX is still high
@@ -662,7 +696,7 @@ wt_rx1bs:
 	brcc	to_next_try		; No, 00 > (11 + d), get Next Data
 
  #if SOFT_UART > 0
-  #if Bits2Measure == 4
+  #if Bits2Measure == 4		/* SW UART, Mode>=60 */
 	; full check, we use a four bit time (1100) for baud-rate calculation.
 
    #if SHOW_BAUD == 11
@@ -733,7 +767,7 @@ divlop2:
 
   #endif		/* Bits2Measure == 4 */
 
-  #if Bits2Measure == 2
+  #if Bits2Measure == 2		/* SW UART, Mode>=60 */
 	; 60-69, we have measured the count of cpu-tics for two RX bits
 
    #if SHOW_BAUD == 11
@@ -830,7 +864,7 @@ divlop3:
    #endif
   #endif	/* Bits2Measuse == 2 */
 
-  #if Bits2Measure == 9
+  #if Bits2Measure == 9		/* SW UART, Mode>=60 */
 	; full check, we use a four bit time (S00001100) for baud-rate calculation.
 	movw	r24, r14		; S00001100
 
@@ -887,7 +921,7 @@ divlop9s:
 
  #else		/* HW-UART */
 
-  #if Bits2Measure == 4
+  #if Bits2Measure == 4    /* HW-UART, Mode>=60 */
 	; full check, we use a four bit time (1100) for baud-rate calculation.
 
    #if SHOW_BAUD == 11
@@ -912,14 +946,14 @@ divlop9s:
 	; ((four_bit_time + 2) / 4) - 1  is equal to
 	; (four_bit_time - 2) / 4 
    #if CounterClockDiv == 1
-    #if defined(__AVR_ATtiny87__) || defined(__AVR_ATtiny167__)
-	sbiw	r24, 28		; (four_bit_time - 28) / 32, faster selection than correct round up
-    #elif defined(__AVR_ATmega162__)
-	sbiw	r24, 19		; (four_bit_time - 19) / 32, faster selection than correct round up
-    #else
-;	sbiw	r24, 24		; (four_bit_time - 24) / 32, faster selection than correct round up
-	sbiw	r24, 16		; (four_bit_time - 24) / 32, faster selection than correct round up
-    #endif
+;    #if defined(__AVR_ATtiny87__) || defined(__AVR_ATtiny167__)
+;	sbiw	r24, 28		; (four_bit_time - 28) / 32, faster selection than correct round up
+;    #elif defined(__AVR_ATmega162__)
+;	sbiw	r24, 19		; (four_bit_time - 19) / 32, faster selection than correct round up
+;    #else
+;	sbiw	r24, 16		; (four_bit_time - 16) / 32, correct round up
+;    #endif
+	sbiw	r24, 14		; (four_bit_time - 14) / 32, slower baud than correct round up
 	ldi	r28, 5		; divide by 32
 div4lop2:
 	lsr	r25		; /2
@@ -927,7 +961,8 @@ div4lop2:
 	dec	r28
 	brne	div4lop2
    #else 	/* /8 counter clock */
-	sbiw	r24, 3		; (four_bit_time - 3) / 4, faster selection than correct round up
+	sbiw	r24, 2		; (four_bit_time - 2) / 4, correct round up
+;	sbiw	r24, 3		; (four_bit_time - 3) / 4, faster selection than correct round up
 	lsr	r25		; /2
 	ror	r24		; rotate through carry
 	lsr	r25		; /2
@@ -955,7 +990,7 @@ div4lop2:
 
   #endif		/* Bits2Measure == 4 */
 
-  #if Bits2Measure == 2
+  #if Bits2Measure == 2    /* HW-UART, Mode>=60 */
 
    #if SHOW_BAUD == 11
 	ldi	r28, SHOW_BAUD_MSK
@@ -980,8 +1015,8 @@ div4lop2:
 	; (two_bit_time - 1) / 2 
    #if CounterClockDiv == 1
 	; 60-79, measurement of two bits is done with full CPU clock
-;	sbiw	r26, 8		; (two_bit_time - 8) / 16
-	sbiw	r26, 15		; (two_bit_time - 15) / 16, faster selection than correct round up
+;	sbiw	r26, 8		; (two_bit_time - 8) / 16, correct round up
+	sbiw	r26, 7		; (two_bit_time - 7) / 16, slower than correct round up
 	ldi	r28, 4		; divide by 16
 div2lop2:
 	lsr	r27
@@ -1016,7 +1051,7 @@ div2lop2:
 
   #endif	/* Bits2Measuse == 2 */
 
-  #if Bits2Measure == 9
+  #if Bits2Measure == 9    /* HW-UART, Mode>=60 */
 	; full check, we use a four bit time (S00001100) for baud-rate calculation.
 	movw	r24, r14		; S00001100
 
@@ -1037,11 +1072,17 @@ div2lop2:
    #endif
 
 	; full check, we have allready the time of 9 Bit (S0001100) in r24:25
-	; because we have measured the time of four bits,
+	; because we have measured the time of nine bits,
 	; we must divide by 9 to get the final UBRR
 	; ((nine_bit_time + 5) / 9) - 1  is equal to
 	; (nine_bit_time - 4) / 9 
+  #if (UART_START_FLASHES < -2) || (UART_START_FLASHES > 2)
+     ; Usually more than two flashes take more time than the delay of first data byte send from PC.
+     ; So more than 22 clock tics are used before the counter starts
+	sbiw	r24, ((4*8+4-22)/CounterClockDiv)	; (nine_bit_time - (4.5*8)-22) / (8*9), correct round up
+  #else
 	sbiw	r24, (4*8/CounterClockDiv)	; (nine_bit_time - (4*8)) / (8*9), faster selection than correct round up
+  #endif
 	; we will nearly double the speed of subtract loop by double suctract
     #if FastDiv == 1
      #warning "Division operation by successive subtraction is probably too slow to finish before the Stop bit ends"

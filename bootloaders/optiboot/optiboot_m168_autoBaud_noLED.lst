@@ -134,34 +134,37 @@ wt_rx0low:
     3e2e:	7e e0       	ldi	r23, 0x0E	; 14
 	AOUT	UART_SRC, r23
     3e30:	70 93 c2 00 	sts	0x00C2, r23	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7e00c2>
- #endif	/* defined(UART_SRC) && defined(UART_SEL) */
-#endif
-
-  ; use the 16-Bit counter to measure Baud time
   ; prepare the counter 1
+ #if (CounterClockDiv == 8) && defined(GTCCR)
+	ldi	r24, (1<<TSM)|(1<<PSRSYNC)
+        AOUT    GTCCR, r24		; reset Prescaler, stop Counters
+ #else
 	AOUT	CNT16_CCRB, r1		; Stop counter 1 
     3e34:	10 92 81 00 	sts	0x0081, r1	; 0x800081 <__TEXT_REGION_LENGTH__+0x7e0081>
+ #endif
 	AOUT	CNT16_CNTH, r1		; set initial counter to 0
     3e38:	10 92 85 00 	sts	0x0085, r1	; 0x800085 <__TEXT_REGION_LENGTH__+0x7e0085>
 	AOUT	CNT16_CNTL, r1
     3e3c:	10 92 84 00 	sts	0x0084, r1	; 0x800084 <__TEXT_REGION_LENGTH__+0x7e0084>
-
-#if BAUD_RATE < 60
-  ; simple detection of the baud-rate
 ; wait, if the UART-RX-Bit is low
+ #if (CounterClockDiv == 8) && defined(GTCCR)
+        ldi	r24, START_COUNTER_COMMAND      ; start counter with /8 scaler, but is still stopped
+	AOUT	CNT16_CCRB, r24		; Start counter 1 with /8 scaler for 9-Bit measure, still stopped
+ #else
 	ldi	r24, START_COUNTER_COMMAND	; start command for counter with /8 scaler or full speed
     3e40:	81 e0       	ldi	r24, 0x01	; 1
 
-00003e42 <wt_rx0s>:
-wt_rx0s:
+00003e42 <wt_rx0l>:
+ #endif
+wt_rx0l:
  #if INVERSE_UART > 0
 	ASBIS	UART_RX_PIN, UART_RX_BIT	; Look if RX is still low, INVERSE
  #else
 	ASBIC	UART_RX_PIN, UART_RX_BIT	; Look if RX is still high
     3e42:	48 99       	sbic	0x09, 0	; 9
  #endif
-	rjmp	wt_rx0s
-    3e44:	fe cf       	rjmp	.-4      	; 0x3e42 <wt_rx0s>
+	rjmp	wt_rx0l
+    3e44:	fe cf       	rjmp	.-4      	; 0x3e42 <wt_rx0l>
 
 00003e46 <wt_rx1s>:
  #endif
@@ -176,7 +179,10 @@ wt_rx1s:
     3e48:	fe cf       	rjmp	.-4      	; 0x3e46 <wt_rx1s>
 	; begin of first "1" data bit is found after S0000, if it was a STK_GET_SYNC, 0x30
  #if (Bits2Measure == 2) || (Bits2Measure == 4)
-	AOUT	CNT16_CCRB, r24		; Start counter 1 with or without /8 scaler for 2 or 4 Bit measure
+  #if (CounterClockDiv == 8) && defined(GTCCR)
+	AOUT	GTCCR, r1		; start prescaler and counters
+  #else
+	AOUT	CNT16_CCRB, r24		; Start counter 1 with or without /8 scaler for 2-Bit or 4-Bit measure
     3e4a:	80 93 81 00 	sts	0x0081, r24	; 0x800081 <__TEXT_REGION_LENGTH__+0x7e0081>
  #endif
 
@@ -223,14 +229,15 @@ wt_rx1bs:
     3e5c:	80 91 84 00 	lds	r24, 0x0084	; 0x800084 <__TEXT_REGION_LENGTH__+0x7e0084>
 	AIN	r25, CNT16_CNTH
     3e60:	90 91 85 00 	lds	r25, 0x0085	; 0x800085 <__TEXT_REGION_LENGTH__+0x7e0085>
-    #if defined(__AVR_ATtiny87__) || defined(__AVR_ATtiny167__)
-	sbiw	r24, 28		; (four_bit_time - 28) / 32, faster selection than correct round up
-    #elif defined(__AVR_ATmega162__)
-	sbiw	r24, 19		; (four_bit_time - 19) / 32, faster selection than correct round up
-    #else
-	sbiw	r24, 24		; (four_bit_time - 24) / 32, faster selection than correct round up
-    3e64:	48 97       	sbiw	r24, 0x18	; 24
-    #endif
+;	sbiw	r24, 28		; (four_bit_time - 28) / 32, faster selection than correct round up
+;    #elif defined(__AVR_ATmega162__)
+;	sbiw	r24, 19		; (four_bit_time - 19) / 32, faster selection than correct round up
+;   #else
+;	sbiw	r24, 16		; (four_bit_time - 16) / 32, correct round up, but many errors with CH340
+	sbiw	r24, 14		; (four_bit_time - 14) / 32, slower baud than correct round up, 12 Err CH340
+    3e64:	0e 97       	sbiw	r24, 0x0e	; 14
+;	sbiw	r24, 12		; (four_bit_time - 14) / 32, slower baud than correct round up, 0 Err CH340, but err with FT232
+;   #endif
 	ldi	r28, 5		; divide by 32 is done with 5 shifts in a loop
     3e66:	c5 e0       	ldi	r28, 0x05	; 5
 

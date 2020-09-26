@@ -1,6 +1,6 @@
   ; setup the correct BAUD_RATE divider for Clock-frequency F_CPU
   ; using of 2 Stop Bit make the transfer more stable,
-  ; usually this effects only the transmitter TX
+  ; usually the second Stop Bit effects only the transmitter TX
 
   #ifndef TWO_STOP_BITS 
    #if TEST_OUTPUT == 1
@@ -9,10 +9,11 @@
     #define TWO_STOP_BITS 1
    #endif
   #endif
-  #define BAUD_DIV (((F_CPU / 4 / BAUD_RATE) - 1) / 2)
+  #define BAUD_DIV (((F_CPU / BAUD_RATE) - 4) / 8)
+/*  #define BAUD_DIV (((F_CPU / BAUD_RATE) - 1) / 8)  ; for CH340G USB-serial Test only */
   #if BAUD_DIV > 255
    #undef BAUD_DIV
-   #define BAUD_DIV (((F_CPU / 8 / BAUD_RATE) - 1) / 2)
+   #define BAUD_DIV (((F_CPU / BAUD_RATE) - 8) / 16)
    #if BAUD_DIV > 4095
     #error "Unachievable baud rate (too slow) BAUD_RATE"
    #endif // baud rate slow check

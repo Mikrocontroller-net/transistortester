@@ -44,7 +44,7 @@ Der Wert 2 gibt den doppelten, der Wert 1 den vierfachen und
 der Wert 0 den acht-fachen Speicherbereich vor.
 Die Tabelle~\ref{tab:bootsz} auf Seite~\pageref{tab:bootsz} gibt einen
 Überblick für verschiedene Zielprozessoren.
-Das Bild~\ref{fig:PlatinesAndAVRs} zeigt fast alle Testplatinen und Prozessoren,s
+Das Bild~\ref{fig:PlatinesAndAVRs} zeigt fast alle Testplatinen und Prozessoren,
 die für die optiboot Tests verwendet wurden. 
 
 \begin{figure}[H]
@@ -220,7 +220,7 @@ Dieser Script wird von only\_avrdude bei Fehler Rückkehr aufgerufen, man kann d
 Script auch mit bash ./find\_serials.sh aufrufen.
 Wenn man mit einer bash arbeitet, kann man sie ausführbar machen und direkt aufrufen
 mit ./find\_serials.sh.
-Bei Windows ist dieser Script nutzlos. Bein Windows muß man den Geräte Manager benutzen.
+Bei Windows ist dieser Script nutzlos. Bei Windows muß man den Geräte Manager benutzen.
 
 \item [get\_avr\_params.sh] findet für den mit MCU\_TARGET spezifizierten AVR Prozessor
 alle benötigten Parameter wie Flashgröße, die Größe der Flash-Seiten und die Größe einer
@@ -253,7 +253,7 @@ C-Preprozessor Aufruf aus der Datei baudcheck.S erzeugt und ausgeführt, um Info
 \section{Zielvorgaben für optiboot Makefile}
 
 Es können verschiedene Konfigurationen auch für einen Prozessortyp
-festgelegt wnd In der Tabelle~\ref{tab:processors} sind die einige der derzeit vordefinierten
+festgelegt werden. In der Tabelle~\ref{tab:processors} sind die einige der derzeit vordefinierten
 Konfigurationen für AVR Prozessoren angegeben. 
 Die einstellbaren Parameter sind aber auch in der Aufrufzeile des
 make Programms als Parameter oder auch als Umgebungsvariable der Shell
@@ -469,14 +469,14 @@ Diese Optionen sind meist nur für Software-Untersuchungen, die Frequenzkalibrat
                    &                & werden, wenn die SUPPORT\_EEPROM Option auf 0 \\
                    &                & gesetzt wird. \\
     \hline
-    LFUSE          & LFUSE=EF       & Gibt einen Wunschwert für das Setzen der Low Fuse des AVRs vor.\\
-                   &                & Es dürfen nur zwei Hex Zeichen angegeben werden. \\
+    LFUSE          & LFUSE=EF       & Gibt einen Wunschwert für das Setzen der Low Fuse des AVRs \\
+                   &                & vor. Es dürfen nur zwei Hex Zeichen angegeben werden. \\
     \hline
-    HFUSE          & HFUSE=D9       & Gibt einen Wunschwert für das Setzen der High Fuse des AVRs vor.\\
-                   &                & Es dürfen nur zwei Hex Zeichen angegeben werden. \\
+    HFUSE          & HFUSE=D9       & Gibt einen Wunschwert für das Setzen der High Fuse des AVRs \\
+                   &                & vor. Es dürfen nur zwei Hex Zeichen angegeben werden. \\
     \hline
-    EFUSE          & EFUSE=FC       & Gibt einen Wunschwert für das Setzen der Extended Fuse des AVRs vor.\\
-                   &                & Es dürfen nur zwei Hex Zeichen angegeben werden. \\
+    EFUSE          & EFUSE=FC       & Gibt einen Wunschwert für das Setzen der Extended Fuse des \\
+                   &                & AVRs vor. Es dürfen nur zwei Hex Zeichen angegeben werden. \\
     \hline
     \end{tabular}
   \end{center}
@@ -495,8 +495,8 @@ Diese Optionen sind meist nur für Software-Untersuchungen, die Frequenzkalibrat
  C\_SOURCE         & C\_SOURCE=1    & Wählt als Programmquelle das C-Programm anstelle des  \\
                    &                & Assembler-Programms (0 = Assembler).\\
                    &                & Die Assembler Version benötigt weniger Speicherplatz. \\
-                   &                & Bei der C-Quelle muß die Funktion SUPPORT\_EEPROM extra \\
-                   &                & eingeschaltet werden (Standard = aus). \\
+                   &                & Bei der C-Quelle muß die Funktion SUPPORT\_EEPROM  \\
+                   &                & extra eingeschaltet werden (Standard = aus). \\
     \hline
  BIGBOOT           & BIGBOOT=512    & Wählt zusätzlichen Speicherverbrauch für das Bootloader- \\
                    &                & Programm. Das dient nur zum Test der automatischen \\
@@ -597,7 +597,7 @@ die normale Bootloader Unterstützung bieten, das BOOTRST Fuse Bit nicht aktivie
 Der Grund hierfür ist, daß bei Benutzung der VIRTUAL\_BOOT\_PARTITION die Start-Adresse des Bootloaders
 auf einer anderen Adresse liegen kann wie bei der normalen Bootloader Unterstützung.
 Bei Benutzung der Option VIRTUAL\_BOOT\_PARTITION kann die Startadresse auf jedem Anfang einer
-Seite des Flash-Speichers liegen. Bei der normalen Bootloader Unterstützung kann immer nur das
+Flashspeicher-Seite liegen. Bei der normalen Bootloader Unterstützung kann immer nur das
 einfache, doppelte, vierfache oder achtfache einer Mindest-Bootloadergröße berücksichtigt
 werden (BOOT\_SZ Fuse-Bits), wie es in Abbildung~\ref{fig:pages} auf Seite~\pageref{fig:pages}
 dargestellt wird.
@@ -694,7 +694,7 @@ Die Assembler Datei soft\_uart.S ist dafür ausgelegt,
 von einer anderen Datei eingefügt (\#include) zu werden, welche ein
 normales Assembler-Programm für die AVR-Familie beinhaltet.
 Für die optiboot Applikation wird das von der Datei optiboot.S gemacht.
-Die eingefügte Datei soft\_uart.S benutzt viele Anweisungen für den GNU C-Processor
+Die eingefügte Datei soft\_uart.S benutzt viele Anweisungen für den GNU C-Preprocessor
 und fügt eine weitere Datei uart\_delay.S ein, um eine Verzögerungsschleife
 für die gewünschte Baud-Rate zu generieren.
 Weil dieses Verfahren für uart\_delay.S mit anderen Parametern mehrfach wiederholt werden kann,
@@ -710,7 +710,7 @@ werden durch die richtigen Funktionsnamen ersetzt, wenn die \#include Anweisung
 vor der Befehlsfolge  für die serielle Eingabe- oder Ausgabe-Funktion steht.
 
 Drei Konstanten müssen vor jeder Einfügung von uart\_delay.S gesetzt sein,
-F\_CPU, BAUD\_RATE und LOOP\_TICS. Die Konstante LOOP\_TICS muß auf die Anzahl
+BAUD\_RATE, F\_CPU und LOOP\_TICS. Die Konstante LOOP\_TICS muß auf die Anzahl
 der Takte gesetzt sein, die von einer seriellen Bit-Ausgabe in der Schleife
 gebraucht wird (normalerweise 9 Takte).
 Für jede erzeugte Verzögerungsfunktion wird die Anzahl der Verzögerungstakte
@@ -763,7 +763,8 @@ Die Abbildung~\ref{fig:onewire-simple} soll die einfachste Verbindung veranschau
 
 Das Problem besteht nun darin, daß die meistens full-duplex fähige externe serielle Schnittstelle
 die eigene Ausgabe zurückliest.
-Darauf ist ein Kommunikationsprogramm wie avrdude auf der externen Seite im allgemeinen nicht vorbereitet.
+Darauf ist ein Kommunikationsprogramm wie avrdude auf der externen Seite im allgemeinen nicht vorbereitet.\\
+
 Es gibt nun die Möglichkeit, das Programm auf der externen Seite entsprechend anzupassen.
 Ich halte das für keine gute Idee, da die angepasste Version dann entweder keine Wartung
 mehr erhält oder es müßte die Änderung für neue Versionen ständig wiederholt werden.
@@ -790,12 +791,13 @@ Probleme machen eigentlich nur die Flankenwechsel des TX-Signals. Deshalb wird m
 Schaltung aus Diode, zwei Widerständen und einem \(18 pF\) Kondensator die runtergehende Flanke
 schneller zum NAND-Eingang 6 weitergeleitet als die raufgehende Flanke.
 Nur zwei NAND Gatter sind für die Funktion erforderlich, die anderen beiden werden nur
-zur Anzeiger der RX/TX Aktivität benutzt.
+zur Anzeige der RX/TX Aktivität benutzt.
 Mit dieser Schaltung kann man ein unverändertes Übertragungsprogramm wie avrdude benutzen.
 Die Schaltung ist weitgehend unabhängig von der benutzen Baudrate.
 Lediglich bei sehr hohen Baud-Raten erwarte ich Probleme. Bei 115200 Baud läuft die Schaltung
 aber einwandfrei. Sehr viel höhere Baudraten sind bei der Softwarelösung sowieso
-oft nicht möglich.
+oft nicht möglich.\\
+
 Die Abbildung~\ref{fig:onewire2} zeigt eine alternative Schaltung mit einem 74HC14 Hex Inverter mit Schmitt-Trigger Eingängen.
 
 \begin{figure}[H]
@@ -818,11 +820,11 @@ Bei der seriellen Übertragung ist als Ruhezustand der High-Pegel (1)
 verabredet. Die Übertragung beginnt dann mit einen Start-Bit auf Low-Pegel (0).
 Unmittelbar darauf wird die verabredete Zahl der Datenbits (8) beginnend
 mit dem niederwertigsten Bit übertragen und dann die Übertragung mit einem oder
-mehreren Stop-Bit (1) abgeschlossen. 
+mehreren Stoppbit (1) abgeschlossen. 
 Der Pegel jedes einzelnen Bits wird für die verabredete Baud-Zeit beibehalten.
-Unmittelbar nach dem Ende der Stop-Bit Übertragung kann das nächste Start-Bit
+Unmittelbar nach dem Ende der Stoppbit Übertragung kann das nächste Start-Bit
 folgen. Es kann aber auch eine Pause mit nicht definierter Zeit bis zur 
-Übertragung der nächsten Bitfolge auf das Stop-Bit folgen. 
+Übertragung der nächsten Bitfolge auf das Stoppbit folgen. 
 In der Abbildung \ref{fig:AutoBaud} ist das erwartete Ergebnis für die möglichen
 Zeitmessungen dargestellt. Auf der Zeitachse ,,t'' sind vier mögliche Startpositionen
 für eine vollständige Zeitmessung dargestellt. Der Counter wird jeweils
@@ -837,13 +839,13 @@ erst gestartet wird, wenn die Datenübertragung schon läuft.
 In der Abbildung~\ref{fig:AutoBaud} sind die erwarteten Zählerstände für die
 4 möglichen Startfälle angegeben. Dabei bedeutet das ,,b'' den Zählerstand
 für ein Bit (Baud-Dauer), das ,,d'' steht für eine mögliche Zeitverzögerung
-zwischen dem Ende der Stopbit-Übertragung bis zum Beginn eines neuen Startbits.
+zwischen dem Ende der Stoppbit-Übertragung bis zum Beginn eines neuen Startbits.
 Das ,,D'' steht für eine zu erwartende lange Zeitverzögerung bis zum nächsten
 Startbit. Die Sendesequenz ist hier zu Ende und der Rechner wartet auf eine
 Antwort des AVRs.
 In der Rx-Reihe sind die Datenbits von ,,0'' (kleinstes Bit) bis ,,7'' (höchstes Bit)
-nummeriert. Das Start-Bit ist mit ,,A'' und das Stop-Bit mit ,,E'' gekennzeichnet.
-Das este Byte ist die Codierung des STK\_GET\_SYNC Kommandos und das zweite Byte
+nummeriert. Das Start-Bit ist mit ,,A'' und das Stoppbit mit ,,E'' gekennzeichnet.
+Das erste Byte ist die Codierung des STK\_GET\_SYNC Kommandos und das zweite Byte
 die Kodierung des Steuerzeichen CRC\_EOP.
 
 
@@ -1020,39 +1022,39 @@ Software.
 			& Anzahl & Basis & Limit &           & Größe (HW)\\
     \hline
     \hline
-	    10-14      &  9     & clk/8 &   -  & simpel   & 500  \\
+	    10-14      &  9     & clk/8 &   -  & simpel   & 502  \\
     \hline
 	    15-19      &  9     & clk   &   -  & simpel   & 502  \\
     \hline
-	    20-24      &  2     & clk/8 &   -  & simpel   & 488  \\
+	    20-24      &  2     & clk/8 &   -  & simpel   & 490  \\
     \hline
 	    25-29      &  2     &  clk  &   -  & simpel   & 494  \\
     \hline
-	    30-34      &  4     & clk/8 &   -  & simpel   & 492  \\
+	    30-34      &  4     & clk/8 &   -  & simpel   & 494  \\
     \hline
 	    35-39      &  4     &  clk  &   -  & simpel   & 494  \\
     \hline
-	    40-44      &  2     & clk/8 &  Ja  & simpel   & 494  \\
+	    40-44      &  2     & clk/8 &  Ja  & simpel   & 496  \\
     \hline
 	    45-49      &  2     &  clk  &  Ja  & simpel   & 500  \\
     \hline
-	    50-54      &  4     & clk/8 &  Ja  & simpel   & 498  \\
+	    50-54      &  4     & clk/8 &  Ja  & simpel   & 500  \\
     \hline
 	    55-59      &  4     &  clk  &  Ja  & simpel   & 500  \\
     \hline
     \hline
-	    60-64      &  2     & clk/8 &  Ja  & Komplex  & 544  \\
+	    60-64      &  2     & clk/8 &  Ja  & Komplex  & 550  \\
     \hline
-	    65-69      &  2     & clk   &  Ja  & Komplex  & 550  \\
+	    65-69      &  2     & clk   &  Ja  & Komplex  & 554  \\
     \hline
-	    70-74      &  4     & clk/8 &  Ja  & Komplex  & 548  \\
+	    70-74      &  4     & clk/8 &  Ja  & Komplex  & 554  \\
     \hline
-	    75-79      &  4     & clk   &  Ja  & Komplex  & 550  \\
+	    75-79      &  4     & clk   &  Ja  & Komplex  & 554  \\
     \hline
-	    80-84      &  9     & clk/8 &  Ja  & Komplex  & 558  \\
+	    80-84      &  9     & clk/8 &  Ja  & Komplex  & 564  \\
 	    90-94      &        &       &      &          &     \\
     \hline 
-	    85-89      &  9     & clk   &  Ja  & Komplex  & 560 \\
+	    85-89      &  9     & clk   &  Ja  & Komplex  & 564 \\
 	    95-99      &        &       &      &          &     \\
     \hline
     \end{tabular}
@@ -1118,8 +1120,9 @@ durch die Abfrageschleife des RX-Signals entstehen kann.
     \hline
   35-39,55-59  &  0     &  488      &   80.0k  & HW\_UART 4-Bit Zeit, CLK \\
     \hline
-  15-19,65-69  &  0     &  1098     &   80.0k  & HW\_UART 9-Bit Zeit, CLK \\
-  75-69,85-89  &        &           &          &                          \\
+  15-19,85-89  &  0     &  1098     &   80.0k  & HW\_UART 9-Bit Zeit, CLK \\
+  25-29,45-49  &        &           &          & HW\_UART 2-Bit Zeit, CLK \\
+  65-69,75-79  &        &           &          & HW\_UART 2/4-Bit Zeit, CLK \\
     \hline
     42         &  1     &  5151     &   81.6k  & Simple, 2-Bit Zeit, 8-Bit Schleife  \\
     \hline
@@ -1158,7 +1161,7 @@ mit Software UART benutzbar.
 Der Unterschied zwischen der 47 und der 67 bzw. 77 Einstellung ergibt
 sich durch den verwendeten 16-Bit Zähler. Bei der Einstellung 49 wird nur
 die Zeit von 2 Datenbits gemessen, bei den Einstellungen über 59 wird
-die komplette Byte-Sequenz vom Start-Bit bis zum Stop-Bit mit dem 16-Bit Zähler gemessen.
+die komplette Byte-Sequenz vom Start-Bit bis zum Stoppbit mit dem 16-Bit Zähler gemessen.
 Baudraten unter 9600 Baud werden wahrscheinlich aber ohnehin eher selten benutzt.
 Die Bereiche für die Baudrate verschieben sich natürlich mit der verwendeten
 Taktrate für den Prozessor.
@@ -1170,10 +1173,11 @@ In der Tabelle~\ref{tab:AutoBaudLen328} sind die resultierenden Programmlängen 
 einen  ATmega328 gegenüber gestellt. Die Programme in den Spalten \_0 und \_5, also alle 
 mit den Ziffern 0 oder 5 endenden Baudraten, sind leider in der Praxis nicht benutzbar.
 Der Grund ist, daß die Division durch fortlaufende Subtraktion zu langsam ist, um sicher
-in der Zeit des Stop-Bits fertig zu werden. Dann wird der Anfang des nächsten Start-Bits
+in der Zeit des Stoppbits fertig zu werden. Dann wird der Anfang des nächsten Start-Bits
 möglicherweise verpasst. Abhilfe würde hier schaffen, wenn der Sender der Daten (avrdude)
 die Daten mit 2 Stopp-Bits senden würde.
-Weil das so nicht vorgesehen ist, benutzen die anderen Spalten eine beschleunigte Subtraktions-Schleife,
+Weil das so von der avrdude Version 6.3 nicht vorgesehen ist,
+benutzen die anderen Spalten eine beschleunigte Subtraktions-Schleife,
 die dann aber ein längeres Programm bewirkt.
 Wenn möglich wird statt der Subtraktions-Schleife die schnellere Schiebe-Operationen
 für die Division durch 2-er Potenzen benutzt. Um das zu ermöglichen, sind in den Spalten
@@ -1192,17 +1196,17 @@ und damit etwa 30 Varianten mehr in 512 Byte Flash unterbringen.
     \hline
        & \multicolumn{5}{c ||}{ simple CLK/8}    &  \multicolumn{5}{c |}{simple CLK/1}      \\
     \hline
-   1\_ , 9Bit   & 510  & 524   & 516  & 528   & 516    &  522  &  518  &  528  &  520   &  532 \\
-   2\_ , 2Bit   & 512  & 528  & 518 & 520 & \textbf{506} & 518 & 514 & 524 & \textbf{512} & 522 \\
-   3\_ , 4Bit   & 508  & 524  & 514 & 522 & \textbf{510} & 520 &  516  &  528  &  514   & 532 \\
-   4\_ , 2Bit   & 518  & 534  & 524 & 526 & \textbf{512} & 524 &  520  &  530  &  518   & 528 \\
-   5\_ , 4Bit   & 514  & 530   & 520  & 528   & 516    &  526  &  522  &  534  &  520   &  538 \\
+   1\_ , 9Bit   & 512  & 526   & 518  & 530   & 518    &  522  &  518  &  528  &  520   &  532 \\
+   2\_ , 2Bit   & 514  & 530  & 520 & 522 & \textbf{508} & 518 & 514 & 524 & \textbf{512} & 522 \\
+   3\_ , 4Bit   & 510  & 526  & 516 & 524 & \textbf{512} & 520 &  516  &  528  &  514   & 532 \\
+   4\_ , 2Bit   & 520  & 536  & 526 & 528 &   514 & 524 &  520  &  530  &  518   & 528 \\
+   5\_ , 4Bit   & 516  & 532   & 522  & 530   & 518    &  526  &  522  &  534  &  520   &  538 \\
     \hline
       & \multicolumn{5}{c ||}{ komplex CLK/8}    &  \multicolumn{5}{c |}{komplex CLK/1}      \\
     \hline
-   6\_ , 2Bit   & 572  & 588   & 578  & 580   & 576    &  578  &  574  &  584  &  572   &  582 \\
-   7\_ , 4Bit   & 570  & 586   & 576  & 590   & 578    &  580  &  576  &  588  &  580   &  592 \\
-   8\_ , 9Bit   & 572  & 586   & 578  & 590   & 578    &  584  &  580  &  590  &  582   &  594 \\
+   6\_ , 2Bit   & 574  & 590   & 580  & 582   & 578    &  578  &  574  &  584  &  572   &  582 \\
+   7\_ , 4Bit   & 572  & 588   & 578  & 592   & 580    &  580  &  576  &  588  &  580   &  592 \\
+   8\_ , 9Bit   & 574  & 588   & 580  & 592   & 580    &  584  &  580  &  590  &  582   &  594 \\
     \hline
     \end{tabular}
   \end{center}
@@ -1213,9 +1217,9 @@ und damit etwa 30 Varianten mehr in 512 Byte Flash unterbringen.
 
 
 Abschließend möchte ich die Ergebnisse von Tests mit einen ATmega1281 bei etwa \(8MHz\)
-RC-Oszillator Frequenz vorstellen, die ich bei und oberhalb der garantierten Baudrate
-durchgeführt habe. Die Frequenz des RC-Generators habe ich dabei mit der
-OSCCAL\_CORR Option in 2er Schritten verstimmt und jeweils gemessen.
+Frequenz mit externem Takt vorstellen, die ich bei und oberhalb der garantierten Baudrate
+durchgeführt habe. Die Frequenz des externen Takts habe ich dabei in Schritten von \(100kHz\)
+von \(7MHz\) bis \(9MHz\) verstellt und jeweils ein kleines Testprogramm geladen.
 Mit der Software UART Lösung gelangen alle Tests, ein kleines Anwenderprogramm
 zu laden. Weil die Ergebnisse bei der Baudrate 57600
 so ermutigend waren, habe ich zusätzlich die Tabelle um Tests bei 115200 Baud
@@ -1225,35 +1229,41 @@ ergänzt.
   \begin{center}
     \begin{tabular}{| c | c || c | c || c | c | c |}
     \hline
-   OSCCAL  & Freq. & HW-UART &  SW-UART & HW-UART & \multicolumn{2}{c |}{SW-UART} \\
-   \_CORR  & MHz       & 57600   & 57600  & 115200  & \multicolumn{2}{c |}{115200}  \\
-           &           & Mode 82 & Mode 82 & Mode 56 & Mode 52 & Mode 57 \\
+	    Freq. & HW-UART &  \multicolumn{2}{c ||}{SW-UART} & HW-UART & \multicolumn{2}{c |}{SW-UART} \\
+	    MHz   & 57600   & \multicolumn{2}{c ||}{57600}  & 115200  & \multicolumn{2}{c |}{115200}  \\
+          & Mode 72 & Mode 72  & Mode 77 & Mode 56 & Mode 52 & Mode 57 \\
     \hline
     \hline
-    20     &  7.18   &  OK       &   OK    &  Err    &  Err    &   Err \\
-    18     &  7.22   &  OK       &   OK    &  Err    &  Err    &   Err \\
+    7.0   &  OK     &   OK     &   OK    &  10/10   &  0/1   &   10/10 \\
+    7.1   &  OK     &   OK     &   OK    &  10/10   &  2/3   &   10/10 \\
     \hline
-    16     &  7.35   &  OK       &   OK    &  OK     &  OK     &   Err \\
-    14     &  7.45   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+    7.2   &  OK     &   OK     &   OK    &  10/5    &  10/2  &   10/3 \\
+    7.3   &  OK     &   OK     &   OK    &  0/0     &  10/0  &   10/0 \\
     \hline
-    12     &  7.56   &  OK       &   OK    &  OK     &  OK     &   OK  \\
-    10     &  7.63   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+    7.4   &  OK     &   OK     &   OK    &  0/0     &  2/2   &   0/0 \\
+    7.5   &  OK     &   OK     &   OK    &  0/0     &  0/0   &   0/2 \\
     \hline
-     8     &  7.75   &  OK       &   OK    &  OK     &  OK     &   OK  \\
-     6     &  7.84   &  OK       &   OK    &  Err    &  OK     &   Err \\
+    7.6   &  OK     &   OK     &   OK    &  1/0     &  0/0   &   0/2 \\
+    7.7   &  OK     &   OK     &   OK    &  1/0     &  2/0   &   1/0 \\
     \hline
-     4     &  7.98   &  OK       &   OK    &  Err    &  Err    &   Err \\
-     2     &  8.04   &  OK       &   OK    &  Err    &  OK     &   Err \\
+    7.8   &  OK     &   OK     &   OK    &  10/10   &  4/6   &   0/0 \\
+    7.9   &  OK     &   OK     &   OK    &  10/10   &  10/3  &   10/10 \\
     \hline
-     0     &  8.18   &  OK       &   OK    &  OK     &  OK     &   Err \\
-    -2     &  8.29   &  OK       &   OK    &  OK     &  OK     &   Err \\
+    8.0   &  OK     &   OK     &   OK    &  10/10   &  5/0   &   10/10 \\
+    8.1   &  OK     &   OK     &   OK    &  10/10   &  1/0   &   10/10 \\
     \hline
-    -4     &  8.42   &  OK       &   OK    &  OK     &  OK     &   Err \\
-    -6     &  8.51   &  OK       &   OK    &  OK     &  OK     &   OK  \\
+    8.2   &  OK     &   OK     &   OK    &  1/0    &  2/0    &   10/6 \\
+    8.3   &  OK     &   OK     &   OK    &  0/0    &  0/1    &   10/1 \\
     \hline
-    -8     &  8.64   &  OK       &   OK    &  OK     &  Err    &   OK  \\
-    -10    &  8.77   &  OK       &   OK    &  OK     &  OK     &   OK  \\
-    -12    &  8.92   &  OK       &   OK    &  Err    &  OK     &   OK  \\
+    8.4   &  OK     &   OK     &   OK    &  0/0    &  0/2    &   10/0 \\
+    8.5   &  OK     &   OK     &   OK    &  0/0    &  6/4    &   0/0 \\
+    \hline
+    8.6   &  OK     &   OK     &   OK    &  1/0    &  10/0   &   0/0 \\
+    8.7   &  OK     &   OK     &   OK    &  0/0    &  0/0    &   0/0 \\
+    \hline
+    8.8   &  OK     &   OK     &   OK    &  10/10  &  3/0    &   0/0 \\
+    8.9   &  OK     &   OK     &   OK    &  10/10  &  0/1    &   0/0 \\
+    9.0   &  OK     &   OK     &   OK    &  10/8   &  1/1    &   0/1 \\
     \hline
     \end{tabular}
   \end{center}
@@ -1281,8 +1291,31 @@ ein Betrieb der seriellen Schnittstelle bei \(230.4kBaud\) möglich, wahrscheinl
 weil sowohl der ATmega328p als auch der Mega16U2 die gleiche tatsächliche Baudrate
 von \(250kBaud\) benutzen.
 
+\subsection{Besonderheiten der seriellen Schnittstelle}
 
-\section{Einige Beispiele für die Erzeugung eines optiboot Bootloaders}
+Normalerweise wird in optiboot bei der seriellen Ausgabe ein verlängertes Stoppbit ausgegeben.
+Die Hardware UART Schnittstelle schaltet ein zweites Stoppbit ein, bei der Software wird
+nur ein halbes zusätzliches Stoppbit berücksichtigt.
+Dies scheint bei geringfügig unterschiedlichen Baudraten sinnvoll zu sein, da so den
+Folgezeichen mehr Zeit zur Verfügung steht, neu mit dem nächsten Startbit zu synchronisieren.
+Die PC-Seite mit der avrdude Version 6.3 hat leider die Möglichkeit nicht, bei
+der seriellen Ausgabe ein zweites Stoppbit auszugeben.
+Für meine Tests habe ich die Quellen von avrdude so verändert, daß diese Funktion mit
+einem zusätzlichen Parameter -S angewähltt werden kann.
+Abschalten läßt sich die zwei Stoppbit Ausgabe bei optiboot übrigens mit der Option TWO\_STOP\_BITS=0.
+Der Unterschied bei der Geschwindigkeit ist allerdings unbedeutend, so daß ich empfehle,
+bei der Benutzung des längeren Stoppbits zu bleiben.\\
+
+Bei der Software für die serielle Schnittstelle (SOFT\_UART=1) wird übrigens die Wartezeit
+für das Stoppbits am Anfang einer seriellen Übertragung berücksichtigt.
+Dadurch wird dem Programm mehr Zeit gegeben,
+sich gegebenenfalls am Ende der seriellen Datenübertragung auf den Empfang von
+seriellen Daten vorzubereiten. Auch diese Funktion ist mit einer zusätzlichen Option
+QuickStopBit=0 abschaltbar. Ich habe aber bisher keine Probleme oder Nachteile
+dieser Methode beobachtet, auch nicht beim Betrieb mit nur einem Pin.
+
+
+\section{Einige Beispiele für die Erzeugung eines optiboot Bootloaders}\label{Examples}
 
 Das erste Beispiel ist die Bildung eines Bootloaders für den beliebten ATmega328P:
 
@@ -1344,7 +1377,7 @@ Boot Loader start address: 0x7E00 = 32256
 # # # # # # # # # # # # # # # # # # # # # #
 
    text	   data	    bss	    dec	    hex	filename
-    506	      0	      0	    506	    1fc	optiboot.elf
+    504	      0	      0	    504	    1f8	optiboot.elf
 Requires 1 Boot Page of 512 Bytes, which is 1.5% of Flash Memory
 BOOTSZ=3, which means 1 Boot Pages
 
@@ -1381,14 +1414,14 @@ avr-gcc -g -Wall -Os -fno-split-wide-types -mrelax -mmcu=atmega328p \
 
 --------------------------------------------------------------------------------
 Simple Baudrate measurement with time limit implemented in optiboot! (4-bit, CLK/8)
-UART Minimum 976 Baud, Difference surely less than 4% up to 160.0 kBaud
+UART Minimum 488 Baud, Difference surely less than 4% up to 160.0 kBaud
 --------------------------------------------------------------------------------
 # # # # # # # # # # # # # # # # # # # # # #
 Boot Loader start address: 0x7E00 = 32256
 # # # # # # # # # # # # # # # # # # # # # #
 
    text	   data	    bss	    dec	    hex	filename
-    498	      0	      0	    498	    1f2	optiboot.elf
+    500	      0	      0	    500	    1f4	optiboot.elf
 Requires 1 Boot Page of 512 Bytes, which is 1.5% of Flash Memory
 BOOTSZ=3, which means 1 Boot Pages
 
@@ -2263,3 +2296,581 @@ at90can128 &         8M & 0xE2  & 38.4k &  0  & 8303k &  3  & 7922k  & 2  & 8057
   \label{tab:t90canfreq}
 \end{table}
 
+
+\section{Prüfung der Zusammenarbeit mit USB-Seriell Wandlern}
+
+\subsection{Vorwort zum Testumfeld}
+Für eine Serienuntersuchung des Verhaltens der automatischen Baudratenanpassung sind die Bedingungen
+erst einmal schlecht. Die Baudraten der AVR-UART Schnittstelle können für höhere Baudraten nur in groben
+Schritten eingestellt werden. Auch die Baudraten der USB-Seriell Schnittstellen lassen sich nur
+relativ grob einstellen und die Wahlmöglichkeit ist vom jeweiligen Chip-Typ und den Fähigkeiten des
+Treibers beschränkt. Es besteht zwar bei den AVR Prozessoren die Möglichkeit, die Taktfrequenz des
+lokalen RC-Generators mit OSCCAL zu verstimmen,
+aber das Resultat der Verstimmung ist vom jeweiligen Exemplar abhängig.
+Die jeweilige Schwingfrequenz des lokalen Oszillators könnte dann zwar gemessen werden, aber die
+Schrittweite der Verstimmung kann nicht geändert werden um eine bestimmte Frequenz genau zu erreichen.
+Der einzige mir bekannte Ausweg ist die Benutzung einer externen Taktquelle für den AVR-Prozessor.
+Dafür habe ich mir den relativ preiswerten Kkmoon FY6900 Funktionsgenerator beschafft, der nahezu 
+beliebige Wellenformen mit Frequenzen bis zu 60 MHz erzeugen kann. Natürlich kann dieser
+Funktionsgenerator auch Rechteck-Signale erzeugen, die dann als Takt für den AVR dienen können.
+Der Funktionsgenerator kann sowohl über das Frontpaneel und auch über ein USB-Interface bedient werden.
+Das USB-Interface besteht aus einem internen CH341 USB-Seriell Wandler, so daß kein spezieller
+USB Treiber erforderlich ist. Die Steuerung kann mit gut dokumentierten ASCII Zeichenfolgen erfolgen.
+Damit sind wesentliche Voraussetzungen für eine systematische Untersuchung des Zusammenspiels
+von avrdude, den USB-Seriell Wandlern und des Optiboot Bootloaders erfüllt.
+Speziell das Verhalten der automatischen Baudratenanpassung sollte intensiver untersucht werden.
+Dafür sollten Downloads mit avrdude mit verschiedenen Taktfrequenzen entsprechend oft wiederholt
+werden, damit Probleme erkannt werden. 
+Eine Anzahl von 40 Wiederholungen des Downloads für jede Frequenz erschien mir ein vertretbarer
+Kompromiss zwischen Zeitaufwand und statistischer Aussagekraft zu sein.
+Da bei der automatischen Baudratenanpassung auch 41 verschiedene Frequenzen untersucht werden
+sollen, ergeben sich für eine Variante schon 1640 Schreibvorgänge. Bei über 10 dieser Varianten
+würde damit die garantierte Zyklenzahl des AVR Flashspeichers überschritten.
+Da ich nicht die Zyklen-Festigkeit des AVR-Flashspeichers untersuchen wollte, habe ich dafür einen
+Schreibschutz-Pin in der optiboot Software vorgesehen. Diese Zusatzfunktion von optiboot
+ist nur für diese Untersuchungen sinnvoll, deshalb ist diese Option (WRITE\_PROTECT\_PIN) nicht
+weiter dokumentiert.
+
+\subsection{Autobaud Messungen mit verschiedenen USB-Seriell Chips}
+
+Die Daten für die hier vorgestellten Ergebnisse wurden mit der Bash-Script Datei test\_download
+im Unterverzeichnis ee\_test erzeugt und dann in .tab Dateien im Verzeichnis Doku/results 
+mit einem Editor zusammengefaßt.
+Im Laufe der Untersuchungen konnte eine Verbesserung der Baudratenmessung mit der vorgeteilten
+Taktfrequenz in optiboot eingebaut werden. Die Verbesserung besteht aus einer Zurücksetzung des
+Vorteilers für die Zähler des AVR. Die andere Fehlerquelle für die Zeitmessung entsteht durch
+die Abfrageschleife für den RX Datenpin und beträgt mindestens 3 Takte für jeden Meßpunkt.
+Doch hier erst einmal als Ergebnis die Fehlerrate mit verschiedenen USB-Seriell Chips
+bei jeweils 40 Downloads für jede Taktfrequenz zwischen 14 MHz und 18 MHz mit einer
+Schrittweite von 100 kHz und einer Baudrate von 115200.
+Insgesamt wurden für jeden Tabelleneintrag 1640 Downloads von 10 kByte mit 
+avrdude durchgeführt.
+Es wurde mit einer speziell angepassten avrdude Version gearbeitet,
+bei der eine serielle Ausgabe mit zwei Stoppbits mit dem Parameter -S angewählt werden kann.
+Die Differenzen zur avrdude Version 6.3 sind in der Datei ee\_test/avrdude.diff festgehalten.
+
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c || c | c | c | c | c | c | c | c | }
+    \hline
+          & FT232 & FT232 & CH340 & CP2102 & CP2104 & PL2303 & Pololu & Arduino \\
+ Baudrate & RL    & Clone &       &        &        & TA     & AVR    & UNO     \\
+    \hline
+    \hline
+    22    &  0    &  1    &  40   &   0    &   0    &  0     &  264   &   0    \\
+    26    &  0    &  0    &  69   &   0    &   0    &  0     &  250   &   0    \\
+    62    &  150  &  181  &  186  &   95   &   155  &  145   &  521   &   129  \\
+    \hline
+    32    &  0    &  0    &  72   &   0    &   0    &  0     &  217   &   0    \\
+    36    &  0    &  0    &  12   &   0    &   0    &  0     &  261   &   0    \\
+    72    &  10   &  44   &  24   &   4    &   4    &  3     &  427   &   0    \\
+    76    &  1    &  0    &  2    &   0    &   0    &  0     &  331   &   0    \\
+    \hline
+    12    &  0    &  0    &  7    &   0    &   0    &  0     &  281   &   0    \\
+    82    &  0    &  0    &  7    &   0    &   0    &  0     &  285   &   0    \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{Fehlerrate bei 1640 Downloads mit je 10 kByte mit HW-UART}
+  \label{tab:HWautoErrs}
+\end{table}
+
+Zur Erinnerung sei hier der Schlüssel für die Optiboot Auto-Baudraten Einstellung erwähnt.
+Die Einstellung 22, 26 und 62 wählen alle eine 2-Bit Zeitmessung an. Bei den Einstellungen
+22 und 62 arbeitet der für die Zeitmessung verwendete Zähler mit /8 Frequenz-Vorteiler,
+bei Einstellung 26 läuft der Zähler mit voller Taktrate.
+Entsprechend wählen die Einstellungen 32, 36, 72 und 76 eine 4-Bit Zeitmessung an.
+Bei den Einstellungen 32 und 72 wird ein Zähler mit /8 Frequenz-Vorteiler benutzt,
+die Einstellungen 36 und 76 benutzen für die Zeitmessung einen Zähler ohne Vorteiler.
+Die beiden übrigen Einstellungen 12 und 82 benutzen für die Zeitmessung 9 Bits,
+beide mit dem /8 Vorteiler für den Zähler.\\
+
+Der USB-Seriell Wandler FT232 taucht in Tabelle \ref{tab:HWautoErrs} zweimal auf, einmal als FT232RL,
+dem Original Chip von Future Technology Devices International Limited (FTDI) und einmal
+als FT232clone, einem Chinesischen Nachbau unbekannter Herkunft mit der Seriennummer A50285BI.
+Die Nachbauten fallen meist durch gleiche Seriennummer auf. Die Original Chips haben alle
+eine unterschiedliche Seriennummer. Äußerlich sind die nachgebauten Chips fast nicht zu
+erkennen, da auch das Hersteller-Logo FTDI kopiert wurde.
+Der untersuchte chinesische Nachbau erreicht aber ähnlich gute Testergebnisse
+wie die Original-Chips.\\
+
+In der Tabelle \ref{tab:HWautoErrs} fällt auf, daß die Zahl der Fehler bei den Autobaud 
+Einstellungen 62, 72  und 82 auffällig hoch sind. Der Grund liegt daran, daß der
+Zähler mit dem /8 Vorteiler für die zusätzlichen Kontrollen schon beim Startbit der
+seriellen Empfangsdaten gestartet wird und dann für die Zeitmessung nur abgelesen wird.
+Dadurch ist der Zustand des Vorteilers bei der eigentlichen Zeitmessung undefiniert.
+Bei den Einstellungen 22 und 32 wird der Zähler mit zurückgesetztem Teiler erst mit
+dem ersten Datenbit gestartet, das für die Messung benutzt wird.
+Dadurch gewinnt die Zeitmessung an Meßsicherheit.
+Die Einstellungen 26, 36 und 76 benutzen den Zähler ohne Vorteiler und haben daher
+das Problem mit dem undefinierten Vorteiler gar nicht.
+Erwähnen möchte ich hier, daß frühere Versionen der optiboot Autobaud Messung mit
+der Einstellung 22 und 32 sicherlich ähnlich hohe Fehlerraten wie bei den 
+Einstellungen 62 und 72 ergeben hätten, da der Reset des Vorteilers beim Meßstart
+erst jetzt eingebaut wurde. Bei normaler Benutzung tauchen üblicherweise weniger
+Probleme mit Autobaud auf, da die TaktFrequenz des AVR besser zur gewünschten 
+Baudrate passt. Mit dieser Untersuchung sollten ja die Grenzen der automatischen
+Baudratenanpassung getestet werden.\\
+
+Zwei USB-Seriell Wandler fallen in der Tabelle \ref{tab:HWautoErrs} mit höherer
+Fehlerrate auf, der CH340 und der Pololu AVR. Um die Ursache einzugrenzen, wurden
+weitere Messungen mit fest eingestelltem UBBR Teiler gemacht, die im nächsten Unterkapitel
+dargestellt werden.
+
+\subsection{Messung von USB-Seriell Wandlern mit fester optiboot Baudrate}
+
+Für diese Untersuchung wurde die optiboot Baudrate fest auf 115200 
+bei einer Taktrate von 16 MHz eingestellt.
+Die USB-Seriell Wandler werden auch bei 115200 Baud betrieben.
+Die Taktfrequenz des ATmega wurde statt der festen 16 MHz von 14.7 Mhz
+in 100 kHz Schritten auf 17.1 MHz erhöht.
+Mit der Frequenzänderung ändert sich dann die optiboot Baudrate proportional mit.
+
+Für die Tests wurden jeweils 40 Downloads von 10 kByte mit avrdude durchgeführt.
+In einer Tabelle wurde die Zahl der Fehlversuche für jede Frequenz von der
+Script-Datei test\_download festgehalten.
+Aus den so gewonnenen Tabellen für die verschiedenen USB-Seriell Wandler wurde mit
+einem Editor jeweils eine Gesamttabelle für die Testreihe mit 1 Stoppbit
+(Doku/results/HWfix\_1\_115200 \_USBserial\_0.tab)
+und für die Testreihe mit 2 Stoppbits
+(Doku/results/HWfix\_1\_115200 \_USBserial\_1.tab)
+erstellt. Aus diesen Tabellen wurde dann die Tabelle \ref{tab:HWfixErrs} erstellt.
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c || c | c | c || c | c | c |}
+    \hline
+              & \multicolumn{3}{c ||}{115200 Baud, 2 Stoppbits} & \multicolumn{3}{c |}{115200 Baud, 1 Stoppbit} \\
+    USB-Seriell  & Mindest- & Maximal- & Frequenz- & Mindest- & Maximal- & Frequenz- \\
+    Typ          & Frequenz & Frequenz & Bereich   & Frequenz & Frequenz & Bereich \\
+    \hline
+    FT232RL      & 15.1 MHz & 16.5 MHz & 9.3\%     & 15.4 MHz & 16.5 MHz & 7.9\% \\
+    FT232clone   & 15.2 MHz & 16.5 MHz & 8.7\%     & 15.5 MHz & 16.5 MHz & 7.2\% \\
+    CH340G       & 15.1 MHz & 16.1 MHz & 6.8\%     & 15.4 MHz & 16.1 MHz & 5.0\% \\
+    CP2102       & 15.0 MHz & 16.4 MHz & 9.3\%     & 15.3 MHz & 16.4 MHz & 7.5\% \\
+    CP2104       & 15.1 MHz & 16.6 MHz & 10\%      & 15.3 MHz & 16.6 MHz & 8.6\% \\
+    PL2303TA     & 15.1 MHz & 16.6 MHz & 10\%      & 15.1 MHz & 16.6 MHz & 10\% \\
+    PololuAVR    & 15.4 MHz & 16.5 MHz & 7.5\%     & 15.4 MHz & 16.5 MHz & 7.5\% \\
+    ArduinoUNO   & 15.4 MHz & 16.6 MHz & 8.1\%     & 15.7 MHz & 16.6 MHz & 6.2\% \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{Nutzbarer Taktfrequenzbereich mit Hardware-UART}
+  \label{tab:HWfixErrs}
+\end{table}
+
+Erwartet wurde bei dieser Untersuchung eine zulässige Abweichung der Baudrate von $\pm 4\%$,
+also ein Gesamtbereich von 8\%. Dieser 8\% Bereich wird von den untersuchten USB-Seriell Wandlern
+bei einem Stoppbit nur vom CP2104 und dem PL2303TA erreicht.
+Mit der auf 2 Stoppbits eingestellten seriellen Schnittstelle erreichen
+die FT232 Wandler, die CP2102, CP2104 und PL2303TA Wandler sowie der Arduino UNO den erwarteten 8\% Bereich.
+Der CH340G Wandler verbessert den nutzbaren Bereich auf 6.8\% deutlich, bleibt aber unter 8\%.
+Der PololuAVR und der PL2303TA zeigen keine Reaktion auf die Erhöhung der Stopp-Bitzahl von 1 auf 2.
+Eine Zeitmessung mit dem Linux Kommando ,,time'' der Ausgabe von über 10000 Zeichen ergab aber beim PL2303TA
+einen etwa 10\% höheren Zeitbedarf bei der 2 Stoppbit Einstellung.
+Der PololuAVR zeigt bei diesem Test keine Änderung der Zeit.
+Es ist wahrscheinlich, daß das Zusammenspiel von Treiber und Chip beim PololuAVR nicht funktioniert.\\
+
+Jedenfalls ist hiermit die mögliche Ursache für das schlechte Abschneiden des CH340G Chips
+und des PololuAVR in Tabelle \ref{tab:HWautoErrs} auf Seite \pageref{tab:HWautoErrs} gefunden.
+Beim PololuAVR sollte man berücksichtigen, das dies von Hause aus
+ein ISP-Programmer ist und der USB-Seriell Wandler nur eine Zusatzfunktion darstellt.\\
+Eindeutige Spitzenreiter bei diesem speziellen Vergleichstest ist der CP2104 der Silicon Laboratories Inc. und
+der PL2303TA der Prolific Incorporated Inc. ,
+der in diesem Test auch bessere Werte erreicht als der FT232RL der Future Technology Devices International.
+Nach Datenblatt unterstützt der FT232RL aber eine maximale Baudrate von 3 MBaud, der PL2303TA sogar
+6 Mbaud, die nach Datenblatt weder vom CP2102 (1 MBaud) noch vom Testsieger CP2104 (2 MBaud) erreicht werden.
+
+Zusätzlich habe ich auch den Arbeitsbereich der USB-Seriell Wandler im Zusammenspiel mit der
+Software-UART Lösung von optiboot untersucht. Die Software benutzt beim Senden von Daten etwa 1,5 Stoppbits,
+die USB-Seriell Wandler benutzen entweder 1 (Doku/results/SWfix\_1\_115200 \_USBserial\_0.tab) oder
+2 Stoppbits (Doku/results/SWfix\_1\_115200\_USBserial\_0.tab). In der Tabelle \ref{tab:SWfixErrs} sind
+die Ergebnisse zusammengefaßt.
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c || c | c | c || c | c | c |}
+    \hline
+              & \multicolumn{3}{c ||}{115200 Baud, 2 Stoppbits} & \multicolumn{3}{c |}{115200 Baud, 1 Stoppbit} \\
+    USB-Seriell  & Mindest- & Maximal- & Frequenz- & Mindest- & Maximal- & Frequenz- \\
+    Typ          & Frequenz & Frequenz & Bereich   & Frequenz & Frequenz & Bereich \\
+    \hline
+    FT232RL      & 15.3 MHz & 16.8 MHz & 9.8\%     & 15.5 MHz & 16.8 MHz & 8.7\% \\
+    FT232clone   & 15.4 MHz & 16.9 MHz & 9.8\%     & 15.55 MHz & 16.9 MHz & 9.0\% \\
+    CH340G       & 15.2 MHz & 16.5 MHz & 8.5\%     & 15.5 MHz & 16.5 MHz & 6.8\% \\
+    CP2102       & 15.2 MHz & 16.7 MHz & 10\%      & 15.5 MHz & 16.8 MHz & 8.7\% \\
+    CP2104       & 15.2 MHz & 16.9 MHz & 11.2\%    & 15.3 MHz & 16.9 MHz & 10.6\% \\
+    PL2303TA     & 15.3 MHz & 16.9 MHz & 10.6\%    & 15.4 MHz & 16.9 MHz & 10\% \\
+    PololuAVR    & 15.5 MHz & 16.9 MHz & 9.3\%     & 15.5 MHz & 16.9 MHz & 9.3\% \\
+    ArduinoUNO   & 15.4 MHz & 16.9 MHz & 10\%      & 15.8 MHz & 16.9 MHz & 7.5\% \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{Nutzbarer Taktfrequenzbereich mit Software-UART}
+  \label{tab:SWfixErrs}
+\end{table}
+
+Bei allen Meßserien mit der Software UART Lösung ergeben sich etwas größere Frequenzbereiche ohne Fehler
+im Vergleich zum Hardware UART Betrieb aus der Tabelle \ref{tab:HWfixErrs}.
+Das liegt wohl daran, daß die Softwarelösung nur eine Abtastung des Eingangssignals je Bit macht und
+versucht diese in die Mitte der mit der Baudrate erwarteten Übertragungszeit zu legen.
+Die Hardware UART Lösung der AVR Prozessoren machen 3 Abtastungen je Datenbit.
+beim hier benutzten ,,Double Speed Mode'' werden die Abtastnummern 4, 5 und 6 der 8 Abtastungen je
+Datenbit oder Stoppbit benutzt. Die drei Abtastungen vorher (1-3) und die beiden hinterher (7-8) werden nicht benutzt. 
+Mindestens 2 Abtastungen der 3 benutzten müssen bei der Stoppbit Abtastung eine 1 ergeben, sonst wird ein
+,,Framing'' Fehler erzeugt.
+Dieses Verfahren der Überabtastung kommt zwar mit gestörter Übetragung besser zurecht,
+lässt aber weniger Toleranz bei der Baudrate zu. \\
+
+Über die Art der Abtastung der seriellen Daten der USB-Seriell Wandler habe ich keine nähere Informationen
+gefunden.
+Ich gehe aber davon aus, daß alle eine Form der Überabtastung ähnlich wie bei der AVR-UART
+Schnittstelle benutzen. Allerdings muß sich das Abtastverfahren der einzelnen USB-Seriell Wandler
+doch unterscheiden, anders sind die unterschiedlichen Testergebnisse nicht zu erklären, weil
+die optiboot Seite für alle Testkandidaten gleich war.
+
+\subsection{Extremtest mit 115200 Baud bei 8 MHz Takt}
+
+Der weite Baudratenbereich für eine funktionierende serielle Kommunikation einiger USB-Seriell Wandler
+hat mich ermuntert, das Verhalten der Autobaud Funktion in der Praxis für eine Baudrate von 115200 Baud
+bei einer Taktrate von 8 MHz zu untersuchen.
+Dafür habe ich den USB-Seriell Wandler mit dem größten Baudratentoleranz ausgewählt, den CP2104. 
+Den für die Tests verwendeten ATmega1281 habe ich mit einem optiboot Bootloader
+mit dem Autobaud Modus 32 ohne LED-Blinken versehen. 
+In der Autobaud Gruppe 30-39 werden 4 Datenbits zur Messung der Baudrate benutzt.
+Mit dieser Einstellung wurden jeweils 40 Downloads von 10 kByte mit avdrude für 41 Frequenzen
+von 7 MHz bis 9 MHz in 50 kHz Schritten durchgeführt.
+Um das Ergebnis bewerten zu können, wurde die gleiche Meßreihe auch mit fest eingestellter Baudrate
+von optiboot wiederholt. Dabei erzeugt die Einstellung 111111 Baud eine UBRR Einstellung des Hardware UARTs
+von 8, bei der Einstellung 125 kBaud wird eine UBRR Einstellung von 7 benutzt.
+Durch die Änderung der Taktfreuenz ändert sich die tatsächliche Baudrate natürlich proportional mit.
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c  r || c | c | c | c | c | c |}
+    \hline
+    & Typ    & \multicolumn{5}{c |}{CP2104}          & CH340G \\
+    & Modus   &  HW32 & HW111111 & HW125000 & SW32 & SW34 & HW32 \\
+Frequenz  & Periode & auto & UBRR=8 & UBRR=7 & auto & auto & auto \\
+    \hline
+7000000  &    &  40   &  40      &   40     &  0   &  0   &  40 \\
+7050000  &    &  40   &  40      &   40     &  0   &  0   &  40 \\
+7100000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+7150000  &    &  0    &  40      &   0      &  4   &  0   &  0 \\
+    \hline
+7200000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+7250000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+7300000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+7350000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+    \hline
+7400000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+7450000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+7500000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+7550000  &    &  0    &  40      &   0      &  0   &  0   &  0 \\
+    \hline
+7600000  &    &  0    &  40      &   0      &  0   &  7   &  40 \\
+7650000  &    &  0    &  40      &   0      &  0   &  40  &  40 \\
+7700000  &    &  0    &  40      &   0      &  0   &  40  &  40 \\
+7750000  &    &  0    &  40      &   0      &  0   &  0   &  40 \\
+    \hline
+7800000  &    &  16   &  40      &   0      &  0   &  0   &  40 \\
+7850000  &    &  40   &  40      &   40     &  0   &  0   &  40 \\
+7900000  &    &  40   &  40      &   40     &  0   &  0   &  40 \\
+7950000  &    &  40   &  40      &   40     &  0   &  0   &  40 \\
+    \hline
+8000000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+8050000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+8100000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+8150000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+    \hline
+8200000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+8250000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+8300000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+8350000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+    \hline
+8400000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+8450000  &    &  0    &  0       &   40     &  0   &  0   &  0 \\
+8500000  &    &  0    &  0       &   40     &  0   &  24  &  0 \\
+8550000  &    &  0    &  0       &   40     &  0   &  40  &  40 \\
+    \hline
+8600000  &    &  0    &  0       &   40     &  0   &  0   &  40 \\
+8650000  &    &  0    &  0       &   40     &  0   &  0   &  40 \\
+8700000  &    &  0    &  0       &   40     &  0   &  0   &  40 \\
+8750000  &    &  15   &  0       &   40     &  0   &  0   &  40 \\
+    \hline
+8800000  &    &  40   &  40      &   40     &  0   &  0   &  40 \\
+8850000  &    &  0    &  40      &   40     &  0   &  0   &  0 \\
+8900000  &    &  0    &  40      &   40     &  0   &  0   &  0 \\
+8950000  &    &  0    &  40      &   40     &  0   &  0   &  0 \\
+9000000  &    &  0    &  40      &   40     &  0   &  0   &  0 \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{Fehlerrate beim Extremtest mit 115200 Baud bei 8 MHz Takt}
+  \label{tab:ExtremErrs}
+\end{table}
+
+Alle Testergebnisse in der Tabelle \ref{tab:ExtremErrs} stellen die Anzahl der Fehlversuche
+bei der jeweils eingestellten Taktrate (Spalte 1) von 40 Download Versuchen je 10 kByte mit avrdude dar.
+Die USB-Seriell Wandler arbeiten immer mit 2 Stoppbits für diese Tests.
+In der ersten Datenspalte sind die Fehlversuche für einen CP2104 USB-Seriell Wandler festgehalten.
+Der PL2303TA hat übrigens ein gleiches Ergebnis gezeigt.
+Wie man sieht gibt es zwischen 7850 kHz und 7950 kHz drei Totalausfälle,
+keiner der 40 Downloads hat funktioniert. Die Erklärung liefern die nächsten beiden Spalten.
+Hier wurde mit konstanter UART-Teilereinstellung 9 (UBRR=8) und 8 (UBRR=7) für den gesamten 
+Frequenzbereich die 40 Downloads versucht. Für die Frequenzen 7850 kHz bis 7950 kHz funktioniert
+keiner der beiden Einstellungen. Zwischen UBRR=7 und UBRR=8 ist aber keine weitere Einstellung wählbar.
+Damit ist klar, warum hier keine Autobaud Variante funktionieren kann.
+Es ist mit diesen Vorbedingungen schlichtweg nicht möglich die gewünschte Baudrate von 115200
+mit diesen Takfrequenzen hinreichend genau einzustellen.
+Der teilweise Ausfall des Downloads bei 7800 kHz mit der Autobaud-Variante 32 liegt wohl
+an der Unsicherheit der Baudratenmessung.\\
+
+In der vierten Datenspalte wurde der Download bei gleichen Einstellungen mit der
+Software-UART Lösung von optiboot versucht. Bei Software-UART zeigte sich schon in der
+Tabelle \ref{tab:SWfixErrs} auf Seite \pageref{tab:SWfixErrs} ein größerer
+Frequenzarbeitsbereich mit dem CP2104 gegenüber den Hardware-UART Tests in Tabelle \ref{tab:HWfixErrs}
+auf Seite \pageref{tab:HWfixErrs}. Außerdem wird die Verzögerungszeit des Software-UART
+mit Warteschleifen gebildet, die eine Einstellung von Vielfachen von 6 Takten erlauben.
+Durch den Vorteiler des Hardware-UART ergibt sich hier zum Vergleich nur eine Einstellmöglichkeit
+von Vielfachen von 8 Takten (UBRR Einstellung).
+Beide Umstände führen wohl dazu, daß beim CP2104 die Software Lösung im gesamten Frequenzbereich
+nur 4 Fehlversuche bei der Taktfrequenz 7150 kHz zeigt, ein wirklich erstaunliches Ergebnis!
+Ab 7200 kHz Taktrate ist die Baudrate 115200 mit diesem CP2104 USB-seriell Wandler bei 2 Stoppbit Betrieb
+und Software-UART des optiboot mit BAUD\_RATE=32 uneingeschränkt nutzbar.\\
+
+Als weiteren Test mit der Software UART Lösung von optiboot habe ich die BAUD\_RATE=34 Einstellung
+getestet. Bei dieser Einstellung wird die Verzögerungs-Schleife um einen Takt verlängert,
+so daß sich hier nur ein Vielfaches von 8 Takten wählen läßt, genau wie bei dem Hardware-UART.
+Der Hintergrund für diese Wahlmöglichkeit ist lediglich ein geringfügig kürzeres optiboot Programm
+mit dieser Einstellung. 
+Obwohl bei dieser Software-UART Einstellung genau so Vielfache von 8 Takten für die Periode
+wie bei dem Hardware-UART, ist das Ergebnis hier leicht besser. 
+Das liegt wahrscheinlich am schon erwähnten größeren Frequenz-Arbeitsbereich des CP2104 Wandlers mit optiboot
+bei Software-UART Betrieb.
+Außerden liegt der kritische Bereich hier nicht so dicht bei der gewählten Arbeitsfrequenz von 8000 kHz
+wie beim Hardware UART.\\
+
+In der 6. und letzten Datenspalte habe ich die gleichen Messung wie in der ersten Datenspalte
+mit dem CH340G getestet. Hier zeigen deutlich mehr Frequenzen mit Totalausfällen der Downloadversuche,
+was auch schon die Untersuchung in Tabelle \ref{tab:HWfixErrs} auf Seite \pageref{tab:HWfixErrs}
+erwarten ließ.
+
+\subsection{Extremtest mit 230400 Baud bei 16 MHz Takt}
+
+Nach den Voruntersuchungen bei 8 MHz Takt und 115200 Baud habe ich zusätzlich noch alle verfügbaren
+USB-Seriell Wandler mit 230400 Baud und einer Autobaud Einstellung 32 des AVRs untersucht.
+Hierbei wird die Baudrate aus der Übertragungszeit für 4 Datenbits berechnet. Für die Zeitmessung wird
+ein Zähler mit /8 Vorteiler benutzt. Der Takt des AVR wurde in Schritten von 100 kHz beginnend bei 14 MHz auf
+18 MHz erhöht. Für jede Frequenz 40 Downloads von je 10 kByte mit dem modifizierten avrdude (2 Stoppbits) versucht.
+Die Tabelle \ref{tab:ExtremErrs16} zeigt die Resulte für die vorhandenen USB-Seriell Wandler.
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c | c | c | c | c | c | c | c | c |}
+    \hline
+\multicolumn{1}{| r |}{Typ}  & FT232   &  FT232 & CH340G & CP2102 & CP2104 & PL2303 & Pololu & Arduino \\
+Frequenz       &  RL     &  clone &        &        &        & TA     & AVR    &  UNO \\
+    \hline
+14000000       &  40     &  40    &  40    & 40     & 40     & 40     & 40     & 0 \\
+14100000       &  40     &  40    &  40    & 40     & 40     & 40     & 40     & 0 \\
+14200000       &  4      &  40    &  0     & 0      & 0      & 0      & 40     & 0 \\
+14300000       &  0      &  0     &  0     & 0      & 0      & 0      & 40     & 0 \\
+14400000       &  0      &  0     &  0     & 0      & 0      & 0      & 40     & 0 \\
+14500000       &  0      &  0     &  1     & 0      & 0      & 0      & 0      & 0 \\
+14600000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 0 \\
+14700000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 0 \\
+14800000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 0 \\
+14900000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 40 \\
+%              & FT232   &  FT232 & CH340G & CP2102 & CP2104 & PL2303 & Pololu & Arduino \\
+    \hline
+15000000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 40 \\
+15100000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 40 \\
+15200000       &  0      &  0     &  40    & 0      & 0      & 0      & 0      & 40 \\
+15300000       &  0      &  0     &  40    & 0      & 0      & 0      & 0      & 40 \\
+15400000       &  0      &  0     &  40    & 0      & 0      & 0      & 0      & 0 \\
+15500000       &  0      &  0     &  40    & 40     & 0      & 0      & 0      & 0 \\
+15600000       &  35     &  23    &  40    & 40     & 19     & 15     & 40     & 0 \\
+15700000       &  40     &  40    &  40    & 40     & 40     & 40     & 40     & 0 \\
+15800000       &  40     &  40    &  40    & 40     & 40     & 40     & 40     & 0 \\
+15900000       &  40     &  40    &  40    & 0      & 40     & 40     & 40     & 0 \\
+    \hline
+16000000       &  0      &  29    &  0     & 0      & 0      & 0      & 40     & 0 \\
+16100000       &  0      &  0     &  0     & 0      & 1      & 0      & 40     & 0 \\
+16200000       &  0      &  0     &  0     & 0      & 0      & 0      & 40     & 0 \\
+16300000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 0 \\
+16400000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 0 \\
+16500000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 0 \\
+16600000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 0 \\
+16700000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 40 \\
+16800000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 40 \\
+16900000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 40 \\
+    \hline
+17000000       &  0      &  0     &  0     & 0      & 0      & 0      & 0      & 40 \\
+17100000       &  0      &  0     &  40    & 0      & 0      & 0      & 0      & 0 \\
+17200000       &  0      &  0     &  40    & 0      & 0      & 0      & 0      & 0 \\
+17300000       &  0      &  0     &  40    & 0      & 0      & 0      & 0      & 0 \\
+17400000       &  0      &  0     &  40    & 8      & 0      & 0      & 0      & 0 \\
+17500000       &  18     &  4     &  40    & 40     & 18     & 20     & 17     & 0 \\
+17600000       &  40     &  40    &  40    & 40     & 40     & 40     & 40     & 0 \\
+17700000       &  40     &  40    &  0     & 0      & 0      & 0      & 40     & 0 \\
+17800000       &  0      &  6     &  0     & 0      & 0      & 0      & 40     & 0 \\
+17900000       &  0      &  0     &  0     & 0      & 0      & 0      & 40     & 0 \\
+18000000       &  0      &  0     &  0     & 0      & 0      & 0      & 40     & 0 \\
+    \hline
+\multicolumn{1}{|r|}{Total:} &  337    &  382   &  641   & 328    & 278    & 275    & 697    & 360 \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{Fehlerrate beim Extremtest mit 230400 Baud bei 16 MHz Takt}
+  \label{tab:ExtremErrs16}
+\end{table}
+
+Wieder zeigen der CP2104 und der PL2303 in der Tabelle \ref{tab:ExtremErrs16} die wenigsten Ausfälle
+über den gesamten Frequenzbereich.
+Die serielle Ausgabe der USB-Seriell Wandler wurden bei dieser Untersuchung mit zwei Stoppbits betrieben
+und der optiboot Bootloader arbeitete mit den Hardware UART. Bei Verwendung des Software-UARTs
+von optiboot wäre das Ergebnis noch besser ausgefallen.
+Dummerweise zeigen außer dem Arduino UNO mit dem ATmega16U2 als USB-Seriell Wandler alle anderen
+USB-Seriell Wandler knapp unter der Taktrate 16 MHz Ausfälle. Der FT232clone hat sogar bei 16 MHz
+selber Probleme mit dem Download, beim Pololu ist ein ganzer Frequenzbereich um die 16 MHz nicht
+benutzbar. Fast alle USB-Seriell Wandler versuchen, die Baudrate von 230400 möglichst genau
+einzuhalten, was wegen der höheren internen Taktrate von etwa 48 MHz bis 96 MHz auch ganz gut gelingt.
+Dagegen benutzt der ATmega16U2 eine Baudrate von 222222, welche auch vom für die Tests verwendeten ATmega1281
+bei 16 MHz erzeugt wird.
+Dies ist der Grund, weshalb der auf dem Arduino UNO verbaute Mega16U2 
+keine Probleme mit dem Download zum ATmega1281 im Taktfrequenzbereich um die 16 MHz zeigt.\\
+
+Wenn der vorhandene USB-Seriell Wandler den Betrieb mit 250000 Baud unterstützt, ist diese Einstellung
+wahrscheinlich bei einer AVR Taktrate von 16 MHz günstiger, da diese Baudrate ohne Abweichung erzeugt
+werden kann.
+Bei einem optiboot mit der Autobaud Funktion kann man ja einfach ausprobieren,
+ob eine höhere Baudrate möglich ist.
+
+
+\subsection{Zusammenfassung und Empfehlungen}
+\begin{itemize}
+
+\item{USB-Seriell Wandler} \\
+Die USB-Seriell Wandler FT232RL, CP2102, CP2104, PL2303TA und auch der von einer Arduino UNO Platinen Variante
+verwendete ATMega16U2 haben sich bei den Tests bewährt.
+Für eine Neuanschaffung würde ich den CP2104 empfehlen,
+der bei den Tests mit dem größten Baudratenbereich bei der 115200 Baud Einstellung zurecht kam.
+Mit dem PL2303 Modul hatte ich bei den Tests Schwierigkeiten, der Linux Treiber meldete Fehler und
+die Ergebnisse bei den Tests waren nicht stimmig. Außerdem mußte ich einen DTR Ausgangs-Pin nachrüsten,
+da dieser Pin bei meinem Modul fehlte. 
+Erst nachdem ich den PL2303HX Chip gegen einen PL2303TA getauscht hatte, wurden die Ergebnisse besser.
+Dabei mußte zusätzlich der GND (Pin 7) des PL2303TA Chips auf der Platine nachverdrahtet werden.
+Nach der Umrüstung des PL2303 Moduls zeigte der PL2303TA gleich gute Ergebnisse wie der CP2104.
+Jetzt habe ich auch schon chinesische Angebote von Arduino Nano clones mit dem PL2303TA Chip
+statt dem sonst üblichen CH340G gesehen.
+
+\item{2 Stoppbits} \\
+Bei den aufwendigen Tests, die in den Tabellen \ref{tab:HWfixErrs} auf Seite \pageref{tab:HWfixErrs}
+und \ref{tab:SWfixErrs} auf Seite \pageref{tab:SWfixErrs} zusammengefasst sind,
+hat sich gezeigt, daß die Benutzung eines zweiten Stoppbits für die
+gesendeten Daten die nutzbare Baudratendifferenz deutlich erhöht.
+Damit wurde gezeigt, daß sich das Auftreten ungünstiger Baudraten-Kombinationen mit 2 Stoppbits verringert.
+Leider läßt der Standard avrdude mit Version 6.3 die Verwendung
+eines zweiten Stoppbits nicht zu.
+Ich hatte dafür die avrdude Quellen von Version 6.3 so verändert, daß diese Einstellung
+mit einem Parameter -S wählbar ist.
+Die Änderungen sind in der Datei ee\_test/avrdude.diff festgehalten.
+Den Geschwindigkeitsverlust durch das zweite Stoppbit halte ich für unerheblich, mit einer
+höheren Baudrate, die sonst nicht möglich wäre, gewinnt man mehr.
+
+\item{Wahl des Autobaud Modus} \\
+Mit der letzten Verbesserung der Autobaud Funktion kann auch die einfachste Messung der Baudrate mit
+der Einstellung BAUD\_RATE=22 benutzt werden. Dies ist deswegen interessant, weil diese Version
+den wenigsten Speicher braucht. Leider wird aber für diese sinnvolle Verbesserung (Vorteiler Reset)
+ein Assemblerbefehl mehr benötigt, so daß 2 Byte Flash zusätzlich benutzt werden für alle Autobaud Modi
+mit Takt-Vorteiler für den Zähler (Einer-Ziffer der Baudrate \textless 5).
+Der Speicherverbrauch ist aber trotzdem geringer im Vergleich zur Benutzung des Zählers bei voller Taktrate
+(Einer-Ziffer der Baudrate \textgreater 4).
+\textbf{Empfohlen wird aber die Baudratenmessung über 4 Datenbits (Modus 32).} Auf die zusätzliche Kontrolle
+bei Modus 52 kann verzichtet werden. 
+Die Benutzung der vollen Kontrolle des Datenbytes bei Baudrate \textgreater 59 wird nicht empfohlen,
+speziell bei Benutzung des Zählers mit Vorteiler ergeben sich deutlich schlechtere Baudratenmessungen.
+Die Messung der Baudrate über 9 Bits (BAUD\_RATE=12) kann zwar uneingeschränkt benutzt werden,
+die Messung über 4 Bits reicht aber völlig aus und braucht weniger Speicher.
+
+\item{Benutzung Software UART} \\
+Es gibt mehrere Gründe, die den Einsatz der Software UART Lösung notwendig machen wie die Verwendung anderer
+Pins für die serielle Kommunikation oder auch die Ein-Pin Kommunikation (RX und TX-Pin gleich).
+Auch für diesen Fall ist die Benutzung der Autobaud Funktion möglich. Da sowohl die Software-UART Lösung
+als auch die Autobaud Funktion mehr Flash Speicher benötigen, wird es immer schwieriger, den optiboot
+in 512 Byte unterzubringen. Wenn der Zielprozessor eine größere Bootloader-Seite wie 1024 Byte hat,
+braucht man sich natürlich um die 512 Byte Grenze nicht zu kümmern.
+Die Tests, ob die optiboot Version in 512 Byte passt, sollte man jedenfalls mit make Aufrufen
+ohne die ISP Option oder mit ISP=0 machen. So kann man mit den Optionen so lange
+ausprobieren, bis eine geeignete Konfiguration gefunden ist, die in 512 Byte passt.
+Die Größe der Bootloader-Seite des Zielprozessors wird übrigens bei jedem make Aufruf mit
+der Angabe eines Zielprozessors im Terminal-Protokoll angezeigt.\\
+Als erstes sollte man die Blink-Funktion der LED mit LED\_START\_FLASHES=0 abschalten, um Platz zu sparen.
+Wer unbedingt etwas zum Leuchten braucht, kann die Funktion LED\_DATA\_FLASH=4 benutzen,
+denn die braucht nur 4 Byte Flash statt der 56 Byte der Blinkfunktion.
+Die Tabelle \ref{tab:AutoBaudLen328} auf Seite \pageref{tab:AutoBaudLen328} gibt
+eine Vorinformation über den benötigten Speicher für alle Einstellmöglichkeiten.\\
+Mit der Option NO\_EARLY\_PAGE\_ERASE=1 werden zusätzlich 14 Byte eingespart,
+wobei dadurch lediglich das Laden des Anwenderprogramms etwas langsamer wird.\\
+Auf die Möglichkeit, das EEprom zu beschreiben, sollte man nach Möglichkeit nicht verzichten.
+Die Abschaltung der Funktion ist zwar mit SUPPORT\_EEPROM=0 auch möglich, spart aber nur etwa 24 Byte ein.\\
+
+Wenn mit mehr Störungen der Übertragung zu rechnen ist, weil beispielsweise längere Kabel
+verwender werden, sollte man nach Möglichkeit aber das Hardware-UART verwenden und höhere Baudraten
+vermeiden.
+
+
+\end{itemize}
+
+\section{Schlußbemerkung}
+
+Als ich die Arbeit mit der optiboot Umstellung auf Assembler und Einbau der EEprom-Unterstützung
+begonnen hatte, hatte ich keine Ahnung, wie viel hier untersucht und erweitert werden könnte.
+Die erste Aufgabe bestand ja darin, einen optiboot zu bauen, der das Laden von EEprom Daten unterstützt
+und nicht mehr wie 512 Byte Flash braucht. Das erschien mir ein überschaubarer Aufwand zu sein.\\
+
+Da war aber zusätzlich noch die Unterstützung vieler AVR Prozessoren einzubauen,
+die dann beschafft, die verschiedenen Bootloader-Seitengrößen berücksichtigt und natürlich auch getestet werden mußten.
+Die vielen Optionen und die sich daraus ergebenden Programmvarianten erzeugen unterschiedliche Programmlängen,
+die jetzt immer automatisch berücksichtigt werden.
+Damit werden Falschsetzungen der AVR-Fuses für alle unterstützten Prozessoren vermieden.\\
+
+Die Software-UART Lösung wurde optimiert und so ist damit jetzt auch ein Betrieb mit einem IO-Pin möglich.
+Es wurde die automatische Baudraten-Anpassung (Autobaud) eingebaut und getestet.
+Dabei können jetzt viele Autobaud-Varianten ausgewählt werden, wobei die Autobaud Funktion
+sowohl mit dem Hardware-UART als auch mit der Software-UART Lösung von optiboot funktioniert.\\
+
+Die Einstellmöglichkeit des internen RC-Oszillators als Taktgeber für die unterstützten AVR's
+wurde untersucht und die Einstellmöglichkeit OSCCAL\_CORR in optiboot integriert.
+Speziell bei der Kombination Autobaud und Software-UART ist die 512 Byte Grenze für den Flash eine Herausforderung,
+selbst wenn man die LED-Blinkfunktion abwählt.
+Natürlich läuft optiboot auch dann, wenn mehr als 512 Byte gebraucht werden. Die Grenze war nur meine Zielvorstellung,
+ich wollte möglichst alle Funktionen in die 512 Byte integrieren.
+So wurde mit der Option NO\_EARLY\_PAGE\_ERASE die Möglichkeit gefunden, gegebenenfalls noch ein paar Byte einzusparen.
+Dadurch wird das Flash-Schreiben etwas langsamer, aber wenn beispielsweise die Baudrate 
+im Autobaud Modus höher gewählt werden kann, wird das mehr als ausgeglichen. Der Vorteil bei der
+Autobaud-Funktion ist ja, daß man die höhere Baudrate wie beispielsweise 115200 Baud bei 8 MHz Takt
+ausprobieren kann. Wenn das dann nicht funktioniert, kann man auf eine niedrigere Baudrate ausweichen,
+ohne den Bootloader zu verändern.\\
+
+So konnte ich in aufwendigen Testreihen nachweisen, daß mit einem zweiten Stoppbit der seriellen Schnittstelle
+eine größere Abweichung der Baudrate von avrdude toleriert wird. Es wundert ein wenig, daß das bisher nicht
+aufgefallen ist. Sonst dürfte das zweite Stoppbit wenigstens als Option von avrdude wählbar sein.\\
+
+Sogar, als ich glaubte, es gäbe nichts mehr zu verbessern, kam bei den abschließenden Tests der Autobaud-Funktion
+mit verschiedenen USB-Seriell-Wandlern die Idee, den Frequenz-Vorteiler für die Zähler bei der Zeitmessung
+für Autobaud zurückzusetzen. Das wird selten benutzt, da der Vorteiler von allen integrierten Zählern gemeinsam
+benutzt wird. Aber hier in optiboot kann diese Funktion benutzt werden und führt zu einer Verringerung
+der Fehlers bei der Autobaud Zeitmessung, wenn der Zähler mit /8 Vorteiler benutzt wird.\\
+
+Es tut mir leid, daß die vielen Einstell-Möglichkeiten für optiboot für einen Benutzer verwirrend sind.
+Soweit es möglich war, habe ich die Optionen der C-Version von Peter Knight und Bill Westfield übernommen,
+damit es Benutzer der Ursprungsversion von optiboot leichter haben.
+Sonst hoffe ich aber, daß die Beispiele aus Kapitel \ref{Examples} auf Seite \pageref{Examples}
+den ersten Einstieg erleichtern. Außerdem reicht immer ein make Aufruf mit dem gewünschten Zielprozessor als
+Parameter aus, um einen lauffähigen optiboot als .hex Datei zu erzeugen. Aus dem Terminal-Protokoll kann man
+entnehmen, welche Einstellung gewählt wurde. Das ist immer eine vorgewählte Taktfrequenz und eine
+vorgewählte (feste) Baudrate für diesen speziellen Prozessor.
+Im Bedarfsfall können die Voreinstellungen natürlich geändert werden.

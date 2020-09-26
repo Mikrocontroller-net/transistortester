@@ -145,34 +145,37 @@ wt_rx0low:
     1e34:	7e e8       	ldi	r23, 0x8E	; 142
 	AOUT	UART_SRC, r23
     1e36:	70 bd       	out	0x20, r23	; 32
- #endif	/* defined(UART_SRC) && defined(UART_SEL) */
-#endif
-
-  ; use the 16-Bit counter to measure Baud time
   ; prepare the counter 1
+ #if (CounterClockDiv == 8) && defined(GTCCR)
+	ldi	r24, (1<<TSM)|(1<<PSRSYNC)
+        AOUT    GTCCR, r24		; reset Prescaler, stop Counters
+ #else
 	AOUT	CNT16_CCRB, r1		; Stop counter 1 
     1e38:	1e bc       	out	0x2e, r1	; 46
+ #endif
 	AOUT	CNT16_CNTH, r1		; set initial counter to 0
     1e3a:	1d bc       	out	0x2d, r1	; 45
 	AOUT	CNT16_CNTL, r1
     1e3c:	1c bc       	out	0x2c, r1	; 44
-
-#if BAUD_RATE < 60
-  ; simple detection of the baud-rate
 ; wait, if the UART-RX-Bit is low
+ #if (CounterClockDiv == 8) && defined(GTCCR)
+        ldi	r24, START_COUNTER_COMMAND      ; start counter with /8 scaler, but is still stopped
+	AOUT	CNT16_CCRB, r24		; Start counter 1 with /8 scaler for 9-Bit measure, still stopped
+ #else
 	ldi	r24, START_COUNTER_COMMAND	; start command for counter with /8 scaler or full speed
     1e3e:	81 e0       	ldi	r24, 0x01	; 1
 
-00001e40 <wt_rx0s>:
-wt_rx0s:
+00001e40 <wt_rx0l>:
+ #endif
+wt_rx0l:
  #if INVERSE_UART > 0
 	ASBIS	UART_RX_PIN, UART_RX_BIT	; Look if RX is still low, INVERSE
  #else
 	ASBIC	UART_RX_PIN, UART_RX_BIT	; Look if RX is still high
     1e40:	80 99       	sbic	0x10, 0	; 16
  #endif
-	rjmp	wt_rx0s
-    1e42:	fe cf       	rjmp	.-4      	; 0x1e40 <wt_rx0s>
+	rjmp	wt_rx0l
+    1e42:	fe cf       	rjmp	.-4      	; 0x1e40 <wt_rx0l>
 
 00001e44 <wt_rx1s>:
  #endif
@@ -187,7 +190,10 @@ wt_rx1s:
     1e46:	fe cf       	rjmp	.-4      	; 0x1e44 <wt_rx1s>
 	; begin of first "1" data bit is found after S0000, if it was a STK_GET_SYNC, 0x30
  #if (Bits2Measure == 2) || (Bits2Measure == 4)
-	AOUT	CNT16_CCRB, r24		; Start counter 1 with or without /8 scaler for 2 or 4 Bit measure
+  #if (CounterClockDiv == 8) && defined(GTCCR)
+	AOUT	GTCCR, r1		; start prescaler and counters
+  #else
+	AOUT	CNT16_CCRB, r24		; Start counter 1 with or without /8 scaler for 2-Bit or 4-Bit measure
     1e48:	8e bd       	out	0x2e, r24	; 46
  #if BAUD_RATE > 39
 	; the optional time-limit check is only done, if the BAUD_RATE is set > 39 
@@ -237,14 +243,15 @@ wt_rx1bs:
     1e5c:	8c b5       	in	r24, 0x2c	; 44
 	AIN	r25, CNT16_CNTH
     1e5e:	9d b5       	in	r25, 0x2d	; 45
-    #if defined(__AVR_ATtiny87__) || defined(__AVR_ATtiny167__)
-	sbiw	r24, 28		; (four_bit_time - 28) / 32, faster selection than correct round up
-    #elif defined(__AVR_ATmega162__)
-	sbiw	r24, 19		; (four_bit_time - 19) / 32, faster selection than correct round up
-    #else
-	sbiw	r24, 24		; (four_bit_time - 24) / 32, faster selection than correct round up
-    1e60:	48 97       	sbiw	r24, 0x18	; 24
-    #endif
+;	sbiw	r24, 28		; (four_bit_time - 28) / 32, faster selection than correct round up
+;    #elif defined(__AVR_ATmega162__)
+;	sbiw	r24, 19		; (four_bit_time - 19) / 32, faster selection than correct round up
+;   #else
+;	sbiw	r24, 16		; (four_bit_time - 16) / 32, correct round up, but many errors with CH340
+	sbiw	r24, 14		; (four_bit_time - 14) / 32, slower baud than correct round up, 12 Err CH340
+    1e60:	0e 97       	sbiw	r24, 0x0e	; 14
+;	sbiw	r24, 12		; (four_bit_time - 14) / 32, slower baud than correct round up, 0 Err CH340, but err with FT232
+;   #endif
 	ldi	r28, 5		; divide by 32 is done with 5 shifts in a loop
     1e62:	c5 e0       	ldi	r28, 0x05	; 5
 

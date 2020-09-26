@@ -39,18 +39,17 @@ endif
 
 
 BitClock=5.0
-#AVRDUDE_BAUD = -b 115200 -D
-AVRDUDE_BAUD = -b $(BAUD_RATE) -D
+AVRDUDE_BAUD = -b $(BAUD_RATE)
 # ********************** end of selectable options
 
-AVRDUDE_CONF =
+AVRDUDE_CONF = -D
 ifdef ETC_CONF
  AVRDUDE_CONF += -C /etc/avrdude.conf
 endif
 
 ifdef TWO_STOP_BITS
  ifneq ($(TWO_STOP_BITS),0)
- AVRDUDE_CONF += -S 
+ AVRDUDE_BAUD += -S 
  endif
 endif
 
@@ -179,9 +178,19 @@ eeread:
 	avrdude -c $(PROGRAMMER) -B $(BitClock) $(AVRDUDE_BAUD) $(AVRDUDE_CONF) -p $(PARTNO) -P $(PORT) -u \
 	-U eeprom:r:./Read.eep:i
 read:
-	avrdude -c $(PROGRAMMER) -B $(BitClock) $(AVRDUDE_BAUD) -p $(PARTNO) $(AVRDUDE_CONF) -P $(PORT) -u \
+	avrdude -c $(PROGRAMMER) -B $(BitClock)  -p $(PARTNO) $(AVRDUDE_BAUD) $(AVRDUDE_CONF) -P $(PORT) -u \
 	-U flash:r:./Read.hex:i
 verify: $(PARTNO)_test.hex $(PARTNO)_test.eep
-	avrdude -D -c $(PROGRAMMER) -B $(BitClock) $(AVRDUDE_BAUD) -p $(PARTNO) $(AVRDUDE_CONF) -P $(PORT) -u \
+	avrdude -D -c $(PROGRAMMER) -B $(BitClock)  -p $(PARTNO) $(AVRDUDE_BAUD) $(AVRDUDE_CONF) -P $(PORT) -u \
 	-U flash:v:./$(PARTNO)_test.hex:a \
 	-U eeprom:v:./$(PARTNO)_test.eep:a -v
+help:
+	@echo "Please use short names like m328 for atmega328"
+	@echo " "
+	@echo "Options:"
+	@echo "AVR_FREQ      Operating frequency of AVR target"
+	@echo "BAUD_RATE     Baudrate for the serial interface"
+	@echo "TWO_STOP_BITS use two stop bits for the serial interface"
+	@echo "PORT          set the port for avrdude to something like /dev/ttyUSB0 or /dev/ttyACM0"
+	@echo "BIGPROGRAM    Additional programming data for the flash memory"
+	@echo "ISP           =1 for download the test program with avrdude"

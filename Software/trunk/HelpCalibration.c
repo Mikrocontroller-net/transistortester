@@ -1,10 +1,34 @@
+/* ************************************************************************
+ *  (c) by Karl-Heinz Kuebbeler, Projekt Transistor Tester
+ *  
+ *  File:       HelpCalibration.c
+ *  Funktion:   Output of help text for Calibration
+ * 
+ * History:     Date        Sign    Kommentar 
+ *              2021-01-10  Karl    Time to read 
+ *              2021-01-11  Karl    change function comment     
+ *              2021-01-11  Karl    repeat help-text with left turn
+ *
+ * ************************************************************************ */
+
 #if defined(AUTO_CAL) && (FLASHEND > 0x3fff)
 // Check is direct included in the main source of the TransistorTester
 // a function with a call from main will use additional 38 bytes of flash
   // define additional variables , ii is already defined in main
  #define TIME_TO_READ 10000
   if (UnCalibrated) {
+
 #ifndef SHORT_UNCAL_MSG
+
+  // set longer time to read, when more lines are shown
+ #if LCD_LINES > 4
+  #undef TIME_TO_READ
+  #define TIME_TO_READ 32000   // near to maximum time
+ #elif LCD_LINES > 2
+  #undef TIME_TO_READ
+  #define TIME_TO_READ 20000   // 20s, if more than 2 Display lines
+ #endif
+
   unsigned int jj;
   char zeich;
   uint8_t space_pos;
@@ -12,6 +36,9 @@
   uint8_t sub_line;
     // Output the help text for calibration.
     // The text is formatted for two 16 character display lines.
+ #ifdef WITH_ROTARY_SWITCH
+start_help_text:
+ #endif
     jj = 0;
     zeich = ' ';		// initial value for while loop
     line_nr = LCD_LINES;		// begin with the first LCD line, but don't wait
@@ -23,7 +50,10 @@
        }
        if (line_nr == 0) {
           // it is the first LCD line, wait for showing the last message
-          if ((wait_for_key_ms(TIME_TO_READ)) != 0) break;	// key pressed
+          if ((wait_for_key_ms(TIME_TO_READ)) != 0)  break;	// key pressed 
+ #ifdef WITH_ROTARY_SWITCH
+          if (rotary.count < 0) goto start_help_text;
+ #endif
        }
        sub_line = line_nr % LCD_LINES;
        if (sub_line == 0) lcd_clear();  // clear display, line_nr is 0 or 4
@@ -44,13 +74,19 @@
        jj += space_pos;		// start position of line 2
        if((pgm_read_byte(&HelpCalibration_str[jj])) == ' ') jj++; // no space at begin of line
     }  /* end while */
+    wait_for_key_ms(TIME_TO_READ);	// key pressed
+ #ifdef WITH_ROTARY_SWITCH
+    if (rotary.count < 0) goto start_help_text;
+ #endif
 #else
     lcd_clear();
     lcd_pgm_string(HelpCalibration_str);	// only short message!
-	#ifdef WITH_UART		//Mauro 
-		uart_newline();		//Mauro 
-	#endif					//Mauro 
-#endif
+	#ifdef WITH_UART		//Mauro
+		uart_newline();		//Mauro
+	#endif					//Mauro
     wait_for_key_ms(TIME_TO_READ);	// key pressed
+#endif
   }
 #endif  /* AUTO_CAL && (FLASHEND > 0x3fff) */
+
+/* ****************************** EOF ***************************************** */

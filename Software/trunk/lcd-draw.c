@@ -1,9 +1,17 @@
-// file lcd-draw.c
+/* ************************************************************************
+ *  (c) by Karl-Heinz Kuebbeler, Projekt Transistor Tester
+ *  
+ *  File:       lcd-draw.c
+ *  Funktion:   Assing from lcd_bitmap parameter
+ * 
+ * History:     Date        Sign    Kommentar 
+ *              2021-01-07  Karl    show all sign
+ *
+ * ************************************************************************ */
 
 #include "Transistortester.h"
 
 #ifdef WITH_GRAPHICS
-//#include "bitmaps.h"
 extern const unsigned char bmp_one_data[] PROGMEM;
 extern const unsigned char bmp_two_data[] PROGMEM;
 extern const unsigned char bmp_three_data[] PROGMEM;
@@ -64,11 +72,11 @@ void ShowIcons(void) {
  lcd_update_icon(bmp_p_jfet);	// update to P_JFET
  lcd_set_cursor(2,1);
  lcd_data('N');		// N-Type
- lcd_data('-');
+ lcd_minus();			// lcd_data('-');
  lcd_MEM_string(jfet_str);
  lcd_set_cursor(2,1+(LCD_LINE_LENGTH / 2));
  lcd_data('P');		// P-Type
- lcd_data('-');
+ lcd_minus();			// lcd_data('-');
  lcd_MEM_string(jfet_str);
  wait_for_key_ms(ShowTime);
 
@@ -78,12 +86,12 @@ void ShowIcons(void) {
  lcd_update_icon(bmp_p_e_igbt);	// update to P-E-IGBT
  lcd_set_cursor(5,0);
  lcd_data('N');		// N-Type
- lcd_data('-');
+ lcd_minus();			// lcd_data('-');
  lcd_data('E');		// Enhancement Type
  lcd_MEM_string(igbt_str);
  lcd_set_cursor(6,(LCD_LINE_LENGTH / 2));
  lcd_data('P');		// P-Type
- lcd_data('-');
+ lcd_minus();			// lcd_data('-');
  lcd_data('E');		// Enhancement Type
  lcd_MEM_string(igbt_str);
  wait_for_key_ms(ShowTime);
@@ -95,12 +103,12 @@ void ShowIcons(void) {
  lcd_update_icon(bmp_p_d_igbt);	// update to P-D-IGBT
  lcd_set_cursor(1,0);
  lcd_data('N');		// N-Type
- lcd_data('-');
+ lcd_minus();			// lcd_data('-');
  lcd_data('D');		// Depletion Type
  lcd_MEM_string(igbt_str);
  lcd_set_cursor(2,(LCD_LINE_LENGTH / 2));
  lcd_data('P');		// P-Type
- lcd_data('-');
+ lcd_minus();			// lcd_data('-');
  lcd_data('D');		// Depletion Type
  lcd_MEM_string(igbt_str);
  wait_for_key_ms(ShowTime);
@@ -111,12 +119,12 @@ void ShowIcons(void) {
  lcd_update_icon(bmp_p_e_mos);  // update to P-E-MOS
  lcd_set_cursor(5,0);
  lcd_data('N');		// N-Type
- lcd_data('-');
+ lcd_minus();			// lcd_data('-');
  lcd_data('E');		// Enhancement Type
  lcd_MEM_string(mosfet_str);
  lcd_set_cursor(6,(LCD_LINE_LENGTH / 2));
  lcd_data('P');		// P-Type
- lcd_data('-');
+ lcd_minus();			// lcd_data('-');
  lcd_data('E');		// Enhancement Type
  lcd_MEM_string(mosfet_str);
  wait_for_key_ms(ShowTime);
@@ -128,12 +136,12 @@ void ShowIcons(void) {
  lcd_update_icon(bmp_p_d_mos);  // update to P-D-MOS
  lcd_set_cursor(1,1);
  lcd_data('N');		// N-Type
- lcd_data('-');
+ lcd_minus();			// lcd_data('-');
  lcd_data('D');		// Depletion Type
  lcd_MEM_string(mosfet_str);
  lcd_set_cursor(2,1+(LCD_LINE_LENGTH / 2));
  lcd_data('P');		// P-Type
- lcd_data('-');
+ lcd_minus();			// lcd_data('-');
  lcd_data('D');		// Depletion Type
  lcd_MEM_string(mosfet_str);
  wait_for_key_ms(ShowTime);
@@ -158,22 +166,29 @@ void ShowIcons(void) {
  wait_for_key_ms(ShowTime);
  #endif
 
- 
- lcd_clear();
- lcd_line1();
- lcd_MEM_string(Resistor_str);    // -[=]-
- lcd_line2();
- lcd_MEM_string(Inductor_str);         // -ww-
- lcd_line3();
- lcd_MEM_string(CapZeich);          // capacitor sign
- lcd_line4();
- lcd_MEM_string(AnKat_str);       //"->|-"
- lcd_space();
- lcd_MEM_string(KatAn_str);       //"-|<-"
 
 
 // show character set
- for (cc=0;cc<(0x7f-0x20);cc++) {
+  #ifdef LCD_ST_TYPE
+   #define StartChar 0x00
+   // LastChar is defined in Font
+  #else
+   #define StartChar 0x20
+   #define LastChar 0x7f
+   lcd_clear();
+   lcd_line1();
+   lcd_MEM_string(Resistor_str);    // -[=]-
+   lcd_line2();
+   lcd_MEM_string(Inductor_str);         // -ww-
+   lcd_line3();
+   lcd_MEM_string(CapZeich);          // capacitor sign
+   lcd_line4();
+   lcd_MEM_string(AnKat_str);       //"->|-"
+   lcd_space();
+   lcd_MEM_string(KatAn_str);       //"-|<-"
+  #endif
+
+ for (cc=0;cc<(LastChar+1-StartChar);cc++) {
    if ((cc%LCD_LINE_LENGTH) == 0) {
      // begin new line
      if(((cc/LCD_LINE_LENGTH) % LCD_LINES) == 0) {
@@ -182,32 +197,15 @@ void ShowIcons(void) {
      }
      lcd_set_cursor(((cc/LCD_LINE_LENGTH)%LCD_LINES)*PAGES_PER_LINE,0);
    }
-  lcd_data(cc+0x20);
+  lcd_data(cc+StartChar);
  } /* end for cc */
  wait_for_key_ms(ShowTime);
 
  lcd_clear();
-  #ifdef LCD_CYRILLIC
- for (cc=0;cc<((Cyr_ja+1-Cyr_B)+(Cyr_schtsch+1-Cyr_D));cc++) {
-   if ((cc%LCD_LINE_LENGTH) == 0) {
-     // begin new line
-     lcd_set_cursor(((cc/LCD_LINE_LENGTH)%LCD_LINES)*PAGES_PER_LINE,0);
-   }
-   if (cc <= (Cyr_ja-Cyr_B))
-   {
-     lcd_data(cc + Cyr_B);
-   } else {
-     lcd_data(cc + Cyr_D - (Cyr_ja + 1 - Cyr_B));
-   }
- } /* end for cc */
- wait_for_key_ms(ShowTime);
-
- lcd_clear();
-  #endif
 
 }
  #endif  /* defined(SamplingADC) || (FLASHEND > 0x7fff)  */
 #else
- #warning "no WITH_GRAPHICS" 
+ #warning "no WITH_GRAPHICS"
 #endif  /* WITH_GRAPHICS */
-
+/* ****************************** EOF ***************************************** */

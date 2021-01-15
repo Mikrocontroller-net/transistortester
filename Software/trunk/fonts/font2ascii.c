@@ -11,11 +11,14 @@ int main(int argc, char *argv[])
  int anz;
  int hexwert;
  int ii, kk;
+ int blanks;
  int hh;
  int lev;
  int line, row;
+ int lines;
  int line_cnt[20];
- char linebuf[256];
+ char origbuf[256];
+ char *linebuf;
  char filename[256];
  char asc_table[100][130];
  char *end_line;
@@ -66,12 +69,19 @@ int main(int argc, char *argv[])
     anz = width;
     anz *= ((height + 7) / 8);
     line_cnt[lev] = 0;
-    while (fgets(linebuf,256,stdin) != NULL)
+    lines = 0;
+    while (fgets(origbuf,256,stdin) != NULL)
     {
+      lines++;
       for(ii=0;ii<256;ii++) {
-        if (linebuf[ii] == '\n') linebuf[ii] = (char)0;
-        if (linebuf[ii] == '\r') linebuf[ii] = (char)0;
+        if (origbuf[ii] == '\n') origbuf[ii] = (char)0;
+        if (origbuf[ii] == '\r') origbuf[ii] = (char)0;
       }
+      /* remove leading Blanks */
+      for (blanks=0;blanks<20;blanks++) {
+	if (origbuf[blanks] != ' ') break;
+      }
+      linebuf = &origbuf[blanks];
       if (linebuf[0] == '{') { 
          fprintf(outfile," /* 0x%02x ",line_cnt[lev]);
          if ((line_cnt[lev] >= (int)' ') && (line_cnt[lev] < 0x7f)) {
@@ -86,60 +96,6 @@ int main(int argc, char *argv[])
            if (line_cnt[lev] == 5) fprintf(outfile,"mu ");
            if (line_cnt[lev] == 6) fprintf(outfile,"Resistor1 ");
            if (line_cnt[lev] == 7) fprintf(outfile,"Resistor2 ");
-           if (line_cnt[lev] == 0xa0) fprintf(outfile,"Cyr_B ");
-           if (line_cnt[lev] == 0xa1) fprintf(outfile,"Cyr_G ");
-           if (line_cnt[lev] == 0xa2) fprintf(outfile,"Cyr_Jo ");
-           if (line_cnt[lev] == 0xa3) fprintf(outfile,"Cyr_Tsch ");
-           if (line_cnt[lev] == 0xa4) fprintf(outfile,"Cyr_Z ");
-           if (line_cnt[lev] == 0xa5) fprintf(outfile,"Cyr_I ");
-           if (line_cnt[lev] == 0xa6) fprintf(outfile,"Cyr_J ");
-           if (line_cnt[lev] == 0xa7) fprintf(outfile,"Cyr_L ");
-           if (line_cnt[lev] == 0xa8) fprintf(outfile,"Cyr_P ");
-           if (line_cnt[lev] == 0xa9) fprintf(outfile,"Cyr_U ");
-           if (line_cnt[lev] == 0xaa) fprintf(outfile,"Cyr_F");
-           if (line_cnt[lev] == 0xab) fprintf(outfile,"Cyr_Tsch");
-           if (line_cnt[lev] == 0xac) fprintf(outfile,"Cyr_Sch");
-           if (line_cnt[lev] == 0xad) fprintf(outfile,"Cyr_HH");
-           if (line_cnt[lev] == 0xae) fprintf(outfile,"Cyr_Y");
-           if (line_cnt[lev] == 0xaf) fprintf(outfile,"Cyr_E");
-           if (line_cnt[lev] == 0xb0) fprintf(outfile,"Cyr_Ju");
-           if (line_cnt[lev] == 0xb1) fprintf(outfile,"Cyr_Ja");
-           if (line_cnt[lev] == 0xb2) fprintf(outfile,"Cyr_b");
-           if (line_cnt[lev] == 0xb3) fprintf(outfile,"Cyr_v");
-           if (line_cnt[lev] == 0xb4) fprintf(outfile,"Cyr_g");
-           if (line_cnt[lev] == 0xb5) fprintf(outfile,"Cyr_jo");
-           if (line_cnt[lev] == 0xb6) fprintf(outfile,"Cyr_zsch");
-           if (line_cnt[lev] == 0xb7) fprintf(outfile,"Cyr_z");
-           if (line_cnt[lev] == 0xb8) fprintf(outfile,"Cyr_i");
-           if (line_cnt[lev] == 0xb9) fprintf(outfile,"Cyr_j");
-           if (line_cnt[lev] == 0xba) fprintf(outfile,"Cyr_k");
-           if (line_cnt[lev] == 0xbb) fprintf(outfile,"Cyr_l");
-           if (line_cnt[lev] == 0xbc) fprintf(outfile,"Cyr_m");
-           if (line_cnt[lev] == 0xbd) fprintf(outfile,"Cyr_n");
-           if (line_cnt[lev] == 0xbe) fprintf(outfile,"Cyr_p");
-           if (line_cnt[lev] == 0xbf) fprintf(outfile,"Cyr_t");
-           if (line_cnt[lev] == 0xc0) fprintf(outfile,"Cyr_tsch");
-           if (line_cnt[lev] == 0xc1) fprintf(outfile,"Cyr_sch");
-           if (line_cnt[lev] == 0xc2) fprintf(outfile,"Cyr_hh");
-           if (line_cnt[lev] == 0xc3) fprintf(outfile,"Cyr_y");
-           if (line_cnt[lev] == 0xc4) fprintf(outfile,"Cyr_ww");
-           if (line_cnt[lev] == 0xc5) fprintf(outfile,"Cyr_e");
-           if (line_cnt[lev] == 0xc6) fprintf(outfile,"Cyr_ju");
-           if (line_cnt[lev] == 0xc7) fprintf(outfile,"Cyr_ja");
-           if (line_cnt[lev] == 0x10) fprintf(outfile,"(Cyr_D)");
-           if (line_cnt[lev] == 0x11) fprintf(outfile,"(Cyr_C)");
-           if (line_cnt[lev] == 0x12) fprintf(outfile,"(Cyr_Schtsch)");
-           if (line_cnt[lev] == 0x13) fprintf(outfile,"(Cyr_d)");
-           if (line_cnt[lev] == 0x14) fprintf(outfile,"(Cyr_f)");
-           if (line_cnt[lev] == 0x15) fprintf(outfile,"(Cyr_c)");
-           if (line_cnt[lev] == 0x16) fprintf(outfile,"(Cyr_schtsch)");
-           if (line_cnt[lev] == 0xe0) fprintf(outfile,"(Cyr_D)");
-           if (line_cnt[lev] == 0xe1) fprintf(outfile,"(Cyr_C)");
-           if (line_cnt[lev] == 0xe2) fprintf(outfile,"(Cyr_Schtsch)");
-           if (line_cnt[lev] == 0xe3) fprintf(outfile,"(Cyr_d)");
-           if (line_cnt[lev] == 0xe4) fprintf(outfile,"(Cyr_f)");
-           if (line_cnt[lev] == 0xe5) fprintf(outfile,"(Cyr_c)");
-           if (line_cnt[lev] == 0xe6) fprintf(outfile,"(Cyr_schtsch)");
          }
          fprintf(outfile," */\r\n");
          // init the table
@@ -210,22 +166,29 @@ int main(int argc, char *argv[])
               }
               tx++;
               if (tx[0] == '}') {
-                 fprintf(stderr,"Warning } is found!\r\n");
+                 fprintf(stderr,"Warning } is found at line %d!\r\n",lines);
                  break;
               } 
               if (tx >= end_line) {
               // read new line
-                if (fgets(linebuf,256,stdin) != NULL) {
+                if (fgets(origbuf,256,stdin) != NULL) {
+		   lines++;
                    for(kk=0;kk<256;kk++) {
-                     if (linebuf[kk] == '\n') linebuf[kk] = (char)0;
-                     if (linebuf[kk] == '\r') linebuf[kk] = (char)0;
+                     if (origbuf[kk] == '\n') origbuf[kk] = (char)0;
+                     if (origbuf[kk] == '\r') origbuf[kk] = (char)0;
                    }
+                   /* remove leading Blanks */
+                   for (blanks=0;blanks<20;blanks++) {
+	             if (origbuf[blanks] != ' ') break;
+                   }
+                   linebuf = &origbuf[blanks];
                    end_line = &linebuf[strlen(linebuf)];
                    tx = &linebuf[0];
                 }
               }
             }
          } /* end while(ii<anz) */
+	 fprintf(outfile,"// %s\r\n",&tx[2]);
          fprintf(outfile," ");
          for (kk=0; kk<width; kk++) {
             if ( ((kk % 8) == 0) && (kk != 0) ) {
@@ -262,7 +225,11 @@ int main(int argc, char *argv[])
          fprintf(outfile," \r\n");
          line_cnt[lev]++;
       } else {  /* linebuf[0] != '{' */
-        fprintf(outfile,"%s\r\n", linebuf);
+        fprintf(outfile,"%s\r\n", origbuf);
+        if ((strncmp(linebuf,"#if ",4)) == 0) {
+          lev++;
+          line_cnt[lev] = line_cnt[lev-1];
+        }
         if ((strncmp(linebuf,"#ifdef",6)) == 0) {
           lev++;
           line_cnt[lev] = line_cnt[lev-1];
@@ -272,6 +239,9 @@ int main(int argc, char *argv[])
           line_cnt[lev] = line_cnt[lev-1];
         }
         if (((strncmp(linebuf,"#else",5)) == 0) && (lev > 0)) {
+	  line_cnt[lev] = line_cnt[lev-1];
+        }
+        if (((strncmp(linebuf,"#elif",5)) == 0) && (lev > 0)) {
 	  line_cnt[lev] = line_cnt[lev-1];
         }
         if (((strncmp(linebuf,"#endif",6)) == 0) && (lev > 0)) {

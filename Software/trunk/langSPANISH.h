@@ -1,3 +1,12 @@
+/* ************************************************************************
+ *  (c) by Karl-Heinz Kuebbeler, Projekt Tranzistor Tester
+ *  
+ *  File:       langCZECH.h
+ *  Funktion:   language selection
+ * 
+ * History:     Date        Sign    Kommentar 
+ *              2021-01-12
+ * ************************************************************************ */
 #if defined(LANG_SPANISH)
    const unsigned char TestRunning[] MEM_TEXT = "Testeando";	
    const unsigned char BatWeak[] MEM_TEXT = "Poca bateria"; 	
@@ -57,3 +66,4 @@
  #endif
  #define LANG_SELECTED
 #endif  /* LANG SPANISH */
+/* ****************************** EOF ***************************************** */

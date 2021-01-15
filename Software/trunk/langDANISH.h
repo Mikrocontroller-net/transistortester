@@ -1,13 +1,22 @@
+/* ************************************************************************
+ *  (c) by Karl-Heinz Kuebbeler, Projekt Transistor Tester
+ *  
+ *  File:       langDANISH.h
+ *  Funktion:   language selection
+ * 
+ * History:     Date        Sign    Kommentar 
+ *              2021-01-12
+ * ************************************************************************ */
 #if defined(LANG_DANISH)		//dansk
-   const unsigned char TestRunning[] MEM_TEXT = "Tester."; //ÄÄÄÄÄÄÄ";
+   const unsigned char TestRunning[] MEM_TEXT = "Tester.";
    const unsigned char BatWeak[] MEM_TEXT = "svag";
-   const unsigned char BatEmpty[] MEM_TEXT = "lav!"; //ÄÄÄ";
-   const unsigned char TestFailed2[] MEM_TEXT = "defekt "; //ÄÄÄ";
-   const unsigned char Bauteil[] MEM_TEXT = "Komponent"; //ÄÄÄ";
+   const unsigned char BatEmpty[] MEM_TEXT = "lav!";
+   const unsigned char TestFailed2[] MEM_TEXT = "defekt ";
+   const unsigned char Bauteil[] MEM_TEXT = "Komponent";
 //   const unsigned char Diode[] MEM_TEXT = "Diode: ";
    const unsigned char Triac[] MEM_TEXT = "Triac";
    const unsigned char Thyristor[] MEM_TEXT = "Tyrist.";
-   const unsigned char Unknown[] MEM_TEXT = " ukendt"; //ÄÄ";
+   const unsigned char Unknown[] MEM_TEXT = " ukendt";
    const unsigned char TestFailed1[] MEM_TEXT = "ingen,ukendt eller";
    const unsigned char Detected[] MEM_TEXT = " detekteret";
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";
@@ -26,7 +35,7 @@
    const unsigned char FScaler_str[] MEM2_TEXT = "F-scaler";
  #endif
   #endif
-   const unsigned char VOLTAGE_str[] MEM2_TEXT = "Spænding";
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = {'S','p',a_e,'n','d','i','n','g',0};
    const unsigned char SHOW_str[] MEM2_TEXT = "Vis data";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "slukker";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-generator";
@@ -75,35 +84,35 @@
 's','t','a','r','t',' ','m','e','d',' ',
 't','a','s','t','e','t','r','y','k','.',' ',
 
-'B','e','k','r','æ','f','t',' ',
+'B','e','k','r',a_e,'f','t',' ',
 's','e','l','v','t','e','s','t','e','n',' ','m','e','d',' ',
 
-'t','a','s','t','e','t','r','y','k',' ','i',' ','l','ø','b','e','t',' ','a','f',' ','2','s','.',' ',
-'A','d','s','k','i','l',' ','f','ø','r','s','t',' ','p','i','n','d','e','n','e',
+'t','a','s','t','e','t','r','y','k',' ','i',' ','l',o_slash,'b','e','t',' ','a','f',' ','2','s','.',' ',
+'A','d','s','k','i','l',' ','f',o_slash,'r','s','t',' ','p','i','n','d','e','n','e',
    #ifdef TPCAP
 '.',' ',
    #else
 ' ','e','f','t','e','r',' ',
-'b','e','k','r','æ','f','t','e','l','s','e','n',' ',
+'b','e','k','r',a_e,'f','t','e','l','s','e','n',' ',
 
 '"','A','d','s','i','l',LCD_CHAR_INSEP,'p','i','n','d','e','n','e','!','"',' ',
 'o','g',' ','t','i','l','s','l','u','t',' ',
 
-'f','ø','r','s','t',' ', 'e','f','t','e','r',' ',
-'b','e','k','r','æ','f','t','e','l','s','e','n',' ',
+'f',o_slash,'r','s','t',' ', 'e','f','t','e','r',' ',
+'b','e','k','r',a_e,'f','t','e','l','s','e','n',' ',
 
 '"','1'+TP_OFFSET,LCD_CHAR_LINE1,LCD_CHAR_CAP,LCD_CHAR_LINE1,'3'+TP_OFFSET,LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
 'T','i','l','s','l','u','t',' ','e','n',' ','g','o','d',' ',
 
 'k','o','n','d','e','n','s','a','t','o','r',' ',
-'p','å',' ','m','e','r','e',' ','e','n','d',' ','1','0','0','n','F',' ',
+'p',a_ring,' ','m','e','r','e',' ','e','n','d',' ','1','0','0','n','F',' ',
 
-'p','å',' ','b','e','n',LCD_CHAR_INSEP,'1',LCD_CHAR_INSEP,'+',LCD_CHAR_INSEP,'3','.',' ',
+'p',a_ring,' ','b','e','n',LCD_CHAR_INSEP,'1',LCD_CHAR_INSEP,'+',LCD_CHAR_INSEP,'3','.',' ',
    #endif
 'S','o','f','t','w','a','r','e',' ','o','g',' ',
 
 'd','o','k','u','m','e','n','t','a','t','i','o','n',' ',
-'e','r',' ','p','å',' ','s','v','n',':','/','/',' ',
+'e','r',' ','p',a_ring,' ','s','v','n',':','/','/',' ',
 
 'm','i','k','r','o','c','o','n','t','r','o','l','l','e','r','.',' ',
 'n','e','t','/','t','r','a','n','s','i','s','t','o','r',' ',
@@ -115,3 +124,4 @@
  #endif  /* FLASHEND > 0x3fff */
 #endif  /* LANG DANISH */
 
+/* ****************************** EOF ***************************************** */

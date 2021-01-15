@@ -222,7 +222,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   lcd_data(',');
   lcd_testpin(HighPin);
   lcd_space();
-  lcd_data('-');
+  lcd_minus();		// lcd_data('-');
   mVOut(adc.vCEs);
   lcd_data('o');
   mVOut(adc.lp_otr);
@@ -233,7 +233,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
   mVOut(adc.lp_otrh);
 
   lcd_line3();
-  lcd_data('-');
+  lcd_minus();		// lcd_data('-');
   mVOut(adc.hp2);
   lcd_data('o');
   mVOut(adc.hp3);

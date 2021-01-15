@@ -39,20 +39,12 @@ void lcd_testpin(unsigned char temp) {
 }
 
 /* ******************************************************************************* */
-// send space character to LCD
-void lcd_space(void) {
-   lcd_data(' ');	// output one space to LCD and UART
-}
-
+// send space characters to LCD
 void lcd_spaces(int8_t nn) {
    while (nn > 0) {
      lcd_space();	// output one space to LCD and UART
      nn--;
    }
-}
-// send equal character to LCD
-void lcd_equal(void) {
-   lcd_data('=');
 }
 
 /* ******************************************************************************* */

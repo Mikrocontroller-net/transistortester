@@ -129,21 +129,21 @@ void CheckRotaryEncoder(void) {
   for (ii=0;ii<120;ii++) {
      lcd_line2();
      lcd_testpin(switch1);
-     lcd_data('-');
+     lcd_minus();		// lcd_data('-');
      if ((ii & 0x01) == 0) {
-        lcd_data('-');		// close state of switch
+        lcd_minus();		// lcd_data('-');	// close state of switch
      } else {
         lcd_data('/');		// open state of switch
      }
-     lcd_data('-');
+     lcd_minus();		// lcd_data('-');
      lcd_testpin(switchm);		// show the found pin number of the common pin
      lcd_data('-');
      if ((ii & 0x02) == 0) {
-        lcd_data('-');		// close state of switch
+        lcd_minus();		// lcd_data('-');	// close state of switch
      } else {
         lcd_data('/');		// open state of switch
      }
-     lcd_data('-');
+     lcd_minus();		// lcd_data('-');
      lcd_testpin(switch2);
      lcd_space();
      iim = (ii & 0x03);

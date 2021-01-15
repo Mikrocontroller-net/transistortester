@@ -1,13 +1,13 @@
 #if defined(LANG_GERMAN)		//deutsch
-   const unsigned char TestRunning[] MEM_TEXT = "Testen."; //€€€€€€€";
+   const unsigned char TestRunning[] MEM_TEXT = "Testen.";
    const unsigned char BatWeak[] MEM_TEXT = "gering";
-   const unsigned char BatEmpty[] MEM_TEXT = "leer!"; //€€€";
-   const unsigned char TestFailed2[] MEM_TEXT = "defektes "; //€€€";
-   const unsigned char Bauteil[] MEM_TEXT = "Bauteil"; //€€€";
+   const unsigned char BatEmpty[] MEM_TEXT = "leer!";
+   const unsigned char TestFailed2[] MEM_TEXT = "defektes ";
+   const unsigned char Bauteil[] MEM_TEXT = "Bauteil";
 //   const unsigned char Diode[] MEM_TEXT = "Diode: ";
    const unsigned char Triac[] MEM_TEXT = "Triac";
    const unsigned char Thyristor[] MEM_TEXT = "Thyrist.";
-   const unsigned char Unknown[] MEM_TEXT = " unbek."; //€€";
+   const unsigned char Unknown[] MEM_TEXT = " unbek.";
    const unsigned char TestFailed1[] MEM_TEXT = "Kein,unbek. oder";
    const unsigned char Detected[] MEM_TEXT = " detektiert";
    const unsigned char TestTimedOut[] MEM_TEXT = "Timeout!";

@@ -342,7 +342,7 @@ End of configuration
 't','e','s','t','e','r',' '
   #endif  /* SHORT_UNCAL_MSG */
 ,0};
- #endif  /* default LANG ENGLISH */
+ #endif  /* ndef HelpTXT */
 #endif  /* FLASHEND > 0x3fff */
 
  const unsigned char AnKat_str[] MEM_TEXT = {LCD_CHAR_LINE1, LCD_CHAR_DIODE1, LCD_CHAR_LINE1,0};

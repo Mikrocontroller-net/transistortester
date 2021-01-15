@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
  int hh;
  int height;
  int beg_end;
+ int lines;
  int comment_out;
  int kk_min, kk_max;
  int ll_min, ll_max;
@@ -27,7 +28,9 @@ int main(int argc, char *argv[])
     
 // line = 0;
  height = 0;
+ lines = 0;
  while (fgets(linebuf,256,stdin) != NULL) {
+    lines++;
     for (ll=0;ll<256;ll++) {
       if (linebuf[ll] == '\r') linebuf[ll] = (char)0;
       if (linebuf[ll] == '\n') linebuf[ll] = (char)0;

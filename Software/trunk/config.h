@@ -1,7 +1,15 @@
+/* ************************************************************************
+ *  (c) by Karl-Heinz Kuebbeler, Projekt Transistor Tester
+ *  
+ *  File:       fonfig.h
+ *  Funktion:   Configuration of Port addresses ...
+ * 
+ * History:     Date        Sign    Kommentar 
+ *              2021-01-10  Karl      
+ *              2021-01-10  Karl 
+*
+ * ************************************************************************ */
 
-/*########################################################################################
-        Configuration
-*/
 #ifndef ADC_PORT
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163) || (LCD_ST_TYPE == 9341) || (LCD_ST_TYPE == 1327))
   #define LCD_GRAPHIC_TYPE 1
@@ -1020,7 +1028,7 @@
 /*
 With define SWUART_INVERT you can specify, if the software-UART operates normal or invers.
 in the normal mode the UART sends with usual logik level (Low = 0; High = 1).
-You can use this mode for direct connection to a µC, or a level converter like MAX232.
+You can use this mode for direct connection to a \B5C, or a level converter like MAX232.
 
 With invers mode the UART sends with invers logik (Low = 1, High = 0).
 This is the level of a standard RS232 port of a PC.
@@ -1124,6 +1132,13 @@ End of configuration
 
 
 // #undef WITH_VEXT   /* disable the external voltage measurement */
+
+#ifndef LCD_CYRILLIC
+ #if (defined(LANG_RUSSIAN) || defined(LANG_UKRAINIAN))
+  #warning LCD_CYRILLIC automatically set!
+  #define LCD_CYRILLIC    // LCD_CYRILLIC is required by font.h
+ #endif
+#endif
 #include "font.h"
 #include "autoconf.h"
 #ifdef WITH_GRAPHICS
@@ -1131,3 +1146,5 @@ End of configuration
 #endif
 // #define AUTO_LC_CAP 1  /* reread parallel capacity value for [RL] measurement */
 #endif /* not defined ADC_PORT */
+
+/* ****************************** EOF ***************************************** */

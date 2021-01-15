@@ -1,3 +1,12 @@
+/* ************************************************************************
+ *  (c) by Karl-Heinz Kuebbeler, Projekt Tranzistor Tester
+ *  
+ *  File:       langSLOVENE.h
+ *  Funktion:   language selection
+ * 
+ * History:     Date        Sign    Kommentar 
+ *              2021-01-13  Bohu    ISO 8859-2 text add  
+ * ************************************************************************ */
 #if defined(LANG_SLOVENE)                    //slovenian
    const unsigned char TestRunning[] MEM_TEXT = "Testiranje"; 
    const unsigned char BatWeak[] MEM_TEXT = "slaba!"; 
@@ -57,3 +66,4 @@
  #endif
  #define LANG_SELECTED
 #endif  /* LANG SLOVENE */
+/* ****************************** EOF ***************************************** */

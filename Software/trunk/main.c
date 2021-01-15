@@ -466,7 +466,7 @@ showdiodecap:
         lcd_next_line_wait(0);		// next line, wait 5s and clear line 2
         DisplayValue(cap.cval,sampling_cap_pre,'F',2);
  #ifdef PULLUP_DISABLE
-        lcd_data('-');
+        lcd_minus();			// lcd_data('-');
         cap.cval=sampling_cap(diodes.Cathode[0],diodes.Anode[0],1);   // at high voltage
         if (cap.cval < 0) cap.cval = 0;		// don't show negativ value
         DisplayValue(cap.cval,sampling_cap_pre,'F',2);
@@ -771,7 +771,7 @@ showdiodecap:
        lcd_data('N');			//N-channel
 //       _trans = &ntrans;	is allready selected as default
     }
-    lcd_data('-');		// minus is used for JFET, D-MOS, E-MOS ...
+    lcd_minus();	// lcd_data('-');		// minus is used for JFET, D-MOS, E-MOS ...
 
     uint8_t part_code;
     part_code = PartMode&0x0f;

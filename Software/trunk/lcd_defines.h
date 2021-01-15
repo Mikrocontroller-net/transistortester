@@ -1,4 +1,15 @@
-
+/* ************************************************************************
+ *  (c) by Karl-Heinz Kuebbeler, Projekt Transistor Tester
+ *  
+ *  File:       lcd_defines.h
+ *  Funktion:   Assing from lcd_bitmap parameter
+ * 
+ * History:     Date        Sign    Kommentar 
+ *              2021-01-02  Bohu    add ISO 8859-2font  
+ *              2021-01-09  Karl    ASCII-replacements for text display
+ *              2021-01-11  Buhu    Zeile 469 defined vor SLOVAK zugefügt ohne Erfolg
+ *              2011-01-11  Karl    Change of defined LANG_.. statements
+ * ************************************************************************ */
 
 // Options for lcd_pgm_bitmap option parameter:
 #define OPT_HREVERSE    1 // Display bitmap reversed horizontally
@@ -394,10 +405,12 @@
 //defines for the cyrillic character set
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || (LCD_ST_TYPE == 9163) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE==9341))
  	#define GR_OFFSET1 0x20	/* shift 0xa0 to 0x80, direct behind ASCII table, to save place in font table */
- 	#define GR_OFFSET2 0xd0	/* shift 0xe0 to 0x10, before the ASCII table */  
+ 	#define GR_OFFSET2 0xb0	/* shift 0xc0 to 0x10, before the ASCII table */  
+        #define GR_OFFSET3 0xc8 /* shift 0xe0 to 0x18, before the ASCII table */
 #else
  	#define GR_OFFSET1 0
  	#define GR_OFFSET2 0
+ 	#define GR_OFFSET3 0
 #endif
 
 #define Cyr_B	(0xa0 - GR_OFFSET1)
@@ -434,71 +447,91 @@
 #define Cyr_p	(0xbe - GR_OFFSET1)
 #define Cyr_t	(0xbf - GR_OFFSET1)
 
-#define Cyr_tsch (0xc0 - GR_OFFSET1)
-#define Cyr_sch (0xc1 - GR_OFFSET1)
-#define Cyr_hh	(0xc2 - GR_OFFSET1)
-#define Cyr_y	(0xc3 - GR_OFFSET1)
-#define Cyr_ww	(0xc4 - GR_OFFSET1)
-#define Cyr_e	(0xc5 - GR_OFFSET1)
-#define Cyr_ju	(0xc6 - GR_OFFSET1)
-#define Cyr_ja	(0xc7 - GR_OFFSET1)
+#define Cyr_tsch (0xc0 - GR_OFFSET2)
+#define Cyr_sch (0xc1 - GR_OFFSET2)
+#define Cyr_hh	(0xc2 - GR_OFFSET2)
+#define Cyr_y	(0xc3 - GR_OFFSET2)
+#define Cyr_ww	(0xc4 - GR_OFFSET2)
+#define Cyr_e	(0xc5 - GR_OFFSET2)
+#define Cyr_ju	(0xc6 - GR_OFFSET2)
+#define Cyr_ja	(0xc7 - GR_OFFSET2)
 
-#define Cyr_D	(0xe0 - GR_OFFSET2)
-#define Cyr_C	(0xe1 - GR_OFFSET2)
-#define Cyr_Schtsch (0xe2 - GR_OFFSET2)
-#define Cyr_d	(0xe3 - GR_OFFSET2)
-#define Cyr_f	(0xe4 - GR_OFFSET2)
-#define Cyr_c	(0xe5 - GR_OFFSET2)
-#define Cyr_schtsch (0xe6 - GR_OFFSET2)
+#define Cyr_D	(0xe0 - GR_OFFSET3)
+#define Cyr_C	(0xe1 - GR_OFFSET3)
+#define Cyr_Schtsch (0xe2 - GR_OFFSET3)
+#define Cyr_d	(0xe3 - GR_OFFSET3)
+#define Cyr_f	(0xe4 - GR_OFFSET3)
+#define Cyr_c	(0xe5 - GR_OFFSET3)
+#define Cyr_schtsch (0xe6 - GR_OFFSET3)
 
- #ifdef LCD_ST_TYPE
- // is graphical display, use special czech characters
- #define Cz_a	0x10
- #define Cz_c	0x11
- #define Cz_d	0x12
- #define Cz_e	0x13
- #define Cz_ee	0x14
- #define Cz_i	0x15
- #define Cz_n	0x16
- #define Cz_o	0x17
- #define Cz_r	0x18
- #define Cz_s	0x19
- #define Cz_t	0x1a
- #define Cz_u	0x1b
- #define Cz_uu	0x1c
- #define Cz_y	0x1d
- #define Cz_z	0x1e
- #define Cz_Z	0x1f
- // Caractères accentues francais
- #define Fr_a_grave	0x10
- #define Fr_a_circ	0x11
- #define Fr_e_aigu	0x12
- #define Fr_e_circ	0x13
- #define Fr_e_grave 0x14 
-#else 	
- // use ASCII replacements for czech characters
- #define Cz_a	'a'
- #define Cz_c	'c'
- #define Cz_d	'd'
- #define Cz_e	'e'
- #define Cz_ee	'e'
- #define Cz_i	'i'
- #define Cz_n	'n'
- #define Cz_o	'o'
- #define Cz_r	'r'
- #define Cz_s	's'
- #define Cz_t	't'
- #define Cz_u	'u'
- #define Cz_uu	'u'
- #define Cz_y	'y'
- #define Cz_z	'z'
- #define Cz_Z	'Z'
+ #ifndef LCD_ST_TYPE
+ // it is no graphical display,  use ASCII replacements for special characters
+ #define A_acute        'A'
+ #define a_acute        'a'
+ #define a_acute        'a'
+ #define A_uml          'A'
+ #define a_uml          'a'
+ #define a_e            'a'
+ #define A_ogonek       'A'
+ #define a_ogonek       'a'
+ #define C_acute        'C'
+ #define c_acute        'c'
+ #define C_caron        'C'
+ #define c_caron        'c'
+ #define c_caron        'c'
+ #define C_circumflex   'C'
+ #define c_circumflex   'c'
+ #define D_caron        'D'
+ #define d_caron        'd'
+ #define D_uml          'D'
+ #define d_uml          'd'
+ #define E_acute        'E'
+ #define e_acute        'e'
+ #define E_caron        'E'
+ #define e_caron        'e'
+ #define E_uml          'E'
+ #define e_uml          'e'
+ #define E_circumflex	'E'
+ #define e_circumflex   'e'
+ #define E_ogonek       'E'
+ #define e_ogonek       'e'
+ #define I_acute        'I'
+ #define i_acute        'i'
+ #define N_acute        'N'
+ #define n_acute        'n'
+ #define N_caron        'N'
+ #define n_caron        'n'
+ #define O_acute        'O'
+ #define o_acute        'o'
+ #define o_slash        'o'
+ #define R_caron        'R'
+ #define r_caron        'r'
+ #define S_acute        'S'
+ #define s_acute        's'
+ #define S_caron        'S'
+ #define s_caron        's'
+ #define s_sharp        's'
+ #define T_caron        'T'
+ #define t_caron        't'
+ #define U_acute        'U'
+ #define u_acute        'u'
+ #define u_above        'u'
+ #define U_uml          'U'
+ #define u_uml          'u'
+ #define Y_acute        'Y'
+ #define y_acute        'y'
+ #define Z_acute        'A'
+ #define z_acute        'a'
+ #define Z_caron        'Z'
+ #define z_caron        'z'
+ #define Z_dotAbove     'Z'
+ #define z_dotAbove     'z'
  // Caractères ASCII de remplacement pour accentues francais
- #define Fr_a_grave	'a'
- #define Fr_a_circ	'a'
- #define Fr_e_aigu	'e'
- #define Fr_e_circ	'e'
- #define Fr_e_grave 'e' 
+ #define Fr_a_grave     'a'
+ #define Fr_a_circ      'a'
+ #define Fr_e_acute     'e'
+ #define Fr_e_circ      'e'
+ #define Fr_e_grave     'e' 
 
 #endif
 
@@ -525,3 +558,4 @@
 #define LCD_UPPER_RIGHT 0x80
 #define LCD_LOWER_LEFT 0x40
 #define LCD_LOWER_RIGHT 0x00
+/* ****************************** EOF ***************************************** */

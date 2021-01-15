@@ -1,3 +1,87 @@
+
+  #if defined LANG_CZECH || defined LANG_SLOVAK
+   #define S_caron       'S' /* (S with caron) */
+   #define s_caron       's' /* (s with caron) */
+   #define Z_caron       'Z' /* (Z with caron) */
+   #define z_caron       'z' /* (z with caron) */
+   #define C_caron       'C' /* (C with caron) */
+   #define c_caron       'c' /* (c with caron) */
+   #define O_acute       'O' /* (O with acute) */
+   #define o_acute       'o' /* (o with acute) */
+   #define A_acute       'A' /* (A with acute) */
+   #define a_acute       'a' /* (a with acute) */
+   #define E_acute       'E' /* (E with acute) */
+   #define e_acute       'e' /* (e with acute) */
+   #define U_acute       'U' /* (U with acute) */
+   #define u_acute       'u' /* (u with acute) */
+   #define I_acute       'I' /* (I with acute) */
+   #define i_acute       'i' /* (i with acute) */
+   #define Y_acute       'Y' /* (Y with acute) */
+   #define y_acute       'y' /* (y with acute) */
+   #define D_caron       'D' /* (D with caron) */
+   #define d_caron       'd' /* (d with caron) */
+   #define E_caron       'E' /* (E with caron) */
+   #define e_caron       'e' /* (e with caron) */
+   #define R_caron       'R' /* (R with caron) */
+   #define r_caron       'r' /* (r with caron) */
+   #define T_caron       'T' /* (T with caron) */
+   #define t_caron       't' /* (t with caron) */
+   #define N_caron       'N' /* (N with caron) */
+   #define n_caron       'n' /* (n with caron) */
+   #define u_above       'u' /* (u with above) */
+   #define CHAR_COUNT 128
+  /* ---------------------------------- */
+  #elif defined LANG_FRANCAIS || defined DANISH
+   // Caractères accentues francais
+   #define Fr_a_grave	'a' /* (a with grave) */
+   #define a_circ       'a' /* (a with circle above) */
+   #define Fr_e_acute	'e' /* (e with acute) */
+   #define Fr_e_circ    'e' /* (e with circle above */
+   #define Fr_e_grave   'e' /* (e with grave) */
+   #define o_slash	'o' /* (o with / )   */
+   #define a_e          'a' /* ae */
+   #define CHAR_COUNT 128
+  /* ---------------------------------- */
+  #elif defined LANG_POLISH
+   #define A_ogonek     'A' /* (A with ogonek) */
+   #define a_ogonek     'a' /* (a with ogonek) */
+   #define S_acute      'S' /* (S with acute)  */
+   #define s_acute      's' /* (s with acute)  */
+   #define L_stroke     'L' /* (L with stroke  */
+   #define l_stroke     'l' /* (l with stroke) */
+   #define O_acute      'O' /* (O with acute)  */
+   #define o_acute      'o' /* (o with acute)  */
+   #define C_acute      'C' /* (C with acute)  */
+   #define c_acute      'c' /* (c with acute)  */
+   #define Z_acute      'Z' /* (Z with acute)  */
+   #define z_acute      'z' /* (z with acute)  */
+   #define Z_dotAbove   'z' /* (Z with dot above) */
+   #define z_dotAbove	'z' /* (z with dot above) */
+   #define E_ogonek     'E' /* (E with ogonek) */
+   #define e_ogonek     'e' /* (e with ogonek) */
+   #define N_acute      'N' /* (N with acute)  */
+   #define n_acute      'n' /* (n with acute)  */
+   #define CHAR_COUNT 128
+/* ---------------------------------- */
+  #elif defined LANG_GERMAN || defined LANG_ALBANIAN
+   #define A_uml      	'A' /* (A with Umlaut) */
+   #define a_uml      	'a' /* (a with Umlaut) */
+   #define D_uml      	'D' /* (O with Umlaut) */
+   #define o_uml      	'o' /* (o with Umlaut) */
+   #define U_uml      	'U' /* (U with Umlaut) */
+   #define u_uml      	'u' /* (u with Umlaut) */
+   #define E_uml      	'E' /* (E with Umlaut) */
+   #define e_uml      	'e' /* (e with Umlaut) */
+   #define C_cedilla	'C' /* (C with cedilla)   */
+   #define c_cedilla	'c' /* (c with cedilla)   */
+   #define s_sharp      's' /* (sharp s)          */
+   #define CHAR_COUNT 128
+  #else
+   #define CHAR_COUNT 128
+  #endif
+
+  #define LAST_CHAR (CHAR_COUNT - 1)
+
 const unsigned char PROGMEM font[256][20] = {
 {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},	// 0x00
 {0x80,0x07,0xC0,0x0C,0x40,0x0A,0xA0,0x14,0x20,0x14,0x20,0x14,0xA0,0x14,0x40,0x0A,0xC0,0x0C,0x80,0x07},	// 0x01
@@ -15,6 +99,15 @@ const unsigned char PROGMEM font[256][20] = {
 {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},	// 0x0D
 {0x00,0x60,0x00,0x70,0x00,0x70,0xF8,0x3F,0x18,0x00,0x08,0x0C,0x0C,0x0E,0x04,0x0E,0xFE,0x07,0x00,0x00},	// 0x0E
 {0x80,0x00,0xF0,0x03,0x20,0x03,0x10,0x02,0x18,0x06,0x10,0x02,0x20,0x02,0x30,0x03,0xD0,0x03,0x80,0x00},	// 0x0F
+ #if defined LANG_FRANCAIS
+ #elif defined LANG_CZECH || LANG_SLOVAK
+ #elif defined LANG_SERBIAN || LANG_CROATIAN || LANG_SLOWENIAN || LANG_BOSNIAN 
+ #elif defined LANG_POLISH
+ #elif defined LANG_GERMAN || LANG_ALBANIAN
+ #elif defined LANG_HUNGARIAN
+ #elif defined LANG_ROMANIAN
+ #else	
+ #endif                              
 {0xF0,0x1F,0xE0,0x0F,0xE0,0x0F,0xC0,0x07,0xC0,0x07,0xC0,0x07,0x80,0x03,0x80,0x03,0x00,0x01,0x00,0x01},	// 0x10
 {0x00,0x01,0x00,0x01,0x80,0x03,0x80,0x03,0xC0,0x07,0xC0,0x07,0xC0,0x07,0xE0,0x0F,0xE0,0x0F,0xF0,0x1F},	// 0x11
 {0x00,0x00,0x00,0x00,0x08,0x10,0x04,0x20,0xFE,0x7F,0x04,0x20,0x08,0x10,0x00,0x00,0x00,0x00,0x00,0x00},	// 0x12
@@ -127,6 +220,10 @@ const unsigned char PROGMEM font[256][20] = {
 {0x00,0x00,0x00,0x00,0x02,0x40,0x02,0x40,0x02,0x40,0xFC,0x3E,0x00,0x01,0x00,0x01,0x00,0x00,0x00,0x00},	// 0x7D
 {0x00,0x03,0x80,0x00,0x80,0x00,0x80,0x00,0x00,0x01,0x00,0x01,0x00,0x02,0x00,0x02,0x00,0x02,0x80,0x01},	// 0x7E
 {0x00,0x00,0x80,0x1F,0xC0,0x10,0x20,0x10,0x10,0x10,0x20,0x10,0xC0,0x10,0x80,0x1F,0x00,0x00,0x00,0x00},	// 0x7F
+ #if defined LANG_CZECH || defined LANG_SLOVAK
+ #elif defined LANG_POLISH 
+ #elif defined LCD_CYRILLIC                                                              
+ #endif                                          
 {0xC0,0x03,0x30,0x0C,0x10,0x08,0x08,0x10,0x08,0x10,0x08,0x90,0x08,0xB0,0x18,0xD0,0x00,0x00,0x00,0x00},	// 0x80
 {0x00,0x00,0xE0,0x0F,0x04,0x10,0x00,0x10,0x00,0x10,0x04,0x08,0xE0,0x1F,0x00,0x00,0x00,0x00,0x00,0x00},	// 0x81
 {0x00,0x00,0x80,0x07,0x40,0x09,0x20,0x11,0x24,0x11,0x22,0x11,0x20,0x11,0xC0,0x11,0x00,0x00,0x00,0x00},	// 0x82

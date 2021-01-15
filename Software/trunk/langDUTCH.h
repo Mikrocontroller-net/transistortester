@@ -1,8 +1,17 @@
+/* ************************************************************************
+ *  (c) by Karl-Heinz Kuebbeler, Projekt Tranzistor Tester
+ *  
+ *  File:       langDUTCH.h
+ *  Funktion:   language selection
+ * 
+ * History:     Date        Sign    Kommentar 
+ *              2021-01-12
+ * ************************************************************************ */
 #if defined(LANG_DUTCH)                      //dutch
    const unsigned char TestRunning[] MEM_TEXT = "Testen."; 
    const unsigned char BatWeak[] MEM_TEXT = "laag"; 
    const unsigned char BatEmpty[] MEM_TEXT = "leeg!"; 
-   const unsigned char TestFailed2[] MEM_TEXT = "defect "; 
+   const unsigned char TestFailed2[] MEM_TEXT = "defect ";
    const unsigned char Bauteil[] MEM_TEXT = "component"; 
 //   const unsigned char Diode[] MEM_TEXT = "Diode: ";
    const unsigned char Triac[] MEM_TEXT = "Triac";
@@ -114,3 +123,4 @@
  #define HelpTXT
  #endif  /* FLASHEND > 0x3fff */
 #endif  /* LANG DUTCH */
+/* ****************************** EOF ***************************************** */

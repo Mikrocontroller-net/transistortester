@@ -1,4 +1,12 @@
-
+/* ************************************************************************
+ *  (c) by Karl-Heinz Kuebbeler, Projekt Tranzistor Tester
+ *  
+ *  File:       LANG_ITALIAN.h
+ *  Funktion:   language selection
+ * 
+ * History:     Date        Sign    Kommentar 
+ *              2021-01-12
+ * ************************************************************************ */
 #if defined(LANG_ITALIAN)		//italiano
    const unsigned char TestRunning[] MEM_TEXT = "Analizzo"; 
    const unsigned char BatWeak[] MEM_TEXT = "debole";
@@ -59,3 +67,4 @@
  #define LANG_SELECTED
 #endif  /* LANG ITALIAN */
 
+/* ****************************** EOF ***************************************** */

@@ -1,3 +1,12 @@
+/* ************************************************************************
+ *  (c) by Karl-Heinz Kuebbeler, Projekt Transistor Tester
+ *  
+ *  File:       LANG_LITHUANIAN.h
+ *  Funktion:   language selection
+ * 
+ * History:     Date        Sign    Kommentar 
+ *              2021-01-12
+ * ************************************************************************ */
 #if defined(LANG_LITHUANIAN) //Lithuanian
    const unsigned char TestRunning[] MEM_TEXT = "Tikrinu"; //"Testing...";
    const unsigned char BatWeak[] MEM_TEXT = "silpna"; //"weak";
@@ -58,3 +67,4 @@
  #endif
  #define LANG_SELECTED
 #endif  /* LANG LITHUANIAN */
+/* ****************************** EOF ***************************************** */

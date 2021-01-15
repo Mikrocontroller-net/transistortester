@@ -11,6 +11,8 @@ endif
 
 # Include current directory
 CFLAGS  += -I.
+# set the Language
+CFLAGS += -D$(UI_LANGUAGE)
 
 # Path to generated files
 OBJDIR := ../Obj/$(PROJECT)
@@ -23,41 +25,52 @@ TARGET = $(OBJDIR)/$(PROJECT).elf
 ifeq ($(WITH_LCD_ST7565),1)
 CFLAGS += -DLCD_ST_TYPE=7565
 CFLAGS += -DLCD_ST7565_RESISTOR_RATIO=$(LCD_ST7565_RESISTOR_RATIO)
+WITH_lcd-draw = 1
 endif
 ifeq ($(WITH_LCD_ST7565),7565)
 CFLAGS += -DLCD_ST_TYPE=7565
 CFLAGS += -DLCD_ST7565_RESISTOR_RATIO=$(LCD_ST7565_RESISTOR_RATIO)
+WITH_lcd-draw = 1
 endif
 ifeq ($(WITH_LCD_ST7565),1306)
 CFLAGS += -DLCD_ST_TYPE=1306
 CFLAGS += -DLCD_ST7565_RESISTOR_RATIO=$(LCD_ST7565_RESISTOR_RATIO)
+WITH_lcd-draw = 1
 endif
 ifeq ($(WITH_LCD_ST7565),7108)
 CFLAGS += -DLCD_ST_TYPE=7108
+WITH_lcd-draw = 1
 endif
 ifeq ($(WITH_LCD_ST7565),7735)
 CFLAGS += -DLCD_ST_TYPE=7735
+WITH_lcd-draw = 1
 endif
 ifeq ($(WITH_LCD_ST7565),9163)
 CFLAGS += -DLCD_ST_TYPE=9163
+WITH_lcd-draw = 1
 endif
 ifeq ($(WITH_LCD_ST7565),9341)
 CFLAGS += -DLCD_ST_TYPE=9341
+WITH_lcd-draw = 1
 endif
 ifeq ($(WITH_LCD_ST7565),7920)
 CFLAGS += -DLCD_ST_TYPE=7920
 CFLAGS += -DLCD_ST7565_RESISTOR_RATIO=$(LCD_ST7565_RESISTOR_RATIO)
+WITH_lcd-draw = 1
 endif
 ifeq ($(WITH_LCD_ST7565),8812)
 CFLAGS += -DLCD_ST_TYPE=8812
 CFLAGS += -DLCD_ST7565_RESISTOR_RATIO=$(LCD_ST7565_RESISTOR_RATIO)
+WITH_lcd-draw = 1
 endif
 ifeq ($(WITH_LCD_ST7565),8814)
 CFLAGS += -DLCD_ST_TYPE=8814
 CFLAGS += -DLCD_ST7565_RESISTOR_RATIO=$(LCD_ST7565_RESISTOR_RATIO)
+WITH_lcd-draw = 1
 endif
 ifeq ($(WITH_LCD_ST7565),1327)
 CFLAGS += -DLCD_ST_TYPE=1327
+WITH_lcd-draw = 1
 endif
 
 ifeq ($(PARTNO),m8)
@@ -362,58 +375,74 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Objects that must be built in order to link
-OBJECTS = lcd_hw_4_bit.o lcd-routines.o
-OBJECTS += i2lcd.o PinLayout.o RvalOut.o UfAusgabe.o DisplayValue.o
-ifeq ($(WITH_LCD_ST7565),1)
+# Please note, that the sequence of objects will change the 
+# resulting program length, because call Instructions will be
+# automatically replaced by the shorter rcall Instruction by optimizing.
+# This replacement is only possible, if the target is near enough.
+# You should not try to find another sequence of object files
+# without to check and compare the results of different configurations.
+# You can find a better sequence for one configuration,
+# but the result of another configuration is a bigger program!
+OBJECTS = 
+
+ifneq ($(PARTNO),m8)
+# I have not found any target, that will result to shorter program,
+# if it is places here
+endif
+
+OBJECTS += lcd_hw_4_bit.o
+OBJECTS += lcd-routines.o
+OBJECTS += i2lcd.o
+OBJECTS += PinLayout.o
+OBJECTS += RvalOut.o
+OBJECTS += UfAusgabe.o
+OBJECTS += DisplayValue.o
+
+ifeq ($(WITH_lcd-draw),1)
 OBJECTS += lcd-draw.o
 endif
-ifeq ($(WITH_LCD_ST7565),7565)
-OBJECTS += lcd-draw.o
-endif
-ifeq ($(WITH_LCD_ST7565),1306)
-OBJECTS += lcd-draw.o
-endif
-ifeq ($(WITH_LCD_ST7565),7108)
-OBJECTS += lcd-draw.o
-endif
-ifeq ($(WITH_LCD_ST7565),7735)
-OBJECTS += lcd-draw.o
-endif
-ifeq ($(WITH_LCD_ST7565),9163)
-OBJECTS += lcd-draw.o
-endif
-ifeq ($(WITH_LCD_ST7565),9341)
-OBJECTS += lcd-draw.o
-endif
-ifeq ($(WITH_LCD_ST7565),7920)
-OBJECTS += lcd-draw.o
-endif
-ifeq ($(WITH_LCD_ST7565),8814)
-OBJECTS += lcd-draw.o
-endif
-ifeq ($(WITH_LCD_ST7565),8812)
-OBJECTS += lcd-draw.o
-endif
-ifeq ($(WITH_LCD_ST7565),1327)
-OBJECTS += lcd-draw.o
-endif
-OBJECTS += swuart.o wait1000ms.o 
+
+OBJECTS += swuart.o
+OBJECTS += wait1000ms.o 
+
 ifneq ($(INHIBIT_SLEEP_MODE),1)
 OBJECTS += sleep_5ms.o
 endif
-OBJECTS += ReadADC.o wait_for_key_ms.o RefVoltage.o
+
+OBJECTS += ReadADC.o
+OBJECTS += wait_for_key_ms.o
+OBJECTS += RefVoltage.o
+
+OBJECTS += main.o
+OBJECTS += Battery_check.o
+OBJECTS += CheckPins.o
+OBJECTS += GetResistance.o
+OBJECTS += ChargePin10ms.o
+OBJECTS += EntladePins.o
+OBJECTS += ReadCapacity.o
+OBJECTS += GetRLmultip.o
+OBJECTS += Calibrate_UR.o
+OBJECTS += show_Resis_Cap.o
+
 ifneq ($(PARTNO),m8)
 OBJECTS += get_log.o
+OBJECTS += ReadInductance.o
+OBJECTS += GetESR.o
+OBJECTS += GetVloss.o
+OBJECTS += function_menu.o
+OBJECTS += message_key_released.o
+OBJECTS += GetFrequency.o
+OBJECTS += ReadBigCap.o
+OBJECTS += CheckRotaryEncoder.o
+OBJECTS += CalibrationCap.o
+OBJECTS += CheckUJT.o
+OBJECTS += ShowData.o
 endif
-OBJECTS += main.o Battery_check.o CheckPins.o GetResistance.o ChargePin10ms.o EntladePins.o
-OBJECTS +=  ReadCapacity.o GetRLmultip.o Calibrate_UR.o show_Resis_Cap.o
-ifneq ($(PARTNO),m8)
-OBJECTS +=  ReadInductance.o GetESR.o GetVloss.o GetFrequency.o function_menu.o message_key_released.o ReadBigCap.o
-OBJECTS += CheckRotaryEncoder.o CalibrationCap.o ShowData.o CheckUJT.o
-endif
+
 ifndef USE_EEPROM
 OBJECTS +=  EE_check_init.o
 endif
+
 ifeq ($(WITH_SamplingADC),1)
 CFLAGS += -DSamplingADC
 OBJECTS += samplingADC.o sampling_cap.o sampling_lc.o sampling_xtal.o

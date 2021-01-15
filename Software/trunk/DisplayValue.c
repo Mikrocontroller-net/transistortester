@@ -51,7 +51,7 @@ void DisplayValue(signed long signedValue, int8_t Exponent, unsigned char Unit, 
 
 #if FLASHEND > 0x1fff
   if (signedValue<0) {
-     lcd_data('-');
+     lcd_minus();		// lcd_data('-');
      Value=-signedValue;
   } else {
      if ((xdigits & 0x20) != 0) lcd_data('+');

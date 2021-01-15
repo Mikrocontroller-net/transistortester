@@ -1,3 +1,14 @@
+# ************************************************************************
+#  (c) by Karl-Heinz Kuebbeler, Projekt Transistor Tester
+#  
+#  File:       finisch.mk
+#  Funktion:   late common tasks for the Makefile(s)
+# 
+# History:     Date        Sign    Kommentar   
+#              2021-01-10  Karl    LastChar
+#              2021-01-10  Karl    add the function in comment
+#
+# ************************************************************************ */
 ########### Compile only Assembler source available
 $(OBJDIR)/lcd_hw_4_bit.o: ../lcd_hw_4_bit.S $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
@@ -62,7 +73,7 @@ $(OBJDIR)/Battery_check.o: ../Battery_check.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
 $(OBJDIR)/main.o: ../main.c $(MKFILES)
-	$(CC) $(INCLUDES) $(CFLAGS) -D$(UI_LANGUAGE) -c -o $@ $<
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
 
 $(OBJDIR)/ChargePin10ms.o: ../ChargePin10ms.c $(MKFILES)
 	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
@@ -184,3 +195,4 @@ verify:
 upload_orig:
 	avrdude -c $(PROGRAMMER) -B $(BitClock) $(AVRDUDE_BAUD) -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTestorig.hex:a \
 	-U eeprom:w:./TransistorTestorig.eep:a
+## ****************************** EOF ***************************************** ##

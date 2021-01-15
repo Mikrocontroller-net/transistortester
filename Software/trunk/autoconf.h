@@ -1,7 +1,13 @@
-
-/*########################################################################################
-       Automatic Configuration
-*/
+/* ************************************************************************
+ *  (c) by Karl-Heinz Kuebbeler, Projekt Transistor Tester
+ *  
+ *  File:       autofonfig.h
+ *  Funktion:   Automatic Configuration
+ * 
+ * History:     Date        Sign    Kommentar 
+ *              2021-01-10  Karl      
+ *
+ * ************************************************************************ */
 
 #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 7108) || (LCD_ST_TYPE == 7920) || (LCD_ST_TYPE == 7735) || (LCD_ST_TYPE == 9163) || (LCD_ST_TYPE == 9341) || (LCD_ST_TYPE == 1327))
 /* Define under which conditions a graphical display is supported. */
@@ -530,32 +536,25 @@
 //self build characters 
 #define LCD_CHAR_DIODE1  1      //Diode-Icon; will be generated as custom character
 #define LCD_CHAR_DIODE2  2      //Diode-Icon;  will be generated as custom character
-#define LCD_CHAR_CAP 3          //Capacitor-Icon;  will be generated as custom character
+#define LCD_CHAR_CAP 4          //Capacitor-Icon;  will be generated as custom character
         // numbers of RESIS1 and RESIS2 are swapped for OLED display, which shows a corrupt RESIS1 character otherwise ???
-#define LCD_CHAR_RESIS1 7       // Resistor left part will be generated as custom character
-#define LCD_CHAR_RESIS2 6       // Resistor right part will be generated as custom character
-
-#ifndef LCD_CYRILLIC
- #if (defined(LANG_RUSSIAN) || defined(LANG_UKRAINIAN))
-  #warning LCD_CYRILLIC automatically set!
-  #define LCD_CYRILLIC
- #endif
-#endif
+#define LCD_CHAR_RESIS1 6       // Resistor left part will be generated as custom character
+#define LCD_CHAR_RESIS2 7       // Resistor right part will be generated as custom character
 
 
 #ifdef LCD_CYRILLIC
-        #define LCD_CHAR_OMEGA  4       //Omega-character 
-        #define LCD_CHAR_U  5           //µ-character 
+        #define LCD_CHAR_OMEGA  13       //Omega-character 
+
 #else
         #define LCD_CHAR_OMEGA  244     //Omega-character
-        #define LCD_CHAR_U  228         //µ-character
+        #define LCD_CHAR_U  228         //\B5-character
 #endif
 
 #ifdef LCD_DOGM
 	#undef LCD_CHAR_OMEGA
 	#define LCD_CHAR_OMEGA 0x1e	//Omega-character for DOGM module
         #undef LCD_CHAR_U
-        #define LCD_CHAR_U  5           //µ-character for DOGM module loadable
+        #define LCD_CHAR_U  14           //\B5-character for DOGM module loadable
 #endif
 
 
@@ -570,16 +569,16 @@
         #undef LCD_CHAR_DEGREE
         #define LCD_CHAR_DEGREE 0xf8	// Character for degree
         #undef LCD_CHAR_OMEGA
-        #define LCD_CHAR_OMEGA  4       //Omega-character 
+        #define LCD_CHAR_OMEGA  13       //Omega-character 
         #undef LCD_CHAR_U
-        #define LCD_CHAR_U  5		//µ-character
+        #define LCD_CHAR_U  14		//\B5-character
         #undef LCD_CHAR_LINE1
         #define LCD_CHAR_LINE1  8	// line is specified as long -
         #undef LCD_CHAR_INDUCTOR1
         #define LCD_CHAR_INDUCTOR1  9		//begin of coil
         #undef LCD_CHAR_INDUCTOR2
         #define LCD_CHAR_INDUCTOR2  10		//end of coil
-	#define LCD_CHAR_BETA 11
+	#define LCD_CHAR_BETA 12
 #endif 
 
 
@@ -846,3 +845,5 @@
 // #endif
   #pragma message "Option WITH_ROTARY_SWITCH can not be used together with option LCD_SPI_OPEN_COL, if the ROTARY switch signals use the same port signals as the LCD."
 #endif
+
+/* ****************************** EOF ***************************************** */

@@ -1,14 +1,23 @@
+/* ************************************************************************
+ *  (c) by Karl-Heinz Kuebbeler, Projekt Tranzistor Tester
+ *  
+ *  File:       langBRASIL.h
+ *  Funktion:   language selection
+ * 
+ * History:     Date        Sign    Kommentar 
+ *              2021-01-12
+ * ************************************************************************ */
 #if defined(LANG_BRASIL)					// Brazilian Portuguese
-   const unsigned char TestRunning[] MEM_TEXT = "Testando";	//€€€€€€";
-   const unsigned char BatWeak[] MEM_TEXT = "fraca"; 		//€€€"; + 2
-   const unsigned char BatEmpty[] MEM_TEXT = "acabou!"; 	//€€"; +2
-   const unsigned char TestFailed2[] MEM_TEXT = "ou danificada..."; 	//€€€€";
-   const unsigned char Bauteil[] MEM_TEXT = "peca"; 		//€€€€€€";
+   const unsigned char TestRunning[] MEM_TEXT = "Testando";
+   const unsigned char BatWeak[] MEM_TEXT = "fraca"; 
+   const unsigned char BatEmpty[] MEM_TEXT = "acabou!"; 
+   const unsigned char TestFailed2[] MEM_TEXT = "ou danificada..."; 
+   const unsigned char Bauteil[] MEM_TEXT = "peca"; 
 //   const unsigned char Diode[] MEM_TEXT = "Diodo: ";
    const unsigned char Triac[] MEM_TEXT = "Triac";
    const unsigned char Thyristor[] MEM_TEXT = "Tiristor";
-   const unsigned char Unknown[] MEM_TEXT = " O que? "; 	//€";
-   const unsigned char TestFailed1[] MEM_TEXT = "Sem peca, ruim"; //€";
+   const unsigned char Unknown[] MEM_TEXT = " O que? "; 
+   const unsigned char TestFailed1[] MEM_TEXT = "Sem peca, ruim";
    const unsigned char Detected[] MEM_TEXT = " detectado";
    const unsigned char TestTimedOut[] MEM_TEXT = "Tempo Esgotado!";
    #define Cathode_char 'K'
@@ -57,3 +66,4 @@
  #endif
  #define LANG_SELECTED
 #endif  /* LANG BRASIL */
+/* ****************************** EOF ***************************************** */

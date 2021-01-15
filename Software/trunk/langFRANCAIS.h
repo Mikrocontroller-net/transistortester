@@ -1,3 +1,12 @@
+/* ************************************************************************
+ *  (c) by Karl-Heinz Kuebbeler, Projekt Tranzistor Tester
+ *  
+ *  File:       langFRANCAIS.h
+ *  Funktion:   language selection
+ * 
+ * History:     Date        Sign    Kommentar 
+ *              2021-01-12
+ * ************************************************************************ */
 #if defined(LANG_FRANCAIS)
    const unsigned char TestRunning[] MEM_TEXT = "Test en cours...";	
    const unsigned char BatWeak[] MEM_TEXT = "Pile faible"; 	
@@ -131,3 +140,4 @@
  #endif  /* FLASHEND > 0x3fff */
 
 #endif  /* LANG FRANCAIS */
+/* ****************************** EOF ***************************************** */

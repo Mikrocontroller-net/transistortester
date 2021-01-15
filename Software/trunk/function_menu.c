@@ -281,18 +281,18 @@ void display_menu() {
   uint8_t ii;
   rawSerial = 1;
   lcd_data('\n');
-  lcd_data('-');
-  lcd_data('-');
-  lcd_data('-');
+  lcd_minus();		// lcd_data('-');
+  lcd_minus();		// lcd_data('-');
+  lcd_minus();		// lcd_data('-');
   for (ii = 0; ii < MODE_LAST; ii++) {
       if (ii == last_func_number) lcd_data('>');
       else			lcd_space();
 	  message2line(ii);
   }
   lcd_data('\n');
-  lcd_data('-');
-  lcd_data('-');
-  lcd_data('-');
+  lcd_minus();		// lcd_data('-');
+  lcd_minus();		// lcd_data('-');
+  lcd_minus();		// lcd_data('-');
   rawSerial = 0;
 }
 uint8_t function_menu() {
@@ -961,7 +961,7 @@ int8_t korr;
   {
      lcd_line2();
      if (korr < 0) {
-       lcd_data('-');
+       lcd_minus();		// lcd_data('-');
        DisplayValue16(-korr,-1,'%',3);
      } else {
        DisplayValue16(korr,-1,'%',3);

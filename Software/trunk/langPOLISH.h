@@ -1,14 +1,23 @@
+/* ************************************************************************
+ *  (c) by Karl-Heinz Kuebbeler, Projekt Transistor Tester
+ *  
+ *  File:       langPOLISH.h
+ *  Funktion:   language selection
+ * 
+ * History:     Date        Sign    Kommentar 
+ *              2021-01-12
+ * ************************************************************************ */
 #if defined(LANG_POLISH)		//polnisch
-   const unsigned char TestRunning[] MEM_TEXT = "Testowanie"; //€€€";
-   const unsigned char BatWeak[] MEM_TEXT = "slaba"; //€€";
+   const unsigned char TestRunning[] MEM_TEXT = "Testowanie";
+   const unsigned char BatWeak[] MEM_TEXT = "slaba";
    const unsigned char BatEmpty[] MEM_TEXT = "za slaba";
    const unsigned char TestFailed2[] MEM_TEXT = "lub uszkodzony";
-   const unsigned char Bauteil[] MEM_TEXT = " "; //t€€€";                       // don't fit on display, besides i think word is unnecesary repeated in second row after tests
+   const unsigned char Bauteil[] MEM_TEXT = " ";   // don't fit on display, besides i think word is unnecesary repeated in second row after tests
 //   const unsigned char Diode[] MEM_TEXT = "Dioda: ";
    const unsigned char Triac[] MEM_TEXT = "Triak";
-   const unsigned char Thyristor[] MEM_TEXT = "Tyrystor"; //€";
+   const unsigned char Thyristor[] MEM_TEXT = "Tyrystor";
    const unsigned char Unknown[] MEM_TEXT = " nieznany";
-   const unsigned char TestFailed1[] MEM_TEXT = "Brak elementu"; //€€€";
+   const unsigned char TestFailed1[] MEM_TEXT = "Brak elementu";
    const unsigned char Detected[] MEM_TEXT = " wykrywa";
    const unsigned char TestTimedOut[] MEM_TEXT = "Przekr. czasu!";
    #define Cathode_char 'K'
@@ -58,3 +67,4 @@
  #define LANG_SELECTED
 #endif  /* LANG POLISH */
 
+/* ****************************** EOF ***************************************** */

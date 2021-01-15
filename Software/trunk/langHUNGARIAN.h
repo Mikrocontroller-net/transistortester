@@ -1,25 +1,34 @@
+/* ************************************************************************
+ *  (c) by Karl-Heinz Kuebbeler, Projekt Tranzistor Tester
+ *  
+ *  File:       langHUNGARIAN.h
+ *  Funktion:   language selection
+ * 
+ * History:     Date        Sign    Kommentar 
+ *              2021-01-12  Bohu    ISO 8859-2 text add  
+ *
+ * ************************************************************************ */
 #if defined(LANG_HUNGARIAN)     //HUNGARIAN
-   const unsigned char TestRunning[] MEM_TEXT = "Meres."; 
-   const unsigned char BatWeak[] MEM_TEXT = "gyenge"; 
-   const unsigned char BatEmpty[] MEM_TEXT = "ures!"; 
-   const unsigned char TestFailed2[] MEM_TEXT = "hibas "; 
-   const unsigned char Bauteil[] MEM_TEXT = "alkatresz"; 
+   const unsigned char TestRunning[] MEM_TEXT = "Tesztelek";
+   const unsigned char BatWeak[] MEM_TEXT = "gyenge";
+   const unsigned char BatEmpty[] MEM_TEXT = "ures!";
+   const unsigned char TestFailed2[] MEM_TEXT = "hibas ";
+   const unsigned char Bauteil[] MEM_TEXT = "alkatresz";
 //   const unsigned char Diode[] MEM_TEXT = "Diode: ";
    const unsigned char Triac[] MEM_TEXT = "Triak";
    const unsigned char Thyristor[] MEM_TEXT = "Tiriszt.";
-   const unsigned char Unknown[] MEM_TEXT = " unknown"; // " ismeretlen"
-   const unsigned char TestFailed1[] MEM_TEXT = "hibas vagy"; 
-   const unsigned char Detected[] MEM_TEXT = " erzekeli";
-   const unsigned char TestTimedOut[] MEM_TEXT = "Idotullepes!";
-
+   const unsigned char Unknown[] MEM_TEXT = "ismeretlen";
+   const unsigned char TestFailed1[] MEM_TEXT = "hibas vagy";
+   const unsigned char Detected[] MEM_TEXT = {e_acute,'s','z','l','e','l','t',e_acute,'k',0};
+   const unsigned char TestTimedOut[] MEM_TEXT = {'a','z',LCD_CHAR_INSEP,'i','d',o_doubleAcute,LCD_CHAR_INSEP,'l','e','j',a_acute,'r','t',0};
    #define Cathode_char 'C'
  #ifdef WITH_SELFTEST
-   const unsigned char SELFTEST[] MEM_TEXT = "On-teszt mod..";
+   const unsigned char SELFTEST[] MEM_TEXT = {O_doubleAcute,'n','t','e','s','z','t',0};
    const unsigned char RELPROBE[] MEM_TEXT = "Rovidzar ki!"; // or "separate pins!";
-   const unsigned char ATE[] MEM_TEXT = "Teszt vege";
+   const unsigned char ATE[] MEM_TEXT = {'A',LCD_CHAR_INSEP,'t','e','s','z','t',LCD_CHAR_INSEP,'v',e_acute,'g','e',0};
  #endif
  #ifdef WITH_MENU
-   const unsigned char SELECTION_str[] MEM2_TEXT = "Valasztas:";
+   const unsigned char SELECTION_str[] MEM2_TEXT =  {'K','i','v',a_acute,'l','a','s','t',a_acute,'s',':',0};
    const unsigned char TESTER_str[] MEM2_TEXT = "Tranzisztor";
   #ifndef NO_FREQ_COUNTER
    const unsigned char FREQ_str[] MEM2_TEXT = "Frekvencia";
@@ -30,19 +39,19 @@
    const unsigned char VOLTAGE_str[] MEM2_TEXT = "Voltage";
    const unsigned char SHOW_str[] MEM2_TEXT = "adatokat mutat";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "kikapcsol";
-   const unsigned char F_GEN_str[] MEM2_TEXT = "f-Generator";
+   const unsigned char F_GEN_str[] MEM2_TEXT = {'f','-','g','e','n','e','r',a_acute,'t','o','r',0};
   #ifdef PWM_SERVO
    const unsigned char PWM_10bit_str[] MEM2_TEXT = "Servo PWM";
   #else
-   const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bit PWM";
+   const unsigned char PWM_10bit_str[] MEM2_TEXT = "10-bites PWM";
   #endif
   #ifdef WITH_ROTARY_CHECK
-   const unsigned char RotaryEncoder_str[] MEM2_TEXT = "Rotary encoder";
+   const unsigned char RotaryEncoder_str[] MEM2_TEXT = {'P','u','l','z','u','s',LCD_CHAR_INSEP,'k',o_acute,'d','o','l'o_acute,0};
   #endif
    const unsigned char SetCapCorr_str[] MEM2_TEXT = {'C','(',LCD_CHAR_U,'F',')','-','C','o','r','r','e','c','t','i','o','n',0};
    const unsigned char TURN_str[] MEM2_TEXT = "forgat!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "On-teszt mod";
-   const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "short Probes!";	// ???
+   const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "Csatlakoztassa a csapokat!";
   #if PROCESSOR_TYP == 644
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frekvencia > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF Quarz";
@@ -53,8 +62,9 @@
   #endif
  #endif  /* WITH_MENU */
  #ifdef WITH_XTAL
-   const unsigned char cerres_str[] MEM_TEXT = "Cer.resonator  ";
-   const unsigned char xtal_str[] MEM_TEXT = "Quarz  ";
+//   const unsigned char cerres_str[] MEM_TEXT = "Cer.resonator  ";
+  const unsigned char cerres_str[] MEM_TEXT = {'K','e','r',a_acute,'m','i','a',LCD_CHAR_INSEP,'r','e','s','o','n',a_acute,'t','o','r',0};
+   const unsigned char xtal_str[] MEM_TEXT = "Kvarc  ";
  #endif
  #define LANG_SELECTED
 
@@ -64,6 +74,7 @@
 // Words are separated by ' '. If you don't allow to separate two words
 // to different rows, you can hide the ' ' with LCD_CHAR_INSEP.
 // Notice, that the LCD has only 16 character in each line!
+
  const unsigned char HelpCalibration_str[] PROGMEM = {'N','o','t',' ','c','a','l','i','b','r','a','t','e','d','!'
   #ifndef SHORT_UNCAL_MSG
 ,' ',
@@ -100,11 +111,10 @@
 't','h','e',' ','m','e','s','s','a','g','e',' ',
 '"','1',LCD_CHAR_LINE1,LCD_CHAR_CAP,LCD_CHAR_LINE1,'3',LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
 
-'i','s',LCD_CHAR_INSEP,'s','h','o','w','n','.',' ',
-'S','o','f','t','w','a','r','e',' ','a','n','d',' ',
+'A',LCD_CHAR_INSEP,'s','z','o','f','t','v','e','r',LCD_CHAR_INSEP,e_acute,'s',' ','a',' ',
+'d','o','k','u','m','e','n','t',a_acute,'c','i','o',' ',
 
-'d','o','c','u','m','e','n','t','a','t','i','o','n',' ',
-'i','s',' ','a','t',' ','s','v','n',':','/','/',' ',
+'a','z',' ','s','v','n',':','/','/',' ',
 
 'm','i','k','r','o','c','o','n','t','r','o','l','l','e','r','.',' ',
 
@@ -115,3 +125,4 @@
  #define HelpTXT
  #endif  /* FLASHEND > 0x3fff */
 #endif  /* LANG HUNGARIAN */
+/* ****************************** EOF ***************************************** */

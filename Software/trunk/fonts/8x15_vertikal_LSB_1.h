@@ -191,11 +191,11 @@ const unsigned char PROGMEM font[CHAR_COUNT][(FONT_WIDTH * ((FONT_HEIGHT + 7)/8)
  0x0C,0x0E,0x0B,0x09,0x08,0x0C,0x0C,0x00},	/* 0x1e,Cz_z */   
 {0x0C,0x85,0xC7,0x66,0x37,0x1D,0x0C,0x00,                                               
  0x0E,0x0F,0x09,0x08,0x08,0x08,0x0C,0x00},	/* 0x1f,Cz_Z  */
- #elif defined LANG_SERBIAN || LANG_CROATIAN || LANG_SLOWENIAN || LANG_BOSNIAN 
- #elif defined LANG_POLISH
- #elif defined LANG_GERMAN || LANG_ALBANIAN
- #elif defined LANG_HUNGARIAN
- #elif defined LANG_ROMANIAN
+// #elif defined LANG_SERBIAN || LANG_CROATIAN || LANG_SLOWENIAN || LANG_BOSNIAN 
+// #elif defined LANG_POLISH
+// #elif defined LANG_GERMAN || LANG_ALBANIAN
+// #elif defined LANG_HUNGARIAN
+// #elif defined LANG_ROMANIAN
  #else                         
 {0xF0,0xF0,0x00,0x00,0x00,0xF0,0xF0,0x00,                                               
  0x00,0x01,0x01,0x01,0x01,0x0F,0x0F,0x00},	/* 0x10 ,Cyr_tsch */                    

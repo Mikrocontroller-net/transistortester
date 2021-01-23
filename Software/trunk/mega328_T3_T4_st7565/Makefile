@@ -35,7 +35,7 @@ CFLAGS += -DWITH_MENU
 #
 # Option NO_FREQ_COUNTER will disable the frequency counter function.
 CFLAGS += -DNO_FREQ_COUNTER
-
+#
 # With the menu item "Show data" the used icons and the font data are displayed for
 # graphical displays after the presentation of calibration data.
 # You can switch off the presentation of the icons and the font data by setting

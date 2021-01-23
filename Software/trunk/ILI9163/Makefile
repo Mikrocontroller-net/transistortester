@@ -32,6 +32,9 @@ CFLAGS += -DWITH_MENU
 #
 # For ATmega328 the menu function "rotary encoder check" is only enabled with the WITH_ROTARY_CHECK option.
 #CFLAGS += -DWITH_ROTARY_CHECK
+#
+# Option NO_FREQ_COUNTER will disable the frequency counter function.
+#CFLAGS += -DNO_FREQ_COUNTER
 
 # With the menu item "Show data" the used icons and the font data are displayed for
 # graphical displays after the presentation of calibration data.

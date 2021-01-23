@@ -846,4 +846,94 @@
   #pragma message "Option WITH_ROTARY_SWITCH can not be used together with option LCD_SPI_OPEN_COL, if the ROTARY switch signals use the same port signals as the LCD."
 #endif
 
+/* ------------------------------------------------------------------- */
+/* Set the USE_ defines for building the function-menu items           */
+
+#define USE_ESR 1
+
+#define USE_RESIS 1
+
+#define USE_CAP13 1
+
+#ifdef NO_FREQ_COUNTER
+ #define USE_FREQ 0
+ #define USE_HFREQ 0
+ #define USE_H_CRYSTAL 0
+ #define USE_L_CRYSTAL 0
+#else   /* with frequency counter */
+ #define USE_FREQ 1
+ #if PROCESSOR_TYP == 644
+  #define USE_FREQ 1
+  #define USE_HFREQ 1
+  #define USE_H_CRYSTAL 1
+  #define USE_L_CRYSTAL 1
+ #else
+  #define USE_FREQ 1
+  #define USE_HFREQ 0
+  #define USE_H_CRYSTAL 0
+  #define USE_L_CRYSTAL 0
+ #endif
+#endif
+
+#if (defined WITH_FREQUENCY_DIVIDER) && (USE_FREQ == 1)
+ #define USE_FSCALER 1
+#else
+ #define USE_FSCALER 0
+#endif
+
+#define USE_FGEN 1
+
+#define USE_PWM 1
+
+
+#define USE_BIG_CAP_CORR 1
+
+#ifdef MODE_ROTARY
+ #define USE_ROTARY 1
+#else
+ #define USE_ROTARY 0
+#endif
+
+#ifdef WITH_VEXT
+ #define USE_VEXT 1
+#else
+ #define USE_VEXT 0
+#endif
+
+#ifdef WITH_SELFTEST
+ #define USE_SELFTEST 1
+#else
+ #define USE_SELFTEST 0
+#endif
+
+#if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
+ #define USE_CONTRAST 1
+#else
+ #define USE_CONTRAST 0
+#endif
+
+#ifdef LCD_CHANGE_COLOR
+ #define USE_SELECT_FG 1
+ #define USE_SELECT_BG 1
+#else
+ #define USE_SELECT_FG 0
+ #define USE_SELECT_BG 0
+#endif
+
+#define USE_SHOW 1
+
+#ifdef POWER_OFF
+ #define USE_OFF 1
+#else
+ #define USE_OFF 0
+#endif
+
+#define MODE_TRANS 0      /* Return to normal tester function is always default as number 0 */
+
+#if 1
+ #include "function_sequence1.h"
+#else
+ #include "function_sequence2.h"
+#endif
+
 /* ****************************** EOF ***************************************** */

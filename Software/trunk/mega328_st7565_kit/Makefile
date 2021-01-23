@@ -32,13 +32,16 @@ CFLAGS += -DWITH_MENU
 #
 # For ATmega328 the menu function "rotary encoder check" is only enabled with the WITH_ROTARY_CHECK option.
 #CFLAGS += -DWITH_ROTARY_CHECK
+#
+# Option NO_FREQ_COUNTER will disable the frequency counter function.
+#CFLAGS += -DNO_FREQ_COUNTER
 
 # With the menu item "Show data" the used icons and the font data are displayed for
 # graphical displays after the presentation of calibration data.
 # You can switch off the presentation of the icons and the font data by setting
 # the option NO_ICONS_DEMO to save flash memory and display time.
-CFLAGS += -DNO_ICONS_DEMO
-CFLAGS += -DSHORT_UNCAL_MSG
+#CFLAGS += -DNO_ICONS_DEMO
+#CFLAGS += -DSHORT_UNCAL_MSG
 
 # The menu function can be easier controlled with a incremental encoder (rotary switch).
 # Both switches of the rotary switch can be connected with 1 kOhm resistors to PD1 and PD3.
@@ -200,7 +203,7 @@ CFLAGS += -DAUTO_CAL
 # Normally a long text is shown, which explains the steps of calibration.
 # You can prevent the long explanation by setting the SHORT_UNCAL_MSG option.
 # With this option set, only a hint of one line is shown.
-#CFLAGS += -DSHORT_UNCAL_MSG
+CFLAGS += -DSHORT_UNCAL_MSG
 
 # You can extend the measurement feature by use of a sampling mode for the ADC converter
 # to extend the resolution of capacity measurement to about 0.01pF.
@@ -211,9 +214,9 @@ WITH_SamplingADC = 1
 # Option can be set only together with SamplingADC=1 and OP_MHZ=16
 #CFLAGS += -DWITH_XTAL 
 # Option WITH_UJT enables additional tests for UJT (UniJunction Transistor)
-CFLAGS += -DWITH_UJT
+#CFLAGS += -DWITH_UJT
 # Option WITH_PUT enables additional tests for PUT (Programmable Unijunction Transistor)
-CFLAGS += -DWITH_PUT
+#CFLAGS += -DWITH_PUT
 # Option FET_Idss will measure the Idss parameter for FETs, if not estimated > 40mA.
 CFLAGS += -DFET_Idss
 

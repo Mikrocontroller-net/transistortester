@@ -333,12 +333,12 @@ const unsigned char PROGMEM font[CHAR_COUNT][(FONT_WIDTH * ((FONT_HEIGHT + 7)/8)
   0x07,0x07,0x04,0x04,0x04,0x06,0x07,0x00
     },  /* x=0, y=0, w=8, h=16 */ 
 
- #elif defined LANG_FRANCAIS
- #elif defined LANG_SERBIAN || LANG_CROATIAN || LANG_SLOWENIAN || LANG_BOSNIAN 
- #elif defined LANG_POLISH
- #elif defined LANG_GERMAN || LANG_ALBANIAN
- #elif defined LANG_HUNGARIAN
- #elif defined LANG_ROMANIAN
+// #elif defined LANG_FRANCAIS
+// #elif defined LANG_SERBIAN || LANG_CROATIAN || LANG_SLOWENIAN || LANG_BOSNIAN 
+// #elif defined LANG_POLISH
+// #elif defined LANG_GERMAN || LANG_ALBANIAN
+// #elif defined LANG_HUNGARIAN
+// #elif defined LANG_ROMANIAN
  #else
  /* 0x10 ,Cyr_tsch */
 { 0x78,0xF8,0x80,0x80,0xF8,0xF8,0x00,0x00,

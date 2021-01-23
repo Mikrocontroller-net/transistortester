@@ -105,9 +105,9 @@ const unsigned char PROGMEM font[CHAR_COUNT][FONT_WIDTH]=
 {0x38,0x40,0x40,0x30,0x40,0x40},	/*(10) 0x09 Inductor1 */                     
 {0x30,0x40,0x40,0x30,0x40,0x38},	/*     0x0a Inductor2 */                     
 {0x00,0x00,0x00,0x00,0x00,0x00},	/*     0x0b ' ' */                              
-{0x00,0x58,0x64,0x04,0x64,0x58},	/*     0x0c Omega  */                        
-{0x00,0x80,0x7C,0x40,0x40,0x3C},	/*     0x0d mu (µ) */                        
-{0x00,0x80,0x7E,0x01,0x49,0x36},	/*     0x0e Beta */                          
+{0x00,0x80,0x7E,0x01,0x49,0x36},	/*     0x0c Beta */                          
+{0x00,0x58,0x64,0x04,0x64,0x58},	/*     0x0d Omega  */                        
+{0x00,0x80,0x7C,0x40,0x40,0x3C},	/*     0x0e mu (µ) */                        
 {0x00,0x06,0x29,0x79,0x29,0x06},	/*     0x0f   degree */                              
 //**************************************************************************** 
 
@@ -146,11 +146,11 @@ const unsigned char PROGMEM font[CHAR_COUNT][FONT_WIDTH]=
 {0x00,0x8C,0x90,0x62,0x11,0x0C},	/* 0x1d,Cz_y       */                            
 {0x00,0x44,0x65,0x56,0x4D,0x44},	/* 0x1e,Cz_z       */                           
 {0x00,0x66,0x53,0x4A,0x47,0x62},	/* 0x1f,Cz_Z       */
- #elif defined LANG_SERBIAN || LANG_CROATIAN || LANG_SLOWENIAN || LANG_BOSNIAN 
- #elif defined LANG_POLISH
- #elif defined LANG_GERMAN || LANG_ALBANIAN
- #elif defined LANG_HUNGARIAN
- #elif defined LANG_ROMANIAN
+// #elif defined LANG_SERBIAN || LANG_CROATIAN || LANG_SLOWENIAN || LANG_BOSNIAN 
+// #elif defined LANG_POLISH
+// #elif defined LANG_GERMAN || LANG_ALBANIAN
+// #elif defined LANG_HUNGARIAN
+// #elif defined LANG_ROMANIAN
  #else	
  //**************************************************************************** 
 {0x00,0x0C,0x10,0x10,0x10,0x7C},	/* 0x10 ,Cyr_tsch */                     
@@ -171,7 +171,6 @@ const unsigned char PROGMEM font[CHAR_COUNT][FONT_WIDTH]=
 {0x00,0x03,0x0F,0x3F,0x0F,0x03},	/*(32) 0x1f  */
 //****************************************************************************
  #endif
-#endif                              
 {0x00,0x00,0x00,0x00,0x00,0x00},	/*(001)0x20 ' ' */                           
 {0x00,0x00,0x00,0x5E,0x00,0x00},	/*     0x21 '!' */                           
 {0x00,0x00,0x06,0x00,0x06,0x00},	/*     0x22 '"' */                           
@@ -310,5 +309,4 @@ const unsigned char PROGMEM font[CHAR_COUNT][FONT_WIDTH]=
  #ifndef __ASSEMBLER__
  extern const unsigned char PROGMEM font[CHAR_COUNT][FONT_WIDTH];
  #endif
-};
 #endif

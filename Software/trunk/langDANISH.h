@@ -35,7 +35,7 @@
    const unsigned char FScaler_str[] MEM2_TEXT = "F-scaler";
  #endif
   #endif
-   const unsigned char VOLTAGE_str[] MEM2_TEXT = {'S','p',a_e,'n','d','i','n','g',0};
+   const unsigned char VOLTAGE_str[] MEM2_TEXT = {'S','p',a_elig,'n','d','i','n','g',0};
    const unsigned char SHOW_str[] MEM2_TEXT = "Vis data";	// "Show data"
    const unsigned char OFF_str[] MEM2_TEXT = "slukker";
    const unsigned char F_GEN_str[] MEM2_TEXT = "f-generator";
@@ -84,7 +84,7 @@
 's','t','a','r','t',' ','m','e','d',' ',
 't','a','s','t','e','t','r','y','k','.',' ',
 
-'B','e','k','r',a_e,'f','t',' ',
+'B','e','k','r',a_elig,'f','t',' ',
 's','e','l','v','t','e','s','t','e','n',' ','m','e','d',' ',
 
 't','a','s','t','e','t','r','y','k',' ','i',' ','l',o_slash,'b','e','t',' ','a','f',' ','2','s','.',' ',
@@ -93,13 +93,13 @@
 '.',' ',
    #else
 ' ','e','f','t','e','r',' ',
-'b','e','k','r',a_e,'f','t','e','l','s','e','n',' ',
+'b','e','k','r',a_elig,'f','t','e','l','s','e','n',' ',
 
 '"','A','d','s','i','l',LCD_CHAR_INSEP,'p','i','n','d','e','n','e','!','"',' ',
 'o','g',' ','t','i','l','s','l','u','t',' ',
 
 'f',o_slash,'r','s','t',' ', 'e','f','t','e','r',' ',
-'b','e','k','r',a_e,'f','t','e','l','s','e','n',' ',
+'b','e','k','r',a_elig,'f','t','e','l','s','e','n',' ',
 
 '"','1'+TP_OFFSET,LCD_CHAR_LINE1,LCD_CHAR_CAP,LCD_CHAR_LINE1,'3'+TP_OFFSET,LCD_CHAR_INSEP,'>','1','0','0','n','F','"',' ',
 'T','i','l','s','l','u','t',' ','e','n',' ','g','o','d',' ',

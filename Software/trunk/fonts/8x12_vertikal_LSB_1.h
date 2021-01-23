@@ -347,11 +347,11 @@ const unsigned char PROGMEM font[CHAR_COUNT][(FONT_WIDTH * ((FONT_HEIGHT + 7)/8)
 { 0x00,0x06,0xC6,0xF3,0x3A,0x0F,0x02,0x00,
   0x00,0x03,0x03,0x02,0x02,0x03,0x03,0x00
    },  /* x=0, y=0, w=8, h=16 */           				
- #elif defined LANG_SERBIAN || LANG_CROATIAN || LANG_SLOWENIAN || LANG_BOSNIAN 
- #elif defined LANG_POLISH
- #elif defined LANG_GERMAN || LANG_ALBANIAN
- #elif defined LANG_HUNGARIAN
- #elif defined LANG_ROMANIAN
+// #elif defined LANG_SERBIAN || LANG_CROATIAN || LANG_SLOWENIAN || LANG_BOSNIAN 
+// #elif defined LANG_POLISH
+// #elif defined LANG_GERMAN || LANG_ALBANIAN
+// #elif defined LANG_HUNGARIAN
+// #elif defined LANG_ROMANIAN
  #else	
  /* 0x10, Cyr_tsch */                     
 { 0x00,0x38,0x78,0x40,0x40,0xF8,0xF8,0x00,

@@ -91,7 +91,7 @@
 '"','1'+TP_OFFSET,LCD_CHAR_LINE1,LCD_CHAR_CAP,LCD_CHAR_LINE1,'3'+TP_OFFSET,LCD_CHAR_INSEP,'>','1','0','0','n','F','"',',',' ',
 
 'p',r_caron,'i','p','o','j',' ','k','v','a','l','i','t','n',i_acute,' ',
-'k','o','n','d',i_acute,'k',',',LCD_CHAR_INSEP,'v','e','t',s_caron,i_acute,' ','n','e',z_caron,' ',
+'k','o','n','d',i_acute,'k',',',LCD_CHAR_INSEP,'v',e_caron,'t',s_caron,i_acute,' ','n','e',z_caron,' ',
 
 '1','0','0','n','F',',',LCD_CHAR_INSEP,'m','e','z','i',' ','b','o','d','y',' ',
 '1',' ','a',' ','3',' ','A','V','R',' ','t','e','s','t','e','r','u','.',' ',

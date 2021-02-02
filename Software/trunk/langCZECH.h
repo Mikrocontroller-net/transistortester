@@ -19,7 +19,8 @@
    const unsigned char ATE[] MEM_TEXT = "Konec testu";
  #endif
  #ifdef WITH_MENU
-   const unsigned char SELECTION_str[] MEM2_TEXT = "Vyber:";
+//   const unsigned char SELECTION_str[] MEM2_TEXT = "Vyber:";
+  const unsigned char SELECTION_str[] MEM2_TEXT = {'V',y_acute,'b',e_caron,'r',':',0};
    const unsigned char TESTER_str[] MEM2_TEXT = "Tranzistor";
   #ifndef NO_FREQ_COUNTER
    const unsigned char FREQ_str[] MEM2_TEXT = "Frekvence";

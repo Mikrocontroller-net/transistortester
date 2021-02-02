@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <string.h>
 
@@ -16,10 +17,22 @@ int main(int argc, char *argv[])
  int comment_out;
  int kk_min, kk_max;
  int ll_min, ll_max;
- char comment[256];
+ char comment_buf[256];
+ char *start_txt;
  char linebuf[256];	// buffer for reading a line from stdin
  int bittab1[16][80];	// bits for every line of bitmap
  int bittab2[16][80];	// bits for every line of bitmap
+
+ if (argc != 2) {
+    fprintf(stderr,"Count of arguments: %d\r\n",argc-1);
+    fprintf(stderr,"Argument 1: file to be converted\r\n");
+    exit(0);
+ }
+ stdin = fopen(argv[1],"r");
+ if (stdin == (FILE *)NULL) {
+    fprintf(stderr,"File %s can not be opened!\r\n",argv[1]);
+    exit(-1);
+ }
  
 #define vertical_offset 0
  if (vertical_offset != 0) {
@@ -29,15 +42,17 @@ int main(int argc, char *argv[])
 // line = 0;
  height = 0;
  lines = 0;
+ comment_buf[0] = ' ';
+ comment_buf[1] = 0;  /* Leerer Kommentar */
  while (fgets(linebuf,256,stdin) != NULL) {
     lines++;
     for (ll=0;ll<256;ll++) {
       if (linebuf[ll] == '\r') linebuf[ll] = (char)0;
       if (linebuf[ll] == '\n') linebuf[ll] = (char)0;
     }
-//      fprintf(stdout,"%s", linebuf);
     beg_end = 0;
     if ((linebuf[0] == '|') || (linebuf[0] == '+')) {
+       // moeglicherweise codiertes ASCII Zeichen 
        if (height == 0) {
           for (kk=1; kk<256; kk++) {
             if ((linebuf[kk] == '|') || (linebuf[kk] == '+')) break; 
@@ -50,20 +65,26 @@ int main(int argc, char *argv[])
              bittab1[hh/8][kk-1] = 0;  // clear all bits
              bittab2[hh/8][kk-1] = 0;  // clear all bits
           }
-          if ((linebuf[kk] == '*') || (linebuf[kk] == ':') || (linebuf[kk] == 'O')) bittab1[hh/8][kk-1] |= (1<<(hh % 8));
-          if ((linebuf[kk] == '*') || (linebuf[kk] == ' ')) bittab2[hh/8][kk-1] |= (1<<(hh % 8));
-       }
+          if ((linebuf[kk] == '@') || (linebuf[kk] == '*') || (linebuf[kk] == ':') || (linebuf[kk] == 'O')) bittab1[hh/8][kk-1] |= (1<<(hh % 8));
+          if ((linebuf[kk] == '@') || (linebuf[kk] == '*') || (linebuf[kk] == ' ')) bittab2[hh/8][kk-1] |= (1<<(hh % 8));
+       }  /* end for kk */
        height++;
-    } else {
-      if ((strncmp(linebuf, "/* ",3)) == 0) {
+    } else {  /* Zeile beginnt nicht mit | oder + */
+      start_txt = &linebuf[0];
+      for (kk=0;kk<20;kk++) {
+	if ((linebuf[kk] == ' ') || (linebuf[kk] == '\t')) start_txt = &linebuf[kk+1];
+	else  break;
+      }
+      if ((strncmp(start_txt, "/* 0x",5)) == 0) {
          // save comment 
-         strcpy(comment,linebuf);
+         strcpy(comment_buf,start_txt);
       } else {
         if ((linebuf[0] == ' ') && (linebuf[1] == '-')) {
            // begin or end of block
            beg_end = 1;
          } else {
-           if ((linebuf[0] != '}') || ((linebuf[1] != ',') && (linebuf[1] != ';'))) {
+//           if ((linebuf[0] != '}') || ((linebuf[1] != ',') && (linebuf[1] != ';')))
+	   {
              // copy the line
              fprintf(stdout,"%s\r\n",linebuf);
            }
@@ -76,7 +97,7 @@ int main(int argc, char *argv[])
        ll_max = -1;
        kk_min = width;
        kk_max = -1;
-       fprintf(stdout,"{ ");
+       fprintf(stdout,"{");
        comment_out = 0;
        for (ll=0;ll<height;ll+=8) {
          for (kk=0;kk<width;kk++) {
@@ -97,14 +118,16 @@ int main(int argc, char *argv[])
             }
             fprintf(stdout,"0x%02X",bittab1[ll/8][kk]);		// Ausgabe des Hex-Wertes
             if (((ll+8) < height) || (kk != (width-1))) fprintf(stdout,",");
-         }
-         fprintf(stdout,"\r\n  ");
-       }
+         } /* end for kk */
+	 if (ll/8 == (height-1)/8 ) fprintf(stdout,"},  %s\r\n",comment_buf);
+	 else fprintf(stdout,"\r\n ");
+       } /* end for ll */
        if (comment_out != 0) {
           comment_out = 0;
           fprintf(stdout,"*/ ");
        }
 #if 0
+       int line;
        fprintf(stdout,"}");
        sscanf(&comment[3],"%x",&line);
        if (line != 255) {
@@ -118,7 +141,7 @@ int main(int argc, char *argv[])
        height = 0;
     } /* end if ((height > 5) && (beg_end != 0)) */
  } /* end while */
-fprintf(stdout,"};\r\n");
+fprintf(stdout,"\r\n");
  return(0);
 }
 

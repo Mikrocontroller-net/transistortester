@@ -7,179 +7,6 @@
 //=================================================================
 // selection of different functions
 
-#if 0
-#if PROCESSOR_TYP == 644
- // the ATmega644 has additional menu functions HFREQ, H_CRYSTALs and L_CRYSTAL
- #define MODE_FREQ 1		/* frequency measurement without 16:1 divider */
- #define MODE_HFREQ 2		/* frequency measurement with the 16:1 divider */
- #define MODE_FGEN 3		/* frequency generator function */
- #define MODE_PWM 4		/* Pulse Width variation function */
- #define MODE_ESR 5		/* ESR measurement in circuit */
- #define MODE_RESIS 6		/* ResistorCheck at TP1:TP3 */
- #define MODE_CAP13 7		/* Capacitor check at TP1:TP3 */
- #define MODE_ROTARY 8		/* Test Rotary Switch */
- #define MODE_BIG_CAP_CORR 9	/* Correction for big caps */
- #define MODE_H_CRYSTAL 10	/* test of high frequency crystal */
- #define MODE_L_CRYSTAL 11	/* test of low frequency crystal */
- #define NNN 11
- #ifdef WITH_SELFTEST
-  #define MODE_SELFTEST 12	/* full selftest function with calibration */
-  #undef NNN
-  #define NNN 12
- #endif
- #ifdef WITH_VEXT
-  #define MODE_VEXT (NNN+1)	/* external voltage measurement and zener voltage */
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
-   #define MODE_CONTRAST (NNN+2)	/* select contrast */
-   #define MODE_SHOW (NNN+3)	/* show data function */
-  #else
-   #ifdef LCD_CHANGE_COLOR
-    #define MODE_SELECT_FG (NNN+2)
-    #define MODE_SELECT_BG (NNN+3)
-    #define MODE_SHOW (NNN+4)
-   #else
-    #define MODE_SHOW (NNN+2)	/* show data function */
-   #endif
-  #endif
- #else
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || defined(LCD_DOGM))
-   #define MODE_CONTRAST (NNN+1)	/* select contrast */
-   #define MODE_SHOW (NNN+2)	/* show data function */
-  #else
-   #ifdef LCD_CHANGE_COLOR
-    #define MODE_SELECT_FG (NNN+1)
-    #define MODE_SELECT_BG (NNN+2)
-    #define MODE_SHOW (NNN+3)
-   #else
-    #define MODE_SHOW (NNN+1)	/* show data function */
-   #endif
-  #endif
-  #define MODE_VEXT 66
- #endif		/* end #ifdef WITH_VEXT */
-#else
- /* no PROCESSOR_TYP == 644 , 328 */
- #ifdef NO_FREQ_COUNTER
-  #define MODE_FREQ 68		/* frequency measurement */
-  #define MODE_FGEN 1		/* frequency generator function */
-  #define MODE_PWM 2		/* Pulse Width variation function */
-  #define MODE_ESR 3		/* ESR measurement in circuit */
-  #define MODE_RESIS 4		/* ResistorCheck at TP1:TP3 */
-  #define MODE_CAP13 5		/* Capacitor check at TP1:TP3 */
-  #define MODE_BIG_CAP_CORR 6	/* Correction for big caps */
-  #define NNN 6
-  #ifdef WITH_ROTARY_CHECK
-   #define MODE_ROTARY 7		/* Test Rotary Switch */
-   #undef NNN
-   #define NNN 7
-   #ifdef WITH_SELFTEST
-    #define MODE_SELFTEST 8	/* full selftest function with calibration */
-    #undef NNN
-    #define NNN 8
-   #endif
-  #else
-   #ifdef WITH_SELFTEST
-    #define MODE_SELFTEST 7	/* full selftest function with calibration */
-    #undef NNN
-    #define NNN 7
-   #endif
-  #endif
- #else
-  // with Frequency counter
-  #ifdef WITH_FREQUENCY_DIVIDER
-   // frequency counter with selectable scaler
-   #define MODE_FREQ 2		/* frequency measurement */
-   #define MODE_FGEN 3		/* frequency generator function */
-   #define MODE_PWM 4		/* Pulse Width variation function */
-   #define MODE_ESR 5		/* ESR measurement in circuit */
-   #define MODE_RESIS 6		/* ResistorCheck at TP1:TP3 */
-   #define MODE_CAP13 7		/* Capacitor check at TP1:TP3 */
-   #define MODE_BIG_CAP_CORR 8	/* Correction for big caps */
-   #define NNN 8
-   #ifdef WITH_ROTARY_CHECK
-    #define MODE_ROTARY 9		/* Test Rotary Switch */
-    #undef NNN
-    #define NNN 9
-    #ifdef WITH_SELFTEST
-     #define MODE_SELFTEST 10	/* full selftest function with calibration */
-     #undef NNN
-     #define NNN 10
-    #endif
-   #else
-    #ifdef WITH_SELFTEST
-     #define MODE_SELFTEST 9	/* full selftest function with calibration */
-     #undef NNN
-     #define NNN 9
-    #endif
-   #endif
-  #else		/* no frequency scaler */
-   #define MODE_FREQ 1		/* frequency measurement */
-   #define MODE_FGEN 2		/* frequency generator function */
-   #define MODE_PWM 3		/* Pulse Width variation function */
-   #define MODE_ESR 4		/* ESR measurement in circuit */
-   #define MODE_RESIS 5		/* ResistorCheck at TP1:TP3 */
-   #define MODE_CAP13 6		/* Capacitor check at TP1:TP3 */
-   #define MODE_BIG_CAP_CORR 7	/* Correction for big caps */
-   #define NNN 7
-   #ifdef WITH_ROTARY_CHECK
-    #define MODE_ROTARY 8		/* Test Rotary Switch */
-    #undef NNN
-    #define NNN 8
-    #ifdef WITH_SELFTEST
-     #define MODE_SELFTEST 9	/* full selftest function with calibration */
-     #undef NNN
-     #define NNN 9
-    #endif
-   #else
-    #ifdef WITH_SELFTEST
-     #define MODE_SELFTEST 8	/* full selftest function with calibration */
-     #undef NNN
-     #define NNN 8
-    #endif
-   #endif
-  #endif
- #endif
-
- #ifdef WITH_VEXT
-  #define MODE_VEXT (NNN+1)	/* external voltage measurement and zener voltage */
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
-   #define MODE_CONTRAST (NNN+2)	/* select contrast */
-   #define MODE_SHOW (NNN+3)	/* show data function */
-  #else
-   #ifdef LCD_CHANGE_COLOR
-    #define MODE_SELECT_FG (NNN+2)
-    #define MODE_SELECT_BG (NNN+3)
-    #define MODE_SHOW (NNN+4)
-   #else
-    #define MODE_SHOW (NNN+2)	/* show data function */
-   #endif
-  #endif
- #else
-  #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306) || (LCD_ST_TYPE == 8812) || (LCD_ST_TYPE == 8814) || defined(LCD_DOGM))
-   #define MODE_CONTRAST (NNN+1)	/* select contrast */
-   #define MODE_SHOW (NNN+2)	/* show data function */
-  #else
-   #ifdef LCD_CHANGE_COLOR
-    #define MODE_SELECT_FG (NNN+1)
-    #define MODE_SELECT_BG (NNN+2)
-    #define MODE_SHOW (NNN+3)
-   #else
-    #define MODE_SHOW (NNN+1)	/* show data function */
-   #endif
-  #endif
-  #define MODE_VEXT 66
- #endif		/* end #ifdef WITH_VEXT */
- #define MODE_HFREQ 66
-#endif
-
-#ifdef POWER_OFF
- #define MODE_OFF MODE_SHOW+1	/* add the power off function */
- #define MODE_LAST MODE_OFF
-#else
- #define MODE_LAST MODE_SHOW	/* without POWER_OFF, the SHOW function is the last */
- #define MODE_OFF 66
-#endif
-#endif  /* #if 0 */
-
 #define MIN_SELECT_TIME 50	/* 50x10ms must be hold down to select function without a rotary switch */
 #ifndef MAX_MENU_LINES
 #define MAX_MENU_LINES 5
@@ -233,7 +60,7 @@ void do_menu(uint8_t func_number) {
     }
  #if (USE_CAP13 == 1)
     if (func_number == MODE_CAP13) {
-   lcd_clear();
+       lcd_clear();
        show_Cap13();		// measure capacitor at TP1 and TP3
     }
  #endif
@@ -242,9 +69,11 @@ void do_menu(uint8_t func_number) {
        CheckRotaryEncoder();		// check rotary encoder
     }
  #endif
+ #if (USE_BIG_CAP_CORR == 1)
     if (func_number == MODE_BIG_CAP_CORR) {
        set_big_cap_corr();
     }
+ #endif
  #if (USE_SELFTEST == 1)
     if (func_number == MODE_SELFTEST) AutoCheck(0x11);	// Full selftest with calibration
  #endif

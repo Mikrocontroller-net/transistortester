@@ -3,11 +3,11 @@
 /*  the calibration data at the 2-line or 4-line LCD */
 #ifdef WITH_MENU
 void ShowData(void) {
-#ifdef SamplingADC
-  uint8_t ii,jj,kk;
-  uint16_t cc,dd;
-#endif
 
+#if (defined SamplingADC) && (defined AUTO_CAL)
+  uint16_t cc,dd;
+  uint8_t ii,jj,kk;
+#endif
 #ifdef WITH_ROTARY_SWITCH
 show_page_1:
 #endif
@@ -44,14 +44,17 @@ show_page_2:
   wait_for_key_ms(MIDDLE_WAIT_TIME);
 #ifdef WITH_ROTARY_SWITCH
   if (rotary.incre > FAST_ROTATION) return;	// fast rotation ends the function
-#if (LCD_LINES > 3)
+ #if (LCD_LINES > 3)
   if (rotary.count < 0) goto show_page_1;
  #else
   if (rotary.count < -1) goto show_page_1;
   if (rotary.count < 0) goto show_page_2;
  #endif
-show_page_3:
 #endif
+#ifdef AUTO_CAL
+ #ifdef WITH_ROTARY_SWITCH
+show_page_3:
+ #endif
   lcd_clear();
   lcd_MEM_string(C0_str);                       //output "C0 "
   u2lcd_space(eeprom_read_byte(&c_zero_tab[5]) -(COMP_SLEW1 / (CC0 + CABLE_CAP + COMP_SLEW2)));		//output cap0 1:3
@@ -88,9 +91,9 @@ show_page_4:
   i2lcd((int8_t)eeprom_read_byte((uint8_t *)(&RefDiff)));
 
 #ifdef SamplingADC
-#ifdef WITH_ROTARY_SWITCH
+ #ifdef WITH_ROTARY_SWITCH
 show_page_5:
-#endif
+ #endif
   /* modified output from sampling_cap_calibrate */
   lcd_set_cursor((LCD_LINES-1)*PAGES_PER_LINE,0);      // set for initial clear screen
   for (ii=0;ii<=2;ii++)
@@ -143,6 +146,8 @@ show_page_5:
  #endif
 
 #endif  /* SamplingADC */
+#endif /* defined AUTO_CAL */
+
   wait_for_key_ms(MIDDLE_WAIT_TIME);
 //#if  defined(WITH_GRAPHICS) && !defined(SamplingADC)
 #ifdef SHOW_ICONS

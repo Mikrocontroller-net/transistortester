@@ -119,6 +119,7 @@ for(ww=0;ww<MAX_REP;ww++) {	// repeat the test MAX_REP times
       lcd_MEM2_string(RHfakt_str);	//"RHf="
       u2lcd(RHmultip);	//lcd_string(utoa(RHmultip, outval, 10));
       ADCconfig.Samples = R_ANZ_MESS;	// set number of ADC reads near to maximum
+      goto ww_end;
    }
 				//############################################
    if (tt == 2) { // how equal are the RL resistors? 
@@ -200,14 +201,13 @@ for(ww=0;ww<MAX_REP;ww++) {	// repeat the test MAX_REP times
       lcd_MEM_string(RHRL_str);	// "RH/RL"
    }
 				//############################################
-   if (tt > 1) {	// output 3 voltages 
       lcd_line2();			//Cursor to column 1, row 2
       i2lcd(adcmv[0]);		// lcd_string(itoa(adcmv[0], outval, 10));	//output voltage 1
       lcd_space();
       i2lcd(adcmv[1]);		// lcd_string(itoa(adcmv[1], outval, 10));	//output voltage 2
       lcd_space();
       i2lcd(adcmv[2]);		// lcd_string(itoa(adcmv[2], outval, 10));	//output voltage 3
-   }
+ww_end:
    ADC_DDR =  TXD_MSK;		// all-Pins to Input
    ADC_PORT = TXD_VAL;		// all ADC-Ports to GND
    R_DDR = 0;			// all R-Ports to Input
@@ -380,11 +380,15 @@ ReadCapacity(TP2, TP3);
 adcmv[4] = (unsigned int) cap.cval_uncorrected.dw;	//save capacity value of empty Pin 3:2
 ReadCapacity(TP1, TP2);
 adcmv[0] = (unsigned int) cap.cval_uncorrected.dw;	//save capacity value of empty Pin 2:1
- #ifdef WITH_MENU
+u2lcd_space(adcmv[5]);	//DisplayValue(adcmv[5],0,' ',3);		//output cap0 1:3
+u2lcd_space(adcmv[6]);	//DisplayValue(adcmv[6],0,' ',3);		//output cap0 2:3
+DisplayValue(adcmv[2],-12,'F',3);		//output cap0 1:2
+ #ifdef AUTO_CAL
+  #ifdef WITH_MENU
 if (((test_mode & 0x0f) == 1) || (UnCalibrated == 2))
- #else
+  #else
 if (UnCalibrated == 2)
- #endif
+  #endif
 {
   adcmv[3] = adcmv[0] + 2;		// mark as uncalibrated until Cap > 100nF has success
 } else {
@@ -392,10 +396,6 @@ if (UnCalibrated == 2)
   UnCalibrated = 0;			// clear the UnCalibrated Flag
   lcd_cursor_off();			// switch cursor off
 }
-u2lcd_space(adcmv[5]);	//DisplayValue(adcmv[5],0,' ',3);		//output cap0 1:3
-u2lcd_space(adcmv[6]);	//DisplayValue(adcmv[6],0,' ',3);		//output cap0 2:3
-DisplayValue(adcmv[2],-12,'F',3);		//output cap0 1:2
- #ifdef AUTO_CAL
 for (ww=0;ww<7;ww++) {			//checking loop
 if ((adcmv[ww] > 190) || (adcmv[ww] < 10)) goto no_c0save;
 }
@@ -410,9 +410,9 @@ no_c0save:
 last_line_used = 2;
 wait_for_key_5s_line2();		// wait up to 5 seconds and clear line 2
 
-#ifdef SamplingADC
+ #ifdef SamplingADC
   sampling_cap_calibrate();		// measure zero capacity for samplingADC
-#endif
+ #endif
 
  #ifdef AUTO_CAL
   #ifdef WITH_MENU
@@ -427,13 +427,13 @@ if (((test_mode & 0x0f) == 1) || (UnCalibrated == 2))
 // for full test or first time calibration, use external capacitor
 // Message C > 100nF at TP1 and TP3
 cap_found = 0;
-#if (TPCAP <= 0)
+  #if (TPCAP <= 0)
 lcd_clear();
 lcd_testpin(TP1);
 lcd_MEM_string(CapZeich);	// "-||-"
 lcd_testpin(TP3);
 lcd_MEM2_string(MinCap_str);	// " >100nF!"
-#endif
+  #endif
 for (ww=0;ww<64;ww++) {
   init_parts();
   #if (TPCAP >= 0)
@@ -544,9 +544,9 @@ for (ww=0;ww<64;ww++) {
 
 ADCconfig.Samples = ANZ_MESS;	// set to configured number of ADC samples
 
-#if defined(SamplingADC) && !defined(AUTO_LC_CAP)
+ #if defined(SamplingADC) && !defined(AUTO_LC_CAP)
   sampling_lc_calibrate(0);	// Cap for L-meas
-#endif
+ #endif
 
 
  #ifdef FREQUENCY_50HZ

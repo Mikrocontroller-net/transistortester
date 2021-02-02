@@ -1,84 +1,189 @@
+/* file 10x16_vertical_LSB_1.h   */
 
-  #if defined LANG_CZECH || defined LANG_SLOVAK
-   #define S_caron       'S' /* (S with caron) */
-   #define s_caron       's' /* (s with caron) */
-   #define Z_caron       'Z' /* (Z with caron) */
-   #define z_caron       'z' /* (z with caron) */
-   #define C_caron       'C' /* (C with caron) */
-   #define c_caron       'c' /* (c with caron) */
-   #define O_acute       'O' /* (O with acute) */
-   #define o_acute       'o' /* (o with acute) */
-   #define A_acute       'A' /* (A with acute) */
-   #define a_acute       'a' /* (a with acute) */
-   #define E_acute       'E' /* (E with acute) */
-   #define e_acute       'e' /* (e with acute) */
-   #define U_acute       'U' /* (U with acute) */
-   #define u_acute       'u' /* (u with acute) */
-   #define I_acute       'I' /* (I with acute) */
-   #define i_acute       'i' /* (i with acute) */
-   #define Y_acute       'Y' /* (Y with acute) */
-   #define y_acute       'y' /* (y with acute) */
-   #define D_caron       'D' /* (D with caron) */
-   #define d_caron       'd' /* (d with caron) */
-   #define E_caron       'E' /* (E with caron) */
-   #define e_caron       'e' /* (e with caron) */
-   #define R_caron       'R' /* (R with caron) */
-   #define r_caron       'r' /* (r with caron) */
-   #define T_caron       'T' /* (T with caron) */
-   #define t_caron       't' /* (t with caron) */
-   #define N_caron       'N' /* (N with caron) */
-   #define n_caron       'n' /* (n with caron) */
-   #define u_above       'u' /* (u with above) */
-   #define CHAR_COUNT 128
-  /* ---------------------------------- */
-  #elif defined LANG_FRANCAIS || defined DANISH
-   // Caractères accentues francais
-   #define Fr_a_grave	'a' /* (a with grave) */
-   #define a_circ       'a' /* (a with circle above) */
-   #define Fr_e_acute	'e' /* (e with acute) */
-   #define Fr_e_circ    'e' /* (e with circle above */
-   #define Fr_e_grave   'e' /* (e with grave) */
-   #define o_slash	'o' /* (o with / )   */
-   #define a_e          'a' /* ae */
-   #define CHAR_COUNT 128
-  /* ---------------------------------- */
-  #elif defined LANG_POLISH
-   #define A_ogonek     'A' /* (A with ogonek) */
-   #define a_ogonek     'a' /* (a with ogonek) */
-   #define S_acute      'S' /* (S with acute)  */
-   #define s_acute      's' /* (s with acute)  */
-   #define L_stroke     'L' /* (L with stroke  */
-   #define l_stroke     'l' /* (l with stroke) */
-   #define O_acute      'O' /* (O with acute)  */
-   #define o_acute      'o' /* (o with acute)  */
-   #define C_acute      'C' /* (C with acute)  */
-   #define c_acute      'c' /* (c with acute)  */
-   #define Z_acute      'Z' /* (Z with acute)  */
-   #define z_acute      'z' /* (z with acute)  */
-   #define Z_dotAbove   'z' /* (Z with dot above) */
-   #define z_dotAbove	'z' /* (z with dot above) */
-   #define E_ogonek     'E' /* (E with ogonek) */
-   #define e_ogonek     'e' /* (e with ogonek) */
-   #define N_acute      'N' /* (N with acute)  */
-   #define n_acute      'n' /* (n with acute)  */
-   #define CHAR_COUNT 128
-/* ---------------------------------- */
-  #elif defined LANG_GERMAN || defined LANG_ALBANIAN
-   #define A_uml      	'A' /* (A with Umlaut) */
-   #define a_uml      	'a' /* (a with Umlaut) */
-   #define D_uml      	'D' /* (O with Umlaut) */
-   #define o_uml      	'o' /* (o with Umlaut) */
-   #define U_uml      	'U' /* (U with Umlaut) */
-   #define u_uml      	'u' /* (u with Umlaut) */
-   #define E_uml      	'E' /* (E with Umlaut) */
-   #define e_uml      	'e' /* (e with Umlaut) */
-   #define C_cedilla	'C' /* (C with cedilla)   */
-   #define c_cedilla	'c' /* (c with cedilla)   */
-   #define s_sharp      's' /* (sharp s)          */
-   #define CHAR_COUNT 128
+ /* ---------------------------------- */
+ #if defined LANG_FRANCAIS || defined DANISH
+   // Caracteres accentues francais
+  #define a_grave       'a' /* e0 */
+  #define a_circ        'a' /* e2 */
+  #define a_elig        'a' /* e6 */
+  #define c_cedil       'c' /* e7 */
+  #define e_acute       'e' /* e9 */
+  #define e_circ        'e' /* ea */
+  #define e_grave       'e' /* e8 */
+  #define e_uml         'e' /* eb */ 
+  #define i_circ        'i' /* ee */ 
+  #define i_uml         'i' /* ef */
+  #define o_circ        'o' /* f4 */
+  #define o_elig        'o' /* bd */
+  #define u_grave       'u' /* f9 */
+  #define u_circ        'u' /* fb */
+  #define u_uml         'u' /* fc */
+  #define y_uml         'y' /* ff */
+  #define CHAR_COUNT 128
+ /* ---------------------------------- */
+ #elif defined LANG_CZECH || defined LANG_SLOVAK
+  /* ---------de ISO8859-2---------- */
+  #define a_acute       'a' /* e1 */
+  #define a_uml         'a' /* e4 */
+  #define c_caron       'c' /* e8 */
+  #define d_caron       'd' /* ef */
+  #define e_acute       'e' /* e9 */
+  #define e_caron       'e' /* ec */
+  #define i_acute       'i' /* ed */
+  #define l_acute       'l' /* e5 */
+  #define l_caron       'l' /* b5 */
+  #define n_caron       'n' /* f2 */
+  #define o_acute       'o' /* f3 */
+  #define o_uml         'o' /* f6 */
+  #define o_circ        'o' /* f4 */
+  #define r_acute       'r' /* e0 */
+  #define r_caron       'r' /* f8 */
+  #define s_caron       's' /* b9 */
+  #define t_caron       't' /* bb */
+  #define u_acute       'u' /* fa */
+  #define u_uml         'u' /* fc */
+  #define u_ring        'u' /* f9 */
+  #define y_acute       'y' /* fd */
+  #define z_caron       'z' /* b9 */
+  #ifdef WITH_CAPITAL_SPECIALS
+   #define A_acute       'A' /* c1 */
+   #define A_uml         'A' /* c4 */
+   #define C_caron       'C' /* c8 */
+   #define D_caron       'D' /* cf */
+   #define E_acute       'E' /* c9 */
+   #define E_caron       'E' /* cc */
+   #define I_acute       'I' /* cd */
+   #define L_acute       'L' /* c5 */
+   #define L_caron       'L' /* a5 */
+   #define N_caron       'N' /* d2 */
+   #define O_acute       'O' /* d3 */
+   #define O_uml         'O' /* d6 */
+   #define O_circ        'O' /* d4 */
+   #define R_acute       'R' /* c0 */
+   #define R_caron       'R' /* d8 */
+   #define S_caron       'S' /* a9 */
+   #define T_caron       'T' /* ab */
+   #define U_acute       'U' /* da */
+   #define U_uml         'U' /* dc */
+   #define Y_acute       'Y' /* dd */
+   #define Z_caron       'Z' /* ae */
+   #define CHAR_COUNT  128  // 0x9b
   #else
-   #define CHAR_COUNT 128
+   #define A_acute       a_acute
+   #define A_uml         a_uml
+   #define C_caron       c_caron
+   #define D_caron       c_caron
+   #define E_acute       e_acute
+   #define E_caron       e_caron
+   #define I_acute       i_acute
+   #define L_acute       l_acute
+   #define L_caron       l_caron
+   #define N_caron       n_caron
+   #define O_acute       o_acute
+   #define O_uml         o_uml
+   #define O_circ        o_circ
+   #define R_acute       r_acute
+   #define R_caron       r_caron
+   #define S_caron       s_caron
+   #define T_caron       t_caron
+   #define U_acute       u_acute
+   #define U_uml         u_uml
+   #define Y_acute       y_acute
+   #define Z_caron       z_caron
+   #define CHAR_COUNT  128 //  0x86
   #endif
+ /*--------------------------------------- */
+ #elif defined LANG_SERBIAN || LANG_CROATIAN || LANG_SLOWENIAN || LANG_BOSNIAN
+  #define c_acute       'c'  /* e6 */
+  #define c_caron       'c'  /* e8 */
+  #define d_eth         'd'  /* f0 */
+  #define s_caron       's'  /* b9 */
+  #define z_caron       'z'  /* be */
+  #define C_acute       'C'  /* c6 */
+  #define C_caron       'C'  /* c8 */
+  #define D_eth         'D'  /* d0 */
+  #define S_caron       'S'  /* a9 */
+  #define Z_caron       'Z'  /* ae */
+  #define CHAR_COUNT   128 // 0x7f + 1
+ /* ---------------------------------- */
+ #elif defined LANG_POLISH
+  #define a_ogon        'a' /* b1  */
+  #define c_acute       'c' /* e6  */
+  #define e_ogon        'e' /* ea  */
+  #define l_stroke      'l' /* b3  */
+  #define n_acute       'n' /* f1  */
+  #define o_acute       'o' /* f3  */
+  #define s_acute       's' /* b6  */
+  #define z_acute       'z' /* bc  */
+  #define z_dot         'z' /* bf  */
+  #define A_ogon        'A' /* a1  */
+  #define C_acute       'C' /* c6  */
+  #define E_ogon        'E' /* ca  */
+  #define L_stroke      'L' /* a3  */
+  #define N_acute       'N' /* d1  */
+  #define O_acute       'O' /* d3  */
+  #define S_acute       'S' /* a6  */
+  #define Z_acute       'Z' /* ac  */
+  #define Z_dot         'Z' /* ae  */
+  #define CHAR_COUNT 128   // 0x82
+/* ---------------------------------- */
+ #elif defined LANG_GERMAN || defined LANG_ALBANIAN
+  #define a_uml         'a' /* e4    */
+  #define c_cedil       'c' /* e7    */
+  #define e_uml         'e' /* f6    */
+  #define o_uml         'o' /* f6    */
+  #define s_sharp       's' /* df    */
+  #define u_uml         'u' /* fc    */
+  #define A_uml         'A' /* c4    */
+  #define C_cedil       'C' /* c7    */
+  #define E_uml         'E' /* d6    */
+  #define O_uml         'O' /* d6    */
+  #define U_uml         'U' /* dc    */
+  #define CHAR_COUNT 128
+/* ---------------------------------- */
+ #elif defined LANG_HUNGARIAN
+  #define a_acute       'a' /* e1 */
+  #define e_acute       'e' /* e9 */
+  #define o_acute       'o' /* f3 */
+  #define o_doubleAcute 'o' /* f5 */
+  #define o_uml         'o' /* f6 */
+  #define u_acute       'u' /* fa */
+  #define u_doubleAcute 'u' /* fb */
+  #define u_uml         'u' /* fc */
+  #define A_acute       'A' /* c1 */
+  #define E_acute       'E' /* c9 */
+  #define O_acute       'O' /* d3 */
+  #define O_doubleAcute 'O' /* d5 */
+  #define O_uml         'O' /* d6 */
+  #define U_acute       'U' /* da */
+  #define U_doubleAcute 'U' /* db */
+  #define U_uml         'U' /* dc */
+#define CHAR_COUNT   128 // 0x7f + 1
+ /* ---------------------------------- */
+  #elif defined LANG_ROMANIAN  || LANG_DANISH
+ /* ----RO-------ISO-8859-2-------- */
+  #define a_circ        'a' /* e2 */
+  #define a_breve       'a' /* e3 */
+  #define i_circ        'i' /* ee */
+  #define s_cedil       's' /* ba */
+  #define t_cedil       't' /* fe */
+  #define A_circ        'A' /* c2 */
+  #define A_breve       'A' /* c3 */
+  #define I_circ        'I' /* ce */
+  #define S_cedil       'S' /* aa */
+  #define T_cedil       'T' /* de */
+/* ----DK-------ISO-8859-15------- */
+  #define a_ring        'a' /* e5 */
+  #define a_elig        'a' /* e6 */
+  #define o_slash       'o' /* f8 */
+  #define A_ring        'A' /* c5 */
+  #define A_elig        'A' /* c6 */
+  #define O_slash       'O' /* d8 */
+ #define CHAR_COUNT   128 // 0x7f + 1
+ /* ---------------------------------- */
+ #else
+  #define CHAR_COUNT 128
+ #endif
 
   #define LAST_CHAR (CHAR_COUNT - 1)
 
@@ -105,7 +210,7 @@ const unsigned char PROGMEM font[256][20] = {
  #elif defined LANG_POLISH
  #elif defined LANG_GERMAN || LANG_ALBANIAN
  #elif defined LANG_HUNGARIAN
- #elif defined LANG_ROMANIAN
+ #elif defined LANG_ROMANIAN || LANG_DANISH
  #else	
  #endif                              
 {0xF0,0x1F,0xE0,0x0F,0xE0,0x0F,0xC0,0x07,0xC0,0x07,0xC0,0x07,0x80,0x03,0x80,0x03,0x00,0x01,0x00,0x01},	// 0x10
@@ -124,6 +229,7 @@ const unsigned char PROGMEM font[256][20] = {
 {0x00,0x00,0x00,0x01,0x80,0x03,0x40,0x05,0x00,0x01,0x00,0x01,0x40,0x05,0x80,0x03,0x00,0x01,0x00,0x00},	// 0x1D
 {0x00,0x10,0x00,0x18,0x00,0x1E,0x80,0x1F,0xC0,0x1F,0xF0,0x1F,0xC0,0x1F,0x00,0x1F,0x00,0x1C,0x00,0x10},	// 0x1E
 {0x10,0x00,0x30,0x00,0xF0,0x00,0xF0,0x03,0xF0,0x07,0xF0,0x1F,0xF0,0x07,0xF0,0x01,0x70,0x00,0x10,0x00},	// 0x1F
+
 {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},	// 0x20
 {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFE,0x1B,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},	// 0x21
 {0x00,0x00,0x00,0x00,0x1E,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x1E,0x00,0x00,0x00,0x00,0x00,0x00,0x00},	// 0x22

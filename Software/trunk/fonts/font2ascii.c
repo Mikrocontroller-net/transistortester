@@ -3,6 +3,10 @@
 #include <string.h>
 #include <math.h>
 
+//#define BitIsSET '*'
+//#define BitIsSET '#'
+#define BitIsSET '@'
+//#define BitIsSET ' '     /* special invers Darstellung */
 
 int main(int argc, char *argv[])
 {
@@ -64,6 +68,12 @@ int main(int argc, char *argv[])
     fprintf(stderr,"File %s can not be created!\r\n",filename);
     exit(-1);
  }
+ /* Test-Ausgabe */
+//  for (kk=0x20; kk<255; kk++) {
+//    if ((kk%16) == 0) fprintf(stderr,"\r\n");
+//    fprintf(stderr,"%c",kk);
+//  }
+//  fprintf(stderr,"\r\n");
  
  lev = 0;    
     anz = width;
@@ -82,7 +92,7 @@ int main(int argc, char *argv[])
 	if (origbuf[blanks] != ' ') break;
       }
       linebuf = &origbuf[blanks];
-      if (linebuf[0] == '{') { 
+      if ((linebuf[0] == '{') && (linebuf[1] == '0')) { 
          fprintf(outfile," /* 0x%02x ",line_cnt[lev]);
          if ((line_cnt[lev] >= (int)' ') && (line_cnt[lev] < 0x7f)) {
            fprintf(outfile,"'%c'",(char)line_cnt[lev]);
@@ -103,7 +113,7 @@ int main(int argc, char *argv[])
             for (kk=0;kk<height;kk++) asc_table[ii][kk] = '.';
             asc_table[ii][width] = (char)0;
          }
-         BitSetChar = '*';
+         BitSetChar = BitIsSET;
          BitClearChar = '.';
          tx = &linebuf[1];
          ii = 0;
@@ -161,7 +171,7 @@ int main(int argc, char *argv[])
                 BitSetChar = 'O';
               }
               if ((tx[0] == '*') && (tx[1] == '/')) {
-                BitSetChar = '*';
+                BitSetChar = BitIsSET;
                 BitClearChar = '.';
               }
               tx++;
@@ -188,7 +198,7 @@ int main(int argc, char *argv[])
               }
             }
          } /* end while(ii<anz) */
-	 fprintf(outfile,"// %s\r\n",&tx[2]);
+         fprintf(outfile,"%s\r\n",&tx[2]);
          fprintf(outfile," ");
          for (kk=0; kk<width; kk++) {
             if ( ((kk % 8) == 0) && (kk != 0) ) {
@@ -206,7 +216,21 @@ int main(int argc, char *argv[])
             } else {
               fprintf(outfile,"|");
             }
-              fprintf(outfile,"%s",&asc_table[kk][0]);
+//              fprintf(outfile,"%s",&asc_table[kk][0]);
+            int ll;
+            ll = 0;
+	    while (asc_table[kk][ll] != 0) {
+ #if BitIsSET == ' '
+	     if (asc_table[kk][ll] == BitIsSET ) {
+	       fprintf(outfile,"\033[0;7m%c\033[0m",asc_table[kk][ll]);
+	     } else {
+	       fprintf(outfile,"%c",asc_table[kk][ll]);
+	     }
+ #else
+	     fprintf(outfile,"%c",asc_table[kk][ll]);
+ #endif
+	     ll++;
+	    }
             if ((kk % 8) == 0) {
               fprintf(outfile,"+\r\n");
             } else {
@@ -224,7 +248,7 @@ int main(int argc, char *argv[])
           }
          fprintf(outfile," \r\n");
          line_cnt[lev]++;
-      } else {  /* linebuf[0] != '{' */
+      } else {  /* linebuf != "{0" */
         fprintf(outfile,"%s\r\n", origbuf);
         if ((strncmp(linebuf,"#if ",4)) == 0) {
           lev++;

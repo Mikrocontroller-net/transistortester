@@ -7,14 +7,23 @@
  * History:     Date        Sign    Kommentar 
  *              2021-01-02  Bohu    font*.LSB_2.h add  
  *              2021-01-09  Karl    FONT_SELECTED add
+ *              2021-01-24  Karl    WITH_CAPITAL_SPECIALS depends on Flash End
  *
  * ************************************************************************ */
 
 #if (LCD_GRAPHIC_TYPE != 0)
 
+#if FLASHEND > 0x7fff
+ #define WITH_CAPITAL_SPECIALS 1
+#else
+ #undef WITH_CAPITAL_SPECIALS
+#endif
 
 #if defined(FONT_5X8) || defined(FONT_5x8)
-   #define FONT_WIDTH 6
+   /* The 5x8 Font is created without horizontal space. */
+   /* Therefore the FONT_H_SPACE is defined with one Pixel more. */
+   #define FONT_WIDTH 5
+   #define FONT_H_SPACE (FONT_WIDTH + 1)  /* 6 Pixels */
    #define FONT_HEIGHT 8
    #include "fonts/5x8_vertikal_LSB_1.h"   //******Font_5x8 (create by mike0815 *** 23-09-2015 )
  #define FONT_SELECTED
@@ -32,6 +41,17 @@
   #define FONT_HEIGHT 8
   #include "fonts/6x8_vertikal_LSB_1.h"
   #define FONT_SELECTED
+ #endif
+
+ #if defined(FONT_7X8) || defined(FONT_7x8)
+  #ifdef FONT_SELECTED
+   #warning Multiple fonts selected, please select only one!
+  #else
+   #define FONT_WIDTH 7
+   #define FONT_HEIGHT 8
+   #include "fonts/7x8_vertikal_LSB_1.h" 
+   #define FONT_SELECTED
+  #endif
  #endif
 
  #if defined(FONT_8X8_2) || defined(FONT_8x8_2)
@@ -139,6 +159,10 @@
    #define FONT_HEIGHT 8
    #include "fonts/6x8_vertikal_LSB_1.h"
    #define FONT_SELECTED
+ #endif
+ 
+ #ifndef FONT_H_SPACE
+  #define FONT_H_SPACE FONT_WIDTH  /* usually the horizontal space is same as FONT_WIDTH */
  #endif
 
 #endif /* LCD_GRAPHIC_TYPE != 0 */

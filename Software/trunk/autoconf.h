@@ -23,8 +23,8 @@
  #undef LCD_LINES
  #define LCD_LINES ((SCREEN_HEIGHT/ONE_B) / PAGES_PER_LINE)
  #undef LCD_LINE_LENGTH
- #define LCD_LINE_LENGTH (SCREEN_WIDTH / (ONE_B/8) / FONT_WIDTH )
- #define TEXT_RIGHT_TO_ICON ((ICON_WIDTH + 16 + 5 + 7) / FONT_WIDTH)
+ #define LCD_LINE_LENGTH (SCREEN_WIDTH / (ONE_B/8) / FONT_H_SPACE )
+ #define TEXT_RIGHT_TO_ICON ((ICON_WIDTH + 16 + 5 + 7) / FONT_H_SPACE)
 #elif (LCD_ST_TYPE == 8812)
  /* defines for PCF8812 */
  /* The space at the display is too small for the big icons for this type, some characters are missing */
@@ -35,8 +35,8 @@
  #undef LCD_LINES
  #define LCD_LINES ((SCREEN_HEIGHT/8) / PAGES_PER_LINE)
  #undef LCD_LINE_LENGTH
- #define LCD_LINE_LENGTH (SCREEN_WIDTH / FONT_WIDTH)
- #define TEXT_RIGHT_TO_ICON ((ICON_WIDTH + 16 + 5 + 7) / FONT_WIDTH)
+ #define LCD_LINE_LENGTH (SCREEN_WIDTH / FONT_H_SPACE)
+ #define TEXT_RIGHT_TO_ICON ((ICON_WIDTH + 16 + 5 + 7) / FONT_H_SPACE)
 #elif (LCD_ST_TYPE == 8814)
  /* defines for PCF8814 */
  /* The space at the display is too small for the big icons for this type, some characters are missing */
@@ -47,8 +47,8 @@
  #undef LCD_LINES
  #define LCD_LINES ((SCREEN_HEIGHT/8) / PAGES_PER_LINE)
  #undef LCD_LINE_LENGTH
- #define LCD_LINE_LENGTH (SCREEN_WIDTH / FONT_WIDTH)
- #define TEXT_RIGHT_TO_ICON ((ICON_WIDTH + 16 + 5 + 7) / FONT_WIDTH)
+ #define LCD_LINE_LENGTH (SCREEN_WIDTH / FONT_H_SPACE)
+ #define TEXT_RIGHT_TO_ICON ((ICON_WIDTH + 16 + 5 + 7) / FONT_H_SPACE)
 #else  /* no ST7565 or SSD1306 graphic controller */
 // #ifdef FOUR_LINE_LCD
 //  #if FOUR_LINE_LCD == 3
@@ -91,7 +91,7 @@
  #define LCD_LINE_LENGTH 16
 #endif
 
-#if (defined(WITH_GRAPHICS) && (((SCREEN_WIDTH-(TEXT_RIGHT_TO_ICON*FONT_WIDTH))/FONT_WIDTH) < 9))
+#if (defined(WITH_GRAPHICS) && (((SCREEN_WIDTH-(TEXT_RIGHT_TO_ICON*FONT_H_SPACE))/FONT_H_SPACE) < 9))
  #define LOW_H_SPACE 1
 #else
  #define LOW_H_SPACE 0
@@ -543,18 +543,18 @@
 
 
 #ifdef LCD_CYRILLIC
-        #define LCD_CHAR_OMEGA  13       //Omega-character 
-
+        #define LCD_CHAR_OMEGA  3       //Omega-character 
+        #define LCD_CHAR_U  5           //mu-character
 #else
         #define LCD_CHAR_OMEGA  244     //Omega-character
-        #define LCD_CHAR_U  228         //\B5-character
+        #define LCD_CHAR_U  228         //mu-character
 #endif
 
 #ifdef LCD_DOGM
 	#undef LCD_CHAR_OMEGA
 	#define LCD_CHAR_OMEGA 0x1e	//Omega-character for DOGM module
         #undef LCD_CHAR_U
-        #define LCD_CHAR_U  14           //\B5-character for DOGM module loadable
+        #define LCD_CHAR_U  5           //mu-character for DOGM module loadable
 #endif
 
 

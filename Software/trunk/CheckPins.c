@@ -388,7 +388,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
                adc.lp2 = W10msReadADC(LowPin);	//measure voltage at the Source; this is the voltage drop across the pin's ~20 ohm internal resistance!
                ADC_DDR = TXD_MSK;             // disconnect drain and source immediately after measurement, since quite a lot of current may flow
                // this is almost the Idss, since the gate-source voltage is almost 0 (only the voltage drop across that 20 ohm resistance)
-               i16 = (unsigned int)(((unsigned long)adc.lp2 * 10000) / pin_rmi); // Idss 1uA
+               i16 = (unsigned int)(((unsigned long)adc.lp2 * 10000) / RRpinMI); // Idss 1uA
   #if DebugOut == 5
            DisplayValue(i16,-6,' ',3);
   #endif
@@ -495,7 +495,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin)
                adc.hp3 = vcc_diff(W10msReadADC(HighPin));	//measure voltage at the Source; this is the voltage drop across the pin's ~20 ohm internal resistance!
                ADC_DDR = TXD_MSK;	// disconnect drain and source immediately after measurement, since quite a lot of current may flow
                // this is almost the Idss, since the gate-source voltage is almost 0 (only the voltage drop across that 20 ohm resistance)
-               i16 = (unsigned int)(((unsigned long)adc.hp3 * 10000) / pin_rpl); // Idss 1uA
+               i16 = (unsigned int)(((unsigned long)adc.hp3 * 10000) / RRpinPL); // Idss 1uA
   #if DebugOut == 5
            DisplayValue(i16,-6,' ',3);
   #endif

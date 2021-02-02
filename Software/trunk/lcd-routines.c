@@ -170,7 +170,7 @@ void lcd_set_cursor(uint8_t y, uint8_t x) {
     // The pixel memory is greater as the display window.
     // For example the SPL501 controller has 132x65 dot matrix memory
     // LCD_ST7565_H_OFFSET specifies the offset of the 128 pixel of the display window.
-   _xpos = (x * FONT_WIDTH);
+   _xpos = (x * FONT_H_SPACE);
 #else
    // move to the specified position for character display
    if (y == 1) {
@@ -305,7 +305,7 @@ _lcd_column++;
  pfont = (uint8_t *)font + (FONT_WIDTH * PAGES_PER_LINE * temp1);	// first byte of character data
  // for other controllers like ST7565 the _page specifies the page of the controller (8 lines)
  lcd_set_pixels( pfont, _xpos, _page*8, 0, (unsigned char)FONT_WIDTH, (unsigned char)(PAGES_PER_LINE*8));
-_xpos += FONT_WIDTH;		// move pointer to the next character position
+_xpos += FONT_H_SPACE;		// move pointer to the next character position
 #else
  lcd_write_data(temp1);		// set RS to 1
 #endif

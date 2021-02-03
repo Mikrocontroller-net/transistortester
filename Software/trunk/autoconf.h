@@ -861,7 +861,6 @@
  #define USE_H_CRYSTAL 0
  #define USE_L_CRYSTAL 0
 #else   /* with frequency counter */
- #define USE_FREQ 1
  #if PROCESSOR_TYP == 644
   #define USE_FREQ 1
   #define USE_HFREQ 1

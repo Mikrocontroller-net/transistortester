@@ -47,7 +47,12 @@ _lcd_hw_write:
                        set_rs_high
                sbrs    preg_1, 0
                        set_rs_low
-
+#ifdef LCD_SPI_HW
+	AOUT	SPDR, preg_2
+wait:
+	sbis	SPSR,SPIF
+	rjmp	wait
+#else
 _bit_loop:
                ; Send bit-7
                set_en_low
@@ -112,6 +117,7 @@ _bit_loop:
                sbrs    preg_2, 0
                        set_b0_low
                set_en_high		; force data read from LCD controller
+#endif
 
 _lcd_hw_write_exit:
                ret

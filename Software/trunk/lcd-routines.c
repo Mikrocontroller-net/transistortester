@@ -395,6 +395,11 @@ void lcd_init(void) {
  #else
    HW_LCD_CE_PORT  |= _BV(HW_LCD_CE_PIN);   // set CS to 1, unselected
    HW_LCD_CE_DDR   |= _BV(HW_LCD_CE_PIN);  // LCD CS is Output
+  #ifdef LCD_SPI_HW
+   #warning "Hardware SPI not yet tested"
+// SPSR = (1<<SPI2X);			// for CLK/2
+   SPCR = (1<<SPE) | (1<<MSTR);		// init SPI with CLK/4
+  #endif
  #endif
  #if (LCD_INTERFACE_MODE == MODE_3LINE)
    // for 3LINE mode the RS is chip enable, RS is send as first serial bit

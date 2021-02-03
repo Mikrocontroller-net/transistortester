@@ -106,10 +106,20 @@
  #define TP3 PA2
  // Port pin for external Voltage measurement (zener voltage extension)
  // The pin number gives the right MUX2:0 setting
+ #if (STRIP_GRID_BOARD & 0x0f) == 7    /* m644 */
+ #define TPext PA4		/* T7 */
+ #else
  #define TPext PA3
+ #endif
+
  // Port pin for 2.5V precision reference used for VCC check (optional)
+ #if (STRIP_GRID_BOARD & 0x0f) == 7    /* m644 */
+ #define TPREF PA3		/* T7 */
+ #define TPRELAY PA3		/* T7 */
+ #else
  #define TPREF PA4
  #define TPRELAY PA4
+ #endif
  // Port pin for Battery voltage measuring
  #define TPBAT PA5
  // Port pin with >100nF capacitor for calibration, -1 for none
@@ -190,15 +200,27 @@
 */
 #if PROCESSOR_TYP == 644
 //################# for m324, m664, m1284 use port D 
- #define R_DDR DDRD
- #define R_PORT PORTD
-
- #define PIN_RL1 PD2
- #define PIN_RL2 PD4
- #define PIN_RL3 PD6
- #define PIN_RH1 PD3
- #define PIN_RH2 PD5
- #define PIN_RH3 PD7
+ #if (STRIP_GRID_BOARD & 0x0f) == 7    /* m644 */
+  #define R_DDR DDRC		/* T7 */
+  #define R_PORT PORTC		/* T7 */
+ 
+  #define PIN_RL1 PC0		/* T7 */
+  #define PIN_RL2 PC2		/* T7 */
+  #define PIN_RL3 PC4		/* T7 */
+  #define PIN_RH1 PC1		/* T7 */
+  #define PIN_RH2 PC3		/* T7 */
+  #define PIN_RH3 PC5		/* T7 */
+ #else
+  #define R_DDR DDRD		/* m644 */
+  #define R_PORT PORTD		/* m644 */
+ 
+  #define PIN_RL1 PD2		/* m644 */
+  #define PIN_RL2 PD4		/* m644 */
+  #define PIN_RL3 PD6		/* m644 */
+  #define PIN_RH1 PD3		/* m644 */
+  #define PIN_RH2 PD5		/* m644 */
+  #define PIN_RH3 PD7		/* m644 */
+ #endif
 /* The calibration capacitor is connected to a 470k resistor to port TCAP */
  #define TCAP_DDR DDRC
  #define TCAP_PORT PORTC
@@ -251,14 +273,23 @@
   #define ROTARY_2_DDR DDRB
   #define ROTARY_2_REG PINB
  #endif
- #ifndef ROTARY_1_PIN
-  // default connection is PB7
-  #define ROTARY_1_PIN PB7
- #endif
- #ifndef ROTARY_2_PIN
-  // PB5 is connected to character LCD D5 or ST7565 RS
-  #define ROTARY_2_PIN PB5
-  // can be preset to PB6 for character display and PB3 for ST7565 graphic controller
+ #if (STRIP_GRID_BOARD & 0x0f) == 7    /* m644 */
+  #ifndef ROTARY_1_PIN
+   #define ROTARY_1_PIN PB5	/* T7 */
+  #endif
+  #ifndef ROTARY_2_PIN
+   #define ROTARY_2_PIN PB6	/* T7 */
+  #endif
+ #else
+  #ifndef ROTARY_1_PIN
+   // default connection is PB7
+   #define ROTARY_1_PIN PB7	/* m644 */
+  #endif
+  #ifndef ROTARY_2_PIN
+   // PB5 is connected to character LCD D5 or ST7565 RS
+   #define ROTARY_2_PIN PB5	/* m644 */
+   // can be preset to PB6 for character display and PB3 for ST7565 graphic controller
+  #endif
  #endif
 /* FDIV_PIN specifies the output pin, which switch on a 16:1 frequency divider */
  #define FDIV_DDR DDRC
@@ -266,15 +297,31 @@
  #define FDIV_PIN PC0
 /* the two bits P0 and P1 at FINP port control the input of frequency measurement */
 /* P1:P0 = 00 external input, P1:P0 = 10 high frequency crystal, P1:P0 = 11 low frequency crystal */
+ #if (STRIP_GRID_BOARD & 0x0f) == 7    /* m644 */
+ #define FINP_DDR DDRB		/* T7 */
+ #define FINP_PORT PORTB	/* T7 */
+ #else
  #define FINP_DDR DDRC
  #define FINP_PORT PORTC
- #if ((STRIP_GRID_BOARD & 0x10) == 0x10)
+ #endif
+ #if (STRIP_GRID_BOARD & 0x0f) == 7    /* m644 */
+  #if ((STRIP_GRID_BOARD & 0x10) == 0x10)
+  // 00 = external, 10 = HF Xtal, 11 = LF Xtal
+  #define FINP_P0 PB2		/* T7, Y1 port of HC4052 is selected with 10 */
+  #define FINP_P1 PB1		/* T7 */
+  #else
+  #define FINP_P0 PB1		/* T7, Y2 port of HC4052 is selected with 10 */
+  #define FINP_P1 PB2		/* T7 */
+  #endif
+ #else
+  #if ((STRIP_GRID_BOARD & 0x10) == 0x10)
   // 00 = external, 10 = HF Xtal, 11 = LF Xtal
   #define FINP_P0 PC2		/* Y1 port of HC4052 is selected with 10 */
   #define FINP_P1 PC1
- #else
+  #else
   #define FINP_P0 PC1		/* Y2 port of HC4052 is selected with 10 */
   #define FINP_P1 PC2
+  #endif
  #endif
 #elif PROCESSOR_TYP == 1280
 /* ------------------------------------------------------------------------- */
@@ -350,9 +397,15 @@
 /* define the output pin for switch the power on/off                         */
 /* ************************************************************************* */
 #if PROCESSOR_TYP == 644
+ #if (STRIP_GRID_BOARD & 0x0f) == 7    /* m644 */
+ #define ON_DDR DDRD		/* T7 */
+ #define ON_PORT PORTD		/* T7 */
+ #define ON_PIN PD2      // T7, This Pin is switched to high to switch power on
+ #else
  #define ON_DDR DDRB
  #define ON_PORT PORTB
  #define ON_PIN PB1      // This Pin is switched to high to switch power on
+ #endif
 #elif PROCESSOR_TYP == 1280
  #define ON_DDR DDRA
  #define ON_PORT PORTA
@@ -374,19 +427,24 @@
 /* define the pin for push button  (low value, if pressed)                   */
 /* ************************************************************************* */
 #if PROCESSOR_TYP == 644
-  // currently no special strip grid layout defined
+ #if (STRIP_GRID_BOARD & 0x0f) == 7    /* m644 */
+  #define RST_PORT PORTD		/* T7 */
+  #define RST_PIN_REG PIND		/* T7 */
+  #define RST_PIN PD1     // T7, Pin, is switched to low, if push button is pressed
+ #else
   #define RST_PORT PORTC
   #define RST_PIN_REG PINC
-  #define RST_PIN PC7     //Pin, is switched to low, if push button is pressed
+  #define RST_PIN PC7     // Pin, is switched to low, if push button is pressed
+ #endif
 #elif PROCESSOR_TYP == 1280
  #if STRIP_GRID_BOARD == 1
   #define RST_PORT PORTA
   #define RST_PIN_REG PINA
-  #define RST_PIN PA0     //Pin, is switched to low, if push button is pressed
+  #define RST_PIN PA0     // Pin, is switched to low, if push button is pressed
  #else
   #define RST_PORT PORTA
   #define RST_PIN_REG PINA
-  #define RST_PIN PA7     //Pin, is switched to low, if push button is pressed
+  #define RST_PIN PA7     // Pin, is switched to low, if push button is pressed
  #endif
 #else		/* PROCESSOR_TYP, must be ATmega8|168|328 */
   /* Processor mega8/168/328 , two board layouts defined */
@@ -449,7 +507,6 @@
   /* additional Chip Enable CE is defined */
 				/* --------------------------------------------- */
  #if PROCESSOR_TYP == 644	/* mega324/644/1284 with SPI */
-  // currently no difference between normal and strip grid board
    /* the ST7565 Reset signal */
    #define HW_LCD_RES_DDR         DDRB
    #define HW_LCD_RES_PORT        PORTB
@@ -458,7 +515,11 @@
    /* EN is the serial clock signal SCL */
    #define HW_LCD_EN_DDR          DDRB
    #define HW_LCD_EN_PORT         PORTB
-   #define HW_LCD_EN_PIN          6
+  #if (STRIP_GRID_BOARD & 0x0f) == 7    /* m644 */
+   #define HW_LCD_EN_PIN          6		/* T7 */
+  #else
+   #define HW_LCD_EN_PIN          6		/* m644 */
+  #endif
 
    /* the data/instruction signal RS */
    #define HW_LCD_RS_DDR          DDRB
@@ -468,7 +529,11 @@
    /* the data signal SI */
    #define HW_LCD_B0_DDR          DDRB
    #define HW_LCD_B0_PORT         PORTB
-   #define HW_LCD_B0_PIN          7
+  #if (STRIP_GRID_BOARD & 0x0f) == 7    /* m644 */
+   #define HW_LCD_B0_PIN          6		/* T7 */
+  #else
+   #define HW_LCD_B0_PIN          7		/* m644 */
+  #endif
 
    /* Chip Enable input */
    #define HW_LCD_CE_DDR          DDRB
@@ -1028,7 +1093,7 @@
 /*
 With define SWUART_INVERT you can specify, if the software-UART operates normal or invers.
 in the normal mode the UART sends with usual logik level (Low = 0; High = 1).
-You can use this mode for direct connection to a \B5C, or a level converter like MAX232.
+You can use this mode for direct connection to a uC, or a level converter like MAX232.
 
 With invers mode the UART sends with invers logik (Low = 1, High = 0).
 This is the level of a standard RS232 port of a PC.
@@ -1044,7 +1109,11 @@ Is SWUART_INVERT defined, the UART works is inverse mode
  // ATmega324/644/1284
  #define SERIAL_PORT PORTD
  #define SERIAL_DDR DDRD
+ #if STRIP_GRID_BOARD == 7    /* m644 */
+ #define SERIAL_BIT PD4		/* T7 use port D bit 1 for serial out */
+ #else
  #define SERIAL_BIT PD1		/* ATmega644 use port D bit 1 for serial out */
+ #endif
  #define TXD_VAL 0	/* no output for ADC port */
  #define TXD_MSK 0	/* no output for ADC port */
 #elif PROCESSOR_TYP == 1280

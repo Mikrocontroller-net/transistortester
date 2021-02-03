@@ -4558,11 +4558,11 @@ void GetIr(uint8_t hipin, uint8_t lopin) {
     131a:	cf 93       	push	r28
     131c:	df 93       	push	r29
     131e:	d6 2f       	mov	r29, r22
+  ADC_PORT = HiADC;		 	// switch ADC port to high level
   ADC_DDR = HiADC | TXD_MSK;		// switch High Pin direct to VCC
   R_PORT = 0;				// switch R-Port to GND
   LoPinR_L = pgm_read_byte(&PinRHRLADCtab[lopin-TP_MIN]);  //R_L mask for LowPin R_L load
 #else
-  uint8_t LoPinR_L;
   HiADC = pgm_read_byte(&PinRLRHADCtab[hipin-TP_MIN]+3);	// Table of ADC pins including | TXD_VAL
     1320:	e8 2f       	mov	r30, r24
     1322:	f0 e0       	ldi	r31, 0x00	; 0

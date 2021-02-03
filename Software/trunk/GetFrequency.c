@@ -31,7 +31,7 @@
  #define PCINTx_vect PCINT2_vect
 #endif
 
-#if defined(WITH_MENU) && !defined(NO_FREQ_COUNTER)
+#if defined WITH_MENU  && defined USE_FREQ
 
 void GetFrequency(uint8_t range) {
   unsigned char taste;			// set if key is pressed during measurement

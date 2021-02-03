@@ -273,23 +273,14 @@
   #define ROTARY_2_DDR DDRB
   #define ROTARY_2_REG PINB
  #endif
- #if (STRIP_GRID_BOARD & 0x0f) == 7    /* m644 */
-  #ifndef ROTARY_1_PIN
-   #define ROTARY_1_PIN PB5	/* T7 */
-  #endif
-  #ifndef ROTARY_2_PIN
-   #define ROTARY_2_PIN PB6	/* T7 */
-  #endif
- #else
-  #ifndef ROTARY_1_PIN
-   // default connection is PB7
-   #define ROTARY_1_PIN PB7	/* m644 */
-  #endif
-  #ifndef ROTARY_2_PIN
-   // PB5 is connected to character LCD D5 or ST7565 RS
-   #define ROTARY_2_PIN PB5	/* m644 */
-   // can be preset to PB6 for character display and PB3 for ST7565 graphic controller
-  #endif
+ #ifndef ROTARY_1_PIN
+  // default connection is PB7
+  #define ROTARY_1_PIN PB7	/* m644 */
+ #endif
+ #ifndef ROTARY_2_PIN
+  // PB5 is connected to character LCD D5 or ST7565 RS
+  #define ROTARY_2_PIN PB5	/* m644 */
+  // can be preset to PB6 for character display and PB3 for ST7565 graphic controller
  #endif
 /* FDIV_PIN specifies the output pin, which switch on a 16:1 frequency divider */
  #define FDIV_DDR DDRC
@@ -516,7 +507,7 @@
    #define HW_LCD_EN_DDR          DDRB
    #define HW_LCD_EN_PORT         PORTB
   #if (STRIP_GRID_BOARD & 0x0f) == 7    /* m644 */
-   #define HW_LCD_EN_PIN          6		/* T7 */
+   #define HW_LCD_EN_PIN          7		/* T7 */
   #else
    #define HW_LCD_EN_PIN          6		/* m644 */
   #endif

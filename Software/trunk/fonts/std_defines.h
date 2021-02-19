@@ -365,5 +365,6 @@
  #else
   #define CHAR_COUNT 128
  #endif
+#endif
 
 #define LastChar (CHAR_COUNT - 1)

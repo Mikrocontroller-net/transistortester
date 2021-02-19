@@ -93,8 +93,8 @@
   #else
    #define FONT_SELECTED
    #define FONT_WIDTH 8
-   #define FONT_HEIGHT 15
-   #include "fonts/8x15_vertikal_LSB_1.h"
+   #define FONT_HEIGHT 15  /* use 8x14 font with extra space */
+   #include "fonts/8x14_vertikal_LSB_1.h"
   #endif
  #endif
 
@@ -138,7 +138,20 @@
    #define FONT_SELECTED
    #define FONT_WIDTH 7
    #define FONT_HEIGHT 12
-   #include "fonts/7x12_vertical_LSB_1.h"
+   #include "fonts/7x12_vertikal_LSB_1.h"
+  #endif
+ #endif
+
+ #if defined(FONT_7X12x) || defined(FONT_7x12x)
+  #ifdef FONT_SELECTED
+   #warning Multiple fonts selected, please select only one!
+  #else
+   #define FONT_SELECTED
+   #define FONT_WIDTH 7
+   #define SFONT_WIDTH 8
+   #define FONT_H_SPACE SFONT_WIDTH  /* 8 Pixels */
+   #define FONT_HEIGHT 12
+   #include "fonts/7x12_vertikal_LSB_1.h"
   #endif
  #endif
 
@@ -153,6 +166,17 @@
   #endif
  #endif
 
+ #if defined(FONT_10X16) || defined(FONT_10x16)
+  #ifdef FONT_SELECTED
+   #warning Multiple fonts selected, please select only one!
+  #else
+   #define FONT_SELECTED
+   #define FONT_WIDTH 10
+   #define FONT_HEIGHT 16
+   #include "fonts/10x16_vertikal_LSB_1.h"
+  #endif
+ #endif
+
  #ifndef FONT_SELECTED
    #warning No Font specified. Check Makefile!
    #define FONT_WIDTH 6
@@ -163,6 +187,9 @@
  
  #ifndef FONT_H_SPACE
   #define FONT_H_SPACE FONT_WIDTH  /* usually the horizontal space is same as FONT_WIDTH */
+ #endif
+ #ifndef SFONT_WIDTH
+  #define SFONT_WIDTH FONT_WIDTH
  #endif
 
 #endif /* LCD_GRAPHIC_TYPE != 0 */

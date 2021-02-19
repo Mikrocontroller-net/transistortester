@@ -75,9 +75,14 @@ int main(int argc, char *argv[])
 	if ((linebuf[kk] == ' ') || (linebuf[kk] == '\t')) start_txt = &linebuf[kk+1];
 	else  break;
       }
-      if ((strncmp(start_txt, "/* 0x",5)) == 0) {
+      if ( ((strncmp(start_txt, "/* 0x",5)) == 0) ||
+           ((strncmp(start_txt, "#define PIX_",12)) == 0) ) {
          // save comment 
          strcpy(comment_buf,start_txt);
+	 /* prepare for output */
+	 /* #define PIX_a_acute  { */
+	 /* 0123456789012345678901 */
+         if ( (strncmp(start_txt, "#define PIX_",12)) == 0) comment_buf[22] = 0;
       } else {
         if ((linebuf[0] == ' ') && (linebuf[1] == '-')) {
            // begin or end of block
@@ -97,11 +102,12 @@ int main(int argc, char *argv[])
        ll_max = -1;
        kk_min = width;
        kk_max = -1;
-       fprintf(stdout,"{");
+       if ((strncmp(comment_buf, "#define PIX_",12)) == 0) fprintf(stdout,"%s",comment_buf);
+       else                                                fprintf(stdout,"{");
        comment_out = 0;
        for (ll=0;ll<height;ll+=8) {
          for (kk=0;kk<width;kk++) {
-            if (((kk%8) == 0) && (kk != 0)) fprintf(stdout,"\r\n  ");
+ //           if (((kk%8) == 0) && (kk != 0)) fprintf(stdout,"\r\n  ");
             if ((bittab1[ll/8][kk] != bittab2[ll/8][kk]) && (comment_out == 0)) {
                comment_out = 1;
                fprintf(stdout,"/* ");		// Beginn Kommentar
@@ -119,8 +125,13 @@ int main(int argc, char *argv[])
             fprintf(stdout,"0x%02X",bittab1[ll/8][kk]);		// Ausgabe des Hex-Wertes
             if (((ll+8) < height) || (kk != (width-1))) fprintf(stdout,",");
          } /* end for kk */
-	 if (ll/8 == (height-1)/8 ) fprintf(stdout,"},  %s\r\n",comment_buf);
-	 else fprintf(stdout,"\r\n ");
+	 if (ll/8 == (height-1)/8 ) {
+            if ((strncmp(comment_buf, "#define PIX_",12)) == 0) fprintf(stdout,"}, \r\n");
+	    else                                                fprintf(stdout,"},  %s\r\n",comment_buf);
+	 } else {
+//          fprintf(stdout,"\r\n ");
+            fprintf(stdout," ");
+	 }
        } /* end for ll */
        if (comment_out != 0) {
           comment_out = 0;
@@ -141,7 +152,6 @@ int main(int argc, char *argv[])
        height = 0;
     } /* end if ((height > 5) && (beg_end != 0)) */
  } /* end while */
-fprintf(stdout,"\r\n");
  return(0);
 }
 

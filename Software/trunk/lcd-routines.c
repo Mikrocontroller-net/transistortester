@@ -302,10 +302,27 @@ void lcd_data(unsigned char temp1) {
 _lcd_column++;
 #if (LCD_GRAPHIC_TYPE != 0)
  uint8_t *pfont;
- pfont = (uint8_t *)font + (FONT_WIDTH * PAGES_PER_LINE * temp1);	// first byte of character data
+ #if FONT_WIDTH != 5
+ if (temp1 < 12) {
+  pfont = (uint8_t *)sfont + (SFONT_WIDTH * PAGES_PER_LINE * temp1);	// first byte of character data
+  // for other controllers like ST7565 the _page specifies the page of the controller (8 lines)
+  lcd_set_pixels( pfont, _xpos, _page*8, 0, (unsigned char)SFONT_WIDTH, (unsigned char)(PAGES_PER_LINE*8));
+ _xpos += FONT_H_SPACE;		// move pointer to the next character position
+ } else {  /* normal character need extra horizontal space */
+  pfont = (uint8_t *)nfont + ((FONT_WIDTH-1) * PAGES_PER_LINE * (temp1-12-16));	// first byte of character data
+  lcd_set_pixels( pfont, _xpos, _page*8, 0, (unsigned char)(FONT_WIDTH-1), (unsigned char)(PAGES_PER_LINE*8));
+ _xpos += (FONT_WIDTH-1);		// move pointer to the next character position
+  lcd_set_pixels( &nfont[((unsigned char)(' '-12-16))][0], _xpos, _page*8, 0, (unsigned char)(FONT_H_SPACE-(FONT_WIDTH-1)), (unsigned char)(PAGES_PER_LINE*8));
+  _xpos += (FONT_H_SPACE-(FONT_WIDTH-1));
+ }
+ #else    /* FONT_WIDTH == 5 */ 
+ unsigned char cc = temp1;
+ if (temp1 > 9) cc -= Gap_length;
+ pfont = (uint8_t *)font + (FONT_WIDTH * PAGES_PER_LINE * cc);	// first byte of character data
  // for other controllers like ST7565 the _page specifies the page of the controller (8 lines)
  lcd_set_pixels( pfont, _xpos, _page*8, 0, (unsigned char)FONT_WIDTH, (unsigned char)(PAGES_PER_LINE*8));
 _xpos += FONT_H_SPACE;		// move pointer to the next character position
+ #endif
 #else
  lcd_write_data(temp1);		// set RS to 1
 #endif

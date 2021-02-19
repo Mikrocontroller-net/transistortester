@@ -10,17 +10,15 @@
 
 int main(int argc, char *argv[])
 {
- int width;
+ int width,new_width;
  int height;
  int anz;
  int hexwert;
  int ii, kk;
  int blanks;
  int hh;
- int lev;
  int line, row;
  int lines;
- int line_cnt[20];
  char origbuf[256];
  char *linebuf;
  char filename[256];
@@ -75,10 +73,8 @@ int main(int argc, char *argv[])
 //  }
 //  fprintf(stderr,"\r\n");
  
- lev = 0;    
     anz = width;
     anz *= ((height + 7) / 8);
-    line_cnt[lev] = 0;
     lines = 0;
     while (fgets(origbuf,256,stdin) != NULL)
     {
@@ -92,22 +88,45 @@ int main(int argc, char *argv[])
 	if (origbuf[blanks] != ' ') break;
       }
       linebuf = &origbuf[blanks];
-      if ((linebuf[0] == '{') && (linebuf[1] == '0')) { 
-         fprintf(outfile," /* 0x%02x ",line_cnt[lev]);
-         if ((line_cnt[lev] >= (int)' ') && (line_cnt[lev] < 0x7f)) {
-           fprintf(outfile,"'%c'",(char)line_cnt[lev]);
+      if (linebuf[0] == 0) {
+           linebuf[1] = 0;
+           linebuf[20] = 0;
+           linebuf[22] = 0;
          }
-         if (height <= 16) {
-           if (line_cnt[lev] == 0) fprintf(outfile,"Resistor3 ");
-           if (line_cnt[lev] == 1) fprintf(outfile,"Diode1 ");
-           if (line_cnt[lev] == 2) fprintf(outfile,"Diode2 ");
-           if (line_cnt[lev] == 3) fprintf(outfile,"Capacitor ");
-           if (line_cnt[lev] == 4) fprintf(outfile,"Omega ");
-           if (line_cnt[lev] == 5) fprintf(outfile,"mu ");
-           if (line_cnt[lev] == 6) fprintf(outfile,"Resistor1 ");
-           if (line_cnt[lev] == 7) fprintf(outfile,"Resistor2 ");
+      if ( ((linebuf[0]  == '{') && (linebuf[1]  == '0')) ||
+           ((linebuf[1]  == ' ') && (linebuf[2]  == '{') && (linebuf[3]  == '0')) ||
+	   ((strncmp(&linebuf[0],"#define PIX_",12) == 0) && (linebuf[21] == '{') && (linebuf[22] == '0')) ||
+	   ((strncmp(&linebuf[2],"#define PIX_",12) == 0) && (linebuf[23] == '{') && (linebuf[24] == '0')) ) { 
+         if ( (linebuf[0]  == '{') ) tx = &linebuf[1];
+         if ( (linebuf[1]  == ' ') && (linebuf[2]  == '{') ) tx = &linebuf[3]; /* probably diff output "< {" "> {" */
+	 if ( (linebuf[20] == ' ') && (linebuf[21] == '{') ) {
+	    /* probably #define style */
+            /* #define PIX_a_stroke {0x.... */
+            /* 012345678901234567890123     */
+            tx = &linebuf[22];
+	 }
+	 if ( (linebuf[22] == ' ') && (linebuf[23] == '{') ) {
+	    /* probably #define style */
+            /* < #define PIX_a_stroke {0x.... */
+            /* 01234567890123456789012345   */
+            tx = &linebuf[24];
+	 }
+	 if ( (strncmp(linebuf,"#define PIX_",12) == 0) ||
+              (strncmp(&linebuf[2],"#define PIX_",12) == 0) ) {			 
+            fprintf(outfile,"%s\r\n",&linebuf[0]);
          }
-         fprintf(outfile," */\r\n");
+	 for (ii=0;ii<235;ii++) {
+            if (tx[ii] == '}') {
+	       /* end of byte list found */
+	       anz = ((ii +2) / 5);
+               new_width = anz / ((height + 7) / 8);
+	       if (new_width != width) {
+//                fprintf(outfile,"// **** new width = %d\r\n",new_width);
+	          width = new_width;
+	       }
+	       break;
+	    }
+	 }  /* end for ii */
          // init the table
          for (ii=0;ii<100;ii++) {
             for (kk=0;kk<height;kk++) asc_table[ii][kk] = '.';
@@ -115,7 +134,6 @@ int main(int argc, char *argv[])
          }
          BitSetChar = BitIsSET;
          BitClearChar = '.';
-         tx = &linebuf[1];
          ii = 0;
          end_line = &linebuf[strlen(linebuf)];
          while (ii<anz ) {
@@ -196,9 +214,9 @@ int main(int argc, char *argv[])
                    tx = &linebuf[0];
                 }
               }
-            }
+            }  /* no "0x" */
          } /* end while(ii<anz) */
-         fprintf(outfile,"%s\r\n",&tx[2]);
+	 if ( tx[2] != 0 ) fprintf(outfile,"%s\r\n",&tx[2]);
          fprintf(outfile," ");
          for (kk=0; kk<width; kk++) {
             if ( ((kk % 8) == 0) && (kk != 0) ) {
@@ -206,7 +224,7 @@ int main(int argc, char *argv[])
             } else {
               fprintf(outfile,"-");
             }
-         }
+         } /* end for kk */
          fprintf(outfile," \r\n");
 
          for (kk=0; kk<height; kk++) {
@@ -230,13 +248,13 @@ int main(int argc, char *argv[])
 	     fprintf(outfile,"%c",asc_table[kk][ll]);
  #endif
 	     ll++;
-	    }
+	    } /* end while */
             if ((kk % 8) == 0) {
               fprintf(outfile,"+\r\n");
             } else {
               fprintf(outfile,"|\r\n");
             }
-         }
+         } /* end for kk */
 
          fprintf(outfile," ");
          for (kk=0; kk<width; kk++) {
@@ -245,33 +263,11 @@ int main(int argc, char *argv[])
             } else {
               fprintf(outfile,"-");
             }
-          }
+          }  /* end for kk */
+//         fprintf(outfile," l=%d\r\n",lines);
          fprintf(outfile," \r\n");
-         line_cnt[lev]++;
       } else {  /* linebuf != "{0" */
         fprintf(outfile,"%s\r\n", origbuf);
-        if ((strncmp(linebuf,"#if ",4)) == 0) {
-          lev++;
-          line_cnt[lev] = line_cnt[lev-1];
-        }
-        if ((strncmp(linebuf,"#ifdef",6)) == 0) {
-          lev++;
-          line_cnt[lev] = line_cnt[lev-1];
-        }
-        if ((strncmp(linebuf,"#ifndef",7)) == 0) {
-          lev++;
-          line_cnt[lev] = line_cnt[lev-1];
-        }
-        if (((strncmp(linebuf,"#else",5)) == 0) && (lev > 0)) {
-	  line_cnt[lev] = line_cnt[lev-1];
-        }
-        if (((strncmp(linebuf,"#elif",5)) == 0) && (lev > 0)) {
-	  line_cnt[lev] = line_cnt[lev-1];
-        }
-        if (((strncmp(linebuf,"#endif",6)) == 0) && (lev > 0)) {
-          line_cnt[lev-1] = line_cnt[lev];
-          lev--;
-        }
       }
     }
  fclose(outfile);

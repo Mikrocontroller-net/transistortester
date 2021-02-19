@@ -1,7 +1,7 @@
 
-../Obj/TransistorTester/TransistorTester.elf:     Dateiformat elf32-avr
+../Obj/TransistorTester/TransistorTester.elf:     file format elf32-avr
 
-Sektionen:
+Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
   0 .data         00000000  00800100  00800100  0000416a  2**0
                   CONTENTS, ALLOC, LOAD, DATA
@@ -17,19 +17,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   6 .debug_aranges 00000450  00000000  00000000  000041b8  2**3
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_info   0000729a  00000000  00000000  00004608  2**0
+  7 .debug_info   000072ca  00000000  00000000  00004608  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 0000195c  00000000  00000000  0000b8a2  2**0
+  8 .debug_abbrev 0000195c  00000000  00000000  0000b8d2  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   00004cb2  00000000  00000000  0000d1fe  2**0
+  9 .debug_line   00004cb2  00000000  00000000  0000d22e  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_frame  000006a4  00000000  00000000  00011eb0  2**2
+ 10 .debug_frame  000006a4  00000000  00000000  00011ee0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_str    00001274  00000000  00000000  00012554  2**0
+ 11 .debug_str    00001278  00000000  00000000  00012584  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_loc    00003e07  00000000  00000000  000137c8  2**0
+ 12 .debug_loc    00003e07  00000000  00000000  000137fc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_ranges 00000220  00000000  00000000  000175cf  2**0
+ 13 .debug_ranges 00000220  00000000  00000000  00017603  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -3048,17 +3048,17 @@ wadfin2:
      b0a:	88 e1       	ldi	r24, 0x18	; 24
      b0c:	90 e0       	ldi	r25, 0x00	; 0
      b0e:	cb df       	rcall	.-106    	; 0xaa6 <lcd_fix_customchar>
-     b10:	80 e6       	ldi	r24, 0x60	; 96
+     b10:	88 e5       	ldi	r24, 0x58	; 88
      b12:	78 df       	rcall	.-272    	; 0xa04 <lcd_command>
      b14:	88 e2       	ldi	r24, 0x28	; 40
      b16:	90 e0       	ldi	r25, 0x00	; 0
      b18:	c6 df       	rcall	.-116    	; 0xaa6 <lcd_fix_customchar>
-     b1a:	80 e7       	ldi	r24, 0x70	; 112
+     b1a:	80 e6       	ldi	r24, 0x60	; 96
      b1c:	73 df       	rcall	.-282    	; 0xa04 <lcd_command>
      b1e:	80 e1       	ldi	r24, 0x10	; 16
      b20:	90 e0       	ldi	r25, 0x00	; 0
      b22:	c1 df       	rcall	.-126    	; 0xaa6 <lcd_fix_customchar>
-     b24:	88 e7       	ldi	r24, 0x78	; 120
+     b24:	88 e6       	ldi	r24, 0x68	; 104
      b26:	6e df       	rcall	.-292    	; 0xa04 <lcd_command>
      b28:	88 e0       	ldi	r24, 0x08	; 8
      b2a:	90 e0       	ldi	r25, 0x00	; 0

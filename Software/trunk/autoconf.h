@@ -90,6 +90,9 @@
  // if line length is not specified otherwise, use 16 characters
  #define LCD_LINE_LENGTH 16
 #endif
+//#if (LCD_LINE_LENGTH + 0) < 16
+// #warning "Your screen can show less then 16 characters in a line! Probably a smaller font can help."
+//#endif
 
 #if (defined(WITH_GRAPHICS) && (((SCREEN_WIDTH-(TEXT_RIGHT_TO_ICON*FONT_H_SPACE))/FONT_H_SPACE) < 9))
  #define LOW_H_SPACE 1
@@ -536,10 +539,10 @@
 //self build characters 
 #define LCD_CHAR_DIODE1  1      //Diode-Icon; will be generated as custom character
 #define LCD_CHAR_DIODE2  2      //Diode-Icon;  will be generated as custom character
-#define LCD_CHAR_CAP 4          //Capacitor-Icon;  will be generated as custom character
+#define LCD_CHAR_CAP 3          //Capacitor-Icon;  will be generated as custom character
         // numbers of RESIS1 and RESIS2 are swapped for OLED display, which shows a corrupt RESIS1 character otherwise ???
-#define LCD_CHAR_RESIS1 6       // Resistor left part will be generated as custom character
-#define LCD_CHAR_RESIS2 7       // Resistor right part will be generated as custom character
+#define LCD_CHAR_RESIS1 4       // Resistor left part will be generated as custom character
+#define LCD_CHAR_RESIS2 5       // Resistor right part will be generated as custom character
 
 
 #ifdef LCD_CYRILLIC
@@ -554,7 +557,7 @@
 	#undef LCD_CHAR_OMEGA
 	#define LCD_CHAR_OMEGA 0x1e	//Omega-character for DOGM module
         #undef LCD_CHAR_U
-        #define LCD_CHAR_U  5           //mu-character for DOGM module loadable
+        #define LCD_CHAR_U  6           //mu-character for DOGM module loadable
 #endif
 
 
@@ -567,18 +570,25 @@
 #if (defined(WITH_GRAPHICS) || defined(LCD_USE_OWN_FONT))
 // redefine the special symbols for software character set used with graphical display
         #undef LCD_CHAR_DEGREE
-        #define LCD_CHAR_DEGREE 0xf8	// Character for degree
         #undef LCD_CHAR_OMEGA
-        #define LCD_CHAR_OMEGA  13       //Omega-character 
         #undef LCD_CHAR_U
-        #define LCD_CHAR_U  14		//\B5-character
         #undef LCD_CHAR_LINE1
-        #define LCD_CHAR_LINE1  8	// line is specified as long -
+        #define LCD_CHAR_LINE1  6	// line is specified as long -
         #undef LCD_CHAR_INDUCTOR1
-        #define LCD_CHAR_INDUCTOR1  9		//begin of coil
+        #define LCD_CHAR_INDUCTOR1  7		//begin of coil
         #undef LCD_CHAR_INDUCTOR2
-        #define LCD_CHAR_INDUCTOR2  10		//end of coil
+        #define LCD_CHAR_INDUCTOR2  8		//end of coil
+ #if (defined WITH_GRAPHICS)
+	#define LCD_CHAR_DEGREE 0x1f
+	#define LCD_CHAR_U	0x1e
+	#define LCD_CHAR_OMEGA	0x1d
+	#define LCD_CHAR_BETA	0x1c
+ #else
+        #define LCD_CHAR_DEGREE 0xf8	// Character for degree
+        #define LCD_CHAR_OMEGA  13       //Omega-character 
+        #define LCD_CHAR_U  14		//\B5-character
 	#define LCD_CHAR_BETA 12
+ #endif
 #endif 
 
 
@@ -887,7 +897,7 @@
 
 #define USE_BIG_CAP_CORR 1
 
-#ifdef MODE_ROTARY
+#ifdef WITH_ROTARY_CHECK
  #define USE_ROTARY 1
 #else
  #define USE_ROTARY 0

@@ -144,8 +144,9 @@ void ShowIcons(void) {
  lcd_minus();			// lcd_data('-');
  lcd_data('D');		// Depletion Type
  lcd_MEM_string(mosfet_str);
- wait_for_key_ms(ShowTime);
+
  #if (ICON_ELEMENTS == 14)
+ wait_for_key_ms(ShowTime);
  lcd_clear();
  lcd_big_icon(TRIAC|LCD_UPPER_LEFT);
  lcd_big_icon(THYRISTOR|LCD_UPPER_RIGHT);
@@ -163,29 +164,15 @@ void ShowIcons(void) {
  lcd_big_icon(DIODES_C_A_C_A|LCD_UPPER_RIGHT);
  lcd_big_icon(DIODES_A_C_C_A|LCD_LOWER_LEFT);
  lcd_big_icon(DIODES_C_A_A_C|LCD_LOWER_RIGHT);
- wait_for_key_ms(ShowTime);
  #endif
-
-
 
 // show character set
   #ifdef LCD_ST_TYPE
-   #define StartChar 0x00
+   #define StartChar 0x1c
    // LastChar is defined in Font
   #else
    #define StartChar 0x20
    #define LastChar 0x7f
-   lcd_clear();
-   lcd_line1();
-   lcd_MEM_string(Resistor_str);    // -[=]-
-   lcd_line2();
-   lcd_MEM_string(Inductor_str);         // -ww-
-   lcd_line3();
-   lcd_MEM_string(CapZeich);          // capacitor sign
-   lcd_line4();
-   lcd_MEM_string(AnKat_str);       //"->|-"
-   lcd_space();
-   lcd_MEM_string(KatAn_str);       //"-|<-"
   #endif
 
  for (cc=0;cc<(LastChar+1-StartChar);cc++) {

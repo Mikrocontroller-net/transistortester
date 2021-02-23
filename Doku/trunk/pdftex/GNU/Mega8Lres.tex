@@ -71,59 +71,68 @@
       \expandafter\def\csname LT8\endcsname{\color{black}}%
     \fi
   \fi
-  \setlength{\unitlength}{0.0500bp}%
-  \begin{picture}(7200.00,5040.00)%
+    \setlength{\unitlength}{0.0500bp}%
+    \ifx\gptboxheight\undefined%
+      \newlength{\gptboxheight}%
+      \newlength{\gptboxwidth}%
+      \newsavebox{\gptboxtext}%
+    \fi%
+    \setlength{\fboxrule}{0.5pt}%
+    \setlength{\fboxsep}{1pt}%
+\begin{picture}(7200.00,5040.00)%
     \gplgaddtomacro\gplbacktext{%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(682,704){\makebox(0,0)[r]{\strut{}-5}}%
-      \csname LTb\endcsname%
-      \put(682,1111){\makebox(0,0)[r]{\strut{}-4}}%
-      \csname LTb\endcsname%
-      \put(682,1518){\makebox(0,0)[r]{\strut{}-3}}%
-      \csname LTb\endcsname%
-      \put(682,1925){\makebox(0,0)[r]{\strut{}-2}}%
-      \csname LTb\endcsname%
-      \put(682,2332){\makebox(0,0)[r]{\strut{}-1}}%
-      \csname LTb\endcsname%
-      \put(682,2740){\makebox(0,0)[r]{\strut{} 0}}%
-      \csname LTb\endcsname%
-      \put(682,3147){\makebox(0,0)[r]{\strut{} 1}}%
-      \csname LTb\endcsname%
-      \put(682,3554){\makebox(0,0)[r]{\strut{} 2}}%
-      \csname LTb\endcsname%
-      \put(682,3961){\makebox(0,0)[r]{\strut{} 3}}%
-      \csname LTb\endcsname%
-      \put(682,4368){\makebox(0,0)[r]{\strut{} 4}}%
-      \csname LTb\endcsname%
-      \put(682,4775){\makebox(0,0)[r]{\strut{} 5}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
+      \put(682,1116){\makebox(0,0)[r]{\strut{}-4}}%
+      \csname LTb\endcsname%%
+      \put(682,1527){\makebox(0,0)[r]{\strut{}-3}}%
+      \csname LTb\endcsname%%
+      \put(682,1939){\makebox(0,0)[r]{\strut{}-2}}%
+      \csname LTb\endcsname%%
+      \put(682,2350){\makebox(0,0)[r]{\strut{}-1}}%
+      \csname LTb\endcsname%%
+      \put(682,2762){\makebox(0,0)[r]{\strut{} 0}}%
+      \csname LTb\endcsname%%
+      \put(682,3173){\makebox(0,0)[r]{\strut{} 1}}%
+      \csname LTb\endcsname%%
+      \put(682,3585){\makebox(0,0)[r]{\strut{} 2}}%
+      \csname LTb\endcsname%%
+      \put(682,3996){\makebox(0,0)[r]{\strut{} 3}}%
+      \csname LTb\endcsname%%
+      \put(682,4408){\makebox(0,0)[r]{\strut{} 4}}%
+      \csname LTb\endcsname%%
+      \put(682,4819){\makebox(0,0)[r]{\strut{} 5}}%
+      \csname LTb\endcsname%%
       \put(814,484){\makebox(0,0){\strut{}1 }}%
-      \csname LTb\endcsname%
-      \put(1563,484){\makebox(0,0){\strut{}10 }}%
-      \csname LTb\endcsname%
-      \put(2311,484){\makebox(0,0){\strut{}100 }}%
-      \csname LTb\endcsname%
-      \put(3060,484){\makebox(0,0){\strut{}1k}}%
-      \csname LTb\endcsname%
-      \put(3809,484){\makebox(0,0){\strut{}10k}}%
-      \csname LTb\endcsname%
-      \put(4557,484){\makebox(0,0){\strut{}100k}}%
-      \csname LTb\endcsname%
-      \put(5306,484){\makebox(0,0){\strut{}1M}}%
-      \csname LTb\endcsname%
-      \put(6054,484){\makebox(0,0){\strut{}10M}}%
-      \csname LTb\endcsname%
-      \put(6803,484){\makebox(0,0){\strut{}100M}}%
-      \put(176,2739){\rotatebox{-270}{\makebox(0,0){\strut{}Error / Percent}}}%
-      \put(3808,154){\makebox(0,0){\strut{}Resistor value / Ohm}}%
+      \csname LTb\endcsname%%
+      \put(1592,484){\makebox(0,0){\strut{}10 }}%
+      \csname LTb\endcsname%%
+      \put(2370,484){\makebox(0,0){\strut{}100 }}%
+      \csname LTb\endcsname%%
+      \put(3148,484){\makebox(0,0){\strut{}1k}}%
+      \csname LTb\endcsname%%
+      \put(3926,484){\makebox(0,0){\strut{}10k}}%
+      \csname LTb\endcsname%%
+      \put(4703,484){\makebox(0,0){\strut{}100k}}%
+      \csname LTb\endcsname%%
+      \put(5481,484){\makebox(0,0){\strut{}1M}}%
+      \csname LTb\endcsname%%
+      \put(6259,484){\makebox(0,0){\strut{}10M}}%
     }%
     \gplgaddtomacro\gplfronttext{%
-      \csname LTb\endcsname%
-      \put(5753,4602){\makebox(0,0)[r]{\strut{}Mega8L-7}}%
-      \csname LTb\endcsname%
-      \put(5753,4382){\makebox(0,0)[r]{\strut{}Mega8L-8}}%
-      \csname LTb\endcsname%
-      \put(5753,4162){\makebox(0,0)[r]{\strut{}Mega8L-9}}%
+      \csname LTb\endcsname%%
+      \put(198,2761){\rotatebox{-270}{\makebox(0,0){\strut{}Error / Percent}}}%
+      \csname LTb\endcsname%%
+      \put(3808,154){\makebox(0,0){\strut{}Resistor value / Ohm}}%
+      \csname LTb\endcsname%%
+      \put(5715,4646){\makebox(0,0){\strut{}}}%
+      \csname LTb\endcsname%%
+      \put(5816,4646){\makebox(0,0)[r]{\strut{}Mega8L-7}}%
+      \csname LTb\endcsname%%
+      \put(5816,4426){\makebox(0,0)[r]{\strut{}Mega8L-8}}%
+      \csname LTb\endcsname%%
+      \put(5816,4206){\makebox(0,0)[r]{\strut{}Mega8L-9}}%
     }%
     \gplbacktext
     \put(0,0){\includegraphics{../GNU/Mega8Lres}}%

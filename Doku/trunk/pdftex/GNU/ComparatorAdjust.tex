@@ -71,53 +71,65 @@
       \expandafter\def\csname LT8\endcsname{\color{black}}%
     \fi
   \fi
-  \setlength{\unitlength}{0.0500bp}%
-  \begin{picture}(7200.00,5040.00)%
+    \setlength{\unitlength}{0.0500bp}%
+    \ifx\gptboxheight\undefined%
+      \newlength{\gptboxheight}%
+      \newlength{\gptboxwidth}%
+      \newsavebox{\gptboxtext}%
+    \fi%
+    \setlength{\fboxrule}{0.5pt}%
+    \setlength{\fboxsep}{1pt}%
+\begin{picture}(7200.00,5040.00)%
     \gplgaddtomacro\gplbacktext{%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(814,704){\makebox(0,0)[r]{\strut{}-20}}%
-      \csname LTb\endcsname%
-      \put(814,1156){\makebox(0,0)[r]{\strut{}-10}}%
-      \csname LTb\endcsname%
-      \put(814,1609){\makebox(0,0)[r]{\strut{} 0}}%
-      \csname LTb\endcsname%
-      \put(814,2061){\makebox(0,0)[r]{\strut{} 10}}%
-      \csname LTb\endcsname%
-      \put(814,2513){\makebox(0,0)[r]{\strut{} 20}}%
-      \csname LTb\endcsname%
-      \put(814,2966){\makebox(0,0)[r]{\strut{} 30}}%
-      \csname LTb\endcsname%
-      \put(814,3418){\makebox(0,0)[r]{\strut{} 40}}%
-      \csname LTb\endcsname%
-      \put(814,3870){\makebox(0,0)[r]{\strut{} 50}}%
-      \csname LTb\endcsname%
-      \put(814,4323){\makebox(0,0)[r]{\strut{} 60}}%
-      \csname LTb\endcsname%
-      \put(814,4775){\makebox(0,0)[r]{\strut{} 70}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
+      \put(814,1161){\makebox(0,0)[r]{\strut{}-10}}%
+      \csname LTb\endcsname%%
+      \put(814,1618){\makebox(0,0)[r]{\strut{} 0}}%
+      \csname LTb\endcsname%%
+      \put(814,2076){\makebox(0,0)[r]{\strut{} 10}}%
+      \csname LTb\endcsname%%
+      \put(814,2533){\makebox(0,0)[r]{\strut{} 20}}%
+      \csname LTb\endcsname%%
+      \put(814,2990){\makebox(0,0)[r]{\strut{} 30}}%
+      \csname LTb\endcsname%%
+      \put(814,3447){\makebox(0,0)[r]{\strut{} 40}}%
+      \csname LTb\endcsname%%
+      \put(814,3905){\makebox(0,0)[r]{\strut{} 50}}%
+      \csname LTb\endcsname%%
+      \put(814,4362){\makebox(0,0)[r]{\strut{} 60}}%
+      \csname LTb\endcsname%%
+      \put(814,4819){\makebox(0,0)[r]{\strut{} 70}}%
+      \csname LTb\endcsname%%
       \put(946,484){\makebox(0,0){\strut{} 0}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(2051,484){\makebox(0,0){\strut{} 2}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(3157,484){\makebox(0,0){\strut{} 4}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(4262,484){\makebox(0,0){\strut{} 6}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(5368,484){\makebox(0,0){\strut{} 8}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(6473,484){\makebox(0,0){\strut{} 10}}%
-      \put(176,2739){\rotatebox{-270}{\makebox(0,0){\strut{}Error / per mill}}}%
-      \put(6692,2739){\rotatebox{-270}{\makebox(0,0){\strut{}Difference to reference / mV}}}%
-      \put(3709,154){\makebox(0,0){\strut{}Number of ATmega168}}%
-      \put(3709,4665){\makebox(0,0){\strut{}}}%
     }%
     \gplgaddtomacro\gplfronttext{%
-      \csname LTb\endcsname%
-      \put(5423,4602){\makebox(0,0)[r]{\strut{}diff2ref}}%
-      \csname LTb\endcsname%
-      \put(5423,4382){\makebox(0,0)[r]{\strut{}CapErr}}%
-      \csname LTb\endcsname%
-      \put(5423,4162){\makebox(0,0)[r]{\strut{}diff}}%
+      \csname LTb\endcsname%%
+      \put(198,2761){\rotatebox{-270}{\makebox(0,0){\strut{}Error / per mill}}}%
+      \csname LTb\endcsname%%
+      \put(6737,2761){\rotatebox{-270}{\makebox(0,0){\strut{}Difference to reference / mV}}}%
+      \csname LTb\endcsname%%
+      \put(3709,154){\makebox(0,0){\strut{}Number of ATmega168}}%
+      \csname LTb\endcsname%%
+      \put(3709,4709){\makebox(0,0){\strut{}}}%
+      \put(5385,4646){\makebox(0,0){\strut{}}}%
+      \csname LTb\endcsname%%
+      \put(5486,4646){\makebox(0,0)[r]{\strut{}diff2ref}}%
+      \csname LTb\endcsname%%
+      \put(5486,4426){\makebox(0,0)[r]{\strut{}CapErr}}%
+      \csname LTb\endcsname%%
+      \put(5486,4206){\makebox(0,0)[r]{\strut{}diff}}%
     }%
     \gplbacktext
     \put(0,0){\includegraphics{../GNU/ComparatorAdjust}}%

@@ -71,66 +71,77 @@
       \expandafter\def\csname LT8\endcsname{\color{black}}%
     \fi
   \fi
-  \setlength{\unitlength}{0.0500bp}%
-  \begin{picture}(7200.00,5040.00)%
+    \setlength{\unitlength}{0.0500bp}%
+    \ifx\gptboxheight\undefined%
+      \newlength{\gptboxheight}%
+      \newlength{\gptboxwidth}%
+      \newsavebox{\gptboxtext}%
+    \fi%
+    \setlength{\fboxrule}{0.5pt}%
+    \setlength{\fboxsep}{1pt}%
+\begin{picture}(7200.00,5040.00)%
     \gplgaddtomacro\gplbacktext{%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(682,704){\makebox(0,0)[r]{\strut{} 0}}%
-      \csname LTb\endcsname%
-      \put(682,1518){\makebox(0,0)[r]{\strut{} 1}}%
-      \csname LTb\endcsname%
-      \put(682,2332){\makebox(0,0)[r]{\strut{} 2}}%
-      \csname LTb\endcsname%
-      \put(682,3147){\makebox(0,0)[r]{\strut{} 3}}%
-      \csname LTb\endcsname%
-      \put(682,3961){\makebox(0,0)[r]{\strut{} 4}}%
-      \csname LTb\endcsname%
-      \put(682,4775){\makebox(0,0)[r]{\strut{} 5}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
+      \put(682,1527){\makebox(0,0)[r]{\strut{} 1}}%
+      \csname LTb\endcsname%%
+      \put(682,2350){\makebox(0,0)[r]{\strut{} 2}}%
+      \csname LTb\endcsname%%
+      \put(682,3173){\makebox(0,0)[r]{\strut{} 3}}%
+      \csname LTb\endcsname%%
+      \put(682,3996){\makebox(0,0)[r]{\strut{} 4}}%
+      \csname LTb\endcsname%%
+      \put(682,4819){\makebox(0,0)[r]{\strut{} 5}}%
+      \csname LTb\endcsname%%
       \put(814,484){\makebox(0,0){\strut{} 0}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(1188,484){\makebox(0,0){\strut{} 1}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(1563,484){\makebox(0,0){\strut{} 2}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(1937,484){\makebox(0,0){\strut{} 3}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(2311,484){\makebox(0,0){\strut{} 4}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(2686,484){\makebox(0,0){\strut{} 5}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(3060,484){\makebox(0,0){\strut{} 6}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(3434,484){\makebox(0,0){\strut{} 7}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(3809,484){\makebox(0,0){\strut{} 8}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(4183,484){\makebox(0,0){\strut{} 9}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(4557,484){\makebox(0,0){\strut{} 10}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(4931,484){\makebox(0,0){\strut{} 11}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(5306,484){\makebox(0,0){\strut{} 12}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(5680,484){\makebox(0,0){\strut{} 13}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(6054,484){\makebox(0,0){\strut{} 14}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(6429,484){\makebox(0,0){\strut{} 15}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(6803,484){\makebox(0,0){\strut{} 16}}%
-      \put(176,2739){\rotatebox{-270}{\makebox(0,0){\strut{}voltage / mV}}}%
-      \put(3808,154){\makebox(0,0){\strut{}Processor number}}%
-      \put(3808,4665){\makebox(0,0){\strut{}}}%
     }%
     \gplgaddtomacro\gplfronttext{%
-      \csname LTb\endcsname%
-      \put(5690,4594){\makebox(0,0)[r]{\strut{}RHbottom1}}%
-      \csname LTb\endcsname%
-      \put(5690,4358){\makebox(0,0)[r]{\strut{}RHbottom2}}%
-      \csname LTb\endcsname%
-      \put(5690,4122){\makebox(0,0)[r]{\strut{}RHbottom3}}%
+      \csname LTb\endcsname%%
+      \put(198,2761){\rotatebox{-270}{\makebox(0,0){\strut{}voltage / mV}}}%
+      \csname LTb\endcsname%%
+      \put(3808,154){\makebox(0,0){\strut{}Processor number}}%
+      \csname LTb\endcsname%%
+      \put(3808,4709){\makebox(0,0){\strut{}}}%
+      \put(5649,4646){\makebox(0,0){\strut{}}}%
+      \csname LTb\endcsname%%
+      \put(5816,4646){\makebox(0,0)[r]{\strut{}RHbottom1}}%
+      \csname LTb\endcsname%%
+      \put(5816,4426){\makebox(0,0)[r]{\strut{}RHbottom2}}%
+      \csname LTb\endcsname%%
+      \put(5816,4206){\makebox(0,0)[r]{\strut{}RHbottom3}}%
     }%
     \gplbacktext
     \put(0,0){\includegraphics{../GNU/SelfTbottomH}}%

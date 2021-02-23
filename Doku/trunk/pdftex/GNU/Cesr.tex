@@ -71,52 +71,56 @@
       \expandafter\def\csname LT8\endcsname{\color{black}}%
     \fi
   \fi
-  \setlength{\unitlength}{0.0500bp}%
-  \begin{picture}(7200.00,5040.00)%
+    \setlength{\unitlength}{0.0500bp}%
+    \ifx\gptboxheight\undefined%
+      \newlength{\gptboxheight}%
+      \newlength{\gptboxwidth}%
+      \newsavebox{\gptboxtext}%
+    \fi%
+    \setlength{\fboxrule}{0.5pt}%
+    \setlength{\fboxsep}{1pt}%
+\begin{picture}(7200.00,5040.00)%
     \gplgaddtomacro\gplbacktext{%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(682,704){\makebox(0,0)[r]{\strut{} 0}}%
-      \csname LTb\endcsname%
-      \put(682,1286){\makebox(0,0)[r]{\strut{} 1}}%
-      \csname LTb\endcsname%
-      \put(682,1867){\makebox(0,0)[r]{\strut{} 2}}%
-      \csname LTb\endcsname%
-      \put(682,2449){\makebox(0,0)[r]{\strut{} 3}}%
-      \csname LTb\endcsname%
-      \put(682,3030){\makebox(0,0)[r]{\strut{} 4}}%
-      \csname LTb\endcsname%
-      \put(682,3612){\makebox(0,0)[r]{\strut{} 5}}%
-      \csname LTb\endcsname%
-      \put(682,4193){\makebox(0,0)[r]{\strut{} 6}}%
-      \csname LTb\endcsname%
-      \put(682,4775){\makebox(0,0)[r]{\strut{} 7}}%
-      \csname LTb\endcsname%
-      \put(814,484){\makebox(0,0){\strut{}100n}}%
-      \csname LTb\endcsname%
-      \put(2311,484){\makebox(0,0){\strut{}1u}}%
-      \csname LTb\endcsname%
-      \put(3809,484){\makebox(0,0){\strut{}10u}}%
-      \csname LTb\endcsname%
-      \put(5306,484){\makebox(0,0){\strut{}100u}}%
-      \csname LTb\endcsname%
-      \put(6803,484){\makebox(0,0){\strut{}1m}}%
-      \put(176,2739){\rotatebox{-270}{\makebox(0,0){\strut{}ESR / Ohm}}}%
-      \put(3808,154){\makebox(0,0){\strut{}Capacity value / F}}%
-      \put(3808,4665){\makebox(0,0){\strut{}}}%
+      \csname LTb\endcsname%%
+      \put(682,1292){\makebox(0,0)[r]{\strut{} 1}}%
+      \csname LTb\endcsname%%
+      \put(682,1880){\makebox(0,0)[r]{\strut{} 2}}%
+      \csname LTb\endcsname%%
+      \put(682,2468){\makebox(0,0)[r]{\strut{} 3}}%
+      \csname LTb\endcsname%%
+      \put(682,3055){\makebox(0,0)[r]{\strut{} 4}}%
+      \csname LTb\endcsname%%
+      \put(682,3643){\makebox(0,0)[r]{\strut{} 5}}%
+      \csname LTb\endcsname%%
+      \put(682,4231){\makebox(0,0)[r]{\strut{} 6}}%
+      \csname LTb\endcsname%%
+      \put(682,4819){\makebox(0,0)[r]{\strut{} 7}}%
+      \csname LTb\endcsname%%
+      \put(1377,484){\makebox(0,0){\strut{}1u}}%
+      \csname LTb\endcsname%%
+      \put(3196,484){\makebox(0,0){\strut{}10u}}%
+      \csname LTb\endcsname%%
+      \put(5015,484){\makebox(0,0){\strut{}100u}}%
     }%
     \gplgaddtomacro\gplfronttext{%
-      \csname LTb\endcsname%
-      \put(5690,4594){\makebox(0,0)[r]{\strut{}328p}}%
-      \csname LTb\endcsname%
-      \put(5690,4358){\makebox(0,0)[r]{\strut{}328}}%
-      \csname LTb\endcsname%
-      \put(5690,4122){\makebox(0,0)[r]{\strut{}168p}}%
-      \csname LTb\endcsname%
-      \put(5690,3886){\makebox(0,0)[r]{\strut{}168a}}%
-      \csname LTb\endcsname%
-      \put(5690,3650){\makebox(0,0)[r]{\strut{}168}}%
-      \csname LTb\endcsname%
-      \put(5690,3414){\makebox(0,0)[r]{\strut{}LCR}}%
+      \csname LTb\endcsname%%
+      \put(198,2761){\rotatebox{-270}{\makebox(0,0){\strut{}ESR / Ohm}}}%
+      \put(3808,154){\makebox(0,0){\strut{}Capacity value / F}}%
+      \put(3808,4709){\makebox(0,0){\strut{}}}%
+      \csname LTb\endcsname%%
+      \put(5816,4646){\makebox(0,0)[r]{\strut{}328p}}%
+      \csname LTb\endcsname%%
+      \put(5816,4426){\makebox(0,0)[r]{\strut{}328}}%
+      \csname LTb\endcsname%%
+      \put(5816,4206){\makebox(0,0)[r]{\strut{}168p}}%
+      \csname LTb\endcsname%%
+      \put(5816,3986){\makebox(0,0)[r]{\strut{}168a}}%
+      \csname LTb\endcsname%%
+      \put(5816,3766){\makebox(0,0)[r]{\strut{}168}}%
+      \csname LTb\endcsname%%
+      \put(5816,3546){\makebox(0,0)[r]{\strut{}LCR}}%
     }%
     \gplbacktext
     \put(0,0){\includegraphics{../GNU/Cesr}}%

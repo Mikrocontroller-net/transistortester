@@ -1026,7 +1026,8 @@ void lcd_pgm_string(const unsigned char *data) {
    unsigned char cc;
    while(1) {
       cc = pgm_read_byte(data);
-      if((cc==0) || (cc==128)) {
+//      if((cc==0) || (cc==128)) {
+      if (cc==0)  {
          return;
       }
       lcd_data(cc);
@@ -1042,7 +1043,8 @@ void lcd_fix_string(const unsigned char *data) {
    unsigned char cc;
    while(1) {
       cc = MEM_read_byte(data);
-      if((cc==0) || (cc==128)) {
+//      if((cc==0) || (cc==128)) {
+      if (cc==0)  {
          return;
       }
       lcd_data(cc);

@@ -135,7 +135,7 @@
    #define U_acute       0x9a /* da */
    #define U_ring        0x9b /*    */
    #define Y_acute       0x9c /* dd */
-   #define Z_caron       0xad /* ae */
+   #define Z_caron       0x9d /* ae */
    #define CHAR_COUNT 0x9e
   #else
    #define A_acute       a_acute

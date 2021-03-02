@@ -71,49 +71,44 @@
       \expandafter\def\csname LT8\endcsname{\color{black}}%
     \fi
   \fi
-  \setlength{\unitlength}{0.0500bp}%
-  \begin{picture}(7200.00,5040.00)%
+    \setlength{\unitlength}{0.0500bp}%
+    \ifx\gptboxheight\undefined%
+      \newlength{\gptboxheight}%
+      \newlength{\gptboxwidth}%
+      \newsavebox{\gptboxtext}%
+    \fi%
+    \setlength{\fboxrule}{0.5pt}%
+    \setlength{\fboxsep}{1pt}%
+\begin{picture}(7200.00,5040.00)%
     \gplgaddtomacro\gplbacktext{%
-      \csname LTb\endcsname%
-      \put(814,704){\makebox(0,0)[r]{\strut{}-25}}%
-      \csname LTb\endcsname%
-      \put(814,1156){\makebox(0,0)[r]{\strut{}-20}}%
-      \csname LTb\endcsname%
-      \put(814,1609){\makebox(0,0)[r]{\strut{}-15}}%
-      \csname LTb\endcsname%
-      \put(814,2061){\makebox(0,0)[r]{\strut{}-10}}%
-      \csname LTb\endcsname%
-      \put(814,2513){\makebox(0,0)[r]{\strut{}-5}}%
-      \csname LTb\endcsname%
-      \put(814,2966){\makebox(0,0)[r]{\strut{} 0}}%
-      \csname LTb\endcsname%
-      \put(814,3418){\makebox(0,0)[r]{\strut{} 5}}%
-      \csname LTb\endcsname%
-      \put(814,3870){\makebox(0,0)[r]{\strut{} 10}}%
-      \csname LTb\endcsname%
-      \put(814,4323){\makebox(0,0)[r]{\strut{} 15}}%
-      \csname LTb\endcsname%
-      \put(814,4775){\makebox(0,0)[r]{\strut{} 20}}%
-      \csname LTb\endcsname%
-      \put(946,484){\makebox(0,0){\strut{} 1}}%
-      \csname LTb\endcsname%
-      \put(1783,484){\makebox(0,0){\strut{} 10}}%
-      \csname LTb\endcsname%
-      \put(2619,484){\makebox(0,0){\strut{} 100}}%
-      \csname LTb\endcsname%
-      \put(3456,484){\makebox(0,0){\strut{} 1000}}%
-      \csname LTb\endcsname%
-      \put(4293,484){\makebox(0,0){\strut{} 10000}}%
-      \csname LTb\endcsname%
-      \put(5130,484){\makebox(0,0){\strut{} 100000}}%
-      \csname LTb\endcsname%
-      \put(5966,484){\makebox(0,0){\strut{} 1e+06}}%
-      \csname LTb\endcsname%
-      \put(6803,484){\makebox(0,0){\strut{} 1e+07}}%
-      \put(176,2739){\rotatebox{-270}{\makebox(0,0){\strut{}Error / ppm}}}%
-      \put(3874,154){\makebox(0,0){\strut{}frequency / Hz}}%
+      \csname LTb\endcsname%%
+      \put(814,704){\makebox(0,0)[r]{\strut{}$-25$}}%
+      \put(814,1161){\makebox(0,0)[r]{\strut{}$-20$}}%
+      \put(814,1618){\makebox(0,0)[r]{\strut{}$-15$}}%
+      \put(814,2076){\makebox(0,0)[r]{\strut{}$-10$}}%
+      \put(814,2533){\makebox(0,0)[r]{\strut{}$-5$}}%
+      \put(814,2990){\makebox(0,0)[r]{\strut{}$0$}}%
+      \put(814,3447){\makebox(0,0)[r]{\strut{}$5$}}%
+      \put(814,3905){\makebox(0,0)[r]{\strut{}$10$}}%
+      \put(814,4362){\makebox(0,0)[r]{\strut{}$15$}}%
+      \put(814,4819){\makebox(0,0)[r]{\strut{}$20$}}%
+      \put(946,484){\makebox(0,0){\strut{}$1$}}%
+      \put(1876,484){\makebox(0,0){\strut{}$10$}}%
+      \put(2805,484){\makebox(0,0){\strut{}$100$}}%
+      \put(3735,484){\makebox(0,0){\strut{}$1000$}}%
+      \put(4664,484){\makebox(0,0){\strut{}$10000$}}%
+      \put(5594,484){\makebox(0,0){\strut{}$100000$}}%
+      \put(6523,484){\makebox(0,0){\strut{}$1\times10^{6}$}}%
     }%
     \gplgaddtomacro\gplfronttext{%
+      \csname LTb\endcsname%%
+      \put(198,2761){\rotatebox{-270}{\makebox(0,0){\strut{}Error / ppm}}}%
+      \csname LTb\endcsname%%
+      \put(3874,154){\makebox(0,0){\strut{}frequency / Hz}}%
+      \csname LTb\endcsname%%
+      \put(5816,4646){\makebox(0,0)[r]{\strut{}2 Gen}}%
+      \csname LTb\endcsname%%
+      \put(5816,4426){\makebox(0,0)[r]{\strut{}1 Gen}}%
     }%
     \gplbacktext
     \put(0,0){\includegraphics{../GNU/frequency-ppm}}%

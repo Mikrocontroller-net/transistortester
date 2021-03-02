@@ -71,68 +71,79 @@
       \expandafter\def\csname LT8\endcsname{\color{black}}%
     \fi
   \fi
-  \setlength{\unitlength}{0.0500bp}%
-  \begin{picture}(7200.00,5040.00)%
+    \setlength{\unitlength}{0.0500bp}%
+    \ifx\gptboxheight\undefined%
+      \newlength{\gptboxheight}%
+      \newlength{\gptboxwidth}%
+      \newsavebox{\gptboxtext}%
+    \fi%
+    \setlength{\fboxrule}{0.5pt}%
+    \setlength{\fboxsep}{1pt}%
+\begin{picture}(7200.00,5040.00)%
     \gplgaddtomacro\gplbacktext{%
-      \csname LTb\endcsname%
-      \put(946,704){\makebox(0,0)[r]{\strut{} 130}}%
-      \csname LTb\endcsname%
-      \put(946,995){\makebox(0,0)[r]{\strut{} 135}}%
-      \csname LTb\endcsname%
-      \put(946,1286){\makebox(0,0)[r]{\strut{} 140}}%
-      \csname LTb\endcsname%
-      \put(946,1576){\makebox(0,0)[r]{\strut{} 145}}%
-      \csname LTb\endcsname%
-      \put(946,1867){\makebox(0,0)[r]{\strut{} 150}}%
-      \csname LTb\endcsname%
-      \put(946,2158){\makebox(0,0)[r]{\strut{} 155}}%
-      \csname LTb\endcsname%
-      \put(946,2449){\makebox(0,0)[r]{\strut{} 160}}%
-      \csname LTb\endcsname%
-      \put(946,2740){\makebox(0,0)[r]{\strut{} 165}}%
-      \csname LTb\endcsname%
-      \put(946,3030){\makebox(0,0)[r]{\strut{} 170}}%
-      \csname LTb\endcsname%
-      \put(946,3321){\makebox(0,0)[r]{\strut{} 175}}%
-      \csname LTb\endcsname%
-      \put(946,3612){\makebox(0,0)[r]{\strut{} 180}}%
-      \csname LTb\endcsname%
-      \put(946,3903){\makebox(0,0)[r]{\strut{} 185}}%
-      \csname LTb\endcsname%
-      \put(946,4193){\makebox(0,0)[r]{\strut{} 190}}%
-      \csname LTb\endcsname%
-      \put(946,4484){\makebox(0,0)[r]{\strut{} 195}}%
-      \csname LTb\endcsname%
-      \put(946,4775){\makebox(0,0)[r]{\strut{} 200}}%
-      \csname LTb\endcsname%
-      \put(1078,484){\makebox(0,0){\strut{} 0}}%
-      \csname LTb\endcsname%
-      \put(1651,484){\makebox(0,0){\strut{} 1}}%
-      \csname LTb\endcsname%
-      \put(2223,484){\makebox(0,0){\strut{} 2}}%
-      \csname LTb\endcsname%
-      \put(2796,484){\makebox(0,0){\strut{} 3}}%
-      \csname LTb\endcsname%
-      \put(3368,484){\makebox(0,0){\strut{} 4}}%
-      \csname LTb\endcsname%
-      \put(3941,484){\makebox(0,0){\strut{} 5}}%
-      \csname LTb\endcsname%
-      \put(4513,484){\makebox(0,0){\strut{} 6}}%
-      \csname LTb\endcsname%
-      \put(5086,484){\makebox(0,0){\strut{} 7}}%
-      \csname LTb\endcsname%
-      \put(5658,484){\makebox(0,0){\strut{} 8}}%
-      \csname LTb\endcsname%
-      \put(6231,484){\makebox(0,0){\strut{} 9}}%
-      \csname LTb\endcsname%
-      \put(6803,484){\makebox(0,0){\strut{} 10}}%
-      \put(176,2739){\rotatebox{-270}{\makebox(0,0){\strut{}voltage / mV}}}%
-      \put(3940,154){\makebox(0,0){\strut{}resistor Rx / Ohm}}%
-      \put(3940,4665){\makebox(0,0){\strut{}}}%
+      \csname LTb\endcsname%%
+      \put(814,704){\makebox(0,0)[r]{\strut{}$130$}}%
+      \csname LTb\endcsname%%
+      \put(814,998){\makebox(0,0)[r]{\strut{}$135$}}%
+      \csname LTb\endcsname%%
+      \put(814,1292){\makebox(0,0)[r]{\strut{}$140$}}%
+      \csname LTb\endcsname%%
+      \put(814,1586){\makebox(0,0)[r]{\strut{}$145$}}%
+      \csname LTb\endcsname%%
+      \put(814,1880){\makebox(0,0)[r]{\strut{}$150$}}%
+      \csname LTb\endcsname%%
+      \put(814,2174){\makebox(0,0)[r]{\strut{}$155$}}%
+      \csname LTb\endcsname%%
+      \put(814,2468){\makebox(0,0)[r]{\strut{}$160$}}%
+      \csname LTb\endcsname%%
+      \put(814,2762){\makebox(0,0)[r]{\strut{}$165$}}%
+      \csname LTb\endcsname%%
+      \put(814,3055){\makebox(0,0)[r]{\strut{}$170$}}%
+      \csname LTb\endcsname%%
+      \put(814,3349){\makebox(0,0)[r]{\strut{}$175$}}%
+      \csname LTb\endcsname%%
+      \put(814,3643){\makebox(0,0)[r]{\strut{}$180$}}%
+      \csname LTb\endcsname%%
+      \put(814,3937){\makebox(0,0)[r]{\strut{}$185$}}%
+      \csname LTb\endcsname%%
+      \put(814,4231){\makebox(0,0)[r]{\strut{}$190$}}%
+      \csname LTb\endcsname%%
+      \put(814,4525){\makebox(0,0)[r]{\strut{}$195$}}%
+      \csname LTb\endcsname%%
+      \put(814,4819){\makebox(0,0)[r]{\strut{}$200$}}%
+      \csname LTb\endcsname%%
+      \put(946,484){\makebox(0,0){\strut{}$0$}}%
+      \csname LTb\endcsname%%
+      \put(1532,484){\makebox(0,0){\strut{}$1$}}%
+      \csname LTb\endcsname%%
+      \put(2117,484){\makebox(0,0){\strut{}$2$}}%
+      \csname LTb\endcsname%%
+      \put(2703,484){\makebox(0,0){\strut{}$3$}}%
+      \csname LTb\endcsname%%
+      \put(3289,484){\makebox(0,0){\strut{}$4$}}%
+      \csname LTb\endcsname%%
+      \put(3875,484){\makebox(0,0){\strut{}$5$}}%
+      \csname LTb\endcsname%%
+      \put(4460,484){\makebox(0,0){\strut{}$6$}}%
+      \csname LTb\endcsname%%
+      \put(5046,484){\makebox(0,0){\strut{}$7$}}%
+      \csname LTb\endcsname%%
+      \put(5632,484){\makebox(0,0){\strut{}$8$}}%
+      \csname LTb\endcsname%%
+      \put(6217,484){\makebox(0,0){\strut{}$9$}}%
+      \csname LTb\endcsname%%
+      \put(6803,484){\makebox(0,0){\strut{}$10$}}%
     }%
     \gplgaddtomacro\gplfronttext{%
-      \csname LTb\endcsname%
-      \put(5816,4602){\makebox(0,0)[r]{\strut{}PC2, type 1}}%
+      \csname LTb\endcsname%%
+      \put(198,2761){\rotatebox{-270}{\makebox(0,0){\strut{}voltage / mV}}}%
+      \csname LTb\endcsname%%
+      \put(3874,154){\makebox(0,0){\strut{}resistor Rx / Ohm}}%
+      \csname LTb\endcsname%%
+      \put(3874,4709){\makebox(0,0){\strut{}}}%
+      \put(5517,4646){\makebox(0,0){\strut{}}}%
+      \csname LTb\endcsname%%
+      \put(5816,4646){\makebox(0,0)[r]{\strut{}PC2, type 1}}%
     }%
     \gplbacktext
     \put(0,0){\includegraphics{../GNU/RLvlow}}%

@@ -71,58 +71,64 @@
       \expandafter\def\csname LT8\endcsname{\color{black}}%
     \fi
   \fi
-  \setlength{\unitlength}{0.0500bp}%
-  \begin{picture}(7200.00,5040.00)%
+    \setlength{\unitlength}{0.0500bp}%
+    \ifx\gptboxheight\undefined%
+      \newlength{\gptboxheight}%
+      \newlength{\gptboxwidth}%
+      \newsavebox{\gptboxtext}%
+    \fi%
+    \setlength{\fboxrule}{0.5pt}%
+    \setlength{\fboxsep}{1pt}%
+\begin{picture}(7200.00,5040.00)%
     \gplgaddtomacro\gplbacktext{%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(814,704){\makebox(0,0)[r]{\strut{}-2}}%
-      \csname LTb\endcsname%
-      \put(814,1383){\makebox(0,0)[r]{\strut{} 0}}%
-      \csname LTb\endcsname%
-      \put(814,2061){\makebox(0,0)[r]{\strut{} 2}}%
-      \csname LTb\endcsname%
-      \put(814,2740){\makebox(0,0)[r]{\strut{} 4}}%
-      \csname LTb\endcsname%
-      \put(814,3418){\makebox(0,0)[r]{\strut{} 6}}%
-      \csname LTb\endcsname%
-      \put(814,4097){\makebox(0,0)[r]{\strut{} 8}}%
-      \csname LTb\endcsname%
-      \put(814,4775){\makebox(0,0)[r]{\strut{} 10}}%
-      \csname LTb\endcsname%
-      \put(946,484){\makebox(0,0){\strut{}10p}}%
-      \csname LTb\endcsname%
-      \put(1532,484){\makebox(0,0){\strut{}100p}}%
-      \csname LTb\endcsname%
-      \put(2117,484){\makebox(0,0){\strut{}1n}}%
-      \csname LTb\endcsname%
-      \put(2703,484){\makebox(0,0){\strut{}10n}}%
-      \csname LTb\endcsname%
-      \put(3289,484){\makebox(0,0){\strut{}100n}}%
-      \csname LTb\endcsname%
-      \put(3875,484){\makebox(0,0){\strut{}1u}}%
-      \csname LTb\endcsname%
-      \put(4460,484){\makebox(0,0){\strut{}10u}}%
-      \csname LTb\endcsname%
-      \put(5046,484){\makebox(0,0){\strut{}100u}}%
-      \csname LTb\endcsname%
-      \put(5632,484){\makebox(0,0){\strut{}1m}}%
-      \csname LTb\endcsname%
-      \put(6217,484){\makebox(0,0){\strut{}10m}}%
-      \csname LTb\endcsname%
-      \put(6803,484){\makebox(0,0){\strut{}100m}}%
-      \put(176,2739){\rotatebox{-270}{\makebox(0,0){\strut{}Error / Percent}}}%
-      \put(3874,154){\makebox(0,0){\strut{}Capacity value / F}}%
-      \put(3874,4665){\makebox(0,0){\strut{}}}%
+      \csname LTb\endcsname%%
+      \put(814,1390){\makebox(0,0)[r]{\strut{} 0}}%
+      \csname LTb\endcsname%%
+      \put(814,2076){\makebox(0,0)[r]{\strut{} 2}}%
+      \csname LTb\endcsname%%
+      \put(814,2762){\makebox(0,0)[r]{\strut{} 4}}%
+      \csname LTb\endcsname%%
+      \put(814,3447){\makebox(0,0)[r]{\strut{} 6}}%
+      \csname LTb\endcsname%%
+      \put(814,4133){\makebox(0,0)[r]{\strut{} 8}}%
+      \csname LTb\endcsname%%
+      \put(814,4819){\makebox(0,0)[r]{\strut{} 10}}%
+      \csname LTb\endcsname%%
+      \put(1249,484){\makebox(0,0){\strut{}100p}}%
+      \csname LTb\endcsname%%
+      \put(1896,484){\makebox(0,0){\strut{}1n}}%
+      \csname LTb\endcsname%%
+      \put(2543,484){\makebox(0,0){\strut{}10n}}%
+      \csname LTb\endcsname%%
+      \put(3189,484){\makebox(0,0){\strut{}100n}}%
+      \csname LTb\endcsname%%
+      \put(3836,484){\makebox(0,0){\strut{}1u}}%
+      \csname LTb\endcsname%%
+      \put(4483,484){\makebox(0,0){\strut{}10u}}%
+      \csname LTb\endcsname%%
+      \put(5130,484){\makebox(0,0){\strut{}100u}}%
+      \csname LTb\endcsname%%
+      \put(5776,484){\makebox(0,0){\strut{}1m}}%
+      \csname LTb\endcsname%%
+      \put(6423,484){\makebox(0,0){\strut{}10m}}%
     }%
     \gplgaddtomacro\gplfronttext{%
-      \csname LTb\endcsname%
-      \put(2002,4602){\makebox(0,0)[r]{\strut{}Mega8-1}}%
-      \csname LTb\endcsname%
-      \put(2002,4382){\makebox(0,0)[r]{\strut{}Mega8-2}}%
-      \csname LTb\endcsname%
-      \put(2002,4162){\makebox(0,0)[r]{\strut{}Mega8-3}}%
-      \csname LTb\endcsname%
-      \put(2002,3942){\makebox(0,0)[r]{\strut{}orig}}%
+      \csname LTb\endcsname%%
+      \put(198,2761){\rotatebox{-270}{\makebox(0,0){\strut{}Error / Percent}}}%
+      \csname LTb\endcsname%%
+      \put(3874,154){\makebox(0,0){\strut{}Capacity value / F}}%
+      \csname LTb\endcsname%%
+      \put(3874,4709){\makebox(0,0){\strut{}}}%
+      \csname LTb\endcsname%%
+      \put(5816,4646){\makebox(0,0)[r]{\strut{}Mega8-1}}%
+      \csname LTb\endcsname%%
+      \put(5816,4426){\makebox(0,0)[r]{\strut{}Mega8-2}}%
+      \csname LTb\endcsname%%
+      \put(5816,4206){\makebox(0,0)[r]{\strut{}Mega8-3}}%
+      \csname LTb\endcsname%%
+      \put(5816,3986){\makebox(0,0)[r]{\strut{}orig}}%
     }%
     \gplbacktext
     \put(0,0){\includegraphics{../GNU/Mega8cap}}%

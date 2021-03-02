@@ -38,7 +38,7 @@ Zwischenwerte der Spannung werden interpoliert.
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/Bigcap.eps}
+\includegraphics[]{../FIG/Bigcap.pdf}
 \caption{Kondensator-Entladung und -Ladung mit \(10ms\) Ladepulsen bis zur Spannung \textgreater~\(300mV\)}
 \label{fig:bigcap1}
 \end{figure}
@@ -57,7 +57,7 @@ der Kondensator eine negative Restspannung von einigen mV hat.
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/Cap_residV.eps}
+\includegraphics[]{../FIG/Cap_residV.pdf}
 \caption{Messung der Kondensator-Restspannung bei Ladebeginn}
 \label{fig:CapResidV}
 \end{figure}
@@ -143,7 +143,7 @@ Aber das Entladen geht in diesem Fall viel schneller als das Laden.
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/Comparat.eps}
+\includegraphics[]{../FIG/Comparat.pdf}
 \caption{Messung kleiner Kapazitätswerte mit dem Komparator}
 \label{fig:comparat}
 \end{figure}
@@ -189,7 +189,7 @@ viel geringer als dargestellt.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=18cm]{../FIG/sampling.eps}
+\includegraphics[width=18cm]{../FIG/sampling.pdf}
 \caption{Abtasten eines Spannungsverlaufs mit der Samplingmethode}
 \label{fig:sampling}
 \end{figure}
@@ -230,16 +230,16 @@ Serieninduktivität und der Widerstand \(ESR\) stellt den äquivalenten Serienwi
 
 \begin{figure}[H]
   \centering
-    \includegraphics[]{../FIG/Cap_equiv.eps}
+    \includegraphics[]{../FIG/Cap_equiv.pdf}
   \caption{Ersatzschaltbild eines Kondensators}
   \label{fig:Cap_equiv}
 \end{figure}
 
 Es ist in Datenblättern üblich, den ESR gemessen bei einer Frequenz von \(100kHz\) und
-einer Temperatur von \(20\textdegree C\) anzugeben.
+einer Temperatur von \(20{\degree}C\) anzugeben.
 Die Abbildungen \ref{fig:Cap_FC_data} und \ref{fig:Cap_FR_data} zeigen die vom Hersteller Panasonic 
 angegebenen ESR-Werte für die Elektrolytkondensatoren verschiedener Betriebs-Spannungen für die FC- und die ,,low ESR'' FR-Reihe.
-Beide Serien sind für eine maximale Temperatur von \(105\textdegree C\) ausgelegt.
+Beide Serien sind für eine maximale Temperatur von \(105{\degree}C\) ausgelegt.
 Die Abbildung \ref{fig:Cap_FC_FR_data} stellt die angegebenen Daten beider Serien bei einer zulässigen Betriebsspannung
 von \(25V\) dar. Wenn in der Baureihe verschiedene Ausführungen mit gleicher Kapazität und Spannung zur Verfügung stehen,
 werden die Daten mit dem niedrigsten ESR dargestellt.
@@ -248,21 +248,21 @@ abhängig.
 
 \begin{figure}[H]
   \centering
-    \resizebox{14cm}{!}{\input{../GNU/Cap_FC_data}}
+    \includegraphics[width=14cm]{../GNU/Cap_FC_data.pdf}
   \caption{ESR-Werte aus dem Panasonic Datenblatt der Serie FC}
   \label{fig:Cap_FC_data}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-    \resizebox{14cm}{!}{\input{../GNU/Cap_FR_data}}
+    \includegraphics[width=14cm]{../GNU/Cap_FR_data.pdf}
   \caption{ESR-Werte aus dem Panasonic Datenblatt der Serie FR}
   \label{fig:Cap_FR_data}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-    \resizebox{14cm}{!}{\input{../GNU/Cap_FC_FR_data}}
+    \includegraphics[width=14cm]{../GNU/Cap_FC_FR_data.pdf}
   \caption{Vergleich der ESR-Werte der Serie FC mit der Serie FR}
   \label{fig:Cap_FC_FR_data}
 \end{figure}
@@ -341,7 +341,7 @@ Die Abbildung~\ref{fig:Cap_esr} zeigt die entsprechenden Schaltungen.
 
 \begin{figure}[H]
   \centering
-    \includegraphics[]{../FIG/Cap_esr.eps}
+    \includegraphics[]{../FIG/Cap_esr.pdf}
   \caption{Schaltbild der ESR-Messung eines Kondensators}
   \label{fig:Cap_esr}
 \end{figure}
@@ -434,7 +434,7 @@ ist ein \(2,2\mu F\) Kondensator.
 
 \begin{figure}[H]
 \centering
-\input{../GNU/Cesr}
+ \includegraphics[width=16cm]{../GNU/Cesr.pdf}
 \caption{Messergebnisse der ESR-Messungen mit 15 verschiedenen ATmega}
 \label{fig:Cesr}
 \end{figure}
@@ -460,14 +460,14 @@ stromlosen Zeit beibehält.
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=18cm]{../FIG/Cap_esr2_timing.eps}
+    \includegraphics[width=18cm]{../FIG/Cap_esr2_timing.pdf}
   \caption{Zeitlicher Ablauf eines Messzyklus der neuen ESR-Messung}
   \label{fig:Cap_esr2_timing}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-    \includegraphics[]{../FIG/Cap_esr2.eps}
+    \includegraphics[]{../FIG/Cap_esr2.pdf}
   \caption{Vereinfachte ESR-Messung eines Kondensators}
   \label{fig:Cap_esr2}
 \end{figure}
@@ -554,7 +554,7 @@ Die Vergleichswerte des LCR-Messgerätes sind bei \(10kHz\) ermittelt worden.
 
 \begin{figure}[H]
 \centering
-\input{../GNU/Cesr2}
+ \includegraphics[width=16cm]{../GNU/Cesr2.pdf}
 \caption{Messergebnisse der ESR-Messungen mit 15 veschiedenen ATmega, Methode 2}
 \label{fig:Cesr2}
 \end{figure}
@@ -568,7 +568,7 @@ Nur der \(500\mu F/3V\) Kondensator war ein älteres Exemplar, alle anderen ware
 
 \begin{figure}[H]
 \centering
-\input{../GNU/Elco_esr}
+ \includegraphics[width=16cm]{../GNU/Elco_esr.pdf}
 \caption{Ergebnisse der ESR-Messungen von verschiedenen Elektrolyt-Kondensatoren}
 \label{fig:ElcoESR}
 \end{figure}
@@ -606,13 +606,13 @@ Es läßt sich in jedem Fall die Qualität eines Kondensators auch bei niedriger
 \begin{figure}[H]
   \begin{subfigure}[b]{9cm}
     \centering
-    \resizebox{9cm}{!}{\input{../GNU/Cesr_22n}}
+    \includegraphics[width=9cm]{../GNU/Cesr_22n.pdf}
     \caption{höhere ESR Werte}
   \end{subfigure}
   ~
   \begin{subfigure}[b]{9cm}
     \centering
-    \resizebox{9cm}{!}{\input{../GNU/Cesr_22n_low}}
+    \includegraphics[width=9cm]{../GNU/Cesr_22n_low.pdf}
     \caption{niedrigere ESR Werte}
   \end{subfigure}
   \caption{ESR-Messungen von Kondensatoren mit niedriger Kapazität}
@@ -877,7 +877,7 @@ Elektrolyt-Kondensator sein. Der Kapazitätswert braucht aber für diesen Abglei
 
 \begin{figure}[H]
 \centering
-\input{../GNU/ComparatorAdjust}
+\includegraphics[]{../GNU/ComparatorAdjust.pdf}
 \caption{Daten von neun ATmega168-Prozessoren}
 \label{fig:CompAdjust}
 \end{figure}

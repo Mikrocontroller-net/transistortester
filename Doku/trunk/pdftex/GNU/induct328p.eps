@@ -1,7 +1,7 @@
 %!PS-Adobe-2.0 EPSF-2.0
 %%Title: ../GNU/induct328p.tex
-%%Creator: gnuplot 4.6 patchlevel 4
-%%CreationDate: Fri Oct  9 21:30:29 2015
+%%Creator: gnuplot 5.2 patchlevel 2
+%%CreationDate: Tue Mar  2 20:22:33 2021
 %%DocumentFonts: 
 %%BoundingBox: 50 50 410 302
 %%EndComments
@@ -14,10 +14,11 @@ gnudict begin
 %
 /Color true def
 /Blacktext true def
-/Solid true def
+/Solid false def
 /Dashlength 1 def
 /Landscape false def
 /Level1 false def
+/Level3 false def
 /Rounded false def
 /ClipToBoundingBox false def
 /SuppressPDFMark false def
@@ -29,11 +30,11 @@ gnudict begin
 %
 /vshift -73 def
 /dl1 {
-  10.0 Dashlength mul mul
+  10.0 Dashlength userlinewidth gnulinewidth div mul mul mul
   Rounded { currentlinewidth 0.75 mul sub dup 0 le { pop 0.01 } if } if
 } def
 /dl2 {
-  10.0 Dashlength mul mul
+  10.0 Dashlength userlinewidth gnulinewidth div mul mul mul
   Rounded { currentlinewidth 0.75 mul add } if
 } def
 /hpt_ 31.5 def
@@ -47,7 +48,7 @@ gnudict begin
   } if
 } def
 %
-% Gnuplot Prolog Version 4.6 (September 2012)
+% Gnuplot Prolog Version 5.1 (Oct 2015)
 %
 %/SuppressPDFMark true def
 %
@@ -64,11 +65,11 @@ gnudict begin
 /vpt2 vpt 2 mul def
 /hpt2 hpt 2 mul def
 /Lshow {currentpoint stroke M 0 vshift R 
-	Blacktext {gsave 0 setgray show grestore} {show} ifelse} def
+	Blacktext {gsave 0 setgray textshow grestore} {textshow} ifelse} def
 /Rshow {currentpoint stroke M dup stringwidth pop neg vshift R
-	Blacktext {gsave 0 setgray show grestore} {show} ifelse} def
+	Blacktext {gsave 0 setgray textshow grestore} {textshow} ifelse} def
 /Cshow {currentpoint stroke M dup stringwidth pop -2 div vshift R 
-	Blacktext {gsave 0 setgray show grestore} {show} ifelse} def
+	Blacktext {gsave 0 setgray textshow grestore} {textshow} ifelse} def
 /UP {dup vpt_ mul /vpt exch def hpt_ mul /hpt exch def
   /hpt2 hpt 2 mul def /vpt2 vpt 2 mul def} def
 /DL {Color {setrgbcolor Solid {pop []} if 0 setdash}
@@ -82,7 +83,7 @@ gnudict begin
 /PL {stroke userlinewidth setlinewidth
 	Rounded {1 setlinejoin 1 setlinecap} if} def
 3.8 setmiterlimit
-% Default Line colors
+% Classic Line colors (version 5.0)
 /LCw {1 1 1} def
 /LCb {0 0 0} def
 /LCa {0 0 0} def
@@ -95,19 +96,21 @@ gnudict begin
 /LC6 {0 0 0} def
 /LC7 {1 0.3 0} def
 /LC8 {0.5 0.5 0.5} def
-% Default Line Types
+% Default dash patterns (version 5.0)
+/LTB {BL [] LCb DL} def
 /LTw {PL [] 1 setgray} def
-/LTb {BL [] LCb DL} def
+/LTb {PL [] LCb DL} def
 /LTa {AL [1 udl mul 2 udl mul] 0 setdash LCa setrgbcolor} def
 /LT0 {PL [] LC0 DL} def
-/LT1 {PL [4 dl1 2 dl2] LC1 DL} def
-/LT2 {PL [2 dl1 3 dl2] LC2 DL} def
-/LT3 {PL [1 dl1 1.5 dl2] LC3 DL} def
-/LT4 {PL [6 dl1 2 dl2 1 dl1 2 dl2] LC4 DL} def
-/LT5 {PL [3 dl1 3 dl2 1 dl1 3 dl2] LC5 DL} def
-/LT6 {PL [2 dl1 2 dl2 2 dl1 6 dl2] LC6 DL} def
-/LT7 {PL [1 dl1 2 dl2 6 dl1 2 dl2 1 dl1 2 dl2] LC7 DL} def
-/LT8 {PL [2 dl1 2 dl2 2 dl1 2 dl2 2 dl1 2 dl2 2 dl1 4 dl2] LC8 DL} def
+/LT1 {PL [2 dl1 3 dl2] LC1 DL} def
+/LT2 {PL [1 dl1 1.5 dl2] LC2 DL} def
+/LT3 {PL [6 dl1 2 dl2 1 dl1 2 dl2] LC3 DL} def
+/LT4 {PL [1 dl1 2 dl2 6 dl1 2 dl2 1 dl1 2 dl2] LC4 DL} def
+/LT5 {PL [4 dl1 2 dl2] LC5 DL} def
+/LT6 {PL [1.5 dl1 1.5 dl2 1.5 dl1 1.5 dl2 1.5 dl1 6 dl2] LC6 DL} def
+/LT7 {PL [3 dl1 3 dl2 1 dl1 3 dl2] LC7 DL} def
+/LT8 {PL [2 dl1 2 dl2 2 dl1 6 dl2] LC8 DL} def
+/SL {[] 0 setdash} def
 /Pnt {stroke [] 0 setdash gsave 1 setlinecap M 0 0 V stroke grestore} def
 /Dia {stroke [] 0 setdash 2 copy vpt add M
   hpt neg vpt neg V hpt vpt neg V
@@ -329,9 +332,14 @@ gnudict begin
 %
 /languagelevel where
  {pop languagelevel} {1} ifelse
- 2 lt
-	{/InterpretLevel1 true def}
-	{/InterpretLevel1 Level1 def}
+dup 2 lt
+	{/InterpretLevel1 true def
+	 /InterpretLevel3 false def}
+	{/InterpretLevel1 Level1 def
+	 2 gt
+	    {/InterpretLevel3 Level3 def}
+	    {/InterpretLevel3 false def}
+	 ifelse }
  ifelse
 %
 % PostScript level 2 pattern fill definitions
@@ -420,6 +428,7 @@ Level1 {Level1PatternFill} {Level2PatternFill} ifelse
 /Symbol-Oblique /Symbol findfont [1 0 .167 1 0 0] makefont
 dup length dict begin {1 index /FID eq {pop pop} {def} ifelse} forall
 currentdict end definefont pop
+%
 Level1 SuppressPDFMark or 
 {} {
 /SDict 10 dict def
@@ -429,14 +438,39 @@ systemdict /pdfmark known not {
 SDict begin [
   /Title (../GNU/induct328p.tex)
   /Subject (gnuplot plot)
-  /Creator (gnuplot 4.6 patchlevel 4)
-  /Author (kub)
+  /Creator (gnuplot 5.2 patchlevel 2)
 %  /Producer (gnuplot)
 %  /Keywords ()
-  /CreationDate (Fri Oct  9 21:30:29 2015)
+  /CreationDate (Tue Mar  2 20:22:33 2021)
   /DOCINFO pdfmark
 end
 } ifelse
+%
+% Support for boxed text - Ethan A Merritt Sep 2016
+%
+/InitTextBox { userdict /TBy2 3 -1 roll put userdict /TBx2 3 -1 roll put
+           userdict /TBy1 3 -1 roll put userdict /TBx1 3 -1 roll put
+	   /Boxing true def } def
+/ExtendTextBox { dup type /stringtype eq
+    { Boxing { gsave dup false charpath pathbbox
+      dup TBy2 gt {userdict /TBy2 3 -1 roll put} {pop} ifelse
+      dup TBx2 gt {userdict /TBx2 3 -1 roll put} {pop} ifelse
+      dup TBy1 lt {userdict /TBy1 3 -1 roll put} {pop} ifelse
+      dup TBx1 lt {userdict /TBx1 3 -1 roll put} {pop} ifelse
+      grestore } if }
+    {} ifelse} def
+/PopTextBox { newpath TBx1 TBxmargin sub TBy1 TBymargin sub M
+               TBx1 TBxmargin sub TBy2 TBymargin add L
+	       TBx2 TBxmargin add TBy2 TBymargin add L
+	       TBx2 TBxmargin add TBy1 TBymargin sub L closepath } def
+/DrawTextBox { PopTextBox stroke /Boxing false def} def
+/FillTextBox { gsave PopTextBox fill grestore /Boxing false def} def
+0 0 0 0 InitTextBox
+/TBxmargin 20 def
+/TBymargin 20 def
+/Boxing false def
+/textshow { ExtendTextBox Gshow } def
+%
 end
 %%EndProlog
 %%Page: 1 1
@@ -450,882 +484,1092 @@ newpath
 1.000 UL
 LTb
 LCb setrgbcolor
-1.000 UL
+[] 0 setdash
+0.500 UL
 LTa
 LCa setrgbcolor
 946 704 M
 5857 0 V
 stroke
+1.000 UL
 LTb
 LCb setrgbcolor
+[] 0 setdash
 946 704 M
 63 0 V
 5794 0 R
 -63 0 V
 stroke
 LTb
-1.000 UL
+0.500 UL
 LTa
 LCa setrgbcolor
-946 1213 M
+946 1218 M
 5857 0 V
 stroke
+1.000 UL
 LTb
 LCb setrgbcolor
-946 1213 M
+[] 0 setdash
+946 1218 M
 63 0 V
 5794 0 R
 -63 0 V
 stroke
 LTb
-1.000 UL
+0.500 UL
 LTa
 LCa setrgbcolor
-946 1722 M
+946 1733 M
 5857 0 V
 stroke
+1.000 UL
 LTb
 LCb setrgbcolor
-946 1722 M
+[] 0 setdash
+946 1733 M
 63 0 V
 5794 0 R
 -63 0 V
 stroke
 LTb
-1.000 UL
+0.500 UL
 LTa
 LCa setrgbcolor
-946 2231 M
+946 2247 M
 5857 0 V
 stroke
+1.000 UL
 LTb
 LCb setrgbcolor
-946 2231 M
+[] 0 setdash
+946 2247 M
 63 0 V
 5794 0 R
 -63 0 V
 stroke
 LTb
-1.000 UL
+0.500 UL
 LTa
 LCa setrgbcolor
-946 2740 M
+946 2762 M
 5857 0 V
 stroke
+1.000 UL
 LTb
 LCb setrgbcolor
-946 2740 M
+[] 0 setdash
+946 2762 M
 63 0 V
 5794 0 R
 -63 0 V
 stroke
 LTb
-1.000 UL
+0.500 UL
 LTa
 LCa setrgbcolor
-946 3248 M
+946 3276 M
 5857 0 V
 stroke
+1.000 UL
 LTb
 LCb setrgbcolor
-946 3248 M
+[] 0 setdash
+946 3276 M
 63 0 V
 5794 0 R
 -63 0 V
 stroke
 LTb
-1.000 UL
+0.500 UL
 LTa
 LCa setrgbcolor
-946 3757 M
-4216 0 V
-1509 0 R
+946 3790 M
+4342 0 V
+1383 0 R
 132 0 V
 stroke
+1.000 UL
 LTb
 LCb setrgbcolor
-946 3757 M
+[] 0 setdash
+946 3790 M
 63 0 V
 5794 0 R
 -63 0 V
 stroke
 LTb
-1.000 UL
+0.500 UL
 LTa
 LCa setrgbcolor
-946 4266 M
-4216 0 V
-1509 0 R
+946 4305 M
+4342 0 V
+1383 0 R
 132 0 V
 stroke
+1.000 UL
 LTb
 LCb setrgbcolor
-946 4266 M
+[] 0 setdash
+946 4305 M
 63 0 V
 5794 0 R
 -63 0 V
 stroke
 LTb
-1.000 UL
+0.500 UL
 LTa
 LCa setrgbcolor
-946 4775 M
+946 4819 M
 5857 0 V
 stroke
+1.000 UL
 LTb
 LCb setrgbcolor
-946 4775 M
+[] 0 setdash
+946 4819 M
 63 0 V
 5794 0 R
 -63 0 V
 stroke
 LTb
-1.000 UL
+0.500 UL
 LTa
 LCa setrgbcolor
 946 704 M
-0 4071 V
+0 4115 V
 stroke
-LTb
-LCb setrgbcolor
-946 704 M
-0 63 V
-0 4008 R
-0 -63 V
-stroke
-LTb
-1198 704 M
-0 31 V
-0 4040 R
-0 -31 V
-1531 704 M
-0 31 V
-0 4040 R
-0 -31 V
-1702 704 M
-0 31 V
-0 4040 R
-0 -31 V
-stroke
-LTa
-LCa setrgbcolor
-1783 704 M
-0 4071 V
-stroke
-LTb
-LCb setrgbcolor
-1783 704 M
-0 63 V
-0 4008 R
-0 -63 V
-stroke
-LTb
-2035 704 M
-0 31 V
-0 4040 R
-0 -31 V
-2368 704 M
-0 31 V
-0 4040 R
-0 -31 V
-2538 704 M
-0 31 V
-0 4040 R
-0 -31 V
-stroke
-LTa
-LCa setrgbcolor
-2619 704 M
-0 4071 V
-stroke
-LTb
-LCb setrgbcolor
-2619 704 M
-0 63 V
-0 4008 R
-0 -63 V
-stroke
-LTb
-2871 704 M
-0 31 V
-0 4040 R
-0 -31 V
-3204 704 M
-0 31 V
-0 4040 R
-0 -31 V
-3375 704 M
-0 31 V
-0 4040 R
-0 -31 V
-stroke
-LTa
-LCa setrgbcolor
-3456 704 M
-0 4071 V
-stroke
-LTb
-LCb setrgbcolor
-3456 704 M
-0 63 V
-0 4008 R
-0 -63 V
-stroke
-LTb
-3708 704 M
-0 31 V
-0 4040 R
-0 -31 V
-4041 704 M
-0 31 V
-0 4040 R
-0 -31 V
-4212 704 M
-0 31 V
-0 4040 R
-0 -31 V
-stroke
-LTa
-LCa setrgbcolor
-4293 704 M
-0 4071 V
-stroke
-LTb
-LCb setrgbcolor
-4293 704 M
-0 63 V
-0 4008 R
-0 -63 V
-stroke
-LTb
-4545 704 M
-0 31 V
-0 4040 R
-0 -31 V
-4878 704 M
-0 31 V
-0 4040 R
-0 -31 V
-5048 704 M
-0 31 V
-0 4040 R
-0 -31 V
-stroke
-LTa
-LCa setrgbcolor
-5130 704 M
-0 4071 V
-stroke
-LTb
-LCb setrgbcolor
-5130 704 M
-0 63 V
-0 4008 R
-0 -63 V
-stroke
-LTb
-5381 704 M
-0 31 V
-0 4040 R
-0 -31 V
-5714 704 M
-0 31 V
-0 4040 R
-0 -31 V
-5885 704 M
-0 31 V
-0 4040 R
-0 -31 V
-stroke
-LTa
-LCa setrgbcolor
-5966 704 M
-0 2828 V
-0 1180 R
-0 63 V
-stroke
-LTb
-LCb setrgbcolor
-5966 704 M
-0 63 V
-0 4008 R
-0 -63 V
-stroke
-LTb
-6218 704 M
-0 31 V
-0 4040 R
-0 -31 V
-6551 704 M
-0 31 V
-0 4040 R
-0 -31 V
-6722 704 M
-0 31 V
-0 4040 R
-0 -31 V
-stroke
-LTa
-LCa setrgbcolor
-6803 704 M
-0 4071 V
-stroke
-LTb
-LCb setrgbcolor
-6803 704 M
-0 63 V
-0 4008 R
-0 -63 V
-stroke
-LTb
 1.000 UL
 LTb
-946 4775 N
+LCb setrgbcolor
+[] 0 setdash
+946 704 M
+0 63 V
+0 4052 R
+0 -63 V
+stroke
+LTb
+1225 704 M
+0 31 V
+0 4084 R
+0 -31 V
+1388 704 M
+0 31 V
+0 4084 R
+0 -31 V
+1504 704 M
+0 31 V
+0 4084 R
+0 -31 V
+1594 704 M
+0 31 V
+0 4084 R
+0 -31 V
+1667 704 M
+0 31 V
+0 4084 R
+0 -31 V
+1729 704 M
+0 31 V
+0 4084 R
+0 -31 V
+1783 704 M
+0 31 V
+0 4084 R
+0 -31 V
+1830 704 M
+0 31 V
+0 4084 R
+0 -31 V
+stroke
+0.500 UL
+LTa
+LCa setrgbcolor
+1872 704 M
+0 4115 V
+stroke
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+1872 704 M
+0 63 V
+0 4052 R
+0 -63 V
+stroke
+LTb
+2151 704 M
+0 31 V
+0 4084 R
+0 -31 V
+2314 704 M
+0 31 V
+0 4084 R
+0 -31 V
+2430 704 M
+0 31 V
+0 4084 R
+0 -31 V
+2520 704 M
+0 31 V
+0 4084 R
+0 -31 V
+2593 704 M
+0 31 V
+0 4084 R
+0 -31 V
+2655 704 M
+0 31 V
+0 4084 R
+0 -31 V
+2709 704 M
+0 31 V
+0 4084 R
+0 -31 V
+2756 704 M
+0 31 V
+0 4084 R
+0 -31 V
+stroke
+0.500 UL
+LTa
+LCa setrgbcolor
+2799 704 M
+0 4115 V
+stroke
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+2799 704 M
+0 63 V
+0 4052 R
+0 -63 V
+stroke
+LTb
+3078 704 M
+0 31 V
+0 4084 R
+0 -31 V
+3241 704 M
+0 31 V
+0 4084 R
+0 -31 V
+3357 704 M
+0 31 V
+0 4084 R
+0 -31 V
+3446 704 M
+0 31 V
+0 4084 R
+0 -31 V
+3520 704 M
+0 31 V
+0 4084 R
+0 -31 V
+3582 704 M
+0 31 V
+0 4084 R
+0 -31 V
+3635 704 M
+0 31 V
+0 4084 R
+0 -31 V
+3683 704 M
+0 31 V
+0 4084 R
+0 -31 V
+stroke
+0.500 UL
+LTa
+LCa setrgbcolor
+3725 704 M
+0 4115 V
+stroke
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+3725 704 M
+0 63 V
+0 4052 R
+0 -63 V
+stroke
+LTb
+4004 704 M
+0 31 V
+0 4084 R
+0 -31 V
+4167 704 M
+0 31 V
+0 4084 R
+0 -31 V
+4283 704 M
+0 31 V
+0 4084 R
+0 -31 V
+4373 704 M
+0 31 V
+0 4084 R
+0 -31 V
+4446 704 M
+0 31 V
+0 4084 R
+0 -31 V
+4508 704 M
+0 31 V
+0 4084 R
+0 -31 V
+4562 704 M
+0 31 V
+0 4084 R
+0 -31 V
+4609 704 M
+0 31 V
+0 4084 R
+0 -31 V
+stroke
+0.500 UL
+LTa
+LCa setrgbcolor
+4652 704 M
+0 4115 V
+stroke
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+4652 704 M
+0 63 V
+0 4052 R
+0 -63 V
+stroke
+LTb
+4931 704 M
+0 31 V
+0 4084 R
+0 -31 V
+5094 704 M
+0 31 V
+0 4084 R
+0 -31 V
+5209 704 M
+0 31 V
+0 4084 R
+0 -31 V
+5299 704 M
+0 31 V
+0 4084 R
+0 -31 V
+5373 704 M
+0 31 V
+0 4084 R
+0 -31 V
+5435 704 M
+0 31 V
+0 4084 R
+0 -31 V
+5488 704 M
+0 31 V
+0 4084 R
+0 -31 V
+5536 704 M
+0 31 V
+0 4084 R
+0 -31 V
+stroke
+0.500 UL
+LTa
+LCa setrgbcolor
+5578 704 M
+0 2952 V
+0 1100 R
+0 63 V
+stroke
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+5578 704 M
+0 63 V
+0 4052 R
+0 -63 V
+stroke
+LTb
+5857 704 M
+0 31 V
+0 4084 R
+0 -31 V
+6020 704 M
+0 31 V
+0 4084 R
+0 -31 V
+6136 704 M
+0 31 V
+0 4084 R
+0 -31 V
+6226 704 M
+0 31 V
+0 4084 R
+0 -31 V
+6299 704 M
+0 31 V
+0 4084 R
+0 -31 V
+6361 704 M
+0 31 V
+0 4084 R
+0 -31 V
+6415 704 M
+0 31 V
+0 4084 R
+0 -31 V
+6462 704 M
+0 31 V
+0 4084 R
+0 -31 V
+stroke
+0.500 UL
+LTa
+LCa setrgbcolor
+6504 704 M
+0 2952 V
+0 1100 R
+0 63 V
+stroke
+1.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+6504 704 M
+0 63 V
+0 4052 R
+0 -63 V
+stroke
+LTb
+6783 704 M
+0 31 V
+0 4084 R
+0 -31 V
+stroke
+946 4819 N
 946 704 L
 5857 0 V
-0 4071 V
+0 4115 V
 -5857 0 V
 Z stroke
 3.000 UP
 1.000 UL
 LTb
-3.000 UP
-3.000 UL
-LT0
-LC0 setrgbcolor
-1.00 0.00 0.00 C LCb setrgbcolor
-LT0
-LC0 setrgbcolor
-1.00 0.00 0.00 C 946 2740 Box
-1198 2740 Box
-1493 1609 Box
-1783 2740 Box
-1930 2061 Box
-2035 3248 Box
-2182 3079 Box
-2217 2740 Box
-2345 2956 Box
-2468 3202 Box
-2479 3039 Box
-2597 3064 Box
-2731 2740 Box
-2767 3214 Box
-2906 2878 Box
-3019 3214 Box
-3053 2678 Box
-3316 2754 Box
-3456 2943 Box
-3568 2964 Box
-3708 3045 Box
-3890 2986 Box
-4142 2878 Box
-4293 2566 Box
-4545 2434 Box
-5130 2241 Box
-5196 2824 Box
-5196 1552 Box
-5999 946 Box
-6236 1770 Box
-6180 4594 Box
-3.000 UP
-3.000 UL
-LT0
-LC0 setrgbcolor
-1.00 0.00 0.00 C 946 2740 Box
-1198 2740 Box
-1493 1609 Box
-1783 2740 Box
-1930 2061 Box
-2035 3248 Box
-2182 3079 Box
-2217 3048 Box
-2345 2956 Box
-2468 3048 Box
-2479 3039 Box
-2597 3064 Box
-2731 2964 Box
-2767 3214 Box
-2906 2971 Box
-3019 3316 Box
-3053 2647 Box
-3316 3009 Box
-3456 2841 Box
-3568 2889 Box
-3708 2892 Box
-3890 2863 Box
-4142 2817 Box
-4293 2424 Box
-4545 2332 Box
-5130 1844 Box
-5196 1637 Box
-5196 1383 Box
-5999 825 Box
-6236 1479 Box
-3.000 UP
-3.000 UL
-LT0
-LC0 setrgbcolor
-1.00 0.00 0.00 C 946 2740 Box
-1198 2740 Box
-1493 1609 Box
-1783 2740 Box
-1930 2061 Box
-2035 3248 Box
-2182 3079 Box
-2217 2740 Box
-2345 2740 Box
-2468 3048 Box
-2479 2889 Box
-2597 2956 Box
-2731 2740 Box
-2767 3079 Box
-2906 2786 Box
-3019 3113 Box
-3053 2524 Box
-3316 2784 Box
-3456 2943 Box
-3568 2964 Box
-3708 3045 Box
-3890 2925 Box
-4142 2863 Box
-4293 2536 Box
-4545 2383 Box
-5130 2200 Box
-5196 2740 Box
-5196 1552 Box
-5999 853 Box
-6236 1286 Box
-3.000 UP
-3.000 UL
-LT0
-LC0 setrgbcolor
-1.00 0.00 0.00 C LCb setrgbcolor
-LT0
-LC0 setrgbcolor
-1.00 0.00 0.00 C 946 2740 Circle
-1198 2740 Circle
-1493 1609 Circle
-1783 2740 Circle
-1930 2061 Circle
-2035 3248 Circle
-2182 3079 Circle
-2217 3048 Circle
-2345 2956 Circle
-2468 3202 Circle
-2479 3039 Circle
-2597 3173 Circle
-2731 2964 Circle
-2767 3282 Circle
-2906 2925 Circle
-3019 3282 Circle
-3053 2740 Circle
-3316 2994 Circle
-3456 3248 Circle
-3568 2964 Circle
-3708 2943 Circle
-3890 2894 Circle
-4142 2863 Circle
-4293 2516 Circle
-4545 2383 Circle
-5130 1895 Circle
-5196 2655 Circle
-5196 1298 Circle
-5999 760 Circle
-6236 1092 Circle
-6180 4358 Circle
-3.000 UP
-3.000 UL
-LT0
-LC0 setrgbcolor
-1.00 0.00 0.00 C 946 2740 Circle
-1198 2740 Circle
-1493 1609 Circle
-1783 1722 Circle
-1930 2061 Circle
-2035 2740 Circle
-2182 3079 Circle
-2217 3048 Circle
-2345 2956 Circle
-2468 4744 Circle
-2479 3039 Circle
-2597 3173 Circle
-2731 2964 Circle
-2767 3214 Circle
-2906 2878 Circle
-3019 3214 Circle
-3053 2709 Circle
-3316 2994 Circle
-3456 3248 Circle
-3568 2964 Circle
-3708 2943 Circle
-3890 2986 Circle
-4142 2755 Circle
-4293 2546 Circle
-4545 2434 Circle
-5130 1956 Circle
-5196 2655 Circle
-5196 1383 Circle
-5999 788 Circle
-6236 1140 Circle
-3.000 UP
-3.000 UL
-LT0
-LC0 setrgbcolor
-1.00 0.00 0.00 C 946 2740 Circle
-1198 2740 Circle
-1493 1609 Circle
-1783 1722 Circle
-1930 2061 Circle
-2035 2740 Circle
-2182 3079 Circle
-2217 3048 Circle
-2345 2956 Circle
-2468 3048 Circle
-2479 3039 Circle
-2597 3064 Circle
-2731 2814 Circle
-2767 3214 Circle
-2906 2878 Circle
-3019 3181 Circle
-3053 2616 Circle
-3316 2844 Circle
-3456 3045 Circle
-3568 3039 Circle
-3708 2994 Circle
-3890 2986 Circle
-4142 2894 Circle
-4293 2526 Circle
-4545 2383 Circle
-5130 2078 Circle
-5196 2740 Circle
-5196 1467 Circle
-5999 881 Circle
-6236 1189 Circle
-2.000 UP
-3.000 UL
-LT0
-LC0 setrgbcolor
-0.00 1.00 0.00 C LCb setrgbcolor
-LT0
-LC0 setrgbcolor
-0.00 1.00 0.00 C 946 2740 Box
-1198 2740 Box
-1493 1609 Box
-1783 1722 Box
-1930 2061 Box
-2035 2231 Box
-2182 2740 Box
-2217 2431 Box
-2345 2306 Box
-2468 2740 Box
-2479 2740 Box
-2597 2631 Box
-2731 2665 Box
-2767 2740 Box
-2906 2554 Box
-3019 2773 Box
-3053 2277 Box
-3316 2680 Box
-3456 2841 Box
-3568 2889 Box
-3708 2740 Box
-3890 2832 Box
-4142 2709 Box
-4293 2444 Box
-4545 2282 Box
-5130 2210 Box
-5196 2824 Box
-5196 1467 Box
-5999 871 Box
-6236 1286 Box
-6180 4122 Box
-2.000 UP
-3.000 UL
-LT0
-LC0 setrgbcolor
-0.00 1.00 0.00 C 946 2740 Box
-1198 2740 Box
-1493 1609 Box
-1783 1722 Box
-1930 1383 Box
-2035 2231 Box
-2182 2740 Box
-2217 2431 Box
-2345 2523 Box
-2468 2585 Box
-2479 2440 Box
-2597 2631 Box
-2731 2590 Box
-2767 2807 Box
-2906 2462 Box
-3019 2740 Box
-3053 2246 Box
-3316 2620 Box
-3456 2740 Box
-3568 2814 Box
-3708 2943 Box
-3890 2801 Box
-4142 2740 Box
-4293 2444 Box
-4545 2332 Box
-5130 2271 Box
-5196 2909 Box
-5196 1552 Box
-5999 843 Box
-6236 1286 Box
-2.000 UP
-3.000 UL
-LT0
-LC0 setrgbcolor
-0.00 1.00 0.00 C 946 2740 Box
-1198 2740 Box
-1493 1609 Box
-1783 1722 Box
-1930 1383 Box
-2035 2231 Box
-2182 2740 Box
-2217 2431 Box
-2345 2523 Box
-2468 2740 Box
-2479 2590 Box
-2597 2740 Box
-2731 2515 Box
-2767 2740 Box
-2906 2508 Box
-3019 2740 Box
-3053 2277 Box
-3316 2530 Box
-3456 2943 Box
-3568 2964 Box
-3708 2943 Box
-3890 2863 Box
-4142 2770 Box
-4293 2444 Box
-4545 2332 Box
-5130 2383 Box
-5196 2994 Box
-5196 1637 Box
-5999 955 Box
-6236 1916 Box
-3.000 UP
-3.000 UL
-LT0
-LC0 setrgbcolor
-0.00 1.00 0.00 C LCb setrgbcolor
-LT0
-LC0 setrgbcolor
-0.00 1.00 0.00 C 946 2740 Star
-1198 2740 Star
-1493 1609 Star
-1783 1722 Star
-1930 2061 Star
-2035 2740 Star
-2182 2740 Star
-2217 2740 Star
-2345 2740 Star
-2468 2894 Star
-2479 2590 Star
-2597 2848 Star
-2731 2740 Star
-2767 2875 Star
-2906 2601 Star
-3019 2909 Star
-3053 2431 Star
-3316 2754 Star
-3456 2943 Star
-3568 2964 Star
-3708 2892 Star
-3890 2894 Star
-4142 2724 Star
-4293 2434 Star
-4545 2332 Star
-5130 2149 Star
-5196 2824 Star
-5196 1552 Star
-5999 899 Star
-6236 1286 Star
-6180 3886 Star
-3.000 UP
-3.000 UL
-LT0
-LC0 setrgbcolor
-0.00 1.00 0.00 C 946 2740 Star
-1198 2740 Star
-1493 1609 Star
-1783 2740 Star
-1930 2061 Star
-2035 2740 Star
-2182 2740 Star
-2217 2431 Star
-2345 2523 Star
-2468 2740 Star
-2479 2590 Star
-2597 2740 Star
-2731 2365 Star
-2767 2875 Star
-2906 2554 Star
-3019 2841 Star
-3053 2308 Star
-3316 2934 Star
-3456 2943 Star
-3568 2889 Star
-3708 2892 Star
-3890 2955 Star
-4142 2847 Star
-4293 2495 Star
-4545 2434 Star
-5130 2434 Star
-5196 3079 Star
-5196 1722 Star
-5999 1048 Star
-6236 1479 Star
-3.000 UP
-3.000 UL
-LT0
-LC0 setrgbcolor
-0.00 1.00 0.00 C 946 2740 Star
-1198 2740 Star
-1493 1609 Star
-1783 2740 Star
-1930 2061 Star
-2035 2740 Star
-2182 2740 Star
-2217 2740 Star
-2345 2740 Star
-2468 2894 Star
-2479 2740 Star
-2597 2848 Star
-2731 2515 Star
-2767 2943 Star
-2906 2647 Star
-3019 2909 Star
-3053 2431 Star
-3316 2575 Star
-3456 2740 Star
-3568 2740 Star
-3708 2841 Star
-3890 2863 Star
-4142 2817 Star
-4293 2485 Star
-4545 2332 Star
-5130 2332 Star
-5196 2994 Star
-5196 1722 Star
-5999 946 Star
-6236 1867 Star
-2.000 UP
-3.000 UL
-LT0
-LC0 setrgbcolor
-0.00 0.00 1.00 C LCb setrgbcolor
-LT0
-LC0 setrgbcolor
-0.00 0.00 1.00 C 946 2740 CircleF
-1198 2740 CircleF
-1493 1609 CircleF
-1783 2740 CircleF
-1930 2061 CircleF
-2035 2740 CircleF
-2182 3079 CircleF
-2217 2740 CircleF
-2345 2956 CircleF
-2468 3048 CircleF
-2479 3039 CircleF
-2597 3064 CircleF
-2731 2515 CircleF
-2767 3147 CircleF
-2906 2878 CircleF
-3019 3113 CircleF
-3053 2616 CircleF
-3316 3084 CircleF
-3456 3147 CircleF
-3568 3039 CircleF
-3708 2994 CircleF
-3890 2955 CircleF
-4142 2832 CircleF
-4293 2546 CircleF
-4545 2332 CircleF
-5130 2261 CircleF
-5196 2824 CircleF
-5196 1722 CircleF
-5999 955 CircleF
-6236 1867 CircleF
-6180 3650 CircleF
-2.000 UP
-3.000 UL
-LT0
-LC0 setrgbcolor
-0.00 0.00 1.00 C 946 2740 CircleF
-1198 2740 CircleF
-1493 3870 CircleF
-1783 2740 CircleF
-1930 2061 CircleF
-2035 3248 CircleF
-2182 3079 CircleF
-2217 2740 CircleF
-2345 2740 CircleF
-2468 3048 CircleF
-2479 2889 CircleF
-2597 2956 CircleF
-2731 2740 CircleF
-2767 3079 CircleF
-2906 2832 CircleF
-3019 3045 CircleF
-3053 2554 CircleF
-3316 2710 CircleF
-3456 2943 CircleF
-3568 2964 CircleF
-3708 2994 CircleF
-3890 2925 CircleF
-4142 2847 CircleF
-4293 2485 CircleF
-4545 2383 CircleF
-5130 2149 CircleF
-5196 2824 CircleF
-5196 1467 CircleF
-5999 760 CircleF
-6236 1237 CircleF
-2.000 UP
-3.000 UL
-LT0
-LC0 setrgbcolor
-0.00 0.00 1.00 C 946 2740 CircleF
-1198 2740 CircleF
-1493 1609 CircleF
-1783 2740 CircleF
-1930 2061 CircleF
-2035 3248 CircleF
-2182 3079 CircleF
-2217 3048 CircleF
-2345 2956 CircleF
-2468 3202 CircleF
-2479 3039 CircleF
-2597 3281 CircleF
-2731 1991 CircleF
-2767 3214 CircleF
-2906 2832 CircleF
-3019 3181 CircleF
-3053 2647 CircleF
-3316 3009 CircleF
-3456 3248 CircleF
-3568 2964 CircleF
-3708 2943 CircleF
-3890 2986 CircleF
-4142 2863 CircleF
-4293 2556 CircleF
-4545 2383 CircleF
-5130 2689 CircleF
-5196 3164 CircleF
-5196 1976 CircleF
-5999 1169 CircleF
-6236 2352 CircleF
-1.000 UL
+LCb setrgbcolor
 LTb
 LCb setrgbcolor
-946 4775 N
+LCb setrgbcolor
+LTb
+LCb setrgbcolor
+% Begin plot #1
+3.000 UP
+3.000 UL
+LTb
+1.00 0.00 0.00 C LCb setrgbcolor
+3.000 UP
+3.000 UL
+LTb
+1.00 0.00 0.00 C 946 2762 Box
+1225 2762 Box
+1551 1618 Box
+1872 2762 Box
+2036 2076 Box
+2151 3276 Box
+2314 3104 Box
+2353 2762 Box
+2495 2980 Box
+2632 3229 Box
+2644 3064 Box
+2774 3090 Box
+2923 2762 Box
+2962 3242 Box
+3116 2902 Box
+3241 3242 Box
+3279 2699 Box
+3570 2777 Box
+3725 2967 Box
+3849 2988 Box
+4004 3070 Box
+4206 3011 Box
+4484 2902 Box
+4652 2587 Box
+4931 2453 Box
+5578 2257 Box
+5651 2847 Box
+5651 1561 Box
+6541 948 Box
+6803 1782 Box
+6243 4646 Box
+LTw
+% End plot #1
+% Begin plot #2
+3.000 UP
+3.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+1.00 0.00 0.00 C 946 2762 Box
+1225 2762 Box
+1551 1618 Box
+1872 2762 Box
+2036 2076 Box
+2151 3276 Box
+2314 3104 Box
+2353 3073 Box
+2495 2980 Box
+2632 3073 Box
+2644 3064 Box
+2774 3090 Box
+2923 2988 Box
+2962 3242 Box
+3116 2995 Box
+3241 3344 Box
+3279 2668 Box
+3570 3034 Box
+3725 2864 Box
+3849 2913 Box
+4004 2916 Box
+4206 2886 Box
+4484 2839 Box
+4652 2443 Box
+4931 2350 Box
+5578 1856 Box
+5651 1647 Box
+5651 1390 Box
+6541 826 Box
+6803 1488 Box
+LTw
+% End plot #2
+% Begin plot #3
+3.000 UP
+3.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+1.00 0.00 0.00 C 946 2762 Box
+1225 2762 Box
+1551 1618 Box
+1872 2762 Box
+2036 2076 Box
+2151 3276 Box
+2314 3104 Box
+2353 2762 Box
+2495 2762 Box
+2632 3073 Box
+2644 2913 Box
+2774 2980 Box
+2923 2762 Box
+2962 3104 Box
+3116 2808 Box
+3241 3139 Box
+3279 2543 Box
+3570 2807 Box
+3725 2967 Box
+3849 2988 Box
+4004 3070 Box
+4206 2949 Box
+4484 2886 Box
+4652 2556 Box
+4931 2401 Box
+5578 2216 Box
+5651 2762 Box
+5651 1561 Box
+6541 854 Box
+6803 1292 Box
+LTw
+% End plot #3
+% Begin plot #4
+3.000 UP
+3.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+1.00 0.00 0.00 C LCb setrgbcolor
+3.000 UP
+3.000 UL
+LTb
+1.00 0.00 0.00 C 946 2762 Circle
+1225 2762 Circle
+1551 1618 Circle
+1872 2762 Circle
+2036 2076 Circle
+2151 3276 Circle
+2314 3104 Circle
+2353 3073 Circle
+2495 2980 Circle
+2632 3229 Circle
+2644 3064 Circle
+2774 3199 Circle
+2923 2988 Circle
+2962 3310 Circle
+3116 2949 Circle
+3241 3310 Circle
+3279 2762 Circle
+3570 3019 Circle
+3725 3276 Circle
+3849 2988 Circle
+4004 2967 Circle
+4206 2917 Circle
+4484 2886 Circle
+4652 2535 Circle
+4931 2401 Circle
+5578 1908 Circle
+5651 2676 Circle
+5651 1304 Circle
+6541 760 Circle
+6803 1096 Circle
+6243 4426 Circle
+LTw
+% End plot #4
+% Begin plot #5
+3.000 UP
+3.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+1.00 0.00 0.00 C 946 2762 Circle
+1225 2762 Circle
+1551 1618 Circle
+1872 1733 Circle
+2036 2076 Circle
+2151 2762 Circle
+2314 3104 Circle
+2353 3073 Circle
+2495 2980 Circle
+2632 4788 Circle
+2644 3064 Circle
+2774 3199 Circle
+2923 2988 Circle
+2962 3242 Circle
+3116 2902 Circle
+3241 3242 Circle
+3279 2730 Circle
+3570 3019 Circle
+3725 3276 Circle
+3849 2988 Circle
+4004 2967 Circle
+4206 3011 Circle
+4484 2777 Circle
+4652 2566 Circle
+4931 2453 Circle
+5578 1969 Circle
+5651 2676 Circle
+5651 1390 Circle
+6541 789 Circle
+6803 1145 Circle
+LTw
+% End plot #5
+% Begin plot #6
+3.000 UP
+3.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+1.00 0.00 0.00 C 946 2762 Circle
+1225 2762 Circle
+1551 1618 Circle
+1872 1733 Circle
+2036 2076 Circle
+2151 2762 Circle
+2314 3104 Circle
+2353 3073 Circle
+2495 2980 Circle
+2632 3073 Circle
+2644 3064 Circle
+2774 3090 Circle
+2923 2837 Circle
+2962 3242 Circle
+3116 2902 Circle
+3241 3207 Circle
+3279 2637 Circle
+3570 2867 Circle
+3725 3070 Circle
+3849 3064 Circle
+4004 3019 Circle
+4206 3011 Circle
+4484 2917 Circle
+4652 2545 Circle
+4931 2401 Circle
+5578 2093 Circle
+5651 2762 Circle
+5651 1476 Circle
+6541 883 Circle
+6803 1194 Circle
+LTw
+% End plot #6
+% Begin plot #7
+2.000 UP
+3.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+0.00 1.00 0.00 C LCb setrgbcolor
+2.000 UP
+3.000 UL
+LTb
+0.00 1.00 0.00 C 946 2762 Box
+1225 2762 Box
+1551 1618 Box
+1872 1733 Box
+2036 2076 Box
+2151 2247 Box
+2314 2762 Box
+2353 2450 Box
+2495 2324 Box
+2632 2762 Box
+2644 2762 Box
+2774 2652 Box
+2923 2686 Box
+2962 2762 Box
+3116 2574 Box
+3241 2796 Box
+3279 2294 Box
+3570 2701 Box
+3725 2864 Box
+3849 2913 Box
+4004 2762 Box
+4206 2855 Box
+4484 2730 Box
+4652 2463 Box
+4931 2299 Box
+5578 2227 Box
+5651 2847 Box
+5651 1476 Box
+6541 873 Box
+6803 1292 Box
+6243 4206 Box
+LTw
+% End plot #7
+% Begin plot #8
+2.000 UP
+3.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+0.00 1.00 0.00 C 946 2762 Box
+1225 2762 Box
+1551 1618 Box
+1872 1733 Box
+2036 1390 Box
+2151 2247 Box
+2314 2762 Box
+2353 2450 Box
+2495 2543 Box
+2632 2606 Box
+2644 2459 Box
+2774 2652 Box
+2923 2610 Box
+2962 2830 Box
+3116 2481 Box
+3241 2762 Box
+3279 2263 Box
+3570 2640 Box
+3725 2762 Box
+3849 2837 Box
+4004 2967 Box
+4206 2824 Box
+4484 2762 Box
+4652 2463 Box
+4931 2350 Box
+5578 2288 Box
+5651 2933 Box
+5651 1561 Box
+6541 845 Box
+6803 1292 Box
+LTw
+% End plot #8
+% Begin plot #9
+2.000 UP
+3.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+0.00 1.00 0.00 C 946 2762 Box
+1225 2762 Box
+1551 1618 Box
+1872 1733 Box
+2036 1390 Box
+2151 2247 Box
+2314 2762 Box
+2353 2450 Box
+2495 2543 Box
+2632 2762 Box
+2644 2610 Box
+2774 2762 Box
+2923 2535 Box
+2962 2762 Box
+3116 2528 Box
+3241 2762 Box
+3279 2294 Box
+3570 2550 Box
+3725 2967 Box
+3849 2988 Box
+4004 2967 Box
+4206 2886 Box
+4484 2793 Box
+4652 2463 Box
+4931 2350 Box
+5578 2401 Box
+5651 3019 Box
+5651 1647 Box
+6541 958 Box
+6803 1929 Box
+LTw
+% End plot #9
+% Begin plot #10
+3.000 UP
+3.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+0.00 1.00 0.00 C LCb setrgbcolor
+3.000 UP
+3.000 UL
+LTb
+0.00 1.00 0.00 C 946 2762 Star
+1225 2762 Star
+1551 1618 Star
+1872 1733 Star
+2036 2076 Star
+2151 2762 Star
+2314 2762 Star
+2353 2762 Star
+2495 2762 Star
+2632 2917 Star
+2644 2610 Star
+2774 2871 Star
+2923 2762 Star
+2962 2899 Star
+3116 2621 Star
+3241 2933 Star
+3279 2450 Star
+3570 2777 Star
+3725 2967 Star
+3849 2988 Star
+4004 2916 Star
+4206 2917 Star
+4484 2746 Star
+4652 2453 Star
+4931 2350 Star
+5578 2165 Star
+5651 2847 Star
+5651 1561 Star
+6541 901 Star
+6803 1292 Star
+6243 3986 Star
+LTw
+% End plot #10
+% Begin plot #11
+3.000 UP
+3.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+0.00 1.00 0.00 C 946 2762 Star
+1225 2762 Star
+1551 1618 Star
+1872 2762 Star
+2036 2076 Star
+2151 2762 Star
+2314 2762 Star
+2353 2450 Star
+2495 2543 Star
+2632 2762 Star
+2644 2610 Star
+2774 2762 Star
+2923 2383 Star
+2962 2899 Star
+3116 2574 Star
+3241 2864 Star
+3279 2325 Star
+3570 2958 Star
+3725 2967 Star
+3849 2913 Star
+4004 2916 Star
+4206 2980 Star
+4484 2871 Star
+4652 2515 Star
+4931 2453 Star
+5578 2453 Star
+5651 3104 Star
+5651 1733 Star
+6541 1052 Star
+6803 1488 Star
+LTw
+% End plot #11
+% Begin plot #12
+3.000 UP
+3.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+0.00 1.00 0.00 C 946 2762 Star
+1225 2762 Star
+1551 1618 Star
+1872 2762 Star
+2036 2076 Star
+2151 2762 Star
+2314 2762 Star
+2353 2762 Star
+2495 2762 Star
+2632 2917 Star
+2644 2762 Star
+2774 2871 Star
+2923 2535 Star
+2962 2967 Star
+3116 2668 Star
+3241 2933 Star
+3279 2450 Star
+3570 2595 Star
+3725 2762 Star
+3849 2762 Star
+4004 2864 Star
+4206 2886 Star
+4484 2839 Star
+4652 2504 Star
+4931 2350 Star
+5578 2350 Star
+5651 3019 Star
+5651 1733 Star
+6541 948 Star
+6803 1880 Star
+LTw
+% End plot #12
+% Begin plot #13
+2.000 UP
+3.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+0.00 0.00 1.00 C LCb setrgbcolor
+2.000 UP
+3.000 UL
+LTb
+0.00 0.00 1.00 C 946 2762 CircleF
+1225 2762 CircleF
+1551 1618 CircleF
+1872 2762 CircleF
+2036 2076 CircleF
+2151 2762 CircleF
+2314 3104 CircleF
+2353 2762 CircleF
+2495 2980 CircleF
+2632 3073 CircleF
+2644 3064 CircleF
+2774 3090 CircleF
+2923 2535 CircleF
+2962 3173 CircleF
+3116 2902 CircleF
+3241 3139 CircleF
+3279 2637 CircleF
+3570 3109 CircleF
+3725 3173 CircleF
+3849 3064 CircleF
+4004 3019 CircleF
+4206 2980 CircleF
+4484 2855 CircleF
+4652 2566 CircleF
+4931 2350 CircleF
+5578 2278 CircleF
+5651 2847 CircleF
+5651 1733 CircleF
+6541 958 CircleF
+6803 1880 CircleF
+6243 3766 CircleF
+LTw
+% End plot #13
+% Begin plot #14
+2.000 UP
+3.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+0.00 0.00 1.00 C 946 2762 CircleF
+1225 2762 CircleF
+1551 3905 CircleF
+1872 2762 CircleF
+2036 2076 CircleF
+2151 3276 CircleF
+2314 3104 CircleF
+2353 2762 CircleF
+2495 2762 CircleF
+2632 3073 CircleF
+2644 2913 CircleF
+2774 2980 CircleF
+2923 2762 CircleF
+2962 3104 CircleF
+3116 2855 CircleF
+3241 3070 CircleF
+3279 2574 CircleF
+3570 2731 CircleF
+3725 2967 CircleF
+3849 2988 CircleF
+4004 3019 CircleF
+4206 2949 CircleF
+4484 2871 CircleF
+4652 2504 CircleF
+4931 2401 CircleF
+5578 2165 CircleF
+5651 2847 CircleF
+5651 1476 CircleF
+6541 760 CircleF
+6803 1243 CircleF
+LTw
+% End plot #14
+% Begin plot #15
+2.000 UP
+3.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+0.00 0.00 1.00 C 946 2762 CircleF
+1225 2762 CircleF
+1551 1618 CircleF
+1872 2762 CircleF
+2036 2076 CircleF
+2151 3276 CircleF
+2314 3104 CircleF
+2353 3073 CircleF
+2495 2980 CircleF
+2632 3229 CircleF
+2644 3064 CircleF
+2774 3309 CircleF
+2923 2005 CircleF
+2962 3242 CircleF
+3116 2855 CircleF
+3241 3207 CircleF
+3279 2668 CircleF
+3570 3034 CircleF
+3725 3276 CircleF
+3849 2988 CircleF
+4004 2967 CircleF
+4206 3011 CircleF
+4484 2886 CircleF
+4652 2576 CircleF
+4931 2401 CircleF
+5578 2710 CircleF
+5651 3190 CircleF
+5651 1990 CircleF
+6541 1174 CircleF
+6803 2370 CircleF
+LTw
+% End plot #15
+2.000 UL
+LTb
+LCb setrgbcolor
+[] 0 setdash
+1.000 UL
+LTb
+946 4819 N
 946 704 L
 5857 0 V
-0 4071 V
+0 4115 V
 -5857 0 V
 Z stroke
 3.000 UP

@@ -71,43 +71,51 @@
       \expandafter\def\csname LT8\endcsname{\color{black}}%
     \fi
   \fi
-  \setlength{\unitlength}{0.0500bp}%
-  \begin{picture}(7200.00,5040.00)%
+    \setlength{\unitlength}{0.0500bp}%
+    \ifx\gptboxheight\undefined%
+      \newlength{\gptboxheight}%
+      \newlength{\gptboxwidth}%
+      \newsavebox{\gptboxtext}%
+    \fi%
+    \setlength{\fboxrule}{0.5pt}%
+    \setlength{\fboxsep}{1pt}%
+\begin{picture}(7200.00,5040.00)%
     \gplgaddtomacro\gplbacktext{%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(946,704){\makebox(0,0)[r]{\strut{} 0}}%
-      \csname LTb\endcsname%
-      \put(946,1383){\makebox(0,0)[r]{\strut{} 20}}%
-      \csname LTb\endcsname%
-      \put(946,2061){\makebox(0,0)[r]{\strut{} 40}}%
-      \csname LTb\endcsname%
-      \put(946,2740){\makebox(0,0)[r]{\strut{} 60}}%
-      \csname LTb\endcsname%
-      \put(946,3418){\makebox(0,0)[r]{\strut{} 80}}%
-      \csname LTb\endcsname%
-      \put(946,4097){\makebox(0,0)[r]{\strut{} 100}}%
-      \csname LTb\endcsname%
-      \put(946,4775){\makebox(0,0)[r]{\strut{} 120}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
+      \put(946,1390){\makebox(0,0)[r]{\strut{} 20}}%
+      \csname LTb\endcsname%%
+      \put(946,2076){\makebox(0,0)[r]{\strut{} 40}}%
+      \csname LTb\endcsname%%
+      \put(946,2762){\makebox(0,0)[r]{\strut{} 60}}%
+      \csname LTb\endcsname%%
+      \put(946,3447){\makebox(0,0)[r]{\strut{} 80}}%
+      \csname LTb\endcsname%%
+      \put(946,4133){\makebox(0,0)[r]{\strut{} 100}}%
+      \csname LTb\endcsname%%
+      \put(946,4819){\makebox(0,0)[r]{\strut{} 120}}%
+      \csname LTb\endcsname%%
       \put(1078,484){\makebox(0,0){\strut{} 0}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(2223,484){\makebox(0,0){\strut{} 50}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(3368,484){\makebox(0,0){\strut{} 100}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(4513,484){\makebox(0,0){\strut{} 150}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(5658,484){\makebox(0,0){\strut{} 200}}%
-      \csname LTb\endcsname%
+      \csname LTb\endcsname%%
       \put(6803,484){\makebox(0,0){\strut{} 250}}%
-      \put(176,2739){\rotatebox{-270}{\makebox(0,0){\strut{}ADC value}}}%
-      \put(3940,154){\makebox(0,0){\strut{}ADC sample}}%
     }%
     \gplgaddtomacro\gplfronttext{%
-      \csname LTb\endcsname%
-      \put(5816,4602){\makebox(0,0)[r]{\strut{}18.2nF}}%
-      \csname LTb\endcsname%
-      \put(5816,4382){\makebox(0,0)[r]{\strut{}20.3nF}}%
+      \csname LTb\endcsname%%
+      \put(198,2761){\rotatebox{-270}{\makebox(0,0){\strut{}ADC value}}}%
+      \put(3940,154){\makebox(0,0){\strut{}ADC sample}}%
+      \csname LTb\endcsname%%
+      \put(5816,4646){\makebox(0,0)[r]{\strut{}18.2nF}}%
+      \csname LTb\endcsname%%
+      \put(5816,4426){\makebox(0,0)[r]{\strut{}20.3nF}}%
     }%
     \gplbacktext
     \put(0,0){\includegraphics{../GNU/W12compare}}%

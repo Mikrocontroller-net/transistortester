@@ -39,9 +39,6 @@ set isosamples 10, 10
 set surface
 unset contour
 set clabel '%8.3g'
-set mapping cartesian
-set datafile separator whitespace
-unset hidden3d
 set cntrparam order 4
 set cntrparam linear
 set cntrparam levels auto 5
@@ -69,20 +66,10 @@ set ylabel ""
 set ylabel  offset character 0, 0, 0 font "" textcolor lt -1 rotate by -270
 set yrange [ * : * ] noreverse nowriteback  # (currently [-8.00000:8.00000] )
 set zero 1e-08
-set lmargin  -1
-set bmargin  -1
-set rmargin  -1
-set tmargin  -1
-set locale "de_DE.UTF-8"
-set pm3d explicit at s
-set pm3d scansautomatic
-set pm3d interpolate 1,1 flush begin noftriangles nohidden3d corners2color mean
 set palette positive nops_allcF maxcolors 0 gamma 1.5 color model RGB 
 set palette rgbformulae 7, 5, 15
 set colorbox default
 set colorbox vertical origin screen 0.9, 0.2, 0 size screen 0.05, 0.6, 0 front bdefault
-set loadpath 
-set fontpath 
 set fit noerrorvariables
 GNUTERM = "wxt"
 set terminal epslatex color solid

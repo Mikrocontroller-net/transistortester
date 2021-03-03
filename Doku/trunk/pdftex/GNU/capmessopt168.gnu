@@ -29,20 +29,20 @@ set ylabel ""
 set ylabel  offset character 0, 0, 0 font "" textcolor lt -1 rotate by -270
 set yrange [ * : * ] noreverse nowriteback  # (currently [-8.00000:8.00000] )
 GNUTERM = "wxt"
-set terminal epslatex color solid
+set terminal pdf color 
 set grid
 set logscale x
 set style data linespoints
-set style line 1  linetype 1 linewidth 3.000 
-set style line 2  linetype 2 linewidth 3.000 
-set style line 3  linetype 3 linewidth 3.000 
+set style line 1  linetype 1 linewidth 2.000 pointsize 1
+set style line 2  linetype 2 linewidth 2.000 pointsize 1
+set style line 3  linetype 3 linewidth 2.000 pointsize 1
 set xlabel "Capacity value / F"
 set format x "%.0s%c"
 set format y "% g"
 set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set xtics autofreq  norangelimit
 set ylabel "Error / Percent"
-set output "../GNU/Mega168cap_opt.eps"
+set output "../GNU/Mega168cap_opt.pdf"
 plot "../GNU/capmess168-3.dat" u 3:($4-$3)/$3*100 title "168-3-A" ls 1,"../GNU/capmess168-3.dat" u 3:($5-$3)/$3*100 title "168-3-B" ls 2,"../GNU/capmess168-3.dat" u 3:($6-$3)/$3*100 title "168-3-C" ls 3
 set output
 #    EOF

@@ -13,15 +13,15 @@ set xlabel  offset character 0, 0, 0 font "" textcolor lt -1 norotate
 set xrange [ * : * ] noreverse nowriteback  # (currently [0.00000:8.00000] )
 set ylabel  offset character 0, 0, 0 font "" textcolor lt -1 rotate by -270
 GNUTERM = "wxt"
-set terminal epslatex color solid
+set terminal pdf color
 set grid
 set style data linespoints
-set style line 1  linetype 1 linecolor rgb "red" linewidth 3.000  pointtype 4
-set style line 2  linetype 1 linecolor rgb "green" linewidth 3.000 pointtype 4
-set style line 3  linetype 1 linecolor rgb "blue" linewidth 3.000  pointtype 4
-set style line 4  linetype 1 linecolor rgb "red" linewidth 3.000  pointtype 3
-set style line 5  linetype 1 linecolor rgb "green" linewidth 3.000 pointtype 3
-set style line 6  linetype 1 linecolor rgb "blue" linewidth 3.000  pointtype 3
+set style line 1  linetype 1 linecolor rgb "red" linewidth 2.000  pointtype 4 pointsize 1
+set style line 2  linetype 1 linecolor rgb "green" linewidth 2.000 pointtype 4 pointsize 1
+set style line 3  linetype 1 linecolor rgb "blue" linewidth 2.000  pointtype 4 pointsize 1
+set style line 4  linetype 1 linecolor rgb "red" linewidth 2.000  pointtype 3 pointsize 1
+set style line 5  linetype 1 linecolor rgb "green" linewidth 2.000 pointtype 3 pointsize 1
+set style line 6  linetype 1 linecolor rgb "blue" linewidth 2.000  pointtype 3 pointsize 1
 
 set xlabel "Resistor value / Ohm"
 #set format x "%.0s%c"
@@ -32,7 +32,7 @@ set yrange [ -0.20000 : 0.20000 ] noreverse nowriteback
 set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set xtics autofreq  norangelimit
 set ylabel "difference / Ohm"
-set output "../GNU/res_esr.eps"
+set output "../GNU/res_esr.pdf"
 plot "../GNU/rmess-esr.dat" u 1:($2-$1) title "m168" ls 1 with points,\
      "../GNU/rmess-esr.dat" u 1:($3-$1) notitle ls 1 with points,\
      "../GNU/rmess-esr.dat" u 1:($4-$1) notitle ls 1 with points,\

@@ -72,13 +72,13 @@ set colorbox default
 set colorbox vertical origin screen 0.9, 0.2, 0 size screen 0.05, 0.6, 0 front bdefault
 set fit noerrorvariables
 GNUTERM = "wxt"
-set terminal epslatex color solid
+set terminal pdf color 
 set grid
 set logscale x
 set style data linespoints
-set style line 1  linetype 1 linewidth 3.000 
-set style line 2  linetype 2 linewidth 3.000 
-set style line 3  linetype 3 linewidth 3.000 
+set style line 1  linetype 1 linewidth 2.000 pointsize 1
+set style line 2  linetype 2 linewidth 2.000 pointsize 1
+set style line 3  linetype 3 linewidth 2.000 pointsize 1
 set xlabel "Capacity value / F"
 set format x "%.0s%c"
 set format y "% g"
@@ -89,7 +89,7 @@ set ylabel "Error / Percent"
 set key inside right top vertical Right noreverse enhanced autotitles nobox
 # calibrated
 set key inside left top vertical Right noreverse enhanced autotitles nobox
-set output "../GNU/Mega1284.eps"
+set output "../GNU/Mega1284.pdf"
 plot "../GNU/capmess1284.dat" u 3:($4-$3)/$3*100 title "328-10" ls 1,"../GNU/capmess1284.dat" u 3:($5-$3)/$3*100 title "1284-int" ls 2,"../GNU/capmess1284.dat" u 3:($6-$3)/$3*100 title "1284-ext" ls 3
 #set output
 #    EOF

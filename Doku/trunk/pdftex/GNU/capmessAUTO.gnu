@@ -31,16 +31,16 @@ set ylabel ""
 set ylabel  offset character 0, 0, 0 font "" textcolor lt -1 rotate by -270
 set yrange [ * : * ] noreverse nowriteback  # (currently [-8.00000:8.00000] )
 GNUTERM = "wxt"
-set terminal epslatex color solid
+set terminal pdf color 
 set grid
 set logscale x
 set style data linespoints
-set style line 1  linetype 1 linecolor rgb "red" linewidth 3.000  pointtype 4
-set style line 2  linetype 1 linecolor rgb "green" linewidth 3.000 pointtype 2
-set style line 3  linetype 1 linecolor rgb "blue" linewidth 3.000  pointtype 3
-set style line 4  linetype 1 linecolor rgb "red" linewidth 3.000  pointtype 4
-set style line 5  linetype 1 linecolor rgb "green" linewidth 3.000 pointtype 2
-set style line 6  linetype 1 linecolor rgb "blue" linewidth 3.000  pointtype 3
+set style line 1  linetype 1 linecolor rgb "red" linewidth 2.000  pointtype 4 pointsize 1
+set style line 2  linetype 1 linecolor rgb "green" linewidth 2.000 pointtype 2 pointsize 1
+set style line 3  linetype 1 linecolor rgb "blue" linewidth 2.000  pointtype 3 pointsize 1
+set style line 4  linetype 1 linecolor rgb "red" linewidth 2.000  pointtype 4 pointsize 1
+set style line 5  linetype 1 linecolor rgb "green" linewidth 2.000 pointtype 2 pointsize 1
+set style line 6  linetype 1 linecolor rgb "blue" linewidth 2.000  pointtype 3 pointsize 1
 set xlabel "Capacity value / F"
 set format x "%.0s%c"
 set format y "% g"
@@ -49,7 +49,7 @@ set xtics autofreq  norangelimit
 set ylabel "Error / Percent"
 #set yrange [-2 to 10]
 set key outside right top vertical Right noreverse enhanced autotitles nobox
-set output "../GNU/MegaAuto.eps"
+set output "../GNU/MegaAuto.pdf"
 plot "../GNU/capmessAUTO.dat" u 3:($4-$3)/$3*100 title "168-3unc" ls 1 with points,   "../GNU/capmessAUTO.dat" u 3:($5-$3)/$3*100 title "168-3cal" ls 4 with lines,\
      "../GNU/capmessAUTO.dat" u 3:($6-$3)/$3*100 title "168PA-7unc" ls 2 with points, "../GNU/capmessAUTO.dat" u 3:($7-$3)/$3*100 title "168PA-7cal" ls 5 with lines,\
      "../GNU/capmessAUTO.dat" u 3:($8-$3)/$3*100 title "328P-14unc" ls 3 with points, "../GNU/capmessAUTO.dat" u 3:($9-$3)/$3*100 title "328P-14cal" ls 6 with lines

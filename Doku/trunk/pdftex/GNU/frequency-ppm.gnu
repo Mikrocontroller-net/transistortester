@@ -28,11 +28,13 @@ set ylabel  offset character 0, 0, 0 font "" textcolor lt -1 rotate by -270
 set yrange [ * : * ] noreverse nowriteback
 set psdir
 # GNUTERM = "wxt"
-set terminal epslatex color solid
-set output "../GNU/frequency-ppm.eps"
-set style line 1  linetype 1 linewidth 3.000 pointtype 4
-set style line 2  linetype 2 linewidth 3.000 pointtype 2
-set xlabel "frequency / Hz"
+set format x "%.0s%c"
+set yrange [-30 : 30]
+set terminal pdf color 
+set output "../GNU/frequency-ppm.pdf"
+set style line 1  linetype 1 linewidth 2.000 pointtype 4 pointsize 1
+set style line 2  linetype 2 linewidth 2.000 pointtype 2 pointsize 1
+set xlabel "Frequency / Hz"
 set ylabel "Error / ppm"
 plot "../GNU/frequency-ppm.dat" u 1:($2-$1)/$1*1000000 title '2 Gen' ls 1, "../GNU/frequency-ppm.dat" u 1:($3-$1)/$1*1000000 title '1 Gen' ls 2
 set output

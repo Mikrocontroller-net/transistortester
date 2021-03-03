@@ -24,10 +24,10 @@ GNUTERM = "wxt"
 set grid
 set xtics 1
 set ytics 5
-set terminal epslatex color solid
-set output "../GNU/RLvlow.eps"
-set style line 1  linetype 1 linewidth 3.000 
-set style line 2  linetype 2 linewidth 3.000 
+set terminal pdf color 
+set output "../GNU/RLvlow.pdf"
+set style line 1  linetype 1 linewidth 2.000  pointsize 1
+set style line 2  linetype 2 linewidth 2.000  pointsize 1
 set xrange [ 0 : 10 ] noreverse nowriteback
 set xlabel "resistor Rx / Ohm" 
 set yrange [130: 200 ] noreverse nowriteback 
@@ -35,5 +35,4 @@ set ylabel "voltage / mV"
 #plot (5000*699/(721+x)) ,(5000*(x+19)/(721+x))
 plot (5000*(x+19)/(721+x)) title 'PC2, type 1' ls 1
 set output
-#    EOF
 #    EOF

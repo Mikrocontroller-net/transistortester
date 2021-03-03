@@ -45,13 +45,13 @@ set ylabel ""
 set ylabel  offset character 0, 0, 0 font "" textcolor lt -1 rotate by -270
 set yrange [ * : * ] noreverse nowriteback  # (currently [-8.00000:8.00000] )
 GNUTERM = "wxt"
-set terminal epslatex color solid
+set terminal pdf color 
 set grid
 set logscale x
 set style data linespoints
-set style line 1  linetype 1 linewidth 3.000 
-set style line 2  linetype 2 linewidth 3.000 
-set style line 3  linetype 3 linewidth 3.000 
+set style line 1  linetype 1 linewidth 2.000 pointsize 1
+set style line 2  linetype 2 linewidth 2.000 pointsize 1
+set style line 3  linetype 3 linewidth 2.000 pointsize 1
 set xlabel "Capacity value / F"
 set format x "%.0s%c"
 set format y "% g"
@@ -60,20 +60,20 @@ set xtics autofreq  norangelimit
 set ylabel "Error / Percent"
 #set yrange [-2 to 10]
 set key inside right top vertical Right noreverse enhanced autotitles nobox
-set output "../GNU/Mega328all.eps"
+set output "../GNU/Mega328all.pdf"
 plot "../GNU/capmess328-all.dat" u 3:($4-$3)/$3*100 title "328-10" ls 1,"../GNU/capmess328-all.dat" u 3:($5-$3)/$3*100 title "328-11" ls 2,"../GNU/capmess328-all.dat" u 3:($6-$3)/$3*100 title "168-12" ls 3
 set output
 set key inside at 1.e-6,5 vertical Right nobox
-set output "../GNU/Mega328Pall.eps"
+set output "../GNU/Mega328Pall.pdf"
 plot "../GNU/capmess328-all.dat" u 3:($7-$3)/$3*100 title "328P-13" ls 1,"../GNU/capmess328-all.dat" u 3:($8-$3)/$3*100 title "328P-14" ls 2,"../GNU/capmess328-all.dat" u 3:($9-$3)/$3*100 title "328P-15" ls 3
 #set output
 # calibrated
 set key inside left top vertical Right noreverse enhanced autotitles nobox
-set output "../GNU/Mega328cal.eps"
+set output "../GNU/Mega328cal.pdf"
 plot "../GNU/capmess328-autocal.dat" u 3:($4-$3)/$3*100 title "328-10" ls 1,"../GNU/capmess328-autocal.dat" u 3:($5-$3)/$3*100 title "328-11" ls 2,"../GNU/capmess328-autocal.dat" u 3:($6-$3)/$3*100 title "328-12" ls 3
 set output
 set key inside left top vertical Right noreverse enhanced autotitles nobox
-set output "../GNU/Mega328Pcal.eps"
+set output "../GNU/Mega328Pcal.pdf"
 plot "../GNU/capmess328-autocal.dat" u 3:($7-$3)/$3*100 title "328P-13" ls 1,"../GNU/capmess328-autocal.dat" u 3:($8-$3)/$3*100 title "328P-14" ls 2,"../GNU/capmess328-autocal.dat" u 3:($9-$3)/$3*100 title "328P-15" ls 3
 #set output
 #    EOF

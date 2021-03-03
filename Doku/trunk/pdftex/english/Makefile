@@ -1,11 +1,11 @@
-LISTE1 = ../GNU/RLvtot.eps ../GNU/RLvlow.eps ../GNU/RLvhigh.eps ../GNU/RHv.eps ../GNU/Mega8res.eps
-LISTE1 += ../GNU/Mega8cap.eps ../GNU/Mega168cap.eps ../GNU/Mega168cap_opt.eps ../GNU/Mega168all.eps 
-LISTE1 += ../GNU/ComparatorAdjust.pdf ../GNU/Mega328all.eps ../GNU/Mega1284.eps ../GNU/SelfTref.eps ../GNU/MegaAuto.eps
-LISTE1 += ../GNU/m168res_all.eps ../GNU/induct328p.eps ../GNU/Cesr.pdf ../GNU/Cesr2.pdf ../GNU/res_esr.eps
+LISTE1 = ../GNU/RLvtot.pdf ../GNU/RLvlow.pdf ../GNU/RLvhigh.pdf ../GNU/RHv.pdf ../GNU/Mega8res.pdf
+LISTE1 += ../GNU/Mega8cap.pdf ../GNU/Mega168cap.pdf ../GNU/Mega168cap_opt.pdf ../GNU/Mega168all.pdf 
+LISTE1 += ../GNU/ComparatorAdjust.pdf ../GNU/Mega328all.pdf ../GNU/Mega1284.pdf ../GNU/SelfTref.pdf ../GNU/MegaAuto.pdf
+LISTE1 += ../GNU/m168res_all.pdf ../GNU/induct328p.pdf ../GNU/Cesr.pdf ../GNU/Cesr2.pdf ../GNU/res_esr.pdf
 LISTE1 += ../GNU/Cesr_22n.pdf ../GNU/Cesr_22n_low.pdf
-LISTE1 += ../GNU/Elco_esr.eps ../GNU/frequency-ppm.eps
+LISTE1 += ../GNU/Elco_esr.pdf ../GNU/frequency-ppm.pdf
 LISTE1 += ../GNU/Cap_FC_data.pdf ../GNU/Cap_FR_data.pdf ../GNU/Cap_FC_FR_data.pdf
-LISTE1 += ../GNU/W12compare.eps
+LISTE1 += ../GNU/W12compare.pdf
 LISTE1 += ../FIG/port.pdf ../FIG/ResistormessH1.pdf ../FIG/ResistormessH2.pdf ../FIG/ResistormessL1.pdf
 LISTE1 += ../FIG/ResistormessL2.pdf ../FIG/terminal.pdf
 LISTE1 += ../FIG/Comparat.pdf ../FIG/Test2.pdf ../FIG/Test7.pdf ../FIG/Test8.pdf ../FIG/Bigcap.pdf ../FIG/Cap_residV.pdf
@@ -25,37 +25,37 @@ LISTE2 += ../FIG/GPS_UP501.pdf ../FIG/GPS_GNS701.pdf
 
 all: ttester.pdf ttinfo.pdf
 	
-../GNU/RLvtot.eps: ../GNU/RLvtot.gnu
+../GNU/RLvtot.pdf: ../GNU/RLvtot.gnu
 	gnuplot $<
-../GNU/RLvlow.eps: ../GNU/RLvlow.gnu
+../GNU/RLvlow.pdf: ../GNU/RLvlow.gnu
 	gnuplot $<
-../GNU/RLvhigh.eps: ../GNU/RLvhigh.gnu
+../GNU/RLvhigh.pdf: ../GNU/RLvhigh.gnu
 	gnuplot $<
-../GNU/RHv.eps: ../GNU/RHv.gnu
+../GNU/RHv.pdf: ../GNU/RHv.gnu
 	gnuplot $<
-../GNU/Mega8res.eps: ../GNU/rmess.gnu ../GNU/rmess.dat
+../GNU/Mega8res.pdf: ../GNU/rmess.gnu ../GNU/rmess.dat
 	gnuplot ../GNU/rmess.gnu
-../GNU/Mega8cap.eps: ../GNU/capmess8.gnu ../GNU/capmess8.dat ../GNU/capmessorig.dat
+../GNU/Mega8cap.pdf: ../GNU/capmess8.gnu ../GNU/capmess8.dat ../GNU/capmessorig.dat
 	gnuplot ../GNU/capmess8.gnu
-../GNU/Mega168cap.eps: ../GNU/capmess168.gnu ../GNU/capmess168.dat
+../GNU/Mega168cap.pdf: ../GNU/capmess168.gnu ../GNU/capmess168.dat
 	gnuplot ../GNU/capmess168.gnu
-../GNU/Mega168cap_opt.eps: ../GNU/capmessopt168.gnu ../GNU/capmess168-3.dat
+../GNU/Mega168cap_opt.pdf: ../GNU/capmessopt168.gnu ../GNU/capmess168-3.dat
 	gnuplot ../GNU/capmessopt168.gnu
-../GNU/Mega168all.eps: ../GNU/capmess168all.gnu ../GNU/capmess168-all.dat ../GNU/capmess168-autocal.dat
+../GNU/Mega168all.pdf: ../GNU/capmess168all.gnu ../GNU/capmess168-all.dat ../GNU/capmess168-autocal.dat
 	gnuplot ../GNU/capmess168all.gnu
-../GNU/Mega328all.eps: ../GNU/capmess328all.gnu ../GNU/capmess328-all.dat ../GNU/capmess328-autocal.dat
+../GNU/Mega328all.pdf: ../GNU/capmess328all.gnu ../GNU/capmess328-all.dat ../GNU/capmess328-autocal.dat
 	gnuplot ../GNU/capmess328all.gnu
-../GNU/Mega1284.eps: ../GNU/capmess1284.gnu ../GNU/capmess1284.dat
+../GNU/Mega1284.pdf: ../GNU/capmess1284.gnu ../GNU/capmess1284.dat
 	gnuplot ../GNU/capmess1284.gnu
 ../GNU/ComparatorAdjust.pdf: ../GNU/comparator_diff.gnu ../GNU/comparator_cap.dat
 	gnuplot ../GNU/comparator_diff.gnu
-../GNU/SelfTref.eps: ../GNU/selftest.gnu ../GNU/selftest.dat
+../GNU/SelfTref.pdf: ../GNU/selftest.gnu ../GNU/selftest.dat
 	gnuplot ../GNU/selftest.gnu
-../GNU/MegaAuto.eps: ../GNU/capmessAUTO.gnu ../GNU/capmessAUTO.dat
+../GNU/MegaAuto.pdf: ../GNU/capmessAUTO.gnu ../GNU/capmessAUTO.dat
 	gnuplot ../GNU/capmessAUTO.gnu
-../GNU/m168res_all.eps: ../GNU/rmess_all.gnu ../GNU/rmess-all.dat ../GNU/rmess-autocal.dat
+../GNU/m168res_all.pdf: ../GNU/rmess_all.gnu ../GNU/rmess-all.dat ../GNU/rmess-autocal.dat
 	gnuplot ../GNU/rmess_all.gnu
-../GNU/induct328p.eps: ../GNU/inductors.gnu ../GNU/inductors.dat
+../GNU/induct328p.pdf: ../GNU/inductors.gnu ../GNU/inductors.dat
 	gnuplot ../GNU/inductors.gnu
 ../GNU/Cesr.pdf: ../GNU/Cesr.gnu ../GNU/Cesr_all.dat
 	gnuplot ../GNU/Cesr.gnu
@@ -65,11 +65,11 @@ all: ttester.pdf ttinfo.pdf
 	gnuplot ../GNU/Cesr_22n.gnu
 ../GNU/Cesr_22n_low.pdf: ../GNU/Cesr_22n_low.gnu ../GNU/Cesr_22n_low.dat
 	gnuplot ../GNU/Cesr_22n_low.gnu
-../GNU/res_esr.eps: ../GNU/rmess_esr.gnu ../GNU/rmess-esr.dat
+../GNU/res_esr.pdf: ../GNU/rmess_esr.gnu ../GNU/rmess-esr.dat
 	gnuplot ../GNU/rmess_esr.gnu
-../GNU/Elco_esr.eps: ../GNU/Elco_esr.gnu ../GNU/Elco_esr.dat
+../GNU/Elco_esr.pdf: ../GNU/Elco_esr.gnu ../GNU/Elco_esr.dat
 	gnuplot ../GNU/Elco_esr.gnu
-../GNU/frequency-ppm.eps: ../GNU/frequency-ppm.gnu ../GNU/frequency-ppm.dat
+../GNU/frequency-ppm.pdf: ../GNU/frequency-ppm.gnu ../GNU/frequency-ppm.dat
 	gnuplot ../GNU/frequency-ppm.gnu
 ../GNU/Cap_FC_data.pdf: ../GNU/Cap_FC_data.gnu ../GNU/Cap6_FC_ESR.dat ../GNU/Cap16_FC_ESR.dat ../GNU/Cap35_FC_ESR.dat ../GNU/Cap63_FC_ESR.dat
 	gnuplot ../GNU/Cap_FC_data.gnu
@@ -77,7 +77,7 @@ all: ttester.pdf ttinfo.pdf
 	gnuplot ../GNU/Cap_FR_data.gnu
 ../GNU/Cap_FC_FR_data.pdf: ../GNU/Cap_FC_FR_data.gnu ../GNU/Cap25_FC_ESR.dat ../GNU/Cap25_FR_ESR.dat
 	gnuplot ../GNU/Cap_FC_FR_data.gnu
-../GNU/W12compare.eps: ../GNU/W12compare.gnu ../GNU/W12_18nF.dat ../GNU/W12_20nF.dat
+../GNU/W12compare.pdf: ../GNU/W12compare.gnu ../GNU/W12_18nF.dat ../GNU/W12_20nF.dat
 	gnuplot ../GNU/W12compare.gnu
 
 ../FIG/port.pdf: ../FIG/port.fig

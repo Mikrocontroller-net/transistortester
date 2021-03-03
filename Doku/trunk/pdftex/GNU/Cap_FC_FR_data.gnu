@@ -48,20 +48,16 @@ set style function lines
 set xzeroaxis linetype -2 linewidth 1.000
 set yzeroaxis linetype -2 linewidth 1.000
 set ticslevel 0.5
-set mxtics default
-set mytics default
 set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0 autojustify
 set xtics autofreq  norangelimit
 set ytics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0 autojustify
 set ytics autofreq  norangelimit
 set title "" 
 set title  offset character 0, 0, 0 font "" norotate
-set timestamp bottom 
-set timestamp "" 
-set timestamp  offset character 0, 0, 0 font "" norotate
+set format x "%.0s%c"
 set xlabel "Capacity / uF" 
 set xlabel  offset character 0, 0, 0 font "" textcolor lt -1 norotate
-set xrange [ 10 : 10000 ] noreverse nowriteback
+set xrange [ 0.00001 : 0.01 ] noreverse nowriteback
 set ylabel "ESR / Ohm" 
 set ylabel  offset character 0, 0, 0 font "" textcolor lt -1 rotate by -270
 set yrange [ * : * ] noreverse nowriteback
@@ -83,6 +79,6 @@ set style line 3  linetype 1 linecolor rgb "blue" linewidth 2.000  pointtype 2 p
 set style line 4  linetype 1 linecolor rgb "red" linewidth 2.000  pointtype 6 pointsize 1
 set terminal pdf color 
 set output "../GNU/Cap_FC_FR_data.pdf"
-plot "../GNU/Cap25_FC_ESR.dat" title "FC 25V" ls 1,\
-"../GNU/Cap25_FR_ESR.dat" title "FR 25V" ls 2
+plot "../GNU/Cap25_FC_ESR.dat" using ($1*0.000001):2 title "FC 25V" ls 1,\
+"../GNU/Cap25_FR_ESR.dat" using ($1*0.000001):2 title "FR 25V" ls 2
 #    EOF

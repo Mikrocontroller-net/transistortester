@@ -51,13 +51,13 @@ set palette rgbformulae 7, 5, 15
 set colorbox default
 set colorbox vertical origin screen 0.9, 0.2, 0 size screen 0.05, 0.6, 0 front bdefault
 GNUTERM = "wxt"
-set terminal epslatex color solid
+set terminal pdf color
 set grid
 set logscale x
 set style data linespoints
-set style line 1  linetype 1 linewidth 3.000 
-set style line 2  linetype 2 linewidth 3.000 
-set style line 3  linetype 3 linewidth 3.000 
+set style line 1  linetype 1 linewidth 2.000 pointsize 1
+set style line 2  linetype 2 linewidth 2.000 pointsize 1
+set style line 3  linetype 3 linewidth 2.000 pointsize 1
 set xlabel "Capacity value / F"
 set format x "%.0s%c"
 set format y "% g"
@@ -65,11 +65,11 @@ set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set xtics autofreq  norangelimit
 set ylabel "Error / Percent"
 set yrange [-2 to 10]
-set output "../GNU/Mega168cap.eps"
+set output "../GNU/Mega168cap.pdf"
 #plot "../GNU/capmess168.dat" u 3:($4-$3)/$3*100 title "Mega168" ls 1,"../GNU/capmess168.dat" u 3:(($5-$3)-12e-12+(4000e-24/($5+259e-12)))/$3*100 title "Mega168as8" ls 2
 plot "../GNU/capmess168.dat" u 3:($4-$3)/$3*100 title "Mega168" ls 1,"../GNU/capmess168.dat" u 3:($5-$3)/$3*100 title "Mega168as8" ls 2
 set output
-set output "../GNU/capcompare.eps"
+set output "../GNU/capcompare.pdf"
 set autoscale y
 #plot "../GNU/capmess168.dat" u 1:($2-$1)/$1*100 title "Multimeter" ls 1,"../GNU/capmess168.dat" u 1:($3-$1)/$1*100 title "LCR" ls 2,"../GNU/capmess168.dat" u 1:($5-$1)/$1*100 title "Mega168as" ls 3
 plot "../GNU/capmess168.dat" u 1:($2-$6)/$6*100 title "Multimeter" ls 1,"../GNU/capmess168.dat" u 1:($3-$6)/$6*100 title "LCR" ls 2,"../GNU/capmess168.dat" u 1:($5-$6)/$6*100 title "Mega168as" ls 3

@@ -115,11 +115,10 @@ Cyr_k,'o',Cyr_g,Cyr_d,'a',LCD_CHAR_INSEP,'c','o','o',Cyr_b,Cyr_schtsch,'e',Cyr_n
 Cyr_P,'p','o',Cyr_g,'p','a',Cyr_m,Cyr_m,'y',LCD_CHAR_INSEP,Cyr_i,' ',
 
 Cyr_d,'o',Cyr_k,'y',Cyr_m,'e',Cyr_n,Cyr_t,'a',Cyr_c,Cyr_i,Cyr_ju,' ',
-'c',Cyr_m,'.',LCD_CHAR_INSEP,Cyr_n,'a',' ','h','t','t','p',':','/','/',' ',
-
-'m','i','k','r','o','c','o','n','t','r','o','l','l','e','r','.',' ',
-'n','e','t','/','t','r','a','n','s','i','s','t','o','r',' ',
-
+'c',Cyr_m,'.',LCD_CHAR_INSEP,Cyr_n,'a',' ',
+'g','i','t','h','u','b','.','c','o','m','/',LCD_NO_SPACE,
+'m','i','k','r','o','c','o','n','t','r','o','l','l','e','r',LCD_NO_SPACE,
+'-','n','e','t','/','t','r','a','n','s','i','s','t','o','r',LCD_NO_SPACE,
 't','e','s','t','e','r',' '
   #endif  /* SHORT_UNCAL_MSG */
 ,0};

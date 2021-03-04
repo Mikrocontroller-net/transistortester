@@ -563,6 +563,7 @@
 
 #define LCD_CHAR_DEGREE 0xdf            // Character for degree
 #define LCD_CHAR_INSEP 0xff		// used as space character without separating text
+#define LCD_NO_SPACE 0xfe               // used to separate text without space
 #define LCD_CHAR_LINE1 '-'		// usually the minus sign is used for line symbol
 #define LCD_CHAR_INDUCTOR1 'w'		// use ww for inductor symbol
 #define LCD_CHAR_INDUCTOR2 'w'		// use ww for inductor symbol

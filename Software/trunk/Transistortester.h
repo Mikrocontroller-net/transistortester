@@ -286,6 +286,7 @@ End of configuration
 // Complete words are output to the LCD rows.
 // Words are separated by ' '. If you don't allow to separate two words
 // to different rows, you can hide the ' ' with LCD_CHAR_INSEP.
+// You can separate the text line also with LCD_NO_SPACE.
 // Notice, that the LCD has only 16 character in each line!
  #ifndef HelpTXT
  //default language english
@@ -334,11 +335,11 @@ End of configuration
 'S','o','f','t','w','a','r','e',' ','a','n','d',' ',
 
 'd','o','c','u','m','e','n','t','a','t','i','o','n',' ',
-'i','s',' ','a','t',' ','s','v','n',':','/','/',' ',
+'i','s',' ','a','t',' ','g','i','t','h','u','b','.','c','o','m','/',LCD_NO_SPACE,
 
-'m','i','k','r','o','c','o','n','t','r','o','l','l','e','r','.',' ',
+'m','i','k','r','o','c','o','n','t','r','o','l','l','e','r',LCD_NO_SPACE,
 
-'n','e','t','/','t','r','a','n','s','i','s','t','o','r',' ',
+'-','n','e','t','/','t','r','a','n','s','i','s','t','o','r',LCD_NO_SPACE,
 't','e','s','t','e','r',' '
   #endif  /* SHORT_UNCAL_MSG */
 ,0};

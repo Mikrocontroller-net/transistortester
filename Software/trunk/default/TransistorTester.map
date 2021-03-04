@@ -472,9 +472,9 @@ Discarded input sections
  .data          0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr5/libatmega168.a(eewr_word.o)
  .bss           0x0000000000000000        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr5/libatmega168.a(eewr_word.o)
 
-Memory Configuration
+Speicherkonfiguration
 
-Name             Origin             Length             Attributes
+Name             Ursprung           Länge             Attribute
 text             0x0000000000000000 0x0000000000020000 xr
 data             0x0000000000800060 0x000000000000ffa0 rw !x
 eeprom           0x0000000000810000 0x0000000000010000 rw !x
@@ -486,7 +486,7 @@ user_signatures  0x0000000000850000 0x0000000000000400 rw !x
 
 Linker script and memory map
 
-Address of section .data set to 0x800100
+Adresse des Abschnitts .data gesetzt auf 0x800100
 LOAD /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr5/crtatmega168.o
 LOAD ../Obj/TransistorTester/lcd_hw_4_bit.o
 LOAD ../Obj/TransistorTester/lcd-routines.o
@@ -627,7 +627,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x0000000000000000     0x3f00
+.text           0x0000000000000000     0x3efc
  *(.vectors)
  .vectors       0x0000000000000000       0x68 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr5/crtatmega168.o
                 0x0000000000000000                __vectors
@@ -853,166 +853,166 @@ END GROUP
                 0x0000000000000a56       0x16 ../Obj/TransistorTester/lcd-routines.o
                 0x0000000000000a56                lcd_string
  .text.lcd_pgm_string
-                0x0000000000000a6c       0x1c ../Obj/TransistorTester/lcd-routines.o
+                0x0000000000000a6c       0x1a ../Obj/TransistorTester/lcd-routines.o
                 0x0000000000000a6c                lcd_pgm_string
  .text.lcd_fix_string
-                0x0000000000000a88       0x1e ../Obj/TransistorTester/lcd-routines.o
-                0x0000000000000a88                lcd_fix_string
+                0x0000000000000a86       0x1c ../Obj/TransistorTester/lcd-routines.o
+                0x0000000000000a86                lcd_fix_string
  .text.lcd_fix_customchar
-                0x0000000000000aa6       0x2a ../Obj/TransistorTester/lcd-routines.o
-                0x0000000000000aa6                lcd_fix_customchar
+                0x0000000000000aa2       0x2a ../Obj/TransistorTester/lcd-routines.o
+                0x0000000000000aa2                lcd_fix_customchar
  .text.lcd_init
-                0x0000000000000ad0       0x60 ../Obj/TransistorTester/lcd-routines.o
-                0x0000000000000ad0                lcd_init
+                0x0000000000000acc       0x60 ../Obj/TransistorTester/lcd-routines.o
+                0x0000000000000acc                lcd_init
  .text.lcd_clear_line
-                0x0000000000000b30        0xc ../Obj/TransistorTester/lcd-routines.o
-                0x0000000000000b30                lcd_clear_line
+                0x0000000000000b2c        0xc ../Obj/TransistorTester/lcd-routines.o
+                0x0000000000000b2c                lcd_clear_line
  .text.lcd_next_line
-                0x0000000000000b3c       0x30 ../Obj/TransistorTester/lcd-routines.o
-                0x0000000000000b3c                lcd_next_line
+                0x0000000000000b38       0x30 ../Obj/TransistorTester/lcd-routines.o
+                0x0000000000000b38                lcd_next_line
  .text.lcd_next_line_wait
-                0x0000000000000b6c        0x6 ../Obj/TransistorTester/lcd-routines.o
-                0x0000000000000b6c                lcd_next_line_wait
+                0x0000000000000b68        0x6 ../Obj/TransistorTester/lcd-routines.o
+                0x0000000000000b68                lcd_next_line_wait
  .text.lcd_clear_line2
-                0x0000000000000b72        0x8 ../Obj/TransistorTester/lcd-routines.o
-                0x0000000000000b72                lcd_clear_line2
+                0x0000000000000b6e        0x8 ../Obj/TransistorTester/lcd-routines.o
+                0x0000000000000b6e                lcd_clear_line2
  .text.lcd_show_Cg
-                0x0000000000000b7a       0x30 ../Obj/TransistorTester/lcd-routines.o
-                0x0000000000000b7a                lcd_show_Cg
+                0x0000000000000b76       0x30 ../Obj/TransistorTester/lcd-routines.o
+                0x0000000000000b76                lcd_show_Cg
  .text.lcd_show_rds
-                0x0000000000000baa       0x28 ../Obj/TransistorTester/lcd-routines.o
-                0x0000000000000baa                lcd_show_rds
+                0x0000000000000ba6       0x28 ../Obj/TransistorTester/lcd-routines.o
+                0x0000000000000ba6                lcd_show_rds
  .text.DisplayValue
-                0x0000000000000bd2      0x164 ../Obj/TransistorTester/DisplayValue.o
-                0x0000000000000bd2                DisplayValue
+                0x0000000000000bce      0x164 ../Obj/TransistorTester/DisplayValue.o
+                0x0000000000000bce                DisplayValue
  .text.DisplayValue16
-                0x0000000000000d36       0x16 ../Obj/TransistorTester/DisplayValue.o
-                0x0000000000000d36                DisplayValue16
+                0x0000000000000d32       0x16 ../Obj/TransistorTester/DisplayValue.o
+                0x0000000000000d32                DisplayValue16
  .text.Display_mV
-                0x0000000000000d4c       0x14 ../Obj/TransistorTester/DisplayValue.o
-                0x0000000000000d4c                Display_mV
+                0x0000000000000d48       0x14 ../Obj/TransistorTester/DisplayValue.o
+                0x0000000000000d48                Display_mV
  .text.search_vak_diode
-                0x0000000000000d60       0x48 ../Obj/TransistorTester/main.o
-                0x0000000000000d60                search_vak_diode
+                0x0000000000000d5c       0x48 ../Obj/TransistorTester/main.o
+                0x0000000000000d5c                search_vak_diode
  .text.init_parts
-                0x0000000000000da8       0x46 ../Obj/TransistorTester/main.o
-                0x0000000000000da8                init_parts
+                0x0000000000000da4       0x46 ../Obj/TransistorTester/main.o
+                0x0000000000000da4                init_parts
  .text.switch_tester_off
-                0x0000000000000dee        0xc ../Obj/TransistorTester/main.o
-                0x0000000000000dee                switch_tester_off
+                0x0000000000000dea        0xc ../Obj/TransistorTester/main.o
+                0x0000000000000dea                switch_tester_off
  .text.ShortedProbes
-                0x0000000000000dfa       0x7a ../Obj/TransistorTester/main.o
-                0x0000000000000dfa                ShortedProbes
+                0x0000000000000df6       0x7a ../Obj/TransistorTester/main.o
+                0x0000000000000df6                ShortedProbes
  .text.AllProbesShorted
-                0x0000000000000e74       0x1e ../Obj/TransistorTester/main.o
-                0x0000000000000e74                AllProbesShorted
+                0x0000000000000e70       0x1e ../Obj/TransistorTester/main.o
+                0x0000000000000e70                AllProbesShorted
  .text.AutoCheck
-                0x0000000000000e92      0x45c ../Obj/TransistorTester/main.o
-                0x0000000000000e92                AutoCheck
+                0x0000000000000e8e      0x45c ../Obj/TransistorTester/main.o
+                0x0000000000000e8e                AutoCheck
  .text.mark_as_uncalibrated
-                0x00000000000012ee       0x24 ../Obj/TransistorTester/main.o
-                0x00000000000012ee                mark_as_uncalibrated
- .text.GetIr    0x0000000000001312       0x88 ../Obj/TransistorTester/main.o
-                0x0000000000001312                GetIr
+                0x00000000000012ea       0x24 ../Obj/TransistorTester/main.o
+                0x00000000000012ea                mark_as_uncalibrated
+ .text.GetIr    0x000000000000130e       0x88 ../Obj/TransistorTester/main.o
+                0x000000000000130e                GetIr
  .text.startup.main
-                0x000000000000139a      0x886 ../Obj/TransistorTester/main.o
-                0x000000000000139a                main
+                0x0000000000001396      0x886 ../Obj/TransistorTester/main.o
+                0x0000000000001396                main
  .text.Battery_check
-                0x0000000000001c20       0x94 ../Obj/TransistorTester/Battery_check.o
-                0x0000000000001c20                Battery_check
+                0x0000000000001c1c       0x94 ../Obj/TransistorTester/Battery_check.o
+                0x0000000000001c1c                Battery_check
  .text.CheckPins
-                0x0000000000001cb4      0xd04 ../Obj/TransistorTester/CheckPins.o
-                0x0000000000001cb4                CheckPins
+                0x0000000000001cb0      0xd04 ../Obj/TransistorTester/CheckPins.o
+                0x0000000000001cb0                CheckPins
  .text.GetResistance
-                0x00000000000029b8      0x422 ../Obj/TransistorTester/GetResistance.o
-                0x00000000000029b8                GetResistance
+                0x00000000000029b4      0x422 ../Obj/TransistorTester/GetResistance.o
+                0x00000000000029b4                GetResistance
  .text.ChargePin10ms
-                0x0000000000002dda       0x2e ../Obj/TransistorTester/ChargePin10ms.o
-                0x0000000000002dda                ChargePin10ms
+                0x0000000000002dd6       0x2e ../Obj/TransistorTester/ChargePin10ms.o
+                0x0000000000002dd6                ChargePin10ms
  .text.EntladePins
-                0x0000000000002e08      0x100 ../Obj/TransistorTester/EntladePins.o
-                0x0000000000002e08                EntladePins
+                0x0000000000002e04      0x100 ../Obj/TransistorTester/EntladePins.o
+                0x0000000000002e04                EntladePins
  .text.Scale_C_with_vcc
-                0x0000000000002f08       0x7a ../Obj/TransistorTester/ReadCapacity.o
-                0x0000000000002f08                Scale_C_with_vcc
+                0x0000000000002f04       0x7a ../Obj/TransistorTester/ReadCapacity.o
+                0x0000000000002f04                Scale_C_with_vcc
  .text.ReadCapacity
-                0x0000000000002f82      0x4fc ../Obj/TransistorTester/ReadCapacity.o
-                0x0000000000002f82                ReadCapacity
+                0x0000000000002f7e      0x4fc ../Obj/TransistorTester/ReadCapacity.o
+                0x0000000000002f7e                ReadCapacity
  .text.Calibrate_UR
-                0x000000000000347e      0x186 ../Obj/TransistorTester/Calibrate_UR.o
-                0x000000000000347e                Calibrate_UR
+                0x000000000000347a      0x186 ../Obj/TransistorTester/Calibrate_UR.o
+                0x000000000000347a                Calibrate_UR
  .text.show_resis
-                0x0000000000003604       0x6e ../Obj/TransistorTester/show_Resis_Cap.o
-                0x0000000000003604                show_resis
+                0x0000000000003600       0x6e ../Obj/TransistorTester/show_Resis_Cap.o
+                0x0000000000003600                show_resis
  .text.show_cap_simple
-                0x0000000000003672       0xd8 ../Obj/TransistorTester/show_Resis_Cap.o
-                0x0000000000003672                show_cap_simple
+                0x000000000000366e       0xd8 ../Obj/TransistorTester/show_Resis_Cap.o
+                0x000000000000366e                show_cap_simple
  .text.ReadInductance
-                0x000000000000374a      0x448 ../Obj/TransistorTester/ReadInductance.o
-                0x000000000000374a                ReadInductance
+                0x0000000000003746      0x448 ../Obj/TransistorTester/ReadInductance.o
+                0x0000000000003746                ReadInductance
  .text.GetVloss
-                0x0000000000003b92      0x14c ../Obj/TransistorTester/GetVloss.o
-                0x0000000000003b92                GetVloss
+                0x0000000000003b8e      0x14c ../Obj/TransistorTester/GetVloss.o
+                0x0000000000003b8e                GetVloss
  .text.libgcc.mul
-                0x0000000000003cde       0x1e /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_mulsi3.o)
-                0x0000000000003cde                __mulsi3
+                0x0000000000003cda       0x1e /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_mulsi3.o)
+                0x0000000000003cda                __mulsi3
  .text.libgcc.div
-                0x0000000000003cfc       0x18 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_udivmodqi4.o)
-                0x0000000000003cfc                __udivmodqi4
+                0x0000000000003cf8       0x18 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_udivmodqi4.o)
+                0x0000000000003cf8                __udivmodqi4
  .text.libgcc.div
-                0x0000000000003d14       0x28 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_udivmodhi4.o)
-                0x0000000000003d14                __udivmodhi4
+                0x0000000000003d10       0x28 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_udivmodhi4.o)
+                0x0000000000003d10                __udivmodhi4
  .text.libgcc.div
-                0x0000000000003d3c       0x44 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_udivmodsi4.o)
-                0x0000000000003d3c                __udivmodsi4
+                0x0000000000003d38       0x44 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_udivmodsi4.o)
+                0x0000000000003d38                __udivmodsi4
  .text.libgcc.div
-                0x0000000000003d80       0x28 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_divmodsi4.o)
-                0x0000000000003d80                __divmodsi4
+                0x0000000000003d7c       0x28 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_divmodsi4.o)
+                0x0000000000003d7c                __divmodsi4
  .text.libgcc.div
-                0x0000000000003da8       0x10 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_negsi2.o)
-                0x0000000000003da8                __negsi2
+                0x0000000000003da4       0x10 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_negsi2.o)
+                0x0000000000003da4                __negsi2
  .text.libgcc.mul
-                0x0000000000003db8       0x1e /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_umulhisi3.o)
-                0x0000000000003db8                __umulhisi3
+                0x0000000000003db4       0x1e /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_umulhisi3.o)
+                0x0000000000003db4                __umulhisi3
  .text.libgcc.mul
-                0x0000000000003dd6        0xc /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_usmulhisi3.o)
-                0x0000000000003dd6                __usmulhisi3
-                0x0000000000003dd8                __usmulhisi3_tail
+                0x0000000000003dd2        0xc /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_usmulhisi3.o)
+                0x0000000000003dd2                __usmulhisi3
+                0x0000000000003dd4                __usmulhisi3_tail
  .text.libgcc.mul
-                0x0000000000003de2       0x14 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_muluhisi3.o)
-                0x0000000000003de2                __muluhisi3
+                0x0000000000003dde       0x14 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_muluhisi3.o)
+                0x0000000000003dde                __muluhisi3
  .text.libgcc.prologue
-                0x0000000000003df6       0x38 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_prologue.o)
-                0x0000000000003df6                __prologue_saves__
+                0x0000000000003df2       0x38 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_prologue.o)
+                0x0000000000003df2                __prologue_saves__
  .text.libgcc.prologue
-                0x0000000000003e2e       0x36 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_epilogue.o)
-                0x0000000000003e2e                __epilogue_restores__
+                0x0000000000003e2a       0x36 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_epilogue.o)
+                0x0000000000003e2a                __epilogue_restores__
  .text.avr-libc
-                0x0000000000003e64       0x14 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr5/libc.a(utoa.o)
-                0x0000000000003e64                utoa
-                0x0000000000003e64                __utoa
+                0x0000000000003e60       0x14 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr5/libc.a(utoa.o)
+                0x0000000000003e60                utoa
+                0x0000000000003e60                __utoa
  .text.avr-libc
-                0x0000000000003e78       0x32 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr5/libc.a(utoa_ncheck.o)
-                0x0000000000003e78                __utoa_ncheck
-                0x0000000000003e7a                __utoa_common
+                0x0000000000003e74       0x32 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr5/libc.a(utoa_ncheck.o)
+                0x0000000000003e74                __utoa_ncheck
+                0x0000000000003e76                __utoa_common
  .text.avr-libc
-                0x0000000000003eaa       0x20 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr5/libc.a(strrev.o)
-                0x0000000000003eaa                strrev
+                0x0000000000003ea6       0x20 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr5/libc.a(strrev.o)
+                0x0000000000003ea6                strrev
  .text.avr-libc
-                0x0000000000003eca       0x10 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr5/libatmega168.a(eerd_byte.o)
-                0x0000000000003eca                eeprom_read_byte
+                0x0000000000003ec6       0x10 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr5/libatmega168.a(eerd_byte.o)
+                0x0000000000003ec6                eeprom_read_byte
  .text.avr-libc
-                0x0000000000003eda       0x1c /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr5/libatmega168.a(eewr_byte.o)
-                0x0000000000003eda                eeprom_write_byte
-                0x0000000000003edc                eeprom_write_r18
+                0x0000000000003ed6       0x1c /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr5/libatmega168.a(eewr_byte.o)
+                0x0000000000003ed6                eeprom_write_byte
+                0x0000000000003ed8                eeprom_write_r18
  .text.avr-libc
-                0x0000000000003ef6        0x6 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr5/libatmega168.a(eewr_word.o)
-                0x0000000000003ef6                eeprom_write_word
-                0x0000000000003efc                . = ALIGN (0x2)
+                0x0000000000003ef2        0x6 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr5/libatmega168.a(eewr_word.o)
+                0x0000000000003ef2                eeprom_write_word
+                0x0000000000003ef8                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000000000003efc        0x0 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_exit.o)
-                0x0000000000003efc                exit
-                0x0000000000003efc                _exit
+ .fini9         0x0000000000003ef8        0x0 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_exit.o)
+                0x0000000000003ef8                exit
+                0x0000000000003ef8                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -1031,11 +1031,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000000000003efc        0x4 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_exit.o)
+ .fini0         0x0000000000003ef8        0x4 /usr/lib/gcc/avr/5.4.0/avr5/libgcc.a(_exit.o)
  *(.fini0)
-                0x0000000000003f00                _etext = .
+                0x0000000000003efc                _etext = .
 
-.data           0x0000000000800100        0x0 load address 0x0000000000003f00
+.data           0x0000000000800100        0x0 load address 0x0000000000003efc
                 [!provide]                        PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -1096,8 +1096,8 @@ END GROUP
                 0x0000000000800196                lcd_text_line
                 0x0000000000800197                ResistorVal
                 0x00000000008001a3                PROVIDE (__bss_end, .)
-                0x0000000000003f00                __data_load_start = LOADADDR (.data)
-                0x0000000000003f00                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000000000003efc                __data_load_start = LOADADDR (.data)
+                0x0000000000003efc                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00000000008001a3        0x0
                 [!provide]                        PROVIDE (__noinit_start, .)

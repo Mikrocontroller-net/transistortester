@@ -41,7 +41,6 @@ CFLAGS += -DWITH_MENU
 # You can switch off the presentation of the icons and the font data by setting
 # the option NO_ICONS_DEMO to save flash memory and display time.
 #CFLAGS += -DNO_ICONS_DEMO
-#CFLAGS += -DSHORT_UNCAL_MSG
 
 # The menu function can be easier controlled with a incremental encoder (rotary switch).
 # Both switches of the rotary switch can be connected with 1 kOhm resistors to PD1 and PD3.
@@ -203,7 +202,7 @@ CFLAGS += -DAUTO_CAL
 # Normally a long text is shown, which explains the steps of calibration.
 # You can prevent the long explanation by setting the SHORT_UNCAL_MSG option.
 # With this option set, only a hint of one line is shown.
-CFLAGS += -DSHORT_UNCAL_MSG
+#CFLAGS += -DSHORT_UNCAL_MSG
 
 # You can extend the measurement feature by use of a sampling mode for the ADC converter
 # to extend the resolution of capacity measurement to about 0.01pF.

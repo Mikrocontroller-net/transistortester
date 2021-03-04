@@ -46,7 +46,7 @@ start_help_text:
        space_pos = LCD_LINE_LENGTH;		// if no space is found
        for (ii=0;ii<(LCD_LINE_LENGTH+1);ii++) {	// look for the last space character
          zeich = pgm_read_byte(&HelpCalibration_str[ii+jj]);
-         if (zeich == ' ')  space_pos = ii; // save the position
+         if ((zeich == ' ') || (zeich == LCD_NO_SPACE)) space_pos = ii; // save the position
        }
        if (line_nr == 0) {
           // it is the first LCD line, wait for showing the last message
@@ -67,7 +67,7 @@ start_help_text:
          if (zeich == LCD_CHAR_INSEP) {
             lcd_space();	// replace with space
          } else {
-            lcd_data(zeich);		// display the character without offset
+            if (zeich != LCD_NO_SPACE) lcd_data(zeich);		// display the character without offset
          }
        }
        if (zeich == (char)0) break;	// end of text found

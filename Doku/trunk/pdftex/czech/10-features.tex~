@@ -1,0 +1,137 @@
+%\newpage
+\chapter{Vlastnosti}
+\label{sec:features}
+\begin{enumerate}
+\item Pracuje s mikrokontroléry ATmega8, ATmega168 nebo ATmega328.Ale také ATmega644, ATmega1280, ATmega1284 nebo ATmega2560 lze použítt.
+\item K zobrazení výsledků měření je vhodný LCD displeji 2x16 nebo 4x20 znaků.
+ Alternativně může být, při použití procesoru s alespoň 32K flash pamětí, také grafický displej
+ s 128x64 pixely a řadiče ST7565, ST7920, NT7108, KS0108 nebo SSD1306.
+ Místo standardního 4bitového paralelního rozhraní je možné použít buď 4-vodičové rozhraní SPI ale také I\textsuperscript{2}C sběrnici.
+ Dokonce berevné displeje s ILI9163 nebo ST7735 řadiči s SPI rozhraním lze použít.
+ Ovladač NT7108 nebo KS0108 vyžaduje sériově paralelní převodník 74HC (T) 164 nebo 74HC (T) 595,
+ protože tyto regulátory umožňují pouze 8bitové paralelní připojení,
+ Displeje s ovladači PCF8812 nebo PCF8814 lze použít pouze bez velkých tranzistorových symbolů
+ proto že je velikost jejich zobrazení nedostatečná (102x65 a 96x65).
+\item Jednoduchý provoz s funkcí automatického vypnutí.
+\item Provoz s akumulátorem je možný, protože spotřeba po vypnutí je jen asi 20nA.
+Od softwarové verze 1.05k používá ATmega k úsporám energie během přestávek měření stav spánku, pokud není rotační pulzní kodér právě v použití.
+\item Je možné i levné řešení bez keramického oscilátoru a bez automatického vypínání.
+\item Automatická detekce NPN a PNP bipolárních tranzistorů, N- a P-KANÁLOVÝ MOSFET, JFETs, diody, dvojí diody, N- a P-IGBT, tyristory a triaky.
+Pro tyristory a triaky musí být dosaženo dostatačné zapalovací a udržovací napětí a proudy.
+U IGBT musí být prahové napětí brány nižší než  \(5V\) .
+\item Znázornění přidělení pinů zjištěných komponentů.
+\item Měření současného zesilovacího faktoru a prahového napětí básis-emitoru pro bipolární tranzistory.
+\item Darlingtonovy tranzistory jsou rozpoznány vyšším prahovým napětím a vysokým proudovým zesílením.
+\item Automatická detekce ochranné diody v bipolárních tranzistorech a MOSFETů.
+\item Měření prahového napětí, vstupní kapacity a R\textsubscript{DSon} s hradlovým napětím těsně pod \(5V\) u MOSFETů.
+\item Jsou měřeny a zobrazeny až dva odpory jako \mbox{\electricR} symboly a jejích hodnoty jsou až na čtyři desetinná místa ve správné hodnotě.
+Všechny symboly jsou zarámovány s testovacími čísly, jak byly nasazeny do zkoušečky (1-3).
+Proto lze také měřit potenciometry. Když ale potenciometr dosáhne koncové polohy,
+Není možné rozlišit mezi prostředním a koncovým kontaktem.
+\item Odpory lze nyní měřit od \(0,01\Omega\), do \(50M\Omega\) .
+\item Kondensátor je také určen a změřen. Je označen symbolem \mbox{\electricC}
+Jeho kapacita je určena a zobrazněna až na čtyři desetiná místa přesně.
+Hodnota může být v rozmezí od \(25pF\) (při \(8MHz\) taktu, \(50pF\) při \(1MHz\) taktu) do \(100mF\) . Rozlišení je \(1pF\) (u \(8MHz\) taktu) .
+\item U kondenzátorů s kapacitou větší než \(20nF\) je kromě toho měřen ještě ekvivalentní sériový odpor (ESR) kondenzátoru
+s rozlišením \(0,01\Omega\) a zobrazen s dvěma desetinnými místy.
+Tato funkce je k dispozici pouze tehdy, pokud má ATmega nejméně 16K flash paměťi.
+\item U kondenzátorů s kapacitní hodnotou nad \(5000pF\) lze po nabíjecím impulsu určit ztrátovou ztrátu Vloss.
+Ztráta napětí indikuje kvalitu kondenzátoru.
+\item Až dvě diody jsou označeny symbolem \mbox{\electricDAK} nebo symbolem \mbox{\electricDKA}
+a jsou zobrazeny ve správném pořadí .
+Kromě toho jsou zobrazena prahová napětí.
+\item LED dioda je rozpoznána jako dioda, prahové napětí je ale mnohem vyšší než u normální diody.
+Dvojité diody jsou rozpoznány jako dvě diody.
+\item Zenerovy diody lze detekovat, když je napětí Zeneru pod hodnotou \(4,5V\) .
+Zobrazují se jako dvě diody, rozpoznat je lze jen přes zobrazené napětí.
+Vnější čísla zkušebního kontaktu obklopující symboly diod jsou v tomto případě totožné.
+Skutečnou anodu diody lze nalézt pouze pro diodu, jejíž prahové napětí je blízké napětí \(700mV\) !
+\item Pokud se zjistí více než 3 diody, zobrazí se spolu s chybovou zprávou počet nalezených diod.
+K tomu může dojít pouze v případě diod na všech třech zkušebních kolíky jsou spojeny a alespoň jeden je zenerova dioda.
+V tomto případě je třeba připojit pouze dva testovací kontakty a restartujte skenování, a měřit jednu diodu za druhou.
+\item Kapacitní odnota diody v opačném směru je určena automaticky.
+Bipolární tranzistory lze také studovat, pokud je připojena pouze base a buď kolektor nebo emitor.
+Pro ATmega s více než 8k flash pamětí je kromě toho měřen ještě zpětný proud s rozlišením \(2nA\) .
+Hodnota je vydaná pouze tehdy pokud je rozdílná od nuly.
+\item Zaapojení usměrňovacího můstku lze zjistit pouze jedním měřením.
+\item Kondenzátory s hodnotami kapacity pod \(25pF\) není možné běžně rozpoznat, 
+ale mohou být použity společně s diodou zapojenou paralelně nebo s paralelně připojeným kondenzátorem
+kapacity nejméně \(25pF\) .
+V tomto případě musí být od výsledku měření odečtena hodnota kapacity součásti zapojené paralelně.
+U procesorů s minimální pamětí 32K flash se tester změní pomocí kondenzátoru \textgreater~\(25pF\)
+na TP1 a TP3 v měřicí funkci kondenzátoru, která také přímo měří kapacity od \(1pF\) .
+\item Pro odpory pod \(2100\Omega\) se také provádí měření indukčnosti když
+má ATmega nejméně 16K flash paměťi.
+Kromě symbolu odporu \mbox{\electricR} se zobrazí symbol indukčnosti \mbox{\electricL} .
+Rozsah zobrazení je asi \(0,01mH\) až přes \(20H\), ale přesnost není vysoká.
+Výsledek se zobrazuje pouze pro jeden rezistor společně s hodnotou odporu.
+\item Doba měření je asi dvě sekundy, měření kapacity a indukčnosti mohou trvat déle.
+\item Software lze konfigurovat pro sérii měření s předem definovaným počtem opakování, než se automatické vypnutí zapne.
+\item Vestavěná funkce automatického testování včetně volitelného frekvenčního generátoru \(50Hz\)  pro přesnost kontroly frekvence
+a časové prodlevy (pouze s minimálně 16 kB flash pamětí).
+\item Volitelná možnost pro nulovou rovnováhu pro měření kondenzátoru a vnitřní odpor pro
+automatické určování portových výstupů během samočinného testu (pouze s minimálně 16 kB flash pamětí).
+Externí kondenzátor s kapacitou mezi \(100nF\) a \(20\mu F\) na testovacích kontaktech TP1 a TP3 je nutný, 
+pro kompenzaci vyrovnávacího napětí analogového komparátoru.
+To může snížit chybu měření při měření kapacity až na hodnotu \(40\mu F\) .
+Stejným kondenzátorem je korekční napětí pro nastavení správného zesílení pro
+vypočet měření ADC pomocí vnitřního referenčního napětí \(1,1V\) .
+\item Zobrazení kolektor - emitor zbytkového proudu \(I_{CE0}\) při bezproudové bási (\(1\mu A\) přesnost) und
+a kolektor - emitor zbytkového proudu \(I_{CES}\) s básis drženou na potenciálu emitoru (pouze s minimálně 16K flash paměťí).
+Tyto hodnoty se zobrazují pouze v případě, že nejsou nulové (zejména pro germaniové tranzistory).
+\item Pro ATmega s minimálně 32K flash pamětí se tester přepne z multifunkčního testu na režim
+měřiče odporu, pokud je v automatickém rozpoznání součásti, pouze jeden odpor na testovacích kontaktech (TP1) a (TP3).
+Pokud v souboru Makefile je také měření indukčnosti na odporovém měřiči
+pomocí volby RMETER\_WITH\_L žádané, se při měření odporu měří také indukčnost.
+Provozní režim je indikován s {\bf[R]} nebo {\bf[RL]} na pravé straně 1 řádku displeje.
+Přesně tak, jak se tester přepne na kapacitní měřidlo když byl na TP1 a TP3 detekován kondenzátor.
+Tento provozní režim je označen symbolem {\bf[C]} na pravé straně 1 řádku displeje.
+V tomto režimu lze měřit kondenzátory  od \(1pF\) . Pouze pro automatické spuštění funkce
+potřebujete kondenzátor s více než \(25pF\).
+Obě speciální funkce lze opět ukončit stisknutím tlačítka. Tester pak řídí normální
+Funkce měření pokračuje.
+\item U procesorů s min. 32 kB flash paměťí může být vybrána dialogová funkce,
+což umožňuje další aplikace.
+Dialog lze samozřejmě použít také k návratu k funkci testeru tranzistoru.
+\item Pomocí funkce dialogu lze provést měření frekvence na portu PD4 ATmega.
+Rozlišení je  \(1Hz\) na vstupních frekvencích nad \(33kHz\) .
+Při nižších frekvencích může být rozlišovací schopnost až \(0,001mHz\) .
+Přečtěte si prosím podkapitolu \ref{sec:frequency_counter} na stránce \pageref{sec:frequency_counter},
+jak musí být signál frekvence připojen.
+\item Pomocí funkce dialogu a bez seriového vývodu lze externí napětí do 50 V přes 10:1 dělič napětí na PC3 kontaktu
+měřit. U PLCC-ATmega328 varianty je možné jeden z těch dvou přidaných kontaktů dohromady se seriovým   
+rozhraním použít na měření napětí.
+Pokud je rozšíření pro měření Zenerovy diody (převodník DC-DC) namontované,
+je možné v této větvi, při současném podržení tlačítka, testovat Zenerovy diody.
+\item Pomocí dialogové funkce lze na kontaktu TP2 (PB2 port ATmega) provést výstup frekvence.
+V současné době lze frekvence nastavit od \(1Hz\) do \(2MHz\) .
+\item Pomocí dialogové funkce je pevná frekvence s nastavitelnou šířkou impulsu vydána na pinu TP2 (PB2 port ATmega).
+Šířku lze zvýšit o \(1\%\) krátkým stiskem klávesy a o \(10\%\) s delším stiskem.
+\item Pomocí dialogové funkce lze spustit speciální měření kondenzátoru s měřením ESR.
+Tato funkce se při výběru nazývá \mbox{C+ESR@TP1:TP3} .
+ Kapacity od přibližně \(2\mu F\) až do \(50mF\) mohou být měřeny pro nízké měřicí napětí okolo \(300mV\)
+ v nainstalovaném stavu.
+\item Pro procesory s alespoň 32K flash pamětí (Mega328) lze ADC použít s metodou vzorkování,
+která umožní měřit kondenzátory pod \(100pF\) s rorlíšením  \(0,01pF\) . Stejným způsobem je možné měřit také cívky
+pod  \(2\mH\) čímž lze dosáhnout výrazně lepší rozlišení než rezonanční frekvence s paralelním kondenzátorem
+známé velikosti.
+
+\end{enumerate}
+
+ Při použití zkoušečky pro testování kondenzátorů v obvodu je třeba věnovat zvláštní pozornost tomu
+  aby kondenzátory neměly, již před měřením, žádné zbytkové napětí.
+
+Tyristory a triaky lze detekovat pouze tehdy, je-li zkušební proud nad přídržným proudem.
+Některé tyristory a triaky také vyžadují vyšší zapalovací proud, než tento tester dokáže dodat.
+Dostupný testovací proud je pouze asi \(6mA\)!
+Stejně tak mohou být IGBT detekovány pouze tehdy, je-li zkušební napětí asi \(5V\) pro pohon dostatečné.
+Vezměte prosím na vědomí, že mnoho možností je k dispozici pouze u mikroprocesorů s minimálně 16 kB programovou pamětí, jako je ATmega168. 
+Všechny funkce jsou dokonce možné pouze u procesorů s programovou pamětí alespoň 32K, jako ATmega328 nebo ATmega1284.
+
+\vspace{1cm}
+\textbf{{\Large Pozor:}} Vždy zkontrolujte, zda jsou {\bf Kondensátory}  před připojením ke zkoušečce,
+nejlépe zkratováním, {\bf vybité} !
+V opačném případě by mohlo dojít k poškození přístroje ještě před jeho zapnutím.
+! ATmega nabízí jen málo vlastní ochrany. !
+Zvláštní pozornost je třeba věnovat také při měření v okruhu.
+Přístroj by měl být vždy předem odpojen od napájení a měli byste se přesvědčit, že v přístroji není {\bf žádné zbytkové napětí} .

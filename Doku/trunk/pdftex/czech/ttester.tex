@@ -1,0 +1,293 @@
+\documentclass[pdftex,12pt,a4paper,oneside,english]{report}
+\special{papersize=210mm,297mm}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}		%umlaute!
+\usepackage[utf8x]{inputenc}
+\usepackage[cm]{fullpage}
+\usepackage[english,ngerman,czech]{babel}
+\usepackage{textcomp}           % Wegen Fehler,perthousand,micro
+\usepackage[pdftex]{graphicx}
+\usepackage[labelsep=period]{caption}
+\usepackage{subcaption}
+\usepackage{xcolor}             %x-Vorschlag
+\usepackage[percent]{overpic}   %ins Bild schreiben
+\usepackage{mwe}                %ins Bild schreiben
+%\usepackage{blindtext}
+%\setlength{\abovecaptionskip}{0.5pc}
+%\setlength{\belowcaptionskip}{-1.0pc}
+%\usepackage{showframe}% zum Anzeigen des Seitenlayouts
+%\RedeclareSectionCommand[  % nur mit documentclass scrreprt 
+%  beforeskip=-1\baselineskip,
+%  afterskip=.5\baselineskip]{section}
+%\RedeclareSectionCommand[
+%  beforeskip=-.75\baselineskip,
+%  afterskip=.5\baselineskip]{subsection}
+%\RedeclareSectionCommand[
+%  beforeskip=-.5\baselineskip,
+%  afterskip=.25\baselineskip]{subsubsection}
+%\usepackage{fixltx2e}
+\setlength{\parindent}{0em}	% Absatz nicht einrücken
+%\usepackage{fixltx2e}
+\usepackage{epstopdf}
+\usepackage{hyperref}
+\usepackage{gensymb}
+\usepackage{float}
+\usepackage{circuitikz}
+\usepackage{wallpaper}
+%\usepackage{subfig}
+\graphicspath{{./FIG}}		% Wegen Hintergrundbild
+
+\begin{document}
+\begin{figure}[t]
+\ThisTileWallPaper{\paperwidth}{\paperheight}{../FIG/Wallpaper.pdf}
+%\TileWallPaper{\paperwidth}{\paperheight}{../FIG/Provisorni.pdf}
+\end{figure}
+\ctikzset{bipoles/length=.6cm}
+\ctikzset{bipoles/thickness=4}
+\newcommand\electricC {
+\hspace{-12 pt}
+\begin{circuitikz}
+\draw (0,0) to[capacitor] (0:1);
+\end{circuitikz}
+\hspace{-6 pt}
+}
+\newcommand\electricR {
+\hspace{-14 pt}
+\begin{circuitikz}
+\draw (0,0) to[european resistor] (0:1);
+\end{circuitikz}
+\hspace{-6 pt}
+}
+\newcommand\electricL {
+\hspace{-14 pt}
+\begin{circuitikz}
+\draw (0,0) 
+ to[american inductor] (-1,0) 
+;\end{circuitikz}
+\hspace{-6 pt}
+}
+\newcommand\electricDAK {
+\begin{circuitikz}
+\draw (0,0) to[full diode] (0:1);
+\end{circuitikz}
+}
+\newcommand\electricDKA {
+\begin{circuitikz}
+\draw (0,0) to[full diode] (180:1);
+\end{circuitikz}
+}
+\title{Název originálu:\\
+TransistorTester
+\\-
+\\Přístroj k určení a měření elektronických součástek \\
+rady při stavbě,\\
+návody k modifikaci hardwaru\\ 
+a hlavně softwaru\\
+~\\
+Version 1.13k \\
+}
+\author{Karl-Heinz Kübbeler\\
+\texttt{kh\_kuebbeler@web.de}
+\\
+\\
+\vspace{-0.3cm}
+{\scriptsize Zkompilováno}\\
+{\scriptsize od bm-magic}\\
+\copyright~\\
+~\\
+\vspace{-0.3cm}
+{\scriptsize Kontrola odborné češtiny:}\\
+{\scriptsize Ing. František Procházka \hspace*{0.2cm}fandapro@seznam.cz}\\
+\vspace{-0.3cm}
+{\scriptsize \&}\\
+{\scriptsize Milan Petko \hspace*{0.2cm} avrtester.tode@seznam.cz}
+}
+\date{\today}
+\maketitle
+\tableofcontents
+
+\include{00-preface}
+
+\include{10-features}
+
+\include{20-hardware}
+
+\include{30-manual}
+
+\include{40-configuring}
+
+\include{50-measurement}
+
+ \include{51-semicon}
+ \include{52-resistors}
+ \include{53-capacitors}
+ \include{54-inductors}
+ \include{55-selftest}
+ \include{56-frequency}
+
+\include{60-generators}
+\include{70-errors}
+\include{80-special}
+\include{90-todo}
+
+\begin{thebibliography}{99}
+
+\bibitem{Frejek}
+Markus Frejek
+\emph{AVR-Transistortester,}.
+Embedded Projects Journal,
+11. Ausgabe,
+2011
+
+\bibitem{khk}
+https://github.com/mikrocontroller-net/transistortester/Doku/
+trunk/pdftex/german/ttester.pdf
+
+\bibitem{ATmega8}
+Atmel Corporation
+\emph{8-bit AVR with 8KBytes In-System Programmable Flash - ATmega8(L),}.
+Manual,
+2486Z-AVR-02/11,
+2011
+
+\bibitem{ATmega168}
+Atmel Corporation
+\emph{8-bit AVR with 4/8/16/32KBytes In-System Programmable Flash - ATmega48 - ATmega328,}.
+Manual,
+8271D-AVR-05/11,
+2011
+
+\bibitem{AVR126}
+Atmel Corporation
+\emph{Atmel AVR126: ADC of megaAVR in Single Ended Mode,}.
+Application Note,
+8444A-AVR-10/11,
+2011
+
+\bibitem{AVR121}
+Atmel Corporation
+\emph{Atmel AVR121: Enhancing ADC resolution by oversampling,}.
+Application Note,
+8003A-AVR-09/05,
+2005
+
+\bibitem{LaTeX}
+\url{http://cz.wikibooks.org/wiki/LaTeX}
+\emph{LaTeX dokumentace,}.
+Příručka pro sázení různých dokumentů v LaTeXu\\
+i  začátečnický úvod jak s ním pracovat.
+2012
+
+\bibitem{Gnuplot}
+\url{http://en.wikibooks.org/wiki/Gnuplot}
+\emph{Gnuplot documentation,}.
+Documentation for the plotting tool gnuplot,
+2012
+
+\bibitem{ESR}
+Wikipedia
+\url{http://de.wikipedia.org/wiki/Equivalent_Series_Resistance}
+\emph{Vysvětlivky k ESR}.
+Normování a náhradní obraz kondenzátoru,
+2012
+
+\bibitem{Xfig}
+\url{http://www.xfig.org/userman}
+\emph{Xfig documentation,}.
+Documentation of the interactive drawing tool xfig,
+2009
+
+\bibitem{gimp}
+\url{http://docs.gimp.org/2.6/de}
+\emph{gimp documentation}.
+Dokumentace k vektorovému programu GIMP GNU Image Manipolation Program,
+2010
+
+\bibitem{markus1}
+\url{http://www.mikrocontroller.net/articles/AVR-Transistortester}
+\emph{Online Dokumentace Transistor testeru,}
+Online Article,
+2009-2011
+
+\bibitem{avrdude}
+\url{http://www.mikrocontroller.net/articles/AVRDUDE}
+\emph{Online Dokumentace avrdude programu interface,}
+Online Article,
+2004-2011
+
+\bibitem{markus2}
+\url{http://www.mikrocontroller.net/topic/131804}
+\emph{Thread von Markus F.,}
+Forum thread, 
+2009
+
+\bibitem{karlheinz1}
+\url{http://www.mikrocontroller.net/articles/AVR\_Transistortester}
+\emph{Popis Transistor Testeru od Karl-Heinz K.,}
+Online Article,
+2012
+
+\bibitem{karlheinz2}
+\url{http://www.mikrocontroller.net/topic/248078}
+\emph{Thread von Karl-Heinz K.,}
+Thread und Software Versionen,
+2012
+
+\bibitem{winavr1}
+\url{http://www.mikrocontroller.net/articles/WinAVR}
+\emph{Artikl o WinAVR,}
+Online Artikel,
+2012
+
+\bibitem{winavr2}
+\url{http://sourceforge.net/projects/winavr/files}
+\emph{Quelle pro WinAVR,}
+Download Quelle,
+2012
+
+\bibitem{winavr3}
+\url{http://www.mikrocontroller.net/topic/248078?page=5#2922341}
+\emph{Patch pro WinAVR, nastavení pojistek (Fuses) s avrdude,}
+Download Quelle,
+2012
+
+\bibitem{st7565}
+\url{http://www.orientdisplay.com/pdf/ST7565.pdf}
+\emph{Technické údaje grafického kontroléru ST7565,}
+Download Quelle,
+2014
+
+\bibitem{ds3231}
+Maxim Integrated Products, Inc.
+\url{http://maximintegrated.com}
+\emph{DS3231: Extremely Accurate I\textsuperscript{2}C-Integrated RTC/TCXO/Crystal,}
+Data Sheet,
+19-5170;Rev 10; 3/15,
+2015
+
+\bibitem{ds3231m}
+Maxim Integrated Products, Inc.
+\url{http://maximintegrated.com}
+\emph{DS3231M: 5ppm I\textsuperscript{2}C Real-Time Clock,}
+Data Sheet,
+19-5312;Rev 7; 3/15,
+2015
+
+\bibitem{avrtester}
+\url{http://www.avrtester.tode.cz}\\
+\emph{AVR tester - czech clone}
+
+\bibitem{fandapro}
+\url{https://fandapro.blogspot.com}\\
+\emph{Rady a zkušenosti fandapro, AVR tester}
+
+\bibitem{Svetelektro}
+\url{https://svetelektro.com/}
+\emph{Všetko zo sveta elektroniky}
+\\
+Sme najnavštevovanejší portál zo zameraním na elektroniku na Slovensku!
+od 2006
+
+\end{thebibliography}
+\end{document}
+

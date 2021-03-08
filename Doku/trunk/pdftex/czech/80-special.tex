@@ -1,0 +1,47 @@
+\chapter{Speciální součásti softwaru}
+\vspace*{-1cm}
+Bylo provedeno mnoho změn ukládání do paměti flash.
+Výstup LCD testovacích čísel portů byl proveden formou ,,lcd\_data('1'+Pin)''.
+\\K ušetření místa pro další požadavky při každé výzvě, byla funkce ,,lcd\_testpin(uint8\_t pin)'' vložena do souboru lcd\_routines.c.
+
+Pseudo funkce v podobě \_delay\_ms(200) nejsou funkce knihovny,
+místo toho jsou v programu pro každý bod spojení vestavěny čekací smyčky.
+To spotřebovává spoustu paměti, pokud je mnoho výzev do různých míst programu.
+
+Všechny tyto výzvy byly vyměněny za speciální výzvu v assembleru napsanou knihovnou,
+která spotřebuje pouze 74 ~ bajtů paměti flash (u \(8MHz\)),  ale
+dává k disposici výzvy od wait1us() do wait5s() v úrovních 1,2,3,4,5,10,20\dots.
+
+Pro všechny výzvy přes \(50ms\) obsahují rutiny příkaz ''Watch Dog Reset''.
+\\Každá výzva vyžaduje pouze jednu instrukci (2~Byte). Čekající výzvy s přechodnými hodnotami
+jako 8 ms potřebují dvě výzvy (wait5ms() a wait3ms() nebo dva wait4ms() výzvy).
+
+Neznám žádné řešení, které by bylo ekonomičtější, pokud je v programu použito mnoho výzev.
+Výzvy nepoužívají registry, pro návratové adresy do RAM, pouze ukazatel zásobníku (stack pointer)
+v paměti RAM (maximálně 28 bajtů).
+
+Úplný seznam funkcí je:\\
+wait1us(), wait2us(), wait3us(), wait4us(), wait5us(), wait10us(), \\
+wait20us(), wait30us(), wait30us(), wait40us(), wait50us(), wait100us(), \\
+wait200us(), wait300us(), wait400us(), wait500us(), wait1ms(),\\
+wait2ms(), wait3ms(), wait4ms(), wait5ms(), wait10ms(),\\
+wait20ms(), wait30ms(), wait40ms(), wait50ms(), wait100ms(),\\
+wait200ms(),wait300ms(), wait400ms, wait500ms(), wait1s(),\\
+wait2s(), wait3s(), wait4s() und wait5s();\\
+
+Jedná se o 36 funkcí, které používají pouze 37 instrukcí včetně Watch Dog Reset!
+\\Neexistuje žádný způsob, jak tuto knihovnu zkrátit.\\
+
+V neposlední řadě dodržují tyto výzvy přesný čas, když to dělá nejnižší výzva (wait1us).
+\\Pouze čekající výzvy přes \(50ms\) jsou jeden takt pro \(100ms\) delší, kvůli dodatečně zabudovanému
+Watch Dog resetu.
+
+
+Kromě toho byla často používá sekvence ,,wait5ms(); ReadADC(\dots);'' nahrazena jedinou výzvou ,,W5msReadADC(\dots);''.
+
+Totéž platí pro sekvenci ,,wait20ms(); ReadADC(\dots);'' provedené výzvou
+,,W20msReadADC(\dots);''.
+Funkce ReadADC byla dodatečně přenesena do assembleru, takže toto rozšíření
+může být velmi účinně integrováno.
+
+K dispozici je také funkčně identická C-verze ReadADC funkce.

@@ -1,0 +1,64 @@
+\chapter{Generace signálu}
+\vspace*{-1cm}
+Různé režimy generování signálu mohou pracovat pouze s jedním ATmega328 procesorem.
+
+Dále musí být také zapnuta dialogová funkce s volbou makefile WITH\_MENU.
+\\Ovládací nabídku lze vyvolat dlouhém stisknutím tlačítka.
+
+Volitelné funkce se zobrazují na druhém řádku displeje.
+\\Zobrazenou funkci lze zase zvolit dlouhým stiskem tlačítka.
+
+Další funkce bude automaticky zobrazeny po 5 vteřinách nebo po krátkém stisknutí tlačítka.
+\label{sec:generation}
+\vspace*{-0.6cm}
+\section{Generování frekvence}
+\vspace*{-0.3cm}
+Generování frekvence se spustí, když je funkce menu ,,f-Generator'' spuštěna dlouhým stisknutím klávesy.
+
+Frekvence se vyvede přes odpor \(680\Omega\) na měřící port TP2.
+
+Měřící port TP1 se přepne na GND.
+\\Frekvence jsou generovány pomocí 16 bitového čítače z CPU frekvence (\(8MHz\) nebo \(16MHz\)) taktu.
+
+Frekvenci lze nastavit po dekádách začínajících číslicí \(1Hz\) číslicemi 0-9.
+
+Nejvyšší volitelná číslice je číslice \(100kHz\). Zde lze nastavit čísla až na 20.
+
+Výstupní kmitočty jsou tedy nastavitelné až do \(2MHz\).
+\\Bez otočného kodéru lze hodnotu nastavit krátkým stiskem kláves (\textless~0.8s).
+\\Pomocí rotačních snímačů lze hodnoty podle potřeby zvýšit nebo snížit.
+
+Při delším stisknutí tlačítka se změní pozice v dekádě.
+\\V tomto případě sloupec 1 ukazuje, v jakém směru se změní další pozice po delším stisknutí.
+
+Pro znak \textgreater~ v 1 sloupci frekvenční linky bylo zvoleno další vyšší místo.
+
+Pro znak \textless~ v 1 sloupci je vybrána další dolní číslice (\(1Hz\)).
+\\Je-li nastavena nejvyšší číslice (\(100kHz\)), zobrazí se namísto \textgreater~ R.
+
+Pak delší stisknutí tlačítka způsobí reset frekvence na \(1Hz\).
+\\Protože nelze každou nastavenou frekvenci správně generovat, je frekvenční odchylka vygenerovaného signálu zobrazena ve 3 řádku nebo za hodnotou frekvence.
+\\Dlouhým stisknutím klávesy (\textgreater~2s) se vrátí tester do dialogové funkce,
+kde lze zvolit jinou funkci.
+\vspace*{-0.6cm}
+\section{Generování impulsů s pulzní šířkovou modulací}
+\vspace*{-0.3cm}
+Generování šířky impulsu je možné vybrat v menu volbou 10 bitové PWM.
+\\Dlouhým stisknutím tlačítka je možné, tuto volbu nastartovat.
+
+Frekvence je vyvedena přes \(680\Omega\) odpor na měřící port TP2.
+
+Měřící port TP1 se přepne na GND.
+
+Výstupní kmitočet je pevný a CPU takt je dělen 1024.
+
+To dává frekvenci \(7812,5Hz\) při frekvenci \(8MHz\) taktu.
+\\Stisknutím tlačítka  lze změnit pouze pozitivní šířku impulsu.
+
+Každým krátkým stiskem se zvýší šířka pozitivního impulzu  o \(1\%\) až k \(99\%\).
+
+Dlouhým stisknutím tlačítka se šířka impulsu zvyšuje o \(10\%\).
+\\Když šířka impulzu dosáhne hodnoty více než \(99\%\), bude od výsledku 100 odečteno.
+
+Šířka impulsu \(0\%\)  vytváří velmi krátký pozitivní impuls.
+

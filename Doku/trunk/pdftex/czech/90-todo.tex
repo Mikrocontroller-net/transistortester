@@ -1,0 +1,21 @@
+\chapter{Pracovní úkoly a nové nápady}
+\label{sec:todo}
+\vspace*{-1cm}
+\begin{enumerate}
+\item Přidat další a lepší dokumentaci.
+\item Přemýšlet o tom, jak určit skutečný vnitřní odpor vývodů portu B- namísto předpokladu, že jsou porty  stejné.
+\item Může být urychleno vybíjení kondenzátorů, kdyby byl kromě toho záporný pól přes \(680\Omega\) odpor
+spojen s VCC (+)?
+\item Zkontrolovat, zda tester může používat hodnoty s plovoucí desetinnou čárkou.
+Riziko přetečení (overflow) je nižší.
+Nebylo by třeba konstrukce násobení nebo dělení k modelu faktoru s částečným číslem.
+Ale nevím, kolik místa potřebuje knihovna.
+\item Napsat návod k instalaci testeru s volbami makefile a popsat průběh procesu až k dokončenému procesoru.
+\item Pokud  nemůže být dosažen držící proud tyristoru pomocí \(680\Omega\) odporu. Je pro velmi krátkou dobu bezpečné přepnout katodu přímo na GND a anodu přímo do VCC?
+\\Proud může dosáhnout více než \(100mA\). Bude port poškozen? A co napájení (regulátor napětí)?
+\item Po této akci zkontrolovat porty s funkcí autotestu!
+\item Nápad na nový projekt: USB verze bez LCD displeje, napájení z USB portu, komunikace s PC přes USB-Serial  most.
+\item Výměna funkce samplingADC s využitím Counter1 k upravení časového posunu ADC S\&H.
+\item Zkouška přesnosti měření pro malé kondenzátory metodou SamplingADC.
+\item Vyšetřování přesnosti pro malé cívky pomocí metody SamplingADC.
+\end{enumerate}

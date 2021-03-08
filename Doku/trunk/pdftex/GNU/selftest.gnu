@@ -40,10 +40,13 @@ set xlabel "číslo procesoru"
 set ylabel "reference napětí / mV"
 set output "../GNU/SelfTrefCZ.pdf" ; replot ; set output
 #
-set output
 set xlabel "Номер процессора"
 set ylabel "Опорное напряжение / mV" 
 set output "../GNU/SelfTrefRU.pdf" ; replot ; set output
+#
+set xlabel "Prozessornummer"
+set ylabel "Referenzspannung / mV"
+set output "../GNU/SelfTrefGE.pdf" ; replot ; set output
 #
 set xlabel "Processor number"
 set ylabel "voltage / mV"
@@ -58,6 +61,10 @@ set output "../GNU/SelfTMitLCZ.pdf" ; replot ; set output
 set xlabel "Номер процессора"
 set ylabel "напряжений / mV" 
 set output "../GNU/SelfTMitLRU.pdf" ; replot ; set output
+#
+set xlabel "Prozessornummer"
+set ylabel "Spannung / mV"
+set output "../GNU/SelfTMitLGE.pdf" ; replot ; set output
 #
 #
 set xlabel "Processor number"
@@ -74,6 +81,10 @@ set xlabel "Номер процессора"
 set ylabel "напряжений / mV" 
 set output "../GNU/SelfTMitHRU.pdf" ; replot ; set output
 #
+set xlabel "Prozessornummer"
+set ylabel "Spannung / mV"
+set output "../GNU/SelfTMitHGE.pdf" ; replot ; set output
+#
 set xlabel "Processor number"
 set ylabel "voltage / mV"
 set output "../GNU/SelfTbottomH.pdf"
@@ -88,6 +99,10 @@ set xlabel "Номер процессора"
 set ylabel "напряжений / mV" 
 set output "../GNU/SelfTbottomHRU.pdf" ; replot ; set output
 #
+set xlabel "Prozessornummer"
+set ylabel "Spannung / mV"
+set output "../GNU/SelfTbottomHGE.pdf" ; replot ; set output
+#
 set autoscale y
 set xlabel "Processor number"
 set ylabel "(voltage - VCC) / mV"
@@ -101,6 +116,10 @@ set output "../GNU/SelfTtopHCZ.pdf" ; replot ; set output
 set xlabel "Номер процессора"
 set ylabel "(напряжений - VCC) / mV" 
 set output "../GNU/SelfTtopHRU.pdf" ; replot ; set output
+#
+set xlabel "Prozessornummer"
+set ylabel "(Spannung - VCC)/ mV"
+set output "../GNU/SelfTtopHGE.pdf" ; replot ; set output
 #
 set yrange [19 to 24]
 set xlabel "Processor number"
@@ -118,6 +137,10 @@ set xlabel "Номер процессора"
 set ylabel "сопротивления / Ω"
 set output "../GNU/SelfTRiLoRU.pdf" ; replot ; set output
 #
+set xlabel "Prozessornummer"
+set ylabel "Widerstand / Ω"
+set output "../GNU/SelfTRiLoGE.pdf" ; replot ; set output
+#
 set xlabel "Processor number"
 set ylabel "resistance / Ω"
 set output "../GNU/SelfTRiHi.pdf"
@@ -133,6 +156,10 @@ set xlabel "Номер процессора"
 set ylabel "сопротивления / Ω"
 set output "../GNU/SelfTRiHiRU.pdf" ; replot ; set output
 #
+set xlabel "Prozessornummer"
+set ylabel "Widerstand / Ω"
+set output "../GNU/SelfTRiHiGE.pdf" ; replot ; set output
+#
 set autoscale y
 set xlabel "Processor number"
 set ylabel "Capacity / pF"
@@ -147,6 +174,10 @@ set xlabel "Номер процессора"
 set ylabel "значение ёмкости / pF"
 set output "../GNU/SelfTcap0RU.pdf" ; replot ; set output
 #
+set xlabel "Prozessornummer"
+set ylabel "Kapazität / pF"
+set output "../GNU/SelfTcap0GE.pdf" ; replot ; set output
+#
 set xlabel "Processor number"
 set output "../GNU/SelfTrefKorr.pdf"
 set ylabel "Voltage correction / mV"
@@ -159,6 +190,10 @@ set output "../GNU/SelfTrefKorrCZ.pdf" ; replot ; set output
 set xlabel "Номер процессора"
 set ylabel "Коррекция напряжений / mV" 
 set output "../GNU/SelfTrefKorrRU.pdf" ; replot ; set output
+#
+set xlabel "Prozessornummer"
+set ylabel "Spannungskorrektur / mV"
+set output "../GNU/SelfTrefKorrGE.pdf" ; replot ; set output
 #
 set xlabel "Processor number"
 set ylabel "Voltage difference / mV"
@@ -173,4 +208,9 @@ set output "../GNU/SelfTrefDiffCZ.pdf" ; replot ; set output
 set xlabel "Номер процессора"
 set ylabel "Разность напряжений / mV" 
 set output "../GNU/SelfTrefDiffRU.pdf" ; replot ; set output
+#
+set xlabel "Prozessornummer"
+set ylabel "Spannungsdifferenz / mV"
+set output "../GNU/SelfTrefDiffGE.pdf" ; replot ; set output
+#
 #    EOF

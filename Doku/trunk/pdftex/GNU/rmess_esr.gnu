@@ -57,4 +57,8 @@ set xlabel "Значение сопротивления / Ω"
 set ylabel "разница  / Ω"
 set output "../GNU/res_esrRU.pdf" ; replot ; set output
 #
+set xlabel "Widerstandswert / Ω"
+set ylabel "Differenz / Ω"
+set output "../GNU/res_esrGE.pdf" ; replot ; set output
+#
 #    EOF

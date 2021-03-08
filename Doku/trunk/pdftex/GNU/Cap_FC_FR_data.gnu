@@ -89,4 +89,9 @@ set output "../GNU/Cap_FC_FR_dataCZ.pdf" ; replot ; set output
 set xlabel "Значение емкости / F" 
 set ylabel "ESR / Ω" 
 set output "../GNU/Cap_FC_FR_dataRU.pdf" ; replot ; set output
+#
+set xlabel "Kapazität / F" 
+set ylabel "ESR / Ω" 
+set output "../GNU/Cap_FC_FR_dataGE.pdf" ; replot ; set output
+#
 #    EOF

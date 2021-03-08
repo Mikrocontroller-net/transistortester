@@ -18,7 +18,8 @@ set terminal pdf color
 set grid
 set logscale x
 set logscale y
-set pointsize 3
+set pointsize 2
+set xrange [ 0.1e-6 : 0.001 ]
 set style data points
 set style line 1  linetype 1 linecolor rgb "red" linewidth 2.000  pointtype 4 pointsize 1.5
 set style line 4  linetype 1 linecolor rgb "red" linewidth 2.000  pointtype 6 pointsize 1.5
@@ -51,4 +52,9 @@ set output "../GNU/Cesr2CZ.pdf" ; replot ; set output
 set xlabel "Значение емкости / F"
 set ylabel "ESR / Ω"
 set output "../GNU/Cesr2RU.pdf" ; replot ; set output
+#
+set xlabel "Kapazitätswert / F"
+set ylabel "ESR / Ω"
+set output "../GNU/Cesr2GE.pdf" ; replot ; set output
+#
 #    EOF

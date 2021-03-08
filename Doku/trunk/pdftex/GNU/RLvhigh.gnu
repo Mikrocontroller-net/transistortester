@@ -31,6 +31,7 @@ GNUTERM = "wxt"
 set grid
 set xtics 1
 set ytics 5
+set key inside right top vertical Right noreverse enhanced autotitles nobox
 set terminal pdf color 
 set output "../GNU/RLvhigh.pdf"
 set style line 1  linetype 1 linewidth 2.000 pointsize 1
@@ -49,4 +50,9 @@ set output "../GNU/RLvhighCZ.pdf" ; replot ; set output
 set xlabel "резистор Rx / Ω"
 set ylabel "напряжений / mV"
 set output "../GNU/RLvhighRU.pdf" ; replot ; set output
+#
+set xlabel "Widerstand Rx / Ω" 
+set ylabel "Spannung / mV" 
+set output "../GNU/RLvhighGE.pdf" ; replot ; set output
+#
 #    EOF

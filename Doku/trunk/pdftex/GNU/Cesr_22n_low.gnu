@@ -1,7 +1,4 @@
-unset logscale
-set logscale x 10
 set pointsize 2
-set origin 0,0
 set style data points
 set style function lines
 set xzeroaxis linetype -2 linewidth 1.000
@@ -16,8 +13,8 @@ set title  offset character 0, 0, 0 font "" norotate
 GNUTERM = "wxt"
 set terminal pdf color 
 set grid
-set logscale x
 set logscale y 10
+set logscale x 10
 set pointsize 3
 set style data points
 set style line 1  linetype 1 linecolor rgb "red" linewidth 3.000  pointtype 4 pointsize 0.7
@@ -31,6 +28,7 @@ set style line 7  linetype 1 linecolor rgb "blue" linewidth 3.000  pointtype 4 p
 set xlabel "Capacity value / F"
 set format x "%.0s%c"
 set format y "% g"
+set xrange [ 10.e-9 : 10.e-6 ]
 set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set xtics autofreq  norangelimit
 set ylabel "ESR / Ω"
@@ -56,4 +54,9 @@ set output "../GNU/Cesr_22n_lowCZ.pdf" ; replot ; set output
 set xlabel "Значение емкости / F" 
 set ylabel "ESR / Ω"
 set output "../GNU/Cesr_22n_lowRU.pdf" ; replot ; set output
+#
+set xlabel "Kapazitätswert / F"
+set ylabel "ESR / Ω"
+set output "../GNU/Cesr_22n_lowGE.pdf" ; replot ; set output
+#
 #    EOF

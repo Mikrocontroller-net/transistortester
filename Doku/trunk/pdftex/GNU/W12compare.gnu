@@ -27,4 +27,8 @@ set xlabel "ADC sample"
 set ylabel "ADC value"
 set output "../GNU/W12compareRU.pdf" ; replot ; set output
 #
+set xlabel "ADC Folgenummer"
+set ylabel "ADC Wert"
+set output "../GNU/W12compareGE.pdf" ; replot ; set output
+#
 #    EOF

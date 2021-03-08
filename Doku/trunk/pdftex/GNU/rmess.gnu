@@ -1,7 +1,7 @@
 set key title ""
 unset logscale
 set logscale x 10
-set pointsize 2
+set pointsize 1
 set size ratio 0 1,1
 set style data points
 set style function lines
@@ -27,6 +27,7 @@ set format x "%.0s%c"
 set format y "% g"
 set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set xtics autofreq  norangelimit
+set key inside center top vertical Right noreverse enhanced autotitles nobox
 set xlabel "Resistor value / Ω"
 set ylabel "Error / \%"
 set output "../GNU/Mega8res.pdf"
@@ -41,6 +42,10 @@ set xlabel "Значение сопротивления / Ω"
 set ylabel "погрешность / \%"
 set output "../GNU/Mega8resRU.pdf" ; replot ; set output
 #
+set xlabel "Widerstandswert / Ω"
+set ylabel "Messfehler / \%"
+set output "../GNU/Mega8resGE.pdf" ; replot ; set output
+#
 set xlabel "Resistor value / Ω"
 set ylabel "Error / \%"
 set output "../GNU/Mega8Ares.pdf"
@@ -53,6 +58,10 @@ set output "../GNU/Mega8AresCZ.pdf" ; replot ; set output
 set xlabel "Значение сопротивления / Ω"
 set ylabel "погрешность / \%"
 set output "../GNU/Mega8AresRU.pdf" ; replot ; set output
+#
+set xlabel "Widerstandswert / Ω"
+set ylabel "Messfehler / \%"
+set output "../GNU/Mega8AresGE.pdf" ; replot ; set output
 #
 set xlabel "Resistor value / Ω"
 set ylabel "Error / \%"
@@ -67,6 +76,10 @@ set xlabel "Значение сопротивления / Ω"
 set ylabel "погрешность / \%"
 set output "../GNU/Mega8LresRU.pdf" ; replot ; set output
 #
+set xlabel "Widerstandswert / Ω"
+set ylabel "Messfehler / \%"
+set output "../GNU/Mega8LresGE.pdf" ; replot ; set output
+#
 set xlabel "Resistor value / Ω"
 set ylabel "Error / \%"
 set output "../GNU/Mega168res.pdf"
@@ -79,5 +92,9 @@ set output "../GNU/Mega168resCZ.pdf" ; replot ; set output
 set xlabel "Значение сопротивления / Ω"
 set ylabel "погрешность / \%"
 set output "../GNU/Mega168resRU.pdf" ; replot ; set output
+#
+set xlabel "Widerstandswert / Ω"
+set ylabel "Messfehler / \%"
+set output "../GNU/Mega168resGE.pdf" ; replot ; set output
 #
 #    EOF

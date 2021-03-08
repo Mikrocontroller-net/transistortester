@@ -37,4 +37,9 @@ set output "../GNU/RHvCZ.pdf" ; replot ; set output
 set xlabel "резистор Rx / Ω"
 set ylabel "напряжений / mV"
 set output "../GNU/RHvRU.pdf" ; replot ; set output
+#
+set xlabel "Widerstand Rx / Ω" 
+set ylabel "Spannung / mV" 
+set output "../GNU/RHvGE.pdf" ; replot ; set output
+#
 #    EOF

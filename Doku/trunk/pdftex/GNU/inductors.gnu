@@ -55,4 +55,8 @@ set xlabel "Значение индуктивности / H"
 set ylabel "погрешность / \%"
 set output "../GNU/induct328pRU.pdf" ; replot ; set output
 #
+set xlabel "Induktivitätswert / H"
+set ylabel "Messfehler / \%"
+set output "../GNU/induct328pGE.pdf" ; replot ; set output
+#
 #    EOF

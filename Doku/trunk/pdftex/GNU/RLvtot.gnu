@@ -11,7 +11,7 @@ set title ""
 set xlabel  offset character 0, 0, 0 font "" textcolor lt -1 norotate
 set ylabel  offset character 0, 0, 0 font "" textcolor lt -1 rotate by -270
 GNUTERM = "wxt"
-set key at 1,2800 left center Right nobox 
+set key inside center center vertical Right noreverse enhanced autotitles nobox
 set grid
 set xrange [ 0.1 : 100000 ] noreverse nowriteback
 set format x "%.0s%c"
@@ -32,5 +32,9 @@ set output "../GNU/RLvtotCZ.pdf" ; replot ; set output
 set xlabel "резистор Rx / Ω"
 set ylabel "Напряжение / mV" 
 set output "../GNU/RLvtotRU.pdf" ; replot ; set output
+#
+set xlabel "Widerstand Rx / Ω" 
+set ylabel "Spannung / mV" 
+set output "../GNU/RLvtotGE.pdf" ; replot ; set output
 #
 #    EOF

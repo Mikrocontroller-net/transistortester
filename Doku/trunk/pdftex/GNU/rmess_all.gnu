@@ -9,9 +9,9 @@ set ytics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 #set ytics autofreq  norangelimit
 set ytics 1  norangelimit
 set xlabel  offset character 0, 0, 0 font "" textcolor lt -1 norotate
-set xrange [ * : * ] noreverse nowriteback  # (currently [0.00000:8.00000] )
 set ylabel  offset character 0, 0, 0 font "" textcolor lt -1 rotate by -270
 set yrange [ -5.00000 : 5.00000 ] noreverse nowriteback
+set xrange [ 1 : 100000000 ]
 GNUTERM = "wxt"
 set terminal pdf color 
 set grid
@@ -46,6 +46,10 @@ set xlabel "Значение сопротивления / Ω"
 set ylabel "ошибка / \%"
 set output "../GNU/m168res_allRU.pdf" ; replot ; set output
 #
+set xlabel "Widerstandswert / Ω"
+set ylabel "Messfehler / \%"
+set output "../GNU/m168res_allGE.pdf" ; replot ; set output
+#
 set xlabel "Resistor value / Ω"
 set ylabel "Error / \%"
 set output "../GNU/m168ares_all.pdf"
@@ -63,6 +67,10 @@ set output "../GNU/m168ares_allCZ.pdf" ; replot ; set output
 set xlabel "Значение сопротивления / Ω"
 set ylabel "ошибка / \%"
 set output "../GNU/m168ares_allRU.pdf" ; replot ; set output
+#
+set xlabel "Widerstandswert / Ω"
+set ylabel "Messfehler / \%"
+set output "../GNU/m168ares_allGE.pdf" ; replot ; set output
 #
 set xlabel "Resistor value / Ω"
 set ylabel "Error / \%"
@@ -82,6 +90,10 @@ set xlabel "Значение сопротивления / Ω"
 set ylabel "ошибка / \%"
 set output "../GNU/m168pres_allRU.pdf" ; replot ; set output
 #
+set xlabel "Widerstandswert / Ω"
+set ylabel "Messfehler / \%"
+set output "../GNU/m168pres_allGE.pdf" ; replot ; set output
+#
 set xlabel "Resistor value / Ω"
 set ylabel "Error / \%"
 set output "../GNU/m328res_all.pdf"
@@ -100,6 +112,10 @@ set xlabel "Значение сопротивления / Ω"
 set ylabel "ошибка / \%"
 set output "../GNU/m328res_allRU.pdf" ; replot ; set output
 #
+set xlabel "Widerstandswert / Ω"
+set ylabel "Messfehler / \%"
+set output "../GNU/m328res_allGE.pdf" ; replot ; set output
+#
 set xlabel "Resistor value / Ω"
 set ylabel "Error / \%"
 set output "../GNU/m328pres_all.pdf"
@@ -117,6 +133,10 @@ set output "../GNU/m328pres_allCZ.pdf" ; replot ; set output
 set xlabel "Значение сопротивления / Ω"
 set ylabel "ошибка / \%"
 set output "../GNU/m328pres_allRU.pdf" ; replot ; set output
+#
+set xlabel "Widerstandswert / Ω"
+set ylabel "Messfehler / \%"
+set output "../GNU/m328pres_allGE.pdf" ; replot ; set output
 #
 ##################################################################################
 #set output "../GNU/m168res_korr.eps"

@@ -53,4 +53,8 @@ set xlabel "Значение емкости / F"
 set ylabel "погрешность / \%"
 set output "../GNU/Mega168cap_optRU.pdf" ; replot ; set output
 #
+set xlabel "Kapazitätswert / F"
+set ylabel "Messfehler / \%"
+set output "../GNU/Mega168cap_optGE.pdf" ; replot ; set output
+#
 #    EOF

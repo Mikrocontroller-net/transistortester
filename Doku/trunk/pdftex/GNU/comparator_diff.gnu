@@ -51,4 +51,10 @@ set xlabel "Number of ATmega168"
 set ylabel "Error / per mill"
 set y2label "Difference to reference / mV"
 set output "../GNU/ComparatorAdjustRU.pdf" ; replot ; set output
+#
+set xlabel "Nummer des ATmega168"
+set ylabel "Fehler / Promille"
+set y2label "Differenz zur Referenz / mV"
+set output "../GNU/ComparatorAdjustGE.pdf" ; replot ; set output
+#
 #    EOF

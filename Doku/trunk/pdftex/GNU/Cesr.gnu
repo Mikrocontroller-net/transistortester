@@ -27,6 +27,7 @@ set style line 5  linetype 1 linecolor rgb "green" linewidth 2.000 pointtype 7 p
 set style line 6  linetype 1 linecolor rgb "blue" linewidth 2.000  pointtype 7 pointsize 1
 set style line 7  linetype 1 linecolor rgb "black" linewidth 2.000  pointtype 4 pointsize 1.8
 
+set xrange [ 0.1e-6 : 0.001 ]
 set xlabel "Capacity value / F"
 set format x "%.0s%c"
 set format y "% g"
@@ -49,4 +50,9 @@ set output "../GNU/CesrCZ.pdf" ; replot ; set output
 set xlabel "Значение емкости / F" 
 set ylabel "ESR / Ω"
 set output "../GNU/CesrRU.pdf" ; replot ; set output
+#
+set xlabel "Kapazitätswert / F"
+set ylabel "ESR / Ω"
+set output "../GNU/CesrGE.pdf" ; replot ; set output
+#
 #    EOF

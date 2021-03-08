@@ -1,4 +1,3 @@
-set key title ""
 unset logscale
 #set logscale x 10
 set offsets 0, 0, 0, 0
@@ -24,6 +23,7 @@ GNUTERM = "wxt"
 set grid
 set xtics 1
 set ytics 5
+set key inside left top vertical Right noreverse enhanced autotitles nobox
 set terminal pdf color 
 set output "../GNU/RLvlow.pdf"
 set style line 1  linetype 1 linewidth 2.000  pointsize 1
@@ -42,4 +42,9 @@ set output "../GNU/RLvlowCZ.pdf" ; replot ; set output
 set xlabel "резистор Rx / Ω"
 set ylabel "напряжений / mV"
 set output "../GNU/RLvlowRU.pdf" ; replot ; set output
+#
+set xlabel "Widerstand Rx / Ω" 
+set ylabel "Spannung / mV" 
+set output "../GNU/RLvlowGE.pdf" ; replot ; set output
+#
 #    EOF

@@ -45,4 +45,8 @@ set ylabel "ошибка / ppm"
 set ylabel "погрешность / ppm"
 set output "../GNU/frequency-ppmRU.pdf" ; replot ; set output
 #
+set xlabel "Frequenz / Hz"
+set ylabel "Fehler / ppm"
+set output "../GNU/frequency-ppmGE.pdf" ; replot ; set output
+#
 #    EOF

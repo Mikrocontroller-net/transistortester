@@ -29,6 +29,7 @@ set style line 6  linetype 1 linecolor rgb "blue" linewidth 2.000  pointtype 7 p
 set style line 7  linetype 1 linecolor rgb "blue" linewidth 2.000  pointtype 4 pointsize 1
 
 set xlabel "Capacity value / F"
+set xrange [ 10.e-9 : 10.3e-6 ]
 set format x "%.0s%c"
 set format y "% g"
 set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
@@ -50,9 +51,15 @@ plot "../GNU/Cesr_22n.dat" u 2:10 title "Tester" ls 3, "../GNU/Cesr_22n.dat" u 2
      "../GNU/Cesr_22n.dat" u 2:4 title "LCR100k" ls 2, "../GNU/Cesr_22n.dat" u 2:3 title "LCR10k" ls 7
 set output
 set xlabel "Capacity value / F"
+set ylabel "ESR / Ω"
 set output "../GNU/Cesr_22nCZ.pdf" ; replot ; set output
 #
 set xlabel "Значение емкости / F" 
 set ylabel "ESR / Ω"
 set output "../GNU/Cesr_22nRU.pdf" ; replot ; set output
+#
+set xlabel "Kapazitätswert / F"
+set ylabel "ESR / Ω"
+set output "../GNU/Cesr_22nGE.pdf" ; replot ; set output
+#
 #    EOF

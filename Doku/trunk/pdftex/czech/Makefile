@@ -82,6 +82,34 @@ LISTE3 += ../GNU/RLvtotRU.pdf
 LISTE3 += ../GNU/SelfTrefRU.pdf
 LISTE3 += ../GNU/W12compareRU.pdf
 
+LISTE4 = ../GNU/Cap_FC_dataGE.pdf
+LISTE4 += ../GNU/Cap_FR_dataGE.pdf
+LISTE4 += ../GNU/Cap_FC_FR_dataGE.pdf
+LISTE4 += ../GNU/CesrGE.pdf
+LISTE4 += ../GNU/Cesr2GE.pdf
+LISTE4 += ../GNU/Cesr_22nGE.pdf
+LISTE4 += ../GNU/Cesr_22n_lowGE.pdf
+LISTE4 += ../GNU/ComparatorAdjustGE.pdf
+LISTE4 += ../GNU/Elco_esrGE.pdf
+LISTE4 += ../GNU/frequency-ppmGE.pdf
+LISTE4 += ../GNU/induct328pGE.pdf
+LISTE4 += ../GNU/m168res_allGE.pdf
+LISTE4 += ../GNU/MegaAutoGE.pdf
+LISTE4 += ../GNU/Mega1284GE.pdf
+LISTE4 += ../GNU/Mega168allGE.pdf 
+LISTE4 += ../GNU/Mega168capGE.pdf
+LISTE4 += ../GNU/Mega168cap_optGE.pdf
+LISTE4 += ../GNU/Mega328allGE.pdf
+LISTE4 += ../GNU/Mega8capGE.pdf
+LISTE4 += ../GNU/Mega8resGE.pdf
+LISTE4 += ../GNU/res_esrGE.pdf
+LISTE4 += ../GNU/RHvGE.pdf
+LISTE4 += ../GNU/RLvhighGE.pdf
+LISTE4 += ../GNU/RLvlowGE.pdf
+LISTE4 += ../GNU/RLvtotGE.pdf
+LISTE4 += ../GNU/SelfTrefGE.pdf
+LISTE4 += ../GNU/W12compareGE.pdf
+
 
 LISTE21 += ../FIG/port.pdf ../FIG/ResistormessH1.pdf ../FIG/ResistormessH2.pdf ../FIG/ResistormessL1.pdf
 LISTE21 += ../FIG/ResistormessL2.pdf ../FIG/terminal.pdf
@@ -395,7 +423,7 @@ TEXLIST1 += 60-generators.tex 70-errors.tex 80-special.tex 90-todo.tex
 
 TEXLIST50 = BJT-transistors.tex MOS-transistors.tex
 
-ttester.pdf: ttester.tex $(LISTE1) $(LISTE2) $(LISTE3) $(LISTE21) $(TEXLIST1) Makefile
+ttester.pdf: ttester.tex $(LISTE1) $(LISTE2) $(LISTE3) $(LISTE4) $(LISTE21) $(TEXLIST1) Makefile
 	pdflatex --shell-escape ttester.tex 
 	pdflatex --shell-escape ttester.tex
 
@@ -403,6 +431,6 @@ ttinfo.pdf: ttinfo.tex $(LISTE50) $(TEXLIST50) Makefile
 	pdflatex --shell-escape ttinfo.tex
 	pdflatex --shell-escape ttinfo.tex
 clean:
-	rm -f $(LISTE1) $(LISTE2) ../GNU/*CZ.pdf $(LISTE3) ../GNU/*RU.pdf $(LISTE21) $(LISTE50)
+	rm -f $(LISTE1) $(LISTE2) ../GNU/*CZ.pdf $(LISTE3) ../GNU/*RU.pdf $(LISTE4) ../GNU/*GE.pdf $(LISTE21) $(LISTE50)
 steril:
-	rm  -f $(LISTE2) ../GNU/*CZ.pdf $(LISTE3) ../GNU/*RU.pdf *.aux 
+	rm  -f $(LISTE2) ../GNU/*CZ.pdf $(LISTE3) ../GNU/*RU.pdf $(LISTE4) ../GNU/*GE.pdf *.aux 

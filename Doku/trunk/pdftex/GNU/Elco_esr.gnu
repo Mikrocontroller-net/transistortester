@@ -45,9 +45,11 @@ set output
 set ylabel "ESR / Ω"
 set output "../GNU/Elco_esrCZ.pdf" ; replot ; set output
 #
-set output
 set ylabel "ESR / Ω"
 set output "../GNU/Elco_esrRU.pdf" ; replot ; set output
+#
+set ylabel "ESR / Ω"
+set output "../GNU/Elco_esrGE.pdf" ; replot ; set output
 #
 #set y2range [ 0.01 : 100 ] 
 #set y2label "Vloss / \%"

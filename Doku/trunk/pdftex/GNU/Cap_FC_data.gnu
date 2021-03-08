@@ -56,7 +56,7 @@ set timestamp  offset character 0, 0, 0 font "" norotate
 set xlabel "Capacity / F" 
 set xlabel  offset character 0, 0, 0 font "" textcolor lt -1 norotate
 set xrange [ 0.000001 : 0.1 ] noreverse nowriteback
-set ylabel "ESR / Ohm" 
+set ylabel "ESR / Ω" 
 set ylabel  offset character 0, 0, 0 font "" textcolor lt -1 rotate by -270
 set yrange [ * : * ] noreverse nowriteback
 GNUTERM = "wxt"
@@ -75,4 +75,13 @@ plot "../GNU/Cap6_FC_ESR.dat" using ($1*0.000001):2 title "6V" ls 1,\
 "../GNU/Cap16_FC_ESR.dat" using ($1*0.000001):2 title "16V" ls 2,\
 "../GNU/Cap35_FC_ESR.dat" using ($1*0.000001):2 title "35V" ls 3,\
 "../GNU/Cap63_FC_ESR.dat" using ($1*0.000001):2 title "63V" ls 4
+set output
+#
+set xlabel "kapacita / F" 
+set ylabel "ESR / Ω" 
+set output "../GNU/Cap_FC_dataCZ.pdf" ; replot ; set output
+#
+set xlabel "Значение емкости / F" 
+set ylabel "ESR / Ω" 
+set output "../GNU/Cap_FC_dataRU.pdf" ; replot ; set output
 #    EOF

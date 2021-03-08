@@ -132,7 +132,7 @@ and the start key was pressed in the normal tester function. In this case the te
 from the special mode opration to the normal tester function with a key press.
 
  \item[Capacitor meter]
-With the \mbox{1 \electricC 3} symbol the tester changes to a capacitor meter function at TP1 and TP3.
+With the \mbox{\begin{large}1 \electricC 3\end{large}} symbol the tester changes to a capacitor meter function at TP1 and TP3.
 This operation mode will be marked with a {\bf[C]} at the right side of the first display line.
 With this operation mode capacitors from \(1pF\) up to \(100mF\) can be measured.
 In this operation mode the measurement is repeated without key press.
@@ -200,13 +200,13 @@ by a very long key press (\textgreater~1.3s).
 For color displays this menu item can be enabled with the Makefile option LCD\_CHANGE\_COLOR 
 for selecting the background color. The rotary encoder extension must be installed.
 You can select the colors red, green and blue with a longer key press. The intensity value of the
-selected color, which is marked with a > symbol in column 1, can be changed by a turn of the rotary encoder.
+selected color, which is marked with a {\textgreater} symbol in column 1, can be changed by a turn of the rotary encoder.
 
 \item[FrontColor]
 For color displays this menu item can be enabled with the Makefile option LCD\_CHANGE\_COLOR 
 for selecting the foreground color. The rotary encoder extension must be installed.
 You can select the colors red, green and blue with a longer key press. The intensity value of the
-selected color, which is marked with a > symbol in column 1, can be changed by a turn of the rotary encoder.
+selected color, which is marked with a {\textgreater} symbol in column 1, can be changed by a turn of the rotary encoder.
 
  \item[Show data]
 The function ,,Show Data'' shows besides the version number of the software the data of the calibration.
@@ -261,7 +261,7 @@ If you have selected the samplingADC function in the Makefile with the option ''
 two special steps are included to the calibration precedure.
 After the normal measuring of the zero capacity values, also the zero capacity values for the samplingADC function is
 measured (C0samp). As last step of the calibration the connection of a test capacitor at pin~1 and pin~3 is requested for
-later measurement of little coils with the message \mbox{1 \electricC 3  10-30nF[L]}.
+later measurement of little coils with the message \mbox{\begin{large}1 \electricC 3~10-30nF[L]\end{large}}.
 The capacity value should be between \(10nF\) and \(30nF\),
 to get a measurable resonant frequency by later parallel connection to a coil with less than \(2mH\).
 For inspection of coils with more than \(2mH\) inductance the normal measurement method should result to a
@@ -270,7 +270,7 @@ not be usefull.\\
 
 A capacitor with any capacity between \(100nF\) and \(20\mu F\) connected to pin~1 and pin~3 is
 required after the measurement of the zero capacity values.
-To indicate that, the message \mbox{1 \electricC 3 \textgreater 100nF} is shown in row 1 of the display.
+To indicate that, the message \mbox{\begin{large}1 \electricC 3~\textgreater 100nF\end{large}} is shown in row 1 of the display.
 You should connect the capacitor not before the message C0= or this text is shown.
 With this capacitor the offset voltage of the analog comparator will be compensated for better measurement
 of capacity values.  
@@ -449,6 +449,6 @@ is not shown and the resistance value is shown in line 1.
 For this resonant circuit the quality factor Q is also computed and shown behind the frequency value in line 3.
 You can identify this type of measurement with the inductance value at the first position of line 2,
 followed by the text '' if '' and the value of the assumed parallel capacity.
-The value of this parallel capacitor can currently only be set with the calibration function (\mbox{1 \electricC 3 \(10-30nF\)(L)}).
+The value of this parallel capacitor can currently only be set with the calibration function (\mbox{\begin{large}1 \electricC 3~10-30nF(L)\end{large}}).
 
 For displays with only two lines, the content for the third line is shown time-delayed in line 2.

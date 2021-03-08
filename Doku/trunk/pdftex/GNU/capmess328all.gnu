@@ -57,23 +57,61 @@ set format x "%.0s%c"
 set format y "% g"
 set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set xtics autofreq  norangelimit
-set ylabel "Error / Percent"
+set ylabel "Error / \%"
 #set yrange [-2 to 10]
-set key inside right top vertical Right noreverse enhanced autotitles nobox
+set key inside center top vertical Right noreverse enhanced autotitles nobox
+#
 set output "../GNU/Mega328all.pdf"
 plot "../GNU/capmess328-all.dat" u 3:($4-$3)/$3*100 title "328-10" ls 1,"../GNU/capmess328-all.dat" u 3:($5-$3)/$3*100 title "328-11" ls 2,"../GNU/capmess328-all.dat" u 3:($6-$3)/$3*100 title "168-12" ls 3
 set output
-set key inside at 1.e-6,5 vertical Right nobox
+set xlabel "hodnota kapacity / F"
+set ylabel "chyba / \%"
+set output "../GNU/Mega328allCZ.pdf" ; replot ; set output
+#
+set xlabel "Значение емкости / F" 
+set ylabel "погрешность / \%"
+set output "../GNU/Mega328allRU.pdf" ; replot ; set output
+#
+set key inside center top vertical Right noreverse enhanced autotitles nobox
+set xlabel "Capacity value / F"
+set ylabel "Error / \%"
 set output "../GNU/Mega328Pall.pdf"
 plot "../GNU/capmess328-all.dat" u 3:($7-$3)/$3*100 title "328P-13" ls 1,"../GNU/capmess328-all.dat" u 3:($8-$3)/$3*100 title "328P-14" ls 2,"../GNU/capmess328-all.dat" u 3:($9-$3)/$3*100 title "328P-15" ls 3
-#set output
+set output
+set xlabel "hodnota kapacity / F"
+set ylabel "chyba / \%"
+set output "../GNU/Mega328PallCZ.pdf" ; replot ; set output
+#
+set xlabel "Значение емкости / F" 
+set ylabel "погрешность / \%"
+set output "../GNU/Mega328PallRU.pdf" ; replot ; set output
+#
 # calibrated
-set key inside left top vertical Right noreverse enhanced autotitles nobox
+set key inside center top vertical Right noreverse enhanced autotitles nobox
+set xlabel "Capacity value / F"
+set ylabel "Error / \%"
 set output "../GNU/Mega328cal.pdf"
 plot "../GNU/capmess328-autocal.dat" u 3:($4-$3)/$3*100 title "328-10" ls 1,"../GNU/capmess328-autocal.dat" u 3:($5-$3)/$3*100 title "328-11" ls 2,"../GNU/capmess328-autocal.dat" u 3:($6-$3)/$3*100 title "328-12" ls 3
 set output
-set key inside left top vertical Right noreverse enhanced autotitles nobox
+set xlabel "hodnota kapacity / F"
+set ylabel "chyba / \%"
+set output "../GNU/Mega328calCZ.pdf" ; replot ; set output
+#
+set xlabel "Значение емкости / F" 
+set ylabel "погрешность / \%"
+set output "../GNU/Mega328calRU.pdf" ; replot ; set output
+#
+set key inside center top vertical Right noreverse enhanced autotitles nobox
+set xlabel "Capacity value / F"
+set ylabel "Error / \%"
 set output "../GNU/Mega328Pcal.pdf"
 plot "../GNU/capmess328-autocal.dat" u 3:($7-$3)/$3*100 title "328P-13" ls 1,"../GNU/capmess328-autocal.dat" u 3:($8-$3)/$3*100 title "328P-14" ls 2,"../GNU/capmess328-autocal.dat" u 3:($9-$3)/$3*100 title "328P-15" ls 3
-#set output
+set output
+set xlabel "hodnota kapacity / F"
+set ylabel "chyba / \%"
+set output "../GNU/Mega328PcalCZ.pdf" ; replot ; set output
+#
+set xlabel "Значение емкости / F" 
+set ylabel "погрешность / \%"
+set output "../GNU/Mega328PcalRU.pdf" ; replot ; set output
 #    EOF

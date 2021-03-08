@@ -20,10 +20,8 @@ set xtics autofreq  norangelimit
 set ytics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0 autojustify
 set ytics autofreq  norangelimit
 set title  offset character 0, 0, 0 font "" norotate
-set xlabel "" 
 set xlabel  offset character 0, 0, 0 font "" textcolor lt -1 norotate
 set xrange [ * : * ] noreverse nowriteback
-set ylabel "" 
 set ylabel  offset character 0, 0, 0 font "" textcolor lt -1 rotate by -270
 set yrange [ * : * ] noreverse nowriteback
 set psdir
@@ -38,5 +36,13 @@ set xlabel "Frequency / Hz"
 set ylabel "Error / ppm"
 plot "../GNU/frequency-ppm.dat" u 1:($2-$1)/$1*1000000 title '2 Gen' ls 1, "../GNU/frequency-ppm.dat" u 1:($3-$1)/$1*1000000 title '1 Gen' ls 2
 set output
-
+set xlabel "frekvence / Hz"
+set ylabel "chyba / ppm"
+set output "../GNU/frequency-ppmCZ.pdf" ; replot ; set output
+#
+set xlabel "Частота / Hz"
+set ylabel "ошибка / ppm"
+set ylabel "погрешность / ppm"
+set output "../GNU/frequency-ppmRU.pdf" ; replot ; set output
+#
 #    EOF

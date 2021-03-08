@@ -38,7 +38,12 @@ Zwischenwerte der Spannung werden interpoliert.
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/Bigcap.pdf}
+ \begin{overpic}[width=16cm]{../FIG/Bigcap.pdf}
+  \color{black}
+  \put(25,97){\makebox(0,0)[cb]{Schnellentladung des Kondensators}}
+  \put(25,61){\makebox(0,0)[cb]{10ms Ladungsphase des Kondensators}}
+  \put(25,26){\makebox(0,0)[cb]{Spannungsmessphase des Kondensators}}
+ \end{overpic}
 \caption{Kondensator-Entladung und -Ladung mit \(10ms\) Ladepulsen bis zur Spannung \textgreater~\(300mV\)}
 \label{fig:bigcap1}
 \end{figure}
@@ -340,8 +345,12 @@ diese Messfolge wiederholt.
 Die Abbildung~\ref{fig:Cap_esr} zeigt die entsprechenden Schaltungen.
 
 \begin{figure}[H]
-  \centering
-    \includegraphics[]{../FIG/Cap_esr.pdf}
+ \centering
+ \begin{overpic}[width=15cm]{../FIG/Cap_esr.pdf}
+   \color{black}
+   \put(28,85){\makebox(0,0)[cb]{Spannungsmessung mit Ladestrom}}
+   \put(28,40){\makebox(0,0)[cb]{Spannungsmessung ohne Strom}}
+  \end{overpic}
   \caption{Schaltbild der ESR-Messung eines Kondensators}
   \label{fig:Cap_esr}
 \end{figure}
@@ -466,10 +475,16 @@ stromlosen Zeit beibehält.
 \end{figure}
 
 \begin{figure}[H]
-  \centering
-    \includegraphics[]{../FIG/Cap_esr2.pdf}
-  \caption{Vereinfachte ESR-Messung eines Kondensators}
-  \label{fig:Cap_esr2}
+ \centering
+  \begin{overpic}[width=15cm]{../FIG/Cap_esr2.pdf}
+   \color{black}
+   \put(20,98){\makebox(0,0)[cb]{Vorwärts Referenzmessung}}
+   \put(20,72){\makebox(0,0)[cb]{Vorwärts Spannungsmessung mit Ladestrom}}
+   \put(20,47){\makebox(0,0)[cb]{Rückwärts Referenzmessung}}
+   \put(20,21){\makebox(0,0)[cb]{Rückwärts Spannungsmessung mit Ladestrom}}
+  \end{overpic}
+ \caption{Vereinfachte ESR-Messung eines Kondensators}
+ \label{fig:Cap_esr2}
 \end{figure}
 
 
@@ -677,8 +692,8 @@ Folie      & 100nF       & 98.0-101nF   & 101.4nF   & 102.2nF  &  101.6nF \\
            &             & Q=58-700     &           &          &  Vloss=0 \% \\
     \hline
 \end{tabular}
-\vspace{0.5 cm}
 
+\vspace{0.5 cm}
 
 In der Tabelle kann man sehen, dass die Kapazität aller Folienkondensatoren mit befriedigender Genauigkeit von allen
 Messgeräten bestimmt werden. Die Kapazitäten und die Güten Q des PeakTech LCR-Messgerätes sind Minumum

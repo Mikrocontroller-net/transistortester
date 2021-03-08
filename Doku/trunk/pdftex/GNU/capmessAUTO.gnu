@@ -46,7 +46,7 @@ set format x "%.0s%c"
 set format y "% g"
 set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set xtics autofreq  norangelimit
-set ylabel "Error / Percent"
+set ylabel "Error / \%"
 #set yrange [-2 to 10]
 set key outside right top vertical Right noreverse enhanced autotitles nobox
 set output "../GNU/MegaAuto.pdf"
@@ -54,3 +54,11 @@ plot "../GNU/capmessAUTO.dat" u 3:($4-$3)/$3*100 title "168-3unc" ls 1 with poin
      "../GNU/capmessAUTO.dat" u 3:($6-$3)/$3*100 title "168PA-7unc" ls 2 with points, "../GNU/capmessAUTO.dat" u 3:($7-$3)/$3*100 title "168PA-7cal" ls 5 with lines,\
      "../GNU/capmessAUTO.dat" u 3:($8-$3)/$3*100 title "328P-14unc" ls 3 with points, "../GNU/capmessAUTO.dat" u 3:($9-$3)/$3*100 title "328P-14cal" ls 6 with lines
 set output
+set xlabel "hodnota kapacity / F"
+set ylabel "chyba / \%"
+set output "../GNU/MegaAutoCZ.pdf" ; replot ; set output
+#
+set xlabel "Значение емкости / F" 
+set ylabel "погрешность / \%"
+set output "../GNU/MegaAutoRU.pdf" ; replot ; set output
+#

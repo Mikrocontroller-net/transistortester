@@ -41,8 +41,16 @@ set format x "%.0s%c"
 set format y "% g"
 set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set xtics autofreq  norangelimit
-set ylabel "Error / Percent"
+set ylabel "Error / \%"
 set output "../GNU/Mega168cap_opt.pdf"
 plot "../GNU/capmess168-3.dat" u 3:($4-$3)/$3*100 title "168-3-A" ls 1,"../GNU/capmess168-3.dat" u 3:($5-$3)/$3*100 title "168-3-B" ls 2,"../GNU/capmess168-3.dat" u 3:($6-$3)/$3*100 title "168-3-C" ls 3
 set output
+set xlabel "Capacity value / F"
+set ylabel "chyba / \%"
+set output "../GNU/Mega168cap_optCZ.pdf" ; replot ; set output
+#
+set xlabel "Значение емкости / F" 
+set ylabel "погрешность / \%"
+set output "../GNU/Mega168cap_optRU.pdf" ; replot ; set output
+#
 #    EOF

@@ -1,11 +1,12 @@
-\chapter{Configuring the TransistorTester}
+\chapter{Programming of the TransistorTester}
+\section{Configuring the TransistorTester}
 \label{sec:config}
 The complete software for the TransistorTester is available in source code.
 The compilation of modules is controlled with a Makefile. The developement was done
 at the Ubuntu Linux operating system with the GNU toolchain (gcc version 4.5.3).
 It should be possible to use other Linux operating systems without problems.
 To load the compiled data to the flash memory or
-the EEprom memory, the tool avrdude (version 5.11svn) was taken by the Makefile, if you call ``make upload''.
+the EEprom memory, the tool avrdude (version 5.11svn) was taken by the Makefile, if you call ''make upload''.
  The program avrdude \cite{avrdude} is available for Linux and Windows operating system.
 The gnu C-compiler gcc is also taken by the AVR studio software and
 by the WinAVR \cite{winavr1},\cite{winavr2} software at the Windows operating system.
@@ -13,8 +14,8 @@ You can load the program data (.hex and .eep) also with other tools to the ATmeg
 but only my Makefile version takes care to load the correct data to the choosed processor.
 Avrdude loads only data to the ATmega if the Signature Bytes of the connected ATmega is
 identical to the choosed one. 
-If you alter the Makefile, all the software will be compiled new, if you call a ``make'' or
-``make upload'' command. The software compiled for a ATmega8 does not run on a ATmega168.
+If you alter the Makefile, all the software will be compiled new, if you call a ''make'' or
+''make upload'' command. The software compiled for a ATmega8 does not run on a ATmega168.
 The software compiled for a ATmega328 does not run on the ATmega168! 
 A exeption from this rule is the software compiled for ATmega168, this data can also be used
 for a ATmega328 without changes.
@@ -355,7 +356,7 @@ Example: CFLAGS += -DFREQUENCY\_50HZ
 
   \item[CAP\_EMPTY\_LEVEL]  This option defines the voltage level for discharged capacitor (mV units).
 You can set the level to higher value as \(3mV\), if the tester does not finish discharging of capacitors.
-In this case the tester ends after longer time with the message ``Cell!''.\\
+In this case the tester ends after longer time with the message ''Cell!''.\\
 Example: CFLAGS += -DCAP\_EMPTY\_LEVEL=3
 
   \item[WITH\_AUTO\_REF] specifies, that reference voltage is read to get the actual factor for capacity measuring of low capacity values (below \(40\mu F\)).\\
@@ -436,6 +437,27 @@ As you can see the switching from \(5V\) to \(1.1V\) is much slower than switchi
 have still installed the \(100nF\), switching time will be about factor 100 longer!\\
 Example: CFLAGS += -DNO\_AREF\_CAP
 
+\end{description}
+
+\begin{figure}[H]
+  \begin{subfigure}[b]{8.6cm}
+    \centering
+    \includegraphics[width=8.3cm]{../PNG/AREF2_1V.png}
+    \caption{from 5V to 1.1V }
+    \label{pic:aref1}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{8.6cm}
+    \centering
+    \includegraphics[width=8.3cm]{../PNG/AREF2VCC.png}
+    \caption{from 1.1V to 5V}
+    \label{pic:aref5}
+  \end{subfigure}
+  \caption{AREF switching with a \(1nF\) Capacitor}
+\end{figure}
+
+\begin{description}
+
   \item[REF\_R\_KORR] specifies a offset for the internal ADC-reference voltage in mV units.
 With this offset a difference by switching from VCC based ADC reference to internal ADC reference for resistor measurement can be adjusted.
 If you select the AUTO\_CAL option of the selftest section, this value is only a additionally offset to the found voltage 
@@ -456,9 +478,9 @@ Example: CFLAGS += -DRESTART\_DELAY\_TICS=6
 Recommended is to use the EEprom (option set).\\
 Example: CFLAGS += -DUSE\_EEPROM
 
-\item[EBC\_STYLE] specifies, that the output of transistor pin layout is done with format ``EBC=...'' or ``GDS=...''.
+\item[EBC\_STYLE] specifies, that the output of transistor pin layout is done with format ''EBC=...'' or ''GDS=...''.
 This way of output save program memory for the ATmega. Without this option the layout is shown with the
-format ``123=...'', where every point represent a E~(Emitter), B~(Base) or C~(Collector).
+format ''123=...'', where every point represent a E~(Emitter), B~(Base) or C~(Collector).
 For FET transistors every point can be a G~(Gate), D~(Drain) or S~(Source).
 If the sequence of the test pins is not 1, 2 and 3 in the reading direction, you can invert the sequence with the option
 EBC\_STYLE=321 . The pin assignment is then shown with style ''321=...'', which will better match the usual
@@ -560,40 +582,289 @@ The usage of this sleep mode indeed spare battery capacity, but produce addition
 Example: INHIBIT\_SLEEP\_MODE = 1
 
   \item[PROGRAMMER] select your programmer type for avrdude interface program.
-The correct selection of this option is needed, if you use the ``make upload'' or ``make fuses'' call
+The correct selection of this option is needed, if you use the ''make upload'' or ''make fuses'' call
 of this Makefile.
-For further information please look to the manual pages of avrdude and online documentation~\cite{avrdude}.\\
+For further information please look to the manual pages of avrdude and online documentation~\cite{avrdude}.
+Usually the Diamex ALL-AVR programmer is preselected in the Makefile and some
+other selections are included as comment.\\
 Example: PROGRAMMER=avrisp2
 
   \item[BitClock] selects the Bit clock period for the Programmer. See the description of the -B parameter of avrdude.\\
 Example: BitClock=5.0
 
   \item[PORT] select the port where avrdude can reach your microcontroller (atmega).
-For further information please look to the manual pages of avrdude.\\
+For further information please look to the manual pages of avrdude.
+Some programmers use a build-in USB-serial interface for the connection to the PC.
+For this programmers the PORT must be set to /dev/ttyUSBx or /dev/ttyACMx , where
+the last x is a assigned number between 0 and 9.\\
 Example: PORT=usb
 
 \end{description}
-
-\begin{figure}[H]
-  \begin{subfigure}[b]{8.6cm}
-    \centering
-    \includegraphics[width=8.3cm]{../PNG/AREF2_1V.png}
-    \caption{from 5V to 1.1V }
-    \label{pic:aref1}
-  \end{subfigure}
-  ~
-  \begin{subfigure}[b]{8.6cm}
-    \centering
-    \includegraphics[width=8.3cm]{../PNG/AREF2VCC.png}
-    \caption{from 1.1V to 5V}
-    \label{pic:aref5}
-  \end{subfigure}
-  \caption{AREF switching with a \(1nF\) Capacitor}
-\end{figure}
-
 
 Additional parameters can be set in the files transistortester.h and config.h .
 The file config.h contains global settings, defines the port / pin constellation,
  the clock frequency of the ADC and the resistor values used for measurement.
 The file Transistortester.h contains the global variables and tables and also the text used for LCD output.
 Normally there is no reason to change these values.
+
+
+
+\section{Programming of the microcontroller}
+I release the software for the microcontroller with source code.
+The developement is done with Linux operationg system (Mint) and
+is controlled with a Makefile. The Makefile makes sure, that your
+software will be compiled with the prior selected Makefile options. Some constellations
+are precompiled with the source. Please take a look to the ReadMe.txt file
+in the directory Software/default and to the chapter~\ref{sec:config} at page~\pageref{sec:config}.
+The result of compilation have the extensions .hex and .eep .
+The .hex file contains the data for the program memory (flash) of the ATmega processor.
+The .eep file contains the data for the EEprom memory of the ATmega. Both data files
+must be loaded to the correct memory.
+
+Additionally the operating state of the
+ATmega processor must be programmed with the ''fuses''.
+If you can use my Makefile and additionally the program avrdude \cite{avrdude}, you need no exact
+knowledge of the details about the fuses. You have only to type ''make fuses'' if you
+have no crystal or ''make fuses-crystal'' if you have installed the \(8MHz\) crystal to your printed board.
+With the ATmega168 series of the microcontroller you can also use ''make fuses-crystal-lp'' to use
+a crytal with the low power mode.
+Never choose the crystal mode of clock generation, if you don't have installed
+the \(8MHz\) or \(16MHz\) crystal. If you are not sure with the fuses, leave them as default
+set by manufactor and first bring the the tester to operation in this mode.
+Maybe your program runs too slow, if you use program data compiled for
+\(8MHz\) operation, but you can correct this later! But a wrong set of fuses may inhibit
+later ISP-programming.
+
+\subsection{Using the Makefile with Linux}
+You can install packages with Debian based Linux versions by using a package manager as synaptic, dpkg
+or simply with the console tool apt.
+The package ''git'' can be used for downloading the sources and the documentation from the Git archive.
+With the command \\
+''git clone https://github.com/mikrocontroller-net/transistortester'' \\
+you can download the complete archive.
+If your distribution does not know the git command, you must install the git package
+with ''sudo apt install git'' or any other package tool.
+For using the Makefile in one of the trunk subdirectories you must install the packages
+make, binutils-avr, avrdude, avr-libc and gcc-avr.
+You can install all packages at once with one command line
+''sudo apt install make binutils-avr avrdude avr-libc gcc-avr''.
+
+At next you must change the working directory with the ''cd'' command to a proper
+subdirectory of the directory trunk (transistortester/Software/trunk/mega328\_st7565 for example).
+For compiling the source you must only type the simple command ''make''.
+You can also change options of the Makefile with any text editor and rebuild the
+tester program by repeating the make entry.
+
+For the next step, programming of your ATmega, you must have access to a ISP-programmer.
+If your programmer does not use a standard USB-serial interface,
+you must probably prepare your system for user access to this device.
+If you open a consol window and you have also connected a ISP programmer with USB interface,
+you can see the recognized USB devices with the command ''lsusb''.
+A sample of the result of lsusb you can see here:
+\begin{verbatim}
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 003: ID 046d:c050 Logitech, Inc. RX 250 Optical Mouse
+Bus 002 Device 058: ID 03eb:2104 Atmel Corp. AVR ISP mkII
+Bus 002 Device 059: ID 2341:0042 Arduino SA Mega 2560 R3 (CDC ACM)
+Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+\end{verbatim}
+A Device 58 is detected here a a AVR ISP mkII type (DIAMEX ALL-AVR).
+The ID 03eb is a vendor ID and the ID 2104 is a product ID.
+Both ID's are required for a entry in the file /etc/udev/rules.d/90-atmel.rules .
+In this example the file 90-atmel.rules has one line:
+\begin{verbatim}
+SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2104", MODE="0660",
+GROUP="plugdev"
+\end{verbatim}
+This entry allow the access to the USB device 58 for members of the group ''plugdev''.
+The also detected USB device 59 allows a access to the serial device ''/dev/ttyACM0'' for
+members of the group ''plugdev''.
+
+Therefore your user identification should be a member of the group plugdev and also
+a member of the group dialout.
+With the command ''usermod -a -G dialout,plugdev \$USER'' the membership of both groups should be established.
+Now the program avrdude should have permission to access the programmer device.
+The correct setting of PORT in your Makefile is ''PORT=usb'' for this type of programmer.\\
+
+If your programmer use a build-in USB-serial interface, you should have access to the device
+by default. You must only know the device name, which the system has assigned to this interface.
+The device name for any USB-serial interface is allways something like /dev/ttyUSBx or
+/dev/ttyACMx, where x is a system assigned number. The easiest way to get the name of
+your device is to check the last system log entry with the command ''dmesg | tail'' right
+after plugging in the programmer.
+The following example shows the relevant information from a ''Diamex ISP-PRog NG'' programmer.
+
+\begin{verbatim}
+usb 1-6: new full-speed USB device number 8 using xhci_hcd
+usb 1-6: New USB device found, idVendor=16c0, idProduct=2a9b, bcdDevice=43.40
+usb 1-6: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-6: Product: AVR-ISP2
+usb 1-6: Manufacturer: ERFOS
+usb 1-6: SerialNumber: 19377-43111-757
+cdc_acm 1-6:1.0: ttyACM0: USB ACM device
+\end{verbatim}
+
+You must set the PORT variable in the Makefile correctly to the found name.
+For the above example the correct setting is ''PORT=/dev/ttyACM0''.
+The Pololu programmer use two serial interfaces. Usually the first name is the right interface
+to the ISP-programmer. The second serial interface is a general purpose serial interface.\\
+
+If the ISP programmer is configured proper in the Makefile, especially the PROGRAMMER
+and PORT setting, a command ''make upload''
+should result to loading the program with the ISP interface to the ATmega.
+The ''fuses'' of the ATmega must also be set correctly once.
+You can achieve this with the command ''make fuses'' or ''make fuses-crystal''.
+The program avrdude probably reports a error for setting the extended fuse efuse.
+The reading of unused fuse bits is specified as ''1'' for the ATmega, but the
+avrdude program mask the unused bits, so that it expect a ''0'' for all unused bits.
+Normally the efuse should be set to 0xfc, but avrdude read back 0x04 with the mask.
+You can change the file avrdude.conf to change the behaviour of avrdude or
+you can set the efuse to 0x04. 
+The value for all efuses can be set with the identifier EFUSE\_VAL at the begin of file setup.mk
+in the trunk directory.
+Probably the fuses are also set correctly with the error message.
+
+\subsection{Using the WinAVR package with Windows}
+If you use the Windows operating system, the easiest way to get a correct programmed
+ATmega is to use the WinAVR package \cite{winavr1},\cite{winavr2}.
+With my patch \cite{winavr3} you can also set the fuses by using the Makefile.
+Of course the avrdude program must support your programmer and the configuration
+in the Makefile must match to your environment.
+But the WinAVR package use a very old compiler version. You should better install
+the Arduino package and overwrite the avr executables.
+
+The figures \ref{fig:WinAVR1} show the File menu of the graphical user interface of WinAVR for
+open the file Makefile and for saving the changed Makefile (Save).
+
+\begin{figure}[H]
+  \begin{subfigure}[b]{9cm}
+    \centering
+    \includegraphics[width=9cm]{../PNG/Notepad_open.png}
+    \caption{open Makefile}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{9cm}
+    \centering
+    \includegraphics[width=9cm]{../PNG/Notepad_save.png}
+    \caption{save Makefile}
+  \end{subfigure}
+  \caption{Using of the WinAVR user interface Programmer's Notepad}
+  \label{fig:WinAVR1}
+\end{figure}
+
+The next figures \ref{fig:WinAVR2} show the Tools menu of the Programmer's Notepad
+for compiling the program (Make All) and for programming the ATmega (Program) with avrdude.
+
+\begin{figure}[H]
+  \begin{subfigure}[b]{9cm}
+    \centering
+    \includegraphics[width=9cm]{../PNG/Notepad_make.png}
+    \caption{Build programming data (.hex/.eep)}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{9cm}
+    \centering
+    \includegraphics[width=9cm]{../PNG/Notepad_program.png}
+    \caption{Programming the ATmega}
+  \end{subfigure}
+  \caption{Using of the WinAVR user interface Programmer's Notepad}
+  \label{fig:WinAVR2}
+\end{figure}
+
+
+
+\section{Troubleshooting}
+In most cases of problems you will miss the text output to the LCD-display.
+At first you should check, if the LED was illuminated weak, if you release
+the Test button. 
+\begin{description}
+
+\item[Power does not switch on.]
+If the LED is without light and the VCC power has correct
+\(5V\) voltage during holding the Test button, the microcontroller does not switch the power
+correctly. The microcontroller should hold the power by switching the
+PD6 output to \(5V\), which is usually done as one of the first actions.
+If you hold the Test key pressed, the power is switched on anyway.
+So you can check the value of VCC power and additionally the voltage value
+of the PD6 output, if you hold the key pressed.
+If VCC voltage has correct value (\(5V\)), but PD6 voltage is
+below \(4V\), your microcontroller does not start the program. In this case
+you should check if the microcontroller flash has been loaded with proper data for your
+installed type and if ATmega is correctly configured with the fuses.
+If your ATmega put the PD6 output to \(5V\) and the power does not stay if you
+release the Test key, it is more difficult to find the reason.
+First you can shorten the LED and try again. If your Tester now starts,
+your LED may be faulty or mounted with wrong polarity. If this is not
+the reason, the current amplification factor of your T3 transistor (BC557C)
+is insufficient. The current to the base of T3 is lower in the microcontroller
+state as in the ''key pressed'' state.
+
+\item[Nothing is readable on the LCD display]
+Check the voltage at the contrast pin at the LCD display (pin 3). Adjust to
+correct value specified in the data sheet of your display and optimize by viewing.
+If you have a high temperature display type, you must provide a negative contrast voltage
+for operation. In this case you can use the ICL~7660 device for generating
+a negative voltage from positive \(5V\).
+
+The tester software can be configured for many different controller with different connection
+types. You should check, if your software matches to your mounted display type.
+If there is no output readable on the LCD and the background light is on,
+you should disconnect the power and check all four data plus the two control signal connections.
+If all connection are well, the only reason I see is a uncorrect timing of
+control signals. This can be caused by a slower LCD controller than expected by
+the software or the ATmega software runs at wrong clock speed. Please check for which
+clock speed your programming data was compiled  and if the fuses of the
+ATmega are correct set to that speed. You find the clock parameter in the corresponding
+Makefile.
+If the tester is build without the switch off electronic, you can test with
+a LED connected to the test pins, if the program operates normally.
+If the LED flickers, the program operates well. The missing text on the
+LCD must be caused by wrong connection or timing.
+For some graphical displays the contrast is changeable with a menu function.
+If you have changed the contrast value, that nothing is readable at the screen,
+you cannot handle the menu function any more. You can try to read the display
+from a slanting look to the display, not from the front side.
+In this case you can try to handle the menu function with this view.
+Otherwise you can write the EEprom data new with a ISP programmer to reset the contrast value.
+
+
+\item[Something but not all is readable on the LCD display]
+Check if the .eep data are loaded to the EEprom memory of ATmega.
+If all data are loaded correctly, you should check the clock speed of your
+programming data (Makefile) and ATmega processor settings (fuses).
+
+\item[Measurement is slow and Capacitors are measured about 8 times too small]
+You run software compiled for \(8MHz\) clock at real clock speed of \(1MHz\).
+Please set the fuses of the ATmega correctly.
+
+\item[Measurement has strangely values]
+Check if your programmer is still connected to the ISP-plug.
+The ISP interface should be disconnected for measuring.
+Very often the reason of wrong measurements is the use of software compiled with
+the AUTOSCALE\_ADC option and with the option NO\_REF\_CAP, but the capacitor
+at the AREF pin has still a value of \(100nF\).
+Wrong assembly of components or remaining soft solder flux can disturb the 
+measurements too. Please check with the selftest function of your TransistorTester software
+if possible. For the details see Chapter \ref{sec:selftest}.
+
+Otherwise inspect your board visually and check the resistor values
+with a ohmmeter. You can use the pins of the ATmega for this check, for example
+to check the R1 you can measure between pin 23 and pin 14. Take a look at the
+circuit diagram \ref{fig:ttester} for details. There is no need to
+remove the microcontroller, only battery or power supply should be removed before.
+
+\item[The Tester switch off the power after 2 seconds display time] 
+This condition exists, if the external Pull-Up resistor at the PD7 input
+is missing or the key button is keep pressed.
+The software switch off the internal Pull-Up resistors to prevent a influence
+to the measurement results. Therefore a external Pull-Up resistor (27k) is required.
+
+\item[Der Tester shows only Vext=xx.xV in row 2]
+This problem exists, if the Pull-Up resistor at the PD7 input
+is missing or the key button is keep pressed.
+Additionally the software is configured without the serial output (without option WITH\_UART) and
+without the internal Pull-Up resistors (with option PULLUP\_DISABLE).
+You should install the Pull-Up resistor at pin PD7.
+
+
+\end{description}

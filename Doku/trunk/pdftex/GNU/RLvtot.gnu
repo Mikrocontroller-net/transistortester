@@ -15,7 +15,7 @@ set key at 1,2800 left center Right nobox
 set grid
 set xrange [ 0.1 : 100000 ] noreverse nowriteback
 set format x "%.0s%c"
-set xlabel "resistor Rx / Ohm" 
+set xlabel "resistor Rx / Ω" 
 set yrange [0: 5000 ] noreverse nowriteback 
 set ylabel "voltage / mV" 
 set terminal pdf color solid
@@ -25,4 +25,12 @@ set style line 1  linetype 1 linewidth 2.000
 set style line 2  linetype 2 linewidth 2.000 
 plot (5000*(x+19)/(721+x)) title 'PC2, type 1' ls 1, (5000*699/(721+x)) title 'PC0, type 2' ls 2
 set output
+set xlabel "odpor Rx / Ω" 
+set ylabel "napětí / mV" 
+set output "../GNU/RLvtotCZ.pdf" ; replot ; set output
+#
+set xlabel "резистор Rx / Ω"
+set ylabel "Напряжение / mV" 
+set output "../GNU/RLvtotRU.pdf" ; replot ; set output
+#
 #    EOF

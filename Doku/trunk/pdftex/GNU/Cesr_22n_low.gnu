@@ -33,7 +33,7 @@ set format x "%.0s%c"
 set format y "% g"
 set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set xtics autofreq  norangelimit
-set ylabel "ESR / Ohm"
+set ylabel "ESR / Ω"
 set key inside right top vertical Right noreverse enhanced autotitles nobox
 set output "../GNU/Cesr_22n_low.pdf"
 #plot "../GNU/Cesr_22n.dat" u 2:22 title "GM328" ls 1, \
@@ -48,6 +48,12 @@ plot "../GNU/Cesr_22n_low.dat" u 2:10 title "Tester" ls 3, "../GNU/Cesr_22n_low.
      "../GNU/Cesr_22n_low.dat" u 2:18 notitle ls 3, "../GNU/Cesr_22n_low.dat" u 2:20 notitle ls 3 ,\
      "../GNU/Cesr_22n_low.dat" u 2:6 notitle ls 3, "../GNU/Cesr_22n_low.dat" u 2:8 notitle ls 3 ,\
      "../GNU/Cesr_22n_low.dat" u 2:4 title "LCR100k" ls 2, "../GNU/Cesr_22n_low.dat" u 2:3 title "LCR10k" ls 7
-#pause 10
 set output
+set xlabel "hodnota kapacity / F"
+set ylabel "ESR / Ω"
+set output "../GNU/Cesr_22n_lowCZ.pdf" ; replot ; set output
+#
+set xlabel "Значение емкости / F" 
+set ylabel "ESR / Ω"
+set output "../GNU/Cesr_22n_lowRU.pdf" ; replot ; set output
 #    EOF

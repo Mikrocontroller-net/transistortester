@@ -1,4 +1,6 @@
-\chapter{Konfigurieren des TransistorTesters}
+\chapter{Programmieren des TransistorTesters}
+
+\section{Konfigurieren des TransistorTesters}
 \label{sec:config}
 Die ganze Software des TransistorTesters ist im Quellcode verfügbar.
 Die Übersetzung der Module wird mit einer Makefile gesteuert. Die Entwicklung wurde
@@ -587,17 +589,32 @@ Die Benutzung dieses Schlafzustandes mit dem Wiederaufwachen spart zwar Batterie
 stellt eine zusätzliche Anforderung für den Spannungsregler dar.\\
 Beispiel: DINHIBIT\_SLEEP\_MODE = 1
 
-  \item[PROGRAMMER] stellt den Programmer-Typ für das avrdude Schnittstellenprogramm ein.
-Eine richtige Einstellung des Programmer-Typs (und Ports) ist notwendig, wenn Sie den ,,make upload''- oder
+\label{sec:config-Prog}
+  \item[PROGRAMMER] stellt den Programmer-Typ für das avrdude Schnittstellenprogramm ein.\\
+Eine richtige Einstellung des Programmer-Typs (und Ports) ist notwendig.\\
+In Makefile ist standardmäßig Programmer der Firma Diamex eingestellt.\\
+Vorbereitet sind aber auch USBasp von Fischler und Arduino Mega.\\
+Falls ein anderer Programmer verwendet sein sollte, muss er in Makefile aufgenommen werden und der,
+bis jetzt aktuelle, mit \#~ am Anfang der Zeile abgewählt werden.\\
+Ein Beispiel für die Benutzung von USBtiny Programmer:\\
+\# setting for USBtiny ISP\\
+PROGRAMMER=usbtiny\\
+BitClock=10\\
+PORT=usb\\
+und ein weiterer Beispiel:\\
+\#~setting for Pololu programmer\\
+\#~PROGRAMMER=stk500v2\\
+\#~BitClock=1.0\\
+\#~Port = /dev/ttyACM0\\
+, wenn Sie den ,,make upload''- oder
 ,,make fuses''-Aufruf dieser Makefile benutzen.
-Für weitere Informationen schauen Sie bitte in das Handbuch von avrdude oder in die Online-Dokumentation~\cite{avrdude}.\\
 Beispiel: PROGRAMMER=avrisp2
 
   \item[BitClock] stellt die Bit-Taktperiode für den Programmer ein. Siehe dazu die Beschreibung des -B Parameters von avrdude.\\
 Beispiel: BitClock=5.0
 
   \item[PORT] stellt die verwendete Schnittstelle ein, wo avrdude den Mikrocontroller (ATmega) erreichen kann.
-Für weitere Informationen schauen Sie bitte ins Handbuch von avrdude.\\
+  Für weitere Informationen schauen Sie bitte in das Handbuch von avrdude oder in die Online-Dokumentation~\cite{avrdude}.\\
 Beispiel: PORT=usb
 
 \end{description}
@@ -607,3 +624,294 @@ Die Datei config.h enthält globale Variablen und Tabellen, definiert die Port- 
 die ADC-Taktfrequenz sowie die Widerstandswerte, die für die Messung benutzt werden.
 Die Datei Transistortester.h enthält die globalen Variablen und Tabellen sowie die Texte für die LCD-Anzeige.
 Normalerweise brauchen diese Werte nicht ohne Grund geändert werden.
+
+
+\section{Programmierung des Mikrocontrollers}
+Ich gebe die Software für den Mikrocontroller in Quelltext heraus.
+Die Entwicklung wurde mit dem Linux-Betriebssystem (Ubuntu bzw. Mint) gemacht
+und wird gesteuert mit einer Makefile.
+
+Die Makefile stellt sicher, dass die Software entsprechend der vorher in der Makefile 
+eingestellten Optionen übersetzt wird. Schauen Sie bitte in die Datei LiesMich.txt
+im Verzeichnis trunk/default und in das Konfigurations-Kapitel~\ref{sec:config} ab Seite~\pageref{sec:config}.
+
+Das Ergebnis der Übersetzung hat die Dateierweiterung .hex und .eep.\\
+Üblicherweise heißen die Dateien TransistorTester.hex und TransistorTester.eep .
+
+Die .hex-Datei enthält die Daten für den Programmspeicher (Flash) des ATmega-Prozessors.
+
+Die .eep-Datei enthält die Daten für den EEPROM des ATmega.\\
+Beide Dateien müssen in den richtigen Speicher geladen werden.
+
+Zusätzlich muss der ATmega mit den ,,fuses'' richtig konfiguriert werden.\\
+Wenn Sie meine Makefile zusammen mit dem Programm avrdude \cite{avrdude} benutzen, brauchen Sie
+keine genaue Kenntnis über die Einzelheiten der fuses.
+
+Sie brauchen nur ,,make fuses'' aufrufen, wenn Sie keinen Quarz benutzen oder Sie
+müssen ,,make fuses-crystal'' aufrufen, wenn Sie einen \(8MHz\) Quarz auf der Baugruppe installiert haben.
+
+Bei der ATmega168-Serie der Mikrocontroller können Sie alternativ auch
+,,make fuses-crystal-lp'' aufrufen für den low power Quarz-Betrieb.\\
+Benutzen Sie niemals die Quarz-Variante, wenn Sie keinen \(8MHz\) Quarz installiert haben.
+
+Wenn Sie sich nicht sicher mit den fuses sind, lassen Sie diese erst einmal wie
+vom Werk gesetzt und bringen Sie den Tester in diesem Zustand zum Laufen.\\
+Es kann sein, dass das Programm zu langsam läuft, wenn Sie die für den \(8MHz\)-Betrieb 
+erzeugten Programmdaten benutzen, aber das kann man später korrigieren!
+
+Aber falsch gesetzte fuses können die spätere ISP-Programmierung verhindern.
+\\Vielleicht meldet das Programm avrdude einen Fehler beim Setzen der extendet Fuse efuse.
+Das Lesen von unbenutzten Fuse Bits ist beim ATmega als ,,1'' spezifiziert, aber
+das avrdude Programm maskiert die unbenutzten Bits, so daß es eine ,,0'' für alle unbenutzen Bits erwartet.
+Normalerweise sollte die efuse auf 0xfc gesetzt werden, aber avrdude liest eine 0x04 mit der Maske zurück.
+Man kann die Datei avrdude.conf ändern, um das Verhalten von avrdude zu ändern oder
+die efuse auf 0x04 setzen. 
+Alle efuse-Werte können mit dem Bezeichner EFUSE\_VAL am Anfang der Datei setup.mk im Verzeichnis trunk
+gesetzt werden. Wahrscheinlich sind die Fuses aber auch mit der Fehlermeldung richtig gesetzt.
+\newpage
+\subsection{Benutzung unter Linux}
+
+Um die Verzweiflungen und "`schlaflose Nächte"', die Schreiber dieses Dieses Unterkapitel erlitten hatte, nach dem er, ohne jegliche AVR Erfahrung, einen Clonetester erworben hatte und diesem die deutsche Sprache "`beibringen"' wollte, anderen Kollegen zu ersparen, wurde dieses Unterkapitel geschrieben.\\
+Die hier bei erworbene Erfahrungen sollten anderen "'willigen"' unerfahrenen helfen,
+ 
+ERFOLGREICH ihr Tester zu programmieren.\\
+Diese Gelegenheit wird benutzt, dem Entwickler des Transistortester und Autor dieses Dokuments,  
+
+Karl-Heinz Kübbeler siehe \cite{karlheinz1} zu danken für sein Engagement und Geduld,\\
+denn die folgenden Seiten hätten ohne seiner Hilfe nie entstanden.
+     
+Damit das übersetzen der Firmware und Brennen ins MCU gelingt und gleichzeitig \dots \\
+"`das Rad nicht neu erfunden sein müsste"', wurde ein Teil der folgenden Seiten aus dem
+Original übernommen.
+
+Also noch einmal \dots \huge{EINEN RIESEN DANK}
+\normalsize an Karl-Heinz Kübbeler.
+
+\subsection{Betrieb System Linux}
+
+Die Programmierung unten Linux bringt viele Vorteile, weil dieses OS von Experten entwickelt wurde, die sich auf den Wünschen der Benutzer orientieren.
+Zu dem ist die Umgebung kostenlos erhältlich und perfekt gewartet.
+
+Ein weiterer Vorteil ist die Sicherheit von OS selbst aber auch beim nutzen des Internets.\\ 
+Die heutigen Editionen lassen sich noch viel leichter bedienen als die Mitbewerber OS.\\
+Diese Anleitung soll alle "'nicht"' Linux Benutzer dazu animieren es NUN zu testen in dem sie ihr Tester damit programmieren.
+
+Als Beispiel wird hier Linux Mint in der aktueller Version aus dem Internet benutzt.
+\\Die Installation ist auf verschiedene Arten möglich und bringt seinen eigenen Bootmanager mit, damit man sein vorhandenes OS weiter parallel nutzen kann.
+
+\subsection{Benutzung unter Linux}
+
+auf einem neu installierten OS.\\
+Für diejenigen, die nicht gerne schreiben, bietet Linux eine einfachere Möglichkeit:
+
+Dieses Handbuch auf einen USB-Stick kopieren und im Linux öffnen.\\
+Danach die Maus zum Namen des Dokumentes führen, hier linke Maustaste drücken und das Dokument bis zum linken Rand des Bildschirms ziehen, bis ein ein mögliches Rahmen angezeigt wird.
+Nun wird die Maus losgelassen.
+
+Die Anleitung nimmt nun die linke Hälfte des Bildschirms ein.
+\\Im nächsten Schritt wird [Strg] + [Alt] + [t] gleichzeitig gedrückt, um das Befehlsfenster zu öffnen.
+Dies wird nun auf gleicher Weise nun die rechte Hälfte des Bildschirmes belegen.\\
+
+\subsection{Programm Pakete installieren}
+
+Nun brauchen wir einen Internetzugang.
+\\Um den Tester zu programmieren, müssen zuerst Programmpakete installiert werden:
+
+'binutils-avr', 'avrdude', 'avr-libc' und 'gcc-avr'.
+\\Jetzt in diesem Dokument zu dieser Seite, bis zu diesem Text navigieren:
+
+sudo apt-get install avrdude avr-libc binutils-avr gcc-avr
+\\den Text mit gedrückter linken Maustaste markieren, die Maus auf das Kursor des rechten
+\\Befehlsfenster führen und durch drücken der mittlerer Maustaste (Scroll-Rad) \textbf{weiter als [MT] abgekürzt} wieder einfügen.
+ 
+Nach dem Bestätigung mit [Enter], wird von 'sudo' noch Benutzerpassword verlangt.
+\\Anders als bei Windows wird das Passwort \textbf{Blind} eingegeben und mit [Enter] bestätigt.
+
+Damit werden nun alle Software Pakete durch 'apt' herunter geladen und installiert.\\
+U.U. muss man dazwischen, Fragen durch [J] bestätigen.
+\\Bitte darauf achten, das im Linux zwischen Groß und Kleinschreibung unterschieden wird.
+\\Also nicht mit [j] sondern mit [J] antworten!
+
+\subsection{Download der Quellen}
+
+Zum Download der Quellen und der Dokumentation aus dem Github-Archiv muss man zu erst github installieren mit:
+
+sudo apt-get install git\\
+Der Erfolg sieht man mit:
+
+git version\\
+Falls schon der Ordner transistortester existiert, sollte man es umbenennen oder löschen.\\
+Mit dem Befehl:   
+
+git clone https://github.com/Mikrocontroller-net/transistortester\\
+wird das komplette Archiv heruntergeladen.\\
+Die Dateien sind nun in dem Linux [Persönlicher Ordner] auf (/home/"`user"') unten dem Namen "`transistortester"'.\\
+Die Kontrolle des Vorhandensein. Teminal Fenster öffnen, "`ls"' eingeben und bestätigen.\\
+Um neue Updates heruntergeladen, reicht es in der Zukunft, aus diesem Ordner:
+
+git status\\
+einzugeben.\\
+Optional kann man auf dieser Stelle sein eigenes Konto bei GitHub erstellen und Konfigurieren.\\
+Trage dabei statt "Linux Mind" deinen eigenen Namen und Mail Adresse ein:
+
+ git config --global user.name "`Linux Mind"'
+ 
+git config --global user.email "`Linux@Mind"'
+
+
+\subsection{Benutzung der Schnittstellen}
+\label{sec:Schnittstellen}
+
+für den Nutzer (user) vorbereiten.\\
+USB-Geräte können durch Eingabe von 'lsusb' im Befehlsfenster erkannt werden.
+Geben Sie 'lsusb' zuerst ohne und dann mit angeschlossenem USB-Programmer ein.\\
+Ein Vergleich der Ergebnisse lokalisiert den USB-Programmer.
+
+Das Ergebnis von lsusb kann so aussehen:
+\begin{footnotesize}
+\begin{verbatim}
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 003: ID 046d:c050 Logitech, Inc. RX 250 Optical Mouse
+Bus 002 Device 058: ID 03eb:2104 Atmel Corp. AVR ISP mkII
+Bus 002 Device 059: ID 2341:0042 Arduino SA Mega 2560 R3 (CDC ACM)
+Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub}
+\end{verbatim}
+\end{footnotesize}
+Hier wurde als Device 58 ein AVR ISP mkII erkannt (DIAMEX ALL-AVR).\\
+Die ID 03eb ist eine Herstellerkennung und die ID 2104 eine Produktkennung.\\
+Diese beiden Kennungen werden der Datei /etc/udev/rules.d/90-atmel.rules benötigt und erstellt\\
+mit Hilfe von:
+
+sudo xed /etc/udev/rules.d/90-atmel.rules\\
+In diesem Beispiel besteht die Datei 90-atmel.rules aus einer Zeile:
+\begin{footnotesize}
+\begin{verbatim}
+SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2104", MODE="0660",
+GROUP="plugdev"
+\end{verbatim}
+\end{footnotesize}
+Dieser Eintrag erlaubt den Zugriff auf das Gerät für Mitglieder der Gruppe ,,plugdev''.\\
+~\\
+Um die meisten Programmer verwenden zu können, wird folgendes Text in 90-atmel.rules empfohlen:
+\begin{footnotesize}
+\begin{verbatim}
+# Copy this file to /etc/udev/rules.d/90-atmel.rules
+# AVR ISP mkII - DIAMEX ALL-AVR
+SUBSYSTEM=="usb", ATTRS {idVendor}=="03eb", ATTS {idProduct}=="2104", MODE="0660", 
+ GROUP = "plugdev",
+# USB ISP-programmer für Atmel AVR
+SUBSYSTEM=="usb", ENV {DEVTYPE}=="usb_device", SYSFS {idVendor}=="16c0", MODE="0666",
+ SYSFS {idProduct} == "05dc",
+# USB asp programmer
+ATTRS {idVendor}=="16c0", ATTRS {idProduct}=="05dc", GROUP="plugdev", MODE="0660"
+# USBtiny programmer
+ATTRS {idVendor}=="1781", ATTRS {idProduct}=="0c9f", GROUP="plugdev", MODE="0660"
+# Pololu programmer
+SUBSYSTEM=="usb", ATTRS {idVendor}=="1ffb", MODE="0666"
+\end{verbatim}
+\end{footnotesize}
+Nach dem die Datei erstellt wurde, kann die Erstellung und Inhalt kontrollieren mit:
+
+less /etc/udev/rules.d/90-atmel.rules\\ 
+Das ebenfalls als Device 59 erkannte USB Gerät  Arduino SA Mega 2560 System erzeugt eine
+Zugriffsmöglichkeit auf das serielle Gerät ,,/dev/ttyACM0'' für Mitglieder der Gruppe 'dialout'.
+
+\subsection{Gruppen Mittgliedschaft}
+
+Deswegen sollte die eigene Benutzerkennung sowohl Mitglied der Gruppe 'plugdev' als auch
+der Gruppe 'dialout' sein. Das Kommando:
+
+sudo usermod -a -G dialout,plugdev \$USER\\
+sollte die Zugehörigkeit sicherstellen. 
+Jetzt sollte ein Zugriff mit avrdude auf beide Geräte möglich sein.
+Kontrollieren kann man es mit dem Kommando: 'id'. \\
+Sollten Probleme auftreten kann man die Mitgliedschaft auch über:\\
+~Menü/Systemverwaltung/Benutzer und Gruppen/<Passwort>/ nun erscheint ein Fenster mit zwei Reitern.\\
+Wenn man nun im Reiter Benutzer auf sein Name klickt, sieht man rechts sein Profil und die Gruppen Zugehörigkeiten. Mit dem Button <ADD> ist nun Möglich neue Gruppen hinzufügen.
+
+\subsection{Arbeitsumgebung}
+
+Damit das Original erhalten bleibt und da sich Terminalfenster immer in ../home/\glqq user\grqq/ öffnet, wird empfohlen, dort eine Verknüpfung mit dem Namen {\bf Mytester} zu verlegen, mit folgenden Eingaben:
+
+cd transistortester/Software/trunk/\\
+und dann durch Eingabe von 'ls' das Unterverzeichnis, des ,,benötigten Testers Models'', zu finden.\\
+Bei den folgenden zwei Kommandos, diese zuerst NUR einfügen, ohne [Enter] zu drücken: !
+
+cp -r 'MyT' Mytester/\\
+Das Verzeichnis des benötigten Models mit der Maus markieren.
+Nun Kursor mit Hilfe von [Pfeiltaste-links] zur letztem Zeichen des Text 'MyT' positionieren und
+diese Zeichen löschen. Nach dem das letzte Zeichen gelöscht wurde, die [MT] Taste der Maus drücken.
+Erst jetzt [Enter] benutzen. Damit ist die Arbeitsumgebung erstellt.
+Die Kontrolle der Existenz und Inhalts ist möglich mit:\\
+
+diff 'MyT' Mytester/\\
+vobei muss 'MyT', wie vorher, für das Verzeichnis des ,,benötigten Testers Models'' ausgetauscht werden.
+Mit dem letzten Anweisung:
+
+ln -s \textasciitilde/transistortester/Software/trunk/Mytester \textasciitilde/Mytester\\
+wird die Verknüpfung zum Arbeitsverzeichnis erstellt.\\ 
+Ab jetzt erreicht man dieses Verzeichnis sehr einfach mit:
+
+[Strg] + [Alt] + [t], cd [Leer] My [Tab] [Enter]\\
+und schon ist man in benötigten Verzeichnis. Mit 'ls' sieht man den Inhalt.\\
+Weiter geht es zum Bearbeiten der Makefile mit der inzwischen bekannten Anweisung:
+
+xed Ma [Tab] [Enter]\\
+{\bf Hier ist am wichtigsten, den VORHANDENEN} USB-Programmer anmelden.\\
+Siehe dazu im Unterkapitel \ref{sec:config}, auf der Seite \pageref{sec:config-Prog}, Thema PROGRAMMER 
+und PORT.
+
+\begin{tabbing}
+Fo\=lgende Aufrufe sind \=zu empfehlen:\\
+\> make clean \> zum reinigen des Arbeitsumgebung\\
+\> make       \> zum Übersetzen des Programms\\
+\> make fuses \> zum setzen von ATmega ,,fuses'' ohne Quarz\\
+\> make fuses-crystal \> zum Setzen von ATmega ,,fuses'' NUR mit Version mit Quarz!\\
+\> make upload \> zum Laden des kompletten Programms über die ISP Schnittstelle in den ATmega.
+\end{tabbing}
+
+\newpage
+\subsection{Benutzung des WinAVR-Paketes unter Windows}
+
+Wenn Sie unter dem Windows Betriebssystem arbeiten, ist der leichteste Weg zum
+richtig programmierten ATmega zu kommen, die Benutzung der WinAVR-Paketes \cite{winavr1},\cite{winavr2}.
+Mit meinem Patch \cite{winavr3} können Sie auch die Fuses mit der Makefile setzen.
+Natürlich muss das avrdude-Programm Ihren Programmer unterstützen und die Konfiguration muss in
+der Makefile richtig angepaßt sein.
+Die Abbildungen \ref{fig:WinAVR1} zeigen das File-Menü der Bedienoberfläche von WinAVR zum
+Öffnen der Datei Makefile und zum Abspeichern der Makefile nach den Änderungen (save).
+
+\begin{figure}[H]
+  \begin{subfigure}[b]{8,5cm}
+    \centering
+    \includegraphics[width=8cm]{../PNG/Notepad_open.png}
+    \caption{open Makefile}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{8,5cm}
+    \centering
+    \includegraphics[width=8cm]{../PNG/Notepad_save.png}
+    \caption{save Makefile}
+  \end{subfigure}
+  \caption{Bedienung der WinAVR-Oberfläche Programmer's Notepad}
+  \label{fig:WinAVR1}
+\end{figure}
+Die nächsten Abbildungen \ref{fig:WinAVR2} zeigen das Tools-Menü von Programmer's Notepad
+zum Übersetzen des Programms (Make All) und zum Programmieren des ATmega (Program) mit avrdude.
+
+\begin{figure}[H]
+  \begin{subfigure}[b]{8,5cm}
+    \centering
+    \includegraphics[width=8cm]{../PNG/Notepad_make.png}
+    \caption{Erzeuge Programmdaten (.hex/.eep)}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{8,5cm}
+    \centering
+    \includegraphics[width=8cm]{../PNG/Notepad_program.png}
+    \caption{Programmiere ATmega}
+  \end{subfigure}
+  \caption{Bedienung der WinAVR-Oberfläche Programmer's Notepad}
+  \label{fig:WinAVR2}
+\end{figure}
+

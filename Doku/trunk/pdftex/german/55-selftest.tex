@@ -67,7 +67,12 @@ Der theoretische Wert ergibt sich im Hinblick auf die internen Port-Widerstände
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=17cm]{../FIG/Test2.pdf}
+ \begin{overpic}[width=17cm]{../FIG/Test2.pdf}
+  \color{black}
+  \put(18,22){\makebox(0,0)[cb]{Erste Messung}}
+  \put(49,22){\makebox(0,0)[cb]{Zweite Messung}}
+  \put(85,22){\makebox(0,0)[cb]{Dritte Messung}}
+ \end{overpic}
 \caption{Vergleich der \(680\Omega\)-Widerstände }
 \label{fig:test2}
 \end{figure}
@@ -106,7 +111,12 @@ Es wird angenommen, dass die Portwiderstände von unterschiedlichen Ports nahezu
 Der Widerstandswert wird im nächsten Schritt mit ausgegeben.
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/Test7.pdf}
+ \begin{overpic}[width=15cm]{../FIG/Test7.pdf}
+  \color{black}
+  \put(14,35){\makebox(0,0)[cb]{Erste Messung}}
+  \put(47,35){\makebox(0,0)[cb]{Zweite Messung}}
+  \put(84,35){\makebox(0,0)[cb]{Dritte Messung}}
+ \end{overpic}
 \caption{Messung des Innenwiderstandes von auf GND geschalteten Port-C-Ausgängen.}
 \label{fig:test7}
 \end{figure}
@@ -122,7 +132,12 @@ zur GND-Seite wird in Zeile~2 mit dem Text ,,RI\_Lo='' angezeigt.
 Diese Werte werden ab Software-Version 1.06k bei jeder Messung neu bestimmt und hier nur dargestellt.
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/Test8.pdf}
+ \begin{overpic}[width=15cm]{../FIG/Test8.pdf}
+  \color{black}
+  \put(16,35){\makebox(0,0)[cb]{Erste Messung}}
+  \put(47,35){\makebox(0,0)[cb]{Zweite Messung}}
+  \put(84,35){\makebox(0,0)[cb]{Dritte Messung}}
+ \end{overpic}
 \caption{Messung des Innenwiderstandes des auf VCC geschalteten Port-C-Ausgängen.}
 \label{fig:test8}
 \end{figure}
@@ -148,7 +163,7 @@ Das kommt daher, weil die Nullkapazität in allen Pinkombinationen sowohl für d
 auch für den Entladevorgang bestimmt wird.
 
 \item {\bf Warten auf den Anschluss eines Kondensators an Pin~1 und Pin~3.}
-Die Meldung ,,1 \mbox{\electricC}3 \textgreater \(100nF\)'' wird in Zeile 1 des Displays angezeigt.
+Die Meldung ,,\mbox{\begin{large}1 \electricC 3~\textgreater 100nF\end{large}}'' wird in Zeile 1 des Displays angezeigt.
 Zur Vorbereitung der Messung des Spannungs-Offsets des analogen Komparators muss ein ausreichend großer
 Kondensator zwischen Pin 1 und Pin 3 angeschlossen werden.
 Es sollte ein Kondensator hoher Güte mit eine Kapazität zwischen \(100nF\) und \(20\mu F\) sein. 
@@ -171,7 +186,7 @@ Der REF\_R\_KORR-Wert ist dann nur ein zusätzlicher Offset für diese automatis
 Wenn der Tester mit der SamplingADC Funktion konfiguriert wurde, ist für die Messung kleiner Induktivitäten
 ein Kondensator bekannter Größe für die Berechnung der Induktivität aus der Schwingfrequenz erforderlich.
 Brauchbare Kapazitätswerte sind hierfür etwa \(10nF\) bis \(27nF\). Ein geeigneter Kondensator
-sollte an Pin~1 und Pin~3 angeschlossen werden, wenn die Meldung ,,\mbox{1 \electricC 3 \(10-30nF\)(L)}'' in Zeile 1 des
+sollte an Pin~1 und Pin~3 angeschlossen werden, wenn die Meldung ,,\mbox{\begin{large}1 \electricC 3~10-30nF(L)\end{large}}'' in Zeile 1 des
 Displays erscheint. Genau dieser Kondensator sollte für die Induktivitätsmessung der Spule
 parallelgeschaltet werden, wenn diese Art der Induktivitätsbestimmung gewünscht wird.
 

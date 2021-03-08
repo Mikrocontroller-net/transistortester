@@ -4,25 +4,48 @@
 %\usepackage[latin1]{inputenc}
 \usepackage[cm]{fullpage}
 \usepackage[english]{babel}
+\usepackage{textcomp}           % Wegen Fehler,perthousand,micro
 \usepackage[pdftex]{graphicx}
 \usepackage[labelsep=period]{caption}
 \usepackage{subcaption}
-\usepackage{color}
-\usepackage{fixltx2e}
+\usepackage{xcolor}             %x-Vorschlag
+\usepackage[percent]{overpic}   %ins Bild schreiben
+\usepackage{mwe}                %ins Bild schreiben
+%\usepackage{blindtext}
+%\setlength{\abovecaptionskip}{0.5pc}
+%\setlength{\belowcaptionskip}{-1.0pc}
+%\usepackage{showframe}% zum Anzeigen des Seitenlayouts
+%\RedeclareSectionCommand[  % nur mit documentclass scrreprt 
+%  beforeskip=-1\baselineskip,
+%  afterskip=.5\baselineskip]{section}
+%\RedeclareSectionCommand[
+%  beforeskip=-.75\baselineskip,
+%  afterskip=.5\baselineskip]{subsection}
+%\RedeclareSectionCommand[
+%  beforeskip=-.5\baselineskip,
+%  afterskip=.25\baselineskip]{subsubsection}
+%\usepackage{fixltx2e}
+\setlength{\parindent}{0em}	% Absatz nicht einrücken
+%\usepackage{fixltx2e}
 \usepackage{epstopdf}
 \usepackage{hyperref}
 \usepackage{gensymb}
 \usepackage{float}
 \usepackage{textcomp}
 \usepackage{circuitikz}
+\usepackage{wallpaper}			%Wegen Hintegrundbild
 %\usepackage{subfig}
 \graphicspath{{./FIG}}
 
 \begin{document}
+\begin{figure}[t]
+\ThisTileWallPaper{\paperwidth}{\paperheight}{../FIG/Wallpaper.pdf}
+\end{figure}
+
 \ctikzset{bipoles/length=.6cm}
 \ctikzset{bipoles/thickness=4}
 \newcommand\electricC {
-\hspace{-14 pt}
+\hspace{-12 pt}
 \begin{circuitikz}
 \draw (0,0) to[capacitor] (0:1);
 \end{circuitikz}
@@ -53,8 +76,14 @@
 \draw (0,0) to[full diode] (180:1);
 \end{circuitikz}
 }
-\title{TransistorTester with AVR microcontroller \\
-and a little more\\
+\title{Transistor Tester \\
+ with AVR microcontroller. \\
+ A device for determining and measuring \\
+ electronic components \\
+ and a little more \dots \\
+~\\
+~\\
+~\\
 Version 1.13k \\
 }
 \author{Karl-Heinz K\"ubbeler\\

@@ -34,14 +34,22 @@ set yrange [ 0.01 : 100 ]
 set xrange [ 0 : 18 ]
 #set xtics 1,1,14
 set xtics rotate
-set xtics ("0.47u/100V" 1 0,"1u/100V" 2 0,"1u/50V" 3 0,"2.2u/100V" 4 0,"2.2u/50V" 5 0,"3.3u/100V" 6 0,"4.7u/63V" 7 0,"4.7u/50V" 8 0,"10u/50V" 9 0,"22u/10V" 10 0,"22u/63V" 11 0,"33u/63V" 12 0,"47u/63V" 13 0,"100u/63V" 14 0,"220u/63V" 15 0,"470u/35V" 16 0,"500u/3V" 17 0)
+set xtics ("0.47µ/100V" 1 0,"1µ/100V" 2 0,"1µ/50V" 3 0,"2.2µ/100V" 4 0,"2.2µ/50V" 5 0,"3.3µ/100V" 6 0,"4.7µ/63V" 7 0,"4.7µ/50V" 8 0,"10µ/50V" 9 0,"22µ/10V" 10 0,"22µ/63V" 11 0,"33µ/63V" 12 0,"47µ/63V" 13 0,"100µ/63V" 14 0,"220µ/63V" 15 0,"470µ/35V" 16 0,"500µ/3V" 17 0)
 #set ytics 0.1,5,50
 GNUTERM = "wxt"
-set ylabel "ESR / Ohm"
-#set y2range [ 0.01 : 100 ] 
-#set y2label "Vloss / \%"
+set ylabel "ESR / Ω"
 #set title "ESR values for different capacitors"
 set output "../GNU/Elco_esr.pdf"
 plot "../GNU/Elco_esr.dat" u 1:4 title "LCR-100Hz" ls 1 with points,"../GNU/Elco_esr.dat" u 1:8 title "LCR-1kHz" ls 4 with points, "../GNU/Elco_esr.dat" u 1:10 title "LCR-10kHz" ls 3 with points, "../GNU/Elco_esr.dat" u 1:12 title "LCR-100kHz" ls 5 with points, "../GNU/Elco_esr.dat" u 1:17 title "TTester" ls 7 with points
+set output
+set ylabel "ESR / Ω"
+set output "../GNU/Elco_esrCZ.pdf" ; replot ; set output
+#
+set output
+set ylabel "ESR / Ω"
+set output "../GNU/Elco_esrRU.pdf" ; replot ; set output
+#
+#set y2range [ 0.01 : 100 ] 
+#set y2label "Vloss / \%"
 # "../GNU/Elco_esr.dat" u 1:16 title "Vloss" ls 6 with points
 #    EOF

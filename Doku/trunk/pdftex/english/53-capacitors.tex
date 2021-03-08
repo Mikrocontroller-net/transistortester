@@ -38,7 +38,12 @@ Interim value of voltage will be interpolated.
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/Bigcap.pdf}
+ \begin{overpic}[width=16cm]{../FIG/Bigcap.pdf}
+  \color{black}
+  \put(25,97){\makebox(0,0)[cb]{Quick Discharge of capacitor}}
+  \put(25,61){\makebox(0,0)[cb]{10ms Charge Phase of capacitor}}
+  \put(25,26){\makebox(0,0)[cb]{Voltage Measurement Phase of capacitor}}
+ \end{overpic}
 \caption{discharge a capacitor and load with \(10ms\) load pulses until voltage reach a value of \(300mV\)}
 \label{fig:bigcap}
 \end{figure}
@@ -346,10 +351,14 @@ If this voltage is below \(3mV\), the sequence of measurement is repeated.
 The figure~\ref{fig:Cap_esr} shows the corresponding circuits.
 
 \begin{figure}[H]
-  \centering
-    \includegraphics[]{../FIG/Cap_esr.pdf}
-  \caption{Circuit of the ESR measurements of a capacitor}
-  \label{fig:Cap_esr}
+ \centering
+  \begin{overpic}[width=15cm]{../FIG/Cap_esr.pdf}
+   \color{black}
+   \put(28,85){\makebox(0,0)[cb]{Voltage measurement with charge current}}
+   \put(28,40){\makebox(0,0)[cb]{Voltage measurement without current}}
+  \end{overpic}
+ \caption{Circuit of the ESR measurements of a capacitor}
+ \label{fig:Cap_esr}
 \end{figure}
 
 The difference of capacitor voltages with and without current is proportional to the internal resistance of the capacitor. 
@@ -473,10 +482,16 @@ It is only assumed, that the capacitor hold the voltage until the next charge or
 \end{figure}
 
 \begin{figure}[H]
-  \centering
-    \includegraphics[]{../FIG/Cap_esr2.pdf}
-  \caption{More simple ESR measurement of a capacitor}
-  \label{fig:Cap_esr2}
+ \centering
+  \begin{overpic}[width=15cm]{../FIG/Cap_esr2.pdf}
+   \color{black}
+   \put(20,98){\makebox(0,0)[cb]{Forward reference measurement}}
+   \put(20,72){\makebox(0,0)[cb]{Forward voltage measurement with probe current}}
+   \put(20,47){\makebox(0,0)[cb]{Reverse reference measurement}}
+   \put(20,21){\makebox(0,0)[cb]{Reverse voltage measurement with probe current}}
+  \end{overpic}
+ \caption{More simple ESR measurement of a capacitor}
+ \label{fig:Cap_esr2}
 \end{figure}
 
 

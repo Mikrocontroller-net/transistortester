@@ -23,7 +23,7 @@ set style line 4  linetype 1 linecolor rgb "red" linewidth 2.000  pointtype 3 po
 set style line 5  linetype 1 linecolor rgb "green" linewidth 2.000 pointtype 3 pointsize 1
 set style line 6  linetype 1 linecolor rgb "blue" linewidth 2.000  pointtype 3 pointsize 1
 
-set xlabel "Resistor value / Ohm"
+set xlabel "Resistor value / Ω"
 #set format x "%.0s%c"
 set format x "% g"
 set format y "% g"
@@ -31,7 +31,7 @@ set xrange [ 0 : 15]
 set yrange [ -0.20000 : 0.20000 ] noreverse nowriteback
 set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set xtics autofreq  norangelimit
-set ylabel "difference / Ohm"
+set ylabel "difference / Ω"
 set output "../GNU/res_esr.pdf"
 plot "../GNU/rmess-esr.dat" u 1:($2-$1) title "m168" ls 1 with points,\
      "../GNU/rmess-esr.dat" u 1:($3-$1) notitle ls 1 with points,\
@@ -49,4 +49,12 @@ plot "../GNU/rmess-esr.dat" u 1:($2-$1) title "m168" ls 1 with points,\
      "../GNU/rmess-esr.dat" u 1:($15-$1) notitle ls 5 with points,\
      "../GNU/rmess-esr.dat" u 1:($16-$1) notitle ls 5 with points
 set output
+set xlabel "hodnota odporu / Ω"
+set ylabel "diference / Ω"
+set output "../GNU/res_esrCZ.pdf" ; replot ; set output
+#
+set xlabel "Значение сопротивления / Ω"
+set ylabel "разница  / Ω"
+set output "../GNU/res_esrRU.pdf" ; replot ; set output
+#
 #    EOF

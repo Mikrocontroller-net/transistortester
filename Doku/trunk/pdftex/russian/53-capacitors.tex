@@ -34,7 +34,12 @@
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/Bigcap.pdf}
+ \begin{overpic}[width=16cm]{../FIG/Bigcap.pdf}
+  \color{black}
+  \put(25,97){\makebox(0,0)[cb]{Quick Discharge of capacitor}}
+  \put(25,61){\makebox(0,0)[cb]{10ms Charge Phase of capacitor}}
+  \put(25,26){\makebox(0,0)[cb]{Voltage Measurement Phase of capacitor}}
+ \end{overpic}
 \caption{Разрядка конденсатора и зарядка импульсом \(10~ms\) до напряжения, не достигающего значения \(300~mV\)}
 \label{fig:bigcap}
 \end{figure}
@@ -239,21 +244,21 @@ Panasonic серий FC и «low ESR» FR.
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=14cm]{../GNU/Cap_FC_data.pdf}
+    \includegraphics[width=14cm]{../GNU/Cap_FC_dataRU.pdf}
   \caption{Документированное значение ESR серии FC Panasonic}
   \label{fig:Cap_FC_data}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=14cm]{../GNU/Cap_FR_data.pdf}
+    \includegraphics[width=14cm]{../GNU/Cap_FR_dataRU.pdf}
   \caption{Документированное значение ESR серии FR Panasonic}
   \label{fig:Cap_FR_data}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=14cm]{../GNU/Cap_FC_FR_data.pdf}
+    \includegraphics[width=14cm]{../GNU/Cap_FC_FR_dataRU.pdf}
   \caption{Сопоставление значений ESR серий FC и FR}
   \label{fig:Cap_FC_FR_data}
 \end{figure}
@@ -324,10 +329,14 @@ ESR конденсаторов с более низкой величиной ёмкости. Иначе измерение ESR этим мет
 измерения будет повторена. На рисунке~\ref{fig:Cap_esr} представлены соответствующие схемы.
  
 \begin{figure}[H]
-  \centering
-    \includegraphics[]{../FIG/Cap_esr.pdf}
-  \caption{Схема измерения ESR конденсатора}
-  \label{fig:Cap_esr}
+ \centering
+  \begin{overpic}[width=15cm]{../FIG/Cap_esr.pdf}
+   \color{black}
+   \put(28,85){\makebox(0,0)[cb]{Voltage measurement with charge current}}
+   \put(28,40){\makebox(0,0)[cb]{Voltage measurement without current}}
+  \end{overpic}
+ \caption{Схема измерения ESR конденсатора}
+ \label{fig:Cap_esr}
 \end{figure}
 
 Разница напряжения на конденсаторе с током и без тока пропорциональна внутреннему сопротивлению конденсатора. 
@@ -420,7 +429,7 @@ ESR \(6,5~\Omega\) на более высокой частоте измерения.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=16cm]{../GNU/Cesr.pdf}
+\includegraphics[width=16cm]{../GNU/CesrRU.pdf}
 \caption{Результаты измерений ESR 15-ти различных ATmega}
 \label{fig:Cesr}
 \end{figure}
@@ -448,10 +457,16 @@ ESR \(6,5~\Omega\) на более высокой частоте измерения.
 \end{figure}
 
 \begin{figure}[H]
-  \centering
-    \includegraphics[]{../FIG/Cap_esr2.pdf}
-  \caption{Более простое измерение ESR конденсатора}
-  \label{fig:Cap_esr2}
+ \centering
+  \begin{overpic}[width=15cm]{../FIG/Cap_esr2.pdf}
+   \color{black}
+   \put(20,98){\makebox(0,0)[cb]{Forward reference measurement}}
+   \put(20,72){\makebox(0,0)[cb]{Forward voltage measurement with probe current}}
+   \put(20,47){\makebox(0,0)[cb]{Reverse reference measurement}}
+   \put(20,21){\makebox(0,0)[cb]{Reverse voltage measurement with probe current}}
+  \end{overpic}
+ \caption{Более простое измерение ESR конденсатора}
+ \label{fig:Cap_esr2}
 \end{figure}
 
 
@@ -535,7 +550,7 @@ ESR \(6,5~\Omega\) на более высокой частоте измерения.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=16cm]{../GNU/Cesr2.pdf}
+\includegraphics[width=16cm]{../GNU/Cesr2RU.pdf}
 \caption{Результаты измерения ESR методом 2 15-ю различными ATmega}
 \label{fig:Cesr2}
 \end{figure}
@@ -559,7 +574,7 @@ ESR \(6,5~\Omega\) на более высокой частоте измерения.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=18cm]{../GNU/res_esr.pdf}
+\includegraphics[width=18cm]{../GNU/res_esrRU.pdf}
 \caption{Погрешность измерения сопротивления методом ESR}
 \label{fig:res_esr}
 \end{figure}
@@ -589,13 +604,13 @@ RC-цепочки, которая будет только \(14.4~\mu s\) для значения ёмкости \(20~nF\).
 \begin{figure}[H]
   \begin{subfigure}[b]{9cm}
     \centering
-    \includegraphics[width=9cm]{../GNU/Cesr_22n.pdf}
+    \includegraphics[width=9cm]{../GNU/Cesr_22nRU.pdf}
     \caption{высокое значение ESR}
   \end{subfigure}
   ~
   \begin{subfigure}[b]{9cm}
     \centering
-    \includegraphics[width=9cm]{../GNU/Cesr_22n_low.pdf}
+    \includegraphics[width=9cm]{../GNU/Cesr_22n_lowRU.pdf}
     \caption{низкое значение ESR}
   \end{subfigure}
   \caption{Измерения ESR конденсаторов малой ёмкости}
@@ -708,7 +723,7 @@ RC-цепочки, которая будет только \(14.4~\mu s\) для значения ёмкости \(20~nF\).
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=16cm]{../GNU/Mega8cap.pdf}
+\includegraphics[width=16cm]{../GNU/Mega8capRU.pdf}
 \caption{Погрешность измерения ёмкости в \% с ATmega8 }
 \label{fig:mega8cap}
 \end{figure}
@@ -716,14 +731,14 @@ RC-цепочки, которая будет только \(14.4~\mu s\) для значения ёмкости \(20~nF\).
 \begin{figure}[H]
   \begin{subfigure}[b]{9cm}
     \centering
-    \includegraphics[width=9cm]{../GNU/Mega8Acap.pdf}
+    \includegraphics[width=9cm]{../GNU/Mega8AcapRU.pdf}
     \caption{ATmega8A}
     \label{fig:mega8Acap}
   \end{subfigure}
   ~
   \begin{subfigure}[b]{9cm}
     \centering
-    \includegraphics[width=9cm]{../GNU/Mega8Lcap.pdf}
+    \includegraphics[width=9cm]{../GNU/Mega8LcapRU.pdf}
     \caption{ATmega8L}
     \label{fig:mega8Lcap}
   \end{subfigure}
@@ -732,7 +747,7 @@ RC-цепочки, которая будет только \(14.4~\mu s\) для значения ёмкости \(20~nF\).
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=18cm]{../GNU/Mega168cap.pdf}
+\includegraphics[width=18cm]{../GNU/Mega168capRU.pdf}
 \caption{Погрешность измерения ёмкости в \% с ATmega168 }
 \label{fig:mega168cap}
 \end{figure}
@@ -747,7 +762,7 @@ PeakTech 2170 LCR-метра, который выбран из-за лучшего приближения по частоте изм
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=18cm]{../GNU/capcompare.pdf}
+\includegraphics[width=18cm]{../GNU/capcompareRU.pdf}
 \caption{Сравнение результатов измерений ёмкости мультиметром, LCR-метром и Тестером на ATmega168}
 \label{fig:capcompare}
 \end{figure}
@@ -765,14 +780,14 @@ PeakTech 2170 LCR-метра, который выбран из-за лучшего приближения по частоте изм
 \begin{figure}[H]
   \begin{subfigure}[b]{9cm}
     \centering
-    \includegraphics[width=9cm]{../GNU/Mega168all.pdf}
+    \includegraphics[width=9cm]{../GNU/Mega168allRU.pdf}
     \caption{ATmega168}
     \label{fig:mega168all}
   \end{subfigure}
   ~
   \begin{subfigure}[b]{9cm}
     \centering
-    \includegraphics[width=9cm]{../GNU/Mega168Aall.pdf}
+    \includegraphics[width=9cm]{../GNU/Mega168AallRU.pdf}
     \caption{ATmega168A}
     \label{fig:mega168Aall}
   \end{subfigure}
@@ -781,7 +796,7 @@ PeakTech 2170 LCR-метра, который выбран из-за лучшего приближения по частоте изм
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=16cm]{../GNU/Mega168PAall.pdf}
+\includegraphics[width=16cm]{../GNU/Mega168PAallRU.pdf}
 \caption{Погрешность измерения ёмкости тремя ATmega168PA, не откалиброван}
 \label{fig:mega168PAall}
 \end{figure}
@@ -789,14 +804,14 @@ PeakTech 2170 LCR-метра, который выбран из-за лучшего приближения по частоте изм
 \begin{figure}[H]
   \begin{subfigure}[b]{9cm}
     \centering
-    \includegraphics[width=9cm]{../GNU/Mega328all.pdf}
+    \includegraphics[width=9cm]{../GNU/Mega328allRU.pdf}
     \caption{ATmega328}
     \label{fig:mega328all}
   \end{subfigure}
   ~
   \begin{subfigure}[b]{9cm}
     \centering
-    \includegraphics[width=9cm]{../GNU/Mega328Pall.pdf}
+    \includegraphics[width=9cm]{../GNU/Mega328PallRU.pdf}
     \caption{ATmega328P}
     \label{fig:mega328Pall}
   \end{subfigure}
@@ -823,7 +838,7 @@ PeakTech 2170 LCR-метра, который выбран из-за лучшего приближения по частоте изм
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=16cm]{../GNU/Mega168cap_opt}
+\includegraphics[width=16cm]{../GNU/Mega168cap_optRU.pdf}
 \caption{Улучшенное измерение ёмкости ATmega168}
 \label{fig:mega168optcap}
 \end{figure}
@@ -857,7 +872,7 @@ EEprom и будет использоваться для дальнейших измерений. Более сложным было выявл
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../GNU/ComparatorAdjust.pdf}
+\includegraphics[]{../GNU/ComparatorAdjustRU.pdf}
 \caption{Данные для 9 ATmega168}
 \label{fig:CompAdjust}
 \end{figure}
@@ -872,14 +887,14 @@ EEprom и будет использоваться для дальнейших измерений. Более сложным было выявл
 \begin{figure}[H]
   \begin{subfigure}[b]{9cm}
     \centering
-    \includegraphics[width=9cm]{../GNU/Mega168cal.pdf}
+    \includegraphics[width=9cm]{../GNU/Mega168calRU.pdf}
     \caption{ATmega168}
     \label{fig:mega168cal}
   \end{subfigure}
   ~
   \begin{subfigure}[b]{9cm}
     \centering
-    \includegraphics[width=9cm]{../GNU/Mega168Acal.pdf}
+    \includegraphics[width=9cm]{../GNU/Mega168AcalRU.pdf}
     \caption{ATmega168A}
     \label{fig:mega168Acal}
   \end{subfigure}
@@ -888,7 +903,7 @@ EEprom и будет использоваться для дальнейших измерений. Более сложным было выявл
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=16cm]{../GNU/Mega168PAcal.pdf}
+\includegraphics[width=16cm]{../GNU/Mega168PAcalRU.pdf}
 \caption{Погрешность измерения ёмкости тремя ATmega168PA, откалиброван}
 \label{fig:mega168PAcal}
 \end{figure}
@@ -896,14 +911,14 @@ EEprom и будет использоваться для дальнейших измерений. Более сложным было выявл
 \begin{figure}[H]
   \begin{subfigure}[b]{9cm}
     \centering
-    \includegraphics[width=9cm]{../GNU/Mega328cal.pdf}
+    \includegraphics[width=9cm]{../GNU/Mega328calRU.pdf}
     \caption{ATmega328}
     \label{fig:mega328cal}
   \end{subfigure}
   ~
   \begin{subfigure}[b]{9cm}
     \centering
-    \includegraphics[width=9cm]{../GNU/Mega328Pcal.pdf}
+    \includegraphics[width=9cm]{../GNU/Mega328PcalRU.pdf}
     \caption{ATmega328P}
     \label{fig:mega328Pcal}
   \end{subfigure}
@@ -920,7 +935,7 @@ EEprom и будет использоваться для дальнейших измерений. Более сложным было выявл
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=16cm]{../GNU/MegaAuto.pdf}
+\includegraphics[width=16cm]{../GNU/MegaAutoRU.pdf}
 \caption{Погрешность измерения ёмкости для трех ATmega, до и после калибровки}
 \label{fig:MegaAuto}
 \end{figure}
@@ -932,7 +947,7 @@ EEprom и будет использоваться для дальнейших измерений. Более сложным было выявл
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=16cm]{../GNU/Mega1284.pdf}
+\includegraphics[width=16cm]{../GNU/Mega1284RU.pdf}
 \caption{Погрешность измерений конденсаторов с ATmega1284 по сравнению с ATmega328}
 \label{fig:Mega1284}
 \end{figure}

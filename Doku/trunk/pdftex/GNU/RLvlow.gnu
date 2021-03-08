@@ -29,10 +29,17 @@ set output "../GNU/RLvlow.pdf"
 set style line 1  linetype 1 linewidth 2.000  pointsize 1
 set style line 2  linetype 2 linewidth 2.000  pointsize 1
 set xrange [ 0 : 10 ] noreverse nowriteback
-set xlabel "resistor Rx / Ohm" 
+set xlabel "resistor Rx / Ω" 
 set yrange [130: 200 ] noreverse nowriteback 
 set ylabel "voltage / mV" 
 #plot (5000*699/(721+x)) ,(5000*(x+19)/(721+x))
 plot (5000*(x+19)/(721+x)) title 'PC2, type 1' ls 1
 set output
+set xlabel "odpor Rx / Ω" 
+set ylabel "napětí / mV" 
+set output "../GNU/RLvlowCZ.pdf" ; replot ; set output
+#
+set xlabel "резистор Rx / Ω"
+set ylabel "напряжений / mV"
+set output "../GNU/RLvlowRU.pdf" ; replot ; set output
 #    EOF

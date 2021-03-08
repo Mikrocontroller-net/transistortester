@@ -144,9 +144,13 @@ entladen werden.
 
 \begin{figure}[H]
   \begin{subfigure}[b]{9cm}
-    \centering
-    \includegraphics[width=7cm]{../FIG/relay_addon.pdf}
-    \caption{mit Relais}
+   \centering
+   \begin{overpic}[width=7cm]{../FIG/relay_addon.pdf}
+    \color{black}
+    \put(78,36){\makebox(0,0)[lb]{\footnotesize VCC oder Ubat}}  
+    \put(78,32){\makebox(0,0)[lb]{\footnotesize abhängig von Relaisspannung}}  
+   \end{overpic}
+  \caption{mit Relais}
   \end{subfigure}
   ~
   \begin{subfigure}[b]{9cm}
@@ -163,10 +167,14 @@ Der Entladestrom wird hier durch Widerstände begrenzt und die ATmega-Eingänge 
 Man darf aber nicht vergessen, daß der Tester während der Messung trotzdem ungeschützt bleibt.
 
 \begin{figure}[H]
-\centering
-\includegraphics[width=18cm]{../FIG/relay_um_addon.pdf}
-\caption{Verbesserter Schutz mit Relais}
-\label{fig:relay_um_addon}
+ \centering
+  \begin{overpic}[width=10cm]{../FIG/relay_um_addon.pdf}
+  \color{black}
+  \put(78,42){\makebox(0,0)[lb]{\footnotesize VCC oder Ubat abhängig}}
+  \put(78,38){\makebox(0,0)[lb]{{\footnotesize von Relaisspannung}}}
+ \end{overpic}
+ \caption{Verbesserter Schutz mit Relais}
+ \label{fig:relay_um_addon}
 \end{figure}
 
 \subsection{Zenerspannungsmessung}
@@ -181,10 +189,17 @@ Der Tester zeigt die externe Spannung so lange an, wie man den Taster gedrückt 
 Ungefähr \(40mA\) mehr Batteriestrom wird für diese Erweiterung bei gedrückter Taste gebraucht.
 
 \begin{figure}[H]
-\centering
-\includegraphics[width=18cm]{../FIG/zener_exp.pdf}
-\caption{Erweiterung zum Messen von Zenerspannungen}
-\label{fig:zener}
+ \centering
+ \begin{overpic}[width=17cm]{../FIG/zener_exp.pdf}
+  \color{black}
+ % \put(42,25){\makebox(0,0)[cb]{Taster}}
+  \put(5,20){\makebox(0,0)[rb]{\textcolor{red}{externe}}}  
+  \put(5,17){\makebox(0,0)[rb]{\textcolor{red}{Spannung}}}  
+  \put(8,24){\makebox(0,0)[lb]{Hat Platz auf der Platine!}} 
+  \put(42,2){\makebox(0,0)[lb]{Sollte separat positioniert werden!}}    
+ \end{overpic}
+ \caption{Erweiterung zum Messen von Zenerspannungen}
+ \label{fig:zener}
 \end{figure}
 
 Der 10:1-Spannungsteiler kann mit dem optionalen Dialogteil für den ATmega328 auch ohne 
@@ -237,10 +252,13 @@ Vielfach ist das graphische Display auch mit einem Adapter-Board an die Steckerl
 Deswegen ist auch hier die Nachrüstung des Impulsdrehgebers nicht sehr schwierig.
 
 \begin{figure}[H]
-\centering
-\includegraphics[width=6cm]{../FIG/rotary_extension.pdf}
-\caption{Erweiterung um einen Impulsdrehgeber}
-\label{fig:RotExt}
+ \centering
+ \begin{overpic}[width=5cm]{../FIG/rotary_extension.pdf}
+  \color{black}
+  %\put(47,6){\makebox(0,0)[lb]{Taster}}
+ \end{overpic}
+ \caption{Erweiterung um einen Impulsdrehgeber}
+ \label{fig:RotExt}
 \end{figure}
 
 Die Abbildung~\ref{fig:RotEnc} zeigt zwei Versionen von Drehgebern.
@@ -251,10 +269,22 @@ Manchmal liegt bei einigen Drehgebern die Schaltflanke eines der beiden Schalter
 Raststellung.
 
 \begin{figure}[H]
-\centering
-\includegraphics[width=14cm]{../FIG/rotary_encoder.pdf}
-\caption{Zwei unterschiedliche Versionen eines Impulsdrehgeber}
-\label{fig:RotEnc}
+ \centering
+ \begin{overpic}[width=15cm]{../FIG/rotary_encoder.pdf}
+  \color{black}
+  \put(90,71.7){\makebox(0,0)[lb]{Schalter A}}
+  \put(90,62){\makebox(0,0)[lb]{Schalter B}}
+  \put(90,29){\makebox(0,0)[lb]{Schalter A}}
+  \put(90,19){\makebox(0,0)[lb]{Schalter B}}
+  \put(6,6){\makebox(0,0)[rb]{\footnotesize{Zustand:}}}
+  \put(6,48.5){\makebox(0,0)[rb]{\footnotesize{Zustand:}}}
+  \multiput(23.5,53)(24.6,0){3}{\footnotesize Rastung}
+  \multiput(11,10)(12.3,0){6}{\footnotesize Rastung}
+  \put(52,43){\makebox(0,0)[cb]{\large{Version 2}}}
+  \put(52,1){\makebox(0,0)[cb]{\large{Version 1}}}
+ \end{overpic}
+ \caption{Zwei unterschiedliche Versionen eines Impulsdrehgeber}
+ \label{fig:RotEnc}
 \end{figure}
 
 Die Abbildung~\ref{fig:RotBounce} zeigt einen Impulsdrehgeber, der nicht nur
@@ -274,10 +304,17 @@ Ein Pendeln der Einstellung (Zähler rauf, Zähler runter) wird durch die Art de
 ungünstiger Lage der Schaltflanken kann aber ein Zählpuls für eine Raststellung ausbleiben.
 
 \begin{figure}[H]
-\centering
-\includegraphics[width=14cm]{../FIG/rotary_bouncing.pdf}
-\caption{Ein Impulsdrehgeber mit prellenden Kontakten}
-\label{fig:RotBounce}
+ \centering
+ \begin{overpic}[width=17cm]{../FIG/rotary_bouncing.pdf}
+  \color{black}
+  \put(90,39){\makebox(0,0)[lb]{Schalter A}}
+  \put(90,30){\makebox(0,0)[lb]{Schalter B}}
+  \multiput(11,23)(28,0){3}{\footnotesize Rastung}
+  \put(7,20){\makebox(0,0)[rb]{Zustand}}
+  \put(5,12){\makebox(0,0)[lb]{Mögliche Zustände von links nach rechts:}}
+ \end{overpic}
+ \caption{Ein Impulsdrehgeber mit prellenden Kontakten}
+ \label{fig:RotBounce}
 \end{figure}
 
 Anstelle der beiden Kontakte für den Impulsdrehgeber können auch zwei Taster für Rauf (Up) und Runter (Down)
@@ -305,15 +342,20 @@ Ob die Signalform für den ST7565-Controller so noch akzeptiert wird, sollte man
 Mit den Gattern des 74HC4050 bleibt die Signalform jedenfalls besser erhalten.\\
  
 \begin{figure}[H]
-\centering
-\includegraphics[width=14cm]{../FIG/ST7565lcd.pdf}
-\caption{Anschluss eines graphischen Displays mit ST7565 Controller}
-\label{fig:ST7565lcd}
+ \centering
+ \begin{overpic}[width=14cm]{../FIG/ST7565lcd.pdf}
+  \color{black}
+  \put(88,10){\makebox(0,0)[lb]{Hintergrund}}
+  \put(88,7){\makebox(0,0)[lb]{LED}}
+ \end{overpic}
+ \caption{Anschluss eines graphischen Displays mit ST7565 Controller}
+ \label{fig:ST7565lcd}
 \end{figure}
 
 Die Tabelle \ref{tab:spi-processor} zeigt weitere Anschlußmöglichkeiten
 für den ATmega328 und andere Prozessoren mit der SPI (LCD\_INTERFACE\_MODE=4)
-oder der 3LINE (LCD\_INTERFACE\_MODE=3) Schnittstelle. Verschiedene Belegungen für
+oder der 3LINE (LCD\_INTERFACE\_MODE=3) Schnittstelle. \\
+Verschiedene Belegungen für
 einen Prozessor werden mit der Makefile Option STRIP\_GRID\_BOARD
 eingestellt.
 Die Belegungen sind in der Datei config.h festgelegt. 
@@ -381,10 +423,14 @@ Das Display Modul mit dem ST7920 Controller kann entweder mit der 4-Bit Parallel
 speziellen Seriellschnittstelle angeschlossen werden, wie die Abbildung \ref{fig:ST7920lcd} zeigt.
  
 \begin{figure}[H]
-\centering
-\includegraphics[width=14cm]{../FIG/ST7920interface.pdf}
-\caption{Anschluss eines Displays mit ST7920 Controller}
-\label{fig:ST7920lcd}
+ \centering
+ \begin{overpic}[width=12cm]{../FIG/ST7920interface.pdf}
+  \color{black}
+  \put(20,1){\makebox(0,0)[cb]{seriell Betrieb}}
+  \put(80,1){\makebox(0,0)[cb]{4-bit parallel Betrieb}}
+ \end{overpic}
+ \caption{Anschluss eines Displays mit ST7920 Controller}
+ \label{fig:ST7920lcd}
 \end{figure}
 
 Für beide Anschlußarten muß die Software speziell konfiguriert werden. 
@@ -439,6 +485,7 @@ Einen entsprechenden Schaltungsvorschlag zeigt das Bild \ref{fig:NT7108lcd} .
 \end{figure}
 
 Sie müssen die Pinreihenfolge bei Ihrem LCD-Modul prüfen, einige Module haben eine andere Signalreihenfolge.
+
 Einige verschiedene Pinbelegungen aus Datenblättern der ABG128064 Serie zeigt Tabelle~\ref{tab:NT7108types}.
 
 \begin{table}[H]
@@ -717,6 +764,145 @@ erkannt werden. In diesem Fall wird keine VCC=x.xV Anzeige in Zeile 2 beim Einsc
 angezeigt. Falls es zu der Anzeige kommen sollte, hilft ein nach VCC geschalteter 
 \(2,2k\Omega\) Widerstand am PC4-Eingang.
 \end{description}
+
+\section{Erweiterte Schaltung mit ATmega644 oder ATmega1284}
+
+Eine erweiterte Schaltung für ATmega644/1284-Prozessoren wurde in Zusammenarbeit mit Nick L. aus
+der Ukraine entwickelt. Die Schaltung nach Abbildung \ref{fig:t644tester} ermöglicht zusätzlich
+einen Test von Quarzen und einen erweiterten Frequenzbereich für die Frequenzmessung.
+Obwohl die Grundschaltung sehr ähnlich der Schaltung \ref{fig:ttester} ist, werden hier
+andere Portbelegungen benutzt.
+Ein Impulsdrehgeber nach Schaltung \ref{fig:RotExt} kann hier an PB5 und PB7 (statt PD1 und PD3) angeschlossen werden.
+Beide Signale und auch die Versorgungssignale VCC und GND sind am ISP-Stecker verfügbar,
+sodass die Erweiterung auch hier angeschlossen werden kann.
+
+Der 16:1-Frequenzteiler 74HC4060 wird für höhere Frequenzen als \(2MHz\) immer benutzt.
+Der Teiler kann aber auch für Frequenzen von \(25kHz\) bis \(400kHz\) benutzt werden, um mit der
+Periodenmessung die Auflösung der Frequenzmessung zu verbessern.
+Für die Umschaltung der Betriebszustände (Frequenzteiler und Quarz-Oszillator) werden
+die Analogschalter 74HC4052 benutzt.
+Die Tabelle \ref{tab:mega644-display} zeigt die Pinbelegung für den ATmega324/624/1284 Mikrocontroller für verschiedene Displayanschlüsse.
+Die I\textsuperscript{2}C-Schnittstelle ist nur mit dem SSD1306-Controller möglich.
+Die Signale der I\textsuperscript{2}C-Schnittstelle erfordern einen ,,Pull-Up''-Widerstand von etwa \(4,7k\Omega\) nach \(3,3V\).
+Die Ausgänge des ATmega werden für die I\textsuperscript{2}C-Signale nur nach \(0V\) geschaltet.
+
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c || c | c | c | c |}
+    \hline
+      Port & Character LCD &  Graphik LCD & Graphik LCD  & Zusatzfunktion      \\
+           &               &  SPI 4-Wire  &  I\textsuperscript{2}C         &                     \\
+    \hline
+    \hline
+    PB2    &  LCD-RS         &            &             &       \\
+    \hline
+    PB3    &  LCD-E          & (LCD-CE)   &  LCD-SCL    &       \\
+    \hline
+    PB4    &  LCD-D4         & LCD-REST   &  LCD-SDA    &       \\
+    \hline
+    PB5    &  LCD-D5         & LCD-RS     &             & ISP-MOSI \\
+           &                 &            &             & Drehgeber 2 \\
+    \hline
+    PB6    &  LCD-D6         & LCD-SCLK   &             & ISP-MISO \\
+    \hline
+    PB7    &  LCD-D7         & LCD-SI     &             & ISP-SCK  \\
+           &                 &            &             & Drehgeber 1 \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{Verschiedene Varianten der Display-Anschlüsse}
+  \label{tab:mega644-display}
+\end{table}
+
+Auch ein Display mit NT7108 (KS0108, S6B0108) Controller kann mit einer kleinen Zusatzschaltung an einen
+ATmega644 oder ATmega1284 angeschlossen werden wie in der Abbildung~\ref{fig:NT7108lcd_644} gezeigt.
+Bitte beachten Sie auch die verschiedenen Pinbelegungen der Displaymodule mit NT7108 Controller wie in
+Tabelle~\ref{tab:NT7108types} auf Seite~\pageref{tab:NT7108types} angegeben.
+
+\begin{figure}[H]
+  \begin{subfigure}[b]{9cm}
+    \centering
+    \includegraphics[width=8cm]{../FIG/ST7108serial164_644.pdf}
+    \caption{mit 74HCT164}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{9cm}
+    \centering
+    \includegraphics[width=8cm]{../FIG/ST7108serial595_644.pdf}
+    \caption{mit 74HCT595}
+  \end{subfigure}
+  \caption{Anschluss des NT7108 Controllers an einen ATmega644/1284}
+  \label{fig:NT7108lcd_644}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=18cm]{../FIG/t644tester.pdf}
+\caption{Erweiterte Transistortester Schaltung mit ATmega644}
+\label{fig:t644tester}
+\end{figure}
+
+\section{Aufbau mit ATmega1280 oder Arduino Mega}
+Die Grundschaltung des Testers läßt sich auch mit einem Arduino Mega mit ATmega1280 oder
+ATmega2560 als Shield aufbauen.
+Die notwendigen Verbindungen zeigt die Abbildung~\ref{fig:t1280tester}.
+Die Steckverbindungen des Arduino für die Datenverbindungen des Displays sind in güner Farbe eingezeichnet.
+Die Bauteile mit roter Bezeichnung sind für die Funktion des Testers nicht erforderlich.
+Der ATmega2560 Controller hat zwar viele Anschlußpins, aber nur ein einziger Pin hat die
+erforderlichen Verbindungen für beide Methoden der Frequenzmessung.
+Der Anschlußpin muß als Takteingang für einen Zähler geschaltet werden können und außerdem muß
+der Pin ein Unterbrechungssignal (Interrupt) bei Pegelwechsel erzeugen können.
+Dies ist nur für den Pin PE6 (T3/INT6) der Fall. Die anderen Takteingänge der Zähler
+PD7 (T0), PD6 (T1), PH7 (T4) und PL2 (T5) können nicht für die Erzeugung des Unterbrechungssignals
+bei Pegelwechsel verwendet werden.
+Leider ist der PE6 Pin nicht mit den Steckerleisten des Arduino verbunden.
+Der PE5 Pin (7) ist mit dem Anschluß 3 der PWM Buchsenleiste des Arduino verbunden und kann
+am Atmega2560 mit dem PE6 Pin (8) gebrückt werden.
+Der Ausgang der Frequenzerzeugung ist am Pin PB6 (OC1B) verfügbar. Dieser Pin ist mit Anschluß 12
+der PWM-Buchsenleiste verbunden.
+Auf den ISP-Stecker kann für den Arduino verzichtet werden, da das Programm über
+das USB-Interface und den Bootloader geladen werden kann.  Mit dem
+Bootloader gibt es lediglich eine kleine Verzögerung des Programmstarts.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=18cm]{../FIG/t1280tester.pdf}
+\caption{Transistortester Schaltung mit ATmega1280, ATmega2560 oder Arduino Mega}
+\label{fig:t1280tester}
+\end{figure}
+
+Natürlich können alle unterstützten Displays auch an die ATmega1280 oder ATmega2560 angeschlossen
+werden, wie in der Tabelle~\ref{tab:display-1280} angegeben.
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c || c | c | c | c | c | c |}
+    \hline
+           & Character     &  ST7565     & ST7920       & NT7108       & SSD1306     & Zusatzfunktion \\
+      Port & LCD           &    SPI      & seriell      & seriell      &    I\textsuperscript{2}C      & \\
+    \hline
+    \hline
+    PA0    &  LCD-D4       &   LCD-REST  &  LCD-RESET   & HC595-RCK       &             & \\
+    \hline
+    PA1    &  LCD-D5       &   LCD-RS    &              & LCD-CS2        &             & Drehgeber-2 \\
+    \hline
+    PA2    &  LCD-D6       &   LCD-SCLK  &              & HC164-CLK      &             & \\
+    \hline
+    PA3    &  LCD-D7       &   LCD-SI    &              & LCD-CS1        &             & Drehgeber-1 \\
+    \hline
+    PA4    &  LCD-RS       &             &   LCD-B0     & LCD-RS         &   LCD-SDA   & \\
+           &               &             &              & HC164-SER      &             & \\
+    \hline
+    PA5    &  LCD-E        &  (LCD-CE)   &   LCD-EN     & LCD-EN         &   LCD-SCL  & \\
+    \hline
+    PA7    &  Tastensignal &             &              &                &             & \\
+    \hline
+    \end{tabular}
+  \end{center}
+  \caption{Pinbelegungen für verschiede Displays an ATmega1280/2560}
+  \label{tab:display-1280}
+\end{table}
 
 \section{Chinesische Nachbauten mit Textdisplay}
 Der Tester wird in China nach meinem Kenntnisstand in zwei Versionen mit Textdisplay nachgebaut.
@@ -1032,275 +1218,74 @@ Auf der Display-Platine der ST7565 Variante ist keine Anpassung der Signalpegel 
 Wahrscheinlich toleriert die gewählte Controller-Variante die 5V Signalpegel des ATmega328.
 Es ist jedenfalls keine Schutzdiode gegen die 3.3V Versorgung bei diesem Controller feststellbar.
 
-\section{Erweiterte Schaltung mit ATmega644 oder ATmega1284}
+section{Und noch ein Clone von Hiland M644}
+Dieses Nachbau basiert auf dem Schaltplan von Nick L. aus der Ukraine siehe Abbildung \ref{fig:t644tester}
+auf der Seite \pageref{fig:t644tester}.\\
+{\bf Bedient wird der Tester mit einem Knopf, der sowohl Taster als auch Drehgeber ist.}
 
-Eine erweiterte Schaltung für ATmega644/1284-Prozessoren wurde in Zusammenarbeit mit Nick L. aus
-der Ukraine entwickelt. Die Schaltung nach Abbildung \ref{fig:t644tester} ermöglicht zusätzlich
-einen Test von Quarzen und einen erweiterten Frequenzbereich für die Frequenzmessung.
-Obwohl die Grundschaltung sehr ähnlich der Schaltung \ref{fig:ttester} ist, werden hier
-andere Portbelegungen benutzt.
-Ein Impulsdrehgeber nach Schaltung \ref{fig:RotExt} kann hier an PB5 und PB7 (statt PD1 und PD3) angeschlossen werden.
-Beide Signale und auch die Versorgungssignale VCC und GND sind am ISP-Stecker verfügbar,
-sodass die Erweiterung auch hier angeschlossen werden kann.\\
+\vspace{0.5cm}
+Er bietet folgende Zusätze:
+\\- die Frequenzmessung
+\\- der f-Generator
+\\- 10-bit PWM
+\\- Impulsdrehgeber
+\\- die Quarz-Messung
+\\- Spannung und Zehnerdioden Bestimmung (bis fast 50V).
+\\Die Platine ist mit einem 8MHz Quarz bestückt. Besser wäre wohl ein 16MHz Quarz,
+wobei die Nachrüstung eines Trimmers (genauere Frequenz) schwierig ist.
+\\Die Kontakte für die ISP-Schnittstelle sind auf eine 6-pol Lochreihe unterhalb dem
+steckbaren Display-Modul herausgeführt die folgend belegt ist:\\
+{\bf von links nach rechts}: 1~-Reset; 2~-SCK; 3~-MISO; 4~-MOSI; 5~-+5V; 6~-GND.\\
+Um den Tester, aktualisieren zu können, benötigt man ein angepasstes Kabel, der man relativ einfach
+selbst erstellen kann.\\
+Bei der Auslieferung ist der Nullkraft-Testsockel über Buchsenleisten mit der Platine verbunden.
 
-Der 16:1-Frequenzteiler 74HC4060 wird für höhere Frequenzen als \(2MHz\) immer benutzt.
-Der Teiler kann aber auch für Frequenzen von \(25kHz\) bis \(400kHz\) benutzt werden, um mit der
-Periodenmessung die Auflösung der Frequenzmessung zu verbessern.
-Für die Umschaltung der Betriebszustände (Frequenzteiler und Quarz-Oszillator) werden
-die Analogschalter 74HC4052 benutzt.
-Die Tabelle \ref{tab:mega644-display} zeigt die Pinbelegung für den ATmega324/624/1284 Mikrocontroller für verschiedene Displayanschlüsse.
-Die I\textsuperscript{2}C-Schnittstelle ist nur mit dem SSD1306-Controller möglich.
-Die Signale der I\textsuperscript{2}C-Schnittstelle erfordern einen ,,Pull-Up''-Widerstand von etwa \(4,7k\Omega\) nach \(3,3V\).
-Die Ausgänge des ATmega werden für die I\textsuperscript{2}C-Signale nur nach \(0V\) geschaltet.
-
-
-\begin{table}[H]
-  \begin{center}
-    \begin{tabular}{| c || c | c | c | c |}
-    \hline
-      Port & Character LCD &  Graphik LCD & Graphik LCD  & Zusatzfunktion      \\
-           &               &  SPI 4-Wire  &  I\textsuperscript{2}C         &                     \\
-    \hline
-    \hline
-    PB2    &  LCD-RS         &            &             &       \\
-    \hline
-    PB3    &  LCD-E          & (LCD-CE)   &  LCD-SCL    &       \\
-    \hline
-    PB4    &  LCD-D4         & LCD-REST   &  LCD-SDA    &       \\
-    \hline
-    PB5    &  LCD-D5         & LCD-RS     &             & ISP-MOSI \\
-           &                 &            &             & Drehgeber 2 \\
-    \hline
-    PB6    &  LCD-D6         & LCD-SCLK   &             & ISP-MISO \\
-    \hline
-    PB7    &  LCD-D7         & LCD-SI     &             & ISP-SCK  \\
-           &                 &            &             & Drehgeber 1 \\
-    \hline
-    \end{tabular}
-  \end{center}
-  \caption{Verschiedene Varianten der Display-Anschlüsse}
-  \label{tab:mega644-display}
-\end{table}
-
-Auch ein Display mit NT7108 (KS0108, S6B0108) Controller kann mit einer kleinen Zusatzschaltung an einen
-ATmega644 oder ATmega1284 angeschlossen werden wie in der Abbildung~\ref{fig:NT7108lcd_644} gezeigt.
-Bitte beachten Sie auch die verschiedenen Pinbelegungen der Displaymodule mit NT7108 Controller wie in
-Tabelle~\ref{tab:NT7108types} auf Seite~\pageref{tab:NT7108types} angegeben.
+Bei dem unten abgebildeten Tester wurde der Sockel direkt angelötet und die hiermit gesparte Buchsenleiste
+auf ein vorhandenes Flachbandkabel mit Pfostenstecker angelötet und mit Schrumpfschlauch fixiert.
+\begin{figure}[H]
+ \centering
+ \begin{overpic}[width=11cm]{../FIG/Kabel_Hiland.pdf}
+  \color{black}
+  \put(14,99){\makebox(0,0)[cb]{Programmer}}
+  \put(14,-3){\makebox(0,0)[cb]{Pfostensteckverbinder}}
+  \put(49,99){\makebox(0,0)[cb]{Ansicht von oben}}
+  \put(38,-3){\makebox(0,0)[lb]{Flachbandkabel}}
+  \put(90,99){\makebox(0,0)[cb]{Tester}}
+  \put(90,-3){\makebox(0,0)[cb]{Buchsenleiste}}
+ \end{overpic}
+ \vspace{0.5cm}
+ \caption{6 und 10 Pol Kabel für die Programmierung}
+\end{figure}
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{8cm}
     \centering
-    \includegraphics[width=8cm]{../FIG/ST7108serial164_644.pdf}
-    \caption{mit 74HCT164}
+    \includegraphics[width=7cm]{../PNG/Hi_u.jpg}
+    \caption{unten TP1 bis TP3 für Bauteilebestimmung}
   \end{subfigure}
   ~
   \begin{subfigure}[b]{9cm}
     \centering
-    \includegraphics[width=8cm]{../FIG/ST7108serial595_644.pdf}
-    \caption{mit 74HCT595}
+    \includegraphics[width=6.8cm]{../PNG/Hi_o.jpg}
+    \caption{oben Pins für Auswahlmenü und die IDE}
   \end{subfigure}
-  \caption{Anschluss des NT7108 Controllers an einen ATmega644/1284}
-  \label{fig:NT7108lcd_644}
+  \caption{Hiland Tester mit Testsockel und 128x64 Pixel Display}
+  \label{fig:Hiland}
 \end{figure}
 
+{\bf Die Testports TP1, TP2 und TP3} werden für die automatische Bauteilerkennung benutzt
+und sind auf der Platine mit den Ziffern {\bf 1,1,1; 2; 3,3,3} gekennzeichnet.
 
+Die gleiche Bezeichnung befindet sich auf dem SMD Testfeld
+und es besteht auch eine Möglichkeit, eigene Test Kabel anzulöten.\\ 
+Der {\bf Testport TP2} wird auch für die Ausgabe der Sonderfunktion ,,f-Generator'' benutzt.\\
+Die mit {\bf LF} bezeichneten Pins sind für die Messung von Quarzen mit niedriger Resonanzfrequenz vorgesehen,
+und die mit {\bf HF} bezeichneten Pins sind für Quarze mit hoher Resonanzfrequenz bestimmt.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=18cm]{../FIG/t644tester.pdf}
-\caption{Erweiterte Transistortester Schaltung mit ATmega644}
-\label{fig:t644tester}
-\end{figure}
+Der Pin {\bf F-in} wird zusammen mit  {\bf Gnd} für die Sonderfunktion Frequenz benutzt.
+Und der Pin {\bf Vext+} wird genauso mit {\bf Gnd} für die Spannungsmessung
+{\bf und} die Zenerdiodenmessung benutzt.\\
 
-
-\section{Aufbau mit ATmega1280 oder Arduino Mega}
-Die Grundschaltung des Testers läßt sich auch mit einem Arduino Mega mit ATmega1280 oder
-ATmega2560 als Shield aufbauen.
-Die notwendigen Verbindungen zeigt die Abbildung~\ref{fig:t1280tester}.
-Die Steckverbindungen des Arduino für die Datenverbindungen des Displays sind in güner Farbe eingezeichnet.
-Die Bauteile mit roter Bezeichnung sind für die Funktion des Testers nicht erforderlich.
-Der ATmega2560 Controller hat zwar viele Anschlußpins, aber nur ein einziger Pin hat die
-erforderlichen Verbindungen für beide Methoden der Frequenzmessung. 
-Der Anschlußpin muß als Takteingang für einen Zähler geschaltet werden können und außerdem muß
-der Pin ein Unterbrechungssignal (Interrupt) bei Pegelwechsel erzeugen können.
-Dies ist nur für den Pin PE6 (T3/INT6) der Fall. Die anderen Takteingänge der Zähler
-PD7 (T0), PD6 (T1), PH7 (T4) und PL2 (T5) können nicht für die Erzeugung des Unterbrechungssignals
-bei Pegelwechsel verwendet werden.
-Leider ist der PE6 Pin nicht mit den Steckerleisten des Arduino verbunden.
-Der PE5 Pin (7) ist mit dem Anschluß 3 der PWM Buchsenleiste des Arduino verbunden und kann
-am Atmega2560 mit dem PE6 Pin (8) gebrückt werden.
-Der Ausgang der Frequenzerzeugung ist am Pin PB6 (OC1B) verfügbar. Dieser Pin ist mit Anschluß 12
-der PWM-Buchsenleiste verbunden.
-Auf den ISP-Stecker kann für den Arduino verzichtet werden, da das Programm über
-das USB-Interface und den Bootloader geladen werden kann.  Mit dem
-Bootloader gibt es lediglich eine kleine Verzögerung des Programmstarts.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=18cm]{../FIG/t1280tester.pdf}
-\caption{Transistortester Schaltung mit ATmega1280, ATmega2560 oder Arduino Mega}
-\label{fig:t1280tester}
-\end{figure}
-
-Natürlich können alle unterstützten Displays auch an die ATmega1280 oder ATmega2560 angeschlossen
-werden, wie in der Tabelle~\ref{tab:display-1280} angegeben.
-
-\begin{table}[H]
-  \begin{center}
-    \begin{tabular}{| c || c | c | c | c | c | c |}
-    \hline
-           & Character     &  ST7565     & ST7920       & NT7108       & SSD1306     & Zusatzfunktion \\
-      Port & LCD           &    SPI      & seriell      & seriell      &    I\textsuperscript{2}C      & \\
-    \hline
-    \hline
-    PA0    &  LCD-D4       &   LCD-REST  &  LCD-RESET   & HC595-RCK       &             & \\
-    \hline
-    PA1    &  LCD-D5       &   LCD-RS    &              & LCD-CS2        &             & Drehgeber-2 \\
-    \hline
-    PA2    &  LCD-D6       &   LCD-SCLK  &              & HC164-CLK      &             & \\
-    \hline
-    PA3    &  LCD-D7       &   LCD-SI    &              & LCD-CS1        &             & Drehgeber-1 \\
-    \hline
-    PA4    &  LCD-RS       &             &   LCD-B0     & LCD-RS         &   LCD-SDA   & \\
-           &               &             &              & HC164-SER      &             & \\
-    \hline
-    PA5    &  LCD-E        &  (LCD-CE)   &   LCD-EN     & LCD-EN         &   LCD-SCL  & \\
-    \hline
-    PA7    &  Tastensignal &             &              &                &             & \\
-    \hline
-    \end{tabular}
-  \end{center}
-  \caption{Pinbelegungen für verschiede Displays an ATmega1280/2560}
-  \label{tab:display-1280}
-\end{table}
-
-
-\section{Programmierung des Mikrocontrollers}
-Ich gebe die Software für den Mikrocontroller in Quelltext heraus.
-Die Entwicklung wurde mit dem Linux-Betriebssystem (Ubuntu bzw. Mint) gemacht
-und wird gesteuert mit einer Makefile.
-Die Makefile stellt sicher, dass die Software entsprechend der vorher in der Makefile 
-eingestellten Optionen übersetzt wird. Schauen Sie bitte in die Datei LiesMich.txt
-im Verzeichnis trunk/default und in das Konfigurations-Kapitel~\ref{sec:config} ab Seite~\pageref{sec:config}.
-Das Ergebnis der Übersetzung hat die Dateierweiterung .hex und .eep.
-Üblicherweise heißen die Dateien TransistorTester.hex und TransistorTester.eep .
-Die .hex-Datei enthält die Daten für den Programmspeicher (Flash) des ATmega-Prozessors.
-Die .eep-Datei enthält die Daten für den EEPROM des ATmega.
-Beide Dateien müssen in den richtigen Speicher geladen werden.
-
-Zusätzlich muss der ATmega mit den ,,fuses'' richtig konfiguriert werden.
-Wenn Sie meine Makefile zusammen mit dem Programm avrdude \cite{avrdude} benutzen, brauchen Sie
-keine genaue Kenntnis über die Einzelheiten der fuses.
-Sie brauchen nur ,,make fuses'' aufrufen, wenn Sie keinen Quarz benutzen oder Sie
-müssen ,,make fuses-crystal'' aufrufen, wenn Sie einen \(8MHz\) Quarz auf der Baugruppe installiert haben.
-Bei der ATmega168-Serie der Mikrocontroller können Sie alternativ auch
-,,make fuses-crystal-lp'' aufrufen für den low power Quarz-Betrieb.
-Benutzen Sie niemals die Quarz-Variante, wenn Sie keinen \(8MHz\) Quarz installiert haben.
-Wenn Sie sich nicht sicher mit den fuses sind, lassen Sie diese erst einmal wie
-vom Werk gesetzt und bringen Sie den Tester in diesem Zustand zum Laufen.
-Es kann sein, dass das Programm zu langsam läuft, wenn Sie die für den \(8MHz\)-Betrieb 
-erzeugten Programmdaten benutzen, aber das kann man später korrigieren!
-Aber falsch gesetzte fuses können die spätere ISP-Programmierung verhindern.
-
-\subsection{Benutzung der Makefile unter Linux}
-Pakete können unter Debian basierten Linux-Versionen mit einer Paketverwaltung wie synaptic oder apt installiert werden.
-Sie benötigen das Paket ,,subversion'' zum Download der Quellen und der
-Dokumentation aus dem SVN-Archiv.
-So wird mit einer Anweisung \\
-,,svn checkout svn://www.mikrocontroller.net/transistortester'' \\
-das komplette Archiv heruntergeladen. Natürlich können auch nur einzelne Unterverzeichnisse
-heruntergeladen werden.
-Für die Benutzung der Makefile in einem Unterverzeichnis müssen die Pakete
-make, binutils-avr, avrdude, avr-libc und gcc-avr installiert sein.
-Einmal muß die Benutzung der Schnittstellen für den Nutzer (user) vorbereitet werden.
-Wenn sie ein Konsolfenster öffnen und ein ISP Programmiergerät mit USB-Schnittstelle eingesteckt ist,
-kann man die erkannten USB-Geräte mit dem Kommando ,,lsusb'' anzeigen.
-Ein Ergebnis von lsusb kann so aussehen:
-\begin{verbatim}
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 002 Device 003: ID 046d:c050 Logitech, Inc. RX 250 Optical Mouse
-Bus 002 Device 058: ID 03eb:2104 Atmel Corp. AVR ISP mkII
-Bus 002 Device 059: ID 2341:0042 Arduino SA Mega 2560 R3 (CDC ACM)
-Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-\end{verbatim}
-Hier wurde als Device 58 ein AVR ISP mkII erkannt (DIAMEX ALL-AVR). Die ID 03eb ist eine
-Herstellerkennung und die ID 2104 eine Produktkennung. Diese beiden Kennungen werden
-für einen Eintrag in einer Datei /etc/udev/rules.d/90-atmel.rules benötigt.
-In diesem Beispiel besteht die Datei 90-atmel.rules aus einer Zeile:
-\begin{verbatim}
-SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2104", MODE="0660",
-GROUP="plugdev"
-\end{verbatim}
-Dieser Eintrag erlaubt den Zugriff auf das Gerät für Mitglieder der Gruppe ,,plugdev''.
-Das ebenfalls als Devive 59 erkannte USB Gerät  Arduino SA Mega 2560 System erzeugt eine
-Zugriffsmöglichkeit auf das serielle Gerät ,,/dev/ttyACM0'' für Mitglieder der Gruppe ,,dialout''.
-Deswegen sollte die eigene Benutzerkennung sowohl Mitglied der Gruppe plugdev als auch
-der Gruppe dialout sein.
-Das Kommando ,,usermod -a -G dialout,plugdev \$USER'' sollte die Zugehörigkeit sicherstellen.
-Jetzt sollte ein Zugriff mit avrdude auf beide Geräte möglich sein.
-
-In einem Konsolen-Fenster müssen Sie zuserst mit dem ,,Change Directory'' Kommando cd in das passende 
-Unterverzeichnis vom Verzeichnis trunk wechseln.
-Hier können Sie mit einem Texteditor die Makefile an ihre Konfiguration anpassen.
-Zum Übersetzen reicht ein einfacher ,,make'' Aufruf im Konsolfenster.
-Wenn auch der ISP-Programmer in der Makefile konfiguriert ist, sollte ein Aufruf von ,,make upload''
-reichen, um das übersetzte Programm über die ISP-Schnittstelle in den ATmega zu laden.
-Auch die ,,fuses'' des ATmega müssen einmal richtig gesetzt werden.
-Dazu reicht ein Aufruf von ,,make fuses'' oder ,,make fuses-crystal'' aus.
-Vielleicht meldet das Programm avrdude einen Fehler beim Setzen der extendet Fuse efuse.
-Das Lesen von unbenutzten Fuse Bits ist beim ATmega als ,,1'' spezifiziert, aber
-das avrdude Programm maskiert die unbenutzten Bits, so daß es eine ,,0'' für alle unbenutzen Bits erwartet.
-Normalerweise sollte die efuse auf 0xfc gesetzt werden, aber avrdude liest eine 0x04 mit der Maske zurück.
-Man kann die Datei avrdude.conf ändern, um das Verhalten von avrdude zu ändern oder
-die efuse auf 0x04 setzen. 
-Alle efuse-Werte können mit dem Bezeichner EFUSE\_VAL am Anfang der Datei setup.mk im Verzeichnis trunk
-gesetzt werden. Wahrscheinlich sind die Fuses aber auch mit der Fehlermeldung richtig gesetzt.
-
-
-
-\subsection{Benutzung des WinAVR-Paketes unter Windows}
-Wenn Sie unter dem Windows Betriebssystem arbeiten, ist der leichteste Weg zum
-richtig programmierten ATmega zu kommen, die Benutzung der WinAVR-Paketes \cite{winavr1},\cite{winavr2}.
-Mit meinem Patch \cite{winavr3} können Sie auch die Fuses mit der Makefile setzen.
-Natürlich muss das avrdude-Programm Ihren Programmer unterstützen und die Konfiguration muss in
-der Makefile richtig angepaßt sein.
-Die Abbildungen \ref{fig:WinAVR1} zeigen das File-Menü der Bedienoberfläche von WinAVR zum
-Öffnen der Datei Makefile und zum Abspeichern der Makefile nach den Änderungen (save).
-
-\begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
-    \centering
-    \includegraphics[width=9cm]{../PNG/Notepad_open.png}
-    \caption{open Makefile}
-  \end{subfigure}
-  ~
-  \begin{subfigure}[b]{9cm}
-    \centering
-    \includegraphics[width=9cm]{../PNG/Notepad_save.png}
-    \caption{save Makefile}
-  \end{subfigure}
-  \caption{Bedienung der WinAVR-Oberfläche Programmer's Notepad}
-  \label{fig:WinAVR1}
-\end{figure}
-
-Die nächsten Abbildungen \ref{fig:WinAVR2} zeigen das Tools-Menü von Programmer's Notepad
-zum Übersetzen des Programms (Make All) und zum Programmieren des ATmega (Program) mit avrdude.
-
-\begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
-    \centering
-    \includegraphics[width=9cm]{../PNG/Notepad_make.png}
-    \caption{Erzeuge Programmdaten (.hex/.eep)}
-  \end{subfigure}
-  ~
-  \begin{subfigure}[b]{9cm}
-    \centering
-    \includegraphics[width=9cm]{../PNG/Notepad_program.png}
-    \caption{Programmiere ATmega}
-  \end{subfigure}
-  \caption{Bedienung der WinAVR-Oberfläche Programmer's Notepad}
-  \label{fig:WinAVR2}
-\end{figure}
 
 
 \section{Fehlersuche}

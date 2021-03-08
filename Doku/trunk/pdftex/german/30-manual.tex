@@ -125,7 +125,7 @@ angeschlossen wurde und der Start-Taster gedrückt wurde. In diesen Fall kehrt d
 wieder zu der normalen Teseterfunktion zurück.
 
  \item[Kondensatormeßgerät]
-Mit dem \mbox{1 \electricC 3} Symbol wird der Tester
+Mit dem \mbox{\begin{large}1 \electricC 3\end{large}} Symbol wird der Tester
 in ein reines Kondensator-Meßgerät an TP1 und TP3 verwandelt.
 Die Betriebsart wird durch ein {\bf[C]} in der rechten Ecke der ersten Zeile des Displays angezeigt.
 Bei dieser Betriebsart können Kondensatoren ab \(1pF\) bis zu \(100mF\) gemessen werden.
@@ -191,14 +191,14 @@ wenn die Taste noch länger gedrückt wird.
 Für Farbdisplays kann dieser Menüpunkt mit der Makefile Option LCD\_CHANGE\_COLOR eingeschaltet werden,
 um die Hintergrundfarbe einstellen zu können. Die Impulsdrehgeber-Erweiterung muß dafür installiert sein.
 Sie können eine der drei Farben rot, grün und blau mit einem längeren Tastendruck wählen.
-Die Intensität der gewählten Farbe, die mit einem > Zeichen in Spalte 1 gekennzeichnet wird,
+Die Intensität der gewählten Farbe, die mit einem {\textgreater} Zeichen in Spalte 1 gekennzeichnet wird,
 kann durch Drehen des Impulsdrehgebers verändert werden.
 
 \item[FrontColor]
 Für Farbdisplays kann dieser Menüpunkt mit der Makefile Option LCD\_CHANGE\_COLOR eingeschaltet werden,
 um die Vordergrundfarbe einstellen zu können. Die Impulsdrehgeber-Erweiterung muß dafür installiert sein.
 Sie können eine der drei Farben rot, grün und blau mit einem längeren Tastendruck wählen.
-Die Intensität der gewählten Farbe, die mit einem > Zeichen in Spalte 1 gekennzeichnet wird,
+Die Intensität der gewählten Farbe, die mit einem {\textgreater} Zeichen in Spalte 1 gekennzeichnet wird,
 kann durch Drehen des Impulsdrehgebers verändert werden.
 
  \item[Zeige Daten]
@@ -256,7 +256,7 @@ Messung durchgeführt. \\
 Bei der Kalibration werden zwei Sonderschritte gemacht, wenn die samplingADC Funktion in der Makefile gewählt wurde (WITH\_SamplingADC = 1).
 Nach der normalen Bestimmung der Nullwerte der Kapazitätsmessung werden dann auch die Nullwerte mit
 der Sampling Methode (C0samp) bestimmt. Als letzter Teil der Kalibration wird der Anschluß eines Testkondensators für die
-Spulenmessung an Pin~1 und Pin~3 angefordert mit der Meldung \mbox{1 \electricC 3  10-30nF(L)}.
+Spulenmessung an Pin~1 und Pin~3 angefordert mit der Meldung \mbox{\begin{large}1 \electricC 3 ~10-30nF(L)\end{large}}.
 Der Kapazitätswert sollte hierbei zwischen \(10nF\) und \(30nF\) liegen,
 um eine meßbare Resonanzfrequenz bei der späteren Parallelschaltung mit einer Spule (\textless~\(2mH\)) zu erreichen.
 Für Spulen mit mehr als 2mH Induktivität sollte die normale Testfunktion ohne die Parallelschaltung eines
@@ -265,7 +265,7 @@ zu einer Verbesserung des Meßergebnisses führen.\\
 
 Nach der Bestimmung der Nullkapazitäten ist der Anschluss eines Kondensators 
 mit einer beliebiger Kapazität zwischen \(100nF\) und \(20\mu F\) an Pin~1 und Pin~3 erforderlich.
-Dazu wird in Zeile 1 ein \mbox{1 \electricC 3\textgreater 100nF} angezeigt.
+Dazu wird in Zeile 1 ein \mbox{\begin{large}1 \electricC 3~\textgreater 100nF\end{large}} angezeigt.
 Sie sollten den Kondensator erst nach der Ausgabe der C0 Werte oder nach der Ausgabe dieser Aufforderung anschließen.
 Mit diesem Kondensator wird die Offset-Spannung des analogen Komparators kompensiert,
 um genauere Kapazitätswerte ermitteln zu können.
@@ -441,7 +441,7 @@ Widerstandswert wird in der ersten Zeile ausgegeben, wenn die Resonanzfrequenz e
 des Kondensators erwarten lässt. Auch für diesen Fall wird eine Güte Q aus den Schwingverhalten berechnet.
 Für diesen Fall wird die berechnete Induktivität an erster Stelle in Zeile 2 angegeben. Dahinter steht dann
 der Text " if " gefolgt von dem Kapazitätswert des Parallelkondensators. Der Wert dieses Kondensators kann derzeit
-nur in der Kalibrationsfunktion durch Messung festgelegt werden (\mbox{1 \electricC 3 \(10-30nF\)(L)}) .
+nur in der Kalibrationsfunktion durch Messung festgelegt werden (\mbox{\begin{large}1 \electricC 3~10-30nF(L)\end{large}}) .
 Die dritte Zeile zeigt wieder die Schwingfrequenz und die ermittelte Güte Q. 
 Bei zweizeiligen Displays wird der Inhalt der 3. Zeile zeitverzögert in Zeile 2 ausgegeben.
 

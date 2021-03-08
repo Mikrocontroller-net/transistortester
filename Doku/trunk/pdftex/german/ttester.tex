@@ -5,42 +5,63 @@
 \usepackage[utf8x]{inputenc}
 \usepackage[cm]{fullpage}
 \usepackage[ngerman]{babel}
+\usepackage{textcomp}           % Wegen Fehler,perthousand,micro
 \usepackage[pdftex]{graphicx}
 \usepackage[labelsep=period]{caption}
 \usepackage{subcaption}
-\usepackage{color}
-\usepackage{fixltx2e}
+\usepackage{xcolor}             %x-Vorschlag
+\usepackage[percent]{overpic}   %ins Bild schreiben
+\usepackage{mwe}                %ins Bild schreiben
+%\usepackage{blindtext}
+%\setlength{\abovecaptionskip}{0.5pc}
+%\setlength{\belowcaptionskip}{-1.0pc}
+%\usepackage{showframe}% zum Anzeigen des Seitenlayouts
+%\RedeclareSectionCommand[  % nur mit documentclass scrreprt 
+%  beforeskip=-1\baselineskip,
+%  afterskip=.5\baselineskip]{section}
+%\RedeclareSectionCommand[
+%  beforeskip=-.75\baselineskip,
+%  afterskip=.5\baselineskip]{subsection}
+%\RedeclareSectionCommand[
+%  beforeskip=-.5\baselineskip,
+%  afterskip=.25\baselineskip]{subsubsection}
+%\usepackage{fixltx2e}
+\setlength{\parindent}{0em}	% Absatz nicht einrücken
 \usepackage{epstopdf}
 \usepackage{hyperref}
 \usepackage{gensymb}
 \usepackage{float}
 \usepackage{circuitikz}
+\usepackage{wallpaper}
 %\usepackage{subfig}
-\graphicspath{{./FIG}}
+\graphicspath{{./FIG}}		% Wegen Hintergrundbild
 
 \begin{document}
+\begin{figure}[t]
+\ThisTileWallPaper{\paperwidth}{\paperheight}{../FIG/Wallpaper.pdf}
+\end{figure}
 \ctikzset{bipoles/length=.6cm}
 \ctikzset{bipoles/thickness=4}
 \newcommand\electricC {
-\hspace{-14 pt}
+\hspace{-10 pt}
 \begin{circuitikz}
 \draw (0,0) to[capacitor] (0:1);
 \end{circuitikz}
 \hspace{-6 pt}
 }
 \newcommand\electricR {
-\hspace{-14 pt}
+\hspace{-10 pt}
 \begin{circuitikz}
 \draw (0,0) to[european resistor] (0:1);
 \end{circuitikz}
 \hspace{-6 pt}
 }
 \newcommand\electricL {
-\hspace{-14 pt}
+\hspace{-10 pt}
 \begin{circuitikz}
 \draw (0,0) 
- to[american inductor] (-1,0) 
-;\end{circuitikz}
+ to[american inductor] (-1,0);
+\end{circuitikz}
 \hspace{-6 pt}
 }
 \newcommand\electricDAK {
@@ -53,12 +74,23 @@
 \draw (0,0) to[full diode] (180:1);
 \end{circuitikz}
 }
-\title{TransistorTester mit AVR-Mikrocontroller \\
-und ein wenig mehr\\
+\title{TransistorTester \\
+mit AVR-Mikrocontroller \\
+Ein Gerät zur Bestimmung und Messung von\\
+elektronischen Bauteilen\\
+und ein wenig mehr \dots\\
 Version 1.13k \\
 }
 \author{Karl-Heinz Kübbeler\\
-\texttt{kh\_kuebbeler@web.de}}
+\texttt{kh\_kuebbeler@web.de}
+\\
+\\
+\\
+\scriptsize Eine modifizierte Ausgabe\\
+\scriptsize von bm-magic und nachbearbeitet von K.-H. Kübbeler\\
+\copyright~\\
+\vspace*{-0.5cm}
+}
 \date{\today}
 \maketitle
 \tableofcontents
@@ -95,6 +127,10 @@ Markus Frejek
 Embedded Projects Journal,
 11. Ausgabe,
 2011
+
+\bibitem{khk}
+https://github.com/mikrocontroller-net/transistortester/blob/master/Doku/
+trunk/pdftex/german/ttester.pdf
 
 \bibitem{ATmega8}
 Atmel Corporation

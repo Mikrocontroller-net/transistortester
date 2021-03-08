@@ -8,18 +8,12 @@ set ydata
 set zdata
 set boxwidth
 set style fill  empty border
-set style rectangle back fc lt -3 fillstyle   solid 1.00 border lt -1
-set style circle radius graph 0.02, first 0, 0 
-set dummy x,y
-set format y "% g"
 set grid xtics nomxtics ytics nomytics noztics nomztics \
  nox2tics nomx2tics noy2tics nomy2tics nocbtics nomcbtics
 set grid layerdefault   linetype 0 linewidth 1.000,  linetype 0 linewidth 1.000
 set key inside right top vertical Right noreverse enhanced autotitles nobox
 set key noinvert samplen 4 spacing 1 width 0 height 0 
 set key maxcolumns 0 maxrows 0
-unset label
-unset arrow
 set style increment default
 unset style line
 unset style arrow
@@ -57,20 +51,12 @@ set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set xtics autofreq  norangelimit
 set ytics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set ytics autofreq  norangelimit
-set title "" 
-set title  offset character 0, 0, 0 font "" norotate
 set xlabel "" 
 set xlabel  offset character 0, 0, 0 font "" textcolor lt -1 norotate
 set xrange [ * : * ] noreverse nowriteback  # (currently [-11.0000:-1.00000] )
 set ylabel "" 
 set ylabel  offset character 0, 0, 0 font "" textcolor lt -1 rotate by -270
 set yrange [ * : * ] noreverse nowriteback  # (currently [-8.00000:8.00000] )
-set zero 1e-08
-set palette positive nops_allcF maxcolors 0 gamma 1.5 color model RGB 
-set palette rgbformulae 7, 5, 15
-set colorbox default
-set colorbox vertical origin screen 0.9, 0.2, 0 size screen 0.05, 0.6, 0 front bdefault
-set fit noerrorvariables
 GNUTERM = "wxt"
 set terminal pdf color 
 set grid
@@ -84,12 +70,20 @@ set format x "%.0s%c"
 set format y "% g"
 set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set xtics autofreq  norangelimit
-set ylabel "Error / Percent"
+set ylabel "Error / \%"
 #set yrange [-2 to 10]
 set key inside right top vertical Right noreverse enhanced autotitles nobox
 # calibrated
 set key inside left top vertical Right noreverse enhanced autotitles nobox
 set output "../GNU/Mega1284.pdf"
 plot "../GNU/capmess1284.dat" u 3:($4-$3)/$3*100 title "328-10" ls 1,"../GNU/capmess1284.dat" u 3:($5-$3)/$3*100 title "1284-int" ls 2,"../GNU/capmess1284.dat" u 3:($6-$3)/$3*100 title "1284-ext" ls 3
-#set output
+set output
+set xlabel "hodnota kapacity / F"
+set ylabel "chyba / \%"
+set output "../GNU/Mega1284CZ.pdf" ; replot ; set output
+#
+set xlabel "Значение емкости / F" 
+set ylabel "погрешность / \%"
+set output "../GNU/Mega1284RU.pdf" ; replot ; set output
+#
 #    EOF

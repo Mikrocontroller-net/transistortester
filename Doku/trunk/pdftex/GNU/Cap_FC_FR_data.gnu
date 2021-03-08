@@ -55,10 +55,10 @@ set ytics autofreq  norangelimit
 set title "" 
 set title  offset character 0, 0, 0 font "" norotate
 set format x "%.0s%c"
-set xlabel "Capacity / uF" 
+set xlabel "Capacity / F" 
 set xlabel  offset character 0, 0, 0 font "" textcolor lt -1 norotate
 set xrange [ 0.00001 : 0.01 ] noreverse nowriteback
-set ylabel "ESR / Ohm" 
+set ylabel "ESR / Ω" 
 set ylabel  offset character 0, 0, 0 font "" textcolor lt -1 rotate by -270
 set yrange [ * : * ] noreverse nowriteback
 set palette positive nops_allcF maxcolors 0 gamma 1.5 color model RGB 
@@ -81,4 +81,12 @@ set terminal pdf color
 set output "../GNU/Cap_FC_FR_data.pdf"
 plot "../GNU/Cap25_FC_ESR.dat" using ($1*0.000001):2 title "FC 25V" ls 1,\
 "../GNU/Cap25_FR_ESR.dat" using ($1*0.000001):2 title "FR 25V" ls 2
+set output
+set xlabel "kapacita / F" 
+set ylabel "ESR / Ω" 
+set output "../GNU/Cap_FC_FR_dataCZ.pdf" ; replot ; set output
+#
+set xlabel "Значение емкости / F" 
+set ylabel "ESR / Ω" 
+set output "../GNU/Cap_FC_FR_dataRU.pdf" ; replot ; set output
 #    EOF

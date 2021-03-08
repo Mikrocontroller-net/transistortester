@@ -10,13 +10,21 @@ set style line 5  linetype 1 linecolor rgb "green" linewidth 2.000 pointtype 7 p
 set style line 6  linetype 1 linecolor rgb "blue" linewidth 2.000  pointtype 7 pointsize 1
 set style line 7  linetype 1 linecolor rgb "black" linewidth 2.000  pointtype 4 pointsize 2
 
-set xlabel "ADC sample"
 set format x "% g"
 set format y "% g"
-set ylabel "ADC value"
 set key inside right top vertical Right noreverse enhanced autotitles nobox
+set xlabel "ADC sample"
 set output "../GNU/W12compare.pdf"
 set xrange [0 to 250]
+set ylabel "ADC value"
 plot "../GNU/W12_18nF.dat" u 1 title "18.2nF", "../GNU/W12_20nF.dat" u 1 title "20.3nF"
 set output
+set xlabel "vzorek ADC"
+set ylabel "hodnota ADC"
+set output "../GNU/W12compareCZ.pdf" ; replot ; set output
+#
+set xlabel "ADC sample"
+set ylabel "ADC value"
+set output "../GNU/W12compareRU.pdf" ; replot ; set output
+#
 #    EOF

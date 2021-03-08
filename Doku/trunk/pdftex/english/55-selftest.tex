@@ -54,7 +54,12 @@ The theoretical value with respect to the internal resistance of the pins should
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=17cm]{../FIG/Test2.pdf}
+ \begin{overpic}[width=17cm]{../FIG/Test2.pdf}
+  \color{black}
+  \put(18,22){\makebox(0,0)[cb]{first measurement}}
+  \put(49,22){\makebox(0,0)[cb]{second measurement}}
+  \put(85,22){\makebox(0,0)[cb]{third measurement}}
+ \end{overpic}
 \caption{Comparison of \(680\Omega\) resistors }
 \label{fig:test2}
 \end{figure}
@@ -92,7 +97,12 @@ Is is assumed that the port resistance of the different ports are nearly identic
 The resistor value will be shown in the next test.
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/Test7.pdf}
+ \begin{overpic}[width=15cm]{../FIG/Test7.pdf}
+  \color{black}
+  \put(16,34){\makebox(0,0)[cb]{first measurement}}
+  \put(47,35){\makebox(0,0)[cb]{second measurement}}
+  \put(84,35){\makebox(0,0)[cb]{third measurement}}
+ \end{overpic}
 \caption{Measurement of internal resistance of Port C switched to GND }
 \label{fig:test7}
 \end{figure}
@@ -110,7 +120,12 @@ measurement. The values are only shown by this step.
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/Test8.pdf}
+ \begin{overpic}[width=15cm]{../FIG/Test8.pdf}
+  \color{black}
+  \put(16,35){\makebox(0,0)[cb]{first measurement}}
+  \put(47,35){\makebox(0,0)[cb]{second measurement}}
+  \put(84,35){\makebox(0,0)[cb]{third measurement}}
+ \end{overpic}
 \caption{Measurement of internal resistance of Port C switched to VCC }
 \label{fig:test8}
 \end{figure}
@@ -135,7 +150,7 @@ with double the count of all pin combinations. The reason for this is, that the
 zero capacity is measured for the charge and the discharge of all pin combinations separately.
 
 \item {\bf Wait for the connection of a capacitor to pin~1 and pin~3.}
-The message ``1 \mbox{\electricC}3 \textgreater 100nF'' is shown in row 1 of LCD.
+The message ``\mbox{\begin{large}1 \electricC 3~\textgreater 100nF\end{large}}'' is shown in row 1 of LCD.
 To prepare the measurement of the comparator offset voltage, you must connect
 a sufficient big capacitor to pin~1 and pin~3.
 It should be a capacitor with a high quality factor and a capacity between \(100nF\) and \(20\mu F\).
@@ -159,7 +174,7 @@ Your REF\_R\_KORR value is a additional offset to this automatic find out differ
 If the tester is configured with the SamplingADC function, a known capacitor is required for
 the computation of the inductance value from the resonant frequency of a parallel connected coil.
 Practical capacity values can be choosed from \(10nF\) to \(27nF\). 
-A suitable capacitor must be connected to pin~1 and pin~3, if the message ''\mbox{1 \electricC 3 \(10-30nF\)(L)}'' is shown in
+A suitable capacitor must be connected to pin~1 and pin~3, if the message ''\mbox{\begin{large}1 \electricC 3~10-30nF(L)\end{large}}'' is shown in
 line 1 of the display.
 Exacly this capacitor should be connected later parallel to a little coil,
 if the calculation of the coil\'s inductance value from resonant frequency is desired.

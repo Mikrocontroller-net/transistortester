@@ -1,45 +1,67 @@
 \documentclass[12pt,a4paper,oneside,english]{report}
 \special{papersize=210mm,297mm}
-%\usepackage[T1]{fontenc}
+%\usepackage[T1]{fontenc}		% Wegan GNU
 %\usepackage[latin1]{inputenc}
 \usepackage[cm]{fullpage}
 \usepackage{cmap}
 \usepackage[cp1251]{inputenc}
 \usepackage[english,russian]{babel}
+\usepackage{textcomp}			% Wegen Fehler, perthousand, micro
 \usepackage[pdftex]{graphicx}
 \usepackage{caption}
 \usepackage{subcaption}
-\usepackage{color}
-\usepackage{fixltx2e}
+\usepackage{xcolor}
+\usepackage[percent]{overpic}   %ins Bild schreiben
+\usepackage{mwe}                %ins Bild schreiben
+%\usepackage{blindtext}
+%\setlength{\abovecaptionskip}{0.5pc}
+%\setlength{\belowcaptionskip}{-1.0pc}
+%\usepackage{showframe}% zum Anzeigen des Seitenlayouts
+%\RedeclareSectionCommand[  % nur mit documentclass scrreprt 
+%  beforeskip=-1\baselineskip,
+%  afterskip=.5\baselineskip]{section}
+%\RedeclareSectionCommand[
+%  beforeskip=-.75\baselineskip,
+%  afterskip=.5\baselineskip]{subsection}
+%\RedeclareSectionCommand[
+%  beforeskip=-.5\baselineskip,
+%  afterskip=.25\baselineskip]{subsubsection}
+%\usepackage{fixltx2e}
+\setlength{\parindent}{0em}	% Absatz nicht einrьcken
+%\usepackage{fixltx2e}
 \usepackage{epstopdf}
 \usepackage{hyperref}
 \usepackage{gensymb}
 \usepackage{float}
 \RequirePackage[labelsep=period]{caption}
 \usepackage{circuitikz}
+\usepackage{wallpaper}			%Wegen Hintegrundbild
 %\RequirePackage{caption}
 %\usepackage{subfig}
 \graphicspath{{./FIG}}
 
 \begin{document}
+\begin{figure}[t]
+\ThisTileWallPaper{\paperwidth}{\paperheight}{../FIG/Wallpaper.pdf}
+\end{figure}
 \ctikzset{bipoles/length=.6cm}
 \ctikzset{bipoles/thickness=4}
 \newcommand\electricC {
-\hspace{-14 pt}
+\hspace{-12 pt}
 \begin{circuitikz}
 \draw (0,0) to[capacitor] (0:1);
 \end{circuitikz}
 \hspace{-6 pt}
 }
 \newcommand\electricR {
-\hspace{-14 pt}
+\hspace{-12 pt}
 \begin{circuitikz}
 \draw (0,0) to[european resistor] (0:1);
 \end{circuitikz}
 \hspace{-6 pt}
 }
 \newcommand\electricL {
-\hspace{-14 pt}
+\hspace{-12 pt}
 \begin{circuitikz}
 \draw (0,0) 
  to[american inductor] (-1,0) 
@@ -56,8 +78,13 @@
 \draw (0,0) to[full diode] (180:1);
 \end{circuitikz}
 }
-\title{Тестер ЭРЭ с AVR микроконтроллером\\
-и минимумом дополнительных элементов\\
+\title{Транзистор тестер \\
+с микроконтроллером AVR.\\
+Прибор для определения и измерения \\
+электронные компоненты, \\
+и минимумом дополнительных элементов \dots \\
+~\\
+~\\
 Версия 1.13k \\
 }
 \author{Karl-Heinz K\"ubbeler\\
@@ -100,6 +127,10 @@ Markus Frejek
 Embedded Projects Journal,
 11. Ausgabe,
 2011
+
+\bibitem{khk}
+https://github.com/mikrocontroller-net/transistortester/Doku/
+trunk/pdftex/german/ttester.pdf
 
 \bibitem{ATmega8}
 Atmel Corporation

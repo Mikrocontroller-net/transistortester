@@ -58,7 +58,11 @@ Für diesen Fall wird der Stromverstärkungsfaktor mit \(hFE = \frac{UE \cdot 47
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/PNPcc.pdf}
+ \begin{overpic}[width=17cm]{../FIG/PNPcc.pdf}
+  \color{black}
+  \put(55,20){\makebox(0,0)[lb]{Wenn Spannung an PC1 \textless~10mV ist,}}
+  \put(55,17){\makebox(0,0)[lb]{wird der \textcolor{green}{grün} gezeichnete Zustand benutzt!}}
+ \end{overpic}
 \caption{hFE-Messung eines PNP-Transistors in Kollektor-Schaltung}
 \label{fig:pnpcc}
 \end{figure}
@@ -88,7 +92,12 @@ die Spannung am Gate gemessen wird.
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/PNPce.pdf}
+ \begin{overpic}[width=17cm]{../FIG/PNPce.pdf}
+  \color{black}
+  \put(55,21){\makebox(0,0)[lb]{Schwarzer Zustand wird benutzt beim Test!}}
+  \put(55,17){\makebox(0,0)[lb]{\textcolor{green}{Grüner} Zustand wird für den}}
+  \put(55,13){\makebox(0,0)[lb]{Stromverstärkungsfaktor hFE benutzt.}}
+ \end{overpic}
 \caption{Prüfung und hFE-Messung eines PNP-Transistors in der Emitter-Schaltung}
 \label{fig:pnpce}
 \end{figure}
@@ -101,7 +110,12 @@ Wenn die Spannung am Basis-Widerstand zu klein ist, wird stattdessen der \(470k\
 Die Messungen werden dann in der Emitter-Schaltung fortgeführt, wie in Abbildung \ref{fig:npnce} gezeigt.
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/NPNce.pdf}
+ \begin{overpic}[width=17cm]{../FIG/NPNce.pdf}
+  \color{black}
+  \put(55,23){\makebox(0,0)[lb]{Schwarzer Zustand wird benutzt beim Test!}}
+  \put(55,19){\makebox(0,0)[lb]{\textcolor{green}{Grüner} Zustand wird für den}}
+  \put(55,15){\makebox(0,0)[lb]{Stromverstärkungsfaktor hFE benutzt.}}
+ \end{overpic}
 \caption{Prüfung und hFE-Messung eines NPN-Transistors in Emitter-Schaltung}
 \label{fig:npnce}
 \end{figure}

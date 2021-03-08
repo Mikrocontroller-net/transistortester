@@ -15,12 +15,9 @@ set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set xtics autofreq  norangelimit
 set ytics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set ytics autofreq  norangelimit
-set title "" 
 set title  offset character 0, 0, 0 font "" norotate
-set xlabel "" 
 set xlabel  offset character 0, 0, 0 font "" textcolor lt -1 norotate
 set xrange [ * : * ] noreverse nowriteback  # (currently [-11.0000:-1.00000] )
-set ylabel "" 
 set ylabel  offset character 0, 0, 0 font "" textcolor lt -1 rotate by -270
 set yrange [ * : * ] noreverse nowriteback  # (currently [-8.00000:8.00000] )
 GNUTERM = "wxt"
@@ -36,12 +33,12 @@ set style line 3  linetype 1 linecolor rgb "blue" linewidth 2.000  pointtype 2 p
 set style line 5  linetype 1 linecolor rgb "green" linewidth 2.000 pointtype 3 pointsize 1
 set style line 6  linetype 1 linecolor rgb "blue" linewidth 2.000  pointtype 7 pointsize 1
 
-set xlabel "Inductance value / H"
 set format x "%.0s%c"
 set format y "% g"
 set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set xtics autofreq  norangelimit
-set ylabel "Error / Percent"
+set xlabel "Inductance value / H"
+set ylabel "Error / \%"
 set key inside right top vertical Right noreverse enhanced autotitles nobox
 set output "../GNU/induct328p.pdf"
 plot "../GNU/inductors.dat" u 1:($28-$1)/$1*100 title "328p" ls 1, "../GNU/inductors.dat" u 1:($30-$1)/$1*100 notitle ls 1 , "../GNU/inductors.dat" u 1:($32-$1)/$1*100 notitle ls 1,\
@@ -50,4 +47,12 @@ plot "../GNU/inductors.dat" u 1:($28-$1)/$1*100 title "328p" ls 1, "../GNU/induc
      "../GNU/inductors.dat" u 1:($10-$1)/$1*100 title "168a" ls 5, "../GNU/inductors.dat" u 1:($12-$1)/$1*100 notitle ls 5 , "../GNU/inductors.dat" u 1:($14-$1)/$1*100 notitle ls 5,\
      "../GNU/inductors.dat" u 1:($4-$1)/$1*100 title "168" ls 6, "../GNU/inductors.dat" u 1:($6-$1)/$1*100 notitle ls 6 , "../GNU/inductors.dat" u 1:($8-$1)/$1*100 notitle ls 6
 set output
+set xlabel "hodnota indukce / H"
+set ylabel "chyba / \%"
+set output "../GNU/induct328pCZ.pdf" ; replot ; set output
+#
+set xlabel "Значение индуктивности / H"
+set ylabel "погрешность / \%"
+set output "../GNU/induct328pRU.pdf" ; replot ; set output
+#
 #    EOF

@@ -38,7 +38,7 @@ R16 к PC4 с высоким номиналом (\(47~k\Omega\)). Это поможет программному обеспеч
 Дополнительный интерфейс ISP был добавлен для упрощения загрузки новых версий программного обеспечения.
 \begin{figure}[H]
 \centering
-\includegraphics[width=18cm]{../FIG/ttester.pdf}
+\includegraphics[width=1.0\textwidth]{../FIG/ttester.pdf}
 \caption{Новая схема Тестера}
 \label{fig:ttester}
 \end{figure}
@@ -131,9 +131,9 @@ R16 к PC4 с высоким номиналом (\(47~k\Omega\)). Это поможет программному обеспеч
 Поэтому, перед тестированием, конденсатор обязательно разрядить!
 
 \begin{figure}[H]
- \begin{subfigure}[b]{9cm}
+ \begin{subfigure}[b]{.5\textwidth}
   \centering
-  \begin{overpic}[width=7cm]{../FIG/relay_addon.pdf}
+  \begin{overpic}[width=.78\textwidth]{../FIG/relay_addon.pdf}
   \color{black}
   \put(78,36){\makebox(0,0)[lb]{\footnotesize VCC or Ubat}}  
   \put(78,32){\makebox(0,0)[lb]{\footnotesize depends on  U{\scriptsize реле}}}  
@@ -141,9 +141,9 @@ R16 к PC4 с высоким номиналом (\(47~k\Omega\)). Это поможет программному обеспеч
   \caption{с использованием реле}
  \end{subfigure}
   ~
- \begin{subfigure}[b]{9cm}
+ \begin{subfigure}[b]{.5\textwidth}
   \centering
-  \includegraphics[width=7cm]{../FIG/diode_addon.pdf}
+  \includegraphics[width=.78\textwidth]{../FIG/diode_addon.pdf}
   \caption{с использованием диодов}
  \end{subfigure}
  \caption{Защита входов ATmega}
@@ -156,7 +156,7 @@ R16 к PC4 с высоким номиналом (\(47~k\Omega\)). Это поможет программному обеспеч
 
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=10cm]{../FIG/relay_um_addon.pdf}
+ \begin{overpic}[width=.58\textwidth]{../FIG/relay_um_addon.pdf}
   \color{black}
   \put(78,42){\makebox(0,0)[lb]{\footnotesize VCC or Ubat}}  
   \put(78,32){\makebox(0,0)[lb]{\footnotesize depends on  U{\scriptsize реле}}}  
@@ -170,17 +170,17 @@ R16 к PC4 с высоким номиналом (\(47~k\Omega\)). Это поможет программному обеспеч
 Если UART не требуется, порт PC3 может использоваться в качестве аналогового входа для измерения внешнего напряжения. 
 Напряжение может составить до \(50~V\) с дополнительным резистивным делителем 10:1. На рисунке ~\ref{fig:zener} 
 представлена схема для измерения напряжение пробоя стабилитрона при низком уровне на порте PD7 ATmega. 
-Тестер показывает внешнее напряжение, пока Вы держите кнопку {\bf TEST} нажатой. Ток, потребляемый от батареи питания, 
+Тестер показывает внешнее напряжение, пока Вы держите кнопку \textbf{ TEST} нажатой. Ток, потребляемый от батареи питания, 
 при этом возрастает, примерно, на \(40~mA\).
 
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=17cm]{../FIG/zener_exp.pdf}
+  \begin{overpic}[width=.90\textwidth]{../FIG/zener_exp.pdf}
   \color{black}
-  \put(5,20){\makebox(0,0)[rb]{\textcolor{red}external}}  
-  \put(5,17){\makebox(0,0)[rb]{\textcolor{red}Voltage}}  
-  \put(8,24){\makebox(0,0)[lb]{Can be placed on Tester board!}}
-  \put(42,6){\makebox(0,0)[lb]{Should be placed separate!}}
+  \put(5,20){\makebox(0,0)[rb]{\textcolor{red}{external}}}  
+  \put(5,17){\makebox(0,0)[rb]{\textcolor{red}{Voltage}}}  
+  \put(33,24){\makebox(0,0)[rb]{Can be placed on Tester board!}}
+  \put(42,2){\makebox(0,0)[lb]{Should be placed separate!}}
  \end{overpic}
 \caption{Схема для измерения параметров стабилитронов}
 \label{fig:zener}
@@ -219,7 +219,7 @@ ATmega или подстроено во время измерения частоты ATmega, чтобы получить лучшую ч
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=7cm]{../FIG/Frequency_addon.pdf}
+\includegraphics[width=.4\textwidth]{../FIG/Frequency_addon.pdf}
 \caption{Дополнительная схема для измерения частоты}
 \label{fig:FreqMes}
 \end{figure}
@@ -236,7 +236,7 @@ ATmega или подстроено во время измерения частоты ATmega, чтобы получить лучшую ч
 
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=5cm]{../FIG/rotary_extension.pdf}
+ \begin{overpic}[width=.30\textwidth]{../FIG/rotary_extension.pdf}
   \color{black}
 %  \put(47,6){\makebox(0,0)[lb]{Taster}}    
  \end{overpic}
@@ -255,7 +255,7 @@ ATmega или подстроено во время измерения частоты ATmega, чтобы получить лучшую ч
 одинаково.
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=14cm]{../FIG/rotary_encoder.pdf}
+ \begin{overpic}[width=.87\textwidth]{../FIG/rotary_encoder.pdf}
   \color{black}
   \put(90,71.5){\makebox(0,0)[lb]{тумблер A}}
   \put(90,62){\makebox(0,0)[lb]{тумблер B}} 
@@ -293,7 +293,7 @@ ATmega или подстроено во время измерения частоты ATmega, чтобы получить лучшую ч
 контактов переключателей в точке фиксации.
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=14cm]{../FIG/rotary_bouncing.pdf}
+ \begin{overpic}[width=.87\textwidth]{../FIG/rotary_bouncing.pdf}
   \color{black}
   \put(90,39){\makebox(0,0)[lb]{окошечко A}}
   \put(90,30){\makebox(0,0)[lb]{окошечко B}}
@@ -332,7 +332,7 @@ ST7565 контроллер использует рабочее напряжение \(3,3~V\).
 
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=12cm]{../FIG/ST7565lcd.pdf}
+ \begin{overpic}[width=.814\textwidth]{../FIG/ST7565lcd.pdf}
   \color{black}
   \put(88,10){\makebox(0,0)[lb]{Background}}
   \put(88,7){\makebox(0,0)[lb]{LED}}
@@ -397,7 +397,7 @@ STRIP\_GRID\_BOARD &       &   -   &   1    &  -   &  1   &  2   &  5   \\
  
 \begin{figure}[H]
 \centering
-\includegraphics[width=14cm]{../FIG/SSD1306_I2C.pdf}
+\includegraphics[width=.814\textwidth]{../FIG/SSD1306_I2C.pdf}
 \caption{Подключение графического OLED дисплея с I\textsuperscript{2}C интерфейсом}
 \label{fig:ssd1306i2c}
 \end{figure}
@@ -414,7 +414,7 @@ STRIP\_GRID\_BOARD &       &   -   &   1    &  -   &  1   &  2   &  5   \\
 
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=12cm]{../FIG/ST7920interface.pdf}
+ \begin{overpic}[width=.698\textwidth]{../FIG/ST7920interface.pdf}
   \color{black}
   \put(20,1){\makebox(0,0)[cb]{serial mode}}  
   \put(80,1){\makebox(0,0)[cb]{4-bit parallel mode}}   
@@ -460,15 +460,15 @@ STRIP\_GRID\_BOARD &   -   &   1   &        &     \\
 Вариант такого подключения показан на рисунке \ref{fig:NT7108lcd}.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8cm]{../FIG/ST7108serial164.pdf}
+    \includegraphics[width=.9\textwidth]{../FIG/ST7108serial164.pdf}
     \caption{с использованием 74HCT164}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8cm]{../FIG/ST7108serial595.pdf}
+    \includegraphics[width=.9\textwidth]{../FIG/ST7108serial595.pdf}
     \caption{с использованием 74HCT595}
   \end{subfigure}
   \caption{Подключение графического дисплея с NT7108 контроллером}
@@ -603,7 +603,7 @@ LCD\_SPI\_OPEN\_COL («открытый коллектор» портов ATmega).
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=8cm]{../PNG/Color_ILI9163_ST7735.jpg}
+\includegraphics[width=.46\textwidth]{../PNG/Color_ILI9163_ST7735.jpg}
 \caption{Вид сзади двух цветных LCD}
 \label{fig:Color_both}
 \end{figure}
@@ -622,7 +622,7 @@ LCD\_SPI\_OPEN\_COL («открытый коллектор» портов ATmega).
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=8cm]{../PNG/Color_PNP_ILI9163.jpg}
+\includegraphics[width=.46\textwidth]{../PNG/Color_PNP_ILI9163.jpg}
 \caption{Измерение биполярного PNP транзистора}
 \label{fig:Color_PNP}
 \end{figure}
@@ -639,7 +639,7 @@ LCD\_SPI\_OPEN\_COL («открытый коллектор» портов ATmega).
 
 В Тестере может использоваться LCD-дисплей 2x16, программно совместимый с HD44780 или ST7036. Вы должны учитывать ток, 
 необходимый для подсветки, некоторым LCD-дисплеям нужен ток ниже, чем другим. Я пытался применить OLED-дисплей, но он 
-стал причиной помех при измерениях для ATmega, и я его {\bf не} рекомендую. Также использование OLED-дисплея вызвало 
+стал причиной помех при измерениях для ATmega, и я его \textbf{ не} рекомендую. Также использование OLED-дисплея вызвало 
 проблему загрузки специального символа для отображения резистора.\\
 
 Чтобы получить максимальную точность измерения, резисторы R1 - R6 \(680~\Omega\) и
@@ -651,17 +651,17 @@ LCD\_SPI\_OPEN\_COL («открытый коллектор» портов ATmega).
 выдавать \(5~V\) при входном напряжение всего \(5,4~V\). Но он несовместим по выводам с известным 78L05 в корпусе TO92 .\\
 
 После проверки правильности монтажа, необходимо подсоединить батарею или источник питание к плате без LCD-дисплея и 
-микроконтроллера. При нажатой кнопке {\bf TEST} должно присутствовать напряжение \(5~V\) на выводах питания 
-микроконтроллера и LCD дисплея. Если отпустить кнопку {\bf TEST}, напряжение должно исчезнуть. Если  напряжения 
-в норме, то необходимо отключить питание, {\bf правильно} вставить микроконтроллер и подключить LCD-дисплей. 
+микроконтроллера. При нажатой кнопке \textbf{ TEST} должно присутствовать напряжение \(5~V\) на выводах питания 
+микроконтроллера и LCD дисплея. Если отпустить кнопку \textbf{ TEST}, напряжение должно исчезнуть. Если  напряжения 
+в норме, то необходимо отключить питание, \textbf{ правильно} вставить микроконтроллер и подключить LCD-дисплей. 
 Перед подключением LCD дисплея необходимо 
 внимательно проверить правильность соединения выводов питания LCD дисплея (т.к. на некоторых LCD дисплеях они 
 подключены наоборот) с GND и VCC платы Тестера!\\
  
 Если Вы уверены, что все в порядке, можно подсоединить питание. Если Вы уже запрограммировали ATmega, то можете 
-кратковременно нажать кнопку {\bf TEST}. При кратковременном нажатии кнопки {\bf TEST} светодиод LED1 и подсветка 
+кратковременно нажать кнопку \textbf{ TEST}. При кратковременном нажатии кнопки \textbf{ TEST} светодиод LED1 и подсветка 
 LCD-дисплея должны включиться. 
-Если Вы отпускаете кнопку {\bf TEST}, светодиод LED1 не должен гаснуть как минимум несколько секунд 
+Если Вы отпускаете кнопку \textbf{ TEST}, светодиод LED1 не должен гаснуть как минимум несколько секунд 
 (зависит от установленных параметров при компилляции программного обеспечения). 
 Заметьте, что программное обеспечение для микроконтроллера должно быть для используемого типа микроконтроллера. Программа для ATmega8 не работает на ATmega168!
 
@@ -677,7 +677,7 @@ LCD-дисплея должны включиться.
 VCC (\(5~V\)). Для решения проблемы конденсатор C2 может быть уменьшен до \textless~\(10~nF\). Если возможно, 
 то включить последовательно в цепь PD6  резистор сопротивлением более \textgreater~\(220~\Omega\).
 \item[Улучшение питания схемы.]
-Если Тестер запускается при нажатии на кнопку {\bf TEST}, но ключ сразу же отпускается, то часто причина этой проблемы 
+	Если Тестер запускается при нажатии на кнопку \textbf{ TEST}, но ключ сразу же отпускается, то часто причина этой проблемы 
 в питании. Проблема порождена большим током подсветки LCD-дисплея. Резистор R7 к базе P-N-P-транзистора T3 был 
 величиной \(27~k\Omega\), 
 чтобы уменьшить потребление энергии. Чтобы улучшить переключение при  более низком напряжении батареи или при низком 
@@ -685,7 +685,7 @@ VCC (\(5~V\)). Для решения проблемы конденсатор C2 может быть уменьшен до \textl
 \item[Дополнительный подтягивающий резистор порта PD7.]
 Отсутствие подтягивающего резистора, после короткого времени, работа заканчивается  выключением Тестера с сообщением 
 «Timeout». Программное обеспечение формируется с опцией PULLUP\_DISABLE, т. е. все внутренние подтягивающие резисторы 
-отключены. По этой причине напряжение порта PD7 не определено, если уровень не переключен кнопкой {\bf TEST} или 
+		отключены. По этой причине напряжение порта PD7 не определено, если уровень не переключен кнопкой \textbf{ TEST} или 
 транзистором T2 к GND. Внешний резистор сопротивлением \(27~k\Omega\) к VCC решает эту проблему.
 \item[Конденсатор C1 в AREF.]
 Многие используют на контакте AREF конденсатор на \(100~nF\) так же, как и Markus F. Пока не было необходимости менять 
@@ -713,12 +713,14 @@ VCC (\(5~V\)). Для решения проблемы конденсатор C2 может быть уменьшен до \textl
 Для основных функций Тестера возможно использование ATmega8, Flash память в ней используется практически на 100\%.
 АТmega168 или АТmega328 совместимы по выводам с ATmega8, я могу рекомендовать замену. 
 При использовании ATmega168 или АТmega328 Вы получаете следующие преимущества: 
-Самопроверка с автоматической калибровкой.\\
-Улучшение качества измерения с автоматическим переключением масштаба АЦП.\\
-Измерение индуктивностей  при сопротивлении ниже \(2100~\Omega\).\\
-Измерение величины ESR конденсаторов с ёмкостью выше \(20~nF\).\\
-Измерение резисторов ниже \(10~\Omega\) с разрешением \(0,01~\Omega\).\\
-Использование порта PC3 в качестве последовательного выхода или аналогового входа для измерения внешнего напряжения.\\
+\begin{itemize} \setlength{\itemsep}{-1.5em}
+ \item Самопроверка с автоматической калибровкой.\\
+ \item Улучшение качества измерения с автоматическим переключением масштаба АЦП.\\
+ \item Измерение индуктивностей  при сопротивлении ниже \(2100~\Omega\).\\
+ \item Измерение величины ESR конденсаторов с ёмкостью выше \(20~nF\).\\
+ \item Измерение резисторов ниже \(10~\Omega\) с разрешением \(0,01~\Omega\).\\
+ \item Использование порта PC3 в качестве последовательного выхода или аналогового входа для измерения внешнего напряжения.\\
+\end{itemize}
 \item[Отсутствующие прецизионное опорное напряжение.]
 Программное обеспечение должно обнаружить недостающие элементы опорного напряжения на выводе PC4. В этом случае при 
 включении питания во второй строке LCD-дисплея должно появиться сообщение «No VCC = x.xV». Если это сообщение 
@@ -750,7 +752,7 @@ ATmega324/644/1284.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=18cm]{../FIG/t644tester.pdf}
+\includegraphics[width=1.\textwidth]{../FIG/t644tester.pdf}
 \caption{Расширенная схема Транзистор Тестера с ATmega644}
 \label{fig:t644tester}
 \end{figure}
@@ -789,15 +791,15 @@ ATmega324/644/1284.
 как показано в таблице~\ref{tab:NT7108types} на странице~\pageref{tab:NT7108types}.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8cm]{../FIG/ST7108serial164_644.pdf}
+    \includegraphics[width=.88\textwidth]{../FIG/ST7108serial164_644.pdf}
     \caption{при использовании 74HCT164}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8cm]{../FIG/ST7108serial595_644.pdf}
+    \includegraphics[width=.88\textwidth]{../FIG/ST7108serial595_644.pdf}
     \caption{при использовании 74HCT595}
   \end{subfigure}
   \caption{Подключение дисплея с контроллером NT7108 к ATmega644/1284}
@@ -829,7 +831,7 @@ ISP-разъем не требуется, так как программа может быть установлена при помощи
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=18cm]{../FIG/t1280tester.pdf}
+\includegraphics[width=1.\textwidth]{../FIG/t1280tester.pdf}
 \caption{Схема Тестера с использованием ATmega1280, ATmega2560 или Arduino Mega}
 \label{fig:t1280tester}
 \end{figure}
@@ -862,13 +864,10 @@ ISP-разъем не требуется, так как программа может быть установлена при помощи
     \hline
     \end{tabular}
   \end{center}
-  \vspace{-0.5cm}
   \caption{Подключение различных дисплеев к ATmega1280/2560}
   \label{tab:display-1280}
 \end{table}
-\vspace{-1cm}
 \section{Китайские клоны с символьным дисплеем}
-\vspace{-0.3cm}
 По имеющейся у меня информации, Тестер с символьным индикатором выпускают в Китае в двух версиях.
 Первая модель первого дизайна от Markus F. 
 без порта ISP. ATmega8 помещен в панельку, поэтому, Вы можете заменить его на ATmega168 или ATmega328. Для этой версии 
@@ -899,21 +898,16 @@ GND (вывод 21) ATmega. Программное обеспечение версии 1.05k использует режим сна
 минимум \(0,3~\Omega\) для двух соединённых выводов. При измерении ESR эту величину обычно можно скомпенсировать. 
 Программное обеспечение, начиная с версии 1.07k, учитывает это смещение для того, чтобы измерять резисторы 
 сопротивлением ниже \(10~\Omega\).
-\vspace{-0.8cm}
 \section{Китайские клоны с графическим дисплеем}
-\vspace{-0.3cm}
 Новые сборки тестера, как, например, версия от Fish8840 используют 128x64 точки графический дисплей.
 Эта версия использует модифицированную логику управления питанием и кнопками. 
 Рисунок \ref{fig:Fish8840} показывает часть модифицированной схемы.
-\vspace{-0.5cm}
 \begin{figure}[H]
 \centering
-\includegraphics[width=12cm]{../FIG/Fish8840.pdf}
-\vspace{-0.3cm}
+\includegraphics[width=.7\textwidth]{../FIG/Fish8840.pdf}
 \caption{Часть схемы версии от Fish8840}
 \label{fig:Fish8840}
 \end{figure}
-\vspace{-0.5cm}
 Как Вы можете видеть, вместо исходного коэффициента делителя, соотношение сопротивлений резисторов в цепи измерения 
 напряжения батареи, R8 и R15 выбрано 2:1.
 Кроме того, резистор R15 соединен непосредственно с батареей, что приводит к потреблению энергии в выключенном состоянии. 
@@ -921,15 +915,12 @@ GND (вывод 21) ATmega. Программное обеспечение версии 1.05k использует режим сна
 расхода энергии батареи.
 Соответствующие изменения в печатной плате изображены на рисунке \ref{fig:Fish8840patch}.
 Резистор R15 отсоединён от дорожки, идущей от R17 к D5 и при помощи эмалированной проволоки подсоединён к стоку Q1.
-\vspace{-0.5cm}
 \begin{figure}[H]
 \centering
-\includegraphics[width=12cm]{../PNG/Fish8840patch.jpg}
-\vspace{-0.3cm}
+\includegraphics[width=.7\textwidth]{../PNG/Fish8840patch.jpg}
 \caption{Вариант изменения в печатной плате Fish8840}
 \label{fig:Fish8840patch}
 \end{figure}
-\vspace{-0.5cm}
 Коэффициент делителя для измерения напряжения батареи должен быть задан в Makefile (например: BAT\_NUMERATOR=66) 
 после внесения изменений в оригинальное программное обеспечение.
 
@@ -940,25 +931,21 @@ GND (вывод 21) ATmega. Программное обеспечение версии 1.05k использует режим сна
 Сигнальные линии четырех данных оснащены четырьмя резисторами \(2.7~k\Omega\) подсоединёнными последовательно 
 для каждого сигнала на небольшой макетной плате. Для подсоединения платы дисплея к плате тестера Fish8840, в 
 этом случае, необходимо использовать более длинные или дополнительные межплатные дистанцирующие стойки.
-\vspace{-0.5cm}
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/Fish8840Adapt1.jpg}
-    \vspace{-0.5cm}
+    \includegraphics[width=1.\textwidth]{../PNG/Fish8840Adapt1.jpg}
     \caption{Вид дисплея с адаптером}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/Fish8840Adapt2.jpg}
+    \includegraphics[width=1.\textwidth]{../PNG/Fish8840Adapt2.jpg}
     \caption{Полностью собранный Тестер}
   \end{subfigure}
-  \vspace{-0.5cm}
   \caption{Адаптер для коррекции подключения дисплея}
   \label{fig:Fish8840Adapt}
 \end{figure}
-\vspace{-0.5cm}
 Вместо приведенной выше модификации, Вы можете также использовать специальный режим вывода сигналов 
 4~SPI ATmega, задав опцию в makefile LCD\_SPI\_OPEN\_COL.
 С помощью этой опции, выходы не достигают уровня VCC, так как во время выхода высокого уровня 
@@ -985,37 +972,31 @@ GND (вывод 21) ATmega. Программное обеспечение версии 1.05k использует режим сна
 Эта сборка использует аккумулятор LiIon AA размера в качестве источника питания, который может быть 
 заряжен от микро USB разъема. 
 Эксплуатировать Тестер можно также без аккумулятора, при питании только от USB.
-\vspace{-0.5cm}
 \begin{figure}[H]
 \centering
-\includegraphics[width=12cm]{../PNG/WEI_M8.JPG}
-\vspace{-0.3cm}
+\includegraphics[width=.7\textwidth]{../PNG/WEI_M8.JPG}
 \caption{Китайский клон WEI\_M8}
 \label{fig:WeiM8}
 \end{figure}
-\vspace{-0.5cm}
 Отрадно, что сигнальные линии дисплея (на плате адаптера) оснащены резисторами, включёнными 
 последовательно. Вы можете увидеть резисторы на рисунке~\ref{fig:WeiM8int} слева.
 Таким образом, Вы не должны бояться, что \(5~V\) сигналы ATmega могут вызвать чрезмерное 
 увеличение предельного логического уровня \(3,3~V\) контроллера дисплея.
-\vspace{-0.5cm}
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/WEI_M8_D.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/WEI_M8_D.JPG}
     \caption{Плата адаптера дисплея}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/WEI_M8_L.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/WEI_M8_L.JPG}
     \caption{Основная плата}
   \end{subfigure}
-  \vspace{-0.8cm}
   \caption{Тестер WEI\_M8 в разобранном виде}
   \label{fig:WeiM8int}
 \end{figure}
-\vspace{-0.5cm}
 При обновлении до версии 1.12k обнаружены некоторые проблемы.
 Если установить Extended Fuse 0x04 (0xFC), как рекомендуется, некоторые измерения вызывали сброс
 процессора из-за короткого провала напряжения «Brown Out».
@@ -1028,15 +1009,12 @@ GND (вывод 21) ATmega. Программное обеспечение версии 1.05k использует режим сна
 установленными навесным монтажом.
 Если Вы не желаете прислушиваться к совету, Вы должны установить Extended Fuse 0x07 (0xFF)
 для поддержания бесперебойной работы. С этой настройкой кратковременные провалы не будут обнаружены.
-\vspace{-0.5cm}
 \begin{figure}[H]
 \centering
-\includegraphics[width=10cm]{../PNG/WEI_M8_modified.JPG}
-\vspace{-0.2cm}
+\includegraphics[width=.7\textwidth]{../PNG/WEI_M8_modified.JPG}
 \caption{Тестер WEI\_M8 после модификации}
 \label{fig:WeiM8mod}
 \end{figure}
-\vspace{-0.5cm}
 Дополнительная китайская версия с графическим дисплеем -- тестер «LCD-T4» 
 на печатной плате с жёлтой маской.
 Я снял дисплей для замены программного обеспечения на новую версию.
@@ -1050,22 +1028,20 @@ ISP разъёма с правильной разводкой для 6-ти контактного подключения программатор
 Установка Extended Fuse 0x04 (0xFC) для проверки сброса из-за короткого провала напряжения «Brown Out»
 каких либо сюрпризов не принесла.
 \begin{figure}[H]
-  \begin{subfigure}[b]{8.5cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/T4_front.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/T4_front.JPG}
     \caption{В собранном виде}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{10cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8.5cm]{../PNG/T4_front_noLCD.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/T4_front_noLCD.JPG}
     \caption{Со снятым дисплеем}
   \end{subfigure}
-  \vspace{-0.8cm}
   \caption{Внешний вид T4 тестера}
   \label{fig:T4_front}
 \end{figure}
-  \vspace{-0.5cm}
 Вы можете увидеть стойки \(5~mm\) и обновленные кабели с зажимами измерения на 
 фотографии задней стороны на рисунке~\ref{fig:T4_back}.
 Поскольку сигналы данных для графического контроллера дисплея не имеют преобразователя
@@ -1074,24 +1050,21 @@ ISP разъёма с правильной разводкой для 6-ти контактного подключения программатор
 использованы путем отключения опции PULLUP\_DISABLE в makefile.
 Эта плата является меньше практичной для последних расширений, а также замену дисплея 
 трудно реализовать.
-  \vspace{-0.8cm}
 \begin{figure}[H]
-  \begin{subfigure}[b]{8cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8.5cm]{../PNG/T4_back.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/T4_back.JPG}
     \caption{Сторона компонентов}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{10.5cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8.5cm]{../PNG/T4_back_clips.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/T4_back_clips.JPG}
     \caption{С кабелями измерения}
   \end{subfigure}
-  \vspace{-0.8cm}
   \caption{Обратная сторона T4 тестера}
   \label{fig:T4_back}
 \end{figure}
-\vspace{-0.5cm}
 Еще одна версия китайского клона с графическим дисплеем имеет название «GM328».
 В этой версии адаптер графического индикатора подключен через 16-пиновый разъем к основной плате.
 Порт PD5 ATmega подключен через вывод 6 разъема на CE (Chip Enable) вход 
@@ -1102,9 +1075,7 @@ ISP разъёма с правильной разводкой для 6-ти контактного подключения программатор
 В новых версиях программного обеспечения выводится сигнал CE, даже если он не является необходимым.
 Для правильной работы «GM328» тестера с новыми версиями, Вы должны отсоединить сигнал CE (порт PD5 ATmega)
 от вывода 6 в разъеме графического адаптера.
-\vspace{-0.6cm}
 \section{Китайские наборы с графическими дисплеями}
-\vspace{-0.4cm}
 Появились две новые версии набора с графическим дисплеем и поворотным энкодером.
 Первый набор использует дисплей с контроллером ST7565 или совместимым (128х64 пикселей).
 В дополнение к поворотному энкодеру, предусмотрен вход для измерения частоты.
@@ -1113,25 +1084,20 @@ ISP разъёма с правильной разводкой для 6-ти контактного подключения программатор
 На фотографии~\ref{fig:Kit_mono} показан смонтированный прибор.
 Один из двух нагрузочных конденсаторов кварца \(22~pF\) заменен триммером.
 Триммером можно подстроить частоту генерации кварца для повышения точности в режиме частотомера и генератора.
-\vspace{-0.4cm}
 \begin{figure}[H]
-  \begin{subfigure}[b]{7cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=7cm]{../PNG/Kit_ST7565a.jpg}
-      \vspace{-0.2cm}
+    \includegraphics[width=1.\textwidth]{../PNG/Kit_ST7565a.jpg}
     \caption{смонтированный вид}
   \end{subfigure}
-  \begin{subfigure}[b]{11cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=7cm]{../PNG/Kit_ST7565b.jpg}
-      \vspace{-0.2cm}
+    \includegraphics[width=1.\textwidth]{../PNG/Kit_ST7565b.jpg}
     \caption{со снятым дисплеем}
   \end{subfigure}
-  \vspace{-0.4cm}
   \caption{Собранный набор с дисплеем 128х64 пикселей}
   \label{fig:Kit_mono}
 \end{figure}
-\vspace{-0.5cm}
 Позже появился набор, который использует цветной дисплей с контроллером ST7735 (160x128 пикселей), 
 дополнительно оснащен входом для измерения напряжения и выходом для генератора частот.
 Но выход генератора не буферизирован, он просто подключен параллельно к контакту ТР2.
@@ -1139,24 +1105,21 @@ ISP разъёма с правильной разводкой для 6-ти контактного подключения программатор
 Преобразователь напряжения DC-DC для измерения стабилитронов не предусмотрен.
 На фотографиях~\ref{fig:Kit_color} показан этот собранный набор.
 Кроме того, в этой версии один нагрузочный конденсатор кварца \(22~pF\) заменен триммером (зеленого цвета).
-\vspace{-0.5cm}
 \begin{figure}[H]
-  \begin{subfigure}[b]{8cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/Kit_Color_a.jpg}
+    \includegraphics[width=1.\textwidth]{../PNG/Kit_Color_a.jpg}
     \caption{смонтированный вид}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{10.5cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8cm]{../PNG/Kit_Color_b.jpg}
+    \includegraphics[width=1.\textwidth]{../PNG/Kit_Color_b.jpg}
     \caption{со снятым дисплеем}
   \end{subfigure}
-  \vspace{-0.8cm}
   \caption{Собранный набор с цветным 160x128 пикселей дисплеем}
   \label{fig:Kit_color}
 \end{figure}
-\vspace{-0.5cm}
 Оба набора используют ATmega328P в DIP корпусе с установкой в панельку и
 не оснащены разъемом ISP для обновления более новыми версиями программного обеспечения.
 Первый комплект использует только выводные компоненты для монтажа печатной платы.
@@ -1178,25 +1141,26 @@ ISP разъёма с правильной разводкой для 6-ти контактного подключения программатор
 Я не обнаружил каких-либо элементов для адаптации уровней сигнала на плате с дисплеем ST7565.
 Вероятно, выбранная версия контроллера допускает уровни сигнала \(5~V\) с ATmega328.
 Я не обнаружил защитные диоды на входе сигналов со стороны питания \(3.3~V\) для данного типа контроллера.
-\vspace{-0.5cm}
 \section{И еще один клон из Hiland M644}
-\vspace{-0.5cm}
 Эта реплика основана на принципиальной электрической схеме Ника Л. из Украины,
 \\см. Иллюстрацию \ref{fig:t644tester} на странице \pageref{fig:t644tester}.\\
-{\bf Тестер работает с кнопкой, которая является одновременно кнопкой и кодером.}
-\vspace{0.5cm}
+\textbf{ Тестер работает с кнопкой, которая является одновременно кнопкой и кодером.}
 Предлагает следующие дополнения:
-\\ - частота измерения
-\\ - генератор f
-\\ - 10-битный ШИМ
-\\ - импульсный энкодер
-\\ - измерение кварца
-\\ - Определение напряжения и десятков диодов (почти до 50В).
-\\ Плата оснащена 8 МГц кварцем. 16 МГц кварц будет лучше
+
+\begin{itemize} \setlength{\itemsep}{-0.5\baselineskip}
+ \item частота измерения
+ \item генератор f
+ \item 10-битный ШИМ
+ \item импульсный энкодер
+ \item измерение кварца
+\item Определение напряжения и десятков диодов (почти до 50В).
+\end{itemize}
+\vspace{-0.5\baselineskip}
+Плата оснащена 8 МГц кварцем. 16 МГц кварц будет лучше
 Модифицировать триммер (более точную частоту) сложно.
 \\ Контакты для интерфейса ISP находятся в 6-контактном ряду отверстий под
 подключаемый модуль дисплея, который занят следующим образом:\\
-{\bf слева направо}: 1~-сброс; 2~-SCK; 3~-MISO; 4~-MOSI; 5~-+5V; 6~-GND.\\
+\textbf{ слева направо}: 1~-сброс; 2~-SCK; 3~-MISO; 4~-MOSI; 5~-+5V; 6~-GND.\\
 Чтобы иметь возможность обновить тестер, вам нужен относительно простой кабель
 можете создать себя.
 При поставке испытательное основание с нулевым усилием соединяется с платой через соединительные планки.
@@ -1204,7 +1168,7 @@ ISP разъёма с правильной разводкой для 6-ти контактного подключения программатор
 В тестере, показанном ниже, основание было припаяно непосредственно, и полоса сокета сохранена с этим
 Припаяны к существующему ленточному кабелю с разъемом и закреплены термоусадочной трубкой.   
 \begin{figure}[H]
- \begin{overpic}[width=12cm]{../FIG/Kabel_Hiland.pdf}
+ \begin{overpic}[width=.64\textwidth]{../FIG/Kabel_Hiland.pdf}
   \color{black}
   \put(14,99){\makebox(0,0)[cb]{Программист}}
   \put(12,-3){\makebox(0,0)[cb]{сообщение разъем}}  
@@ -1218,33 +1182,32 @@ ISP разъёма с правильной разводкой для 6-ти контактного подключения программатор
 \end{figure}
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{6cm}
+  \begin{subfigure}[b]{.47\textwidth}
     \centering
-    \includegraphics[width=7cm]{../PNG/Hi_u.jpg}
+    \includegraphics[width=.875\textwidth]{../PNG/Hi_u.jpg}
     \caption{ниже TP1 до TP3 для определения компонента}
   \end{subfigure}
-  \begin{subfigure}[b]{14cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=6.5cm]{../PNG/Hi_o.jpg}
+    \includegraphics[width=.756\textwidth]{../PNG/Hi_o.jpg}
     \caption{штифты выше для меню выбора и IDE}
   \end{subfigure}
-  \vspace{-0.8cm}
   \caption{Hiland Tester с тестовой базой и дисплеем 128 x 64 пикселей}
   \label{fig:Hiland}
 \end{figure}
 
-{\bf Тестовые порты TP1, TP2 и TP3}  используются для автоматического распознавания компонентов
-и находятся на доске с номерами {\bf 1,1,1; 2; 3,3,3} в.
+\textbf{ Тестовые порты TP1, TP2 и TP3}  используются для автоматического распознавания компонентов
+и находятся на доске с номерами \textbf{1~~1~~1~~2~~3~~3~~3} в.
 
 То же имя можно найти в поле теста SMD
 
 и есть возможность паять свой собственный тестовый кабель.\\
 
-{\bf Testport TP2} также используется для вывода специальной функции "f-Generator". \\
-Контакты с маркировкой {\bf LF} предназначены для измерения кристаллов кварца с низкой резонансной частотой,
-\\ и выводы с меткой {\bf HF} предназначены для кристаллов с высокой резонансной частотой.
+\textbf{ Testport TP2} также используется для вывода специальной функции "f-Generator". \\
+Контакты с маркировкой \textbf{ LF} предназначены для измерения кристаллов кварца с низкой резонансной частотой,
+\\ и выводы с меткой \textbf{ HF} предназначены для кристаллов с высокой резонансной частотой.
 
-Пин {\bf F-in} используется вместе с {\bf Gnd} для частоты специальной функции. \\
-И вывод {\bf Vext+} также используется с {\bf Gnd} для измерения напряжения
+Пин \textbf{ F-in} используется вместе с \textbf{ Gnd} для частоты специальной функции. \\
+И вывод \textbf{ Vext+} также используется с \textbf{ Gnd} для измерения напряжения
 
-{\bf и}  использует измерение стабилитрона.
+\textbf{ и}  использует измерение стабилитрона.

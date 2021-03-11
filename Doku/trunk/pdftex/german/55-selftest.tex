@@ -42,13 +42,14 @@ Hier ist die Liste der derzeit eingebauten Tests:
 
 \begin{enumerate}
 
-\item {\bf Messung der \(1,3V\) (oder \(1,1V\)) Referenzspannung (band gap Reference).} In Zeile~1 wird der Text ,,Ref='' und die
+\item \textbf {Messung der \(1,3V\) (oder \(1,1V\)) Referenzspannung (band gap Reference).}
+In Zeile~1 wird der Text ,,Ref='' und die
 gemessene Spannung in mV angezeigt.
 Für den ATmega8 sollte die gemessene Spannung nahe bei \(1,3V\) liegen, für die anderen Prozessoren liegt
 die Referenzspannung normal um die \(1,1V\).
 Die zweite Zeile zeigt den resultierenden Faktor für die Kapazitäts-Messung mit dem \(470k\Omega\) Widerstand.
 
-\item {\bf Vergleich der \(680\Omega\) Widerstände.} 
+\item \textbf {Vergleich der \(680\Omega\) Widerstände.} 
 In Zeile~1 wird der kryptische Text  ,,+RL- 12 13 23'' angezeigt. Das bedeutet:
 RL ist eine Kurzform für Resistor Low, was die \(680\Omega\) Widerstände meint. Die ,,12'' steht für: 
 Widerstand am Pin~1 ist verbunden mit VCC (+) und Widerstand am Pin~2 ist verbunden mit GND (-). 
@@ -67,7 +68,7 @@ Der theoretische Wert ergibt sich im Hinblick auf die internen Port-Widerstände
 
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=17cm]{../FIG/Test2.pdf}
+ \begin{overpic}[width=1.\textwidth]{../FIG/Test2.pdf}
   \color{black}
   \put(18,22){\makebox(0,0)[cb]{Erste Messung}}
   \put(49,22){\makebox(0,0)[cb]{Zweite Messung}}
@@ -77,31 +78,31 @@ Der theoretische Wert ergibt sich im Hinblick auf die internen Port-Widerstände
 \label{fig:test2}
 \end{figure}
 
-\item {\bf Vergleich der \(470k\Omega\) Widerstände.}
+\item \textbf {Vergleich der \(470k\Omega\) Widerstände.}
 Jetzt zeigt das Display in Zeile 1 ,,+RH- 12 13 23''. Das gleiche Verfahren wie in Schritt~2 wird wiederholt mit den
  \(470k\Omega\)-Widerständen (Symbol RH).
 Die Ergebnisse werden als Differenz zu  \(\frac{VCC \cdot (19 + 470000]}{ (19 + 470000 + 470000 + 22)} \) für alle Kombinationen dargestellt.
 
-\item In diesem Schritt wird nichts gemessen, es erfolgt lediglich die {\bf Anweisung ,,isolate Probe!''},
+\item In diesem Schritt wird nichts gemessen, es erfolgt lediglich die \textbf {Anweisung ,,isolate Probe!''},
 was bedeutet, dass es nun Zeit ist die Klemmen zu trennen (vom blanken Draht lösen).
 Dieser Schritt wird nur beendet, wenn Sie die Verbindung zwischen den Testports getrennt haben.
 
-\item Dieser Schritt testet die {\bf Fähigkeit von mit GND (-) verbundenen \(470k\Omega\)-Widerständen (H) die Testpins auf GND zu ziehen.}
+\item Dieser Schritt testet die \textbf {Fähigkeit von mit GND (-) verbundenen \(470k\Omega\)-Widerständen (H) die Testpins auf GND zu ziehen.}
 Zeile 1 zeigt den Text ,,RH-''.
 Zeile 2 sollte für alle drei Pinne  Null mV anzeigen.
 
-\item Dieser Schritt testet die {\bf Fähigkeit von mit VCC (+) verbundenen \(470k\Omega\)-Widerständen (H) die Testpins auf VCC zu ziehen.}
+\item Dieser Schritt testet die \textbf {Fähigkeit von mit VCC (+) verbundenen \(470k\Omega\)-Widerständen (H) die Testpins auf VCC zu ziehen.}
 Zeile 1 zeigt den Text ,,RH+''.
 Der bestmögliche mV Wert für die drei Messungen wäre 0 in Zeile~2, da die Diffenz zu VCC dargestellt wird.
 Große Abweichungen vom Idealwert für Schritt 5 und 6 sind Fehler wie Isolations-Problem, Flussmittelreste oder beschädigter Port.
 
-\item {\bf Dieser Schritt testet die Spannungen der \(470k\Omega / 680\Omega\)  Widerstandsteiler.}
+\item \textbf {Dieser Schritt testet die Spannungen der \(470k\Omega / 680\Omega\)  Widerstandsteiler.}
 Zeile 1 zeigt den Text ,,RH/RL''.
 Für alle drei Testpins wird die Abweichung von der erwarteten Spannung eines \(470k\Omega\) / \(680\Omega\) \(5V\)-Teilers 
 in Zeile 2 des Displays ausgegeben.
 Abweichungen von mehr als einige mV weisen auf einen Bestückungsfehler der Widerstände hin.
 
-\item {\bf Messung des Innenwiderstandes eines auf GND geschalteten Ausgangs.}
+\item \textbf {Messung des Innenwiderstandes eines auf GND geschalteten Ausgangs.}
 Dieser und die folgenden Schritte werden nur bei gewählter AUTO\_CAL-Option durchgeführt.
 Die internen Port-C-Widerstände von auf GND (-) geschalteten Ausgängen werden mit dem Strom
 der nach VCC (+) geschalteten \(680\Omega\) Widerstände gemessen, siehe Abbildung~\ref{fig:test7}.
@@ -111,7 +112,7 @@ Es wird angenommen, dass die Portwiderstände von unterschiedlichen Ports nahezu
 Der Widerstandswert wird im nächsten Schritt mit ausgegeben.
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=15cm]{../FIG/Test7.pdf}
+ \begin{overpic}[width=.9\textwidth]{../FIG/Test7.pdf}
   \color{black}
   \put(14,35){\makebox(0,0)[cb]{Erste Messung}}
   \put(47,35){\makebox(0,0)[cb]{Zweite Messung}}
@@ -121,7 +122,7 @@ Der Widerstandswert wird im nächsten Schritt mit ausgegeben.
 \label{fig:test7}
 \end{figure}
 
-\item {\bf Messung des Innenwiderstandes von auf VCC geschalteten Port-Ausgängen.}
+\item \textbf {Messung des Innenwiderstandes von auf VCC geschalteten Port-Ausgängen.}
 Der benötigte Strom wird von auf GND geschalteten \(680\Omega\)-Widerständen geliefert.
 Es ist die gleiche Messung wie die in Test~8 zur anderen Seite, wie in Abbildung \ref{fig:test8} gezeigt wird.
 Der Innenwiderstand wird wie folgt berechnet:
@@ -132,7 +133,7 @@ zur GND-Seite wird in Zeile~2 mit dem Text ,,RI\_Lo='' angezeigt.
 Diese Werte werden ab Software-Version 1.06k bei jeder Messung neu bestimmt und hier nur dargestellt.
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=15cm]{../FIG/Test8.pdf}
+ \begin{overpic}[width=.9\textwidth]{../FIG/Test8.pdf}
   \color{black}
   \put(16,35){\makebox(0,0)[cb]{Erste Messung}}
   \put(47,35){\makebox(0,0)[cb]{Zweite Messung}}
@@ -142,7 +143,7 @@ Diese Werte werden ab Software-Version 1.06k bei jeder Messung neu bestimmt und 
 \label{fig:test8}
 \end{figure}
 
-\item {\bf Messung des Nulloffsets der Kondensatormessung.}
+\item \textbf {Messung des Nulloffsets der Kondensatormessung.}
 Für die Pinkombinationen 1:3, 2:3 und 1:2 wird der Nullwert der Kondensatormessung in pF in Zeile~1
 hinter dem Text ,,C0 '' ausgegeben.
 In der Software wird ein Vorgabewert von circa \(39pF\) für die normale Messwertausgabe berücksichtigt.
@@ -162,7 +163,7 @@ für die SamplingADC Messmethode in doppelt so vielen Konfigurationen gemessen.
 Das kommt daher, weil die Nullkapazität in allen Pinkombinationen sowohl für den Ladevorgang als
 auch für den Entladevorgang bestimmt wird.
 
-\item {\bf Warten auf den Anschluss eines Kondensators an Pin~1 und Pin~3.}
+\item \textbf {Warten auf den Anschluss eines Kondensators an Pin~1 und Pin~3.}
 Die Meldung ,,\mbox{\begin{large}1 \electricC 3~\textgreater 100nF\end{large}}'' wird in Zeile 1 des Displays angezeigt.
 Zur Vorbereitung der Messung des Spannungs-Offsets des analogen Komparators muss ein ausreichend großer
 Kondensator zwischen Pin 1 und Pin 3 angeschlossen werden.
@@ -170,7 +171,7 @@ Es sollte ein Kondensator hoher Güte mit eine Kapazität zwischen \(100nF\) und
 Auf keinen Fall sollte man Elektrolyt-Kondensatoren verwenden.
 
 
-\item {\bf Messung des Komparatoroffsets für den Abgleich der Kondensatormessung.}
+\item \textbf {Messung des Komparatoroffsets für den Abgleich der Kondensatormessung.}
 Um den Offset des analogen Komparators zu bestimmen, muss ein Kondensator an Pin~1 und Pin~3 angeschlossen sein.
 Der Kondensator wird für die Pufferung der Ladespannung bei der Kondensatormessung benötigt, um den Unterschied der 
 Ladespannung zur internen Referenzspannung bestimmen zu können.
@@ -182,7 +183,7 @@ der VCC-Referenz gemessen und einmal mit der internen Referenz.
 Die gefundene Differenz wird in Zeile 2 mit dem Text ,,REF\_R='' angezeigt und ebenfalls im EEPROM festgehalten.
 Der REF\_R\_KORR-Wert ist dann nur ein zusätzlicher Offset für diese automatisch gefundene Differenz.
 
-\item {\bf Warten auf einen Kondensator für die Messung kleiner Induktivitäten}
+\item \textbf {Warten auf einen Kondensator für die Messung kleiner Induktivitäten}
 Wenn der Tester mit der SamplingADC Funktion konfiguriert wurde, ist für die Messung kleiner Induktivitäten
 ein Kondensator bekannter Größe für die Berechnung der Induktivität aus der Schwingfrequenz erforderlich.
 Brauchbare Kapazitätswerte sind hierfür etwa \(10nF\) bis \(27nF\). Ein geeigneter Kondensator
@@ -193,7 +194,7 @@ parallelgeschaltet werden, wenn diese Art der Induktivitätsbestimmung gewünsch
 \end{enumerate}
 
 Am Ende der Selbsttest-Funktion wird der Text ,,Test End'' in Zeile~1 und die Versions-Nummer der Software in Zeile~2 angezeigt.
-Wenn gewählt, wird ein {\bf 50~Hz Rechtecksignal} auf Testpin~2 generiert und das gegenphasige Signal auf Testpin~3.
+Wenn gewählt, wird ein \textbf {50~Hz Rechtecksignal} auf Testpin~2 generiert und das gegenphasige Signal auf Testpin~3.
 Testpin~1 wird auf GND geschaltet. Der Strom für Testpin 2 und 3 wird mit \(680\Omega\) Widerständen begrenzt.
 Angezeigt wird das durch die Ausgabe von ,,50Hz'' am Ende der Zeile~1.
 Diese Ausgabe wird dreißig Mal mit jeweils 2~Sekunden Dauer durchgeführt.
@@ -202,7 +203,7 @@ Frequenz-Zähler besitzt. Abbildung \ref{fig:Frequency50} zeigt ein Oszillogramm
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../PNG/Frequency50.png}
+\includegraphics[width=.8\textwidth]{../PNG/Frequency50.png}
 \caption{Oszillogramm der \(50Hz\) Ausgänge von Port 2 und 3}
 \label{fig:Frequency50}
 \end{figure}
@@ -251,22 +252,22 @@ Test 11 & Referenz-Korrektur  & 0 & \ref{fig:SelfTrefKorr} \\
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=16cm]{../GNU/SelfTrefGE.pdf}
+  \includegraphics[width=.9\textwidth]{../GNU/SelfTrefGE.pdf}
   \caption{Selbsttest: Referenz-Spannungen}
   \label{fig:SelfTref}
 \end{figure}
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../GNU/SelfTMitLGE.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/SelfTMitLGE.pdf}
     \caption{mit \(680 \Omega\)}
     \label{fig:SelfTMitL}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../GNU/SelfTMitHGE.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/SelfTMitHGE.pdf}
     \caption{mit \(470 k\Omega\)}
     \label{fig:SelfTMitH}
   \end{subfigure}
@@ -274,16 +275,16 @@ Test 11 & Referenz-Korrektur  & 0 & \ref{fig:SelfTrefKorr} \\
 \end{figure}
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
   \centering
-    \includegraphics[width=9cm]{../GNU/SelfTbottomHGE.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/SelfTbottomHGE.pdf}
     \caption{mit \(470k\Omega\) auf \(0V\)}
     \label{fig:SelfTlowH}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
   \centering
-    \includegraphics[width=9cm]{../GNU/SelfTtopHGE.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/SelfTtopHGE.pdf}
     \caption{mit \(470k\Omega\) auf \(5V\)}
     \label{fig:SelfTtopH}
   \end{subfigure}
@@ -291,16 +292,16 @@ Test 11 & Referenz-Korrektur  & 0 & \ref{fig:SelfTrefKorr} \\
 \end{figure}
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
   \centering
-    \includegraphics[width=9cm]{../GNU/SelfTRiLoGE.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/SelfTRiLoGE.pdf}
     \caption{mit \(680\Omega\) auf \(5V\)}
     \label{fig:SelfTRoL}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
   \centering
-    \includegraphics[width=9cm]{../GNU/SelfTRiHiGE.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/SelfTRiHiGE.pdf}
     \caption{mit \(680\Omega\) auf \(0V\)}
     \label{fig:SelfTRoH}
   \end{subfigure}
@@ -309,14 +310,14 @@ Test 11 & Referenz-Korrektur  & 0 & \ref{fig:SelfTrefKorr} \\
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=16cm]{../GNU/SelfTcap0GE.pdf}
+  \includegraphics[width=.6\textwidth]{../GNU/SelfTcap0GE.pdf}
   \caption{Selbsttest: Nullwert der Kapazitätsmessung}
   \label{fig:SelfTcap}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=16cm]{../GNU/SelfTrefKorrGE.pdf}
+  \includegraphics[width=.6\textwidth]{../GNU/SelfTrefKorrGE.pdf}
   \caption{Selbsttest: Korrekturwerte nach automatischer Kalibration}
   \label{fig:SelfTrefKorr}
 \end{figure}
@@ -330,7 +331,7 @@ gemessenen Referenz-Spannungswerten folgen.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=16cm]{../GNU/SelfTrefDiffGE.pdf}
+  \includegraphics[width=.6\textwidth]{../GNU/SelfTrefDiffGE.pdf}
   \caption{Selbsttest: Spannungsdifferenz der internen Referenz}
   \label{fig:SelfTrefDiff}
 \end{figure}

@@ -41,7 +41,7 @@
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/JFETcd.pdf}
+\includegraphics[width=.8\textwidth]{../FIG/JFETcd.pdf}
 \caption{Измерение напряжения затвор-исток и тока истока N-JFET транзистора }
 \label{fig:JFETcd}
 \end{figure}
@@ -63,10 +63,10 @@
 
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=15cm]{../FIG/PNPcc.pdf}
+ \begin{overpic}[width=1.\textwidth]{../FIG/PNPcc.pdf}
   \color{black}
-  \put(55,20){\makebox(0,0)[lb]{\textcolor{green}{зеленым} switch state is used, }}  
-  \put(55,17){\makebox(0,0)[lb]{if Voltage at PC1 is \textless~ 10mV!}}      
+  \put(55,20){\makebox(0,0)[lb]{\footnotesize {\textcolor{green}{зеленым} switch state is used,}}}  
+  \put(55,17){\makebox(0,0)[lb]{\footnotesize {if Voltage at PC1 is \textless~ 10mV!}}}      
  \end{overpic}
 \caption{Измерение hFE P-N-P транзистора в схеме с общим коллектором }
 \label{fig:pnpcc}
@@ -91,13 +91,14 @@
 Если напряжение базы ниже, чем \(0,97~V\), то это должен быть P-E-MOS. В этом случае пороговое напряжение затвора 
 измеряется при плавном переключении затвора с резистором \(470~k\Omega\) от VCC до GND, ожидая на цифровом входе 
 изменения  сигнала  стока, и затем, считывается напряжение затвора.
+
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=15cm]{../FIG/PNPce.pdf}
+ \begin{overpic}[width=1.\textwidth]{../FIG/PNPce.pdf}
   \color{black}
-  \put(55,21){\makebox(0,0)[lb]{The black state is used for Test!}}  
-  \put(55,17){\makebox(0,0)[lb]{\textcolor{green}{зеленым} state is used for current}} 
-  \put(55,13){\makebox(0,0)[lb]{gamplification factor hFE!}}      
+  \put(55,21){\makebox(0,0)[lb]{\footnotesize {The black state is used for Test!}}}  
+  \put(55,17){\makebox(0,0)[lb]{\footnotesize {\textcolor{green}{зеленым} state is used for current}}} 
+  \put(55,13){\makebox(0,0)[lb]{\footnotesize {gamplification factor hFE!}}}      
  \end{overpic}
 \caption{Испытание и измерение hFE P-N-P транзистора в схеме с общим эмиттером }
 \label{fig:pnpce}
@@ -118,11 +119,11 @@
 тесты с обратной полярностью, чтобы исключить или подтвердить симистор. 
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=15cm]{../FIG/NPNce.pdf}
+ \begin{overpic}[width=1.\textwidth]{../FIG/NPNce.pdf}
   \color{black}
-  \put(55,23){\makebox(0,0)[lb]{The black state is used for Test!}}  
-  \put(55,19){\makebox(0,0)[lb]{\textcolor{green}{зеленым} state is used for current}} 
-  \put(55,15){\makebox(0,0)[lb]{amplification factor hFE!}}      
+  \put(55,23){\makebox(0,0)[lb]{\footnotesize {The black state is used for Test!}}}  
+  \put(55,19){\makebox(0,0)[lb]{\footnotesize {\textcolor{green}{зеленым} state is used for current}}} 
+  \put(55,15){\makebox(0,0)[lb]{\footnotesize {amplification factor hFE!}}}      
  \end{overpic}
 \caption{Испытание и измерение hFE N-P-N транзистора в схеме с общим эмиттером }
 \label{fig:npnce}
@@ -139,7 +140,7 @@ E-MOS (MOSFET обогащённый). В этом случае пороговое напряжение измеряется при пл
 Результат умножается на 4 и делится на 9, чтобы получить напряжение в \(mV\).
 \begin{figure}[H]
 \centering
-\includegraphics[]{../PNG/IRFU120gate.png}
+\includegraphics[width=.8\textwidth]{../PNG/IRFU120gate.png}
 \caption{Измерение порогового напряжения N-канального MOSFET}
 \label{fig:eleven}
 \end{figure}
@@ -148,21 +149,21 @@ E-MOS (MOSFET обогащённый). В этом случае пороговое напряжение измеряется при пл
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/CheckSemi1.pdf}
+\includegraphics[width=.95\textwidth]{../FIG/CheckSemi1.pdf}
 \caption{Блок-схема тестирования транзисторов. Часть 1: JFET и D-MOS}
 \label{fig:ChkSemi1}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/CheckSemi2.pdf}
+\includegraphics[width=.95\textwidth]{../FIG/CheckSemi2.pdf}
 \caption{Блок-схема тестирования транзисторов. Часть 2: BJT и E-MOS}
 \label{fig:ChkSemi2}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/CheckSemi3.pdf}
+\includegraphics[width=.95\textwidth]{../FIG/CheckSemi3.pdf}
 \caption{Блок-схема тестирования транзисторов. Часть 3: Тиристор и симистор}
 \label{fig:ChkSemi3}
 \end{figure}

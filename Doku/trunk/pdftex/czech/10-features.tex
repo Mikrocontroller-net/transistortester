@@ -1,7 +1,7 @@
 %\newpage
 \chapter{Vlastnosti}
 \label{sec:features}
-\begin{enumerate}
+\begin{enumerate} \setlength{\itemsep}{0pt}
 \item Pracuje s mikrokontroléry ATmega8, ATmega168 nebo ATmega328.Ale lze použít také ATmega644, ATmega1280, ATmega1284 nebo ATmega2560 .
 \item K zobrazení výsledků měření je vhodný LCD displej 2x16 nebo 4x20 znaků.
  Alternativně může být, při použití procesoru s alespoň 32K flash pamětí, také grafický displej
@@ -79,8 +79,8 @@ vypočet měření ADC pomocí vnitřního referenčního napětí \(1,1V\) .
 a zbytkový proud kolektor - emitor  \(I_{CES}\) s bází připojenou na potenciál emitoru (pouze s minimálně 16K flash paměťí).
 Tyto hodnoty se zobrazují pouze v případě, že nejsou nulové (zejména pro germaniové tranzistory).
 \item Pro ATmega s minimálně 32K flash pamětí se tester přepne z multifunkčního testu na režim
-měřiče odporu, pokud je v automatickém režimu rozpoznání součástek, pouze jeden odpor na testovacích kontaktech (TP1) a (TP3). Pokud je v souboru Makefile zapnuto pomocí volby RMETER\_WITH\_L při měření odporů také měření indukčnosti, měří se také. Provozní režim je indikován s {\bf[R]} nebo {\bf[RL]} na pravé straně 1 řádku displeje. Přesně tak, jak se tester přepne na měřič kapacit, když byl mezi TP1 a TP3 detekován kondenzátor.
-Tento provozní režim je označen symbolem {\bf[C]} na pravé straně 1 řádku displeje.
+měřiče odporu, pokud je v automatickém režimu rozpoznání součástek, pouze jeden odpor na testovacích kontaktech (TP1) a (TP3). Pokud je v souboru Makefile zapnuto pomocí volby RMETER\_WITH\_L při měření odporů také měření indukčnosti, měří se také. Provozní režim je indikován s {\textbf[R]} nebo {\textbf[RL]} na pravé straně 1 řádku displeje. Přesně tak, jak se tester přepne na měřič kapacit, když byl mezi TP1 a TP3 detekován kondenzátor.
+Tento provozní režim je označen symbolem {\textbf[C]} na pravé straně 1 řádku displeje.
 V tomto režimu lze měřit kondenzátory  od \(1pF\) . Pouze pro automatické spuštění funkce
 potřebujete kondenzátor s více než \(25pF\).
 Obě speciální funkce lze opět ukončit stisknutím tlačítka. Tester poté funguje v normálním režimu.
@@ -116,9 +116,9 @@ Vezměte prosím na vědomí, že víc možností je k dispozici pouze u mikropr
 Všechny funkce jsou dokonce možné pouze u procesorů s programovou pamětí alespoň 32K, jako ATmega328 nebo ATmega1284.
 
 \vspace{1cm}
-\textbf{{\Large Pozor:}} Vždy zkontrolujte, zda jsou {\bf Kondenzátory}  před připojením ke zkoušečce,
-nejlépe zkratováním, {\bf vybité} !
+{\textbf{\Large Pozor:}} Vždy zkontrolujte, zda jsou {\textbf Kondenzátory}  před připojením ke zkoušečce,
+nejlépe zkratováním, {\textbf vybité} !
 V opačném případě by mohlo dojít k poškození přístroje ještě před jeho zapnutím.
 ! ATmega nabízí jen málo vlastní ochrany. !
 Zvláštní pozornost je třeba věnovat také při měření v zapojení.
-Přístroj by měl být vždy předem odpojen od napájení a měli byste se přesvědčit, že v přístroji není {\bf žádné zbytkové napětí} .
+Přístroj by měl být vždy předem odpojen od napájení a měli byste se přesvědčit, že v přístroji není {\textbf {žádné zbytkové napětíi}} .

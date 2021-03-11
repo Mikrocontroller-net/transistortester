@@ -18,6 +18,7 @@ After displaying a start message, the measurement result should appear after two
 If capacitors are measured, the time to result can be longer corresponding to the capacity.
 
 How the transistor-tester continues, depends on the configuration of the software.
+
 \begin{description}
   \item[Single measurement mode] If the tester is configured for single measurement mode (POWER\_OFF option), the tester shut off automatical 
 after displaying the result for 28~seconds for a longer lifetime of battery. 
@@ -68,7 +69,7 @@ Starting of the selected menu function can only be done with a key press.
 Within a selected function parameters can be selected with slow rotation of the encoder.
 A fast rotarion of the encoder will return to the selection menu.
 
-\begin{description}
+\begin{description} \setlength{\itemsep}{0em}
  \item[frequency]
 The additional function ''frequency'' (frequency measurement) uses the ATmega Pin PD4, which is also connected to the LCD.
 First the frequency is allways measured by counting.
@@ -115,13 +116,13 @@ The series of measurements can be finished with a long key press.\\
 
  \item[Resistor meter]
 With the \mbox{1 \electricR 3} symbol the tester changes to a resistor meter at TP1 and TP3 . 
-This operation mode will be marked with a {\bf[R]} at the right side of the first display line.
+This operation mode will be marked with a \textbf{[R]} at the right side of the first display line.
 Because the ESR measurement is not used in this operation mode, the resolution of the measurement
 result for resistors below \(10\Omega\) is only \(0.1\Omega\).
 If the resistor measurement function is configured with the additional inductance measurement,
 a \mbox{1 \electricR \electricL 3} symbol is shown at this menu.
 Then the resistor meter function includes the measurement of inductance for resistors below \(2100\Omega\).
-At the right side of the first display line a {\bf[RL]} is shown.
+At the right side of the first display line a \textbf{[RL]} is shown.
 For resistors below \(10\Omega\) the ESR measurement is used,
 if no inductance is find out. For this reason the resolution for resistors below \(10\Omega\) 
 is increased to \(0.01\Omega\).
@@ -133,7 +134,7 @@ from the special mode opration to the normal tester function with a key press.
 
  \item[Capacitor meter]
 With the \mbox{\begin{large}1 \electricC 3\end{large}} symbol the tester changes to a capacitor meter function at TP1 and TP3.
-This operation mode will be marked with a {\bf[C]} at the right side of the first display line.
+This operation mode will be marked with a \textbf{[C]} at the right side of the first display line.
 With this operation mode capacitors from \(1pF\) up to \(100mF\) can be measured.
 In this operation mode the measurement is repeated without key press.
 With a key press the tester finish this operation mode and returns to the menu.
@@ -425,7 +426,7 @@ For analysing the same load pulse is repeated many times and the voltage is moni
 using interval-tics build from the processor clock. But a complete AD conversion take 1664 processor tics!
 Up to 250 ADC samples are build by this way and from the voltage curve the capacity value is computed.
 If the samplingADC function is selected in the Makefile, all capacitors with less than \(100pF\) are measured with
-the samplingADC function in the capacitor-meter mode {\bf[C]}. The resolution is up to \(0.01pf\) with a clock 
+the samplingADC function in the capacitor-meter mode \textbf{[C]}. The resolution is up to \(0.01pf\) with a clock 
 frequency of \(16MHz\). The calibrated condition is difficult to build with this high resolution.
 You can assume the use of the samplingADC methode every time, fractions of \(1pF\) are displayed at the screen.
 By the way it should mentiored, that the junction capacitance of single diodes can also be measured with

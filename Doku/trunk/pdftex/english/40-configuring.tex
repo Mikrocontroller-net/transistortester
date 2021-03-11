@@ -22,13 +22,13 @@ for a ATmega328 without changes.
 Be careful, if you don't use my Makefile.
 
 With the correct options set, my software runs on the unchanged hardware of Markus F.
-You must set the option PARTNO=M8, {\bf NOT} the option NO\_AREF\_CAP and {\bf NOT} the  PULLUP\_DISABLE option.
+You must set the option PARTNO=M8, \textbf {NOT} the option NO\_AREF\_CAP and \textbf {NOT} the  PULLUP\_DISABLE option.
 The clock rate can also be set to \(8MHz\) with fuses, no crystal is required!
 
 
 The following options in the Makefile are avaiable to configure the software for your Tester.
 
-\begin{description}
+\begin{description} \setlength{\itemsep}{0em}
   \item[PARTNO] describes the target processor:\\
          m8 = ATmega8\\
          m168 or m168p = ATmega168\\
@@ -410,7 +410,7 @@ TQFP\_ADC7 is set. In this case this option is only possible, if the WITH\_UART 
 Example: CFLAGS += -DWITH\_VEXT 
 
   \item[RMETER\_WITH\_L] select for the resistor measurement function, which is selected with a resistor at TP1 and TP3,
-additionally the measurement of inductance. The operation mode is indicated with a {\bf[RL]} at the end of the first display line.
+additionally the measurement of inductance. The operation mode is indicated with a \textbf{[RL]} at the end of the first display line.
 With the additional test for inductance the measurement time is increased for resistors below \(2100\Omega\) considerably.
 Also resistors below \(10\Omega\) will not be measured with the ESR methode Without this option, because
 a part with inductance can not be excluded. Because the ESR measurement method  uses short current pulses,
@@ -440,23 +440,23 @@ Example: CFLAGS += -DNO\_AREF\_CAP
 \end{description}
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{8.6cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8.3cm]{../PNG/AREF2_1V.png}
+    \includegraphics[width=.95\textwidth]{../PNG/AREF2_1V.png}
     \caption{from 5V to 1.1V }
     \label{pic:aref1}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{8.6cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8.3cm]{../PNG/AREF2VCC.png}
+    \includegraphics[width=.95\textwidth]{../PNG/AREF2VCC.png}
     \caption{from 1.1V to 5V}
     \label{pic:aref5}
   \end{subfigure}
   \caption{AREF switching with a \(1nF\) Capacitor}
 \end{figure}
 
-\begin{description}
+\begin{description} \setlength{\itemsep}{0em}
 
   \item[REF\_R\_KORR] specifies a offset for the internal ADC-reference voltage in mV units.
 With this offset a difference by switching from VCC based ADC reference to internal ADC reference for resistor measurement can be adjusted.
@@ -737,15 +737,15 @@ The figures \ref{fig:WinAVR1} show the File menu of the graphical user interface
 open the file Makefile and for saving the changed Makefile (Save).
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/Notepad_open.png}
+    \includegraphics[width=1.\textwidth]{../PNG/Notepad_open.png}
     \caption{open Makefile}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/Notepad_save.png}
+    \includegraphics[width=1.\textwidth]{../PNG/Notepad_save.png}
     \caption{save Makefile}
   \end{subfigure}
   \caption{Using of the WinAVR user interface Programmer's Notepad}
@@ -756,15 +756,15 @@ The next figures \ref{fig:WinAVR2} show the Tools menu of the Programmer's Notep
 for compiling the program (Make All) and for programming the ATmega (Program) with avrdude.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/Notepad_make.png}
+    \includegraphics[width=1.\textwidth]{../PNG/Notepad_make.png}
     \caption{Build programming data (.hex/.eep)}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/Notepad_program.png}
+    \includegraphics[width=1.\textwidth]{../PNG/Notepad_program.png}
     \caption{Programming the ATmega}
   \end{subfigure}
   \caption{Using of the WinAVR user interface Programmer's Notepad}
@@ -777,7 +777,7 @@ for compiling the program (Make All) and for programming the ATmega (Program) wi
 In most cases of problems you will miss the text output to the LCD-display.
 At first you should check, if the LED was illuminated weak, if you release
 the Test button. 
-\begin{description}
+\begin{description} \setlength{\itemsep}{0em}
 
 \item[Power does not switch on.]
 If the LED is without light and the VCC power has correct
@@ -833,7 +833,7 @@ Check if the .eep data are loaded to the EEprom memory of ATmega.
 If all data are loaded correctly, you should check the clock speed of your
 programming data (Makefile) and ATmega processor settings (fuses).
 
-\item[Measurement is slow and Capacitors are measured about 8 times too small]
+\item[Measurement is slow] and Capacitors are measured about 8 times too small
 You run software compiled for \(8MHz\) clock at real clock speed of \(1MHz\).
 Please set the fuses of the ATmega correctly.
 

@@ -1,10 +1,11 @@
 \documentclass[12pt,a4paper,oneside,english]{report}
+%\documentclass[pdftex,12pt,a4paper,final,headings=normal,english]{scrreprt}
 \special{papersize=210mm,297mm}
 %\usepackage[T1]{fontenc}		% Wegan GNU
 %\usepackage[latin1]{inputenc}
 \usepackage[cm]{fullpage}
 \usepackage{cmap}
-\usepackage[cp1251]{inputenc}
+\usepackage[cp1251]{inputenc}		% statt utf8x wegen Russisch
 \usepackage[english,russian]{babel}
 \usepackage{textcomp}			% Wegen Fehler, perthousand, micro
 \usepackage[pdftex]{graphicx}
@@ -13,10 +14,13 @@
 \usepackage{xcolor}
 \usepackage[percent]{overpic}   %ins Bild schreiben
 \usepackage{mwe}                %ins Bild schreiben
-%\usepackage{blindtext}
-%\setlength{\abovecaptionskip}{0.5pc}
-%\setlength{\belowcaptionskip}{-1.0pc}
+
+\usepackage{blindtext}		% zum Ändern der Abstände der Bildunterschrift
+\setlength{\abovecaptionskip}{0.5em}
+\setlength{\belowcaptionskip}{-0.5em}
+
 %\usepackage{showframe}% zum Anzeigen des Seitenlayouts
+
 %\RedeclareSectionCommand[  % nur mit documentclass scrreprt 
 %  beforeskip=-1\baselineskip,
 %  afterskip=.5\baselineskip]{section}
@@ -26,9 +30,9 @@
 %\RedeclareSectionCommand[
 %  beforeskip=-.5\baselineskip,
 %  afterskip=.25\baselineskip]{subsubsection}
+
 %\usepackage{fixltx2e}
 \setlength{\parindent}{0em}	% Absatz nicht einrücken
-%\usepackage{fixltx2e}
 \usepackage{epstopdf}
 \usepackage{hyperref}
 \usepackage{gensymb}
@@ -36,9 +40,9 @@
 \RequirePackage[labelsep=period]{caption}
 \usepackage{circuitikz}
 \usepackage{wallpaper}			%Wegen Hintegrundbild
-%\RequirePackage{caption}
 %\usepackage{subfig}
 \graphicspath{{./FIG}}
+\sloppy
 
 \begin{document}
 \begin{figure}[t]

@@ -1,38 +1,37 @@
 %\newpage
 \section{Měření polovodičů}
-Nejdříve má být u součástky zkoumán průběh proudu, s odpojeným ovládacím pinem (TP3), (nazývaný také TriState pin). Ovládací pin je například (gate) nebo báze testované součástky.\\
-Jeden testovací pin bude zvolen za kladnou stranu součástky a připojen přímo k VCC.\\
+Nejdříve má být u součástky zkoumán průběh proudu, s odpojeným ovládacím pinem (TP3),
+(nazývaný také TriState pin). Ovládací pin je například (gate) nebo báze testované součástky.
+Jeden testovací pin bude zvolen za kladnou stranu součástky a připojen přímo k VCC.
 Jiný pin je pak považován za negativní stranu součástky.
 Negativní strana bude připojena přes \(680\Omega\) odpor k GND.
 U tranzistorů řízených polem je stav tranzistoru závislý na napájecím napětí.
 (TP3) je nejprve pomocí \(680\Omega\) odporu připojen  k GND na \(5ms\) a zároveň změřeno napětí na negativní straně.\\Poté je TriState pin  přepnutý na vstup mcu (vysoká impedance) napětí opět změřeno.
 Následovně je předpokládaný (gate) na \(5ms\) přes \(680\Omega\) odpor  přepnutý na VCC a napětí bude měřeno ještě jednou.
-
 Pokud je měřené napětí nyní nižší než u prvního měření, bude tento stav přijat jako správný.
 Nyní bude napětí s bezproudovým (TP3) ještě jednou změřeno.
-
 Pokud je napětí záporného pinu s udržovanou úrovní větší než \(115mV\), tato úroveň není \(100mV\) nižší než úroveň s aktuálním (TP3), je předpokládán polovodič typu NPN minor chudý.
-
 Pro bipolární tranzistory s vysokým zbytkovým proudem je zbytkový proud kolektoru 
 v bázi mnohem vyšší.
-
 Kontrolou obou úrovní se falešné detekci germaniových NPN tranzistorů s vyšším zbytkovým proudem kolektoru,
 jako zchudlý typ N JFET tranzistorů, vyhneme.
-
 Pak jsou provedeny další testy k rozlišení N-kanál JFET nebo D-MOSFET a P-kanál JFET nebo P-MOSFET.
 Verze MOSFET mohou být detekovány nedostatkem řídícího proudu v každém stavu na (TP3).
-
-Aby bylo možné měřit parametry typu N minor, je měřeno napětí na \(680\Omega\) odporu na zdrojovém source pinu. Jak je znázorněno na obrázku \ref{fig:JFETcd} Toto měření je místo obvyklého měření proudu na gate napětí na potenciálu zdroje uděláno, kvůli relativně vysokému \(680\Omega\) odporu. Tak by v mnoha případech charakteristický proud \(I_\mathrm{DSS}\) FET by nebyl dosažen.
+Aby bylo možné měřit parametry typu N minor, je měřeno napětí na \(680\Omega\) odporu
+na zdrojovém source pinu. Jak je znázorněno na obrázku \ref{fig:JFETcd}
+Toto měření je místo obvyklého měření proudu na gate napětí na potenciálu zdroje uděláno,
+kvůli relativně vysokému \(680\Omega\) odporu.
+Tak by v mnoha případech charakteristický proud \(I_\mathrm{DSS}\) FET by nebyl dosažen.
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/JFETcd.pdf}
+\includegraphics[width=.8\textwidth]{../FIG/JFETcd.pdf}
 \caption{Měření Gate-Source-napětí a Source-proudu N-JFET-tranzistoru}
 \label{fig:JFETcd}
 \end{figure}
 
 Pokud součástka nemá proud mezi kladným vývodem a záporným vývodem bez signálu
-na (TP3) pinu jsou další testy popsány v další podkapitole \ref{sec:pnp}.\\
+na (TP3) pinu jsou další testy popsány v další podkapitole \ref{sec:pnp}.
 Pokud je zjištěn proud, jsou další testy popsány v podkapitole diody \ref{sec:diode}.
 
 \subsection{Měření PNP tranzistoru nebo P-kanálu MOSFET}
@@ -40,18 +39,15 @@ Pokud je zjištěn proud, jsou další testy popsány v podkapitole diody \ref{s
 Za prvé je měřen aktuální faktor zesílení hFE v okruhu kolektoru (emitor následovník) pro předpokládaný
 PNP tranzistor.
 Situace měření je zobrazena na obrázku \ref{fig:pnpcc}.
-
 Leží-li naměřené napětí báze (\(UB\)) přes \(9mV\) s \(680\Omega\) odporem,
 bude aktuální zesílení hFE vypočítán pomocí \(hFE = \frac{UE-UB}{UB}\).
-
 Napětí \(UE\) je rozdíl napětí emitoru k VCC. Rozdíl mezi \(22\Omega\) a \(19\Omega\) odporem se zanedbává.
 \\Když leží \(UB\) napětí pod \(10mV\), bude měření provedeno s \(470k\Omega\) odporem v bázi.
-
 V tomto případě bude vytvořen faktor zesílení proudu s \(hFE = \frac{UE \cdot 470000}{UB \cdot (680+22)}\).
 
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=17cm]{../FIG/PNPcc.pdf}
+ \begin{overpic}[width=1.\textwidth]{../FIG/PNPcc.pdf}
   \color{black}
   \put(55,20){\makebox(0,0)[lb]{\textcolor{green}{Zeleně} označený stav nastane,}}  
   \put(55,17){\makebox(0,0)[lb]{když napětí na PC1 klesne  \textless~ 10mV!}}      
@@ -60,28 +56,24 @@ V tomto případě bude vytvořen faktor zesílení proudu s \(hFE = \frac{UE \c
 \label{fig:pnpcc}
 \end{figure}
 
-Dále jsou testy pro předpokládaný PNP tranzistor v zapojení emitorový sledovač v obvodu emitoru.\\
-Kladná strana je nyní připojena přímo k VCC, \(680\Omega\) odpor na záporném konci je připojen k GND, jak je znázorněno na obrázku \ref{fig:pnpce}.
- 
-Pokud má záporná strana součástky napětí větší než \(3,4V\)  při použití \(680\Omega\) odporu na bázi spojenou s GND, musí se jednat o PNP trazistor nebo o P-Kanal-FET.
-
-To lze snadno rozlišit kontrolou napětí báze: pokud je větší než \(0,97V\), musí to být PNP.\\
+Dále jsou testy pro předpokládaný PNP tranzistor v zapojení emitorový sledovač v obvodu emitoru.
+Kladná strana je nyní připojena přímo k VCC, \(680\Omega\) odpor na záporném konci je připojen k GND,
+jak je znázorněno na obrázku \ref{fig:pnpce}.
+Pokud má záporná strana součástky napětí větší než \(3,4V\)  při použití \(680\Omega\) odporu na
+bázi spojenou s GND, musí se jednat o PNP trazistor nebo o P-Kanal-FET.
+To lze snadno rozlišit kontrolou napětí báze: pokud je větší než \(0,97V\), musí to být PNP.
 Pro měření aktuálního faktoru zesílení bude namísto \(680\Omega\) odporu použitý \(470k\Omega\) jako odpor báze.
-
 Aktuální zesílení se vypočítá pomocí \(hFE = \frac{(UC-UC0) \cdot 470000}{UB \cdot (680+19)}\).
-\\Napětí UC0 je napětí na kolektorovém odporu bez proudu báze.
-
+Napětí UC0 je napětí na kolektorovém odporu bez proudu báze.
 Vyšší faktor proudu je považován za správný, pro tento či onen zjištěný v kolektorovém obvodu.
-\\Hodnoty zjištěné pro PNP tranzistor jsou platné pouze po provedení druhé sady měření.
-
+Hodnoty zjištěné pro PNP tranzistor jsou platné pouze po provedení druhé sady měření.
 Aby nedošlo k tomu, že by byl PNP tranzistor v inverzním obvodu, kdy je kolektor a emitor opačně, špatně detektován, bude jako správné měření použito to s vyšší hodnotou proudu.
-
-Pokud je báze napětí menší než \(0,97V\), musí to být P-E-MOS.\\
+Pokud je báze napětí menší než \(0,97V\), musí to být P-E-MOS.
 V tomto případě je spínací napětí G řídící elektrody určeno tak, že je napětí na Gate s \(470k\Omega\) odporem pomalu měněno nahoru a dolů, dokud proud tekoucí přes vývod drain nevypne a potom je napětí na Gate měřeno.
 
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=15cm]{../FIG/PNPce.pdf}
+ \begin{overpic}[width=1.\textwidth]{../FIG/PNPce.pdf}
   \color{black}
   \put(55,21){\makebox(0,0)[lb]{Černý stav je používán při testu!}}  
   \put(55,17){\makebox(0,0)[lb]{\textcolor{green}{Zelený} stav se používá při}} 
@@ -94,14 +86,12 @@ V tomto případě je spínací napětí G řídící elektrody určeno tak, že
 \subsection{Měření NPN tranzistoru nebo N-kanálového MOSFETu}
 Měření tranzistoru NPN začíná stejným způsobem jako měření PNP tranzistoru, jmenovitě
 s měřením zesílení zesílení v kolektorovém obvodu.
-
-První měření se provádí pomocí na VCC spojeným \(680\Omega\) bázovým odporem.\\
+První měření se provádí pomocí na VCC spojeným \(680\Omega\) bázovým odporem.
 Pokud je napětí na bázovém odporu příliš malé, bude zde použitý \(470k\Omega\) odpor.
-
 Měření pak pokračuje v emitorovém obvodu, jak je znázorněno na obrázku \ref{fig:npnce}.
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=17cm]{../FIG/NPNce.pdf}
+ \begin{overpic}[width=1.\textwidth]{../FIG/NPNce.pdf}
   \color{black}
   \put(55,23){\makebox(0,0)[lb]{Černý stav je používán při testu!}}  
   \put(55,19){\makebox(0,0)[lb]{\textcolor{green}{Zelený} stav se používá při}} 
@@ -112,39 +102,26 @@ Měření pak pokračuje v emitorovém obvodu, jak je znázorněno na obrázku \
 \end{figure}
 Pokud napětí na kolektoru je pod \(1,6V\) zatímco \(680\Omega\) je základní odpor
 na VCC připojen, musí to být NPN, N-Kanal MOSFET nebo tyristor (TRIAC).
-
-Dva jednoduché testy mohou detekovat tyristor nebo TRIAC.\\
+Dva jednoduché testy mohou detekovat tyristor nebo TRIAC.
 Je-li Gate pin po dobu \(10ms\) připojen k GND a pak odpojen, měl by zůstat tyristor nebo triac sepnut.
-
 Pokud se nyní anodový odpor krátce přepne na GND a poté se vrátí zpět na VCC,
 neměl by tyristor znovu sepnout. Zůstane bez proudu.
-
 Mějte na paměti, že lze testovat pouze tyristory s nízkým výkonem, protože spínací proud
 testeru může dosáhnout pouze \(6mA\).
-
 Pokud oba testy tyristor potvrdí, jsou prováděny další testy s obrácenou polaritou,
 k vyloučení nebo potvrzení že se může jednat o TRIAC.
-\\
-\\
 Pokud nebyl potvrzen žádný tyristor ani TRIAC, může to být NPN nebo N-kanálový E-MOSFET.
-\\
-\\
 Napětí báze NPN tranzistoru se blíží napětí emitoru, čímž lze tento typ bezpečně rozpoznat.
-
 Aktuální faktor zesílení v emitorovém okruhu je 
-\(hFE = \frac{(VCC-UC-UC0)\cdot 470000}{(VCC-UB)\cdot (680+22)}\).\\
-\\
+\(hFE = \frac{(VCC-UC-UC0)\cdot 470000}{(VCC-UB)\cdot (680+22)}\).
 Pokud napětí na bázi ukazuje, že teče jen malý nebo žádný proud, jedná se zde o N-kanál E-MOS MOSFET.
-
 V tomto případě je prahové napětí měřeno pomalým vzrůstem Gate napětí přes \(470k\Omega\) odpor střídavým připojením na VCC a GND a čeká až digitální signál na vstupu G sepne proud na Drain, aby v tom okamžiku bylo přečteno Gate napětí.
-
 Měření se opakuje jedenáctkrát, jak je znázorněno na obrázku~\ref{fig:eleven}, a výsledky budou sčítány.
-\\
 Vypočtená suma je násobena čtyřmi a pak dělena devíti, aby bylo dosaženo rozlišení v mV.
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../PNG/IRFU120gate.png}
+\includegraphics[width=.8\textwidth]{../PNG/IRFU120gate.png}
 \caption{Měření prahového napětí u N-kanálového MOSFETu}
 \label{fig:eleven}
 \end{figure}
@@ -153,21 +130,21 @@ Vypočtená suma je násobena čtyřmi a pak dělena devíti, aby bylo dosaženo
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/CheckSemi1.pdf}
+\includegraphics[width=.8\textwidth]{../FIG/CheckSemi1.pdf}
 \caption{Program testování tranzistorů část 1, JFET a D-MOS}
 \label{fig:ChkSemi1}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/CheckSemi2.pdf}
+\includegraphics[width=.8\textwidth]{../FIG/CheckSemi2.pdf}
 \caption{Program pro testování tranzistorů část 2, BJT a E-MOS}
 \label{fig:ChkSemi2}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/CheckSemi3.pdf}
+\includegraphics[width=.8\textwidth]{../FIG/CheckSemi3.pdf}
 \caption{Program testování tranzistorů část 3, tyristor a triak}
 \label{fig:ChkSemi3}
 \end{figure}
@@ -175,26 +152,26 @@ Vypočtená suma je násobena čtyřmi a pak dělena devíti, aby bylo dosaženo
 \subsection{Měření diod}
 \label{sec:diode}
 Pokud byl v předběžných testech zjištěn proud, je součástka testována na chování diod.
-
 Předpětí s \(680\Omega\) odporem musí být mezi \(0,15V\) a \(4,64V\).
 Přední napětí s \(680\Omega\) odporem musí překročit 1,125 násobek dopředného napětí
-s \(470k\Omega\) odporem a šestnáctinásobek dopředného napětí s \(470k\Omega\) odporem větší než přední napětí s \(680\Omega\) odporem.
-
-Navíc nesmí následné opětovné měření s \(470k\Omega\) odporem vydat vyšší napětí než měření s \(680\Omega\) odporem.\\
+s \(470k\Omega\) odporem a šestnáctinásobek dopředného napětí s \(470k\Omega\) odporem
+větší než přední napětí s \(680\Omega\) odporem.
+Navíc nesmí následné opětovné měření s \(470k\Omega\) odporem vydat vyšší napětí
+než měření s \(680\Omega\) odporem.\\
 Pak se dá předpokládat, že zařízení s tímto chováním je vždy dioda.
-
-Detekce chování diody nedostatkem proudu v opačném směru není u antiparalelních diod možné.\\
-Pro jednu diodu je přidán zpětný proud diody měřený u \(5V\) s \(470k\Omega\) odporem. Rozlišení je asi \(2nA\).
-\\Pro větší zbytkové proudy než \(5,3\mu A\) (napětí při odporu větší než \(2,5V\)) bude měřeno s \(680\Omega\) odporem.
+Detekce chování diody nedostatkem proudu v opačném směru není u antiparalelních diod možné.
+Pro jednu diodu je přidán zpětný proud diody měřený u \(5V\) s \(470k\Omega\) odporem.
+Rozlišení je asi \(2nA\). Pro větší zbytkové proudy než \(5,3\mu A\)
+(napětí při odporu větší než \(2,5V\)) bude měřeno s \(680\Omega\) odporem.
 Pak je rozlišení pouze \(1\mu A\).
-
 Kromě toho se provádí měření kapacity diody v opačném směru. 
 
 \subsection{Výsledky různých měření}
-Následující tři tabulky zobrazují výsledky měření různých komponentů s procesory ATmega8, ATmega168 a ATmega328.\\
-Měření kapacity pro dvojitou diodu MBR4045PT je úspěšné pouze při účinném chlazení. Příčinou je vysoký zbytkový proud diody \(40A\).
-
-Podobně pro báze emitor trasu germaniového tranzistoru AC128, lze izolační kapacitu měřit pouze při dobrém chlazení. 
+Následující tři tabulky zobrazují výsledky měření různých komponentů s procesory ATmega8, ATmega168 a ATmega328.
+Měření kapacity pro dvojitou diodu MBR4045PT je úspěšné pouze při účinném chlazení.
+Příčinou je vysoký zbytkový proud diody \(40A\).
+Podobně pro báze emitor trasu germaniového tranzistoru AC128, lze izolační kapacitu
+měřit pouze při dobrém chlazení. 
 
 \begin{table}[H]
   \begin{center}
@@ -300,32 +277,25 @@ MAC97A6     & Triac &   0.92V        &  0.90V        &  0.91V           &  0.90V
 
 Výsledky měření tranzistorů se v některých případech značně liší od hodnot verze
 programu eep a hex od Markuse Frejeka.
-
 Například pro Darlingtonův tranzistor BC517 bylo v předchozím softwarem měřen hFE pouze 797 namísto 77200.
 To souvisí se skutečností, že se aktuální zisk v nové verzi také měří v kolektorovém okruhu.
-
 To také dokazují výsledky nové verze v emitorovém okruhu (společný emitor),
 jak vidíte v posledním sloupci tabulky \ref{tab:bipolar}.
-
-Napětí báze emitor bylo předem stanoveno pomocí samostatného diodového testu s \(1438mV\).\\
+Napětí báze emitor bylo předem stanoveno pomocí samostatného diodového testu s \(1438mV\).
 Nyní je také určeno uvedené napětí ze stavu měření zesílení (\(1,20V\)).
-
 Tranzistor BUL38D obsahuje ochrannou diodu přes anodu a kolektor NPN tranzistoru,
 přičemž je vytvořen parazitní PNP tranzistor s obráceným spojením báze a kolektoru.
-
 V softwarové verzi 1.10k jsou oba tranzistory detekovány a s připojeným p ukázáno na druhý tranzistor.
 Správný tranzistor (NPN) je zjištěn porovnáním spojovacích kapacit.
-
-Předpokládá se, že ten, který má vyšší kapacitu přechodu, je ten správný tranzistor.\\
-Pokud je během zobrazení výsledku stisknuto tlačítko start, budou zobrazeny parametry parazitního tranzistoru. Přitom je zase s PNPn na další strukturu tranzistoru upozorněno.\\
-Další struktura tranzistoru vzniká pouze při integraci ochranné diody v blízkosti tranzistoru ve stejném polovodičovém materiálu, nikoli při připojení externí diody.
-
+Předpokládá se, že ten, který má vyšší kapacitu přechodu, je ten správný tranzistor.
+Pokud je během zobrazení výsledku stisknuto tlačítko start, budou zobrazeny parametry parazitního tranzistoru.
+Přitom je zase s PNPn na další strukturu tranzistoru upozorněno.
+Další struktura tranzistoru vzniká pouze při integraci ochranné diody v blízkosti
+tranzistoru ve stejném polovodičovém materiálu, nikoli při připojení externí diody.
 V následující tabulce \ref{tab:germanium} jsou zobrazeny výsledky germánových tranzistorů,
 které jsou silně teplotně závislé a měření zbytkových proudů kolektorů je obzvláště problematické.
-
-Zde jsou výsledky původní verze Markuse F. a výsledky verze 1.10k srovnány s ostatními.\\
+Zde jsou výsledky původní verze Markuse F. a výsledky verze 1.10k srovnány s ostatními.
 Verze 1.10k měří aktuální zesílení jak v kolektorovém obvodu, stejně jako v obvodu emitoru s přihlédnutím ke klidovému proudu kolektoru, přičemž je vydáno vyšší proudové zesílení.
-
 Ve starších verzích nebyl brán ohled na klidový proud kolektoru.
 
 \begin{table}[H]
@@ -360,40 +330,31 @@ AD162       & PNP, B=2127, 280mV  & PNP, B=89, 107mV    & PNP, B=89, 107mV    \\
 \end{table}
 
 Tabulka \ref{tab:mos} zobrazuje výsledky měření některých tranzistorů s efektem pole.
-Naměřený parametr typů E-MOS je Gate Source spínací napětí, kde digitální vstupní ATmega signál \(680\Omega\) Drain odpor spíná.
-
+Naměřený parametr typů E-MOS je Gate Source spínací napětí, kde digitální vstupní
+ATmega signál \(680\Omega\) Drain odpor spíná.
 Při velmi rychlé změně Gate napětí v důsledku malé Gate kapacity je zjištěné napětí poněkud nepřesné.
-
-U BS250 se změní Gate napětí z \(2,6V\) na \(2,5V\), pokud je další \(10nF\) kondenzátor mezi gate-source připojen.
-
-Dalším měřeným parametrem je kapacita gate.\\
+U BS250 se změní Gate napětí z \(2,6V\) na \(2,5V\), pokud je další \(10nF\) kondenzátor
+mezi gate-source připojen.
+Dalším měřeným parametrem je kapacita gate.
 Gate kapacita je určena umístěním Source i Drain na potenciál GND.
-
-U IGBT nedosáhne často \(5V\) Gate napětí testeru pro jeho sepnutí.\\
+U IGBT nedosáhne často \(5V\) Gate napětí testeru pro jeho sepnutí.
 Většinou je detekována pouze ochranná dioda emitor-kolektor.
-
 V takovém případě může baterie připojená k Gate pinu s hodnotou kolem \(3V\) stačit k sepnutí,
-a k detekci tranzistoru IGBT. Druhý pól baterie pak nahradí Gate pin při připojením k testovacímu pinu (TP) testeru.
-
+a k detekci tranzistoru IGBT. Druhý pól baterie pak nahradí Gate pin při připojením k testovacímu
+pinu (TP) testeru.
 Je-li polarita baterie správná, je možné rozpoznání IGBT.
-\\Zobrazené spínací napětí Gate Emitor napětí musí být navýšeno o napětí baterie,
+Zobrazené spínací napětí Gate Emitor napětí musí být navýšeno o napětí baterie,
 aby bylo dosaženo skutečné spínací napětí.
-
 V případě JFET tranzistorů se datové listy (datasheet) často vztahují k Idss charakteristickému proudu,
 proud v Drainu při Gate napětí 0V.
-
 Zde je však daný proud, který je charakterizován \(680\Omega\) odporem zatěžovaný Source straně JFET.
 Zátěžový odpor generuje pro Gate protiproudové Vgs, což je také uvedeno.
-
 S \(470k\Omega\) odporem zátěže na Gate straně JFET je Source Drain proud téměř 0.
-\\Tímto způsobem lze stanovit s dostatečnou přesností Gate Source, spínací či vypínací napětí Vgs\_off pokud leží pod \(5V\).
-\\S těmito dvěma operačními body může být kvůli kvadratické proudové charakteristice Igss odhadnout.
-
-Pokud je odhadovaný proud menší než \(40mA\) bude provedeno další měření bez odporu na Source straně.\\
+Tímto způsobem lze stanovit s dostatečnou přesností Gate Source, spínací či vypínací napětí Vgs\_off pokud leží pod \(5V\).
+S těmito dvěma operačními body může být kvůli kvadratické proudové charakteristice Igss odhadnout.
+Pokud je odhadovaný proud menší než \(40mA\) bude provedeno další měření bez odporu na Source straně.
 Přídavná hodnota proudu může být určena prostřednictvím napětí na Source.
-
 S touto vyšší hodnotou proudu a Gate Source napětím, bude aktuální Idss opět s kvadratickou proudovou charakteristikou vypočítán za předpokladu, že hodnota \(40mA\) není překročena.
-
 Vzhledem k symetrické stavbě JFETs nelze rozlišit vývody Drain a Source.
 
 \begin{table}[H]

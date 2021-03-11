@@ -68,7 +68,7 @@ Die ausgewählte Menüfunktion kann aber nur mit einem längeren Tastendruck ges
 Innerhalb einer Menüfunktion können Parameter durch eine langsame Drehung des Encoders ausgewählt werden.
 Eine schnelle Drehung des Encoders kehrt zur Menü-Auswahl zurück.
 
-\begin{description}
+\begin{description} \setlength{\itemsep}{0em}
  \item[Frequenz]
 Die Zusatzfunktion ,,Frequenz'' (Frequenzmessung) benutzt als Eingang den PD4-Pin des ATmega, der auch an das LCD angeschlossen ist.
 Es wird immer zunächst die Frequenz gemessen, bei Frequenzen unter \(25kHz\) wird auch die mittlere Periode des Eingangssignals
@@ -109,12 +109,12 @@ Die Mess-Serie kann durch einen längeren Tastendruck beendet werden.\\
 
  \item[Widerstandsmeßgerät]
 Mit dem \mbox{1 \electricR 3} Symbol wird der Tester in ein Ohmmeter an TP1 und TP3 verwandelt. Diese Betriebsart wird durch
-ein {\bf[R]} in der rechten Ecke der ersten Displayzeile angezeigt. Weil bei dieser Betriebsart die
+ein \textbf{[R]} in der rechten Ecke der ersten Displayzeile angezeigt. Weil bei dieser Betriebsart die
 ESR-Meßfunktion nicht benutzt wird, beträgt auch für Widerstände unter \(10\Omega\) die Auflösung
 nur \(0.1\Omega\). Wenn die Ohmmeter Funktion mit der Induktitivitätsmessung konfiguriert wurde,
 erscheint hier ein \mbox{1 \electricR \electricL 3} Symbol.
 Dann beinhaltet die Ohmmeter Funktion die Messung von Induktivitäten für Widerstände unter \(2100\Omega\). 
-In der rechten Ecke der ersten Zeile des Displays wird dann ein {\bf[RL]} angezeigt.
+In der rechten Ecke der ersten Zeile des Displays wird dann ein \textbf{[RL]} angezeigt.
 Für Widerstände unter \(10\Omega\) wird dann auch die ESR-Meßmethode benutzt,
 wenn keine Induktivität festgestellt wurde. Damit erhöht sich die Auflösung für Widerstände
 unter \(10\Omega\) auf \(0.01\Omega\).
@@ -127,7 +127,7 @@ wieder zu der normalen Teseterfunktion zurück.
  \item[Kondensatormeßgerät]
 Mit dem \mbox{\begin{large}1 \electricC 3\end{large}} Symbol wird der Tester
 in ein reines Kondensator-Meßgerät an TP1 und TP3 verwandelt.
-Die Betriebsart wird durch ein {\bf[C]} in der rechten Ecke der ersten Zeile des Displays angezeigt.
+Die Betriebsart wird durch ein \textbf{[C]} in der rechten Ecke der ersten Zeile des Displays angezeigt.
 Bei dieser Betriebsart können Kondensatoren ab \(1pF\) bis zu \(100mF\) gemessen werden.
 In dieser Betriebsart werden die Meßwerte fortlaufend ermittelt.
 Mit einem Tastendruck wird dieser Sonderbetrieb beendet und der Tester kehrt wieder zum Menü zurück.
@@ -417,7 +417,7 @@ Dabei wird ein Aufladevorgang immer wieder erzeugt und durch Verschiebung der AD
 der sich aus der Taktfrequenz des Prozessors ergibt. Eine komplette ADC Wandlung braucht hingegen 1664 Prozessortakte!
 Bis zu 250 ADC-Werte werden so ermittelt und aus dem Spannungsverlauf die Kapazität berechnet.
 Wenn die samplingADC Funktion in der Makefile gewählt wurde, werden alle Kondensatoren \textless~\(100pF\) in der 
-Kondensatormeßfunktion  {\bf[C]} mit der samplingADC Methode gemessen. Die Auflösung beträgt hier bis zu \(0.01pF\) bei
+Kondensatormeßfunktion  \textbf{[C]} mit der samplingADC Methode gemessen. Die Auflösung beträgt hier bis zu \(0.01pF\) bei
 \(16MHz\) Taktfrequenz. Der Abgleich der Nullkapazität stellt bei dieser Auflösung eine besondere Herausforderung dar.
 Die samplingADC Methode des Kapazitätsbestimmung wurde immer angewendet, wenn es Bruchteile von \(1pF\) dargestellt werden.
 Übrigens können auch die Sperrschichtkapazitäten von Einzeldioden mit dieser Methode gemessen werden. Da die Methode

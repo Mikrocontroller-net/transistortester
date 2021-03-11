@@ -1,69 +1,72 @@
 \chapter{Návod k obsluze}
 \label{sec:manual}
 
-\vspace*{-1cm}
 \section{Měřicí operace}
-\vspace{-0.3cm}
-Obsluha testeru je jednoduchá. Nicméně zde je pár rad pro jeho použití.\\
-Tři testovací porty jsou většinou propojeny prostřednictvím kabelů s krokosvorkami, nebo jiným zakončením.\\
-Může být také připojena zásuvka pro měření tranzistorů.\\
-V každém případě můžete do tří testovacích bodů připojit tříbodové komponenty v libovolném pořadí.\\
-U dvoupólových součástek můžete použít kterékoliv dva testovací porty.\\
+
+Obsluha testeru je jednoduchá. Nicméně zde je pár rad pro jeho použití.
+Tři testovací porty jsou většinou propojeny prostřednictvím kabelů s krokosvorkami, nebo jiným zakončením.
+Může být také připojena zásuvka pro měření tranzistorů.
+V každém případě můžete do tří testovacích bodů připojit tříbodové komponenty v libovolném pořadí.
+U dvoupólových součástek můžete použít kterékoliv dva testovací porty.
 Nezáleží ani na polaritě, to znamená že i elyty mohou být připojeny libovolně.
- Měření kapacity se však provádí tak, že záporný pól je na měřícím portu s nižším číslem.\\
-Protože měřicí napětí leží mezi \(0,3V\) a maximálně \(1,3V\), nehraje zde polarita důležitou roli.\\
-Je-li součástka připojena, nesmíte se jí během měření dotýkat. Dejte ji na izolační podklad, pokud není v zásuvce. Nedotýkejte se ani izolace měřicích kabelů, výsledek měření tím může být ovlivněn.\\
+Měření kapacity se však provádí tak, že záporný pól je na měřícím portu s nižším číslem.
+Protože měřicí napětí leží mezi \(0,3V\) a maximálně \(1,3V\), nehraje zde polarita důležitou roli.
+Je-li součástka připojena, nesmíte se jí během měření dotýkat. Dejte ji na izolační podklad,
+pokud není v zásuvce. Nedotýkejte se ani izolace měřicích kabelů, výsledek měření tím může být ovlivněn.
 Poté stiskněte tlačítko start.
 Po úvodním hlášení se výsledek měření zobrazí asi do dvou sekund. Při měření kondenzátorů může
-v závislosti na kapacitě trvat mnohem déle.\\
-
+v závislosti na kapacitě trvat mnohem déle.
 Co se stane poté, závisí na softwarové konfiguraci testeru.
 \begin{description}
   \item[Jednotlivé měření] Pokud je tester konfigurován pro jedno měření (POWER\_OFF-volba),
 Pokud nespustíte nové měření, vypne se tester kvůli úspoře baterie automaticky za 28 sekund (konfigurovatelné).
 Po vypnutí lze samozřejmě spustit nové měření, buďto se stejnou součástkou, nebo také s jinou.
 Pokud chybí vypínací elektronika, zůstane zobrazen poslední výsledek měření.
-\vspace{-0.3cm}
   \item[Kontinuální měření]  Zvláštním případem je konfigurace bez funkce automatického vypnutí.
 V tomto případě je nutno nastavit možnost POWER\_OFF v makefile.
 Tato konfigurace se obvykle používá pokud nejsou osazeny tranzistory pro automatické vypnutí.
 Místo toho je zapotřebí externí vypínač pro zapnutí / vypnutí. Zde tester opakuje měření až do vypnutí.
-\vspace{-0.3cm}
-  \item[Opakované měření] V tomto případě se testovací přístroj nevypne přímo po měření, ale až po zvoleném počtu. Chcete-li to nastavit, je volbě POWER\_OFF v makefile přiřazeno číslo
-opakování (například 5).
+  \item[Opakované měření] V tomto případě se testovací přístroj nevypne přímo po měření,
+ale až po zvoleném počtu.
+Chcete-li to nastavit, je volbě POWER\_OFF v makefile přiřazeno číslo opakování (například 5).
 Ve standardním případě se přístroj vypne po pěti měřeních bez rozpoznaného komponentu.
 Pokud je detekována další měřená součástka, vypne se po dvojnásobku, tj. Deset měření.
 Jediné měření s nerozpoznanou komponentou vynuluje počet zjištěných kusů na nulu.
 Stejně tak jediné měření s detekovanou komponentou vynuluje počet nerozpoznaných komponent na nulu.
 To má za následek, že i bez stisku startovacího tlačítka lze měřit další a další kusy,
-  pokud se součástky pravidelně obměňují.
+pokud se součástky pravidelně obměňují.
 Změna součásti s prázdnými měřícími svorkami mezitím provede měření bez detekované součásti.
-V tomto provozním režimu je pro zobrazení času speciální funkce. Při krátkém stisku start tlačítka, jsou výsledky měření zobrazeny pouze 5 sekund. Pokud držíte tlačítko start, až do zobrazení první zprávy,
-je doba zobrazení 28 sekund, jako u jednotlivého měření. Další měření v době zobrazování, je umožněno následujícím stiskem Start tlačítka.
+V tomto provozním režimu je pro zobrazení času speciální funkce.
+Při krátkém stisku start tlačítka, jsou výsledky měření zobrazeny pouze 5 sekund.
+Pokud držíte tlačítko start, až do zobrazení první zprávy, je doba zobrazení 28 sekund,
+jako u jednotlivého měření.
+Další měření v době zobrazování, je umožněno následujícím stiskem Start tlačítka.
 \end{description}
 
 \section{Volitelné funkce menu pro ATmega328}
-\vspace{-0.3cm}
+
 Když je zapnuta funkce menu, začne tester po dlouhém stisku tlačítka (\textgreater~\(0.5s\)) volbu dalších funkcí.
 Tato funkce je k dispozici i pro jiné procesory s minimálně 32K flash pamětí.
-Volitelné funkce se zobrazují na řádku ~ 2 dvouřádkového displeje nebo na řádku 3 čtyřřádkového displeje. Předchozí a následující funkce jsou zobrazeny v řádcích 2 a 4.
+Volitelné funkce se zobrazují na řádku ~ 2 dvouřádkového displeje nebo na řádku 3 čtyřřádkového displeje.
+Předchozí a následující funkce jsou zobrazeny v řádcích 2 a 4.
 Po delším čekání bez odezvy tlačítka se program vrátí k normální funkci testeru.
 Krátkým stiskem tlačítka můžete přepnout na další volbu.
 Dlouhým stisknutím tlačítka se spustí zobrazená doplňková funkce.
 Po zobrazení poslední funkce "Vypnout" se znovu zobrazí první funkce.
-
-Pokud je Tester vybaven pulzním enkodérem lze výběr nabídky docílit rychlým otáčením enkodéru.\\
+Pokud je Tester vybaven pulzním enkodérem lze výběr nabídky docílit rychlým otáčením enkodéru.
 Funkcemi nabídky lze listovat pomalým otáčením voliče v libovolném směru.
-Zvolenou funkci nabídky, lze spustit pouze stiskem tlačítka. V rámci vybraných nastavení funkce jsou další parametry volitelné pomocí pomalého otáčení enkodéru.\\
+Zvolenou funkci nabídky, lze spustit pouze stiskem tlačítka.
+V rámci vybraných nastavení funkce jsou další parametry volitelné pomocí pomalého otáčení enkodéru.
 Rychlým otočením enkodéru se vrátíte do nabídkového menu.
-\begin{description}
-\vspace{-0.3cm}
+
+\begin{description} \setlength{\itemsep}{0em}
  \item[Frekvence]
-Přídavná funkce "frekvence" (frekvenční měření) používá jako vstupní pin PD4 ATmega, který je také připojen k LCD.
-Nejdříve je vždy měřena frekvence, při frekvencích pod \(25kHz\) je  také měřena střední hodnota vstupního signálu a z toho je vypočtena frekvence frekvence s rozlišením až \(0,001Hz\).
+Přídavná funkce "frekvence" (frekvenční měření) používá jako vstupní pin PD4 ATmega,
+který je také připojen k LCD.
+Nejdříve je vždy měřena frekvence, při frekvencích pod \(25kHz\) je také měřena střední
+hodnota vstupního signálu a z toho je vypočtena frekvence frekvence s rozlišením až \(0,001Hz\).
 Pokud je v souboru Makefile nastavena v makefile volba POWER\_OFF  je doba měření frekvence omezena na  8~minut.
 Měření frekvence je ukončeno stisknutím tlačítka a návratem do nabídky menu.
-\vspace{-0.3cm}
  \item[f-generátor]
 Pomocí doplňkové funkce "f-generátor" (frekvenční generátor) lze zvolit frekvenci mezi 1Hz a 2MHz.
 Nastavení frekvence lze měnit pouze v nejvyšším řádu.
@@ -79,104 +82,110 @@ Krátké stisknutí tlačítka (\textless~0,2s) pouze resetuje sledování času
 Uplynulý čas je zobrazen v 1 řádku tečkou za každých 30 sekund.
 Pravidelným krátkým stiskem tlačítka lze zabránit předčasnému vypnutí generování kmitočtu.
 Dlouhé stisknutí tlačítka (\textgreater~2s) způsobí návrat do menu.
-\vspace{-0.3cm}
  \item[10-bit PWM]
-Přídavná funkce "10bitové PWM" (šířková modulace impulzů) generuje pevnou frekvenci s nastavitelnou šířkou impulsu na pinu TP2.
-Při krátkém stisknutí klávesy (\textless~0,5s) se šířka impulsu zvýší o \(1\%\),  s delším stisknutím klávesy o \(10\%\).\\
+Přídavná funkce "10bitové PWM" (šířková modulace impulzů) generuje pevnou frekvenci s nastavitelnou
+šířkou impulsu na pinu TP2.
+Při krátkém stisknutí klávesy (\textless~0,5s) se šířka impulsu zvýší o \(1\%\), 
+s delším stisknutím klávesy o \(10\%\).
 Při překročení \(99\%\) bude \(100\%\) odečteno (zpátky na 0).
 Při zvolené možnosti POWER\_OFF-v makefile, bude po 8 minutách bez stisku tlačítka, tester vypnutý.
 Konec generování je také možné dosáhnout dlouhým (\textgreater~1,3s) stiskem.
-\vspace{-0.3cm}
  \item[C+ESR@TP1:3]
 Pomocí rozšiřující funkce "C + ESR @ TP1: 3" se na TP1 a TP3 spustí samostatné měření kondenzátoru s měřením ESR.
-Měřitelné jsou kondenzátory s více než \(2\mu F\) až k \(50mF\).\\Vzhledem k nízkému měřicímu napětí asi 300mV by mělo být ve většině případech možné měření v obvodu bez předchozího vypájení.\\
-Pokud je v souboru Makefile nastavena možnost POWER\_OFF-, je počet měření omezen na 250, může být ale znovu spuštěn.\\
+Měřitelné jsou kondenzátory s více než \(2\mu F\) až k \(50mF\).
+Vzhledem k nízkému měřicímu napětí asi 300mV by mělo být ve většině případech možné
+měření v obvodu bez předchozího vypájení.
+Pokud je v souboru Makefile nastavena možnost POWER\_OFF-, je počet měření omezen na 250,
+může být ale znovu spuštěn.
 Opakované měření může být ukončeno delším stiskem tlačítka.
-\vspace{-0.3cm}
  \item[Měření odporů]
 Ikona \mbox{1 ~\electricR 3} promění tester na ohmmetr mezi TP1 a TP3. Tento režim je indikován
-zobrazením textu {\bf[R]} v pravém rohu prvního řádku displeje.\\Protože se při této měřicí funkci
-nepoužívá ESR, platí pro odpory s hodnotou nižší než \(10\Omega\) rozlišení pouze \(0.1\Omega\).\\
-Pokud je funkce ohmmetru nakonfigurovaná i s měřením indukcí, zobrazí se zde ikona \mbox{1 ~\electricR \electricL 3}.
+zobrazením textu {\textbf[R]} v pravém rohu prvního řádku displeje.\\Protože se při této měřicí funkci
+nepoužívá ESR, platí pro odpory s hodnotou nižší než \(10\Omega\) rozlišení pouze \(0.1\Omega\).
+Pokud je funkce ohmmetru nakonfigurovaná i s měřením indukcí,
+zobrazí se zde ikona \mbox{1 ~\electricR \electricL 3}.
 Funkce ohmmetru poté zahrnuje měření indukčnosti pro odpory pod \(2100\Omega\). 
-V pravém rohu prvního řádku displeje se zobrazí text {\bf[RL]}.\\
+V pravém rohu prvního řádku displeje se zobrazí text {\textbf[RL]}.
 Pokud nebyla detekována žádná indukčnost pro odpory pod \(10\Omega\) tak je použita ESR metoda měření.
-To zvyšuje rozlišení rezistorů s hodnotou nižší než \(10\Omega\) na \(0.01\Omega\).\\
+To zvyšuje rozlišení rezistorů s hodnotou nižší než \(10\Omega\) na \(0.01\Omega\).
 V tomto měřícím režimu se měření opakuje bez stisku tlačítka.
-Stisknutím tlačítka opustíme tento režim a tester se vrátí do nabídky menu.\\
+Stisknutím tlačítka opustíme tento režim a tester se vrátí do nabídky menu.
 Pokud je mezi TP1 a TP3 připojený odpor je tento měřící režim také automaticky spuštěn stiskem tlačítka.
 Po stisku tlačítka se tester vrátí ke své normální funkci.
-\vspace{-0.3cm}
  \item[Měření kondenzátorů]
 Ikona \mbox{\begin{large}1 \electricC 3\end{large}} mění tester na klasický meřič kondenzátorů na TP1 a TP3.
-Tento režim je označen znakem {\bf[C]} v pravém rohu prvního řádku displeje.\\
-V tomto režimu mohou být kondenzátory měřeny od \(1pF\) do \(100mF\).\\
-V tomto provozním režimu se měření opakuje bez stisku tlačítka.\\
-Stiskem tlačítka se tato speciální operace ukončí a tester se vrátí do nabídky menu.\\
+Tento režim je označen znakem {\textbf[C]} v pravém rohu prvního řádku displeje.
+V tomto režimu mohou být kondenzátory měřeny od \(1pF\) do \(100mF\).
+V tomto provozním režimu se měření opakuje bez stisku tlačítka.
+Stiskem tlačítka se tato speciální operace ukončí a tester se vrátí do nabídky menu.
 Stejně tak jako u měření odporů se tento provozní režim automaticky zapne,
-pokud byl mezi TP1 a TP3 detektován kondenzátor.\\
+pokud byl mezi TP1 a TP3 detektován kondenzátor.
 Po stisku tlačítka se tester vrátí ke své normální funkci.
-\vspace{-0.3cm}
  \item[Pulzní Enkodér]
 Pulzní enkodér lze testovat pomocí dodatečné funkce "Pulsní rotační snímač".
-Tři kontakty pulzního enkodéru libovolně připojíme ke třem zkušebním pinům před startem této doplňkové funkce.\\
+Tři kontakty pulzního enkodéru libovolně připojíme ke třem zkušebním pinům před startem této doplňkové funkce.
 Po spuštění funkce nesmí být otočným knoflíkem otáčeno příliš rychle.
-Po úspěšném dokončení testu je na druhém řádku zobrazen symbol přiřazení kontaktů.\\
+Po úspěšném dokončení testu je na druhém řádku zobrazen symbol přiřazení kontaktů.
 Tester indikuje společný kontakt obou přepínačů a indikuje zda jsou v aretované poloze oba kontakty
-otevřené, ("o") nebo zavřené ("C").\\
-Impulzní snímač s otevřenými kontakty v aretované pozici se zobrazí na řádce 2 ,, 1 - / - 2 - / - 3 ~ o "po dobu dvou sekund.
-Samozřejmě je správné číslo pinu společného kontaktu zobrazeno uprostřed namísto "2".\\
+otevřené, ("o") nebo zavřené ("C").
+Impulzní snímač s otevřenými kontakty v aretované pozici se zobrazí na řádce 2 ,,1-/-2-/-3~o"po
+dobu dvou sekund.
+Samozřejmě je správné číslo pinu společného kontaktu zobrazeno uprostřed namísto "2".
 Dokonce i když je uzavřená poloha spínače v aretovaných pozicích,
-je také zobrazen na řádku 2, "1 --- 2 --- 3 ~ C" po dobu dvou sekund.
+je také zobrazen na řádku 2, "1---2---3~C" po dobu dvou sekund.
 Neznám žádný pulsní snímač, který má vždy pouze uzavřené kontakty v každé pozici zámku.
-Polohy kontaktů mezi aretačními polohami se jen krátce (\textless\(~0,5s\))  zobrazí bez kódových písmen "o" nebo "C" v 2 řádku.\\
-Pokud má být impulsní kodér použit k ovládání testeru, musí být v makefile  volba\\
-WITH\_ROTARY\_SWITCH=2 pro kodéry s pouze otevřenými kontakty ('o') a volba\\ WITH\_ROTARY\_SWITCH=1  pro snímače s otevřenými ("o") a uzavřenými ("C") kontakty v aretačních pozicích.
-\vspace{-0.3cm}
+Polohy kontaktů mezi aretačními polohami se jen krátce (\textless\(~0,5s\))  zobrazí bez
+kódových písmen "o" nebo "C" v 2 řádku.
+Pokud má být impulsní kodér použit k ovládání testeru, musí být v makefile  volba
+WITH\_ROTARY\_SWITCH=2 pro kodéry s pouze otevřenými kontakty ('o') a volba WITH\_ROTARY\_SWITCH=1 
+pro snímače s otevřenými ("o") a uzavřenými ("C") kontakty v aretačních pozicích.
 \item[C(\(\mu F\))-korekce]
-Pomocí této funkce lze měnit korekční hodnotu pro měření kapacit velkých hodnot.\\
+Pomocí této funkce lze měnit korekční hodnotu pro měření kapacit velkých hodnot.
 Stejnou korekci můžete také nastavit pomocí volby Makefile C\_H\_KORR.
-Hodnoty nad nulou snižují výstupní hodnotu kapacity o tuto procentuální hodnotu.\\ Hodnoty pod nulou výstupní hodnotu zvyšují.\\ Krátké stisknutí tlačítka snižuje korekční hodnotu o 0.1\%,
-delší stisk tlačítka zvýší opravnou hodnotu o 0.1\%.\\ Velmi dlouhým stiskem tlačítka se hodnota uloží. \\Vlastností této metody měření je, že u nekvalitních elektrolytických kondenzátorů je naměřena kapacita výrazně vyšší než skutečná.\\
+Hodnoty nad nulou snižují výstupní hodnotu kapacity o tuto procentuální hodnotu.
+Hodnoty pod nulou výstupní hodnotu zvyšují.
+Krátké stisknutí tlačítka snižuje korekční hodnotu o 0.1\%,
+delší stisk tlačítka zvýší opravnou hodnotu o 0.1\%.
+Velmi dlouhým stiskem tlačítka se hodnota uloží.
+Vlastností této metody měření je, že u nekvalitních elektrolytických kondenzátorů je
+naměřena kapacita výrazně vyšší než skutečná.
 Kvalitu lze rozpoznat parametrem Vloss. Kvalitní kondenzátory nemají žádný Vloss, nebo pouze 0,1\%.
-Pro nastavení tohoto parametru je třeba použít pouze kondenzátory s vyšší hodnotou než \(50\mu F\) s vysokou kvalitou.\\
+Pro nastavení tohoto parametru je třeba použít pouze kondenzátory s vyšší hodnotou
+než \(50\mu F\) s vysokou kvalitou.
 Mimochodem, považuji za zbytečné, určit přesnou hodnotu kapacity elektrolytických kondenzátorů,
 protože kapacita závisí jak na teplotě, tak na výši stejnosměrného napětí.
-\vspace{-0.3cm}
  \item[Autotest]
-Pomocí přídavné funkce "autotest" se provádí kompletní autotest s kalibrací.\\
+Pomocí přídavné funkce "autotest" se provádí kompletní autotest s kalibrací.
 Všechny testovací funkce T1 až T7 (pokud tomu nebrání možnost NO\_TEST\_T1\_T7)
 Pokaždé se provádí kalibrace s externím kondenzátorem.
-\vspace{-0.3cm}
  \item[Napětí]
 Přídavná funkce "napětí" (měření napětí) je možná pouze tehdy, když je deaktivován UART výstup.
 nebo má ATmega nejméně 32 pinů (PLCC) a jeden z dalších pinů  ADC6 nebo ADC7 je použit pro měření.
-\\Vzhledem k tomu, že je na portu PC3 (nebo ADC6 / 7) připojen dělič napětí 10:1, lze měřit napětí do hodnoty \(50V\).\\
+Vzhledem k tomu, že je na portu PC3 (nebo ADC6 / 7) připojen dělič napětí 10:1,
+lze měřit napětí do hodnoty \(50V\).
 Připojený měnič DC-DC pro měření Zenerovy diody se zapíná stiskem tlačítka.
-Tak lze také měřit i připojené Zenerovy diody.\\
-Je-li v makefile volba POWER\_OFF-Option nastavena a není li stisknuto tlačítko, skončí měření
-po 4 minutách.\\Měření lze předtím ukončit dlouhým stiskem tlačítka (\textgreater~4~vteřiny).
-\vspace{-0.3cm}
+Tak lze také měřit i připojené Zenerovy diody.
+Je-li v makefile volba POWER\_OFF-Option nastavena a není li stisknuto tlačítko,
+skončí měření po 4 minutách.
+Měření lze předtím ukončit dlouhým stiskem tlačítka (\textgreater~4~vteřiny).
 \item[Kontrast] 
 Tato funkce je k dispozici řadičům se softwarovým řízením kontrastu.
 Nastavenou hodnotu lze snížit velmi krátkým stisknutím tlačítka nebo levým otočením impulzního snímače.
-Dlouhým stiskem tlačítka, nebo otáčením pulzního enkodéru ve směru hodinových ručiček se hodnota kontrastu zvýší.\\
+Dlouhým stiskem tlačítka, nebo otáčením pulzního enkodéru ve směru hodinových ručiček
+se hodnota kontrastu zvýší.
 Pokud je tlačítko stisknuto déle, je funkce ukončena a nastavená hodnota je trvale zapsána do paměti EEPROM.
-\vspace{-0.3cm}
 \item[Barva pozadí]
 Pro barevné displeje, může být tato položka zapnuta volbou Makefile\\ LCD\_CHANGE\_COLOR,
-sloužící pro nastavení barvy pozadí. K tomu musí být nainstalováno rozšíření impulzního enkodéru.\\
+sloužící pro nastavení barvy pozadí. K tomu musí být nainstalováno rozšíření impulzního enkodéru.
 Můžete zvolit jednu ze tří barev červenou, zelenou a modrou pomocí delšího stisku tlačítka.
 Intenzitu vybrané barvy, označené znakem> ve sloupci 1,
 lze změnit otáčením enkodérem impulzů.
-\vspace{-0.3cm}
 \item[Barva popředí]
 Pro barevné displeje, může být tato položka zapnuta volbou Makefile\\ LCD\_CHANGE\_COLOR,
-pro úpravu barvy popředí. K tomu musí být nainstalováno rozšíření impulzního enkodéru.\\
+pro úpravu barvy popředí. K tomu musí být nainstalováno rozšíření impulzního enkodéru.
 Můžete zvolit jednu ze tří barev červenou, zelenou a modrou pomocí delšího stisku tlačítka.
 Intenzitu vybrané barvy, označené znakem> ve sloupci 1,
 lze změnit otáčením knoflíku impulzů.
-\vspace{-0.8cm}
 \item[Zobrazit údaje]
 Funkce "Zobrazit data" kromě údajů o verzi softwaru zobrazuje také údaje o kalibraci.
 Jedná se o přechodové odpory R0  kombinace pinů 1:3, 2:3 a 1:2.
@@ -187,102 +196,133 @@ U grafických displejů se zobrazí symboly použité pro součástky a font pí
 Každá stránka se zobrazí 15 sekund.
 Na další stránku se také dostaneme stiskem tlačítka nebo otáčením enkodéru impulzů ve směru hodinových ručiček.
 Při otočení vlevo impulzního kodéru se zobrazení bude opakovat nebo přejdeme zpět na předchozí stránku.
-\vspace{-0.3cm}
  \item[Vypnout]
 Pomocí dodatečné funkce "vypnout" se dá tester vypnout.
-\vspace{-0.3cm}
  \item[Transistor]
-Samozřejmě že je možné s funkcí "tranzistor" (tranzistorový tester) vrátit zpět na normální funkci testeru tranzistorů.
+Samozřejmě že je možné s funkcí "tranzistor" (tranzistorový tester) vrátit zpět na
+normální funkci testeru tranzistorů.
 \end{description}
 
 Když je nastavena volba Makefile POWER\_OFF jsou všechny přídavné funkce z důvodu úspory baterie časově omezené. 
 \newpage
 \section{Autotest a kalibrace}
 
-Je-li v software konfigurovaná funkce Autotestu a kalibrace, může se provést samočinný test zkratováním všech tří testovacích portů a stiskem tlačítka Start.\\
+Je-li v software konfigurovaná funkce Autotestu a kalibrace, může se provést samočinný test
+zkratováním všech tří testovacích portů a stiskem tlačítka Start.
 Pro zahájení autotestu musí být během 2 sekund znovu stisknuto tlačítko start,
-jinak začne tester s normálním měřením.\\
+jinak začne tester s normálním měřením.
 Autotest provádí testy popsané v kapitole autotestu \ref{sec:selftest}.
-Je-li tester konfigurován s funkcí menu (volba WITH\_MENU), provádí se úplný samočinný test automaticky jen při prvním použití a dále pak pouze během "autotestu", který lze vybrat jako funkci menu.\\
-Pro kalibraci jsou zkoušeny T1 až T7. Navíc se při volání funkce přes menu provádí nastavení s externím kondenzátorem.\\ 
-Normálně se provádí pouze při první kalibraci, tímto způsobem lze autotest se zkratovanými vstupy provádět rychleji.\\
-Čtyřnásobnému opakování testu na T1 až T7 je možné se vyhnout, pokud je trvale stisknuté tlačítko start. Takže můžete rychle ukončit nezajímavé testy a interaktivní testy můžete opakovat čtyřikrát uvolněním tlačítka start.\\Čtvrtý test pokračuje automaticky pouze, pokud je uvolněný zkrat mezi testovacími porty.
-Je-li v Makefile vybrána funkce AUTO\_CAL provede autotest kalibraci nulové hodnoty pro měření kondenzátorů. Pro tuto kalibraci je důležité, aby během čtvrté zkoušky bylo zrušen zkrat mezi testovacími piny.\\
+Je-li tester konfigurován s funkcí menu (volba WITH\_MENU), provádí se úplný samočinný test
+automaticky jen při prvním použití a dále pak pouze během "autotestu",
+který lze vybrat jako funkci menu.
+Pro kalibraci jsou zkoušeny T1 až T7.
+Navíc se při volání funkce přes menu provádí nastavení s externím kondenzátorem. 
+Normálně se provádí pouze při první kalibraci, tímto způsobem lze autotest se
+zkratovanými vstupy provádět rychleji.
+Čtyřnásobnému opakování testu na T1 až T7 je možné se vyhnout, pokud je trvale stisknuté tlačítko start.
+Takže můžete rychle ukončit nezajímavé testy a interaktivní testy můžete opakovat
+čtyřikrát uvolněním tlačítka start.
+Čtvrtý test pokračuje automaticky pouze, pokud je uvolněný zkrat mezi testovacími porty.
+Je-li v Makefile vybrána funkce AUTO\_CAL provede autotest kalibraci nulové hodnoty pro měření kondenzátorů.
+Pro tuto kalibraci je důležité, aby během čtvrté zkoušky bylo zrušen zkrat mezi testovacími piny.
 Během kalibrace (po zkoušce 6) byste se neměli dotýkat testovacích portů, nebo připojených kabelů.
 Měřící kabely, by měly být stejné, které budou poté použity k měření.
-V opačném případě nebude vynulování správně provedeno.\\
+V opačném případě nebude vynulování správně provedeno.
 Při této volbě je kalibrace vnitřního odporu měřících portů provedena před každým měřením.
-Je-li v makefile nastavena funkce vzorkování volbou (WITH\_SamplingADC = 1) jsou během kalibrace provedeny navíc dva speciální kroky. Po normálním měření nulových hodnot kapacity budou změřeny také nulové hodnoty
-metodou odběru vzorků (C0samp).\\Poslední částí kalibrace je připojení zkušebního kondenzátoru pro
-měření cívky mezi pinem 1 a 3 což je oznámeno požadavkem na vložení kapacity \mbox{\begin{large}1 \electricC 3~10-30nF(L)\end{large}}.
-Hodnota kapacity by měla být mezi \(10nF\) a \(30nF\), k dosažení měřitelné rezonanční frekvence v pozdějším paralelním spojení s cívkou (\textless~\(2mH\)).
-U cívky s indukčností větší než 2mH by měla být použita běžná zkušební funkce bez připojeného paralelního kondenzátoru.\\Paralelně připojený kondenzátor zde nezlepšuje výsledky měření.\\
-
-Po měření nulové kapacity je nezbytné připojit kondenzátor s kapacitou mezi \(100nF\) a \(20\mu F\)mezi Pin ~ 1 a Pin ~ 3.\\
-Z tohoto důvodu se v prvním řádku zobrazí požadavek na vložení kondenzátoru \mbox{\begin{large}1 \electricC 3~\textgreater 100nF\end{large}}.\\
-Kondenzátor byste měli připojit pouze po výstupu hodnot C0 nebo po zobrazení této hlášky.\\
-S tímto kondenzátorem je proveden offset analogového komparátoru, k určení přesnějších hodnot při měření kapacit.\\
-Navíc je tímto kondenzátorem také nastaven zisk ADC s vnitřním referencí k získání lepších výsledků při měření odporů s možností AUTOSCALE\_ADC.\\
+Je-li v makefile nastavena funkce vzorkování volbou (WITH\_SamplingADC = 1) jsou během
+kalibrace provedeny navíc dva speciální kroky.
+Po normálním měření nulových hodnot kapacity budou změřeny také nulové hodnoty
+metodou odběru vzorků (C0samp).
+Poslední částí kalibrace je připojení zkušebního kondenzátoru pro měření cívky mezi
+pinem 1 a 3 což je oznámeno požadavkem na vložení kapacity
+\mbox{\begin{large}1 \electricC 3~10-30nF(L)\end{large}}.
+Hodnota kapacity by měla být mezi \(10nF\) a \(30nF\), k dosažení měřitelné rezonanční
+frekvence v pozdějším paralelním spojení s cívkou (\textless~\(2mH\)).
+U cívky s indukčností větší než 2mH by měla být použita běžná zkušební funkce
+bez připojeného paralelního kondenzátoru.
+Paralelně připojený kondenzátor zde nezlepšuje výsledky měření.
+Po měření nulové kapacity je nezbytné připojit kondenzátor s kapacitou
+mezi \(100nF\) a \(20\mu F\)mezi Pin~1 a Pin~3.
+Z tohoto důvodu se v prvním řádku zobrazí požadavek na vložení
+kondenzátoru \mbox{\begin{large}1 \electricC 3~\textgreater 100nF\end{large}}.
+Kondenzátor byste měli připojit pouze po výstupu hodnot C0 nebo po zobrazení této hlášky.
+S tímto kondenzátorem je proveden offset analogového komparátoru, k určení přesnějších hodnot při měření kapacit.
+Navíc je tímto kondenzátorem také nastaven zisk ADC s vnitřním referencí k získání lepších
+výsledků při měření odporů s možností AUTOSCALE\_ADC.
 Pokud byla na testeru vybrána funkce menu (volba WITH\_MENU) a autotest nebyl spuštěn ve funkci menu,
-nastavení provede se kalibrace s externím kondenzátorem pouze při prvním zapnutím přístroje.\\
-Kalibrace s externím kondenzátorem se opakuje pouze v případě, že se provádí autotest funkcí menu.\\
-Offset pro měření ESR je přednastaven jako volba Option ESR\_ZERO  v makefile.\\
-Při každém autotestu je nulová hodnota ESR znovu určena pro všechny tři kombinace měřících pinů.\\
-Metoda ESR měření se používá také pro odpory s hodnotami pod \(10\Omega\), zde slouží k dosažení rozlišení \(0,01\Omega\).
+nastavení provede se kalibrace s externím kondenzátorem pouze při prvním zapnutím přístroje.
+Kalibrace s externím kondenzátorem se opakuje pouze v případě, že se provádí autotest funkcí menu.
+Offset pro měření ESR je přednastaven jako volba Option ESR\_ZERO  v makefile.
+Při každém autotestu je nulová hodnota ESR znovu určena pro všechny tři kombinace měřících pinů.
+Metoda ESR měření se používá také pro odpory s hodnotami pod \(10\Omega\),
+zde slouží k dosažení rozlišení \(0,01\Omega\).
 
 \section{Důležité poznámky pro použití}
 Obvykle se při spuštění testeru zobrazí napětí baterie. Pokud napětí klesne pod hranici,
-bude za tímto textem vydáno varování.\\Pokud používáte dobíjecí \(9V\)-baterii, měli byste
-ji co nejdříve dobít a jednorázovou baterii vyměnit.\\
+bude za tímto textem vydáno varování.
+Pokud používáte dobíjecí \(9V\)-baterii, měli byste ji co nejdříve dobít a jednorázovou baterii vyměnit.
 Pokud máte verzi s vestavěnou precizní referencí \(2,5V\) ukáže se při startu na jednu sekundu
 naměřené provozní napětí v 2 řádku displeje ,,VCC=x.xxV''.
-
 Nemůže být často připomínáno, že je třeba před měřením kondenzátory vybít.
-V opačném případě může být tester poškozený již před stiskem tlačítka Start.\\
+V opačném případě může být tester poškozený již před stiskem tlačítka Start.
 Při měření zapájených součástek musí být zařízení vždy vypnuto.
-Kromě toho se ujistěte, že v měřeném přístroji nezůstalo žádné zbytkové napětí.\\
-Všechna elektronická zařízení uvnitř obsahují kondenzátory!\\
-
-Při měření malých odporů je třeba věnovat zvláštní pozornost odporu měřících kabelů a přechodových odporů kontaktů.
-Kvalita a stav konektorů hrají velkou roli, stejně jako odpor měřicích kabelů.\\
-Totéž platí pro měření hodnoty ESR kondenzátorů.\\
-Se špatnými měřícími kabely s krokosvorkami se může ESR odpor z \(0,02\Omega\) dosáhnout lehce hodnoty \(0,61\Omega\).\\
-Pokud je to možné, připájejte měřící kabely s krokosvorkami k testovacím portům paralelně s existujícími konektory.
-Pak nemusí být tester, při měření malých kapacit pokaždé kalibrován, pokud měříte pomocí zkušebních kabelů, nebo bez nich.\\
-Při kalibraci nulového odporu je však rozdíl, pokud jsou testovací piny připojeny ke zkušebním svorkám přímo na základně nebo přes kabel.\\ Pouze ve druhém případě je odpor kabelu a svorek kalibrován.\\Pokud máte pochybnosti, proveďte kalibraci pomocí zkratu na zkušební zásuvce a poté změřte odpor zkratovaných měřících kabelů.\\
+Kromě toho se ujistěte, že v měřeném přístroji nezůstalo žádné zbytkové napětí.
+Všechna elektronická zařízení uvnitř obsahují kondenzátory!
+Při měření malých odporů je třeba věnovat zvláštní pozornost odporu měřících kabelů a přechodových
+odporů kontaktů.
+Kvalita a stav konektorů hrají velkou roli, stejně jako odpor měřicích kabelů.
+Totéž platí pro měření hodnoty ESR kondenzátorů.
+Se špatnými měřícími kabely s krokosvorkami se může ESR odpor z \(0,02\Omega\) dosáhnout
+lehce hodnoty \(0,61\Omega\).
+Pokud je to možné, připájejte měřící kabely s krokosvorkami k testovacím portům
+paralelně s existujícími konektory.
+Pak nemusí být tester, při měření malých kapacit pokaždé kalibrován,
+pokud měříte pomocí zkušebních kabelů, nebo bez nich.
+Při kalibraci nulového odporu je však rozdíl, pokud jsou testovací piny připojeny ke zkušebním
+svorkám přímo na základně nebo přes kabel.
+Pouze ve druhém případě je odpor kabelu a svorek kalibrován.
+Pokud máte pochybnosti, proveďte kalibraci pomocí zkratu na zkušební zásuvce a poté
+změřte odpor zkratovaných měřících kabelů.
 Neočekávejte vysokou přesnost měření, to platí zejména pro měření ESR a měření indukčnosti.
-\\Výsledky mé řady měření naleznete v kapitole \ref{sec:measurement} od stránky~\pageref{sec:measurement}.
+Výsledky mé řady měření naleznete v kapitole \ref{sec:measurement} od stránky~\pageref{sec:measurement}.
 
 
 
 \section{Problémové komponenty}
-Ve výsledcích měření byste měli mít vždy na paměti, že byl tester navržen pro citlivé součástky. Obvykle je maximální měřící proud pouze \(6mA\).\\
-Výkonové polovodiče často způsobují problémy při zjišťování, nebo měření vysokých zbytkových proudů malým měřícím proudem.\\
-Pro tyristory a triaky nejsou často dosaženy spínací, nebo přídržné proudy. To je důvod, proč je občas tyristor detekován jako NPN tranzistor, nebo dioda. Stejně tak se může stát, že některý tyristor, nebo triak nebude vůbec rozpoznán.\\
-Další Problém vzniká s detekováním polovodičů obsahujících integrované odpory, takže dioda báze-emitor BU508D
-tranzistoru nebyla v důsledku paralelně zapojeného vnitřního\(42 \Omega\) odporu detekována.\\
-Z toho plyne, že zde funkce tranzistoru nemůže být testovaná.\\
-Problémy s rozpoznáním jdou často také u výkonových tranzistorů Darlington. Tady je také
-často vestavěný odpor mezi bází a emitorem, které komplikují detekci kvůli nízkým měřicím proudům, které se zde používají.
+Ve výsledcích měření byste měli mít vždy na paměti, že byl tester navržen pro citlivé součástky.
+Obvykle je maximální měřící proud pouze \(6mA\).
+Výkonové polovodiče často způsobují problémy při zjišťování,
+nebo měření vysokých zbytkových proudů malým měřícím proudem.
+Pro tyristory a triaky nejsou často dosaženy spínací, nebo přídržné proudy.
+To je důvod, proč je občas tyristor detekován jako NPN tranzistor, nebo dioda.
+Stejně tak se může stát, že některý tyristor, nebo triak nebude vůbec rozpoznán.
+Další Problém vzniká s detekováním polovodičů obsahujících integrované odpory,
+takže dioda báze-emitor BU508D tranzistoru nebyla v důsledku paralelně zapojeného
+vnitřního\(42 \Omega\) odporu detekována.
+Z toho plyne, že zde funkce tranzistoru nemůže být testovaná.
+Problémy s rozpoznáním jdou často také u výkonových tranzistorů Darlington.
+Tady je také často vestavěný odpor mezi bází a emitorem,
+které komplikují detekci kvůli nízkým měřicím proudům, které se zde používají.
 
 \section{Měření PNP- a NPN- transistorů}
-Obvykle lze tranzistor zapojit k měřicím vstupům testeru v libovolném pořadí.\\
+Obvykle lze tranzistor zapojit k měřicím vstupům testeru v libovolném pořadí.
 Po stisknutí tlačítka Start tester zobrazí v 1 řádku  typ (NPN nebo PNP) případně vestavěnou ochrannou
-diodu mezi kolektorem a emitorem a přiřazení pinů.\\
+diodu mezi kolektorem a emitorem a přiřazení pinů.
 Symbol diody je zobrazen se správnou polaritou.
 2 řádek zobrazuje aktuální zesilovací činitel \(B\) nebo \(hFE\) a proud, kterým bylo zesílení měřeno. 
-Pokud je k měření zesílení použito zapojení se společným emitorem, měří se proud kolektoru \(Ic\).\\
-Při měření zesilovacího činitele v zapojení se společným kolektorem (emitorový sledovač) se měří proud emitoru \(Ie\).\\
-Další parametry jsou na dvouřádkovém displeji jeden po druhém zobrazeny ve 2 řádku.\\
-U displejů s více řádky se používají další řádky až do posledního. Je li použít i poslední řádek, jsou zde postupně zobrazeny také další parametry.\\
-Pokud jsou k dispozici další parametry, zobrazí se na konci posledního řádku znak +.\\
-Další hodnota se také automaticky zobrazí stisknutím tlačítka nebo po uplynutí čekací doby.\\
+Pokud je k měření zesílení použito zapojení se společným emitorem, měří se proud kolektoru \(Ic\).
+Při měření zesilovacího činitele v zapojení se společným kolektorem (emitorový sledovač)
+se měří proud emitoru \(Ie\).
+Další parametry jsou na dvouřádkovém displeji jeden po druhém zobrazeny ve 2 řádku.
+U displejů s více řádky se používají další řádky až do posledního.
+Je li použít i poslední řádek, jsou zde postupně zobrazeny také další parametry.
+Pokud jsou k dispozici další parametry, zobrazí se na konci posledního řádku znak +.
+Další hodnota se také automaticky zobrazí stisknutím tlačítka nebo po uplynutí čekací doby.
 V každém případě je dalším parametrickým výstupem prahové napětí báze-emitor \(Ube\),
-kde je měřen zesilovací činitel.\\
+kde je měřen zesilovací činitel.
 Pokud je měřitelný, závěrný proud otevřeného základního kolektoru bude také \(I_{CE0}\) a se
-zkratovanou bází \(I_{CES}\).\\
-Pokud je integrovaná ochranná dioda, tak se jako poslední parametr zobrazí její úbytek napětí \(Uf\).\\
-
+zkratovanou bází \(I_{CES}\).
+Pokud je integrovaná ochranná dioda, tak se jako poslední parametr zobrazí její úbytek napětí \(Uf\).
 V obvodu se společným emitorem má tester pouze dvě možnosti nastavení proudu báze:
 \begin{enumerate}
 \item S odporem \(680\Omega\) je výsledný proud báze asi \(6,1mA\).\\
@@ -294,62 +334,92 @@ To je pro výkonový tranzistor s nízkým zesílením moc málo.\\
 Verze softwaru Markus F. měřila proudový zesilovací činitel v obvodu (hFE=...).\\
 \end{enumerate}
 
-Software testeru měří zesílení i v zapojení se společným kolektorem.\\
+Software testeru měří zesílení i v zapojení se společným kolektorem.
 Zobrazena je vyšší hodnota z obou měřících metod.
-Zapojení se společným Kolektorem má tu výhodu, že proud báze snižuje proudová zpětná vazba, jejíž velikost odpovídá zesilovacímu činiteli tranzistoru.\\
-To umožňuje pro výkonové tranzistory s odporem \(680\Omega\) a pro Darlingtonové tranzistory s odporem \(470k\Omega\) měření obvykle s výhodnějším měřicím proudem.\\
-Výstupní prahové napětí výstupu báze-emitor \(Ube\)  je nyní napětí což bylo měřeno při stanovení současného faktoru zesílení.\\
-Pokud chcete zjistit prahové napětí báze-emitor proudem asi \(6mA\) musíte kolektor odpojit od testeru a měřit znovu.\\
-Poté bude zobrazeno prahové napětí přibližně při \(6mA\) proudi a také bude změřena kapacita diody v závěrném směru.
-Samozřejmě lze takto měřit i diodu  báze-emitor.
-
-V případě germaniových tranzistorů je obvykle změřen také zbytkový proud kolektoru s \(I_{CE0}\) s bezproudovou bází nebo zbytkový proud kolektor-emitor \(I_{CES}\) s bází na potenciálu emitoru. Pouze pro ATmega328.
-Tyto hodnoty se zobrazí po dobu 5 sekund na druhém řádku displeje, nebo po stisku tlačítka před zobrazením zesilovacího činitele.
+Zapojení se společným Kolektorem má tu výhodu, že proud báze snižuje proudová zpětná vazba,
+jejíž velikost odpovídá zesilovacímu činiteli tranzistoru.
+To umožňuje pro výkonové tranzistory s odporem \(680\Omega\) a pro Darlingtonové
+tranzistory s odporem \(470k\Omega\) měření obvykle s výhodnějším měřicím proudem.
+Výstupní prahové napětí výstupu báze-emitor \(Ube\) je nyní napětí což bylo měřeno při
+stanovení současného faktoru zesílení.
+Pokud chcete zjistit prahové napětí báze-emitor proudem asi \(6mA\) musíte kolektor
+odpojit od testeru a měřit znovu.
+Poté bude zobrazeno prahové napětí přibližně při \(6mA\) proudi a také bude změřena
+kapacita diody v závěrném směru.
+Samozřejmě lze takto měřit i diodu báze-emitor.
+V případě germaniových tranzistorů je obvykle změřen také zbytkový proud kolektoru s \(I_{CE0}\) s
+bezproudovou bází nebo zbytkový proud kolektor-emitor \(I_{CES}\) s bází na potenciálu emitoru.
+Pouze pro ATmega328.
+Tyto hodnoty se zobrazí po dobu 5 sekund na druhém řádku displeje,
+nebo po stisku tlačítka před zobrazením zesilovacího činitele.
 Ochlazení může zbytkový proud u germaniových tranzistorů výrazně snížit. 
 
 \section{Měření JFET- a D-MOS- transistorů}
-Vzhledem k symetrickému provedení tranzistorů JFET nelze rozlišit elektrody S a D.\\
-Jeden parametr JFET specifikuje proud se zkratovanými elektrodami D a S.\\
-Tento proud je však často vyšší než proud, kterého lze dosáhnout v měřícím obvodu s \(680\Omega\) odporem.\\
- Proto je elektroda S připojena přes odpor \(680\Omega\). Tím je zavedena záporná zpětná vazba elektrody G.
-Tester také měří proud elektrody S a strmost napětí Gate.\\
-Tímto je možné rozlišit různé typy.\\
+Vzhledem k symetrickému provedení tranzistorů JFET nelze rozlišit elektrody S a D.
+Jeden parametr JFET specifikuje proud se zkratovanými elektrodami D a S.
+Tento proud je však často vyšší než proud, kterého lze dosáhnout v měřícím obvodu s \(680\Omega\) odporem.
+Proto je elektroda S připojena přes odpor \(680\Omega\).
+Tím je zavedena záporná zpětná vazba elektrody G.
+Tester také měří proud elektrody S a strmost napětí Gate.
+Tímto je možné rozlišit různé typy.
 Pro tranzistory D-MOS (ochuzovací typ) se používá stejná metoda měření.
 
 \section{Měření E-MOStTransistorů a IGBTs}
-Měli byste vědět že u tranzistorů MOS (P-E-MOS nebo N-E-MOS) je měření prahového napětí Gate (Vth) z důvodu nízké kapacity obtížné.\\Zde je možné pomocí testeru změřit přesnější hodnoty napětí, pokud připojíte kondenzátor s hodnotou řádově nF paralelně mezi elektrody gate-source.\\
-Prahové napětí je změřeno při unikajícím proudu, pro P-E-MOS kolem \(3,6mA\) a pro N-E-MOS cca při \(4mA\).\\
-RDS odpor, nebo lépe R\textsubscript{DSon} u E-MOS transistorů je měřen napětím gate-source téměř \(5V\), což pravděpodobně není nejnižší hodnota.\\
-Kromě toho je odpor RDS určen při nízkém výstupním (drain) proudu, který omezuje rozlišení hodnoty odporu.\\Často s IGBT a někdy s MOS tranzistory, dostupné napětí testeru \(5V\) nestačí pro ovládání gate tranzistoru.\\
- V takovém případě pro detekování pomůže baterie cca \(3V\) a umožní měření s testerem.\\
-Baterie je připojena jedním pólem ke gate tranzistoru a druhý pól je připojen k portu (TP) testeru místo gate tranzistoru.\\
+Měli byste vědět že u tranzistorů MOS (P-E-MOS nebo N-E-MOS) je měření prahového napětí
+Gate (Vth) z důvodu nízké kapacity obtížné.
+Zde je možné pomocí testeru změřit přesnější hodnoty napětí, pokud připojíte
+kondenzátor s hodnotou řádově nF paralelně mezi elektrody gate-source.
+Prahové napětí je změřeno při unikajícím proudu, pro P-E-MOS kolem \(3,6mA\) a pro N-E-MOS cca při \(4mA\).
+RDS odpor, nebo lépe R\textsubscript{DSon} u E-MOS transistorů je měřen napětím gate-source téměř \(5V\),
+což pravděpodobně není nejnižší hodnota.
+Kromě toho je odpor RDS určen při nízkém výstupním (drain) proudu, který omezuje rozlišení hodnoty odporu.
+Často s IGBT a někdy s MOS tranzistory, dostupné napětí testeru \(5V\) nestačí pro ovládání gate tranzistoru.
+V takovém případě pro detekování pomůže baterie cca \(3V\) a umožní měření s testerem.
+Baterie je připojena jedním pólem ke gate tranzistoru a druhý pól je připojen k portu (TP) testeru
+místo gate tranzistoru.
 Pokud je polarita baterie správná,  připočítá se napětí baterie k řídícímu napětí přístroje a
-Detekce tranzistoru je úspěšná.\\Samozřejmě, že napětí baterie musí být pro změření správného prahového napětí pro tuto komponentu přičteno k uvedenému prahovému napětí.
+Detekce tranzistoru je úspěšná.
+Samozřejmě, že napětí baterie musí být pro změření správného prahového napětí pro tuto
+komponentu přičteno k uvedenému prahovému napětí.
 
 \section{Měření kondenzátorů}
-Hodnoty kapacit jsou vždy vypočítávány z časové konstanty vyplývající ze sériového zapojení vestavěných odporů s kondenzátorem při jeho nabíjení.\\U menších kondenzátorů jsou použity pro měření času odpory \(470k\Omega\) a měří se čas nutný k dosažení prahového napětí.\\
-U větších kondenzátorů s nějakými \(10\mu F\) se zvyšuje napětí kondenzátoru po nabití impulsy s \(680\Omega\) odpory měří a výpočte kapacita.\\Velmi malé kapacity lze měřit metodou vzorkováníADC. 
+Hodnoty kapacit jsou vždy vypočítávány z časové konstanty vyplývající ze sériového zapojení
+vestavěných odporů s kondenzátorem při jeho nabíjení.
+U menších kondenzátorů jsou použity pro měření času odpory \(470k\Omega\) a měří se čas
+nutný k dosažení prahového napětí.
+U větších kondenzátorů s nějakými \(10\mu F\) se zvyšuje napětí kondenzátoru po nabití
+impulsy s \(680\Omega\) odpory měří a výpočte kapacita.
+Velmi malé kapacity lze měřit metodou vzorkováníADC. 
 Proces nabíjení je znovu a znovu generován a naskenován posunutím času  ADC S\&H s časovým intervalem,
-což je výsledkem hodinové frekvence procesoru.\\Kompletní konverze ADC však vyžaduje 1664 procesorových taktů!
-Dojde k výpočtu až 250 hodnot ADC a kapacita se vypočítá z křivky napětí.\\
-Pokud byla v souboru Makefile vybrána funkce vzorkování ADC, všechny kondenzátory \textless~\(100pF\) budou měřené metodou vzorkování S ADC {\bf[C]}.\\ Rozlišení je až \(0.01pF\) při \(16MHz\).\\
-Odpovídající nulová kapacita je při tomhle rozlišení zvlášť přesná.\\
+což je výsledkem hodinové frekvence procesoru.
+Kompletní konverze ADC však vyžaduje 1664 procesorových taktů!
+Dojde k výpočtu až 250 hodnot ADC a kapacita se vypočítá z křivky napětí.
+Pokud byla v souboru Makefile vybrána funkce vzorkování ADC, všechny kondenzátory
+\textless~\(100pF\) budou měřené metodou vzorkování S ADC {\textbf[C]}.
+Rozlišení je až \(0.01pF\) při \(16MHz\).
+Odpovídající nulová kapacita je při tomhle rozlišení zvlášť přesná.
 Metoda odběru vzorků ADC pro stanovení kapacity byla vždy použita při rozlišení \(1pF\).
-Mimochodem, touto metodou může být měřena také kapacita jednotlivých diod.\\ Protože metoda
-Kapacity měří jak při nabíjení, tak při vybíjení, jsou uvedeny dvě kapacitní hodnoty, protože kvůli vlivu kapacity diody, jsou obě hodnoty rozdílné.
+Mimochodem, touto metodou může být měřena také kapacita jednotlivých diod.
+Protože metoda Kapacity měří jak při nabíjení, tak při vybíjení, jsou uvedeny dvě kapacitní hodnoty,
+protože kvůli vlivu kapacity diody, jsou obě hodnoty rozdílné.
 
 \section{Měření cívek}
-Metoda použitá k měření indukčnosti spočívá v určení časové konstanty nárůstu proudu.\\
-Pokud je odpor cívky menší než \(24\Omega\) je nejnižší měřitelná hodnota \(0.01mH\).\\
+Metoda použitá k měření indukčnosti spočívá v určení časové konstanty nárůstu proudu.
+Pokud je odpor cívky menší než \(24\Omega\) je nejnižší měřitelná hodnota \(0.01mH\).
 Pro větší hodnoty odporu indukčnosti je rozlišení pouze \(0.1mH\).
-Pro hodnoty odporu nad \(2.1k\Omega\) nelze tuto metodu použít.\\ 
+Pro hodnoty odporu nad \(2.1k\Omega\) nelze tuto metodu použít.
 Výstupní hodnoty běžného měření se objevují ve druhém řádku (odpor a indukčnost).
 Metodou vzorkováníADC lze stanovit přirozené rezonance pro větší hodnoty cívky.
 Pokud je změřeno, tak budou k běžnému měření na 3 řádku zobrazeny také rezonanční frekvence a třída jakosti Q.
-
-Navíc může být pro měření indukčnosti použita metoda rezonanční frekvence, pokud je paralelně k cívce s nízkou indukčností (\textless~\(2mH\)) připojen dostatečně velký kondenzátor se známou kapacitou.\\ Kvůli paralelně zapojenému kondenzátoru je nemůže běžné měření dobře fungovat.\\
-Pokud rezonanční frekvence akceptuje paralelně připojený kondenzátor, očekávaná hodnota odporu se ukáže v prvním řádku.\\
+Navíc může být pro měření indukčnosti použita metoda rezonanční frekvence,
+pokud je paralelně k cívce s nízkou indukčností (\textless~\(2mH\)) připojen dostatečně
+velký kondenzátor se známou kapacitou.
+Kvůli paralelně zapojenému kondenzátoru je nemůže běžné měření dobře fungovat.
+Pokud rezonanční frekvence akceptuje paralelně připojený kondenzátor,
+očekávaná hodnota odporu se ukáže v prvním řádku.
 Také v tomto případě se vypočítává činitel jakosti Q a je zobrazen za hodnotou frekvence v řádku 3.
-Pro tento případ je vypočtená indukčnost uvedena na prvním místě druhého řádku.\\ Za ním stojí
-text  " if " následovaný kapacitní hodnotou paralelního kondenzátoru.\\ Hodnota tohoto kondenzátoru může být aktuálně určena\\ jen při kalibraci testeru (\mbox{\begin{large}1 \electricC 3~10-30nF(L)\end{large}}).\\
+Pro tento případ je vypočtená indukčnost uvedena na prvním místě druhého řádku.
+Za ním stojí text " if " následovaný kapacitní hodnotou paralelního kondenzátoru.
+Hodnota tohoto kondenzátoru může být aktuálně určena jen při kalibraci
+testeru (\mbox{\begin{large}1 \electricC 3~10-30nF(L)\end{large}}).
 U dvouřádkových displejů se obsah třetího řádku zobrazuje s časovým zpožděním ve 2 řádku.

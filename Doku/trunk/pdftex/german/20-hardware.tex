@@ -47,7 +47,7 @@ laden zu können.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=18cm]{../FIG/ttester.pdf}
+\includegraphics[width=1.0\textwidth]{../FIG/ttester.pdf}
 \caption{Neue TransistorTester-Schaltung}
 \label{fig:ttester}
 \end{figure}
@@ -58,7 +58,7 @@ Bei allen Varianten dieser Tabelle sollten die Zusatzfunktionen möglich sein.
 Das Signal LCD-CE bei der SPI Schnittstelle ist am ATmega-Port verfügbar. Der Eingang CE (Chip Enable) des
 Controllers kann aber auch fest auf GND gelegt werden anstelle mit dem LCD-CE Ausgang des ATmega verbunden zu werden.
 
-\begin{table}[H]
+\begin{table}[H] \small
   \begin{center}
     \begin{tabular}{| c || c | c | c | c | c | c |}
     \hline
@@ -143,19 +143,19 @@ Ein vollständiger Schutz ist aber nicht möglich. Deshalb sollten Kondensatoren
 entladen werden.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	%9cm
    \centering
-   \begin{overpic}[width=7cm]{../FIG/relay_addon.pdf}
+   \begin{overpic}[width=.78\textwidth]{../FIG/relay_addon.pdf}	% width=7cm
     \color{black}
-    \put(78,36){\makebox(0,0)[lb]{\footnotesize VCC oder Ubat}}  
-    \put(78,32){\makebox(0,0)[lb]{\footnotesize abhängig von Relaisspannung}}  
+    \put(78,36){\makebox(0,0)[lb]{\footnotesize {VCC oder Ubat}}}  
+    \put(78,32){\makebox(0,0)[lb]{\footnotesize {abhängig von Relaisspannung}}}  
    \end{overpic}
   \caption{mit Relais}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	%9cm
     \centering
-    \includegraphics[width=7cm]{../FIG/diode_addon.pdf}
+    \includegraphics[width=.78\textwidth]{../FIG/diode_addon.pdf}	% width=7cm
     \caption{mit Dioden}
   \end{subfigure}
   \caption{Zusätzlicher Schutz der ATmega-Eingänge}
@@ -168,7 +168,7 @@ Man darf aber nicht vergessen, daß der Tester während der Messung trotzdem ung
 
 \begin{figure}[H]
  \centering
-  \begin{overpic}[width=10cm]{../FIG/relay_um_addon.pdf}
+  \begin{overpic}[width=.58\textwidth]{../FIG/relay_um_addon.pdf}	% width=10cm
   \color{black}
   \put(78,42){\makebox(0,0)[lb]{\footnotesize VCC oder Ubat abhängig}}
   \put(78,38){\makebox(0,0)[lb]{{\footnotesize von Relaisspannung}}}
@@ -190,12 +190,12 @@ Ungefähr \(40mA\) mehr Batteriestrom wird für diese Erweiterung bei gedrückte
 
 \begin{figure}[H]
  \centering
- \begin{overpic}[width=17cm]{../FIG/zener_exp.pdf}
+ \begin{overpic}[width=.90\textwidth]{../FIG/zener_exp.pdf}	% width=15.5cm
   \color{black}
  % \put(42,25){\makebox(0,0)[cb]{Taster}}
   \put(5,20){\makebox(0,0)[rb]{\textcolor{red}{externe}}}  
   \put(5,17){\makebox(0,0)[rb]{\textcolor{red}{Spannung}}}  
-  \put(8,24){\makebox(0,0)[lb]{Hat Platz auf der Platine!}} 
+  \put(33,24){\makebox(0,0)[rb]{Hat Platz auf der Platine!}} 
   \put(42,2){\makebox(0,0)[lb]{Sollte separat positioniert werden!}}    
  \end{overpic}
  \caption{Erweiterung zum Messen von Zenerspannungen}
@@ -236,30 +236,32 @@ weil dessen Pull-Up Widerstände die Spannung verändern.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=7cm]{../FIG/Frequency_addon.pdf}
+\includegraphics[width=.4\textwidth]{../FIG/Frequency_addon.pdf}	% width=7cm
 \caption{Erweiterung zum Messen von Frequenzen}
 \label{fig:FreqMes}
 \end{figure}
 
 \subsection{Impulsdrehgeber}
 
+\begin{wrapfigure}{r}{0.5\textwidth}
+\vspace{-0.5\baselineskip}
+\begin{center}
+\includegraphics[width=0.30\textwidth]{../FIG/rotary_extension.pdf}
+\end{center}
+\vspace{-0.5\baselineskip}
+ \caption{\\Impulsdrehgeber-Erweiterung}
+\vspace{-0.5\baselineskip}
+\label{fig:RotExt}
+\end{wrapfigure}
+
 Zur leichteren Bedienung der Menüfunktion für den ATmega328 kann die Schaltung um einen
-Impulsdrehgeber mit Taster erweitert werden. Die Schaltung~\ref{fig:RotExt} gibt die Standard-Belegung
+Impulsdrehgeber mit Taster erweitert werden.
+Die Schaltung~\ref{fig:RotExt} gibt die Standard-Belegung
 für ein normales LCD an. Alle Anschlüsse für den Impulsdrehgeber sind an der Steckerleiste für das LCD 
 verfügbar. 
 Deswegen kann der Impulsdrehgeber in vielen Fällen leicht nachgerüstet werden. 
 Vielfach ist das graphische Display auch mit einem Adapter-Board an die Steckerleiste des LCD angeschlossen. 
 Deswegen ist auch hier die Nachrüstung des Impulsdrehgebers nicht sehr schwierig.
-
-\begin{figure}[H]
- \centering
- \begin{overpic}[width=5cm]{../FIG/rotary_extension.pdf}
-  \color{black}
-  %\put(47,6){\makebox(0,0)[lb]{Taster}}
- \end{overpic}
- \caption{Erweiterung um einen Impulsdrehgeber}
- \label{fig:RotExt}
-\end{figure}
 
 Die Abbildung~\ref{fig:RotEnc} zeigt zwei Versionen von Drehgebern.
 Die Version 1 hat doppelt so viele Raststellungen (detent) pro Umdrehung
@@ -268,9 +270,9 @@ Die Version 2 hat gleich viele Pulse pro Umdrehung wie Raststellungen.
 Manchmal liegt bei einigen Drehgebern die Schaltflanke eines der beiden Schalter genau an der
 Raststellung.
 
-\begin{figure}[H]
+\begin{figure}[htb]
  \centering
- \begin{overpic}[width=15cm]{../FIG/rotary_encoder.pdf}
+ \begin{overpic}[width=.87\textwidth]{../FIG/rotary_encoder.pdf}	% width=15cm
   \color{black}
   \put(90,71.7){\makebox(0,0)[lb]{Schalter A}}
   \put(90,62){\makebox(0,0)[lb]{Schalter B}}
@@ -278,8 +280,8 @@ Raststellung.
   \put(90,19){\makebox(0,0)[lb]{Schalter B}}
   \put(6,6){\makebox(0,0)[rb]{\footnotesize{Zustand:}}}
   \put(6,48.5){\makebox(0,0)[rb]{\footnotesize{Zustand:}}}
-  \multiput(23.5,53)(24.6,0){3}{\footnotesize Rastung}
-  \multiput(11,10)(12.3,0){6}{\footnotesize Rastung}
+  \multiput(23.5,53)(24.6,0){3}{\footnotesize {Rastung}}
+  \multiput(11,10)(12.3,0){6}{\footnotesize {Rastung}}
   \put(52,43){\makebox(0,0)[cb]{\large{Version 2}}}
   \put(52,1){\makebox(0,0)[cb]{\large{Version 1}}}
  \end{overpic}
@@ -305,11 +307,11 @@ ungünstiger Lage der Schaltflanken kann aber ein Zählpuls für eine Raststellu
 
 \begin{figure}[H]
  \centering
- \begin{overpic}[width=17cm]{../FIG/rotary_bouncing.pdf}
+ \begin{overpic}[width=.87\textwidth]{../FIG/rotary_bouncing.pdf}	% width=17cm
   \color{black}
   \put(90,39){\makebox(0,0)[lb]{Schalter A}}
   \put(90,30){\makebox(0,0)[lb]{Schalter B}}
-  \multiput(11,23)(28,0){3}{\footnotesize Rastung}
+  \multiput(11,23)(28,0){3}{\footnotesize {Rastung}}
   \put(7,20){\makebox(0,0)[rb]{Zustand}}
   \put(5,12){\makebox(0,0)[lb]{Mögliche Zustände von links nach rechts:}}
  \end{overpic}
@@ -343,7 +345,7 @@ Mit den Gattern des 74HC4050 bleibt die Signalform jedenfalls besser erhalten.\\
  
 \begin{figure}[H]
  \centering
- \begin{overpic}[width=14cm]{../FIG/ST7565lcd.pdf}
+ \begin{overpic}[width=.814\textwidth]{../FIG/ST7565lcd.pdf}	% width=14cm
   \color{black}
   \put(88,10){\makebox(0,0)[lb]{Hintergrund}}
   \put(88,7){\makebox(0,0)[lb]{LED}}
@@ -407,7 +409,7 @@ Außerdem sollte die Belegung der Pinne beim OLED Modul geprüft werden, bei ein
  
 \begin{figure}[H]
 \centering
-\includegraphics[width=14cm]{../FIG/SSD1306_I2C.pdf}
+\includegraphics[width=.814\textwidth]{../FIG/SSD1306_I2C.pdf}	% width=17cm
 \caption{Anschluss eines graphischen OLED Displays mit I\textsuperscript{2}C Schnittstelle}
 \label{fig:ssd1306i2c}
 \end{figure}
@@ -424,7 +426,7 @@ speziellen Seriellschnittstelle angeschlossen werden, wie die Abbildung \ref{fig
  
 \begin{figure}[H]
  \centering
- \begin{overpic}[width=12cm]{../FIG/ST7920interface.pdf}
+ \begin{overpic}[width=.698\textwidth]{../FIG/ST7920interface.pdf}	% width=12cm
   \color{black}
   \put(20,1){\makebox(0,0)[cb]{seriell Betrieb}}
   \put(80,1){\makebox(0,0)[cb]{4-bit parallel Betrieb}}
@@ -469,15 +471,15 @@ Die einfachste Lösung scheint mir mit einem 74HCT164 oder einem 74HCT595 Chip m
 Einen entsprechenden Schaltungsvorschlag zeigt das Bild \ref{fig:NT7108lcd} .
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
-    \includegraphics[width=8cm]{../FIG/ST7108serial164.pdf}
+    \includegraphics[width=.9\textwidth]{../FIG/ST7108serial164.pdf}	% 8cm
     \caption{mit 74HCT164}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
-    \includegraphics[width=8cm]{../FIG/ST7108serial595.pdf}
+    \includegraphics[width=.9\textwidth]{../FIG/ST7108serial595.pdf}	% 8cm
     \caption{mit 74HCT595}
   \end{subfigure}
   \caption{Anschluss eines graphischen Displays mit NT7108 Controller}
@@ -611,7 +613,7 @@ Aber das Erscheinungsbild ist scharf und klar.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=8cm]{../PNG/Color_ILI9163_ST7735.jpg}
+\includegraphics[width=.46\textwidth]{../PNG/Color_ILI9163_ST7735.jpg}	% width=8cm
 \caption{Rückseite der beiden Color-LCD's}
 \label{fig:Color_both}
 \end{figure}
@@ -632,7 +634,7 @@ Auf dem Foto \ref{fig:Color_PNP} ist das Ergebnis einer Messung eines Germanium 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=8cm]{../PNG/Color_PNP_ILI9163.jpg}
+\includegraphics[width=.46\textwidth]{../PNG/Color_PNP_ILI9163.jpg}	% width=8cm
 \caption{Messung eines bipolaren PNP Transistors}
 \label{fig:Color_PNP}
 \end{figure}
@@ -751,13 +753,17 @@ Dabei ist der Programmspeicher nahezu zu \(100\%\) benutzt.
 Da die ATmega168 oder ATmega328 Prozessoren pinkompatibel zum ATmega8 sind,
 kann der Austausch nur empfohlen werden. Mittlerweile sind die Preise für
 den ATmega328 so günstig, dass eigentlich nichts mehr für den ATmega168 spricht.
-Mit dem ATmega168/328 gewinnt man folgende Vorteile:
-Selbsttestfunktion mit automatischem Abgleich.\\
-Erhöhung der Messgenauigkeit durch automatische Umschaltung der ADC-Referenzspannung.\\
-Messung von Induktivitäten, deren Widerstandswert \textless~\(2100\Omega\) ist.\\
-Messung des ESR-Wertes von Kondensatoren \textgreater~\(20nF\).\\
-Die Auflösung der Widerstandsmessung unter \(10\Omega\) beträgt \(0,01\Omega\).\\
-Der PC3-Pin kann für eine serielle Ausgabe genutzt werden.
+Mit dem \textbf {ATmega168/328} gewinnt man folgende \textbf {Vorteile}:
+\begin{itemize} \setlength{\itemsep}{-1.0\baselineskip}
+ \vspace{-0.5\baselineskip}
+ \item Selbsttestfunktion mit automatischem Abgleich.\\
+ \item Erhöhung der Messgenauigkeit durch automatische Umschaltung der ADC-Referenzspannung.\\
+ \item Messung von Induktivitäten, deren Widerstandswert \textless~\(2100\Omega\) ist.\\
+ \item Messung des ESR-Wertes von Kondensatoren \textgreater~\(20nF\).\\
+ \item Die Auflösung der Widerstandsmessung unter \(10\Omega\) beträgt \(0,01\Omega\).\\
+ \item Der PC3-Pin kann für eine serielle Ausgabe genutzt werden.
+\end{itemize}
+\vspace{-0.5\baselineskip}
 \item[Fehlende Präzisionsreferenz]
 Normalerweise sollte die fehlende Präzisionsreferenz auch bei unbeschaltetem PC4-Pin
 erkannt werden. In diesem Fall wird keine VCC=x.xV Anzeige in Zeile 2 beim Einschalten
@@ -821,15 +827,15 @@ Bitte beachten Sie auch die verschiedenen Pinbelegungen der Displaymodule mit NT
 Tabelle~\ref{tab:NT7108types} auf Seite~\pageref{tab:NT7108types} angegeben.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
-    \includegraphics[width=8cm]{../FIG/ST7108serial164_644.pdf}
+    \includegraphics[width=.88\textwidth]{../FIG/ST7108serial164_644.pdf}	% width=8cm
     \caption{mit 74HCT164}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
-    \includegraphics[width=8cm]{../FIG/ST7108serial595_644.pdf}
+    \includegraphics[width=.88\textwidth]{../FIG/ST7108serial595_644.pdf}	% width=8cm
     \caption{mit 74HCT595}
   \end{subfigure}
   \caption{Anschluss des NT7108 Controllers an einen ATmega644/1284}
@@ -838,7 +844,7 @@ Tabelle~\ref{tab:NT7108types} auf Seite~\pageref{tab:NT7108types} angegeben.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=18cm]{../FIG/t644tester.pdf}
+\includegraphics[width=1.\textwidth]{../FIG/t644tester.pdf}	% width=18cm
 \caption{Erweiterte Transistortester Schaltung mit ATmega644}
 \label{fig:t644tester}
 \end{figure}
@@ -867,7 +873,7 @@ Bootloader gibt es lediglich eine kleine Verzögerung des Programmstarts.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=18cm]{../FIG/t1280tester.pdf}
+\includegraphics[width=1.\textwidth]{../FIG/t1280tester.pdf}	% width=18cm
 \caption{Transistortester Schaltung mit ATmega1280, ATmega2560 oder Arduino Mega}
 \label{fig:t1280tester}
 \end{figure}
@@ -951,7 +957,7 @@ zeigt einen Ausschnitt der Schaltung.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=12cm]{../FIG/Fish8840.pdf}
+\includegraphics[width=.7\textwidth]{../FIG/Fish8840.pdf}	% width=12cm
 \caption{Ausschnitt aus der Schaltung von Fish8840}
 \label{fig:Fish8840}
 \end{figure}
@@ -967,7 +973,7 @@ neue Verbindung zwischen Q1 und R15 gelötet.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=12cm]{../PNG/Fish8840patch.jpg}
+\includegraphics[width=.7\textwidth]{../PNG/Fish8840patch.jpg}	% width=12cm
 \caption{Foto der geänderten Fish8840 Platine}
 \label{fig:Fish8840patch}
 \end{figure}
@@ -986,15 +992,15 @@ Längere Gewindebolzen müssen nun verwendet werden, um das Display mit der Adap
 Fish8840 Tester zu befestigen.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	% width=9cm
     \centering
-    \includegraphics[width=9cm]{../PNG/Fish8840Adapt1.jpg}
+    \includegraphics[width=1.\textwidth]{../PNG/Fish8840Adapt1.jpg}	% width=9cm
     \caption{Display mit Adapter}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	% width=9cm
     \centering
-    \includegraphics[width=9cm]{../PNG/Fish8840Adapt2.jpg}
+    \includegraphics[width=1.\textwidth]{../PNG/Fish8840Adapt2.jpg}	% width=9cm
     \caption{Fertig montierter Tester}
   \end{subfigure}
   \caption{Adapter für einen korrekten Display Anschluß}
@@ -1031,7 +1037,7 @@ ebenfalls möglich.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=12cm]{../PNG/WEI_M8.JPG}
+\includegraphics[width=.7\textwidth]{../PNG/WEI_M8.JPG}	% width=12cm
 \caption{Foto des chinesischen WEI\_M8 Testers}
 \label{fig:WeiM8}
 \end{figure}
@@ -1042,15 +1048,15 @@ zu sehen ist. Damit ist eine Überhöhung der \(3.3V\) Versorgung für den Displ
 wegen der \(5V\) Signalpegel vom ATmega nicht zu befürchten.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
-    \includegraphics[width=9cm]{../PNG/WEI_M8_D.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/WEI_M8_D.JPG}	% width=9cm
     \caption{Adapterplatine für das Display}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
-    \includegraphics[width=9cm]{../PNG/WEI_M8_L.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/WEI_M8_L.JPG}	% width=9cm
     \caption{Grundplatine}
   \end{subfigure}
   \caption{Innenleben des WEI\_M8 Testers}
@@ -1074,7 +1080,7 @@ setzen, damit ein Betrieb möglich ist. Damit bleiben die Spannungseinbrüche un
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=12cm]{../PNG/WEI_M8_modified.JPG}
+\includegraphics[width=.7\textwidth]{../PNG/WEI_M8_modified.JPG}	% 12cm
 \caption{Foto des umgerüsteten WEI\_M8 Testers}
 \label{fig:WeiM8mod}
 \end{figure}
@@ -1092,15 +1098,15 @@ Auch das Aktivieren der ,,Brown-Out'' Erkennung des Prozessors mit der extended 
 brachte keine Überraschungen.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
-    \includegraphics[width=9cm]{../PNG/T4_front.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/T4_front.JPG}	% width=9cm
     \caption{vollständig}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
-    \includegraphics[width=9cm]{../PNG/T4_front_noLCD.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/T4_front_noLCD.JPG}	% width=9cm
     \caption{mit abgenommenem Display}
   \end{subfigure}
   \caption{Frontansicht des T4 Testers}
@@ -1118,15 +1124,15 @@ Für nachträgliche Erweiterungen ist diese Platine weniger geeignet, auch ein A
 Displays ist hier nur schwer möglich.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
-    \includegraphics[width=9cm]{../PNG/T4_back.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/T4_back.JPG}	% width=9cm
     \caption{Bestückungsseite}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
-    \includegraphics[width=9cm]{../PNG/T4_back_clips.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/T4_back_clips.JPG}	% width=9cm
     \caption{mit Messkabeln}
   \end{subfigure}
   \caption{Rückansicht des T4 Testers}
@@ -1158,15 +1164,15 @@ wurde hier durch einen Trimmer auf der Lötseite ersetzt. Mit dem Trimmer läßt
 Frequenzmessung bzw. Frequenzerzeugung abgleichen.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
-    \includegraphics[width=9cm]{../PNG/Kit_ST7565a.jpg}
+    \includegraphics[width=1.\textwidth]{../PNG/Kit_ST7565a.jpg}	% width=9cm
     \caption{zusammengebaut}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
-    \includegraphics[width=9cm]{../PNG/Kit_ST7565b.jpg}
+    \includegraphics[width=1.\textwidth]{../PNG/Kit_ST7565b.jpg}	% width=9cm
     \caption{mit abgenommenem Display}
   \end{subfigure}
   \caption{Bestückter Bausatz mit 128x64 Pixel Display}
@@ -1183,15 +1189,15 @@ Auch hier wurde einer der beiden \(22 pF\) Kondensatoren
 wurde hier durch einen Trimmer (grün) ersetzt. 
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
-    \includegraphics[width=9cm]{../PNG/Kit_Color_a.jpg}
+    \includegraphics[width=1.\textwidth]{../PNG/Kit_Color_a.jpg}	% width=9cm
     \caption{zusammengebaut}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
-    \includegraphics[width=9cm]{../PNG/Kit_Color_b.jpg}
+    \includegraphics[width=1.\textwidth]{../PNG/Kit_Color_b.jpg}	% width=9cm
     \caption{mit abgenommenem Display}
   \end{subfigure}
   \caption{Bestückter Bausatz mit 160x128 Pixel Farbdisplay}
@@ -1221,30 +1227,34 @@ Es ist jedenfalls keine Schutzdiode gegen die 3.3V Versorgung bei diesem Control
 section{Und noch ein Clone von Hiland M644}
 Dieses Nachbau basiert auf dem Schaltplan von Nick L. aus der Ukraine siehe Abbildung \ref{fig:t644tester}
 auf der Seite \pageref{fig:t644tester}.\\
-{\bf Bedient wird der Tester mit einem Knopf, der sowohl Taster als auch Drehgeber ist.}
+Bedient wird der Tester mit einem Knopf, der sowohl \textbf {Taster} als auch \textbf {Drehgeber} ist.
 
 \vspace{0.5cm}
 Er bietet folgende Zusätze:
-\\- die Frequenzmessung
-\\- der f-Generator
-\\- 10-bit PWM
-\\- Impulsdrehgeber
-\\- die Quarz-Messung
-\\- Spannung und Zehnerdioden Bestimmung (bis fast 50V).
-\\Die Platine ist mit einem 8MHz Quarz bestückt. Besser wäre wohl ein 16MHz Quarz,
+\vspace{-0.5\baselineskip}
+\begin{itemize} \setlength{\itemsep}{-0.5\baselineskip}
+ \item die Frequenzmessung
+ \item den f-Generator
+ \item 10-bit PWM
+ \item Impulsdrehgeber
+ \item die Quarz-Messung
+ \item Spannung und Zehnerdioden Bestimmung (bis fast 50V).
+\end{itemize}
+\vspace{-0.5\baselineskip}
+Die Platine ist mit einem 8MHz Quarz bestückt. Besser wäre wohl ein 16MHz Quarz,
 wobei die Nachrüstung eines Trimmers (genauere Frequenz) schwierig ist.
-\\Die Kontakte für die ISP-Schnittstelle sind auf eine 6-pol Lochreihe unterhalb dem
+Die Kontakte für die ISP-Schnittstelle sind auf eine 6-pol Lochreihe unterhalb dem
 steckbaren Display-Modul herausgeführt die folgend belegt ist:\\
-{\bf von links nach rechts}: 1~-Reset; 2~-SCK; 3~-MISO; 4~-MOSI; 5~-+5V; 6~-GND.\\
+\textbf {von links nach rechts}: 1~-Reset; 2~-SCK; 3~-MISO; 4~-MOSI; 5~-+5V; 6~-GND.\\
 Um den Tester, aktualisieren zu können, benötigt man ein angepasstes Kabel, der man relativ einfach
-selbst erstellen kann.\\
-Bei der Auslieferung ist der Nullkraft-Testsockel über Buchsenleisten mit der Platine verbunden.
+selbst erstellen kann.
+Bei der Auslieferung ist der Nullkraft-Testsockel über Buchsenleisten mit der Platine verbunden.\\
 
 Bei dem unten abgebildeten Tester wurde der Sockel direkt angelötet und die hiermit gesparte Buchsenleiste
 auf ein vorhandenes Flachbandkabel mit Pfostenstecker angelötet und mit Schrumpfschlauch fixiert.
 \begin{figure}[H]
  \centering
- \begin{overpic}[width=11cm]{../FIG/Kabel_Hiland.pdf}
+ \begin{overpic}[width=.64\textwidth]{../FIG/Kabel_Hiland.pdf}
   \color{black}
   \put(14,99){\makebox(0,0)[cb]{Programmer}}
   \put(14,-3){\makebox(0,0)[cb]{Pfostensteckverbinder}}
@@ -1258,35 +1268,33 @@ auf ein vorhandenes Flachbandkabel mit Pfostenstecker angelötet und mit Schrump
 \end{figure}
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{8cm}
+  \begin{subfigure}[b]{.47\textwidth}	% width=8cm
     \centering
-    \includegraphics[width=7cm]{../PNG/Hi_u.jpg}
+    \includegraphics[width=.875\textwidth]{../PNG/Hi_u.jpg}  % width=7cm
     \caption{unten TP1 bis TP3 für Bauteilebestimmung}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
-    \includegraphics[width=6.8cm]{../PNG/Hi_o.jpg}
+    \includegraphics[width=.756\textwidth]{../PNG/Hi_o.jpg}  % 6.8cm
     \caption{oben Pins für Auswahlmenü und die IDE}
   \end{subfigure}
   \caption{Hiland Tester mit Testsockel und 128x64 Pixel Display}
   \label{fig:Hiland}
 \end{figure}
 
-{\bf Die Testports TP1, TP2 und TP3} werden für die automatische Bauteilerkennung benutzt
-und sind auf der Platine mit den Ziffern {\bf 1,1,1; 2; 3,3,3} gekennzeichnet.
+\textbf {Die Testports TP1, TP2 und TP3} werden für die automatische Bauteilerkennung benutzt
+und sind auf der Platine mit den Ziffern \textbf {1~~1~~1~~2~~3~~3,3} gekennzeichnet.
 
 Die gleiche Bezeichnung befindet sich auf dem SMD Testfeld
-und es besteht auch eine Möglichkeit, eigene Test Kabel anzulöten.\\ 
-Der {\bf Testport TP2} wird auch für die Ausgabe der Sonderfunktion ,,f-Generator'' benutzt.\\
-Die mit {\bf LF} bezeichneten Pins sind für die Messung von Quarzen mit niedriger Resonanzfrequenz vorgesehen,
-und die mit {\bf HF} bezeichneten Pins sind für Quarze mit hoher Resonanzfrequenz bestimmt.
+und es besteht auch eine Möglichkeit, eigene Test Kabel anzulöten.
+Der \textbf {Testport TP2} wird auch für die Ausgabe der Sonderfunktion ,,f-Generator'' benutzt.\\
+Die mit \textbf {LF} bezeichneten Pins sind für die Messung von Quarzen mit niedriger Resonanzfrequenz vorgesehen,
+und die mit \textbf {HF} bezeichneten Pins sind für Quarze mit hoher Resonanzfrequenz bestimmt.
 
-Der Pin {\bf F-in} wird zusammen mit  {\bf Gnd} für die Sonderfunktion Frequenz benutzt.
-Und der Pin {\bf Vext+} wird genauso mit {\bf Gnd} für die Spannungsmessung
-{\bf und} die Zenerdiodenmessung benutzt.\\
-
-
+Der Pin \textbf {F-in} wird zusammen mit  \textbf {Gnd} für die Sonderfunktion Frequenz benutzt.
+Und der Pin \textbf {Vext+} wird genauso mit \textbf {Gnd} für die Spannungsmessung
+\textbf {und} die Zenerdiodenmessung benutzt.
 
 \section{Fehlersuche}
 Bei den meisten Problemen werden Sie den Text auf dem LCD-Display vermissen.

@@ -41,7 +41,7 @@ A optional ISP connector has been added to easier load new software versions to 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=18cm]{../FIG/ttester.pdf}
+\includegraphics[width=1.\textwidth]{../FIG/ttester.pdf}
 \caption{New circuit of TransistorTester}
 \label{fig:ttester}
 \end{figure}
@@ -51,7 +51,7 @@ and the assignment of the additional functions.
 For the SPI interface a signal LCD-CE is available at the ATmega port. The controller input CE (Chip Enable) can 
 be also connected to GND instead of connecting this input to the ATmega output LCD-CE.
 
-\begin{table}[H]
+\begin{table}[H] \small
   \begin{center}
     \begin{tabular}{| c || c | c | c | c | c | c |}
     \hline
@@ -135,19 +135,19 @@ of a capacitor with higher residual voltage.
 A complete protection is not possible. Therefore capacitors should always be discharged before measuring.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \begin{overpic}[width=7cm]{../FIG/relay_addon.pdf}
+    \begin{overpic}[width=.78\textwidth]{../FIG/relay_addon.pdf}
     \color{black}
-    \put(78,36){\makebox(0,0)[lb]{\footnotesize VCC or U{\scriptsize Bat}}}
-    \put(78,32){\makebox(0,0)[lb]{\footnotesize depends on U{\scriptsize relay}}}
+    \put(78,36){\makebox(0,0)[lb]{\footnotesize {VCC or Ubat}}}
+    \put(78,32){\makebox(0,0)[lb]{\footnotesize {depends on U}\scriptsize {relay}}}
     \end{overpic}
     \caption{with Relay}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=7cm]{../FIG/diode_addon.pdf}
+    \includegraphics[width=.78\textwidth]{../FIG/diode_addon.pdf}
     \caption{with Diodes}
   \end{subfigure}
   \caption{Additional protection of the ATmega inputs}
@@ -182,7 +182,7 @@ About \(40mA\) more battery current is used by this expansion during key pressin
 
 \begin{figure}[H]
 \centering
-  \begin{overpic}[width=17cm]{../FIG/zener_exp.pdf}
+  \begin{overpic}[width=1.\textwidth]{../FIG/zener_exp.pdf}
   \color{black}
   \put(5,20){\makebox(0,0)[rb]{\textcolor{red}{external}}}
   \put(5,17){\makebox(0,0)[rb]{\textcolor{red}{Voltage}}}
@@ -228,12 +228,25 @@ The LCD should always be installed for adjusting, because the pull up resistor o
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=7cm]{../FIG/Frequency_addon.pdf}
+\includegraphics[width=.4\textwidth]{../FIG/Frequency_addon.pdf}
 \caption{Extension for measurement of frequency}
 \label{fig:FreqMes}
 \end{figure}
 
 \subsection{Using of a rotary pulse encoder}
+
+\begin{wrapfigure}{r}{0.5\textwidth}
+\vspace{-0.5\baselineskip}
+\begin{center}
+\includegraphics[width=0.30\textwidth]{../FIG/rotary_extension.pdf}
+\end{center}
+\vspace{-0.5\baselineskip}
+ \caption{Expansion with a rotary pulse encoder}
+\vspace{-0.5\baselineskip}
+\label{fig:RotExt}
+\end{wrapfigure}
+
+
 
 For easier control of the menu function for the ATmega328 you can expand the circuit 
 by a rotary pulse encoder with a push button.
@@ -243,16 +256,6 @@ for the LCD. For this reason the expansion can also be easy upgraded for many ex
 In many cases the graphical LCD is assembled on a adapter board with some connection pins
 of the character LCD. Also in this cases the upgrade with a rotary encoder is not very difficult to do.
 
-\begin{figure}[H]
-\centering
- \begin{overpic}[width=4cm]{../FIG/rotary_extension.pdf}
- \color{black}
- % \put(47,6){\makebox(0,0)[lb]{Taster}}
- \end{overpic}
-\caption{Expansion with a rotary pulse encoder}
-\label{fig:RotExt}
-\end{figure}
-
 The figure~\ref{fig:RotEnc} shows the feature of two different rotary pulse encoder.
 The version 1 has twice as much indexed positions (detents) per turn as pulses per turn.
 The version 2 has the same count of detents as pulses per turn.
@@ -261,18 +264,18 @@ rotary pulse encoder.
 
 \begin{figure}[H]
 \centering
-\begin{overpic}[width=14cm]{../FIG/rotary_encoder.pdf}
+\begin{overpic}[width=.87\textwidth]{../FIG/rotary_encoder.pdf}
   \color{black}
   \put(90,71.5){\makebox(0,0)[lb]{Switch A}}
   \put(90,62){\makebox(0,0)[lb]{Switch B}}
   \put(90,29){\makebox(0,0)[lb]{Switch A}}
   \put(90,19){\makebox(0,0)[lb]{Switch B}}
-  \put(6,6){\makebox(0,0)[rb]{\footnotesize State:}}
-  \put(6,48.5){\makebox(0,0)[rb]{\footnotesize State:}}
-  \multiput(23.5,53)(24.6,0){3}{\footnotesize detent}
-  \multiput(11,10)(12.3,0){6}{\footnotesize detent}
-  \put(52,43){\makebox(0,0)[cb]{{\large Version 2}}}
-  \put(52,1){\makebox(0,0)[cb]{{\large Version 1}}}
+  \put(6,6){\makebox(0,0)[rb]{\footnotesize {State:}}}
+  \put(6,48.5){\makebox(0,0)[rb]{\footnotesize {State:}}}
+  \multiput(23.5,53)(24.6,0){3}{\footnotesize {detent}}
+  \multiput(11,10)(12.3,0){6}{\footnotesize {detent}}
+  \put(52,43){\makebox(0,0)[cb]{{\large {Version 2}}}}
+  \put(52,1){\makebox(0,0)[cb]{{\large {Version 1}}}}
  \end{overpic}
 \caption{Feature of two different rotary pulse encoder}
 \label{fig:RotEnc}
@@ -296,11 +299,11 @@ but sometimes a count can be missed with a bad placement of the indexed position
 
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=14cm]{../FIG/rotary_bouncing.pdf}
+ \begin{overpic}[width=.87\textwidth]{../FIG/rotary_bouncing.pdf}
   \color{black}
   \put(90,39){\makebox(0,0)[lb]{Switch A}}
   \put(90,30){\makebox(0,0)[lb]{Switch B}}
-  \multiput(11,23)(28,0){3}{\footnotesize detent}
+  \multiput(11,23)(28,0){3}{\footnotesize {detent}}
   \put(7,20){\makebox(0,0)[rb]{State:}}
   \put(5,12){\makebox(0,0)[lb]{Možné polohy z zleva do prava:}}
  \end{overpic}
@@ -333,7 +336,7 @@ The signal form at the controller inputs will be more simular to the output shap
 
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=12cm]{../FIG/ST7565lcd.pdf}
+ \begin{overpic}[width=.814\textwidth]{../FIG/ST7565lcd.pdf}
   \color{black}
   \put(88,10){\makebox(0,0)[lb]{Background}}
   \put(88,7){\makebox(0,0)[lb]{LED}}
@@ -395,7 +398,7 @@ Also you should check the pin sequence of your OLED module, some moduls have a d
  
 \begin{figure}[H]
 \centering
-\includegraphics[width=14cm]{../FIG/SSD1306_I2C.pdf}
+\includegraphics[width=.814\textwidth]{../FIG/SSD1306_I2C.pdf}
 \caption{Connection of a graphical OLED display with I\textsuperscript{2}C interface}
 \label{fig:ssd1306i2c}
 \end{figure}
@@ -414,7 +417,7 @@ special serial interface., as shown in figure \ref{fig:ST7920lcd}.
  
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=12cm]{../FIG/ST7920interface.pdf}
+ \begin{overpic}[width=.698\textwidth]{../FIG/ST7920interface.pdf}
   \color{black}
   \put(20,1){\makebox(0,0)[cb]{serial mode}}
   \put(80,1){\makebox(0,0)[cb]{4-bit parallel mode}}
@@ -459,15 +462,15 @@ The simplest way seems to be the use of a 74HCT164 or a 74HCT595 chip.
 A suitable suggestion of a connection circuit shows the figure \ref{fig:NT7108lcd} .
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8cm]{../FIG/ST7108serial164.pdf}
+    \includegraphics[width=.9\textwidth]{../FIG/ST7108serial164.pdf}
     \caption{with 74HCT164}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8cm]{../FIG/ST7108serial595.pdf}
+    \includegraphics[width=.9\textwidth]{../FIG/ST7108serial595.pdf}
     \caption{with 74HCT595}
   \end{subfigure}
   \caption{Connection of a graphical display with a NT7108 controller}
@@ -600,7 +603,7 @@ But the appearance is sharp and clear.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=8cm]{../PNG/Color_ILI9163_ST7735.jpg}
+\includegraphics[width=.46\textwidth]{../PNG/Color_ILI9163_ST7735.jpg}
 \caption{Back side of two Color-LCD's}
 \label{fig:Color_both}
 \end{figure}
@@ -620,7 +623,7 @@ at a 128x128 pixel display.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=8cm]{../PNG/Color_PNP_ILI9163.jpg}
+\includegraphics[width=.46\textwidth]{../PNG/Color_PNP_ILI9163.jpg}
 \caption{Measurement of a bipolar PNP transistors}
 \label{fig:Color_PNP}
 \end{figure}
@@ -637,7 +640,7 @@ Every LCD-display with at least 2x16 character and a HD44780 compatible controll
 can be used with the TransistorTester. You should respect the current needed for
 illumination, some LCD need lower current than others.
 I had tried OLED type displays, but this type cause interference with measurements
-of the ATmega and are {\bf not} recommended. Also loading of special characters
+of the ATmega and are \textbf {not} recommended. Also loading of special characters
 for displaying the resistor symbol has caused problems with the OLED.
 
 The resistors R1 to R6 are critical for measurements and this \(680\Omega\) and
@@ -736,13 +739,15 @@ I can recommend the replacement.
 Actually the price for ATmega328 is so cheap, that there is no reason to take
 a ATmega168 type.
 With a ATmega168/328 you get the following advantages:
-Self test with automatic calibration.\\
-Improvement of measurement quality by automatic switching of ADC scale.\\
-Measurement of inductors with resistance  below \(2100\Omega\).\\
-Measurement of ESR value of capacitors with value of above  \(20nF\).\\
-The resolution of resistor measurement below \(10\Omega\) is \(0.01\Omega\).\\
-Using of pin PC4 as serial output.\\
-\item[Missing precision voltage reference]
+ \begin{itemize} \setlength{\itemsep}{-1.5em}
+ \item Self test with automatic calibration.\\
+ \item Improvement of measurement quality by automatic switching of ADC scale.\\
+ \item Measurement of inductors with resistance  below \(2100\Omega\).\\
+ \item Measurement of ESR value of capacitors with value of above  \(20nF\).\\
+ \item The resolution of resistor measurement below \(10\Omega\) is \(0.01\Omega\).\\
+ \item Using of pin PC4 as serial output.\\
+ \item[Missing precision voltage reference]
+ \end{itemize}
 Usually the software should detect the missing voltage reference with the unconnected pin PC4.
 In this case no VCC=x.xV message should appear in row 2 of the LCD on power on.
 If this message appear without the reference, you should connect a \(2.2k\Omega\) resistor
@@ -808,15 +813,15 @@ You should also respect the different pin assignments of display modules with NT
 shown in table~\ref{tab:NT7108types} at page~\pageref{tab:NT7108types}.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8cm]{../FIG/ST7108serial164_644.pdf}
+    \includegraphics[width=.9\textwidth]{../FIG/ST7108serial164_644.pdf}
     \caption{with 74HCT164}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8cm]{../FIG/ST7108serial595_644.pdf}
+    \includegraphics[width=.9\textwidth]{../FIG/ST7108serial595_644.pdf}
     \caption{with 74HCT595}
   \end{subfigure}
   \caption{Connection of a NT7108 Controller to a ATmega644/1284}
@@ -826,7 +831,7 @@ shown in table~\ref{tab:NT7108types} at page~\pageref{tab:NT7108types}.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=18cm]{../FIG/t644tester.pdf}
+\includegraphics[width=1.\textwidth]{../FIG/t644tester.pdf}
 \caption{Extended Transistor Tester circuit with ATmega644}
 \label{fig:t644tester}
 \end{figure}
@@ -856,7 +861,7 @@ little delay for the power up start of the program.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=18cm]{../FIG/t1280tester.pdf}
+\includegraphics[width=1.\textwidth]{../FIG/t1280tester.pdf}
 \caption{TransistorTester circuit with ATmega1280, ATmega2560 or Arduino Mega}
 \label{fig:t1280tester}
 \end{figure}
@@ -942,7 +947,7 @@ The figure \ref{fig:Fish8840} shows a part of the modified circuit.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=12cm]{../FIG/Fish8840.pdf}
+\includegraphics[width=.698\textwidth]{../FIG/Fish8840.pdf}
 \caption{Part of the circuit from the Fish8840 version}
 \label{fig:Fish8840}
 \end{figure}
@@ -958,7 +963,7 @@ R15 with a enameled copper wire.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=12cm]{../PNG/Fish8840patch.jpg}
+\includegraphics[width=.698\textwidth]{../PNG/Fish8840patch.jpg}
 \caption{Picture of the changed Fish8840 printed board}
 \label{fig:Fish8840patch}
 \end{figure}
@@ -976,15 +981,15 @@ Longer spacer bolts must be used to mount the display with the adapter board to 
 of the Fish8840 tester now.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/Fish8840Adapt1.jpg}
+    \includegraphics[width=1.\textwidth]{../PNG/Fish8840Adapt1.jpg}
     \caption{Display with the breadboard adapter}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/Fish8840Adapt2.jpg}
+    \includegraphics[width=1.\textwidth]{../PNG/Fish8840Adapt2.jpg}
     \caption{Ready mounted Tester}
   \end{subfigure}
   \caption{Adapter for a correctly display connection}
@@ -1021,7 +1026,7 @@ with the micro USB plug. Operating is also possible without the accumulator, onl
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=12cm]{../PNG/WEI_M8.JPG}
+\includegraphics[width=.698\textwidth]{../PNG/WEI_M8.JPG}
 \caption{Picture of the chinese WEI\_M8 tester}
 \label{fig:WeiM8}
 \end{figure}
@@ -1032,15 +1037,15 @@ Therefore you must not be afraid that the \(5V\) signals of the ATmega can cause
 increase of the \(3.3V\) power of the display controller.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/WEI_M8_D.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/WEI_M8_D.JPG}
     \caption{Adapter board for the display}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/WEI_M8_L.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/WEI_M8_L.JPG}
     \caption{Base board}
   \end{subfigure}
   \caption{Inside look to the WEI\_M8 Testers}
@@ -1064,7 +1069,7 @@ to enable a regular operation. With that setting the voltage drops remain undete
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=12cm]{../PNG/WEI_M8_modified.JPG}
+\includegraphics[width=.698\textwidth]{../PNG/WEI_M8_modified.JPG}
 \caption{Picture of the modified WEI\_M8 Tester}
 \label{fig:WeiM8mod}
 \end{figure}
@@ -1083,15 +1088,15 @@ Also the activating of the ''brown-out'' monitor by setting the extended fuse ha
 shown any surprice.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/T4_front.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/T4_front.JPG}
     \caption{completely}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/T4_front_noLCD.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/T4_front_noLCD.JPG}
     \caption{with removed display}
   \end{subfigure}
   \caption{Front view of the T4 tester}
@@ -1108,15 +1113,15 @@ This board is lesser practical for later extensions, a replacement of the displa
 also difficult to realize.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/T4_back.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/T4_back.JPG}
     \caption{components side}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/T4_back_clips.JPG}
+    \includegraphics[width=1.\textwidth]{../PNG/T4_back_clips.JPG}
     \caption{with measurement cables}
   \end{subfigure}
   \caption{Back side of the T4 tester}
@@ -1147,15 +1152,15 @@ With a trimmer the frequency of the crystal can be adjusted for better accuracy 
 and frequency generation. 
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/Kit_ST7565a.jpg}
+    \includegraphics[width=1.\textwidth]{../PNG/Kit_ST7565a.jpg}
     \caption{build together}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/Kit_ST7565b.jpg}
+    \includegraphics[width=1.\textwidth]{../PNG/Kit_ST7565b.jpg}
     \caption{with dismounted display}
   \end{subfigure}
   \caption{Assembled kit with 128x64 pixel display}
@@ -1172,15 +1177,15 @@ Also in this version was one of the both \(22 pF\) capacitors replaced
 by a trimmer (green color).
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/Kit_Color_a.jpg}
+    \includegraphics[width=1.\textwidth]{../PNG/Kit_Color_a.jpg}
     \caption{build together}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../PNG/Kit_Color_b.jpg}
+    \includegraphics[width=1.\textwidth]{../PNG/Kit_Color_b.jpg}
     \caption{with dismounted display}
   \end{subfigure}
   \caption{Assembled kit with 160x128 pixel color display}
@@ -1212,13 +1217,23 @@ I could not find protection diodes at the input signals to the 3.3V supply side 
 \section{And another clone from Hiland M644}
 \vspace*{-0.3cm}
 This replica is based on the circuit diagram by Nick L. from Ukraine, see illustration \ref{fig:t644tester} on page \pageref{fig:t644tester}.
-{\bf The tester is operated with a button that is both a button and an encoder.}
-It offers all of the extensions to measure crystals and zener diodes.
+\textbf {The tester is operated with a button that is both a button and an encoder.}
+It offers all of the the known measurement extensions:
+\begin{itemize} \setlength{\itemsep}{-0.5em}
+ \item the frequency measurement
+ \item the f-generator
+ \item the 10-bit PWM
+ \item rotary encoder
+ \item the crystal measurement
+ \item Voltage measurement and Zener diode measurement (up to nearly 50V).
+\end{itemize}
 The board is equipped with an 8MHz quartz. A 16MHz quartz would be a better selection.
 Retrofitting a trimmer for more accurate frequency measurement is difficult.
 The contacts for the ISP interface are on a 6-pin row of holes below the
 plug-in display module which is occupied as follows: \\
-{\bf left to right}: 1~-Reset; 2~-SCK; 3~-MISO; 4~-MOSI; 5~-+5V; 6~-GND.\\
+\textbf {left to right}: 1~-Reset; 2~-SCK; 3~-MISO; 4~-MOSI; 5~-+5V; 6~-GND.\\
+
+
 To be able to update the tester, you need an adapted cable that you can relatively simple
 create yourself as shown in figure \ref{fig:HiCable}.
 When delivered, the zero force test base is connected to the board via socket strips.
@@ -1227,7 +1242,7 @@ In the tester shown below, the base was soldered directly and the socket strip s
 soldered to an existing ribbon cable with post connector and fixed with shrink tubing.
 \begin{figure}[H]
  \centering
- \begin{overpic}[width=12cm]{../FIG/Kabel_Hiland.pdf}
+ \begin{overpic}[width=.698\textwidth]{../FIG/Kabel_Hiland.pdf}
   \color{black}
   \put(14,99){\makebox(0,0)[cb]{Programmer}}
   \put(14,-3){\makebox(0,0)[cb]{post connector}}
@@ -1241,15 +1256,15 @@ soldered to an existing ribbon cable with post connector and fixed with shrink t
 \end{figure}
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{8cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=7cm]{../PNG/Hi_u.jpg}
+    \includegraphics[width=.875\textwidth]{../PNG/Hi_u.jpg}
     \caption{measurement ports TP1 to TP3}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=6.8cm]{../PNG/Hi_o.jpg}
+    \includegraphics[width=.756\textwidth]{../PNG/Hi_o.jpg}
     \caption{Pins for special menu function}
   \end{subfigure}
   \vspace{-0.2cm}
@@ -1257,18 +1272,18 @@ soldered to an existing ribbon cable with post connector and fixed with shrink t
   \label{fig:Hiland}
 \end{figure}
 
-{\bf The test ports TP1, TP2 and TP3} are used for automatic component recognition
-and are on the board with the the number sequence {\bf 1,1,1; 2; 3,3,3}.
+\textbf {The test ports TP1, TP2 and TP3} are used for automatic component recognition
+and are on the board with the the number sequence \textbf {1,1,1; 2; 3,3,3}.
 
 The same numbers can be found on the SMD test field 
 and at three holes to solder your own test cable.\\
 
 
-The {\bf Testport TP2} is also used for the output of the special function ,,f-Generator''.\\
-The pins labeled {\bf LF} are intended for the measurement of quartz crystals with a low resonance frequency,
-\\und die mit {\bf HF} are intended for crystals with a high resonance frequency.
+The \textbf {Testport TP2} is also used for the output of the special function ,,f-Generator''.\\
+The pins labeled \textbf {LF} are intended for the measurement of quartz crystals with a low resonance frequency,
+\\und die mit \textbf {HF} are intended for crystals with a high resonance frequency.
 
-The pin {\bf F-in} is used together with {\bf Gnd} for the function frequency measurement.\\
-And the pin {\bf Vext+} is used with {\bf Gnd} for the voltage measurement
-{\bf and} is also used for the Zener diode measurement.\\
+The pin \textbf {F-in} is used together with \textbf {Gnd} for the function frequency measurement.\\
+And the pin \textbf {Vext+} is used with \textbf {Gnd} for the voltage measurement
+\textbf {and} is also used for the Zener diode measurement.\\
 

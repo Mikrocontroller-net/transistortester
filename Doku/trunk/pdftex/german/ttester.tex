@@ -1,10 +1,11 @@
 \documentclass[pdftex,12pt,a4paper,oneside,english]{report}
-\special{papersize=210mm,297mm}
+%\documentclass[pdftex,12pt,a4paper,final,headings=normal,english]{scrreprt}
+%\special{papersize=210mm,297mm}
 \usepackage{lmodern}
 \usepackage[T1]{fontenc}		%umlaute!
 \usepackage[utf8x]{inputenc}
 \usepackage[cm]{fullpage}
-\usepackage[ngerman]{babel}
+\usepackage[english,ngerman]{babel}
 \usepackage{textcomp}           % Wegen Fehler,perthousand,micro
 \usepackage[pdftex]{graphicx}
 \usepackage[labelsep=period]{caption}
@@ -12,10 +13,9 @@
 \usepackage{xcolor}             %x-Vorschlag
 \usepackage[percent]{overpic}   %ins Bild schreiben
 \usepackage{mwe}                %ins Bild schreiben
-%\usepackage{blindtext}
-%\setlength{\abovecaptionskip}{0.5pc}
-%\setlength{\belowcaptionskip}{-1.0pc}
-%\usepackage{showframe}% zum Anzeigen des Seitenlayouts
+
+%\usepackage{showframe}		% zum Anzeigen des Seitenlayouts
+
 %\RedeclareSectionCommand[  % nur mit documentclass scrreprt 
 %  beforeskip=-1\baselineskip,
 %  afterskip=.5\baselineskip]{section}
@@ -25,16 +25,31 @@
 %\RedeclareSectionCommand[
 %  beforeskip=-.5\baselineskip,
 %  afterskip=.25\baselineskip]{subsubsection}
-%\usepackage{fixltx2e}
+
 \setlength{\parindent}{0em}	% Absatz nicht einrücken
+
+\newcommand{\LMB}{{\fbox{\(\bullet \circ \circ\)}} } % Left Mouse Button
+\newcommand{\RMB}{{\fbox{\(\circ \circ \bullet\)}} } % Right Mouse Button
+\newcommand{\MMB}{{\fbox{\(\circ \bullet \circ\)}} } % Middle Mouse Button
+
+%\usepackage{fixltx2e}
 \usepackage{epstopdf}
 \usepackage{hyperref}
 \usepackage{gensymb}
 \usepackage{float}
 \usepackage{circuitikz}
 \usepackage{wallpaper}
+\usepackage{wrapfig}		% Bild mit Textumlauf
 %\usepackage{subfig}
 \graphicspath{{./FIG}}		% Wegen Hintergrundbild
+
+\usepackage{blindtext}		% zum Ändern der Abstände der Bildunterschrift
+\setlength{\abovecaptionskip}{0.5em}
+\setlength{\belowcaptionskip}{-0.5em}
+
+\usepackage[os=win]{menukeys}		% Zur Darstellung der Menue-Keys
+
+\sloppy			% Blocksatz 
 
 \begin{document}
 \begin{figure}[t]
@@ -43,26 +58,26 @@
 \ctikzset{bipoles/length=.6cm}
 \ctikzset{bipoles/thickness=4}
 \newcommand\electricC {
-\hspace{-10 pt}
+\hspace{-10pt}
 \begin{circuitikz}
 \draw (0,0) to[capacitor] (0:1);
 \end{circuitikz}
-\hspace{-6 pt}
+\hspace{-6pt}
 }
 \newcommand\electricR {
-\hspace{-10 pt}
+\hspace{-10pt}
 \begin{circuitikz}
 \draw (0,0) to[european resistor] (0:1);
 \end{circuitikz}
-\hspace{-6 pt}
+\hspace{-6pt}
 }
 \newcommand\electricL {
-\hspace{-10 pt}
+\hspace{-10pt}
 \begin{circuitikz}
 \draw (0,0) 
  to[american inductor] (-1,0);
 \end{circuitikz}
-\hspace{-6 pt}
+\hspace{-6pt}
 }
 \newcommand\electricDAK {
 \begin{circuitikz}
@@ -74,6 +89,7 @@
 \draw (0,0) to[full diode] (180:1);
 \end{circuitikz}
 }
+
 \title{TransistorTester \\
 mit AVR-Mikrocontroller \\
 Ein Gerät zur Bestimmung und Messung von\\

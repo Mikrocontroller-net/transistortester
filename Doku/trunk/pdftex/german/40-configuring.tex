@@ -23,13 +23,13 @@ sind auch für einen ATmega328 brauchbar.
 Seien Sie vorsichtig, wenn Sie nicht das mitgelieferte Makefile benutzen.
 
 Mit den entsprechenden Optionen ist die Software auch auf dem unveränderten Hardware-Entwurf von
-Markus F. lauffähig (PARTNO=m8 , {\bf keine} NO\_AREF\_CAP und {\bf keine} PULLUP\_DISABLE Option).
+Markus F. lauffähig (PARTNO=m8 , \textbf{keine} NO\_AREF\_CAP und \textbf{keine} PULLUP\_DISABLE Option).
 Die Taktrate kann mit den fuses auch auf \(8MHz\) gestellt werden, dazu ist kein Quarz erforderlich!
 
 
 Die folgenden Optionen der Makefile sind verfügbar, um die Software für den Tester zu konfigurieren:
 
-\begin{description}
+\begin{description} \setlength{\itemsep}{0em}
   \item[PARTNO] beschreibt den Ziel-Prozessor:\\
          m8 = ATmega8\\
          m168 or m168p = ATmega168\\
@@ -416,7 +416,7 @@ TQFP\_ADC7 gesetzt ist. Dann ist diese Option aber nur möglich, wenn die WITH\_
 Beispiel: CFLAGS += -DWITH\_VEXT 
 
   \item[RMETER\_WITH\_L] wählt für die Widerstandsmeßfunktion, die durch einen Widerstand an TP1 und TP3 gestartet wird,
-zusätzlich die Messung von Induktivitäten. Der Betriebsmodus wird dann durch ein {\bf[RL]} am Ende der ersten Displayzeile
+zusätzlich die Messung von Induktivitäten. Der Betriebsmodus wird dann durch ein \textbf{[RL]} am Ende der ersten Displayzeile
 angezeigt. Durch den zusätzlichen Test auf Induktivität wird die Meßzeit für Widerstände unter \(2100\Omega\) deutlich
 länger. Ohne diese Option werden außerdem Widerstände unter \(10\Omega\) nicht mit der ESR-Methode gemessen,
 da als Bauteil eine Induktivität nicht ausgeschlossen werden kann.
@@ -447,23 +447,23 @@ Beispiel: CFLAGS += -DNO\_AREF\_CAP
 \end{description}
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{8.6cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8.3cm]{../PNG/AREF2_1V.png}
+    \includegraphics[width=.95\textwidth]{../PNG/AREF2_1V.png}
     \caption{from \(5V\) to \(1.1V\) }
     \label{pic:aref1}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{8.6cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8.3cm]{../PNG/AREF2VCC.png}
+    \includegraphics[width=.95\textwidth]{../PNG/AREF2VCC.png}
     \caption{from \(1.1V\) to \(5V\)}
     \label{pic:aref5}
   \end{subfigure}
   \caption{Umschalten von AREF mit einem \(1nF\) Kondensator}
 \end{figure}
 
-\begin{description}
+\begin{description} \setlength{\itemsep}{0em}
   \item[REF\_R\_KORR] gibt einen Offset für die interne Referenz-Spannung in mV-Einheiten an.
 Mit diesem Offset kann eine Differenz bei der Umschaltung der Referenzspannung für die Widerstandsmessung abgeglichen werden.
 Wenn die AUTO\_CAL-Option gewählt wurde, ist dieser Wert nur ein Offset zu der gefundenen Spannungs-Differenz in der
@@ -671,100 +671,189 @@ gesetzt werden. Wahrscheinlich sind die Fuses aber auch mit der Fehlermeldung ri
 \newpage
 \subsection{Benutzung unter Linux}
 
-Um die Verzweiflungen und "`schlaflose Nächte"', die Schreiber dieses Dieses Unterkapitel erlitten hatte, nach dem er, ohne jegliche AVR Erfahrung, einen Clonetester erworben hatte und diesem die deutsche Sprache "`beibringen"' wollte, anderen Kollegen zu ersparen, wurde dieses Unterkapitel geschrieben.\\
+Um die Verzweiflungen und "`schlaflose Nächte"', die Schreiber dieses Unterkapitel erlitten hatte,
+nach dem er, ohne jegliche AVR Erfahrung, einen Clonetester erworben hatte und diesem die
+deutsche Sprache "`beibringen"' wollte, anderen Kollegen zu ersparen,
+wurde dieses Unterkapitel geschrieben.\\
 Die hier bei erworbene Erfahrungen sollten anderen "'willigen"' unerfahrenen helfen,
- 
 ERFOLGREICH ihr Tester zu programmieren.\\
 Diese Gelegenheit wird benutzt, dem Entwickler des Transistortester und Autor dieses Dokuments,  
-
-Karl-Heinz Kübbeler siehe \cite{karlheinz1} zu danken für sein Engagement und Geduld,\\
+Karl-Heinz Kübbeler siehe \cite{karlheinz1} zu danken für sein Engagement und Geduld,
 denn die folgenden Seiten hätten ohne seiner Hilfe nie entstanden.
      
-Damit das übersetzen der Firmware und Brennen ins MCU gelingt und gleichzeitig \dots \\
+Damit das übersetzen der Firmware und Brennen ins MCU gelingt und gleichzeitig \dots
 "`das Rad nicht neu erfunden sein müsste"', wurde ein Teil der folgenden Seiten aus dem
 Original übernommen.
 
 Also noch einmal \dots \huge{EINEN RIESEN DANK}
 \normalsize an Karl-Heinz Kübbeler.
 
-\subsection{Betrieb System Linux}
+\subsection{Betriebssystem Linux}
 
-Die Programmierung unten Linux bringt viele Vorteile, weil dieses OS von Experten entwickelt wurde, die sich auf den Wünschen der Benutzer orientieren.
+Die Programmierung unten Linux bringt viele Vorteile, weil dieses OS von Experten entwickelt wurde,
+die sich auf den Wünschen der Benutzer orientieren.
 Zu dem ist die Umgebung kostenlos erhältlich und perfekt gewartet.
-
-Ein weiterer Vorteil ist die Sicherheit von OS selbst aber auch beim nutzen des Internets.\\ 
-Die heutigen Editionen lassen sich noch viel leichter bedienen als die Mitbewerber OS.\\
-Diese Anleitung soll alle "'nicht"' Linux Benutzer dazu animieren es NUN zu testen in dem sie ihr Tester damit programmieren.
+Ein weiterer Vorteil ist die Sicherheit von OS selbst aber auch beim Nutzen des Internets.
+Die heutigen Editionen lassen sich noch viel leichter bedienen als die Mitbewerber OS.
+Es gibt auch sehr leistungsfähige Editoren wie vim oder emacs, die aber etwas
+Einarbeitungszeit erfordern. Speziell vim hat den Vorteil, daß er praktisch auf
+jedem System vorinstalliert ist. Aber gerade bei diesem Editor ist der
+Wechsel zwischen Eingabe-Modus und Befehls-Modus gewöhnungsbedürfig.
+Diese Anleitung soll alle "'nicht"' Linux Benutzer dazu animieren es NUN zu testen
+indem sie ihr Tester damit programmieren.
 
 Als Beispiel wird hier Linux Mint in der aktueller Version aus dem Internet benutzt.
-\\Die Installation ist auf verschiedene Arten möglich und bringt seinen eigenen Bootmanager mit, damit man sein vorhandenes OS weiter parallel nutzen kann.
+Die Installation ist auf verschiedene Arten möglich und bringt seinen eigenen Bootmanager mit,
+damit man sein vorhandenes OS weiter parallel nutzen kann.
 
 \subsection{Benutzung unter Linux}
 
-auf einem neu installierten OS.\\
+auf einem neu installierten OS.
 Für diejenigen, die nicht gerne schreiben, bietet Linux eine einfachere Möglichkeit:
 
-Dieses Handbuch auf einen USB-Stick kopieren und im Linux öffnen.\\
-Danach die Maus zum Namen des Dokumentes führen, hier linke Maustaste drücken und das Dokument bis zum linken Rand des Bildschirms ziehen, bis ein ein mögliches Rahmen angezeigt wird.
-Nun wird die Maus losgelassen.
+Dieses Handbuch auf einen USB-Stick kopieren und im Dateibrowser mit Doppelclick der
+linken Maustaste \LMB öffnen.
+Alternativ kann mit der \RMB Taste ein anderes als das
+vorgewählte PDF Betrachtungsprogramm ausgewählt werden.
+Das geöffnete Fenster kann auf dem Bildschirm verschoben werden und auch in der Größe
+angepasst werden. Dazu gibt es in der Regel verschiedene Möglichkeiten.
+Eine davon ist die \RMB Taste zu drücken, wenn der Mauszeiger 
+auf die Kopfzeile des Fensters zeigt und dann die Funktion auszuwählen..
+So kann man das Fenster mit der PDF-Dokumentation beispielsweise an die linke Bildschirmseite
+verschieben. Zum Verschieben kann man auch mit der \LMB Taste die
+Kopfleiste des Fensters packen und bei weiter gedrückter \LMB Taste verschieben.
+Im nächsten Schritt wird die Tastenkombination \keys{{Strg} + \Alt + t} gleichzeitig gedrückt,
+um ein Befehlsfenster zu öffnen.
+Dies wird nun auf die gleiche Weise zur rechten Hälfte des Bildschirmes verschoben und
+kann auch in der Größe verändert werden.\\
 
-Die Anleitung nimmt nun die linke Hälfte des Bildschirms ein.
-\\Im nächsten Schritt wird [Strg] + [Alt] + [t] gleichzeitig gedrückt, um das Befehlsfenster zu öffnen.
-Dies wird nun auf gleicher Weise nun die rechte Hälfte des Bildschirmes belegen.\\
+In der Regel besitzen die graphischen Oberflächen bei Linux mehr als eine Arbeitsfläche,
+die mit der Tastenkombination \keys{{Strg} + \Alt + \arrowkeyright}
+beziehungsweise \keys{{strg} + \Alt + \arrowkeyleft} umgeschaltet werden können.
+Mit der \RMB Taste können Sie auf der Kopfzeile der Fenster eine
+der Arbeitsflächen wählen, auf der das Fenster angezeigt wird.
+So kann man die für die Arbeit benötigten Fenster auf einer Arbeitfläche
+zusammen sammeln und erstickt nicht in Fenstern. 
+
 
 \subsection{Programm Pakete installieren}
 
 Nun brauchen wir einen Internetzugang.
-\\Um den Tester zu programmieren, müssen zuerst Programmpakete installiert werden:
+Um den Tester zu programmieren, müssen zuerst Programmpakete
+binutils-avr, avrdude, avr-libc und gcc-avr installiert werden.
+Jetzt in diesem Dokument zu dieser Seite, bis zu diesem Text navigieren:
 
-'binutils-avr', 'avrdude', 'avr-libc' und 'gcc-avr'.
-\\Jetzt in diesem Dokument zu dieser Seite, bis zu diesem Text navigieren:
-
-sudo apt-get install avrdude avr-libc binutils-avr gcc-avr
-\\den Text mit gedrückter linken Maustaste markieren, die Maus auf das Kursor des rechten
-\\Befehlsfenster führen und durch drücken der mittlerer Maustaste (Scroll-Rad) \textbf{weiter als [MT] abgekürzt} wieder einfügen.
- 
-Nach dem Bestätigung mit [Enter], wird von 'sudo' noch Benutzerpassword verlangt.
-\\Anders als bei Windows wird das Passwort \textbf{Blind} eingegeben und mit [Enter] bestätigt.
-
+\verb"sudo apt-get install avrdude avr-libc binutils-avr gcc-avr git"\\
+Dann den Text mit gedrückter linken Maustaste \LMB markieren,
+die \LMB Taste wieder loslassen
+und den Mauszeiger in das rechte Befehlsfenster führen.
+Hier kann jetzt durch Drücken der mittlerer Maustaste (Scroll-Rad)
+{weiter als \MMB abgekürzt} der vorher kopierte Text einfügt werden.
+Nach dem Bestätigung mit \keys{\enter}, wird von 'sudo' noch das Benutzerpassword verlangt.
+Anders als bei Windows wird das Passwort \textbf{Blind} (mit verdecktem Echo auf dem Bildschirm)
+eingegeben und mit \keys{\enter} oder \keys{\return} bestätigt.
 Damit werden nun alle Software Pakete durch 'apt' herunter geladen und installiert.\\
-U.U. muss man dazwischen, Fragen durch [J] bestätigen.
-\\Bitte darauf achten, das im Linux zwischen Groß und Kleinschreibung unterschieden wird.
-\\Also nicht mit [j] sondern mit [J] antworten!
+Es kann sein, daß apt bei der Installation der Pakete Fragen stellt,
+die man in der Regel mit [J] beantworten kann.
+Bitte darauf achten, das im Linux zwischen Groß und Kleinschreibung unterschieden wird.
 
 \subsection{Download der Quellen}
 
-Zum Download der Quellen und der Dokumentation aus dem Github-Archiv muss man zu erst github installieren mit:
-
-sudo apt-get install git\\
-Der Erfolg sieht man mit:
-
-git version\\
-Falls schon der Ordner transistortester existiert, sollte man es umbenennen oder löschen.\\
+Ob die Versionsverwaltung git erfolgreich installiert wurde,
+kann man mit dem folgendn Kommando prüfen:
+\verb"git version"\\
+Falls in Ihrem Heimatverzeichnis schon ein Ordner transistortester existiert,
+sollte man den umbenennen oder löschen.
 Mit dem Befehl:   
-
-git clone https://github.com/Mikrocontroller-net/transistortester\\
-wird das komplette Archiv heruntergeladen.\\
-Die Dateien sind nun in dem Linux [Persönlicher Ordner] auf (/home/"`user"') unten dem Namen "`transistortester"'.\\
-Die Kontrolle des Vorhandensein. Teminal Fenster öffnen, "`ls"' eingeben und bestätigen.\\
+\verb"git clone https://github.com/Mikrocontroller-net/transistortester"\\
+wird das komplette Archiv heruntergeladen.
+Die Dateien sind nun in dem Linux [Persönlicher Ordner] auf (/home/"`user"') unter dem
+Namen "`transistortester"'.
+Mit der Terminaleingabe \mbox{\keys{l} \keys{s} \keys{\return}} kann man das Vorhandensein überprüfen.
+Mehr Informationen über Dateien und Verzeichnisse erhält man mit
+dem Kommando \mbox{ls -lh}. Hier wurden jetzt zwei Optionen für das Kommando ls zusammengefasst,
+die -l Option und die -h Option. Diese Eingabeform ist also eine Kurzform für
+das Kommando \mbox{ls -l -h} oder auch \mbox{ls -l --human-readable}.
+Die Reihenfolge der Optionen spielt übrigens keine Rolle,
+genau wie die Anzahl der trennenden Leerzeichen.
+Bei fast allen Kommandos erfährt man mehr über die Bedienung und die Optionen
+durch die Eingabe \mbox{man <kommando>} oder durch \mbox{<kommando> --help}.
+Das gilt natürlich auch für das Kommando git.
 Um neue Updates heruntergeladen, reicht es in der Zukunft, aus diesem Ordner:
-
-git status\\
-einzugeben.\\
-Optional kann man auf dieser Stelle sein eigenes Konto bei GitHub erstellen und Konfigurieren.\\
+\verb"git checkout"\\
+einzugeben.
+Optional kann man auf dieser Stelle sein eigenes Konto bei GitHub erstellen und konfigurieren.\\
 Trage dabei statt "Linux Mind" deinen eigenen Namen und Mail Adresse ein:
-
- git config --global user.name "`Linux Mind"'
- 
-git config --global user.email "`Linux@Mind"'
+\verb|git config --global user.name "Linux Mind"|\\
+\verb|git config --global user.email "Linux@Mind"|\\
 
 
 \subsection{Benutzung der Schnittstellen}
 \label{sec:Schnittstellen}
 
-für den Nutzer (user) vorbereiten.\\
-USB-Geräte können durch Eingabe von 'lsusb' im Befehlsfenster erkannt werden.
-Geben Sie 'lsusb' zuerst ohne und dann mit angeschlossenem USB-Programmer ein.\\
+Viele ISP-Programmer benutzen eine serielle Schnittstelle für
+die Verbindung zum Rechner.
+Für diese Geräte sollten Sie überprüfen, welche Gerätebezeichnung
+diesem Gerät zugeordnet ist.
+Alle modernen Programmer mit serieller Schnittstelle benutzen die USB Schnittstelle,
+da diese Schnittstelle auch gleich die Stromversorgung sicherstellt.
+Beim Einstecken eines USB Gerätes wird bei Linux ein Eintrag in das
+Systemprotokoll vorgenommen. Da das Systemprotokoll eine Textdatei ist,
+kann man diese einfach auf dem Bildschirm anzeigen.
+Dazu kann man in Konsolfenster den Befehl dmesg benutzen und da wir nach dem
+Einstecken des Programmers nur an den letzten Zeilen des Protokolls
+interessiert sind, benutzt man:
+\verb"dmesg|tail"\\
+Für einen Pololu Programmer sieht das Ergebnis dass so aus:
+\begin{footnotesize}
+\begin{verbatim}
+usb 1-3: new full-speed USB device number 3 using xhci_hcd
+usb 1-3: New USB device found, idVendor=1ffb, idProduct=00bb, bcdDevice= 1.02
+usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-3: Product: Pololu USB AVR Programmer v2.1
+usb 1-3: Manufacturer: Pololu Corporation
+usb 1-3: SerialNumber: 00227484
+cdc_acm 1-3:1.1: ttyACM0: USB ACM device
+cdc_acm 1-3:1.3: ttyACM1: USB ACM device
+usbcore: registered new interface driver cdc_acm
+cdc_acm: USB Abstract Control Model driver for USB modems and ISDN adapters
+\end{verbatim}
+\end{footnotesize}
+Wichtig sind hier die Zeilen 7 und 8 mit den Einträgen ttyACM0 und ttyACM1.
+Das sind die Gerätebezeichnungen für zwei serielle Schnittstellen.
+Bei Linux sind alle Geräte auch Bestandteil des Dateibaums und im
+Ordner ,,/dev/'' eingetragen. Mit vollständigem Namen heißen die
+beiden seriellen Schnittstellen also ,,/dev/ttyACM0'' und ,,/dev/ttyACM1''.
+Für den Pololu Programmer muß man wissen, daß die erste serielle Schnittstelle
+für den ISP-Programmer benutzt wird und die zweite serielle Schnittstelle
+für andere Zwecke frei benutzt werden kann.
+Sie können die Existenz der Geräteeintragungen mit dem Kommando
+\verb"ls -l /dev/ttyACM*"\\
+überprüfen. Das Ergebnis sollte dann so aussehen:
+\begin{footnotesize}
+\begin{verbatim}
+crw-rw---- 1 root dialout 166, 0 Mär 11 09:57 /dev/ttyACM0
+crw-rw---- 1 root dialout 166, 1 Mär 11 09:57 /dev/ttyACM1
+\end{verbatim}
+\end{footnotesize}
+Bei dieser Ausgabe kann man lesen, daß der Zugriff für den Benutzer ,,root''
+und für die Benutzergruppe ,,dialout'' erlaubt ist.
+Mit dem Kommando ,,id'' können Sie ihre Gruppenzugehörigkeit überprüfen.
+Hier sollte die Gruppe ,,dialout'' in der Liste auftauchen.
+Jetzt muß für dieses Beispiel nur der PORT Eintrag in der Makefile auf
+,,PORT=/dev/ttyACM0'' geändert werden,
+damit das avrdude Programm auf den Programmer zugreifen kann.
+Wenn bei Ihrem System noch andere USB-seriell Schnittstellen benutzt
+werden, können natürlich auch andere Nummern wie 0 und 1 vergeben sein.\\
+
+Wenn Ihr Programmer eine spezielle USB-Schnittstelle benutzt und
+keinen USB-seriell Typ, ist wahrscheinlich noch zusätzliche
+Arbeit erforderlich. Als PORT kann hier fest ,,usb'' in der Makefile
+eingetragen werden. Es ist aber wahrscheinlich, daß Sie trotzdem
+keinen Zugriff auf das Gerät haben.
+Alle angeschlossenen USB-Geräte können durch Eingabe von ,,lsusb'' im Befehlsfenster 
+angezeigt werden.
+Geben Sie ,,lsusb'' zuerst ohne und dann mit angeschlossenem USB-Programmer ein.
 Ein Vergleich der Ergebnisse lokalisiert den USB-Programmer.
 
 Das Ergebnis von lsusb kann so aussehen:
@@ -777,89 +866,93 @@ Bus 002 Device 059: ID 2341:0042 Arduino SA Mega 2560 R3 (CDC ACM)
 Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub}
 \end{verbatim}
 \end{footnotesize}
-Hier wurde als Device 58 ein AVR ISP mkII erkannt (DIAMEX ALL-AVR).\\
-Die ID 03eb ist eine Herstellerkennung und die ID 2104 eine Produktkennung.\\
-Diese beiden Kennungen werden der Datei /etc/udev/rules.d/90-atmel.rules benötigt und erstellt\\
+Hier wurde als Device 58 ein AVR ISP mkII erkannt (DIAMEX ALL-AVR).
+Die ID 03eb ist eine Herstellerkennung und die ID 2104 eine Produktkennung.
+Diese beiden Kennungen werden der Datei /etc/udev/rules.d/90-atmel.rules benötigt und erstellt
 mit Hilfe von:
-
-sudo xed /etc/udev/rules.d/90-atmel.rules\\
+\verb"sudo xed /etc/udev/rules.d/90-atmel.rules"\\
 In diesem Beispiel besteht die Datei 90-atmel.rules aus einer Zeile:
 \begin{footnotesize}
 \begin{verbatim}
-SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2104", MODE="0660",
-GROUP="plugdev"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2104",\
+MODE="0660", GROUP="plugdev"
 \end{verbatim}
 \end{footnotesize}
-Dieser Eintrag erlaubt den Zugriff auf das Gerät für Mitglieder der Gruppe ,,plugdev''.\\
-~\\
+Dieser Eintrag erlaubt den Zugriff auf das Gerät für Mitglieder der Gruppe ,,plugdev''.
 Um die meisten Programmer verwenden zu können, wird folgendes Text in 90-atmel.rules empfohlen:
 \begin{footnotesize}
 \begin{verbatim}
 # Copy this file to /etc/udev/rules.d/90-atmel.rules
 # AVR ISP mkII - DIAMEX ALL-AVR
-SUBSYSTEM=="usb", ATTRS {idVendor}=="03eb", ATTS {idProduct}=="2104", MODE="0660", 
- GROUP = "plugdev",
+SUBSYSTEM=="usb", ATTRS {idVendor}=="03eb", ATTS {idProduct}=="2104",\
+MODE="0660", GROUP = "plugdev",
 # USB ISP-programmer für Atmel AVR
-SUBSYSTEM=="usb", ENV {DEVTYPE}=="usb_device", SYSFS {idVendor}=="16c0", MODE="0666",
- SYSFS {idProduct} == "05dc",
+SUBSYSTEM=="usb", ENV {DEVTYPE}=="usb_device", SYSFS {idVendor}=="16c0",\
+MODE="0666", SYSFS {idProduct} == "05dc",
 # USB asp programmer
 ATTRS {idVendor}=="16c0", ATTRS {idProduct}=="05dc", GROUP="plugdev", MODE="0660"
 # USBtiny programmer
 ATTRS {idVendor}=="1781", ATTRS {idProduct}=="0c9f", GROUP="plugdev", MODE="0660"
-# Pololu programmer
-SUBSYSTEM=="usb", ATTRS {idVendor}=="1ffb", MODE="0666"
 \end{verbatim}
 \end{footnotesize}
 Nach dem die Datei erstellt wurde, kann die Erstellung und Inhalt kontrollieren mit:
+\verb"less /etc/udev/rules.d/90-atmel.rules"\\ 
 
-less /etc/udev/rules.d/90-atmel.rules\\ 
 Das ebenfalls als Device 59 erkannte USB Gerät  Arduino SA Mega 2560 System erzeugt eine
 Zugriffsmöglichkeit auf das serielle Gerät ,,/dev/ttyACM0'' für Mitglieder der Gruppe 'dialout'.
 
-\subsection{Gruppen Mittgliedschaft}
+\subsection{Gruppen Mitgliedschaft}
 
 Deswegen sollte die eigene Benutzerkennung sowohl Mitglied der Gruppe 'plugdev' als auch
 der Gruppe 'dialout' sein. Das Kommando:
 
-sudo usermod -a -G dialout,plugdev \$USER\\
+\verb"sudo usermod -a -G dialout,plugdev $USER"\\
 sollte die Zugehörigkeit sicherstellen. 
 Jetzt sollte ein Zugriff mit avrdude auf beide Geräte möglich sein.
-Kontrollieren kann man es mit dem Kommando: 'id'. \\
-Sollten Probleme auftreten kann man die Mitgliedschaft auch über:\\
-~Menü/Systemverwaltung/Benutzer und Gruppen/<Passwort>/ nun erscheint ein Fenster mit zwei Reitern.\\
-Wenn man nun im Reiter Benutzer auf sein Name klickt, sieht man rechts sein Profil und die Gruppen Zugehörigkeiten. Mit dem Button <ADD> ist nun Möglich neue Gruppen hinzufügen.
+Kontrollieren kann man es mit dem Kommando: 'id'. 
+Sollten Probleme auftreten kann man die Mitgliedschaft auch mit der graphischen Bedienoberfläche:
+\menu[,]{Menü,Systemverwaltung,{Benutzer und Gruppen},{?Passwort}}.
+Das Menü kann man auch mit der \keys{\winmenu} Taste zwischen \keys{{Strg}} und
+\keys{\Alt} öffnen.
+Nun erscheint ein Fenster mit zwei Reitern.
+Wenn man nun im Reiter Benutzer auf seinen Name klickt,
+sieht man rechts sein Profil und die Gruppen Zugehörigkeiten.
+Mit dem Button \fbox{ADD} ist nun möglich neue Gruppen hinzufügen.
 
 \subsection{Arbeitsumgebung}
 
-Damit das Original erhalten bleibt und da sich Terminalfenster immer in ../home/\glqq user\grqq/ öffnet, wird empfohlen, dort eine Verknüpfung mit dem Namen {\bf Mytester} zu verlegen, mit folgenden Eingaben:
+Damit das Original erhalten bleibt und da sich Terminalfenster immer in ../home/\glqq user\grqq/ öffnet, wird empfohlen, dort eine Verknüpfung mit dem Namen \textbf {Mytester} zu verlegen, mit folgenden Eingaben:
 
-cd transistortester/Software/trunk/\\
+\verb"cd transistortester/Software/trunk/"\\
 und dann durch Eingabe von 'ls' das Unterverzeichnis, des ,,benötigten Testers Models'', zu finden.\\
-Bei den folgenden zwei Kommandos, diese zuerst NUR einfügen, ohne [Enter] zu drücken: !
+Bei den folgenden zwei Kommandos, diese zuerst NUR einfügen, ohne \keys{enter} zu drücken: !
 
-cp -r 'MyT' Mytester/\\
+\verb"cp -r 'MyT' Mytester/"\\
 Das Verzeichnis des benötigten Models mit der Maus markieren.
-Nun Kursor mit Hilfe von [Pfeiltaste-links] zur letztem Zeichen des Text 'MyT' positionieren und
-diese Zeichen löschen. Nach dem das letzte Zeichen gelöscht wurde, die [MT] Taste der Maus drücken.
-Erst jetzt [Enter] benutzen. Damit ist die Arbeitsumgebung erstellt.
+beziehungsweise \keys{{Strg} + \Alt + \arrowkeyleft} umgeschaltet werden können.
+Nun Kursor mit Hilfe von \keys{\arrowkeyleft} zur letztem Zeichen des Text 'MyT' positionieren und
+diese Zeichen mit der \keys{\backspace} Taste löschen.
+Nach dem das letzte Zeichen gelöscht wurde, die [MT] Taste der Maus drücken.
+Erst jetzt die \keys{\enter} Taste betätigen.
+Damit ist die Arbeitsumgebung erstellt.
 Die Kontrolle der Existenz und Inhalts ist möglich mit:\\
 
-diff 'MyT' Mytester/\\
+\verb"diff 'MyT' Mytester/"\\
 vobei muss 'MyT', wie vorher, für das Verzeichnis des ,,benötigten Testers Models'' ausgetauscht werden.
 Mit dem letzten Anweisung:
 
-ln -s \textasciitilde/transistortester/Software/trunk/Mytester \textasciitilde/Mytester\\
-wird die Verknüpfung zum Arbeitsverzeichnis erstellt.\\ 
+\verb"ln -s ~/transistortester/Software/trunk/Mytester ~/Mytester"\\
+wird die Verknüpfung zum Arbeitsverzeichnis erstellt. 
 Ab jetzt erreicht man dieses Verzeichnis sehr einfach mit:
 
-[Strg] + [Alt] + [t], cd [Leer] My [Tab] [Enter]\\
+\verb"[Strg]+[Alt]+[t]cd[Leer]My[Tab][Enter]"\\
 und schon ist man in benötigten Verzeichnis. Mit 'ls' sieht man den Inhalt.\\
 Weiter geht es zum Bearbeiten der Makefile mit der inzwischen bekannten Anweisung:
 
-xed Ma [Tab] [Enter]\\
-{\bf Hier ist am wichtigsten, den VORHANDENEN} USB-Programmer anmelden.\\
-Siehe dazu im Unterkapitel \ref{sec:config}, auf der Seite \pageref{sec:config-Prog}, Thema PROGRAMMER 
-und PORT.
+\verb"xed[Leer]Ma[Tab][Enter]"\\
+\textbf {Hier ist am wichtigsten, den VORHANDENEN} USB-Programmer anmelden.
+Siehe dazu im Unterkapitel \ref{sec:config}, auf der Seite \pageref{sec:config-Prog},
+Thema PROGRAMMER und PORT.
 
 \begin{tabbing}
 Fo\=lgende Aufrufe sind \=zu empfehlen:\\
@@ -882,15 +975,15 @@ Die Abbildungen \ref{fig:WinAVR1} zeigen das File-Menü der Bedienoberfläche vo
 Öffnen der Datei Makefile und zum Abspeichern der Makefile nach den Änderungen (save).
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{8,5cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8cm]{../PNG/Notepad_open.png}
+    \includegraphics[width=.95\textwidth]{../PNG/Notepad_open.png}
     \caption{open Makefile}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{8,5cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8cm]{../PNG/Notepad_save.png}
+    \includegraphics[width=.95\textwidth]{../PNG/Notepad_save.png}
     \caption{save Makefile}
   \end{subfigure}
   \caption{Bedienung der WinAVR-Oberfläche Programmer's Notepad}
@@ -900,15 +993,15 @@ Die nächsten Abbildungen \ref{fig:WinAVR2} zeigen das Tools-Menü von Programme
 zum Übersetzen des Programms (Make All) und zum Programmieren des ATmega (Program) mit avrdude.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{8,5cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8cm]{../PNG/Notepad_make.png}
+    \includegraphics[width=.95\textwidth]{../PNG/Notepad_make.png}
     \caption{Erzeuge Programmdaten (.hex/.eep)}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{8,5cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=8cm]{../PNG/Notepad_program.png}
+    \includegraphics[width=.95\textwidth]{../PNG/Notepad_program.png}
     \caption{Programmiere ATmega}
   \end{subfigure}
   \caption{Bedienung der WinAVR-Oberfläche Programmer's Notepad}

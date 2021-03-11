@@ -12,14 +12,14 @@ Das Schaltbild dieser Messungen mit Testpin 1 (TP1) und Testpin 3 (TP3) werden v
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/ResistormessL1.pdf}
+\includegraphics[width=.8\textwidth]{../FIG/ResistormessL1.pdf}
 \caption{Messung Type 1 mit \(680\Omega\) }
 \label{fig:RL1mes}
 \end{figure}
 
 \begin{figure}[H]
  \centering
- \includegraphics[]{../FIG/ResistormessL2.pdf}
+ \includegraphics[width=.8\textwidth]{../FIG/ResistormessL2.pdf}
  \caption{Messung Type 2 mit \(680\Omega\) }
 \label{fig:RL2mes}
 \end{figure}
@@ -43,7 +43,7 @@ Der theoretische Spannungsverlauf wird in Abbildung~\ref{fig:RLvtot} gezeigt, wo
 in logarithmischer Skalierung dargestellt sind.
 \begin{figure}[H]
 \centering
-\includegraphics[width=16cm]{../GNU/RLvtotGE.pdf}
+\includegraphics[width=.93\textwidth]{../GNU/RLvtotGE.pdf}
 \caption{Spannung von Type 1 und Type 2 mit Messwiderstand \(680\Omega\) }
 \label{fig:RLvtot}
 \end{figure}
@@ -72,16 +72,16 @@ Durch diese Maßnahme werden auch große Kondensatoren nicht mehr irrtümlich al
 Widerstände erkannt und der Gleichstrom-Widerstand großer Induktivitäten wird richtig gemessen.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../GNU/RLvlowGE.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/RLvlowGE.pdf}
     \caption{Type 1 Messung}
     \label{fig:RLvlow}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../GNU/RLvhighGE.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/RLvhighGE.pdf}
     \caption{Type 2 Messung}
     \label{fig:RLvhigh}
   \end{subfigure}
@@ -109,21 +109,21 @@ Dieser Offset kann mit der Konstante RH\_OFFSET (define) in der Datei config.h a
 
 \begin{figure}[H]
 \centering
-\includegraphics[]{../FIG/ResistormessH1.pdf}
+\includegraphics[width=.8\textwidth]{../FIG/ResistormessH1.pdf}
 \caption{Messung Type 3 mit \(470k\Omega\) }
 \label{fig:RH1mes}
 \end{figure}
 
 \begin{figure}[H]
  \centering
- \includegraphics[]{../FIG/ResistormessH2.pdf}
+ \includegraphics[width=.8\textwidth]{../FIG/ResistormessH2.pdf}
  \caption{Messung Type 4 mit \(470k\Omega\) }
 \label{fig:RH2mes}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=16cm]{../GNU/RHvGE.pdf}
+\includegraphics[width=.93\textwidth]{../GNU/RHvGE.pdf}
 \caption{Spannungen bei Messungen von Type 3 und Type 4  mit \(470k\Omega\) }
 \label{fig:RHv}
 \end{figure}
@@ -151,22 +151,22 @@ Unterhalb von einem Widerstandswert von \(10\Omega\) macht ein Auflösungs-Schri
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=16cm]{../GNU/Mega8resGE.pdf}
+\includegraphics[width=.93\textwidth]{../GNU/Mega8resGE.pdf}
 \caption{Relativer Fehler für Widerstands-Messungen mit ATmega8 }
 \label{fig:mega8res}
 \end{figure}
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../GNU/Mega8AresGE.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/Mega8AresGE.pdf}
     \caption{mit drei ATmega8A}
     \label{fig:mega8Ares}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../GNU/Mega8LresGE.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/Mega8LresGE.pdf}
     \caption{mit drei ATmega8L}
     \label{fig:mega8Lres}
   \end{subfigure}
@@ -175,7 +175,7 @@ Unterhalb von einem Widerstandswert von \(10\Omega\) macht ein Auflösungs-Schri
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=16cm]{../GNU/Mega168resGE.pdf}
+\includegraphics[width=.93\textwidth]{../GNU/Mega168resGE.pdf}
 \caption{Relativer Fehler für Widerstand-Messungen mit ATmega168 }
 \label{fig:mega168res}
 \end{figure}
@@ -197,16 +197,16 @@ der entweder manuell mit der Option REF\_R\_KORR oder automatisch mit der Option
 Im AUTO\_CAL-Modus ist REF\_R\_KORR ein zusätzlicher Offset zur automatisch gefundenen Spannungsdifferenz.
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../GNU/m168res_allGE.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/m168res_allGE.pdf}
     \caption{mit drei ATmega168}
     \label{fig:m168res_all}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../GNU/m168ares_allGE.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/m168ares_allGE.pdf}
     \caption{mit drei ATmega168A}
     \label{fig:m168ares_all}
   \end{subfigure}
@@ -215,22 +215,22 @@ Im AUTO\_CAL-Modus ist REF\_R\_KORR ein zusätzlicher Offset zur automatisch gef
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=16cm]{../GNU/m168pres_allGE.pdf}
+\includegraphics[width=.93\textwidth]{../GNU/m168pres_allGE.pdf}
 \caption{Relativer Fehler für Widerstands-Messungen mit drei ATmega168P }
 \label{fig:m168pres_all}
 \end{figure}
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../GNU/m328res_allGE.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/m328res_allGE.pdf}
     \caption{mit drei ATmega328}
     \label{fig:m328res_all}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../GNU/m328pres_allGE.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/m328pres_allGE.pdf}
     \caption{mit drei ATmega328P}
     \label{fig:m328pres_all}
   \end{subfigure}

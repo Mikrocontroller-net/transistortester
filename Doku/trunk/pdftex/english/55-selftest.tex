@@ -31,12 +31,12 @@ The ISP interface influences the measurement.
 \vspace{1cm}
 Here is the list of currently implemented tests:
 \vspace{1cm}
-\begin{enumerate}
-\item {\bf Measurement of the \(1.3V\) (or \(1.1V\)) reference Voltage (band gap Reference).}
+\begin{enumerate} \setlength{\itemsep}{0em}
+\item \textbf {Measurement of the \(1.3V\) (or \(1.1V\)) reference Voltage (band gap Reference).}
 In row 1 the text ``Ref='' and the measured Voltage in mV is displayed.
 For the ATmega8 the voltage should be near to \(1.3V\). For the other processors the voltage should be near to \(1.1V\).
 The second row shows the resulting factor for the capacity measurement with the \(470k\Omega\) resistor.
-\item {\bf Comparing of the  \(680\Omega\) resistors.}
+\item \textbf {Comparing of the  \(680\Omega\) resistors.}
 In row~1 the cryptic text  ``+RL- 12 13 23'' is shown. Meaning of this is as follows: 
 The RL is the short form of Resistor Low meaning the \(680\Omega\) resistors. The 12 stand for: 
 resistor at pin~1 is connected to VCC (+) and resistor at pin~2 is connected to GND (-). 
@@ -54,7 +54,7 @@ The theoretical value with respect to the internal resistance of the pins should
 
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=17cm]{../FIG/Test2.pdf}
+ \begin{overpic}[width=1.\textwidth]{../FIG/Test2.pdf}
   \color{black}
   \put(18,22){\makebox(0,0)[cb]{first measurement}}
   \put(49,22){\makebox(0,0)[cb]{second measurement}}
@@ -64,30 +64,30 @@ The theoretical value with respect to the internal resistance of the pins should
 \label{fig:test2}
 \end{figure}
 
-\item {\bf Comparing of the \(470k\Omega\) resistors.}
+\item \textbf {Comparing of the \(470k\Omega\) resistors.}
 Now the display shows in row 1 ``+RH- 12 13 23''. The same procedure as done in step~2 is repeated with the \(470k\Omega\) resistors (symbols RH).
 All results are shown as difference to the theoretical value.
 The theoretical value is this time \(\frac{5001 \cdot (19 + 470000]}{ (19 + 470000 + 470000 + 22)} = 2500\) for all combinations.
 
-\item In this step nothing is measured, but the {\bf order is displayed „ isolate Probe!“},
+\item In this step nothing is measured, but the \textbf {order is displayed „ isolate Probe!“},
 which means that it is time to separate the probes (release from wire).
 This step will finish only if you release the connections between the probes.
 
-\item {\bf This step tests the capability of GND (-) connected \(470k\Omega\) resistors (H) to pull the test pins to GND.}
+\item \textbf {This step tests the capability of GND (-) connected \(470k\Omega\) resistors (H) to pull the test pins to GND.}
 Row 1 shows the text  ``RH-''.
 Row 2 should display zero for all three pins.
 
-\item {\bf This step tests the capability of VCC (+) connected \(470k\Omega\) resistors (H) to pull the test pins  to VCC (+).}
+\item \textbf {This step tests the capability of VCC (+) connected \(470k\Omega\) resistors (H) to pull the test pins  to VCC (+).}
 Row 1 shows the text ``RH+''.
 The results are shown als difference to VCC and should be near zero.
  Great differences from the best value for test 5 and 6 are errors  such as isolation problem, flux material or damaged port.
 
-\item {\bf This Step tests the voltages of the \(470k\Omega / 680\Omega\)  resistor divider.}
+\item \textbf {This Step tests the voltages of the \(470k\Omega / 680\Omega\)  resistor divider.}
 The voltage difference to the expected voltage of the \(470k\Omega\) / \(680\Omega\) resistor dividers is shown
 in row 2 of the LCD for all three terminals.
 Differences of more than some mV can be caused by the assembly of wrong resistor values.
 
-\item {\bf Measuring of internal resistance of pin output switched to the GND signal.}
+\item \textbf {Measuring of internal resistance of pin output switched to the GND signal.}
 This test and the follwing tests will only be done, if the option AUTO\_CAL is selected.
 The internal resistance of the port C outputs switched to GND (-) are measured with the current
 of to VCC (+) switched \(680\Omega\) resistors, see Figure~\ref{fig:test7}.
@@ -97,7 +97,7 @@ Is is assumed that the port resistance of the different ports are nearly identic
 The resistor value will be shown in the next test.
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=15cm]{../FIG/Test7.pdf}
+ \begin{overpic}[width=.9\textwidth]{../FIG/Test7.pdf}
   \color{black}
   \put(16,34){\makebox(0,0)[cb]{first measurement}}
   \put(47,35){\makebox(0,0)[cb]{second measurement}}
@@ -107,7 +107,7 @@ The resistor value will be shown in the next test.
 \label{fig:test7}
 \end{figure}
 
-\item {\bf Measuring of internal resistance of port outputs switched to the VCC (+)signal.}
+\item \textbf {Measuring of internal resistance of port outputs switched to the VCC (+)signal.}
 The needed current is generated with to GND connected \(680\Omega\) resistors .
 It are the same measurements as those in test~8 to the other side as you can see in Figure \ref{fig:test8}.
 With the following steps the resistance is computed:
@@ -120,7 +120,7 @@ measurement. The values are only shown by this step.
 
 \begin{figure}[H]
 \centering
- \begin{overpic}[width=15cm]{../FIG/Test8.pdf}
+ \begin{overpic}[width=.9\textwidth]{../FIG/Test8.pdf}
   \color{black}
   \put(16,35){\makebox(0,0)[cb]{first measurement}}
   \put(47,35){\makebox(0,0)[cb]{second measurement}}
@@ -130,7 +130,7 @@ measurement. The values are only shown by this step.
 \label{fig:test8}
 \end{figure}
 
-\item {\bf Measurement of the zero offset of the capacitor measurement.}
+\item \textbf {Measurement of the zero offset of the capacitor measurement.}
 The zero offset for the capacity measurement with pin combinations 1:3, 2:3 and 1:2 is shown in that order
 in display row 1 following the ``C0 ''.
 Alls three values are shown in pF units.
@@ -149,14 +149,14 @@ If the tester is configured with the SamplingADC function, the zero capacity val
 with double the count of all pin combinations. The reason for this is, that the
 zero capacity is measured for the charge and the discharge of all pin combinations separately.
 
-\item {\bf Wait for the connection of a capacitor to pin~1 and pin~3.}
+\item \textbf {Wait for the connection of a capacitor to pin~1 and pin~3.}
 The message ``\mbox{\begin{large}1 \electricC 3~\textgreater 100nF\end{large}}'' is shown in row 1 of LCD.
 To prepare the measurement of the comparator offset voltage, you must connect
 a sufficient big capacitor to pin~1 and pin~3.
 It should be a capacitor with a high quality factor and a capacity between \(100nF\) and \(20\mu F\).
 You should never use electrolytical capacitors, use film capacitors instead.
 
-\item {\bf Measurement of the comparator offset for capacitor measurement adjustment.}
+\item \textbf {Measurement of the comparator offset for capacitor measurement adjustment.}
 To get the offset of the analog comparator, a capacitor must already be connected to pin~1 and pin~3.
 The capacitor is needed for buffering the load voltage of a capacitor, in order to get the voltage
 difference of load voltage to the internal reference voltage (band gap).
@@ -170,7 +170,7 @@ readed with the internal reference.
 The measurement result is shown in row 2 with the text ``REF\_R=''. 
 Your REF\_R\_KORR value is a additional offset to this automatic find out difference value.
 
-\item {\bf Wait for a capacitor for measuring of low inductace values}
+\item \textbf {Wait for a capacitor for measuring of low inductace values}
 If the tester is configured with the SamplingADC function, a known capacitor is required for
 the computation of the inductance value from the resonant frequency of a parallel connected coil.
 Practical capacity values can be choosed from \(10nF\) to \(27nF\). 
@@ -183,7 +183,7 @@ If your tester does not include the SamplingADC function, this step is omitted.
 \end{enumerate}
 
 At the end of test function the text ``Test End''  is shown in row~1 and the version number of software is shown in row~2.
-If the Makefile option FREQUENCY\_50HZ is set, a {\bf 50Hz rectangle signal} is generated on pin~2 and 
+If the Makefile option FREQUENCY\_50HZ is set, a \textbf {50Hz rectangle signal} is generated on pin~2 and 
 the same signal in opposite direction on pin~3.
 Pin~1 is switched to GND . The current is limited with \(680\Omega\) resistors.
 This will be notified by the Output of ``50Hz'' at the end of row 1 of the LCD display.
@@ -242,23 +242,23 @@ Test 11 & Reference correction & 0 & \ref{fig:SelfTrefKorr} \\
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=16cm]{../GNU/SelfTref.pdf}
+\includegraphics[width=.9\textwidth]{../GNU/SelfTref.pdf}
 \caption{Selftest: Reference-Voltages}
 \label{fig:SelfTref}
 \end{figure}
 
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../GNU/SelfTMitL.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/SelfTMitL.pdf}
     \caption{with \(680\Omega\)}
     \label{fig:SelfTMitL}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
     \centering
-    \includegraphics[width=9cm]{../GNU/SelfTMitH.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/SelfTMitH.pdf}
     \caption{with \(470k\Omega\)}
     \label{fig:SelfTMitH}
   \end{subfigure}
@@ -266,16 +266,16 @@ Test 11 & Reference correction & 0 & \ref{fig:SelfTrefKorr} \\
 \end{figure}
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
   \centering
-    \includegraphics[width=9cm]{../GNU/SelfTbottomH.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/SelfTbottomH.pdf}
     \caption{with \(470k\Omega\) to 0V}
     \label{fig:SelfTlowH}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
   \centering
-    \includegraphics[width=9cm]{../GNU/SelfTtopH.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/SelfTtopH.pdf}
     \caption{with \(470k\Omega\) to \(5V\)}
     \label{fig:SelfTtopH}
   \end{subfigure}
@@ -283,16 +283,16 @@ Test 11 & Reference correction & 0 & \ref{fig:SelfTrefKorr} \\
 \end{figure}
 
 \begin{figure}[H]
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
   \centering
-    \includegraphics[width=9cm]{../GNU/SelfTRiLo.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/SelfTRiLo.pdf}
     \caption{with \(680\Omega\) to \(5V\)}
     \label{fig:SelfTRoL}
   \end{subfigure}
   ~
-  \begin{subfigure}[b]{9cm}
+  \begin{subfigure}[b]{.5\textwidth}
   \centering
-    \includegraphics[width=9cm]{../GNU/SelfTRiHi.pdf}
+    \includegraphics[width=1.\textwidth]{../GNU/SelfTRiHi.pdf}
     \caption{with \(680\Omega\) to \(0V\)}
     \label{fig:SelfTRoH}
   \end{subfigure}
@@ -301,14 +301,14 @@ Test 11 & Reference correction & 0 & \ref{fig:SelfTrefKorr} \\
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=16cm]{../GNU/SelfTcap0.pdf}
+  \includegraphics[width=.9\textwidth]{../GNU/SelfTcap0.pdf}
   \caption{Selftest: zero offset of the capacity measurement}
   \label{fig:SelfTcap}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=16cm]{../GNU/SelfTrefKorr.pdf}
+  \includegraphics[width=.9\textwidth]{../GNU/SelfTrefKorr.pdf}
   \caption{Selftest: correction values after automatic calibration}
   \label{fig:SelfTrefKorr}
 \end{figure}
@@ -322,7 +322,7 @@ You can see, that the automatic calibration values nearly follow the external me
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=16cm]{../GNU/SelfTrefDiff.pdf}
+  \includegraphics[width=.9\textwidth]{../GNU/SelfTrefDiff.pdf}
   \caption{Selftest: Voltage difference of the internal reference}
   \label{fig:SelfTrefDiff}
 \end{figure}

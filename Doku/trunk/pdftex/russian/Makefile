@@ -423,9 +423,9 @@ TEXLIST1 += 60-generators.tex 70-errors.tex 80-special.tex 90-todo.tex
 
 TEXLIST50 = BJT-transistors.tex MOS-transistors.tex
 
+.PHONY: ttester.pdf
 ttester.pdf: ttester.tex $(LISTE1) $(LISTE2) $(LISTE3) $(LISTE4) $(LISTE21) $(TEXLIST1) Makefile
 	pdflatex --shell-escape ttester.tex 
-	pdflatex --shell-escape ttester.tex
 
 ttinfo.pdf: ttinfo.tex $(LISTE50) $(TEXLIST50) Makefile
 	pdflatex --shell-escape ttinfo.tex

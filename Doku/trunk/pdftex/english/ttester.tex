@@ -25,10 +25,15 @@
 %\RedeclareSectionCommand[
 %  beforeskip=-.5\baselineskip,
 %  afterskip=.25\baselineskip]{subsubsection}
-%\usepackage{fixltx2e}
+
+\setlength{\parindent}{0em}	% Absatz nicht einrücken
+
+\newcommand{\LMB}{{\fbox{\(\bullet \circ \circ\)}} } % Left Mouse Button
+\newcommand{\RMB}{{\fbox{\(\circ \circ \bullet\)}} } % Right Mouse Button
+\newcommand{\MMB}{{\fbox{\(\circ \bullet \circ\)}} } % Middle Mouse Button
+\newcommand{\LRMB}{{\fbox{\(\bullet ~~ \bullet\)}} } % Middle Mouse Button
 
 %\usepackage{fixltx2e}
-\setlength{\parindent}{0em}	% Absatz nicht einrücken
 \usepackage{epstopdf}
 \usepackage{hyperref}
 \usepackage{gensymb}
@@ -43,6 +48,8 @@
 \usepackage{blindtext}			% for changing of caption spacing 
 \setlength{\abovecaptionskip}{0.5pc}
 \setlength{\belowcaptionskip}{-0.5pc}
+
+\usepackage[os=win]{menukeys}           % Zur Darstellung der Menue-Keys
 
 \sloppy
 

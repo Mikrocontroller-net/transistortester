@@ -612,54 +612,268 @@ Normally there is no reason to change these values.
 \section{Programming of the microcontroller}
 I release the software for the microcontroller with source code.
 The developement is done with Linux operationg system (Mint) and
-is controlled with a Makefile. The Makefile makes sure, that your
-software will be compiled with the prior selected Makefile options. Some constellations
-are precompiled with the source. Please take a look to the ReadMe.txt file
+is controlled with a Makefile.
+The Makefile makes sure, that your software will be compiled with the prior selected Makefile options.
+Some constellations are precompiled with the source.
+Please take a look to the ReadMe.txt file
 in the directory Software/default and to the chapter~\ref{sec:config} at page~\pageref{sec:config}.
 The result of compilation have the extensions .hex and .eep .
 The .hex file contains the data for the program memory (flash) of the ATmega processor.
-The .eep file contains the data for the EEprom memory of the ATmega. Both data files
-must be loaded to the correct memory.
+The .eep file contains the data for the EEprom memory of the ATmega.\\
+Both data files must be loaded to the correct memory.
 
-Additionally the operating state of the
-ATmega processor must be programmed with the ''fuses''.
+Additionally the operating state of the ATmega processor must be programmed with the ''fuses''.
 If you can use my Makefile and additionally the program avrdude \cite{avrdude}, you need no exact
-knowledge of the details about the fuses. You have only to type ''make fuses'' if you
-have no crystal or ''make fuses-crystal'' if you have installed the \(8MHz\) crystal to your printed board.
-With the ATmega168 series of the microcontroller you can also use ''make fuses-crystal-lp'' to use
-a crytal with the low power mode.
+knowledge of the details about the fuses.
+You have only to type ''make fuses'' if you have no crystal or
+''make fuses-crystal'' if you have installed the \(8MHz\) crystal to your printed board.
+With the ATmega168 series of the microcontroller you can also use ''make fuses-crystal-lp''
+to use a crytal with the low power mode.\\
 Never choose the crystal mode of clock generation, if you don't have installed
-the \(8MHz\) or \(16MHz\) crystal. If you are not sure with the fuses, leave them as default
+the \(8MHz\) or \(16MHz\) crystal.
+If you are not sure with the fuses, leave them as default
 set by manufactor and first bring the the tester to operation in this mode.
 Maybe your program runs too slow, if you use program data compiled for
-\(8MHz\) operation, but you can correct this later! But a wrong set of fuses may inhibit
-later ISP-programming.
+\(8MHz\) operation, but you can correct this later!
+But a wrong set of fuses may inhibit further ISP-programming.
 
-\subsection{Using the Makefile with Linux}
-You can install packages with Debian based Linux versions by using a package manager as synaptic, dpkg
-or simply with the console tool apt.
-The package ''git'' can be used for downloading the sources and the documentation from the Git archive.
-With the command \\
-''git clone https://github.com/mikrocontroller-net/transistortester'' \\
-you can download the complete archive.
-If your distribution does not know the git command, you must install the git package
-with ''sudo apt install git'' or any other package tool.
-For using the Makefile in one of the trunk subdirectories you must install the packages
-make, binutils-avr, avrdude, avr-libc and gcc-avr.
-You can install all packages at once with one command line
-''sudo apt install make binutils-avr avrdude avr-libc gcc-avr''.
+The program avrdude probably reports a error for setting the extended fuse efuse.
+The reading of unused fuse bits is specified as ''1'' for the ATmega, but the
+avrdude program mask the unused bits, so that it expect a ''0'' for all unused bits.
+Normally the efuse should be set to 0xfc, but avrdude read back 0x04 with the mask.
+You can change the file avrdude.conf to change the behaviour of avrdude or
+you can set the efuse to 0x04. 
+The value for all efuses can be set with the identifier EFUSE\_VAL at the begin of file setup.mk
+in the trunk directory.
+Probably the fuses are also set correctly with the error message.
 
+\newpage
+\subsection{Using of Linux}
+In order to spare other colleagues my experience of desperation and ''sleepless nights'',
+this subchapter was written.
+I had acquired a clone tester without any AVR experience and wanted to let it spell the
+German language. 
+The experience gained in this way should help other "willing" inexperienced people to
+SUCCESSFULLY program their tester. 
+We take this opportunity to thank the developer of the transistor tester and author of this document, Karl-Heinz Kübbeler see \ cite {karlheinz1}, for his commitment and patience,
+because the following pages would never have been created without his help. 
+So that the translation of the firmware and burning into the MCU succeed and at the same
+time \dots the wheel doesn't have to be reinvented "',
+a part of the following pages has been taken from the original. 
+So once again \dots \LARGE {MANY THANKS}
+\normalsize to Karl-Heinz Kübbeler. 
+
+\subsubsection{Operating system Linux}
+
+The programming below Linux brings many advantages, because this OS was developed by experts
+who orientate themselves on the wishes of the users.
+In addition, the environment is available free of charge and perfectly maintained.
+Another advantage is the security of the OS itself but also when using the Internet.
+Today's editions are much easier to use than the competitor OS.
+There are also very powerful editors such as vim or emacs, but they require some training time.
+Vim in particular has the advantage that it is preinstalled on practically every Linux distribution.
+But with this editor in particular, the change between input mode and command mode
+is unusual and takes time to getting used to.
+These guide intended to encourage all "'not"' Linux users to test it NOW
+by programming their tester with it.
+The following instructions are tested with Linux-Mint, which is released with
+three desktop environments (cinnemon, MATE or Xfce).
+All following hints should operate with any of the three desktop envirenments.
+The Installation can be done with different ways and brings its own boot manager,
+so that you can continue to use your existing OS in parallel. 
+
+\subsubsection{Tips for the Linux usage}
+
+At first I would like to give a hint for everyone, who do not like to
+type texts with the keyboard.
+You can copy this manual to a USB-stick and open the PDF file with a double click
+of the left mouse key \LMB,
+when the mouse cursor points to the file.
+Alternatively, you can use the \RMB key to select a different PDF viewer program
+than the preselected one with the double click.
+The opened window can be moved on the screen and the size can also be adjusted.
+There are usually various ways of doing this.
+One of them is to press the \RMB key when the mouse pointer is on the window header and
+then select the \menu[,]{move} function.
+For example, you can move the window with the PDF documentation to the left side of the screen.
+By pressing the \LMB, the window will snap into the new position. 
+To move, you can also grab the header bar of the window with the \LMB key and move it
+while keeping the \LMB key pressed.
+with this way the window will snap in the new position, if the mause button is released.
+
+In the next step the key combination \keys{{Ctrl} + \Alt + T} is pressed at the same time,
+to open a (new) command window.
+This is now moved to the right half of the screen in the manner already described and
+its size can also be changed.
+The size change can be done with the \ LMB key at the edges or corners of the window,
+or with the \RMB on the header with the \menu[,]{change size}  function.
+
+As a rule, the graphical user interfaces in Linux have more than one workspace,
+which can be switched with the key combination \keys{{Ctrl} + \Alt + \arrowkeyright} or
+\keys{{ctrl} + \Alt + \arrowkeyleft}.
+With the \RMB key at the header line of the window you can select one of the workspacess
+on which this window is displayed.
+
+So you can put together the windows you need for your work on a separate working desk and
+you don't get stifled in all the different windows for all work areas.
+By the way, with all commands and file identifiers, it is important to know
+that Linux is case-sensitive. 
+
+\subsubsection{Installing of Program packages}
+
+For installing software packages you need a access to the internet.
+Before you can program the tester, the program packages
+binutils-avr, avrdude, avr-libc and gcc-avr must be installed first.
+Now you can type the command given below with the keyboard.
+You can also scroll to this point in the open PDF document and select the
+following text with the left mouse button pressed \LMB:
+
+\verb"sudo apt-get install avrdude avr-libc binutils-avr gcc-avr git"\\
+At the end of the text the mouse button \LMB must be released,
+to complete the selection.
+Then you can move the mouse pointer into the right command window and
+insert the previously marked text into the command line by pressing the
+middle mouse button {further abbreviated as \ MMB}.
+For many mice, the scroll wheel is also the middle mouse button.
+For mice without a middle mouse button, it is possible to replace the middle mouse button
+by pressing the \LRMB mouse buttons at the same time.
+Another way to copy the selected text is to copy the mouse selection with the
+\keys{{Ctrl} + C} and to insert the text with the \RMB and the function 
+\menu[,]{{Insert}} with mouse pointer in the right window.
+Regardless of how the command text got into the command line,
+you should check the text again before sending the command by pressing the \keys{\enter} key.
+As a rule, you do not need to be afraid that something bad will happen when you install packages
+due to incorrect operation.
+Before executing the operation, the apt program checks whether the packages listed
+are already installed and whether the dependencies are met.
+But in some cases a previously installed package can be replaced by a newer version.
+Then the sudo program will first ask you for the user password before it
+will execute the rest of the command line.
+In contrast to Windows, the password is entered \textbf{Blind} (with a hidden echo on the screen).
+You should finish and confirm the password entry with \keys{\enter} or \keys{\return}. 
+
+Now all specified software packages are downloaded and installed by 'apt'.
+It may be that apt asks questions when installing the packages,
+which can usually be answered with \keys{Y}.
+Please make sure that a distinction is made between upper and lower case in Linux.\\
+
+Of course there are other ways to install the packages, which use the graphical interface
+like synaptic or dpkd. But it is not easier to select a mixed group of packages.
+If you use one of these package managers, they should know each installed package,
+any way which way it was installed.
+The graphical package managers can help you to find out the names of the packages.
+
+
+\subsubsection{Download of sources}
+
+You can check the correct installation of the git package by typing the command:
+\verb"git version"\\
+The git program should answer with its version number.
+The git program should respond with the output of its version number.
+If a folder transistortester already exists in your home directory,
+you should rename or delete it.
+The package ''git'' is used for downloading the sources and the documentation from the Git archive.
+With the command:
+\verb"git clone https://github.com/mikrocontroller-net/transistortester"\\
+you can download the complete transistortester archive.
+So you must see a new directory ''transistortester'', which can
+be checked by typing ls ( \mbox{\keys{L} \keys{S} \keys{\return}} ).
+You get more information about files and directories, if you call
+the command with options like \mbox{ls -lh}.
+In this example two options for the ls command have been combined here,
+the -l option and the -h option.
+This input form is a short form for the command \mbox{ls -l -h} or \mbox{ls -l --human-readable}.
+Some options appear in two forms, a short one with one - (-h) and a long form
+with two - (--human-readable).
+Usually the sequence of the options doesn't care, but the options must by separated
+by at least one space \keys{\space}.
+If you write some short form options (one character) together, there is no space allowed
+and you need only one - character in front of the collection.
+You can get help about the command and the options for nearly every command by appendings
+the \mbox{--help} option.
+Of course, this also applies to the git command.\\
+For getting updates, you should change your working dirctory to transistortester and call:
+\verb"git pull"
+
+\subsubsection{compiling of transistor tester source}
 At next you must change the working directory with the ''cd'' command to a proper
-subdirectory of the directory trunk (transistortester/Software/trunk/mega328\_st7565 for example).
+subdirectory of the directory trunk for example \mbox{cd transistortester/Software/trunk/mega328\_st7565}.
 For compiling the source you must only type the simple command ''make''.
 You can also change options of the Makefile with any text editor and rebuild the
 tester program by repeating the make entry.
+To program the Atmega you still have to take care of the possibility of accessing the interfaces (USB). 
+\subsubsection{usage of interfaces}
+label{sec:Schnittstellen}
+All modern ISP-programmers with a serial interface like to use the USB interface,
+as this interface also ensures the power supply. 
+For these devices you should check, which device is assigned to this device.
+When inserting a USB device in Linux, an entry to the system log file is made.
+Since the system log is a text file, you can simply display it on the screen.
+To do this, you can use the command dmesg in the console window, and
+After you have plugged in the programmer, you should use:
+\verb"dmesg|tail"\\
+The dmesg command shows the full logfile and the command tail will only show the
+last 10 lines. So the result for a Pololu programmer will be like:
+\begin{footnotesize}
+\begin{verbatim}
+usb 1-3: new full-speed USB device number 3 using xhci_hcd
+usb 1-3: New USB device found, idVendor=1ffb, idProduct=00bb, bcdDevice= 1.02
+usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-3: Product: Pololu USB AVR Programmer v2.1
+usb 1-3: Manufacturer: Pololu Corporation
+usb 1-3: SerialNumber: 00227484
+cdc_acm 1-3:1.1: ttyACM0: USB ACM device
+cdc_acm 1-3:1.3: ttyACM1: USB ACM device
+usbcore: registered new interface driver cdc_acm
+cdc_acm: USB Abstract Control Model driver for USB modems and ISDN adapters
+\end{verbatim}
+\end{footnotesize}
+Important are only the lines 7 and 8 with the entries ttyACM0 and ttyACM1.
+These names are assigned to the two serial interfaces.
+With Linux, all devices are also part of the directory tree and appear in the
+folder ''/dev/''.
+With their full names, the two serial interfaces are called "/dev/ttyACM0" and "/dev/ttyACM1".
+For the Pololu programmer you have to know that the first serial interface is used for
+the ISP programmer and the second serial interface can be freely used for other purpose.
+You can check the existence of these device enties with:
+\verb"ls -l /dev/ttyACM*"\\
+The result should look like:
+\begin{footnotesize}
+\begin{verbatim}
+crw-rw---- 1 root dialout 166, 0 Mär 11 09:57 /dev/ttyACM0
+crw-rw---- 1 root dialout 166, 1 Mär 11 09:57 /dev/ttyACM1
+\end{verbatim}
+\end{footnotesize}
+You can see with this output, that the access is allowed for the user ''root''
+and for members of the ''dialout'' group.
+You can use the "id" command to check your group membership.
+The group "dialout" should appear in the list.
+Another example for the system log of a programmer with serial interface
+is a ''Diamex ISP-PRog NG'' programmer:
 
-For the next step, programming of your ATmega, you must have access to a ISP-programmer.
+\begin{verbatim}
+usb 1-6: new full-speed USB device number 8 using xhci_hcd
+usb 1-6: New USB device found, idVendor=16c0, idProduct=2a9b, bcdDevice=43.40
+usb 1-6: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-6: Product: AVR-ISP2
+usb 1-6: Manufacturer: ERFOS
+usb 1-6: SerialNumber: 19377-43111-757
+cdc_acm 1-6:1.0: ttyACM0: USB ACM device
+\end{verbatim}
+
+For this example the device name is identical (ttyACM0).
+If everything is OK up to this step, you must only change the PORT entry in the Makefile,
+for this example "PORT = /dev/ttyACM0" would be the correct setting.
+So the avrdude program can access the programmer.
+If other serial interfaces names are used in your system, you have to take the first interface name
+of your list for the PORT setting.\\
+
 If your programmer does not use a standard USB-serial interface,
-you must probably prepare your system for user access to this device.
-If you open a consol window and you have also connected a ISP programmer with USB interface,
-you can see the recognized USB devices with the command ''lsusb''.
+but a special USB interface,
+you must probably prepare your system i to enable user access for this device.
+Your PORT setting in the Makefile should be ''usb'' for this devices.
+If you have connected a ISP programmer with USB interface,
+you can see the recognized USB devices with the command ''lsusb'' in any consol window.
 A sample of the result of lsusb you can see here:
 \begin{verbatim}
 Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
@@ -672,57 +886,47 @@ A Device 58 is detected here a a AVR ISP mkII type (DIAMEX ALL-AVR).
 The ID 03eb is a vendor ID and the ID 2104 is a product ID.
 Both ID's are required for a entry in the file /etc/udev/rules.d/90-atmel.rules .
 In this example the file 90-atmel.rules has one line:
+\begin{footnotesize}
 \begin{verbatim}
-SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2104", MODE="0660",
-GROUP="plugdev"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2104", MODE="0660", GROUP="plugdev"
 \end{verbatim}
+\end{footnotesize}
 This entry allow the access to the USB device 58 for members of the group ''plugdev''.
-The also detected USB device 59 allows a access to the serial device ''/dev/ttyACM0'' for
-members of the group ''plugdev''.
+The also detected USB device 59 allows a access to a serial device for
+members of the group ''dialout''.
 
+Because the file location is in a system part of your file system, you need super user rights
+for building this entry. You can build this entry with any editor.
+For the ''xed'' editor your call would be:
+\verb"sudo xed /etc/udev/rules.d/90-atmel.rules"\\
+You should add the above ''SUBSYSTEM=='' line to this file and close the file.
+Then you should disconnect and replug your ISP-programmer.
+Now your system give you access to the device, if you are member of the ''plugdev'' group.
 Therefore your user identification should be a member of the group plugdev and also
-a member of the group dialout.
-With the command ''usermod -a -G dialout,plugdev \$USER'' the membership of both groups should be established.
-Now the program avrdude should have permission to access the programmer device.
-The correct setting of PORT in your Makefile is ''PORT=usb'' for this type of programmer.\\
+a member of the group dialout for USB-serial devices..
+The correct setting for a non USB-serial type of ISP-programmer
+in your Makefile should be ''PORT=usb''.\\
 
-If your programmer use a build-in USB-serial interface, you should have access to the device
-by default. You must only know the device name, which the system has assigned to this interface.
-The device name for any USB-serial interface is allways something like /dev/ttyUSBx or
-/dev/ttyACMx, where x is a system assigned number. The easiest way to get the name of
-your device is to check the last system log entry with the command ''dmesg | tail'' right
-after plugging in the programmer.
-The following example shows the relevant information from a ''Diamex ISP-PRog NG'' programmer.
-
-\begin{verbatim}
-usb 1-6: new full-speed USB device number 8 using xhci_hcd
-usb 1-6: New USB device found, idVendor=16c0, idProduct=2a9b, bcdDevice=43.40
-usb 1-6: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-usb 1-6: Product: AVR-ISP2
-usb 1-6: Manufacturer: ERFOS
-usb 1-6: SerialNumber: 19377-43111-757
-cdc_acm 1-6:1.0: ttyACM0: USB ACM device
-\end{verbatim}
-
-You must set the PORT variable in the Makefile correctly to the found name.
-For the above example the correct setting is ''PORT=/dev/ttyACM0''.
-The Pololu programmer use two serial interfaces. Usually the first name is the right interface
-to the ISP-programmer. The second serial interface is a general purpose serial interface.\\
+\subsubsection{group membership}
+ 
+You can add the membership of your account to the groups ''dialout'' and ''plugdev'' with one command:
+\verb"sudo usermod -a -G dialout,plugdev $USER"\\
+Now the membership of both groups should be established.
+If your membership is reported well, the program avrdude should have permission to accesss
+a ISP programmer device with both interface types.
+You can check the membership of your account with the command ''id''.
+Another way to take a look to the group menbership is to use a tool with
+graphical  interface:
+\menu[,]{Menu,System,{Users and Groups},{?Password}}.
+You can also start the \menu[,]{Menu} with the \keys{\winmenu} key (between \keys{{Ctlr}} and
+\keys{\Alt}).
+But the layout is different with the type of desktop environment.
 
 If the ISP programmer is configured proper in the Makefile, especially the PROGRAMMER
 and PORT setting, a command ''make upload''
 should result to loading the program with the ISP interface to the ATmega.
 The ''fuses'' of the ATmega must also be set correctly once.
 You can achieve this with the command ''make fuses'' or ''make fuses-crystal''.
-The program avrdude probably reports a error for setting the extended fuse efuse.
-The reading of unused fuse bits is specified as ''1'' for the ATmega, but the
-avrdude program mask the unused bits, so that it expect a ''0'' for all unused bits.
-Normally the efuse should be set to 0xfc, but avrdude read back 0x04 with the mask.
-You can change the file avrdude.conf to change the behaviour of avrdude or
-you can set the efuse to 0x04. 
-The value for all efuses can be set with the identifier EFUSE\_VAL at the begin of file setup.mk
-in the trunk directory.
-Probably the fuses are also set correctly with the error message.
 
 \subsection{Using the WinAVR package with Windows}
 If you use the Windows operating system, the easiest way to get a correct programmed

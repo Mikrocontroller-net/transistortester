@@ -635,11 +635,8 @@ Die Makefile stellt sicher, dass die Software entsprechend der vorher in der Mak
 eingestellten Optionen übersetzt wird. Schauen Sie bitte in die Datei LiesMich.txt
 im Verzeichnis trunk/default und in das Konfigurations-Kapitel~\ref{sec:config} ab Seite~\pageref{sec:config}.
 
-Das Ergebnis der Übersetzung hat die Dateierweiterung .hex und .eep.\\
-Üblicherweise heißen die Dateien TransistorTester.hex und TransistorTester.eep .
-
+Das Ergebnis der Übersetzung hat die Dateierweiterung .hex und .eep.
 Die .hex-Datei enthält die Daten für den Programmspeicher (Flash) des ATmega-Prozessors.
-
 Die .eep-Datei enthält die Daten für den EEPROM des ATmega.\\
 Beide Dateien müssen in den richtigen Speicher geladen werden.
 
@@ -652,15 +649,15 @@ müssen ,,make fuses-crystal'' aufrufen, wenn Sie einen \(8MHz\) Quarz auf der B
 
 Bei der ATmega168-Serie der Mikrocontroller können Sie alternativ auch
 ,,make fuses-crystal-lp'' aufrufen für den low power Quarz-Betrieb.\\
-Benutzen Sie niemals die Quarz-Variante, wenn Sie keinen \(8MHz\) Quarz installiert haben.
+Benutzen Sie niemals die Quarz-Variante, wenn Sie keinen \(8MHz\) oder \(16MHz\) Quarz installiert haben.
 
 Wenn Sie sich nicht sicher mit den fuses sind, lassen Sie diese erst einmal wie
 vom Werk gesetzt und bringen Sie den Tester in diesem Zustand zum Laufen.\\
 Es kann sein, dass das Programm zu langsam läuft, wenn Sie die für den \(8MHz\)-Betrieb 
 erzeugten Programmdaten benutzen, aber das kann man später korrigieren!
-
 Aber falsch gesetzte fuses können die spätere ISP-Programmierung verhindern.
-\\Vielleicht meldet das Programm avrdude einen Fehler beim Setzen der extendet Fuse efuse.
+
+Vielleicht meldet das Programm avrdude einen Fehler beim Setzen der extendet Fuse efuse.
 Das Lesen von unbenutzten Fuse Bits ist beim ATmega als ,,1'' spezifiziert, aber
 das avrdude Programm maskiert die unbenutzten Bits, so daß es eine ,,0'' für alle unbenutzen Bits erwartet.
 Normalerweise sollte die efuse auf 0xfc gesetzt werden, aber avrdude liest eine 0x04 mit der Maske zurück.
@@ -668,27 +665,29 @@ Man kann die Datei avrdude.conf ändern, um das Verhalten von avrdude zu ändern
 die efuse auf 0x04 setzen. 
 Alle efuse-Werte können mit dem Bezeichner EFUSE\_VAL am Anfang der Datei setup.mk im Verzeichnis trunk
 gesetzt werden. Wahrscheinlich sind die Fuses aber auch mit der Fehlermeldung richtig gesetzt.
-\newpage
-\subsection{Benutzung unter Linux}
 
-Um die Verzweiflungen und "`schlaflose Nächte"', die Schreiber dieses Unterkapitel erlitten hatte,
-nach dem er, ohne jegliche AVR Erfahrung, einen Clonetester erworben hatte und diesem die
-deutsche Sprache "`beibringen"' wollte, anderen Kollegen zu ersparen,
-wurde dieses Unterkapitel geschrieben.\\
-Die hier bei erworbene Erfahrungen sollten anderen "'willigen"' unerfahrenen helfen,
-ERFOLGREICH ihr Tester zu programmieren.\\
+\newpage
+\subsection{Benutzung von Linux}
+
+Um meine Erfahrung mit Verzweiflung und "`schlaflose Nächten"' anderen Kollegen zu ersparen,
+wurde dieses Unterkapitel geschrieben.
+Ich hatte ohne jegliche AVR Erfahrung einen Clonetester erworben und wollte diesem die deutsche Sprache
+"`beibringen"'.\\
+
+Die dabei erworbenen Erfahrungen sollen anderen "'willigen"' Unerfahrenen helfen,
+ERFOLGREICH ihren Tester zu programmieren.
 Diese Gelegenheit wird benutzt, dem Entwickler des Transistortester und Autor dieses Dokuments,  
 Karl-Heinz Kübbeler siehe \cite{karlheinz1} zu danken für sein Engagement und Geduld,
-denn die folgenden Seiten hätten ohne seiner Hilfe nie entstanden.
+denn die folgenden Seiten wären ohne seine Hilfe nie entstanden.
      
-Damit das übersetzen der Firmware und Brennen ins MCU gelingt und gleichzeitig \dots
+Damit das Übersetzen der Firmware und Brennen ins MCU gelingt und gleichzeitig \dots
 "`das Rad nicht neu erfunden sein müsste"', wurde ein Teil der folgenden Seiten aus dem
-Original übernommen.
+ursprünglichen Original übernommen.
 
-Also noch einmal \dots \huge{EINEN RIESEN DANK}
+Also noch einmal \dots \LARGE{EINEN RIESEN DANK}
 \normalsize an Karl-Heinz Kübbeler.
 
-\subsection{Betriebssystem Linux}
+\subsubsection{Betriebssystem Linux}
 
 Die Programmierung unten Linux bringt viele Vorteile, weil dieses OS von Experten entwickelt wurde,
 die sich auf den Wünschen der Benutzer orientieren.
@@ -702,109 +701,149 @@ Wechsel zwischen Eingabe-Modus und Befehls-Modus gewöhnungsbedürfig.
 Diese Anleitung soll alle "'nicht"' Linux Benutzer dazu animieren es NUN zu testen
 indem sie ihr Tester damit programmieren.
 
-Als Beispiel wird hier Linux Mint in der aktueller Version aus dem Internet benutzt.
+Die nachfolgenden Beispiele wurden mit Linux Mint getestet, das
+mit drei verschiedenen Desktop Umgebungen angeboten wird (cinnemon, MATE und Xfce).
+Die nachfolgenden Hinweise sollten aber bei allen drei Desktops funktionieren.
 Die Installation ist auf verschiedene Arten möglich und bringt seinen eigenen Bootmanager mit,
 damit man sein vorhandenes OS weiter parallel nutzen kann.
 
-\subsection{Benutzung unter Linux}
+\subsubsection{Tipps für die Linux Nutzung}
 
-auf einem neu installierten OS.
-Für diejenigen, die nicht gerne schreiben, bietet Linux eine einfachere Möglichkeit:
-
-Dieses Handbuch auf einen USB-Stick kopieren und im Dateibrowser mit Doppelclick der
+Zuerst möchte ich einen Hinweis geben für alle, die nicht gerne Texte abschreiben.
+Sie können dieses Handbuch auf einen USB-Stick kopieren und im Dateibrowser mit Doppelclick der
 linken Maustaste \LMB öffnen.
-Alternativ kann mit der \RMB Taste ein anderes als das
+Alternativ zum Doppelklick kann mit der \RMB Taste ein anderes als das
 vorgewählte PDF Betrachtungsprogramm ausgewählt werden.
 Das geöffnete Fenster kann auf dem Bildschirm verschoben werden und auch in der Größe
 angepasst werden. Dazu gibt es in der Regel verschiedene Möglichkeiten.
 Eine davon ist die \RMB Taste zu drücken, wenn der Mauszeiger 
-auf die Kopfzeile des Fensters zeigt und dann die Funktion auszuwählen..
+auf die Kopfzeile des Fensters zeigt und dann die Funktion \menu[,]{Verschieben} auszuwählen.
 So kann man das Fenster mit der PDF-Dokumentation beispielsweise an die linke Bildschirmseite
-verschieben. Zum Verschieben kann man auch mit der \LMB Taste die
+verschieben. Durch Drücken der linken Maustaste rastet das Fenster an der neuen Position ein.
+Zum Verschieben kann man auch mit der \LMB Taste die
 Kopfleiste des Fensters packen und bei weiter gedrückter \LMB Taste verschieben.
-Im nächsten Schritt wird die Tastenkombination \keys{{Strg} + \Alt + t} gleichzeitig gedrückt,
-um ein Befehlsfenster zu öffnen.
-Dies wird nun auf die gleiche Weise zur rechten Hälfte des Bildschirmes verschoben und
-kann auch in der Größe verändert werden.\\
+Dann rastet das Fenster auf der Position ein, wenn man die Maustaste loslässt.
+
+Im nächsten Schritt wird die Tastenkombination \keys{{Strg} + \Alt + T} gleichzeitig gedrückt,
+um ein (neues) Befehlsfenster zu öffnen.
+Dies wird nun auf die schon beschriebene Weise zur rechten Hälfte des Bildschirmes verschoben und
+kann auch in der Größe verändert werden.
+Die Größenänderung kann mit der \LMB Taste an den Rändern oder Ecken des Fenstern gemacht werden,
+oder auch mit der \RMB Taste an der Kopfleiste mit der \menu[,]{{Größe ändern}} Funktion.\\
 
 In der Regel besitzen die graphischen Oberflächen bei Linux mehr als eine Arbeitsfläche,
 die mit der Tastenkombination \keys{{Strg} + \Alt + \arrowkeyright}
-beziehungsweise \keys{{strg} + \Alt + \arrowkeyleft} umgeschaltet werden können.
+beziehungsweise \keys{{Strg} + \Alt + \arrowkeyleft} umgeschaltet werden können.
 Mit der \RMB Taste können Sie auf der Kopfzeile der Fenster eine
 der Arbeitsflächen wählen, auf der das Fenster angezeigt wird.
+
 So kann man die für die Arbeit benötigten Fenster auf einer Arbeitfläche
-zusammen sammeln und erstickt nicht in Fenstern. 
+zusammen sammeln und erstickt nicht in all den Fenstern für verschiedene Arbeitsbereiche. 
+Bei allen Befehlseingaben und Dateibezeichnern ist übrigens darauf zu  achten,
+daß bei Linux zwischen Groß und Kleinschreibung unterschieden wird.
 
 
-\subsection{Programm Pakete installieren}
+\subsubsection{Programm Pakete installieren}
 
-Nun brauchen wir einen Internetzugang.
-Um den Tester zu programmieren, müssen zuerst Programmpakete
+Zum Installieren von Software-Paketen braucht ihr Rechner einen Internetzugang.
+Bevor Sie den Tester programmieren konnen, müssen zuerst die Programmpakete
 binutils-avr, avrdude, avr-libc und gcc-avr installiert werden.
-Jetzt in diesem Dokument zu dieser Seite, bis zu diesem Text navigieren:
+Jetzt können sie den unten angegebenen Befehl durch Abtippen
+mit der Tastatur ausführen lassen.
+Sie können aber auch im geöffneten PDF Dokument an diese Stelle blättern
+und den nachfolgenden Text mit der gedückten linken Maustaste \LMB markieren:
 
 \verb"sudo apt-get install avrdude avr-libc binutils-avr gcc-avr git"\\
-Dann den Text mit gedrückter linken Maustaste \LMB markieren,
-die \LMB Taste wieder loslassen
-und den Mauszeiger in das rechte Befehlsfenster führen.
-Hier kann jetzt durch Drücken der mittlerer Maustaste (Scroll-Rad)
-{weiter als \MMB abgekürzt} der vorher kopierte Text einfügt werden.
-Nach dem Bestätigung mit \keys{\enter}, wird von 'sudo' noch das Benutzerpassword verlangt.
+Am Ende des Textes muß die Maustaste \LMB losgelassen werden,
+um die Markierung abzuschließen.
+Danach kann man den Mauszeiger in das rechte Befehlsfenster führen und
+durch Drücken der mittlerer Maustaste {weiter als \MMB abgekürzt} den vorhin
+markierten Text in die Befehlszeile einfügen.
+Bei vielen Mäusen ist das Scoll-Rad gleichzeitig die mittlere Maustaste.
+Bei Mäusen ohne mittlere Maustaste ist es möglich die mittlere Maustaste
+durch gleichzeitiges Drücken der \LRMB Maustasten zu ersetzen.
+Egal, wie der Befehlstext nun in die Befehlszeile gekommen ist,
+sie sollten den Text noch einmal kontrollieren, bevor
+sie den Befehl durch Dücken der \keys{\enter} Taste abschicken.
+In der Regel brauchen Sie keine Angst zu haben, daß durch die Installation
+von Paketen etwas schlimmes durch Fehlbedienung passiert.
+Das Programm apt prüft vor dem Ausführen der Operation, ob die aufgeführten
+Pakete schon installiert sind und die Abhängigkeiten erfüllt sind.
+Gegebenenfalls wird aber ein schon vorher installiertes Paket durch ein neueres ersetzt.
+Dann wird das sudo Programm Sie zunächst nach den Benutzer Passwort fragen,
+bevor es den Rest der Befehlszeile ausführt.
 Anders als bei Windows wird das Passwort \textbf{Blind} (mit verdecktem Echo auf dem Bildschirm)
-eingegeben und mit \keys{\enter} oder \keys{\return} bestätigt.
+eingegeben.
+Sie sollten das Passwort mit Drücken der \keys{\enter} oder \keys{\return} Taste abschließen und bestätigen.
 Damit werden nun alle Software Pakete durch 'apt' herunter geladen und installiert.\\
 Es kann sein, daß apt bei der Installation der Pakete Fragen stellt,
-die man in der Regel mit [J] beantworten kann.
-Bitte darauf achten, das im Linux zwischen Groß und Kleinschreibung unterschieden wird.
+die man in der Regel mit der Taste \keys{J} beantworten kann.
 
-\subsection{Download der Quellen}
+Natürlich gibt es auch andere Wege, die Pakete zu installieren, welche eine graphische Oberfläche benutzen
+wie synaptic oder dpkg. Aber es nicht einfacher eine gemischte Gruppe von Paketen anzugeben.
+Wenn sie irgendeine dieser Paketmanager, sollten sie über alle installierten Pakete bBescheid wissen,
+egal auf welchem Wege sie installiert wurden.
+Die graphischen Paketmanager können auch dabei helfen, den Namen der Pakete herauszufinden.
+
+\subsubsection{Download der Quellen}
 
 Ob die Versionsverwaltung git erfolgreich installiert wurde,
-kann man mit dem folgendn Kommando prüfen:
+kann man mit dem folgenden Kommando prüfen:
 \verb"git version"\\
+Das git Programm sollte mit der Ausgabe seiner Versionsnummer antworten.
 Falls in Ihrem Heimatverzeichnis schon ein Ordner transistortester existiert,
 sollte man den umbenennen oder löschen.
 Mit dem Befehl:   
 \verb"git clone https://github.com/Mikrocontroller-net/transistortester"\\
-wird das komplette Archiv heruntergeladen.
+wird das komplette transistortester Archiv heruntergeladen.
 Die Dateien sind nun in dem Linux [Persönlicher Ordner] auf (/home/"`user"') unter dem
 Namen "`transistortester"'.
-Mit der Terminaleingabe \mbox{\keys{l} \keys{s} \keys{\return}} kann man das Vorhandensein überprüfen.
+Mit der Terminaleingabe  ls \(\mbox{\keys{L} \keys{S} \keys{\return}}\) kann man das Vorhandensein überprüfen.
 Mehr Informationen über Dateien und Verzeichnisse erhält man mit
 dem Kommando \mbox{ls -lh}. Hier wurden jetzt zwei Optionen für das Kommando ls zusammengefasst,
 die -l Option und die -h Option. Diese Eingabeform ist also eine Kurzform für
 das Kommando \mbox{ls -l -h} oder auch \mbox{ls -l --human-readable}.
+Einige der Optionen sind in zwei Versionen vorhanden, einer kurzen mit einem - (-h)
+und einer langen Form mit zwei - (--human-readable).
 Die Reihenfolge der Optionen spielt übrigens keine Rolle,
 genau wie die Anzahl der trennenden Leerzeichen.
 Bei fast allen Kommandos erfährt man mehr über die Bedienung und die Optionen
-durch die Eingabe \mbox{man <kommando>} oder durch \mbox{<kommando> --help}.
+durch durch Anhängen der \mbox{ --help} Option.
 Das gilt natürlich auch für das Kommando git.
-Um neue Updates heruntergeladen, reicht es in der Zukunft, aus diesem Ordner:
-\verb"git checkout"\\
+Um neue Updates heruntergeladen, reicht es in der Zukunft, aus dem transistortester Ordner:
+\verb"git pull"\\
 einzugeben.
-Optional kann man auf dieser Stelle sein eigenes Konto bei GitHub erstellen und konfigurieren.\\
-Trage dabei statt "Linux Mind" deinen eigenen Namen und Mail Adresse ein:
-\verb|git config --global user.name "Linux Mind"|\\
-\verb|git config --global user.email "Linux@Mind"|\\
 
+\subsubsection{Übersetzen der Transistortester Quellen}
 
-\subsection{Benutzung der Schnittstellen}
+Als nächstes müssen Sie mit dem cd Kommando in ein passendes Arbeitsverzeichnis wechseln.
+Für den Transistortester ist das ein Unterverzeichnis von trunk, zum Beispiel
+\mbox{cd transistortester/Software/trunk/mega328\_st7565}.
+Zum Übersetzen mit den Standardeinstellungen der Makefie müssen sie jetzt nur noch ,,make'' angeben.
+Jetzt können Sie aber auch die Optionen in der Makefile mit einem Texteditor ändern
+und das Transistortester Programm durch Wiederholen des make Befehls neu übersetzen.
+Zum Programmieren des Atmega müssen sie sich noch um d2sieen Zugriffsmöglichkeit auf die
+Schnittstellen (USB) kümmern.
+
+\subsubsection{Benutzung der Schnittstellen}
 \label{sec:Schnittstellen}
 
-Viele ISP-Programmer benutzen eine serielle Schnittstelle für
-die Verbindung zum Rechner.
+Alle modernen ISP-Programmer mit serieller Schnittstelle benutzen gerne die USB Schnittstelle,
+da diese Schnittstelle auch gleich die Stromversorgung sicherstellt.
 Für diese Geräte sollten Sie überprüfen, welche Gerätebezeichnung
 diesem Gerät zugeordnet ist.
-Alle modernen Programmer mit serieller Schnittstelle benutzen die USB Schnittstelle,
-da diese Schnittstelle auch gleich die Stromversorgung sicherstellt.
 Beim Einstecken eines USB Gerätes wird bei Linux ein Eintrag in das
-Systemprotokoll vorgenommen. Da das Systemprotokoll eine Textdatei ist,
+Systemprotokoll vorgenommen.
+Da das Systemprotokoll eine Textdatei ist,
 kann man diese einfach auf dem Bildschirm anzeigen.
 Dazu kann man in Konsolfenster den Befehl dmesg benutzen und da wir nach dem
 Einstecken des Programmers nur an den letzten Zeilen des Protokolls
 interessiert sind, benutzt man:
+
 \verb"dmesg|tail"\\
-Für einen Pololu Programmer sieht das Ergebnis dass so aus:
+Das dmesg Programm zeigt das gesamte Systemprotokoll und das Kommando 
+tail zeigt nur die letzten 10 Zeilen der Ausgabe.
+Für einen Pololu Programmer sieht das Ergebnis so aus:
 \begin{footnotesize}
 \begin{verbatim}
 usb 1-3: new full-speed USB device number 3 using xhci_hcd
@@ -820,7 +859,7 @@ cdc_acm: USB Abstract Control Model driver for USB modems and ISDN adapters
 \end{verbatim}
 \end{footnotesize}
 Wichtig sind hier die Zeilen 7 und 8 mit den Einträgen ttyACM0 und ttyACM1.
-Das sind die Gerätebezeichnungen für zwei serielle Schnittstellen.
+Das sind die zugewiesenen Gerätebezeichnungen für zwei serielle Schnittstellen.
 Bei Linux sind alle Geräte auch Bestandteil des Dateibaums und im
 Ordner ,,/dev/'' eingetragen. Mit vollständigem Namen heißen die
 beiden seriellen Schnittstellen also ,,/dev/ttyACM0'' und ,,/dev/ttyACM1''.
@@ -840,7 +879,8 @@ Bei dieser Ausgabe kann man lesen, daß der Zugriff für den Benutzer ,,root''
 und für die Benutzergruppe ,,dialout'' erlaubt ist.
 Mit dem Kommando ,,id'' können Sie ihre Gruppenzugehörigkeit überprüfen.
 Hier sollte die Gruppe ,,dialout'' in der Liste auftauchen.
-Jetzt muß für dieses Beispiel nur der PORT Eintrag in der Makefile auf
+Wenn bis zu diesem Schritt alles in Ordnung ist,
+muß für dieses Beispiel nur der PORT Eintrag in der Makefile auf
 ,,PORT=/dev/ttyACM0'' geändert werden,
 damit das avrdude Programm auf den Programmer zugreifen kann.
 Wenn bei Ihrem System noch andere USB-seriell Schnittstellen benutzt
@@ -901,25 +941,23 @@ Nach dem die Datei erstellt wurde, kann die Erstellung und Inhalt kontrollieren 
 Das ebenfalls als Device 59 erkannte USB Gerät  Arduino SA Mega 2560 System erzeugt eine
 Zugriffsmöglichkeit auf das serielle Gerät ,,/dev/ttyACM0'' für Mitglieder der Gruppe 'dialout'.
 
-\subsection{Gruppen Mitgliedschaft}
+\subsubsection{Gruppen Mitgliedschaft}
 
 Deswegen sollte die eigene Benutzerkennung sowohl Mitglied der Gruppe 'plugdev' als auch
 der Gruppe 'dialout' sein. Das Kommando:
 
 \verb"sudo usermod -a -G dialout,plugdev $USER"\\
 sollte die Zugehörigkeit sicherstellen. 
-Jetzt sollte ein Zugriff mit avrdude auf beide Geräte möglich sein.
+Jetzt sollte ein Zugriff mit avrdude auf ISP-Programmer mit beiden Schnittstellentypen möglich sein.
 Kontrollieren kann man es mit dem Kommando: 'id'. 
-Sollten Probleme auftreten kann man die Mitgliedschaft auch mit der graphischen Bedienoberfläche:
-\menu[,]{Menü,Systemverwaltung,{Benutzer und Gruppen},{?Passwort}}.
-Das Menü kann man auch mit der \keys{\winmenu} Taste zwischen \keys{{Strg}} und
-\keys{\Alt} öffnen.
-Nun erscheint ein Fenster mit zwei Reitern.
-Wenn man nun im Reiter Benutzer auf seinen Name klickt,
-sieht man rechts sein Profil und die Gruppen Zugehörigkeiten.
-Mit dem Button \fbox{ADD} ist nun möglich neue Gruppen hinzufügen.
 
-\subsection{Arbeitsumgebung}
+Mann kann sich die Gruppenmitgliedschaft auch mit einem Programm mit graphischer Bedienoberfläche ansehen:
+\menu[,]{Menü,Systemverwaltung,{Benutzer und Gruppen},{?Passwort}}.
+Das \menu[,]{Menü} kann man auch mit der \keys{\winmenu} Taste (zwischen \keys{{Strg}} und
+\keys{\Alt}) öffnen.
+Aber das Layout der Funktion ist unterschiedlich je nach Desktopm Umgebung.
+
+\subsubsection{Arbeitsumgebung}
 
 Damit das Original erhalten bleibt und da sich Terminalfenster immer in ../home/\glqq user\grqq/ öffnet, wird empfohlen, dort eine Verknüpfung mit dem Namen \textbf {Mytester} zu verlegen, mit folgenden Eingaben:
 

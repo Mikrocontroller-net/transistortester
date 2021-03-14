@@ -112,8 +112,7 @@ deleteobj:
 	rm -rf $(OBJDIR)
 # create directories
 directories: deleteobj
-	mkdir $(OBJDIR)
-	mkdir $(DEPDIR)
+	mkdir $(OBJDIR) ; mkdir $(DEPDIR)
 
 OBJFILES = $(addprefix $(OBJDIR)/, $(OBJECTS))
 
@@ -135,6 +134,7 @@ size: ${TARGET}
 	@echo
 	@echo $(OP_MHZ) MHz operation configured.
 	@$(AVR_TOOL/PATH)avr-size -C --mcu=${MCU} ${TARGET}
+	@rm -rf $(OBJDIR)
 
 ## Clean target
 .PHONY: directories size clean steril fuses fuses-crystal fuses-crystal-lp erase upload program flash eeprom eeread read verify upload_orig

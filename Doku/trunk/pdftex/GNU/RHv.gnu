@@ -19,7 +19,7 @@ set ylabel  offset character 0, 0, 0 font "" textcolor lt -1 rotate by -270
 GNUTERM = "wxt"
 set grid
 set terminal pdf color
-set output "../GNU/RHv.pdf"
+set output "../GNU/RHvEN.pdf"
 set format x "%.0s%c"
 set style line 1  linetype 1 linewidth 2.000
 set style line 2  linetype 2 linewidth 2.000

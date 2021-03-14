@@ -33,7 +33,7 @@ set ylabel "Error / \%"
 #set yrange [-2 to 10]
 set xrange [10.e-12 : 200.e-6 ]
 set key outside right top vertical Right noreverse enhanced autotitles nobox
-set output "../GNU/MegaAuto.pdf"
+set output "../GNU/MegaAutoEN.pdf"
 plot "../GNU/capmessAUTO.dat" u 3:($4-$3)/$3*100 title "168-3unc" ls 1 with points,   "../GNU/capmessAUTO.dat" u 3:($5-$3)/$3*100 title "168-3cal" ls 4 with lines,\
      "../GNU/capmessAUTO.dat" u 3:($6-$3)/$3*100 title "168PA-7unc" ls 2 with points, "../GNU/capmessAUTO.dat" u 3:($7-$3)/$3*100 title "168PA-7cal" ls 5 with lines,\
      "../GNU/capmessAUTO.dat" u 3:($8-$3)/$3*100 title "328P-14unc" ls 3 with points, "../GNU/capmessAUTO.dat" u 3:($9-$3)/$3*100 title "328P-14cal" ls 6 with lines

@@ -32,7 +32,7 @@ set ylabel  offset character 0, 0, 0 font "" textcolor lt -1 rotate by -270
 set yrange [ * : * ] noreverse nowriteback  # (currently [-20.0000:70.0000] )
 GNUTERM = "wxt"
 set terminal pdf color 
-set output "../GNU/ComparatorAdjust.pdf"
+set output "../GNU/ComparatorAdjustEN.pdf"
 set style line 1  linetype 1 linewidth 2.000 pointsize 1
 set style line 2  linetype 2 linewidth 2.000 pointsize 1
 set style line 3  linetype 3 linewidth 2.000 pointsize 1

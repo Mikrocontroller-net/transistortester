@@ -39,7 +39,7 @@ set xtics ("0.47µ/100V" 1 0,"1µ/100V" 2 0,"1µ/50V" 3 0,"2.2µ/100V" 4 0,"2.2�
 GNUTERM = "wxt"
 set ylabel "ESR / Ω"
 #set title "ESR values for different capacitors"
-set output "../GNU/Elco_esr.pdf"
+set output "../GNU/Elco_esrEN.pdf"
 plot "../GNU/Elco_esr.dat" u 1:4 title "LCR-100Hz" ls 1 with points,"../GNU/Elco_esr.dat" u 1:8 title "LCR-1kHz" ls 4 with points, "../GNU/Elco_esr.dat" u 1:10 title "LCR-10kHz" ls 3 with points, "../GNU/Elco_esr.dat" u 1:12 title "LCR-100kHz" ls 5 with points, "../GNU/Elco_esr.dat" u 1:17 title "TTester" ls 7 with points
 set output
 set ylabel "ESR / Ω"

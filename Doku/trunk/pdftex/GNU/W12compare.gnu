@@ -14,7 +14,7 @@ set format x "% g"
 set format y "% g"
 set key inside right top vertical Right noreverse enhanced autotitles nobox
 set xlabel "ADC sample"
-set output "../GNU/W12compare.pdf"
+set output "../GNU/W12compareEN.pdf"
 set xrange [0 to 250]
 set ylabel "ADC value"
 plot "../GNU/W12_18nF.dat" u 1 title "18.2nF", "../GNU/W12_20nF.dat" u 1 title "20.3nF"

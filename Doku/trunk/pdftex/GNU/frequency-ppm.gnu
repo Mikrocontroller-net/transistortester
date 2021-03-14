@@ -29,7 +29,7 @@ set psdir
 set format x "%.0s%c"
 set yrange [-30 : 30]
 set terminal pdf color 
-set output "../GNU/frequency-ppm.pdf"
+set output "../GNU/frequency-ppmEN.pdf"
 set style line 1  linetype 1 linewidth 2.000 pointtype 4 pointsize 1
 set style line 2  linetype 2 linewidth 2.000 pointtype 2 pointsize 1
 set xlabel "Frequency / Hz"

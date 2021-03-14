@@ -30,7 +30,7 @@ set xtics autofreq  norangelimit
 set key inside center top vertical Right noreverse enhanced autotitles nobox
 set xlabel "Resistor value / Ω"
 set ylabel "Error / \%"
-set output "../GNU/Mega8res.pdf"
+set output "../GNU/Mega8resEN.pdf"
 plot "../GNU/rmess.dat" u 1:(($2-$1)/$1*100) title "Mega8-1" ls 1, "../GNU/rmess.dat" u 1:(($3-$1)/$1*100) title "Mega8-2" ls 2, "../GNU/rmess.dat" u 1:(($4-$1)/$1*100) title "Mega8-3" ls 3,\
 "../GNU/ormess.dat" u 1:(($2-$1)/$1*100) title "Mega8orig" ls 4
 set output
@@ -48,7 +48,7 @@ set output "../GNU/Mega8resGE.pdf" ; replot ; set output
 #
 set xlabel "Resistor value / Ω"
 set ylabel "Error / \%"
-set output "../GNU/Mega8Ares.pdf"
+set output "../GNU/Mega8AresEN.pdf"
 plot "../GNU/rmess.dat" u 1:(($5-$1)/$1*100) title "Mega8A-4" ls 1, "../GNU/rmess.dat" u 1:(($6-$1)/$1*100) title "Mega8A-5" ls 2, "../GNU/rmess.dat" u 1:(($7-$1)/$1*100) title "Mega8A-6" ls 3
 set output
 set xlabel "hodnota odporu / Ω"
@@ -65,7 +65,7 @@ set output "../GNU/Mega8AresGE.pdf" ; replot ; set output
 #
 set xlabel "Resistor value / Ω"
 set ylabel "Error / \%"
-set output "../GNU/Mega8Lres.pdf"
+set output "../GNU/Mega8LresEN.pdf"
 plot "../GNU/rmess.dat" u 1:(($8-$1)/$1*100) title "Mega8L-7" ls 1, "../GNU/rmess.dat" u 1:(($9-$1)/$1*100) title "Mega8L-8" ls 2, "../GNU/rmess.dat" u 1:(($10-$1)/$1*100) title "Mega8L-9" ls 3
 set output
 set xlabel "hodnota odporu / Ω"
@@ -82,7 +82,7 @@ set output "../GNU/Mega8LresGE.pdf" ; replot ; set output
 #
 set xlabel "Resistor value / Ω"
 set ylabel "Error / \%"
-set output "../GNU/Mega168res.pdf"
+set output "../GNU/Mega168resEN.pdf"
 plot "../GNU/rmess.dat" u 1:(($11-$1)/$1*100) title "Mega168" ls 1, "../GNU/rmess.dat" u 1:(($12-$1)/$1*100) title "Mega168as" ls 2
 set output
 set xlabel "hodnota odporu / Ω"

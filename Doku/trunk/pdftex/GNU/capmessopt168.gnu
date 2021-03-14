@@ -42,7 +42,7 @@ set format y "% g"
 set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set xtics autofreq  norangelimit
 set ylabel "Error / \%"
-set output "../GNU/Mega168cap_opt.pdf"
+set output "../GNU/Mega168cap_optEN.pdf"
 plot "../GNU/capmess168-3.dat" u 3:($4-$3)/$3*100 title "168-3-A" ls 1,"../GNU/capmess168-3.dat" u 3:($5-$3)/$3*100 title "168-3-B" ls 2,"../GNU/capmess168-3.dat" u 3:($6-$3)/$3*100 title "168-3-C" ls 3
 set output
 set xlabel "Capacity value / F"

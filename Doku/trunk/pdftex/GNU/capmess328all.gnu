@@ -22,7 +22,7 @@ set ylabel "Error / \%"
 set xrange [10.e-12 : 10.e-3 ]
 set key inside center top vertical Right noreverse enhanced autotitles nobox
 #
-set output "../GNU/Mega328all.pdf"
+set output "../GNU/Mega328allEN.pdf"
 plot "../GNU/capmess328-all.dat" u 3:($4-$3)/$3*100 title "328-10" ls 1,"../GNU/capmess328-all.dat" u 3:($5-$3)/$3*100 title "328-11" ls 2,"../GNU/capmess328-all.dat" u 3:($6-$3)/$3*100 title "168-12" ls 3
 set output
 set xlabel "hodnota kapacity / F"
@@ -40,7 +40,7 @@ set output "../GNU/Mega328allGE.pdf" ; replot ; set output
 set key inside center top vertical Right noreverse enhanced autotitles nobox
 set xlabel "Capacity value / F"
 set ylabel "Error / \%"
-set output "../GNU/Mega328Pall.pdf"
+set output "../GNU/Mega328PallEN.pdf"
 plot "../GNU/capmess328-all.dat" u 3:($7-$3)/$3*100 title "328P-13" ls 1,"../GNU/capmess328-all.dat" u 3:($8-$3)/$3*100 title "328P-14" ls 2,"../GNU/capmess328-all.dat" u 3:($9-$3)/$3*100 title "328P-15" ls 3
 set output
 set xlabel "hodnota kapacity / F"
@@ -59,7 +59,7 @@ set output "../GNU/Mega328PallGE.pdf" ; replot ; set output
 set key inside center top vertical Right noreverse enhanced autotitles nobox
 set xlabel "Capacity value / F"
 set ylabel "Error / \%"
-set output "../GNU/Mega328cal.pdf"
+set output "../GNU/Mega328calEN.pdf"
 plot "../GNU/capmess328-autocal.dat" u 3:($4-$3)/$3*100 title "328-10" ls 1,"../GNU/capmess328-autocal.dat" u 3:($5-$3)/$3*100 title "328-11" ls 2,"../GNU/capmess328-autocal.dat" u 3:($6-$3)/$3*100 title "328-12" ls 3
 set output
 set xlabel "hodnota kapacity / F"
@@ -77,7 +77,7 @@ set output "../GNU/Mega328calGE.pdf" ; replot ; set output
 set key inside center top vertical Right noreverse enhanced autotitles nobox
 set xlabel "Capacity value / F"
 set ylabel "Error / \%"
-set output "../GNU/Mega328Pcal.pdf"
+set output "../GNU/Mega328PcalEN.pdf"
 plot "../GNU/capmess328-autocal.dat" u 3:($7-$3)/$3*100 title "328P-13" ls 1,"../GNU/capmess328-autocal.dat" u 3:($8-$3)/$3*100 title "328P-14" ls 2,"../GNU/capmess328-autocal.dat" u 3:($9-$3)/$3*100 title "328P-15" ls 3
 set output
 set xlabel "hodnota kapacity / F"

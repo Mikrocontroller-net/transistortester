@@ -20,7 +20,7 @@ set yrange [0: 5000 ] noreverse nowriteback
 set ylabel "voltage / mV" 
 set terminal pdf color solid
 #set terminal pdfcairo color linewidth 0.5
-set output "../GNU/RLvtot.pdf"
+set output "../GNU/RLvtotEN.pdf"
 set style line 1  linetype 1 linewidth 2.000 
 set style line 2  linetype 2 linewidth 2.000 
 plot (5000*(x+19)/(721+x)) title 'PC2, type 1' ls 1, (5000*699/(721+x)) title 'PC0, type 2' ls 2

@@ -28,7 +28,7 @@ set yrange [-4 to 10]
 set xrange [10.e-12 : 100.e-3]
 set key inside center top vertical Right noreverse enhanced autotitles nobox
 set terminal pdf color 
-set output "../GNU/Mega8cap.pdf"
+set output "../GNU/Mega8capEN.pdf"
 set xlabel "Capacity value / F"
 set ylabel "Error / \%"
 plot "../GNU/capmess8.dat" u 3:($4-$3)/$3*100 title "Mega8-1" ls 1,\
@@ -50,7 +50,7 @@ set output "../GNU/Mega8capGE.pdf" ; replot ; set output
 #
 set xlabel "Capacity value / F"
 set ylabel "Error / \%"
-set output "../GNU/Mega8Acap.pdf"
+set output "../GNU/Mega8AcapEN.pdf"
 plot "../GNU/capmess8.dat" u 3:($7-$3)/$3*100 title "Mega8A-4" ls 1,\
      "../GNU/capmess8.dat" u 3:($8-$3)/$3*100 title "Mega8A-5" ls 2,\
      "../GNU/capmess8.dat" u 3:($9-$3)/$3*100 title "Mega8A-6" ls 3
@@ -69,7 +69,7 @@ set output "../GNU/Mega8AcapGE.pdf" ; replot ; set output
 #
 set xlabel "Capacity value / F"
 set ylabel "Error / \%"
-set output "../GNU/Mega8Lcap.pdf"
+set output "../GNU/Mega8LcapEN.pdf"
 plot "../GNU/capmess8.dat" u 3:($10-$3)/$3*100 title "Mega8L-7" ls 1,\
      "../GNU/capmess8.dat" u 3:($11-$3)/$3*100 title "Mega8L-8" ls 2,\
      "../GNU/capmess8.dat" u 3:($12-$3)/$3*100 title "Mega8L-9" ls 3

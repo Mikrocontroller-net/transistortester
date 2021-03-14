@@ -49,7 +49,7 @@ set style line 2  linetype 1 linecolor rgb "green" linewidth 2.000 pointtype 4 p
 set style line 3  linetype 1 linecolor rgb "blue" linewidth 2.000  pointtype 2 pointsize 1
 set style line 4  linetype 1 linecolor rgb "red" linewidth 2.000  pointtype 6 pointsize 1
 set terminal pdf color 
-set output "../GNU/Cap_FR_data.pdf"
+set output "../GNU/Cap_FR_dataEN.pdf"
 plot "../GNU/Cap6_FR_ESR.dat" using ($1*0.000001):2 title "6V" ls 1,\
 "../GNU/Cap16_FR_ESR.dat" using ($1*0.000001):2 title "16V" ls 2,\
 "../GNU/Cap35_FR_ESR.dat" using ($1*0.000001):2 title "35V" ls 3,\

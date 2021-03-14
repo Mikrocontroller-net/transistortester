@@ -33,7 +33,7 @@ set xtics 1
 set ytics 5
 set key inside right top vertical Right noreverse enhanced autotitles nobox
 set terminal pdf color 
-set output "../GNU/RLvhigh.pdf"
+set output "../GNU/RLvhighEN.pdf"
 set style line 1  linetype 1 linewidth 2.000 pointsize 1
 set style line 2  linetype 2 linewidth 2.000 pointsize 1
 set xrange [ 0 : 10 ] noreverse nowriteback

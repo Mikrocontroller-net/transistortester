@@ -24,7 +24,7 @@ set xrange [10.e-12 : 10e-3]
 set ylabel "Error / \%"
 #set yrange [-2 to 10]
 set key inside center top vertical Right noreverse enhanced autotitles nobox
-set output "../GNU/Mega168all.pdf"
+set output "../GNU/Mega168allEN.pdf"
 plot "../GNU/capmess168-all.dat" u 3:($4-$3)/$3*100 title "168-1" ls 1,"../GNU/capmess168-all.dat" u 3:($5-$3)/$3*100 title "168-2" ls 2,"../GNU/capmess168-all.dat" u 3:($6-$3)/$3*100 title "168-3" ls 3
 set output
 set xlabel "hodnota kapacity / F"
@@ -41,7 +41,7 @@ set output "../GNU/Mega168allGE.pdf" ; replot ; set output
 #
 set xlabel "Capacity value / F"
 set ylabel "Error / \%"
-set output "../GNU/Mega168Aall.pdf"
+set output "../GNU/Mega168AallEN.pdf"
 plot "../GNU/capmess168-all.dat" u 3:($7-$3)/$3*100 title "168A-4" ls 1,"../GNU/capmess168-all.dat" u 3:($8-$3)/$3*100 title "168A-5" ls 2,"../GNU/capmess168-all.dat" u 3:($9-$3)/$3*100 title "168A-6" ls 3
 set output
 set xlabel "hodnota kapacity / F"
@@ -59,7 +59,7 @@ set output "../GNU/Mega168AallGE.pdf" ; replot ; set output
 set key inside center top vertical Right noreverse enhanced autotitles nobox
 set xlabel "Capacity value / F"
 set ylabel "Error / \%"
-set output "../GNU/Mega168PAall.pdf"
+set output "../GNU/Mega168PAallEN.pdf"
 plot "../GNU/capmess168-all.dat" u 3:($10-$3)/$3*100 title "168PA-7" ls 1,"../GNU/capmess168-all.dat" u 3:($11-$3)/$3*100 title "168PA-8" ls 2,"../GNU/capmess168-all.dat" u 3:($12-$3)/$3*100 title "168PA-9" ls 3
 set output
 set xlabel "hodnota kapacity / F"
@@ -78,7 +78,7 @@ set output "../GNU/Mega168PAallGE.pdf" ; replot ; set output
 set key inside center top vertical Right noreverse enhanced autotitles nobox
 set xlabel "Capacity value / F"
 set ylabel "Error / \%"
-set output "../GNU/Mega168cal.pdf"
+set output "../GNU/Mega168calEN.pdf"
 plot "../GNU/capmess168-autocal.dat" u 3:($4-$3)/$3*100 title "168-1" ls 1,"../GNU/capmess168-autocal.dat" u 3:($5-$3)/$3*100 title "168-2" ls 2,"../GNU/capmess168-autocal.dat" u 3:($6-$3)/$3*100 title "168-3" ls 3
 set output
 set xlabel "hodnota kapacity / F"
@@ -96,7 +96,7 @@ set output "../GNU/Mega168calGE.pdf" ; replot ; set output
 set key inside center top vertical Right noreverse enhanced autotitles nobox
 set xlabel "Capacity value / F"
 set ylabel "Error / \%"
-set output "../GNU/Mega168Acal.pdf"
+set output "../GNU/Mega168AcalEN.pdf"
 plot "../GNU/capmess168-autocal.dat" u 3:($7-$3)/$3*100 title "168A-4" ls 1,"../GNU/capmess168-autocal.dat" u 3:($8-$3)/$3*100 title "168A-5" ls 2,"../GNU/capmess168-autocal.dat" u 3:($9-$3)/$3*100 title "168A-6" ls 3
 set output
 set xlabel "hodnota kapacity / F"
@@ -114,7 +114,7 @@ set output "../GNU/Mega168AcalGE.pdf" ; replot ; set output
 set key inside center top vertical Right noreverse enhanced autotitles nobox
 set xlabel "Capacity value / F"
 set ylabel "Error / \%"
-set output "../GNU/Mega168PAcal.pdf"
+set output "../GNU/Mega168PAcalEN.pdf"
 plot "../GNU/capmess168-autocal.dat" u 3:($10-$3)/$3*100 title "168PA-7" ls 1,"../GNU/capmess168-autocal.dat" u 3:($11-$3)/$3*100 title "168PA-8" ls 2,"../GNU/capmess168-autocal.dat" u 3:($12-$3)/$3*100 title "168PA-9" ls 3
 set output
 set xlabel "hodnota kapacity / F"

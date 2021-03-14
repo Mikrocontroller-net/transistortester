@@ -32,7 +32,7 @@ set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set xtics 1  norangelimit
 set ylabel "reference voltage / mV"
 set key inside right top vertical Right noreverse enhanced autotitles nobox
-set output "../GNU/SelfTref.pdf"
+set output "../GNU/SelfTrefEN.pdf"
 set yrange [ 1050 : 1110 ] noreverse nowriteback 
 plot "../GNU/selftest.dat" u 1:2 ls 4 title "Reference"
 set output
@@ -50,7 +50,7 @@ set output "../GNU/SelfTrefGE.pdf" ; replot ; set output
 #
 set xlabel "Processor number"
 set ylabel "voltage / mV"
-set output "../GNU/SelfTMitL.pdf"
+set output "../GNU/SelfTMitLEN.pdf"
 set yrange [ -20 : 5 ] noreverse nowriteback 
 plot "../GNU/selftest.dat" u 1:3 ls 4 title "RLmiddle12", "../GNU/selftest.dat" u 1:4 ls 2 title "RLmiddle13", "../GNU/selftest.dat" u 1:5 ls 3 title "RLmiddle23"
 set output
@@ -69,7 +69,7 @@ set output "../GNU/SelfTMitLGE.pdf" ; replot ; set output
 #
 set xlabel "Processor number"
 set ylabel "voltage / mV"
-set output "../GNU/SelfTMitH.pdf"
+set output "../GNU/SelfTMitHEN.pdf"
 set yrange [ -20 : 5 ] noreverse nowriteback 
 plot "../GNU/selftest.dat" u 1:6 ls 4 title "RHmiddle12", "../GNU/selftest.dat" u 1:7 ls 2 title "RHmiddle13", "../GNU/selftest.dat" u 1:8 ls 3 title "RHmiddle23"
 set output
@@ -87,7 +87,7 @@ set output "../GNU/SelfTMitHGE.pdf" ; replot ; set output
 #
 set xlabel "Processor number"
 set ylabel "voltage / mV"
-set output "../GNU/SelfTbottomH.pdf"
+set output "../GNU/SelfTbottomHEN.pdf"
 set yrange [ 0 : 5 ] noreverse nowriteback 
 plot "../GNU/selftest.dat" u 1:9 ls 4 title "RHbottom1", "../GNU/selftest.dat" u 1:10 ls 2 title "RHbottom2", "../GNU/selftest.dat" u 1:11 ls 3 title "RHbottom3"
 set output
@@ -106,7 +106,7 @@ set output "../GNU/SelfTbottomHGE.pdf" ; replot ; set output
 set autoscale y
 set xlabel "Processor number"
 set ylabel "(voltage - VCC) / mV"
-set output "../GNU/SelfTtopH.pdf"
+set output "../GNU/SelfTtopHEN.pdf"
 plot "../GNU/selftest.dat" u 1:12 ls 4 title "RHtop1", "../GNU/selftest.dat" u 1:13 ls 2 title "RHtop2", "../GNU/selftest.dat" u 1:14 ls 3 title "RHtop3"
 set output
 set xlabel "číslo procesoru"
@@ -124,7 +124,7 @@ set output "../GNU/SelfTtopHGE.pdf" ; replot ; set output
 set yrange [19 to 24]
 set xlabel "Processor number"
 set ylabel "resistance / Ω"
-set output "../GNU/SelfTRiLo.pdf"
+set output "../GNU/SelfTRiLoEN.pdf"
 plot "../GNU/selftest.dat" u 1:(($15*680)/(5001 - $15 - $18)) ls 4 title "RiLo1", \
      "../GNU/selftest.dat" u 1:(($16*680)/(5001 - $16 - $19)) ls 2 title "RiLo2", \
      "../GNU/selftest.dat" u 1:(($17*680)/(5001 - $17 - $20)) ls 3 title "RiLo3"
@@ -143,7 +143,7 @@ set output "../GNU/SelfTRiLoGE.pdf" ; replot ; set output
 #
 set xlabel "Processor number"
 set ylabel "resistance / Ω"
-set output "../GNU/SelfTRiHi.pdf"
+set output "../GNU/SelfTRiHiEN.pdf"
 plot "../GNU/selftest.dat" u 1:(($18*680)/(5001 - $15 - $18)) ls 4 title "RiHi1", \
      "../GNU/selftest.dat" u 1:(($19*680)/(5001 - $16 - $19)) ls 2 title "RiHi2", \
      "../GNU/selftest.dat" u 1:(($20*680)/(5001 - $17 - $20)) ls 3 title "RiHi3"
@@ -163,7 +163,7 @@ set output "../GNU/SelfTRiHiGE.pdf" ; replot ; set output
 set autoscale y
 set xlabel "Processor number"
 set ylabel "Capacity / pF"
-set output "../GNU/SelfTcap0.pdf"
+set output "../GNU/SelfTcap0EN.pdf"
 plot "../GNU/selftest.dat" u 1:21 ls 4 title "CNULL1", "../GNU/selftest.dat" u 1:22 ls 2 title "CNULL2", "../GNU/selftest.dat" u 1:23 ls 3 title "CNULL3"
 set output
 set xlabel "číslo procesoru"
@@ -179,7 +179,7 @@ set ylabel "Kapazität / pF"
 set output "../GNU/SelfTcap0GE.pdf" ; replot ; set output
 #
 set xlabel "Processor number"
-set output "../GNU/SelfTrefKorr.pdf"
+set output "../GNU/SelfTrefKorrEN.pdf"
 set ylabel "Voltage correction / mV"
 plot "../GNU/selftest.dat" u 1:24 ls 4 title "REF\\_C\\_KORR", "../GNU/selftest.dat" u 1:25 ls 2 title "REF\\_R\\_KORR"
 set output
@@ -197,7 +197,7 @@ set output "../GNU/SelfTrefKorrGE.pdf" ; replot ; set output
 #
 set xlabel "Processor number"
 set ylabel "Voltage difference / mV"
-set output "../GNU/SelfTrefDiff.pdf"
+set output "../GNU/SelfTrefDiffEN.pdf"
 set yrange [ -40 : 40 ] 
 plot "../GNU/selftest.dat" u 1:($26-$2) ls 4 title "AREF - REF", "../GNU/selftest.dat" u 1:25 ls 2 title "REF\\_R\\_KORR"
 set output

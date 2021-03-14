@@ -751,8 +751,7 @@ binutils-avr, avrdude, avr-libc und gcc-avr installiert werden.
 Jetzt können sie den unten angegebenen Befehl durch Abtippen
 mit der Tastatur ausführen lassen.
 Sie können aber auch im geöffneten PDF Dokument an diese Stelle blättern
-und den nachfolgenden Text mit der gedückten linken Maustaste \LMB markieren:
-
+und den nachfolgenden Text mit der gedückten linken Maustaste \LMB markieren:\\
 \verb"sudo apt-get install avrdude avr-libc binutils-avr gcc-avr git"\\
 Am Ende des Textes muß die Maustaste \LMB losgelassen werden,
 um die Markierung abzuschließen.
@@ -781,20 +780,20 @@ die man in der Regel mit der Taste \keys{J} beantworten kann.
 
 Natürlich gibt es auch andere Wege, die Pakete zu installieren, welche eine graphische Oberfläche benutzen
 wie synaptic oder dpkg. Aber es nicht einfacher eine gemischte Gruppe von Paketen anzugeben.
-Wenn sie irgendeine dieser Paketmanager, sollten sie über alle installierten Pakete bBescheid wissen,
+Wenn sie irgendeine dieser Paketmanager, sollten sie über alle installierten Pakete Bescheid wissen,
 egal auf welchem Wege sie installiert wurden.
 Die graphischen Paketmanager können auch dabei helfen, den Namen der Pakete herauszufinden.
 
 \subsubsection{Download der Quellen}
 
 Ob die Versionsverwaltung git erfolgreich installiert wurde,
-kann man mit dem folgenden Kommando prüfen:
-\verb"git version"\\
+kann man mit dem folgenden Kommando prüfen:\\
+\large{\verb"git version"}\\
 Das git Programm sollte mit der Ausgabe seiner Versionsnummer antworten.
 Falls in Ihrem Heimatverzeichnis schon ein Ordner transistortester existiert,
 sollte man den umbenennen oder löschen.
-Mit dem Befehl:   
-\verb"git clone https://github.com/Mikrocontroller-net/transistortester"\\
+Mit dem Befehl:\\
+\large{\verb"git clone https://github.com/Mikrocontroller-net/transistortester"}\\
 wird das komplette transistortester Archiv heruntergeladen.
 Die Dateien sind nun in dem Linux [Persönlicher Ordner] auf (/home/"`user"') unter dem
 Namen "`transistortester"'.
@@ -810,8 +809,8 @@ genau wie die Anzahl der trennenden Leerzeichen.
 Bei fast allen Kommandos erfährt man mehr über die Bedienung und die Optionen
 durch durch Anhängen der \mbox{ --help} Option.
 Das gilt natürlich auch für das Kommando git.
-Um neue Updates heruntergeladen, reicht es in der Zukunft, aus dem transistortester Ordner:
-\verb"git pull"\\
+Um neue Updates heruntergeladen, reicht es in der Zukunft, aus dem transistortester Ordner:\\
+\large{\verb"git pull"}\\
 einzugeben.
 
 \subsubsection{Übersetzen der Transistortester Quellen}
@@ -909,8 +908,8 @@ Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub}
 Hier wurde als Device 58 ein AVR ISP mkII erkannt (DIAMEX ALL-AVR).
 Die ID 03eb ist eine Herstellerkennung und die ID 2104 eine Produktkennung.
 Diese beiden Kennungen werden der Datei /etc/udev/rules.d/90-atmel.rules benötigt und erstellt
-mit Hilfe von:
-\verb"sudo xed /etc/udev/rules.d/90-atmel.rules"\\
+mit Hilfe von:\\
+\large{\verb"sudo xed /etc/udev/rules.d/90-atmel.rules"}\\
 In diesem Beispiel besteht die Datei 90-atmel.rules aus einer Zeile:
 \begin{footnotesize}
 \begin{verbatim}
@@ -946,7 +945,7 @@ Zugriffsmöglichkeit auf das serielle Gerät ,,/dev/ttyACM0'' für Mitglieder de
 Deswegen sollte die eigene Benutzerkennung sowohl Mitglied der Gruppe 'plugdev' als auch
 der Gruppe 'dialout' sein. Das Kommando:
 
-\verb"sudo usermod -a -G dialout,plugdev $USER"\\
+\large{\verb"sudo usermod -a -G dialout,plugdev $USER"}\\
 sollte die Zugehörigkeit sicherstellen. 
 Jetzt sollte ein Zugriff mit avrdude auf ISP-Programmer mit beiden Schnittstellentypen möglich sein.
 Kontrollieren kann man es mit dem Kommando: 'id'. 
@@ -959,17 +958,18 @@ Aber das Layout der Funktion ist unterschiedlich je nach Desktopm Umgebung.
 
 \subsubsection{Arbeitsumgebung}
 
-Damit das Original erhalten bleibt und da sich Terminalfenster immer in ../home/\glqq user\grqq/ öffnet, wird empfohlen, dort eine Verknüpfung mit dem Namen \textbf {Mytester} zu verlegen, mit folgenden Eingaben:
-
-\verb"cd transistortester/Software/trunk/"\\
-und dann durch Eingabe von 'ls' das Unterverzeichnis, des ,,benötigten Testers Models'', zu finden.\\
+Damit das Original erhalten bleibt und da sich Terminalfenster immer in ../home/\glqq user\grqq/ öffnet,
+wird empfohlen, dort eine Verknüpfung mit dem Namen \textbf {Mytester} zu verlegen,
+mit folgenden Eingaben:\\
+\large{\verb"cd transistortester/Software/trunk/"}\\
+und dann durch Eingabe von \large{\verb"ls"} das Unterverzeichnis, des ,,benötigten Testers Models'', zu finden.\\
 Bei den folgenden zwei Kommandos, diese zuerst NUR einfügen, ohne \keys{enter} zu drücken: !
 
-\verb"cp -r 'MyT' Mytester/"\\
+\large{\verb"cp -r 'MyT' Mytester/"}\\
 Das Verzeichnis des benötigten Models mit der Maus markieren.
 beziehungsweise \keys{{Strg} + \Alt + \arrowkeyleft} umgeschaltet werden können.
 Nun Kursor mit Hilfe von \keys{\arrowkeyleft} zur letztem Zeichen des Text 'MyT' positionieren und
-diese Zeichen mit der \keys{\backspace} Taste löschen.
+diese Zeichen mit der \keys{\backspace~} Taste löschen.
 Nach dem das letzte Zeichen gelöscht wurde, die [MT] Taste der Maus drücken.
 Erst jetzt die \keys{\enter} Taste betätigen.
 Damit ist die Arbeitsumgebung erstellt.

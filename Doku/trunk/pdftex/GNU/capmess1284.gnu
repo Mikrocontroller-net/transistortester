@@ -20,7 +20,7 @@ set ylabel "Error / \%"
 set xrange [10.e-12 : 20.e-3 ]
 # calibrated
 set key inside center top vertical Right noreverse enhanced autotitles nobox
-set output "../GNU/Mega1284.pdf"
+set output "../GNU/Mega1284EN.pdf"
 plot "../GNU/capmess1284.dat" u 3:($4-$3)/$3*100 title "328-10" ls 1,"../GNU/capmess1284.dat" u 3:($5-$3)/$3*100 title "1284-int" ls 2,"../GNU/capmess1284.dat" u 3:($6-$3)/$3*100 title "1284-ext" ls 3
 set output
 set xlabel "hodnota kapacity / F"

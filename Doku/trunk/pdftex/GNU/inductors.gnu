@@ -40,7 +40,7 @@ set xtics autofreq  norangelimit
 set xlabel "Inductance value / H"
 set ylabel "Error / \%"
 set key inside right top vertical Right noreverse enhanced autotitles nobox
-set output "../GNU/induct328p.pdf"
+set output "../GNU/induct328pEN.pdf"
 plot "../GNU/inductors.dat" u 1:($28-$1)/$1*100 title "328p" ls 1, "../GNU/inductors.dat" u 1:($30-$1)/$1*100 notitle ls 1 , "../GNU/inductors.dat" u 1:($32-$1)/$1*100 notitle ls 1,\
      "../GNU/inductors.dat" u 1:($22-$1)/$1*100 title "328" ls 4, "../GNU/inductors.dat" u 1:($24-$1)/$1*100 notitle ls 4 , "../GNU/inductors.dat" u 1:($26-$1)/$1*100 notitle ls 4,\
      "../GNU/inductors.dat" u 1:($16-$1)/$1*100 title "168p" ls 2, "../GNU/inductors.dat" u 1:($18-$1)/$1*100 notitle ls 2 , "../GNU/inductors.dat" u 1:($20-$1)/$1*100 notitle ls 2,\

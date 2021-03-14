@@ -25,7 +25,7 @@ set xtics 1
 set ytics 5
 set key inside left top vertical Right noreverse enhanced autotitles nobox
 set terminal pdf color 
-set output "../GNU/RLvlow.pdf"
+set output "../GNU/RLvlowEN.pdf"
 set style line 1  linetype 1 linewidth 2.000  pointsize 1
 set style line 2  linetype 2 linewidth 2.000  pointsize 1
 set xrange [ 0 : 10 ] noreverse nowriteback

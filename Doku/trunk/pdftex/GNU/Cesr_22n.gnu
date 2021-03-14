@@ -36,7 +36,7 @@ set xtics border in scale 1,0.5 mirror norotate  offset character 0, 0, 0
 set xtics autofreq  norangelimit
 set ylabel "ESR / Ω"
 set key inside right top vertical Right noreverse enhanced autotitles nobox
-set output "../GNU/Cesr_22n.pdf"
+set output "../GNU/Cesr_22nEN.pdf"
 #plot "../GNU/Cesr_22n.dat" u 2:22 title "GM328" ls 1, \
 #     "../GNU/Cesr_22n.dat" u 2:24 title "fish" ls 3, \
 #     "../GNU/Cesr_22n.dat" u 2:18 title "kit" ls 4, "../GNU/Cesr_22n.dat" u 2:20 notitle ls 4 ,\

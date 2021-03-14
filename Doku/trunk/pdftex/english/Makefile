@@ -431,6 +431,6 @@ ttinfo.pdf: ttinfo.tex $(LISTE50) $(TEXLIST50) Makefile
 	pdflatex --shell-escape ttinfo.tex
 	pdflatex --shell-escape ttinfo.tex
 clean:
-	rm -f $(LISTE1) $(LISTE2) ../GNU/*CZ.pdf $(LISTE3) ../GNU/*RU.pdf $(LISTE4) ../GNU/*GE.pdf $(LISTE21) $(LISTE50)
+	rm -f $(LISTE1) ../GNU/*EN.pdf $(LISTE2) ../GNU/*CZ.pdf $(LISTE3) ../GNU/*RU.pdf $(LISTE4) ../GNU/*GE.pdf $(LISTE21) $(LISTE50)
 steril:
-	rm  -f $(LISTE2) ../GNU/*CZ.pdf $(LISTE3) ../GNU/*RU.pdf $(LISTE4) ../GNU/*GE.pdf *.aux 
+	rm  -f $(LISTE1) ../GNU/*EN.pdf $(LISTE2) ../GNU/*CZ.pdf $(LISTE3) ../GNU/*RU.pdf $(LISTE4) ../GNU/*GE.pdf *.aux 

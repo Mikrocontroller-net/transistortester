@@ -787,21 +787,22 @@ Die graphischen Paketmanager können auch dabei helfen, den Namen der Pakete her
 \subsubsection{Download der Quellen}
 
 Ob die Versionsverwaltung git erfolgreich installiert wurde,
-kann man mit dem folgenden Kommando prüfen:\\
-\large{\verb"git version"}\\
+kann man mit dem folgenden Kommando prüfen:
+\large{\newline\verb"git version"\newline}
 Das git Programm sollte mit der Ausgabe seiner Versionsnummer antworten.
 Falls in Ihrem Heimatverzeichnis schon ein Ordner transistortester existiert,
 sollte man den umbenennen oder löschen.
-Mit dem Befehl:\\
-\large{\verb"git clone https://github.com/Mikrocontroller-net/transistortester"}\\
+Mit dem Befehl:
+\newline\large{\verb"git clone https://github.com/Mikrocontroller-net/transistortester"\newline}
 wird das komplette transistortester Archiv heruntergeladen.
-Die Dateien sind nun in dem Linux [Persönlicher Ordner] auf (/home/"`user"') unter dem
-Namen "`transistortester"'.
-Mit der Terminaleingabe  ls \(\mbox{\keys{L} \keys{S} \keys{\return}}\) kann man das Vorhandensein überprüfen.
+Die Dateien sind nun in dem Linux [Persönlicher Ordner] , üblicherweise \verb"/home/" gefolgt
+von Ihrem Benutzerkürzel, mit dem  Verzeichnisnamen ,,transistortester''.
+Mit der Terminaleingabe  \verb"ls" \(\mbox{\keys{L} \keys{S} \keys{\return}}\) kann man
+das Vorhandensein überprüfen.
 Mehr Informationen über Dateien und Verzeichnisse erhält man mit
-dem Kommando \mbox{ls -lh}. Hier wurden jetzt zwei Optionen für das Kommando ls zusammengefasst,
+dem Kommando \mbox{\verb"ls -lh"}. Hier wurden jetzt zwei Optionen für das Kommando ls zusammengefasst,
 die -l Option und die -h Option. Diese Eingabeform ist also eine Kurzform für
-das Kommando \mbox{ls -l -h} oder auch \mbox{ls -l --human-readable}.
+das Kommando \mbox{\verb"ls -l -h"} oder auch \mbox{\verb"ls -l --human-readable"}.
 Einige der Optionen sind in zwei Versionen vorhanden, einer kurzen mit einem - (-h)
 und einer langen Form mit zwei - (--human-readable).
 Die Reihenfolge der Optionen spielt übrigens keine Rolle,
@@ -809,20 +810,24 @@ genau wie die Anzahl der trennenden Leerzeichen.
 Bei fast allen Kommandos erfährt man mehr über die Bedienung und die Optionen
 durch durch Anhängen der \mbox{ --help} Option.
 Das gilt natürlich auch für das Kommando git.
-Um neue Updates heruntergeladen, reicht es in der Zukunft, aus dem transistortester Ordner:\\
-\large{\verb"git pull"}\\
-einzugeben.
+Um neue Updates heruntergeladen, reicht es in der Zukunft, 
+\large{\newline\verb"git pull"\newline}
+im Arbeitsverzeichnis ,,transistortester'' einzugeben.
+Das kann je nach Kommandointerpreter auch mit \large{\verb"(cd ~/transistortester ; git pull)"}
+aus jedem Arbeisverzeichnis erfolgen.
+Damit der \verb"git pull" einwandfrei funktioniert, sollte man den
+Verzeichnisbaum besser nicht verändern.
 
 \subsubsection{Übersetzen der Transistortester Quellen}
 
-Als nächstes müssen Sie mit dem cd Kommando in ein passendes Arbeitsverzeichnis wechseln.
-Für den Transistortester ist das ein Unterverzeichnis von trunk, zum Beispiel
-\mbox{cd transistortester/Software/trunk/mega328\_st7565}.
-Zum Übersetzen mit den Standardeinstellungen der Makefie müssen sie jetzt nur noch ,,make'' angeben.
-Jetzt können Sie aber auch die Optionen in der Makefile mit einem Texteditor ändern
-und das Transistortester Programm durch Wiederholen des make Befehls neu übersetzen.
-Zum Programmieren des Atmega müssen sie sich noch um d2sieen Zugriffsmöglichkeit auf die
-Schnittstellen (USB) kümmern.
+Zum Übersetzen der Transistortester-Quellen ist nur ein ,,\verb"make"'' Aufruf
+im richtigen Arbeitsverzeichnis erforderlich.
+Da aber auch mit ,,\verb"make upload"'' der ATmega mit einem angeschlossenen
+ISP-Programmer programmiert werden kann, ist es sinnvoll,
+sich zunächst mit den Schnittstellen für den Anschluß des ISP-Programmer
+zu beschäftigen.
+Der weitere Arbeitsablauf ist dann unter Punkt \ref{sec:Arbeitsumgebung} auf
+Seite \pageref{sec:Arbeitsumgebung} beschrieben.
 
 \subsubsection{Benutzung der Schnittstellen}
 \label{sec:Schnittstellen}
@@ -838,8 +843,7 @@ kann man diese einfach auf dem Bildschirm anzeigen.
 Dazu kann man in Konsolfenster den Befehl dmesg benutzen und da wir nach dem
 Einstecken des Programmers nur an den letzten Zeilen des Protokolls
 interessiert sind, benutzt man:
-
-\verb"dmesg|tail"\\
+\large{\newline\verb"dmesg|tail"\newline}
 Das dmesg Programm zeigt das gesamte Systemprotokoll und das Kommando 
 tail zeigt nur die letzten 10 Zeilen der Ausgabe.
 Für einen Pololu Programmer sieht das Ergebnis so aus:
@@ -866,7 +870,7 @@ Für den Pololu Programmer muß man wissen, daß die erste serielle Schnittstell
 für den ISP-Programmer benutzt wird und die zweite serielle Schnittstelle
 für andere Zwecke frei benutzt werden kann.
 Sie können die Existenz der Geräteeintragungen mit dem Kommando
-\verb"ls -l /dev/ttyACM*"\\
+\large{\newline\verb"ls -l /dev/ttyACM*"\newline}
 überprüfen. Das Ergebnis sollte dann so aussehen:
 \begin{footnotesize}
 \begin{verbatim}
@@ -908,8 +912,8 @@ Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub}
 Hier wurde als Device 58 ein AVR ISP mkII erkannt (DIAMEX ALL-AVR).
 Die ID 03eb ist eine Herstellerkennung und die ID 2104 eine Produktkennung.
 Diese beiden Kennungen werden der Datei /etc/udev/rules.d/90-atmel.rules benötigt und erstellt
-mit Hilfe von:\\
-\large{\verb"sudo xed /etc/udev/rules.d/90-atmel.rules"}\\
+mit Hilfe von:
+\large{\newline\verb"sudo xed /etc/udev/rules.d/90-atmel.rules"\newline}
 In diesem Beispiel besteht die Datei 90-atmel.rules aus einer Zeile:
 \begin{footnotesize}
 \begin{verbatim}
@@ -954,44 +958,86 @@ Mann kann sich die Gruppenmitgliedschaft auch mit einem Programm mit graphischer
 \menu[,]{Menü,Systemverwaltung,{Benutzer und Gruppen},{?Passwort}}.
 Das \menu[,]{Menü} kann man auch mit der \keys{\winmenu} Taste (zwischen \keys{{Strg}} und
 \keys{\Alt}) öffnen.
-Aber das Layout der Funktion ist unterschiedlich je nach Desktopm Umgebung.
+Aber das Layout der Funktion ist unterschiedlich je nach Desktop Umgebung.
 
-\subsubsection{Arbeitsumgebung}
+\subsubsection{Arbeitsumgebung und Übersetzen der Quellen}
+\label{sec:Arbeitsumgebung}
+Damit das Original erhalten bleibt,
+wird empfohlen, ein Duplikat der Quellen mit Namen \textbf {Mytester} anzulegen.
+Üblicherweise heißt das Home-Verzeichnis \verb"/home/" gefolgt von ihrem Benutzerkürzel.
+Der Name ihres Home-Verzeichnisses ist in der System-Variablen \verb"$HOME" abgelegt.
+Sie können statt des Namens in Befehlen auch kurz \verb"~/" schreiben.
+Vergessen sie nicht den \verb"/" nach dem \verb"~" Zeichen, sonst würde der
+Kommandointerpreter nach einem Benutzer mit dem nachfolgenden Namen suchen!
+Dazu legen Sie erst einmal ein leeres Verzeichnis an mit:
+\large{\newline\verb"mkdir ~/Mytester"\newline}
+Wenn Sie den Download vom Archiv in das Verzeichnis \verb"~/transistortester"  durchgeführt haben,
+können Sie den nachfolgenden Befehl ausführen, um die Quelldateien und dessen Unterverzeichnisse
+in das Mytester Verzeichnis zu kopieren.
+\large{\newline\verb"rsync -auv ~/transistortester/Software/trunk/ ./Mytester"\newline}
+Wegen der \verb"-v" Option protokolliert rsync alle Kopiervorgänge.
+Wenn Sie statt der \verb"-auv" Optionen also \verb"-au" als Optionen angeben,
+bleibt der Kopiervorgang stumm.
+Sie können sich aber vom gefüllten Unterverzeichnis trunk mit folgendem Befehl
+überzeugen:
+\large{\newline\verb"ls -lh ~/Mytester/trunk"\newline}
+Eine übersichtliche Darstellung der Verzeichnisstruktur und der Dateien ist mit
+dem Kommando \verb"tree ~/Mytester" möglich. Das Kommando ist aber nicht als
+Standard installiert, was sie aber mit \verb"sudo apt install tree" leicht nachholen können.\\
 
-Damit das Original erhalten bleibt und da sich Terminalfenster immer in ../home/\glqq user\grqq/ öffnet,
-wird empfohlen, dort eine Verknüpfung mit dem Namen \textbf {Mytester} zu verlegen,
-mit folgenden Eingaben:\\
-\large{\verb"cd transistortester/Software/trunk/"}\\
-und dann durch Eingabe von \large{\verb"ls"} das Unterverzeichnis, des ,,benötigten Testers Models'', zu finden.\\
-Bei den folgenden zwei Kommandos, diese zuerst NUR einfügen, ohne \keys{enter} zu drücken: !
+Wenn Sie jetzt wissen, welches Unterverzeichnis für Ihren Tester paßt,
+können Sie in dieses Unterverzeichnis wechseln.
+Nehmen wir mal an, Sie besäßen einen chinesischen Bausatz mit SW-Display, 
+dann wäre das Unterverzeichnis \verb"mega328_st7565_kit" richtig.
+Der Befehl dazu wäre dann:
+\large{\newline\verb"cd ~/Mytester/trunk/mega328_st7565_kit"\newline}
 
-\large{\verb"cp -r 'MyT' Mytester/"}\\
-Das Verzeichnis des benötigten Models mit der Maus markieren.
-beziehungsweise \keys{{Strg} + \Alt + \arrowkeyleft} umgeschaltet werden können.
-Nun Kursor mit Hilfe von \keys{\arrowkeyleft} zur letztem Zeichen des Text 'MyT' positionieren und
-diese Zeichen mit der \keys{\backspace~} Taste löschen.
-Nach dem das letzte Zeichen gelöscht wurde, die [MT] Taste der Maus drücken.
-Erst jetzt die \keys{\enter} Taste betätigen.
-Damit ist die Arbeitsumgebung erstellt.
-Die Kontrolle der Existenz und Inhalts ist möglich mit:\\
-
-\verb"diff 'MyT' Mytester/"\\
-vobei muss 'MyT', wie vorher, für das Verzeichnis des ,,benötigten Testers Models'' ausgetauscht werden.
-Mit dem letzten Anweisung:
-
-\verb"ln -s ~/transistortester/Software/trunk/Mytester ~/Mytester"\\
-wird die Verknüpfung zum Arbeitsverzeichnis erstellt. 
-Ab jetzt erreicht man dieses Verzeichnis sehr einfach mit:
-
-\verb"[Strg]+[Alt]+[t]cd[Leer]My[Tab][Enter]"\\
-und schon ist man in benötigten Verzeichnis. Mit 'ls' sieht man den Inhalt.\\
-Weiter geht es zum Bearbeiten der Makefile mit der inzwischen bekannten Anweisung:
-
-\verb"xed[Leer]Ma[Tab][Enter]"\\
-\textbf {Hier ist am wichtigsten, den VORHANDENEN} USB-Programmer anmelden.
+Sie können die Dateien in \verb"~/Mytester/trunk/" auch mit dem Dateien Fenster ansehen
+\menu[,]{Menü, Zubehör, Dateien}, dabei muß das Verzeichnis \verb"Mytester" und danach
+\verb"trunk" durch \LMB Doppelclick ausgewählt werden.
+Hier erscheinen jetzt viele Unterverzeichnisse, darunter auch das
+gewünschte \verb"mega328_st7565_kit".
+Wenn Sie dieses jetzt auch dieses Verzeichnis mit \LMB Doppelclick auswählen,
+sehen Sie unter den Files auch die Makefile.
+Wenn Sie das geschafft haben, können sie jetzt mit der \RMB Taste die Funktion \menu{Im Terminal öffnen}
+auswählen und schon öffnet sich ein Kommandofenster mit dem richtigen Arbeitsverzeichnis,
+welches auch direkt aktiv ist. Jetzt brauchen sie nur noch \verb"make" einzutippen und schon wird
+das Transistortester Programm neu übersetzt.
+Sie haben jetzt zwei Fenster, die schon auf dem richtigen Arbeitsverzeichnis stehen.
+Das Dateien-Fenster und das Terminal-Fenster für die Befehls-Eingabe (make).
+Durch \LMB Doppelclick auf die Makefile Datei im Dateien-Fenster öffnet sich ein weiteres Fenster
+mit dem voreingestellten Editor. Wenn Sie hier einen anderen Editor bevorzugen, können Sie
+diesen Editor entweder direkt über \RMB \menu[,]{{Öffnen mit}} auswählen.
+Wenn Sie immer einen anderen Editor für Text-Dateien einstellen möchten,
+ist das ebenfalls über \RMB  \menu[,]{Eigenschaften} möglich.
+Dann öffnet sich ein neues \verb"Eigenschaften von Makefile" Fenster, wo sie die
+Funktion \menu[,]{{Öffnen Mit}} durch \RMB anklicken auswählen können.
+Hier sehen sie jetzt die aktuelle Einstellung und eine Auswahl an Möglichkeiten zum Bearbeiten
+der Makefile. Hier können Sie durch \LMB anklicken eine andere Anwendung auswählen.
+Durch \LMB Anklicken können sie jetzt auswählen, ob sie diese Anwendung \menu[,]{{Zur Liste hinzufügen}}
+oder \menu[,]{{Als Vorgabe festlegen}} möchten.
+Sie können die Einstellung aber auch wieder \menu[,]{{Auf Systemvorgabe zurücksetzen}}.
+Für den nächsten Schritt ist es wichtig, daß die Einstellungen für
+\textbf{ihren ISP-Programmer} in der Makefile richtig eingestellt sind.
 Siehe dazu im Unterkapitel \ref{sec:config}, auf der Seite \pageref{sec:config-Prog},
-Thema PROGRAMMER und PORT.
+Thema \textbf{PROGRAMMER} und \textbf{PORT}.
+Wenn sie diese Einstellungen überprüft haben,
+können sie durch \LMB Anklicken des Terminal Fensters dieses wieder aktivieren.
+Beim aktivierten Fenster hat die Kopfzeile einen höheren Kontrast!
+Wenn jetzt ihr ISP-Programmer komplett angeschlossen ist, also eine Verbinduung
+zum Rechner und zum ATmega hat, brauchen sie nur das Kommandoa eingeben:
+\large{\newline\verb"make upload"\newline}
+Das Transistortester Programm wird jetzt noch einmal neu übersetzt und dann sofort
+mit dem Programm avrdude in den ATmega geladen.
+Sie brauchen den Befehl nicht jedesmal neu eintippen.
+Bereits abgegebene Befehle in dem Terminal Fenster lassen sich mit der \keys{arrowkeyup} Taste
+wieder anzeigen.
+Den angezeigten Befehl können sie durch drücken der \keys{\enter} oder \keys{\return}
+taste wiederholen.
+Sie können aber auch der angezeigten Befehl vor dem Abschicken editieren,
+oder mit der \keys{arrowkeydown} wieder zu neueren Befehlen wechseln.\\
 
+Zum Schluß sind hier noch einmal die wichtigsten Makefile Aufrufe aufgelistet:
 \begin{tabbing}
 Fo\=lgende Aufrufe sind \=zu empfehlen:\\
 \> make clean \> zum reinigen des Arbeitsumgebung\\
@@ -1001,7 +1047,27 @@ Fo\=lgende Aufrufe sind \=zu empfehlen:\\
 \> make upload \> zum Laden des kompletten Programms über die ISP Schnittstelle in den ATmega.
 \end{tabbing}
 
+\subsubsection{Hinweise zum Update der Transistortester-Quellen}
+Die Kopie der transistortester-Quellen kann mit dem Kommando
+\verb"(cd ~/transistortester ; git pull)"
+auf dem aktuellen Stand gehalten werden.
+Wenn man wie hier empfohlen in einer Kopie unter \verb"~/Mytester" arbeitet,
+werden die Änderungen erst übertragen, wenn man auch das Kommando
+\verb"rsync -auv ~/transistortester/Software/trunk ~/Mytester" 
+ausführt.
+Dabei kann es passieren, daß die Makefile auf dem github Server ein neueres Datum 
+hat als die hier lokal geänderte Kopie. Dann würden die hier lokal im Mytester Ordner
+durchgeführten Änderungen der Optionen in der Makefile verlorengehen.
+Daher ist es eine gute Idee, die erfolgreich geänderte Makefile als Kopie
+zu sichern. Das kann beispielsweise mit dem Befehl \mbox{\verb"cp Makefile Makefile.bak"}
+erfolgen. Dann kann man mit dem Befehl \mbox{\verb"diff Makefile Makefile.bak"}
+die Dateien nach einem Update vom Rechner vergleichen lassen.
+Ein besserer Überblick der Änderungen ist auch mit \mbox{\verb"kdiff3 Makefile Makefile.bak"}
+möglich. Das Programm muß aber wahrscheinlich mit \mbox{\verb"sudo apt get kdiff3"}
+erst installiert werden, da es eigentlich für die KDE Desktopumgebung entwickelt wurde.
+
 \newpage
+
 \subsection{Benutzung des WinAVR-Paketes unter Windows}
 
 Wenn Sie unter dem Windows Betriebssystem arbeiten, ist der leichteste Weg zum

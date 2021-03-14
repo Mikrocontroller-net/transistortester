@@ -1,30 +1,30 @@
-LISTE1 = ../GNU/Cap_FC_data.pdf
-LISTE1 += ../GNU/Cap_FR_data.pdf
-LISTE1 += ../GNU/Cap_FC_FR_data.pdf
-LISTE1 += ../GNU/Cesr.pdf
-LISTE1 += ../GNU/Cesr2.pdf
-LISTE1 += ../GNU/Cesr_22n.pdf
-LISTE1 += ../GNU/Cesr_22n_low.pdf
-LISTE1 += ../GNU/ComparatorAdjust.pdf
-LISTE1 += ../GNU/Elco_esr.pdf
-LISTE1 += ../GNU/frequency-ppm.pdf
-LISTE1 += ../GNU/induct328p.pdf
-LISTE1 += ../GNU/m168res_all.pdf
-LISTE1 += ../GNU/MegaAuto.pdf
-LISTE1 += ../GNU/Mega1284.pdf
-LISTE1 += ../GNU/Mega168all.pdf 
-LISTE1 += ../GNU/Mega168cap.pdf
-LISTE1 += ../GNU/Mega168cap_opt.pdf
-LISTE1 += ../GNU/Mega328all.pdf
-LISTE1 += ../GNU/Mega8cap.pdf
-LISTE1 += ../GNU/Mega8res.pdf
-LISTE1 += ../GNU/res_esr.pdf
-LISTE1 += ../GNU/RHv.pdf
-LISTE1 += ../GNU/RLvhigh.pdf
-LISTE1 += ../GNU/RLvlow.pdf
-LISTE1 += ../GNU/RLvtot.pdf
-LISTE1 += ../GNU/SelfTref.pdf
-LISTE1 += ../GNU/W12compare.pdf
+LISTE1 = ../GNU/Cap_FC_dataEN.pdf
+LISTE1 += ../GNU/Cap_FR_dataEN.pdf
+LISTE1 += ../GNU/Cap_FC_FR_dataEN.pdf
+LISTE1 += ../GNU/CesrEN.pdf
+LISTE1 += ../GNU/Cesr2EN.pdf
+LISTE1 += ../GNU/Cesr_22nEN.pdf
+LISTE1 += ../GNU/Cesr_22n_lowEN.pdf
+LISTE1 += ../GNU/ComparatorAdjustEN.pdf
+LISTE1 += ../GNU/Elco_esrEN.pdf
+LISTE1 += ../GNU/frequency-ppmEN.pdf
+LISTE1 += ../GNU/induct328pEN.pdf
+LISTE1 += ../GNU/m168res_allEN.pdf
+LISTE1 += ../GNU/MegaAutoEN.pdf
+LISTE1 += ../GNU/Mega1284EN.pdf
+LISTE1 += ../GNU/Mega168allEN.pdf 
+LISTE1 += ../GNU/Mega168capEN.pdf
+LISTE1 += ../GNU/Mega168cap_optEN.pdf
+LISTE1 += ../GNU/Mega328allEN.pdf
+LISTE1 += ../GNU/Mega8capEN.pdf
+LISTE1 += ../GNU/Mega8resEN.pdf
+LISTE1 += ../GNU/res_esrEN.pdf
+LISTE1 += ../GNU/RHvEN.pdf
+LISTE1 += ../GNU/RLvhighEN.pdf
+LISTE1 += ../GNU/RLvlowEN.pdf
+LISTE1 += ../GNU/RLvtotEN.pdf
+LISTE1 += ../GNU/SelfTrefEN.pdf
+LISTE1 += ../GNU/W12compareEN.pdf
 
 LISTE2 = ../GNU/Cap_FC_dataCZ.pdf
 LISTE2 += ../GNU/Cap_FR_dataCZ.pdf
@@ -130,59 +130,59 @@ LISTE50 += ../FIG/JFET_BF245.pdf ../FIG/JFET_J175.pdf ../FIG/MOS_BSS169.pdf ../F
 
 all: ttester.pdf ttinfo.pdf
 	
-../GNU/Cap_FC_data.pdf: ../GNU/Cap_FC_data.gnu ../GNU/Cap6_FC_ESR.dat ../GNU/Cap16_FC_ESR.dat ../GNU/Cap35_FC_ESR.dat ../GNU/Cap63_FC_ESR.dat
+../GNU/Cap_FC_dataEN.pdf: ../GNU/Cap_FC_data.gnu ../GNU/Cap6_FC_ESR.dat ../GNU/Cap16_FC_ESR.dat ../GNU/Cap35_FC_ESR.dat ../GNU/Cap63_FC_ESR.dat
 	gnuplot ../GNU/Cap_FC_data.gnu
-../GNU/Cap_FC_FR_data.pdf: ../GNU/Cap_FC_FR_data.gnu ../GNU/Cap25_FC_ESR.dat ../GNU/Cap25_FR_ESR.dat
+../GNU/Cap_FC_FR_dataEN.pdf: ../GNU/Cap_FC_FR_data.gnu ../GNU/Cap25_FC_ESR.dat ../GNU/Cap25_FR_ESR.dat
 	gnuplot ../GNU/Cap_FC_FR_data.gnu
-../GNU/Cap_FR_data.pdf: ../GNU/Cap_FR_data.gnu ../GNU/Cap6_FR_ESR.dat ../GNU/Cap16_FR_ESR.dat ../GNU/Cap35_FR_ESR.dat ../GNU/Cap63_FR_ESR.dat
+../GNU/Cap_FR_dataEN.pdf: ../GNU/Cap_FR_data.gnu ../GNU/Cap6_FR_ESR.dat ../GNU/Cap16_FR_ESR.dat ../GNU/Cap35_FR_ESR.dat ../GNU/Cap63_FR_ESR.dat
 	gnuplot ../GNU/Cap_FR_data.gnu
-../GNU/Cesr.pdf: ../GNU/Cesr.gnu ../GNU/Cesr_all.dat
+../GNU/CesrEN.pdf: ../GNU/Cesr.gnu ../GNU/Cesr_all.dat
 	gnuplot ../GNU/Cesr.gnu
-../GNU/Cesr2.pdf: ../GNU/Cesr2.gnu ../GNU/Cesr2_all.dat
+../GNU/Cesr2EN.pdf: ../GNU/Cesr2.gnu ../GNU/Cesr2_all.dat
 	gnuplot ../GNU/Cesr2.gnu
-../GNU/Cesr_22n.pdf: ../GNU/Cesr_22n.gnu ../GNU/Cesr_22n.dat
+../GNU/Cesr_22nEN.pdf: ../GNU/Cesr_22n.gnu ../GNU/Cesr_22n.dat
 	gnuplot ../GNU/Cesr_22n.gnu
-../GNU/Cesr_22n_low.pdf: ../GNU/Cesr_22n_low.gnu ../GNU/Cesr_22n_low.dat
+../GNU/Cesr_22n_lowEN.pdf: ../GNU/Cesr_22n_low.gnu ../GNU/Cesr_22n_low.dat
 	gnuplot ../GNU/Cesr_22n_low.gnu
-../GNU/ComparatorAdjust.pdf: ../GNU/comparator_diff.gnu ../GNU/comparator_cap.dat
+../GNU/ComparatorAdjustEN.pdf: ../GNU/comparator_diff.gnu ../GNU/comparator_cap.dat
 	gnuplot ../GNU/comparator_diff.gnu
-../GNU/Elco_esr.pdf: ../GNU/Elco_esr.gnu ../GNU/Elco_esr.dat
+../GNU/Elco_esrEN.pdf: ../GNU/Elco_esr.gnu ../GNU/Elco_esr.dat
 	gnuplot ../GNU/Elco_esr.gnu
-../GNU/frequency-ppm.pdf: ../GNU/frequency-ppm.gnu ../GNU/frequency-ppm.dat
+../GNU/frequency-ppmEN.pdf: ../GNU/frequency-ppm.gnu ../GNU/frequency-ppm.dat
 	gnuplot ../GNU/frequency-ppm.gnu
-../GNU/induct328p.pdf: ../GNU/inductors.gnu ../GNU/inductors.dat
+../GNU/induct328pEN.pdf: ../GNU/inductors.gnu ../GNU/inductors.dat
 	gnuplot ../GNU/inductors.gnu
-../GNU/Mega1284.pdf: ../GNU/capmess1284.gnu ../GNU/capmess1284.dat
+../GNU/Mega1284EN.pdf: ../GNU/capmess1284.gnu ../GNU/capmess1284.dat
 	gnuplot ../GNU/capmess1284.gnu
-../GNU/m168res_all.pdf: ../GNU/rmess_all.gnu ../GNU/rmess-all.dat ../GNU/rmess-autocal.dat
+../GNU/m168res_allEN.pdf: ../GNU/rmess_all.gnu ../GNU/rmess-all.dat ../GNU/rmess-autocal.dat
 	gnuplot ../GNU/rmess_all.gnu
-../GNU/MegaAuto.pdf: ../GNU/capmessAUTO.gnu ../GNU/capmessAUTO.dat
+../GNU/MegaAutoEN.pdf: ../GNU/capmessAUTO.gnu ../GNU/capmessAUTO.dat
 	gnuplot ../GNU/capmessAUTO.gnu
-../GNU/Mega168all.pdf: ../GNU/capmess168all.gnu ../GNU/capmess168-all.dat ../GNU/capmess168-autocal.dat
+../GNU/Mega168allEN.pdf: ../GNU/capmess168all.gnu ../GNU/capmess168-all.dat ../GNU/capmess168-autocal.dat
 	gnuplot ../GNU/capmess168all.gnu
-../GNU/Mega168cap.pdf: ../GNU/capmess168.gnu ../GNU/capmess168.dat
+../GNU/Mega168capEN.pdf: ../GNU/capmess168.gnu ../GNU/capmess168.dat
 	gnuplot ../GNU/capmess168.gnu
-../GNU/Mega168cap_opt.pdf: ../GNU/capmessopt168.gnu ../GNU/capmess168-3.dat
+../GNU/Mega168cap_optEN.pdf: ../GNU/capmessopt168.gnu ../GNU/capmess168-3.dat
 	gnuplot ../GNU/capmessopt168.gnu
-../GNU/Mega328all.pdf: ../GNU/capmess328all.gnu ../GNU/capmess328-all.dat ../GNU/capmess328-autocal.dat
+../GNU/Mega328allEN.pdf: ../GNU/capmess328all.gnu ../GNU/capmess328-all.dat ../GNU/capmess328-autocal.dat
 	gnuplot ../GNU/capmess328all.gnu
-../GNU/Mega8res.pdf: ../GNU/rmess.gnu ../GNU/rmess.dat
+../GNU/Mega8resEN.pdf: ../GNU/rmess.gnu ../GNU/rmess.dat
 	gnuplot ../GNU/rmess.gnu
-../GNU/Mega8cap.pdf: ../GNU/capmess8.gnu ../GNU/capmess8.dat ../GNU/capmessorig.dat
+../GNU/Mega8capEN.pdf: ../GNU/capmess8.gnu ../GNU/capmess8.dat ../GNU/capmessorig.dat
 	gnuplot ../GNU/capmess8.gnu
-../GNU/res_esr.pdf: ../GNU/rmess_esr.gnu ../GNU/rmess-esr.dat
+../GNU/res_esrEN.pdf: ../GNU/rmess_esr.gnu ../GNU/rmess-esr.dat
 	gnuplot ../GNU/rmess_esr.gnu
-../GNU/RHv.pdf: ../GNU/RHv.gnu
+../GNU/RHvEN.pdf: ../GNU/RHv.gnu
 	gnuplot $<
-../GNU/RLvhigh.pdf: ../GNU/RLvhigh.gnu
+../GNU/RLvhighEN.pdf: ../GNU/RLvhigh.gnu
 	gnuplot $<
-../GNU/RLvlow.pdf: ../GNU/RLvlow.gnu
+../GNU/RLvlowEN.pdf: ../GNU/RLvlow.gnu
 	gnuplot $<
-../GNU/RLvtot.pdf: ../GNU/RLvtot.gnu
+../GNU/RLvtotEN.pdf: ../GNU/RLvtot.gnu
 	gnuplot $<
-../GNU/SelfTref.pdf: ../GNU/selftest.gnu ../GNU/selftest.dat
+../GNU/SelfTrefEN.pdf: ../GNU/selftest.gnu ../GNU/selftest.dat
 	gnuplot ../GNU/selftest.gnu
-../GNU/W12compare.pdf: ../GNU/W12compare.gnu ../GNU/W12_18nF.dat ../GNU/W12_20nF.dat
+../GNU/W12compareEN.pdf: ../GNU/W12compare.gnu ../GNU/W12_18nF.dat ../GNU/W12_20nF.dat
 	gnuplot ../GNU/W12compare.gnu
 	
 ../GNU/Cap_FC_dataCZ.pdf: ../GNU/Cap_FC_data.gnu ../GNU/Cap6_FC_ESR.dat ../GNU/Cap16_FC_ESR.dat ../GNU/Cap35_FC_ESR.dat ../GNU/Cap63_FC_ESR.dat
@@ -426,12 +426,11 @@ TEXLIST50 = BJT-transistors.tex MOS-transistors.tex
 .PHONY: ttester.pdf
 ttester.pdf: ttester.tex $(LISTE1) $(LISTE2) $(LISTE3) $(LISTE4) $(LISTE21) $(TEXLIST1) Makefile
 	pdflatex --shell-escape ttester.tex 
-	pdflatex --shell-escape ttester.tex
 
 ttinfo.pdf: ttinfo.tex $(LISTE50) $(TEXLIST50) Makefile
 	pdflatex --shell-escape ttinfo.tex
 	pdflatex --shell-escape ttinfo.tex
 clean:
-	rm -f $(LISTE1) $(LISTE2) ../GNU/*CZ.pdf $(LISTE3) ../GNU/*RU.pdf $(LISTE4) ../GNU/*GE.pdf $(LISTE21) $(LISTE50)
+	rm -f $(LISTE1) ../GNU/*EN.pdf $(LISTE2) ../GNU/*CZ.pdf $(LISTE3) ../GNU/*RU.pdf $(LISTE4) ../GNU/*GE.pdf $(LISTE21) $(LISTE50)
 steril:
-	rm  -f $(LISTE2) ../GNU/*CZ.pdf $(LISTE3) ../GNU/*RU.pdf $(LISTE4) ../GNU/*GE.pdf *.aux 
+	rm  -f $(LISTE1) ../GNU/*EN.pdf $(LISTE2) ../GNU/*CZ.pdf $(LISTE3) ../GNU/*RU.pdf $(LISTE4) ../GNU/*GE.pdf *.aux 

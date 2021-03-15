@@ -699,7 +699,7 @@ For example, you can move the window with the PDF documentation to the left side
 By pressing the \LMB, the window will snap into the new position. 
 To move, you can also grab the header bar of the window with the \LMB key and move it
 while keeping the \LMB key pressed.
-with this way the window will snap in the new position, if the mause button is released.
+With this way the window will snap in the new position, if the mause button is released.
 
 In the next step the key combination \keys{{Ctrl} + \Alt + T} is pressed at the same time,
 to open a (new) command window.
@@ -707,11 +707,12 @@ This is now moved to the right half of the screen in the manner already describe
 its size can also be changed.
 The size change can be done with the \ LMB key at the edges or corners of the window,
 or with the \RMB on the header with the \menu[,]{change size}  function.
+The handling is otherwise the same as for moving.
 
-As a rule, the graphical user interfaces in Linux have more than one workspace,
+As a rule, the desktop environment of Linux have more than one workspace,
 which can be switched with the key combination \keys{{Ctrl} + \Alt + \arrowkeyright} or
 \keys{{ctrl} + \Alt + \arrowkeyleft}.
-With the \RMB key at the header line of the window you can select one of the workspacess
+With the \RMB key at the header line of a window you can select one of the workspacess
 on which this window is displayed.
 
 So you can put together the windows you need for your work on a separate working desk and
@@ -726,14 +727,15 @@ Before you can program the tester, the program packages
 binutils-avr, avrdude, avr-libc and gcc-avr must be installed first.
 Now you can type the command given below with the keyboard.
 You can also scroll to this point in the open PDF document and select the
-following text with the left mouse button pressed \LMB:
-
-\verb"sudo apt-get install avrdude avr-libc binutils-avr gcc-avr git"\\
+following text with the left mouse button pressed \LMB :
+\large{\newline\verb"sudo apt-get install avrdude avr-libc binutils-avr gcc-avr git"\newline}
 At the end of the text the mouse button \LMB must be released,
 to complete the selection.
+If the text is shown in a line as in this example, you can select the full line also
+with three \LMB mouse clicks anywhere at the line.
 Then you can move the mouse pointer into the right command window and
 insert the previously marked text into the command line by pressing the
-middle mouse button {further abbreviated as \ MMB}.
+middle mouse button {further abbreviated as \MMB }.
 For many mice, the scroll wheel is also the middle mouse button.
 For mice without a middle mouse button, it is possible to replace the middle mouse button
 by pressing the \LRMB mouse buttons at the same time.
@@ -744,18 +746,17 @@ Regardless of how the command text got into the command line,
 you should check the text again before sending the command by pressing the \keys{\enter} key.
 As a rule, you do not need to be afraid that something bad will happen when you install packages
 due to incorrect operation.
-Before executing the operation, the apt program checks whether the packages listed
+Before executing the operation, the \verb"apt-get" program checks whether the packages listed
 are already installed and whether the dependencies are met.
 But in some cases a previously installed package can be replaced by a newer version.
 Then the sudo program will first ask you for the user password before it
 will execute the rest of the command line.
 In contrast to Windows, the password is entered \textbf{Blind} (with a hidden echo on the screen).
 You should finish and confirm the password entry with \keys{\enter} or \keys{\return}. 
+Now all specified software packages are downloaded and installed by ''\verb"apt-get"''.\\
 
-Now all specified software packages are downloaded and installed by 'apt'.
-It may be that apt asks questions when installing the packages,
+It may be that \verb"apt-get" asks questions when installing the packages,
 which can usually be answered with \keys{Y}.
-Please make sure that a distinction is made between upper and lower case in Linux.\\
 
 Of course there are other ways to install the packages, which use the graphical interface
 like synaptic or dpkd. But it is not easier to select a mixed group of packages.
@@ -767,43 +768,51 @@ The graphical package managers can help you to find out the names of the package
 \subsubsection{Download of sources}
 
 You can check the correct installation of the git package by typing the command:
-\verb"git version"\\
-The git program should answer with its version number.
+\large{\newline\verb"git version"\newline}
 The git program should respond with the output of its version number.
 If a folder transistortester already exists in your home directory,
 you should rename or delete it.
 The package ''git'' is used for downloading the sources and the documentation from the Git archive.
 With the command:
-\verb"git clone https://github.com/mikrocontroller-net/transistortester"\\
+\large{\newline\verb"git clone https://github.com/mikrocontroller-net/transistortester"\newline}
 you can download the complete transistortester archive.
+The directory ''transistortester''is now addded to your home directory,
+wich is usually the full file name \verb"/home/" followed by your user ID.
 So you must see a new directory ''transistortester'', which can
-be checked by typing ls ( \mbox{\keys{L} \keys{S} \keys{\return}} ).
+be checked by typing \verb"ls" ( \mbox{\keys{L} \keys{S} \keys{\return}} ).
 You get more information about files and directories, if you call
-the command with options like \mbox{ls -lh}.
-In this example two options for the ls command have been combined here,
-the -l option and the -h option.
-This input form is a short form for the command \mbox{ls -l -h} or \mbox{ls -l --human-readable}.
-Some options appear in two forms, a short one with one - (-h) and a long form
-with two - (--human-readable).
+the command with options like {\verb"ls -lh"}.
+In this example two options for the \verb"ls" command have been combined here,
+the \verb" -l" option and the \verb" -h" option.
+This input form is a short form for the command {\verb"ls -l -h"} or
+{\verb"ls -l --human-readable"}.
+Some options appear in two forms, a short one with one - (\verb" -h") and a long form
+with two - (\verb" --human-readable").
 Usually the sequence of the options doesn't care, but the options must by separated
 by at least one space \keys{\space}.
 If you write some short form options (one character) together, there is no space allowed
 and you need only one - character in front of the collection.
-You can get help about the command and the options for nearly every command by appendings
-the \mbox{--help} option.
+You can get help about the command and the options for nearly every command by appending
+the {\verb" --help"} option.
 Of course, this also applies to the git command.\\
 For getting updates, you should change your working dirctory to transistortester and call:
-\verb"git pull"
+\large{\newline\verb"git pull"\newline}
+Das kann je nach Kommandoprozessor auch mit
+\large{\newline\verb"(cd ~/transistortester ; git pull)"\newline}
+aus jedem Arbeitsverzeichnis heraus erfolgen.
+
 
 \subsubsection{compiling of transistor tester source}
-At next you must change the working directory with the ''cd'' command to a proper
-subdirectory of the directory trunk for example \mbox{cd transistortester/Software/trunk/mega328\_st7565}.
-For compiling the source you must only type the simple command ''make''.
-You can also change options of the Makefile with any text editor and rebuild the
-tester program by repeating the make entry.
-To program the Atmega you still have to take care of the possibility of accessing the interfaces (USB). 
+For compiling the source you must only type the simple command ''make''
+in thbe right working directory.
+Because the ATmega can be easy programmed with a ''\verb"make upload"'' command,
+we should first prepare the access to the interface of the ISB-programmer.
+The further operating steps you can find in section \ref{sec:Arbeitsumgebung}
+at page \pageref{sec:arbeitsumgebung}.
+
 \subsubsection{usage of interfaces}
 label{sec:Schnittstellen}
+
 All modern ISP-programmers with a serial interface like to use the USB interface,
 as this interface also ensures the power supply. 
 For these devices you should check, which device is assigned to this device.
@@ -811,8 +820,8 @@ When inserting a USB device in Linux, an entry to the system log file is made.
 Since the system log is a text file, you can simply display it on the screen.
 To do this, you can use the command dmesg in the console window, and
 After you have plugged in the programmer, you should use:
-\verb"dmesg|tail"\\
-The dmesg command shows the full logfile and the command tail will only show the
+\large{\newline\verb"dmesg|tail"\newline}
+The dmesg command output the full logfile and the command tail will show only the
 last 10 lines. So the result for a Pololu programmer will be like:
 \begin{footnotesize}
 \begin{verbatim}
@@ -831,12 +840,13 @@ cdc_acm: USB Abstract Control Model driver for USB modems and ISDN adapters
 Important are only the lines 7 and 8 with the entries ttyACM0 and ttyACM1.
 These names are assigned to the two serial interfaces.
 With Linux, all devices are also part of the directory tree and appear in the
-folder ''/dev/''.
-With their full names, the two serial interfaces are called "/dev/ttyACM0" and "/dev/ttyACM1".
+folder ''\verb"/dev/"''.
+With their full names, the two serial interfaces are called ''\verb"/dev/ttyACM0"'' and
+''\verb"/dev/ttyACM1"''.
 For the Pololu programmer you have to know that the first serial interface is used for
 the ISP programmer and the second serial interface can be freely used for other purpose.
 You can check the existence of these device enties with:
-\verb"ls -l /dev/ttyACM*"\\
+\large{\newline\verb"ls -l /dev/ttyACM*"\newline}
 The result should look like:
 \begin{footnotesize}
 \begin{verbatim}
@@ -846,8 +856,10 @@ crw-rw---- 1 root dialout 166, 1 Mär 11 09:57 /dev/ttyACM1
 \end{footnotesize}
 You can see with this output, that the access is allowed for the user ''root''
 and for members of the ''dialout'' group.
-You can use the "id" command to check your group membership.
-The group "dialout" should appear in the list.
+You can use the ''\verb"id"'' command to check your group membership.
+The group ''dialout'' should appear in the list,
+otherwise the change of group membership is decribed in the
+next working point.
 Another example for the system log of a programmer with serial interface
 is a ''Diamex ISP-PRog NG'' programmer:
 
@@ -861,19 +873,24 @@ usb 1-6: SerialNumber: 19377-43111-757
 cdc_acm 1-6:1.0: ttyACM0: USB ACM device
 \end{verbatim}
 
-For this example the device name is identical (ttyACM0).
+For this example the device name is identical (ttyACM0).\\
+
 If everything is OK up to this step, you must only change the PORT entry in the Makefile,
 for this example "PORT = /dev/ttyACM0" would be the correct setting.
 So the avrdude program can access the programmer.
-If other serial interfaces names are used in your system, you have to take the first interface name
-of your list for the PORT setting.\\
+If additional USB-serial interfaces are used in your system,
+the last digit of the device name can differ to the shown examples.
+I wouls like to member, that another group of USB-serial interfaces
+use a name ttyUSB instead of ttyACM.\\
 
 If your programmer does not use a standard USB-serial interface,
 but a special USB interface,
 you must probably prepare your system i to enable user access for this device.
 Your PORT setting in the Makefile should be ''usb'' for this devices.
 If you have connected a ISP programmer with USB interface,
-you can see the recognized USB devices with the command ''lsusb'' in any consol window.
+you can see the recognized USB devices with the command ''\verb"lsusb"''
+in any consol window.
+
 A sample of the result of lsusb you can see here:
 \begin{verbatim}
 Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
@@ -883,8 +900,12 @@ Bus 002 Device 059: ID 2341:0042 Arduino SA Mega 2560 R3 (CDC ACM)
 Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
 \end{verbatim}
 A Device 58 is detected here a a AVR ISP mkII type (DIAMEX ALL-AVR).
-The ID 03eb is a vendor ID and the ID 2104 is a product ID.
-Both ID's are required for a entry in the file /etc/udev/rules.d/90-atmel.rules .
+The also detected USB device 59 is a ''USB-serial'' type device.
+The ID 03eb is a vendor ID and the ID 2104 is a product ID of this ISP-programmer.
+Both ID's are required for a entry in the file \verb"/etc/udev/rules.d/90-atmel.rules"
+and can be added with:
+\large{\newline\verb"sudo xed /etc/udev/rules.d/90-atmel.rules"\newline}
+Of course you can select another editor than xed, if you like.
 In this example the file 90-atmel.rules has one line:
 \begin{footnotesize}
 \begin{verbatim}
@@ -892,14 +913,15 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2104", MODE="0660"
 \end{verbatim}
 \end{footnotesize}
 This entry allow the access to the USB device 58 for members of the group ''plugdev''.
-The also detected USB device 59 allows a access to a serial device for
-members of the group ''dialout''.
 
 Because the file location is in a system part of your file system, you need super user rights
 for building this entry. You can build this entry with any editor.
 For the ''xed'' editor your call would be:
 \verb"sudo xed /etc/udev/rules.d/90-atmel.rules"\\
 You should add the above ''SUBSYSTEM=='' line to this file and close the file.
+You can also build the entry without any editor only with the command feature:
+{sudo echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2104",MODE="0660", GROUP="plugdev"' >> /etc/udev/rules.d/90-atmel.rules}
+
 Then you should disconnect and replug your ISP-programmer.
 Now your system give you access to the device, if you are member of the ''plugdev'' group.
 Therefore your user identification should be a member of the group plugdev and also
@@ -910,11 +932,12 @@ in your Makefile should be ''PORT=usb''.\\
 \subsubsection{group membership}
  
 You can add the membership of your account to the groups ''dialout'' and ''plugdev'' with one command:
-\verb"sudo usermod -a -G dialout,plugdev $USER"\\
+\large{\newline\verb"sudo usermod -a -G dialout,plugdev $USER"\newline}
 Now the membership of both groups should be established.
-If your membership is reported well, the program avrdude should have permission to accesss
-a ISP programmer device with both interface types.
 You can check the membership of your account with the command ''id''.
+If your membership is reported well, the program avrdude should now have permission to accesss
+a ISP programmer device with both interface types.
+
 Another way to take a look to the group menbership is to use a tool with
 graphical  interface:
 \menu[,]{Menu,System,{Users and Groups},{?Password}}.
@@ -922,11 +945,121 @@ You can also start the \menu[,]{Menu} with the \keys{\winmenu} key (between \key
 \keys{\Alt}).
 But the layout is different with the type of desktop environment.
 
-If the ISP programmer is configured proper in the Makefile, especially the PROGRAMMER
-and PORT setting, a command ''make upload''
-should result to loading the program with the ISP interface to the ATmega.
-The ''fuses'' of the ATmega must also be set correctly once.
-You can achieve this with the command ''make fuses'' or ''make fuses-crystal''.
+\subsubsection{Working environment and compiling of sources}
+\label{sec:Arbeitsumgebung}
+In order to preserve the original, it is recommended to create a duplicate
+of the sources with the name \textbf{Mytester}.
+Usually the home directory is called \verb"/home/" followed by your user short name.
+The name of your home directory is stored in the system variable \verb"$HOME".
+You can also write \verb"~/" in short instead of the full path name in commands. 
+Don't forget the \verb"/" after the \verb"~" character, otherwise the command
+interpreted would try to find a user name with the following name!
+To do this task, first create an empty directory with: 
+\large{\newline\verb"mkdir ~/Mytester"\newline}
+If you have downloaded the transistortester archive in the directory \verb"~/transistortester",
+you can give the next instruction to copy the source files and subdirectories
+in the Mytester directory:
+\large{\newline\verb"rsync -auv ~/transistortester/Software/trunk/ ./Mytester"\newline}
+Because the \verb" -v" Option is given to the rsync program, all
+copies are logged at the screen.
+If you had specified the \verb" -au" option instead of the \verb" -auv",
+the rsync would do the same copy without any log.
+You can take a look to the copied subdirectory trunk with:
+\large{\newline\verb"ls -lh ~/Mytester/trunk"\newline}
+A clear representation of the directory structure and the files is possible with the
+command \verb "tree ~/Mytester".
+The tree command is not installed by default, which you can easily dos
+with \verb"sudo apt-get install tree".\\
+
+If you now know which subdirectory is suitable for your tester,
+you can now change to this subdirectory.
+Let's assume you have a Chinese kit with a monochrome graphical display,s
+then the subdirectory \verb"mega328_st7565_kit" would be correct.
+The command to do this would then be:
+\large{\newline\verb"cd ~/Mytester/trunk/mega328_st7565_kit"\newline}
+After the working directory is selected, you can compile the
+transistor tester sources with ''\verb"make"''.\\
+
+You can also view the files in \verb"~/Mytester/trunk/" with the Files window \menu[,]{Menu,Accessories, Files}, the directory \verb"Mytester" and then
+\verb"trunk" can be selected by double-clicking \LMB.
+Many subdirectories now appear here, including that desired \verb"mega328_st7565_kit".
+If you now select this directory with a double click on \LMB,
+you will also see that Makefile is one of the files.
+If you have done that, you can now use the \RMB key to activate the \menu{open in terminal} action.
+A command window opens with the correct working directory, which is also directly active.
+Now all you have to do is type \verb"make" and 
+the transistor tester program is translated again.
+You now have two windows that are already in the correct working directory.
+The files window and the terminal window for entering commands (make).
+By double-clicking \LMB on the Makefile file in the files window,
+another window with the preset editor opens.
+If you'd prefer a different editor here, you can select this editor either
+directly via \RMB \menu[,]{{Open with}}.
+If you always want to set a different editor for text files,
+this is also possible via \RMB \menu[,]{Properties}.
+Then a new \verb"Makefile Properties" window opens, where you can select the
+function \menu[,]{{Open With}} by clicking \RMB.
+Here you can now see the current setting and a variety for editing the Makefile.
+Here you can select another application by clicking \LMB.
+By clicking \LMB you can now choose whether you want this
+application \menu[,]{{Add to list}} or \menu[,]{{Set as default}}.
+You can also use the \menu [,] {{Reset to system defaults}} to reset all changes. 
+
+For the next step it is important that the settings for
+\textbf {your ISP programmer} are correctly set in the Makefile.
+See the subsection \ref{sec:config}, on the page \pageref{sec:config-Prog},
+topic \textbf{PROGRAMMER} and \textbf{PORT}.
+When you have checked these settings, you can reactivate the terminal window by clicking \LMB.
+When the window is activated, the header has a higher contrast!
+If your ISP programmer is now completely connected,
+i.e. has a connection to the computer and the ATmega, you only need to enter the command:
+\large{\newline\verb"make upload"\newline}
+The transistor tester program is now compiled again and then immediately loaded
+into the ATmega with the avrdude program.
+You do not need to type in the command every time.
+Commands already issued in the terminal window can be displayed again with
+the \keys{arrowkeyup} key.
+You can repeat the displayed command by pressing the \keys{\enter} or \keys{\return} key.
+But you can also edit the displayed command before sending it,
+or switch to newer commands with the \keys{arrowkeydown}.\\
+\\
+At last I would like to list the most important Makefile orders:
+\begin{table}[H]
+%  \begin{center}
+    \begin{tabular}{ l | l}
+	Instruction & Function\\
+    \hline
+    make clean & to clean old files\\
+    make       & compile the transistor tester sources\\
+    make fuses & to set the ATmega ''fuses'' without crystali RC-clock\\
+    make fuses-crystal & to set the ATmega ,,fuses'' for crystal operation!\\
+    make upload & to load the complete program with the ISP-programmer to the ATmega.\\
+    \end{tabular}
+%  \end{center}
+%  \caption{}
+%  \label{}
+\end{table}
+
+\subsubsection{Hints for updates of the transistortester sources}
+The copy of the transistortester sources can be kept up to date with the command:
+\large{\newline\verb"(cd ~/transistortester; git pull)"a\newline}
+If you work in a copy under \verb "~/Mytester" as recommended here,
+the changes will only be transferred if you also execute the command:
+\large{\newline\verb "rsync -auv ~/transistortester/Software/trunk ~/Mytester"\newline}
+It can happen that the Makefile on the github server has a newer date than
+the locally changed copy.
+Then the changes made to the options in the Makefile locally in the Mytester folder would be lost.
+It is therefore a good idea to save the successfully modified Makefile as a copy.
+This can be done, for example, with the command:
+\large{\newline\verb"cp Makefile Makefile.bak"\newline}
+Then you can use the command
+\large{\newline\verb"diff Makefile Makefile.bak"\newline}
+to let the computer compare the files after an update.
+A better overview of the changes is also available with:
+\large{\newline\verb"kdiff3 Makefile Makefile.bak"\newline}
+The kdiff3 program is probably missing because is is developed for a
+KDE desctop environment, but you can install ist with:
+\large{\newline\verb"sudo apt-get install kdiff3"\newline}
 
 \subsection{Using the WinAVR package with Windows}
 If you use the Windows operating system, the easiest way to get a correct programmed

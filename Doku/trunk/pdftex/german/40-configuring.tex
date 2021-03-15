@@ -691,8 +691,8 @@ Also noch einmal \dots \LARGE{EINEN RIESEN DANK}
 
 Die Programmierung unten Linux bringt viele Vorteile, weil dieses OS von Experten entwickelt wurde,
 die sich auf den Wünschen der Benutzer orientieren.
-Zu dem ist die Umgebung kostenlos erhältlich und perfekt gewartet.
-Ein weiterer Vorteil ist die Sicherheit von OS selbst aber auch beim Nutzen des Internets.
+Zudem ist die Umgebung kostenlos erhältlich und perfekt gewartet.
+Ein weiterer Vorteil ist die Sicherheit des OS selbst aber auch beim Nutzen des Internets.
 Die heutigen Editionen lassen sich noch viel leichter bedienen als die Mitbewerber OS.
 Es gibt auch sehr leistungsfähige Editoren wie vim oder emacs, die aber etwas
 Einarbeitungszeit erfordern. Speziell vim hat den Vorteil, daß er praktisch auf
@@ -729,7 +729,8 @@ um ein (neues) Befehlsfenster zu öffnen.
 Dies wird nun auf die schon beschriebene Weise zur rechten Hälfte des Bildschirmes verschoben und
 kann auch in der Größe verändert werden.
 Die Größenänderung kann mit der \LMB Taste an den Rändern oder Ecken des Fenstern gemacht werden,
-oder auch mit der \RMB Taste an der Kopfleiste mit der \menu[,]{{Größe ändern}} Funktion.\\
+oder auch mit der \RMB Taste an der Kopfleiste mit der \menu[,]{{Größe ändern}} Funktion.
+Die Bedienung ist sonst gleich wie beim Verschieben.\\
 
 In der Regel besitzen die graphischen Oberflächen bei Linux mehr als eine Arbeitsfläche,
 die mit der Tastenkombination \keys{{Strg} + \Alt + \arrowkeyright}
@@ -751,10 +752,12 @@ binutils-avr, avrdude, avr-libc und gcc-avr installiert werden.
 Jetzt können sie den unten angegebenen Befehl durch Abtippen
 mit der Tastatur ausführen lassen.
 Sie können aber auch im geöffneten PDF Dokument an diese Stelle blättern
-und den nachfolgenden Text mit der gedückten linken Maustaste \LMB markieren:\\
-\verb"sudo apt-get install avrdude avr-libc binutils-avr gcc-avr git"\\
+und den nachfolgenden Text mit der gedückten linken Maustaste \LMB markieren:
+\large{\newline\verb"sudo apt-get install avrdude avr-libc binutils-avr gcc-avr git"\newline}
 Am Ende des Textes muß die Maustaste \LMB losgelassen werden,
 um die Markierung abzuschließen.
+wenn der Text in einer eigenen Zeile steht, wie in diesem Beispiel, können
+die den Text auch mit dreimaligem \LMB Maus Click irgenwo auf der Zeile markieren.
 Danach kann man den Mauszeiger in das rechte Befehlsfenster führen und
 durch Drücken der mittlerer Maustaste {weiter als \MMB abgekürzt} den vorhin
 markierten Text in die Befehlszeile einfügen.
@@ -766,7 +769,7 @@ sie sollten den Text noch einmal kontrollieren, bevor
 sie den Befehl durch Dücken der \keys{\enter} Taste abschicken.
 In der Regel brauchen Sie keine Angst zu haben, daß durch die Installation
 von Paketen etwas schlimmes durch Fehlbedienung passiert.
-Das Programm apt prüft vor dem Ausführen der Operation, ob die aufgeführten
+Das Programm \verb"apt-get" prüft vor dem Ausführen der Operation, ob die aufgeführten
 Pakete schon installiert sind und die Abhängigkeiten erfüllt sind.
 Gegebenenfalls wird aber ein schon vorher installiertes Paket durch ein neueres ersetzt.
 Dann wird das sudo Programm Sie zunächst nach den Benutzer Passwort fragen,
@@ -774,8 +777,9 @@ bevor es den Rest der Befehlszeile ausführt.
 Anders als bei Windows wird das Passwort \textbf{Blind} (mit verdecktem Echo auf dem Bildschirm)
 eingegeben.
 Sie sollten das Passwort mit Drücken der \keys{\enter} oder \keys{\return} Taste abschließen und bestätigen.
-Damit werden nun alle Software Pakete durch 'apt' herunter geladen und installiert.\\
-Es kann sein, daß apt bei der Installation der Pakete Fragen stellt,
+Damit werden nun alle Software Pakete durch ,,\verb"apt-get"'' herunter geladen und installiert.\\
+
+Es kann sein, daß \verb"apt-get" bei der Installation der Pakete Fragen stellt,
 die man in der Regel mit der Taste \keys{J} beantworten kann.
 
 Natürlich gibt es auch andere Wege, die Pakete zu installieren, welche eine graphische Oberfläche benutzen
@@ -792,24 +796,26 @@ kann man mit dem folgenden Kommando prüfen:
 Das git Programm sollte mit der Ausgabe seiner Versionsnummer antworten.
 Falls in Ihrem Heimatverzeichnis schon ein Ordner transistortester existiert,
 sollte man den umbenennen oder löschen.
+Das Programm ,,git'' wird für den Download der Quellen und Dokumentation benutzt.
 Mit dem Befehl:
-\newline\large{\verb"git clone https://github.com/Mikrocontroller-net/transistortester"\newline}
+\large{\newline\verb"git clone https://github.com/Mikrocontroller-net/transistortester"\newline}
 wird das komplette transistortester Archiv heruntergeladen.
 Die Dateien sind nun in dem Linux [Persönlicher Ordner] , üblicherweise \verb"/home/" gefolgt
 von Ihrem Benutzerkürzel, mit dem  Verzeichnisnamen ,,transistortester''.
 Mit der Terminaleingabe  \verb"ls" \(\mbox{\keys{L} \keys{S} \keys{\return}}\) kann man
 das Vorhandensein überprüfen.
 Mehr Informationen über Dateien und Verzeichnisse erhält man mit
-dem Kommando \mbox{\verb"ls -lh"}. Hier wurden jetzt zwei Optionen für das Kommando ls zusammengefasst,
-die -l Option und die -h Option. Diese Eingabeform ist also eine Kurzform für
+dem Kommando \mbox{\verb"ls -lh"}. Hier wurden jetzt zwei Optionen für das Kommando \verb"ls" zusammengefasst,
+die \verb" -l" Option und die \verb" -h" Option. Diese Eingabeform ist also eine Kurzform für
 das Kommando \mbox{\verb"ls -l -h"} oder auch \mbox{\verb"ls -l --human-readable"}.
-Einige der Optionen sind in zwei Versionen vorhanden, einer kurzen mit einem - (-h)
-und einer langen Form mit zwei - (--human-readable).
+Einige der Optionen sind in zwei Versionen vorhanden, einer kurzen mit einem - (\verb" -h")
+und einer langen Form mit zwei - (\verb" --human-readable").
 Die Reihenfolge der Optionen spielt übrigens keine Rolle,
-genau wie die Anzahl der trennenden Leerzeichen.
+genau wie die Anzahl der trennenden Leerzeichen \keys{\space}.
 Bei fast allen Kommandos erfährt man mehr über die Bedienung und die Optionen
 durch durch Anhängen der \mbox{ --help} Option.
-Das gilt natürlich auch für das Kommando git.
+Das gilt natürlich auch für das Kommando git.\\
+
 Um neue Updates heruntergeladen, reicht es in der Zukunft, 
 \large{\newline\verb"git pull"\newline}
 im Arbeitsverzeichnis ,,transistortester'' einzugeben.
@@ -864,8 +870,8 @@ cdc_acm: USB Abstract Control Model driver for USB modems and ISDN adapters
 Wichtig sind hier die Zeilen 7 und 8 mit den Einträgen ttyACM0 und ttyACM1.
 Das sind die zugewiesenen Gerätebezeichnungen für zwei serielle Schnittstellen.
 Bei Linux sind alle Geräte auch Bestandteil des Dateibaums und im
-Ordner ,,/dev/'' eingetragen. Mit vollständigem Namen heißen die
-beiden seriellen Schnittstellen also ,,/dev/ttyACM0'' und ,,/dev/ttyACM1''.
+Ordner ,,\verb"/dev/"'' eingetragen. Mit vollständigem Namen heißen die
+beiden seriellen Schnittstellen also ,,\verb"/dev/ttyACM0"'' und ,,\verb"/dev/ttyACM1"''.
 Für den Pololu Programmer muß man wissen, daß die erste serielle Schnittstelle
 für den ISP-Programmer benutzt wird und die zweite serielle Schnittstelle
 für andere Zwecke frei benutzt werden kann.
@@ -881,13 +887,32 @@ crw-rw---- 1 root dialout 166, 1 Mär 11 09:57 /dev/ttyACM1
 Bei dieser Ausgabe kann man lesen, daß der Zugriff für den Benutzer ,,root''
 und für die Benutzergruppe ,,dialout'' erlaubt ist.
 Mit dem Kommando ,,id'' können Sie ihre Gruppenzugehörigkeit überprüfen.
-Hier sollte die Gruppe ,,dialout'' in der Liste auftauchen.
+Hier sollte die Gruppe ,,dialout'' in der Liste auftauchen,
+sonst wird im nächsten Arbeitspunkt die Änderung der Gruppenzugehörigkeit
+beschrieben.
+Ein anderes Beispiel für das Systemprotokoll eines anderen
+ISP-Programmers ,,Diamex ISP-PRog NG'' sehen sie hier:
+\begin{verbatim}
+usb 1-6: new full-speed USB device number 8 using xhci_hcd
+usb 1-6: New USB device found, idVendor=16c0, idProduct=2a9b, bcdDevice=43.40
+usb 1-6: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-6: Product: AVR-ISP2
+usb 1-6: Manufacturer: ERFOS
+usb 1-6: SerialNumber: 19377-43111-757
+cdc_acm 1-6:1.0: ttyACM0: USB ACM device
+\end{verbatim}
+
+Bei diesem Beispiel ist der Gerätename identisch (ttyACM0).\\
+
+
 Wenn bis zu diesem Schritt alles in Ordnung ist,
 muß für dieses Beispiel nur der PORT Eintrag in der Makefile auf
 ,,PORT=/dev/ttyACM0'' geändert werden,
 damit das avrdude Programm auf den Programmer zugreifen kann.
 Wenn bei Ihrem System noch andere USB-seriell Schnittstellen benutzt
-werden, können natürlich auch andere Nummern wie 0 und 1 vergeben sein.\\
+werden, können die letzten Ziffern der Gerätebezeichnung abweichen.
+Erwähnen möchte ich auch, daß eine andere Gruppe von USB-seriell
+Schnittstellen statt ttyACM den Namen ttyUSB verwendet.\\
 
 Wenn Ihr Programmer eine spezielle USB-Schnittstelle benutzt und
 keinen USB-seriell Typ, ist wahrscheinlich noch zusätzliche
@@ -910,10 +935,12 @@ Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub}
 \end{verbatim}
 \end{footnotesize}
 Hier wurde als Device 58 ein AVR ISP mkII erkannt (DIAMEX ALL-AVR).
-Die ID 03eb ist eine Herstellerkennung und die ID 2104 eine Produktkennung.
+Das ebenfalls entdeckte Gerät mit der Nummer 59 gehört zur Gruppe der ,,USB-seriell'' Geräte.
+Die ID 03eb ist eine Herstellerkennung und die ID 2104 eine Produktkennung für diesen ISP-Programmer.
 Diese beiden Kennungen werden der Datei /etc/udev/rules.d/90-atmel.rules benötigt und erstellt
 mit Hilfe von:
 \large{\newline\verb"sudo xed /etc/udev/rules.d/90-atmel.rules"\newline}
+Natürlich können Sie auch einen anderen Editor als xed benutzen, wenn Sie möchten.
 In diesem Beispiel besteht die Datei 90-atmel.rules aus einer Zeile:
 \begin{footnotesize}
 \begin{verbatim}
@@ -922,37 +949,47 @@ MODE="0660", GROUP="plugdev"
 \end{verbatim}
 \end{footnotesize}
 Dieser Eintrag erlaubt den Zugriff auf das Gerät für Mitglieder der Gruppe ,,plugdev''.
-Um die meisten Programmer verwenden zu können, wird folgendes Text in 90-atmel.rules empfohlen:
-\begin{footnotesize}
-\begin{verbatim}
-# Copy this file to /etc/udev/rules.d/90-atmel.rules
-# AVR ISP mkII - DIAMEX ALL-AVR
-SUBSYSTEM=="usb", ATTRS {idVendor}=="03eb", ATTS {idProduct}=="2104",\
-MODE="0660", GROUP = "plugdev",
-# USB ISP-programmer für Atmel AVR
-SUBSYSTEM=="usb", ENV {DEVTYPE}=="usb_device", SYSFS {idVendor}=="16c0",\
-MODE="0666", SYSFS {idProduct} == "05dc",
-# USB asp programmer
-ATTRS {idVendor}=="16c0", ATTRS {idProduct}=="05dc", GROUP="plugdev", MODE="0660"
-# USBtiny programmer
-ATTRS {idVendor}=="1781", ATTRS {idProduct}=="0c9f", GROUP="plugdev", MODE="0660"
-\end{verbatim}
-\end{footnotesize}
-Nach dem die Datei erstellt wurde, kann die Erstellung und Inhalt kontrollieren mit:
-\verb"less /etc/udev/rules.d/90-atmel.rules"\\ 
+Man kann den Eintrag auch ohne Editor direkt mit einem Kommando erzeugen:\newline
+\scriptsize
+{sudo echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2104",MODE="0660", GROUP="plugdev"'}
+\newline Dieser Zeile müssen sie noch die nächste Zeile anhängen:\newline
+\verb" >> /etc/udev/rules.d/90-atmel.rules"\newline
 
-Das ebenfalls als Device 59 erkannte USB Gerät  Arduino SA Mega 2560 System erzeugt eine
-Zugriffsmöglichkeit auf das serielle Gerät ,,/dev/ttyACM0'' für Mitglieder der Gruppe 'dialout'.
+%Um die meisten Programmer verwenden zu können, wird folgendes Text in 90-atmel.rules empfohlen:
+%\begin{footnotesize}
+%\begin{verbatim}
+%# Copy this file to /etc/udev/rules.d/90-atmel.rules
+%# AVR ISP mkII - DIAMEX ALL-AVR
+%SUBSYSTEM=="usb", ATTRS {idVendor}=="03eb", ATTS {idProduct}=="2104",\
+%MODE="0660", GROUP = "plugdev",
+%# USB ISP-programmer für Atmel AVR
+%SUBSYSTEM=="usb", ENV {DEVTYPE}=="usb_device", SYSFS {idVendor}=="16c0",\
+%MODE="0666", SYSFS {idProduct} == "05dc",
+%# USB asp programmer
+%ATTRS {idVendor}=="16c0", ATTRS {idProduct}=="05dc", GROUP="plugdev", MODE="0660"
+%# USBtiny programmer
+%ATTRS {idVendor}=="1781", ATTRS {idProduct}=="0c9f", GROUP="plugdev", MODE="0660"
+%\end{verbatim}
+%\end{footnotesize}
+%Nach dem die Datei erstellt wurde, kann die Erstellung und Inhalt kontrollieren mit:
+%\verb"less /etc/udev/rules.d/90-atmel.rules"\\ 
+
+Nach diesem Eintrag sollten Sie den ISP-Programmer ausstecken und wieder einstecken.
+Jetzt sollte das System Ihnen Zugriff auf das Gerät geben, wenn Sie Mitglied der Gruppe ,,plugdev''
+sind.
+Daher sollten Sie Mitglied der Gruppe ,,plugdev'' und auch der Gruppe ,,dialout''
+sein, damit Sie beide ISP-Programmertypen nutzen können.
+
 
 \subsubsection{Gruppen Mitgliedschaft}
 
 Deswegen sollte die eigene Benutzerkennung sowohl Mitglied der Gruppe 'plugdev' als auch
 der Gruppe 'dialout' sein. Das Kommando:
-
-\large{\verb"sudo usermod -a -G dialout,plugdev $USER"}\\
+\large{\newline\verb"sudo usermod -a -G dialout,plugdev $USER"\newline}
 sollte die Zugehörigkeit sicherstellen. 
-Jetzt sollte ein Zugriff mit avrdude auf ISP-Programmer mit beiden Schnittstellentypen möglich sein.
 Kontrollieren kann man es mit dem Kommando: 'id'. 
+Wenn die Gruppenmitgliedschaft richtig gemeldet wird,
+sollte jetzt ein Zugriff mit avrdude auf ISP-Programmer mit beiden Schnittstellentypen möglich sein.
 
 Mann kann sich die Gruppenmitgliedschaft auch mit einem Programm mit graphischer Bedienoberfläche ansehen:
 \menu[,]{Menü,Systemverwaltung,{Benutzer und Gruppen},{?Passwort}}.
@@ -983,7 +1020,7 @@ Sie können sich aber vom gefüllten Unterverzeichnis trunk mit folgendem Befehl
 \large{\newline\verb"ls -lh ~/Mytester/trunk"\newline}
 Eine übersichtliche Darstellung der Verzeichnisstruktur und der Dateien ist mit
 dem Kommando \verb"tree ~/Mytester" möglich. Das Kommando ist aber nicht als
-Standard installiert, was sie aber mit \verb"sudo apt install tree" leicht nachholen können.\\
+Standard installiert, was sie aber mit \verb"sudo apt-get install tree" leicht nachholen können.\\
 
 Wenn Sie jetzt wissen, welches Unterverzeichnis für Ihren Tester paßt,
 können Sie in dieses Unterverzeichnis wechseln.
@@ -1017,6 +1054,7 @@ der Makefile. Hier können Sie durch \LMB anklicken eine andere Anwendung auswä
 Durch \LMB Anklicken können sie jetzt auswählen, ob sie diese Anwendung \menu[,]{{Zur Liste hinzufügen}}
 oder \menu[,]{{Als Vorgabe festlegen}} möchten.
 Sie können die Einstellung aber auch wieder \menu[,]{{Auf Systemvorgabe zurücksetzen}}.
+
 Für den nächsten Schritt ist es wichtig, daß die Einstellungen für
 \textbf{ihren ISP-Programmer} in der Makefile richtig eingestellt sind.
 Siehe dazu im Unterkapitel \ref{sec:config}, auf der Seite \pageref{sec:config-Prog},
@@ -1038,22 +1076,30 @@ Sie können aber auch der angezeigten Befehl vor dem Abschicken editieren,
 oder mit der \keys{arrowkeydown} wieder zu neueren Befehlen wechseln.\\
 
 Zum Schluß sind hier noch einmal die wichtigsten Makefile Aufrufe aufgelistet:
-\begin{tabbing}
-Fo\=lgende Aufrufe sind \=zu empfehlen:\\
-\> make clean \> zum reinigen des Arbeitsumgebung\\
-\> make       \> zum Übersetzen des Programms\\
-\> make fuses \> zum setzen von ATmega ,,fuses'' ohne Quarz\\
-\> make fuses-crystal \> zum Setzen von ATmega ,,fuses'' NUR mit Version mit Quarz!\\
-\> make upload \> zum Laden des kompletten Programms über die ISP Schnittstelle in den ATmega.
-\end{tabbing}
+
+\begin{table}[H]
+%  \begin{center}
+    \begin{tabular}{ l | l}
+	    Befehl     & Bedeutung\\
+	    \hline
+ make clean 		& zum reinigen des Arbeitsumgebung\\
+ make       		& zum Übersetzen des Programms\\
+ make fuses		& zum setzen von ATmega ,,fuses'' ohne Quarz\\
+ make fuses-crystal	& zum Setzen von ATmega ,,fuses'' NUR mit Version mit Quarz!\\
+ make upload		& zum Laden des kompletten Programms über die ISP Schnittstelle in den ATmega.\\
+        \end{tabular}
+%  \end{center}
+%  \caption{}
+%  \label{}
+\end{table}
 
 \subsubsection{Hinweise zum Update der Transistortester-Quellen}
 Die Kopie der transistortester-Quellen kann mit dem Kommando
-\verb"(cd ~/transistortester ; git pull)"
+\large{\newline\verb"(cd ~/transistortester ; git pull)"\newline}
 auf dem aktuellen Stand gehalten werden.
 Wenn man wie hier empfohlen in einer Kopie unter \verb"~/Mytester" arbeitet,
 werden die Änderungen erst übertragen, wenn man auch das Kommando
-\verb"rsync -auv ~/transistortester/Software/trunk ~/Mytester" 
+\large{\newline\verb"rsync -auv ~/transistortester/Software/trunk ~/Mytester"\newline}
 ausführt.
 Dabei kann es passieren, daß die Makefile auf dem github Server ein neueres Datum 
 hat als die hier lokal geänderte Kopie. Dann würden die hier lokal im Mytester Ordner
@@ -1063,7 +1109,7 @@ zu sichern. Das kann beispielsweise mit dem Befehl \mbox{\verb"cp Makefile Makef
 erfolgen. Dann kann man mit dem Befehl \mbox{\verb"diff Makefile Makefile.bak"}
 die Dateien nach einem Update vom Rechner vergleichen lassen.
 Ein besserer Überblick der Änderungen ist auch mit \mbox{\verb"kdiff3 Makefile Makefile.bak"}
-möglich. Das Programm muß aber wahrscheinlich mit \mbox{\verb"sudo apt get kdiff3"}
+möglich. Das Programm muß aber wahrscheinlich mit \mbox{\verb"sudo apt-get install kdiff3"}
 erst installiert werden, da es eigentlich für die KDE Desktopumgebung entwickelt wurde.
 
 \newpage

@@ -28,11 +28,6 @@
 
 \setlength{\parindent}{0em}	% Absatz nicht einrücken
 
-\newcommand{\LMB}{{\fbox{\(\bullet \circ \circ\)}} } % Left Mouse Button
-\newcommand{\RMB}{{\fbox{\(\circ \circ \bullet\)}} } % Right Mouse Button
-\newcommand{\MMB}{{\fbox{\(\circ \bullet \circ\)}} } % Middle Mouse Button
-\newcommand{\LRMB}{{\fbox{\(\bullet ~~ \bullet\)}} } % Middle Mouse Button
-
 %\usepackage{fixltx2e}
 \usepackage{epstopdf}
 \usepackage{hyperref}
@@ -51,7 +46,18 @@
 
 \usepackage[os=win]{menukeys}           % Zur Darstellung der Menue-Keys
 
-\sloppy
+\newcommand{\LMB}{{\fbox{\(\bullet \circ \circ\)}} } % Left Mouse Button
+\newcommand{\RMB}{{\fbox{\(\circ \circ \bullet\)}} } % Right Mouse Button
+\newcommand{\MMB}{{\fbox{\(\circ \bullet \circ\)}} } % Middle Mouse Button
+\newcommand{\LRMB}{{\fbox{\(\bullet ~~ \bullet\)}} } % Middle Mouse Button
+\newcommand{\lsusb}{\colorbox{green!30}{{\textls[200]{lsusb}}}}
+
+%\newcommand{\lcmd}[1]{{\colorbox{green!15}{\textls[150]{#1}}}} % Linux command green stretched
+\newcommand{\lcmd}[1]{\mbox{{\colorbox{green!15}{#1}}}} % Linux command green normal
+%\newcommand{\lcmd}[1]{{\textls[150]{ #1}}} % Linux command only streched
+\newcommand{\lname}[1]{\mbox{{\colorbox{blue!15}{#1}}}} % Linux key word blue normal
+
+%\sloppy
 
 \begin{document}
 \begin{figure}[t]

@@ -6,8 +6,8 @@ The compilation of modules is controlled with a Makefile. The developement was d
 at the Ubuntu Linux operating system with the GNU toolchain (gcc version 4.5.3).
 It should be possible to use other Linux operating systems without problems.
 To load the compiled data to the flash memory or
-the EEprom memory, the tool avrdude (version 5.11svn) was taken by the Makefile, if you call ''make upload''.
- The program avrdude \cite{avrdude} is available for Linux and Windows operating system.
+the EEprom memory, the tool \lcmd{avrdude} (version 5.11svn) was taken by the Makefile, if you call ''make upload''.
+ The program \lcmd{avrdude} \cite{avrdude} is available for Linux and Windows operating system.
 The gnu C-compiler gcc is also taken by the AVR studio software and
 by the WinAVR \cite{winavr1},\cite{winavr2} software at the Windows operating system.
 You can load the program data (.hex and .eep) also with other tools to the ATmega,
@@ -581,19 +581,20 @@ Normaly the software uses for longer work breaks the sleep mode to avoid unneede
 The usage of this sleep mode indeed spare battery capacity, but produce additional stress for the voltage regulator.\\
 Example: INHIBIT\_SLEEP\_MODE = 1
 
-  \item[PROGRAMMER] select your programmer type for avrdude interface program.
+\label{sec:config-Prog}
+  \item[PROGRAMMER] select your programmer type for \lcmd{avrdude} interface program.
 The correct selection of this option is needed, if you use the ''make upload'' or ''make fuses'' call
 of this Makefile.
-For further information please look to the manual pages of avrdude and online documentation~\cite{avrdude}.
+For further information please look to the manual pages of \lcmd{avrdude} and online documentation~\cite{avrdude}.
 Usually the Diamex ALL-AVR programmer is preselected in the Makefile and some
 other selections are included as comment.\\
 Example: PROGRAMMER=avrisp2
 
-  \item[BitClock] selects the Bit clock period for the Programmer. See the description of the -B parameter of avrdude.\\
+  \item[BitClock] selects the Bit clock period for the Programmer. See the description of the -B parameter of \lcmd{avrdude}.\\
 Example: BitClock=5.0
 
-  \item[PORT] select the port where avrdude can reach your microcontroller (atmega).
-For further information please look to the manual pages of avrdude.
+  \item[PORT] select the port where \lcmd{avrdude} can reach your microcontroller (atmega).
+	  For further information please look to the manual pages of \lcmd{avrdude}.
 Some programmers use a build-in USB-serial interface for the connection to the PC.
 For this programmers the PORT must be set to /dev/ttyUSBx or /dev/ttyACMx , where
 the last x is a assigned number between 0 and 9.\\
@@ -623,7 +624,7 @@ The .eep file contains the data for the EEprom memory of the ATmega.\\
 Both data files must be loaded to the correct memory.
 
 Additionally the operating state of the ATmega processor must be programmed with the ''fuses''.
-If you can use my Makefile and additionally the program avrdude \cite{avrdude}, you need no exact
+If you can use my Makefile and additionally the program \lcmd{avrdude} \cite{avrdude}, you need no exact
 knowledge of the details about the fuses.
 You have only to type ''make fuses'' if you have no crystal or
 ''make fuses-crystal'' if you have installed the \(8MHz\) crystal to your printed board.
@@ -637,11 +638,11 @@ Maybe your program runs too slow, if you use program data compiled for
 \(8MHz\) operation, but you can correct this later!
 But a wrong set of fuses may inhibit further ISP-programming.
 
-The program avrdude probably reports a error for setting the extended fuse efuse.
+The program \lcmd{avrdude} probably reports a error for setting the extended fuse efuse.
 The reading of unused fuse bits is specified as ''1'' for the ATmega, but the
-avrdude program mask the unused bits, so that it expect a ''0'' for all unused bits.
-Normally the efuse should be set to 0xfc, but avrdude read back 0x04 with the mask.
-You can change the file avrdude.conf to change the behaviour of avrdude or
+\lcmd{avrdude} program mask the unused bits, so that it expect a ''0'' for all unused bits.
+Normally the efuse should be set to 0xfc, but \lcmd{avrdude} read back 0x04 with the mask.
+You can change the file \lname{avrdude.conf} to change the behaviour of \lcmd{avrdude} or
 you can set the efuse to 0x04. 
 The value for all efuses can be set with the identifier EFUSE\_VAL at the begin of file setup.mk
 in the trunk directory.
@@ -728,7 +729,9 @@ binutils-avr, avrdude, avr-libc and gcc-avr must be installed first.
 Now you can type the command given below with the keyboard.
 You can also scroll to this point in the open PDF document and select the
 following text with the left mouse button pressed \LMB :
-\large{\newline\verb"sudo apt-get install avrdude avr-libc binutils-avr gcc-avr git"\newline}
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+sudo apt-get install avrdude avr-libc binutils-avr gcc-avr git
+\end{verbatim} \end{large}
 At the end of the text the mouse button \LMB must be released,
 to complete the selection.
 If the text is shown in a line as in this example, you can select the full line also
@@ -746,20 +749,19 @@ Regardless of how the command text got into the command line,
 you should check the text again before sending the command by pressing the \keys{\enter} key.
 As a rule, you do not need to be afraid that something bad will happen when you install packages
 due to incorrect operation.
-Before executing the operation, the \verb"apt-get" program checks whether the packages listed
+Before executing the operation, the \lcmd{apt-get} program checks whether the packages listed
 are already installed and whether the dependencies are met.
 But in some cases a previously installed package can be replaced by a newer version.
 Then the sudo program will first ask you for the user password before it
 will execute the rest of the command line.
-In contrast to Windows, the password is entered \textbf{Blind} (with a hidden echo on the screen).
 You should finish and confirm the password entry with \keys{\enter} or \keys{\return}. 
-Now all specified software packages are downloaded and installed by ''\verb"apt-get"''.\\
+Now all specified software packages are downloaded and installed by \lcmd{apt-get}.\\
 
-It may be that \verb"apt-get" asks questions when installing the packages,
+It may be that \lcmd{apt-get} asks questions when installing the packages,
 which can usually be answered with \keys{Y}.
 
 Of course there are other ways to install the packages, which use the graphical interface
-like synaptic or dpkd. But it is not easier to select a mixed group of packages.
+like \lcmd{synaptic} or \lcmd{dpkd}. But it is not easier to select a mixed group of packages.
 If you use one of these package managers, they should know each installed package,
 any way which way it was installed.
 The graphical package managers can help you to find out the names of the packages.
@@ -768,63 +770,73 @@ The graphical package managers can help you to find out the names of the package
 \subsubsection{Download of sources}
 
 You can check the correct installation of the git package by typing the command:
-\large{\newline\verb"git version"\newline}
-The git program should respond with the output of its version number.
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+git version
+\end{verbatim} \end{large}
+The \lcmd{git} program should respond with the output of its version number.
 If a folder transistortester already exists in your home directory,
 you should rename or delete it.
 The package ''git'' is used for downloading the sources and the documentation from the Git archive.
 With the command:
-\large{\newline\verb"git clone https://github.com/mikrocontroller-net/transistortester"\newline}
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+git clone https://github.com/Mikrocontroller-net/transistortester
+\end{verbatim} \end{large}
 you can download the complete transistortester archive.
-The directory ''transistortester''is now addded to your home directory,
-wich is usually the full file name \verb"/home/" followed by your user ID.
-So you must see a new directory ''transistortester'', which can
-be checked by typing \verb"ls" ( \mbox{\keys{L} \keys{S} \keys{\return}} ).
+The directory \lname{transistortester} is now addded to your home directory,
+wich is usually the full file name \lname{/home/} followed by your user ID.
+So you must see a new directory \lname{transistortester}, which can
+be checked by typing \lcmd{ls} ( \mbox{\keys{L} \keys{S} \keys{\return}} ).
 You get more information about files and directories, if you call
-the command with options like {\verb"ls -lh"}.
-In this example two options for the \verb"ls" command have been combined here,
-the \verb" -l" option and the \verb" -h" option.
-This input form is a short form for the command {\verb"ls -l -h"} or
-{\verb"ls -l --human-readable"}.
-Some options appear in two forms, a short one with one - (\verb" -h") and a long form
-with two - (\verb" --human-readable").
+the command with options like \lcmd{ls -lh}.
+In this example two options for the \lcmd{ls} command have been combined here,
+the \lcmd{ -l} option and the \lcmd{ -h} option.
+This input form is a short form for the command \lcmd{ls -l -h} or
+\lcmd{ls -l --human-readable}.
+Some options appear in two forms, a short one with one - like \lcmd{ -h} and a long form
+with two -  like \lcmd{ --human-readable}.
 Usually the sequence of the options doesn't care, but the options must by separated
 by at least one space \keys{\space}.
 If you write some short form options (one character) together, there is no space allowed
 and you need only one - character in front of the collection.
 You can get help about the command and the options for nearly every command by appending
-the {\verb" --help"} option.
+the \lcmd{ --help} option.
 Of course, this also applies to the git command.\\
-For getting updates, you should change your working dirctory to transistortester and call:
-\large{\newline\verb"git pull"\newline}
-Das kann je nach Kommandoprozessor auch mit
-\large{\newline\verb"(cd ~/transistortester ; git pull)"\newline}
-aus jedem Arbeitsverzeichnis heraus erfolgen.
+For getting updates, you should change your working dirctory to \lname{transistortester} and call:
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+git pull
+\end{verbatim} \end{large}
+You can do that also from every working directotory with some command interpreters:
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+(cd ~/transistortester ; git pull)
+\end{verbatim} \end{large}
+You should better not change anything in the \lname{\textasciitilde/transistortester}
+directory tree to let the \lcmd{git pull} run properly.
 
 
 \subsubsection{compiling of transistor tester source}
-For compiling the source you must only type the simple command ''make''
+For compiling the source you must only type the simple command \lcmd{make}
 in thbe right working directory.
-Because the ATmega can be easy programmed with a ''\verb"make upload"'' command,
+Because the ATmega can be easy programmed with a \lcmd{make upload} command,
 we should first prepare the access to the interface of the ISB-programmer.
 The further operating steps you can find in section \ref{sec:Arbeitsumgebung}
 at page \pageref{sec:arbeitsumgebung}.
 
 \subsubsection{usage of interfaces}
-label{sec:Schnittstellen}
+\label{sec:Schnittstellen}
 
 All modern ISP-programmers with a serial interface like to use the USB interface,
 as this interface also ensures the power supply. 
 For these devices you should check, which device is assigned to this device.
 When inserting a USB device in Linux, an entry to the system log file is made.
 Since the system log is a text file, you can simply display it on the screen.
-To do this, you can use the command dmesg in the console window, and
+To do this, you can use the command \lcmd{dmesg} in the console window, and
 After you have plugged in the programmer, you should use:
-\large{\newline\verb"dmesg|tail"\newline}
-The dmesg command output the full logfile and the command tail will show only the
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+dmesg|tail
+\end{verbatim} \end{large}
+The \lcmd{dmesg} command output the full logfile and the command tail will show only the
 last 10 lines. So the result for a Pololu programmer will be like:
-\begin{footnotesize}
-\begin{verbatim}
+\begin{footnotesize} \begin{verbatim}
 usb 1-3: new full-speed USB device number 3 using xhci_hcd
 usb 1-3: New USB device found, idVendor=1ffb, idProduct=00bb, bcdDevice= 1.02
 usb 1-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
@@ -835,35 +847,34 @@ cdc_acm 1-3:1.1: ttyACM0: USB ACM device
 cdc_acm 1-3:1.3: ttyACM1: USB ACM device
 usbcore: registered new interface driver cdc_acm
 cdc_acm: USB Abstract Control Model driver for USB modems and ISDN adapters
-\end{verbatim}
-\end{footnotesize}
-Important are only the lines 7 and 8 with the entries ttyACM0 and ttyACM1.
+\end{verbatim} \end{footnotesize}
+Important are only the lines 7 and 8 with the entries \lname{ttyACM0} and \lname{ttyACM1}.
 These names are assigned to the two serial interfaces.
 With Linux, all devices are also part of the directory tree and appear in the
-folder ''\verb"/dev/"''.
-With their full names, the two serial interfaces are called ''\verb"/dev/ttyACM0"'' and
-''\verb"/dev/ttyACM1"''.
+folder \lname{/dev/}.
+With their full names, the two serial interfaces are called \lname{/dev/ttyACM0} and
+\lname{/dev/ttyACM1}.
 For the Pololu programmer you have to know that the first serial interface is used for
 the ISP programmer and the second serial interface can be freely used for other purpose.
 You can check the existence of these device enties with:
-\large{\newline\verb"ls -l /dev/ttyACM*"\newline}
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+ls -l /dev/ttyACM*
+\end{verbatim} \end{large}
 The result should look like:
-\begin{footnotesize}
-\begin{verbatim}
+\begin{footnotesize} \begin{verbatim}
 crw-rw---- 1 root dialout 166, 0 Mär 11 09:57 /dev/ttyACM0
 crw-rw---- 1 root dialout 166, 1 Mär 11 09:57 /dev/ttyACM1
-\end{verbatim}
-\end{footnotesize}
-You can see with this output, that the access is allowed for the user ''root''
-and for members of the ''dialout'' group.
-You can use the ''\verb"id"'' command to check your group membership.
-The group ''dialout'' should appear in the list,
+\end{verbatim} \end{footnotesize}
+You can see with this output, that the access is allowed for the user \lname{root}
+and for members of the \lname{dialout} group.
+You can use the \lcmd{id} command to check your group membership.
+The group \lname{dialout} should appear in the list,
 otherwise the change of group membership is decribed in the
 next working point.
 Another example for the system log of a programmer with serial interface
 is a ''Diamex ISP-PRog NG'' programmer:
 
-\begin{verbatim}
+\begin{footnotesize} \begin{verbatim}
 usb 1-6: new full-speed USB device number 8 using xhci_hcd
 usb 1-6: New USB device found, idVendor=16c0, idProduct=2a9b, bcdDevice=43.40
 usb 1-6: New USB device strings: Mfr=1, Product=2, SerialNumber=3
@@ -871,71 +882,79 @@ usb 1-6: Product: AVR-ISP2
 usb 1-6: Manufacturer: ERFOS
 usb 1-6: SerialNumber: 19377-43111-757
 cdc_acm 1-6:1.0: ttyACM0: USB ACM device
-\end{verbatim}
+\end{verbatim} \end{footnotesize}
 
 For this example the device name is identical (ttyACM0).\\
 
 If everything is OK up to this step, you must only change the PORT entry in the Makefile,
 for this example "PORT = /dev/ttyACM0" would be the correct setting.
-So the avrdude program can access the programmer.
+So the \lcmd{avrdude} program can access the programmer.
 If additional USB-serial interfaces are used in your system,
 the last digit of the device name can differ to the shown examples.
 I wouls like to member, that another group of USB-serial interfaces
-use a name ttyUSB instead of ttyACM.\\
+use a name \lname{ttyUSB} instead of \lname{ttyACM}.\\
 
 If your programmer does not use a standard USB-serial interface,
 but a special USB interface,
 you must probably prepare your system i to enable user access for this device.
 Your PORT setting in the Makefile should be ''usb'' for this devices.
 If you have connected a ISP programmer with USB interface,
-you can see the recognized USB devices with the command ''\verb"lsusb"''
+you can see the recognized USB devices with the command \lcmd{lsusb}
 in any consol window.
 
 A sample of the result of lsusb you can see here:
-\begin{verbatim}
+\begin{footnotesize} \begin{verbatim}
 Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 Bus 002 Device 003: ID 046d:c050 Logitech, Inc. RX 250 Optical Mouse
 Bus 002 Device 058: ID 03eb:2104 Atmel Corp. AVR ISP mkII
 Bus 002 Device 059: ID 2341:0042 Arduino SA Mega 2560 R3 (CDC ACM)
 Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-\end{verbatim}
+\end{verbatim} \end{footnotesize}
 A Device 58 is detected here a a AVR ISP mkII type (DIAMEX ALL-AVR).
 The also detected USB device 59 is a ''USB-serial'' type device.
 The ID 03eb is a vendor ID and the ID 2104 is a product ID of this ISP-programmer.
-Both ID's are required for a entry in the file \verb"/etc/udev/rules.d/90-atmel.rules"
+Both ID's are required for a entry in the file \lname{/etc/udev/rules.d/90-atmel.rules}
 and can be added with:
-\large{\newline\verb"sudo xed /etc/udev/rules.d/90-atmel.rules"\newline}
-Of course you can select another editor than xed, if you like.
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+sudo xed /etc/udev/rules.d/90-atmel.rules
+\end{verbatim} \end{large}
+Of course you can select another editor than \lcmd{xed}, if you like.
 In this example the file 90-atmel.rules has one line:
-\begin{footnotesize}
-\begin{verbatim}
+\begin{footnotesize} \begin{verbatim}
 SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2104", MODE="0660", GROUP="plugdev"
-\end{verbatim}
-\end{footnotesize}
-This entry allow the access to the USB device 58 for members of the group ''plugdev''.
+\end{verbatim} \end{footnotesize}
+This entry allow the access to the USB device 58 for members of the group \lname{plugdev}.
 
 Because the file location is in a system part of your file system, you need super user rights
 for building this entry. You can build this entry with any editor.
-For the ''xed'' editor your call would be:
-\verb"sudo xed /etc/udev/rules.d/90-atmel.rules"\\
+For the \lcmd{xed} editor your call would be:
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+sudo xed /etc/udev/rules.d/90-atmel.rules
+\end{verbatim} \end{large}
 You should add the above ''SUBSYSTEM=='' line to this file and close the file.
 You can also build the entry without any editor only with the command feature:
-{sudo echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2104",MODE="0660", GROUP="plugdev"' >> /etc/udev/rules.d/90-atmel.rules}
+\begin{footnotesize} \vspace{-0.4em} \begin{verbatim}
+sudo echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2104"
+, MODE="0660", GROUP="plugdev"' >> /etc/udev/rules.d/90-atmel.rules
+\end{verbatim} \end{footnotesize}
+You should combine these two lines to one command line!
 
 Then you should disconnect and replug your ISP-programmer.
-Now your system give you access to the device, if you are member of the ''plugdev'' group.
+Now your system give you access to the device, if you are member of the \lname{plugdev} group.
 Therefore your user identification should be a member of the group plugdev and also
-a member of the group dialout for USB-serial devices..
+a member of the group \lname{dialout} for USB-serial devices..
 The correct setting for a non USB-serial type of ISP-programmer
 in your Makefile should be ''PORT=usb''.\\
 
 \subsubsection{group membership}
  
-You can add the membership of your account to the groups ''dialout'' and ''plugdev'' with one command:
-\large{\newline\verb"sudo usermod -a -G dialout,plugdev $USER"\newline}
+You can add the membership of your account to the groups \lname{dialout} and \lname{plugdev} with one command:
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+sudo usermod -a -G dialout,plugdev $USER
+\end{verbatim} \end{large}
 Now the membership of both groups should be established.
-You can check the membership of your account with the command ''id''.
-If your membership is reported well, the program avrdude should now have permission to accesss
+You can check the membership of your account with the command \lcmd{id}.
+If your membership is reported well, the program \lcmd{avrdude} should now have permission to accesss
 a ISP programmer device with both interface types.
 
 Another way to take a look to the group menbership is to use a tool with
@@ -949,48 +968,56 @@ But the layout is different with the type of desktop environment.
 \label{sec:Arbeitsumgebung}
 In order to preserve the original, it is recommended to create a duplicate
 of the sources with the name \textbf{Mytester}.
-Usually the home directory is called \verb"/home/" followed by your user short name.
-The name of your home directory is stored in the system variable \verb"$HOME".
-You can also write \verb"~/" in short instead of the full path name in commands. 
-Don't forget the \verb"/" after the \verb"~" character, otherwise the command
+Usually the home directory is called \lname{/home/} followed by your user short name.
+The name of your home directory is stored in the system variable \lname{\$HOME}.
+You can also write \lname{\textasciitilde/} in short instead of the full path name in commands. 
+Don't forget the \lname{/} after the \lname{\textasciitilde} character, otherwise the command
 interpreted would try to find a user name with the following name!
 To do this task, first create an empty directory with: 
-\large{\newline\verb"mkdir ~/Mytester"\newline}
-If you have downloaded the transistortester archive in the directory \verb"~/transistortester",
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+mkdir ~/Mytester
+\end{verbatim} \end{large}
+If you have downloaded the transistortester archive in the directory \lname{\textasciitilde/transistortester},
 you can give the next instruction to copy the source files and subdirectories
 in the Mytester directory:
-\large{\newline\verb"rsync -auv ~/transistortester/Software/trunk/ ./Mytester"\newline}
-Because the \verb" -v" Option is given to the rsync program, all
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+rsync -auv ~/transistortester/Software/trunk/ ./Mytester
+\end{verbatim} \end{large}
+Because the \lname{ -v} Option is given to the rsync program, all
 copies are logged at the screen.
-If you had specified the \verb" -au" option instead of the \verb" -auv",
-the rsync would do the same copy without any log.
+If you had specified the \lname{ -au} option instead of the \lname{ -auv},
+the \lcmd{rsync} would do the same copy without any log.
 You can take a look to the copied subdirectory trunk with:
-\large{\newline\verb"ls -lh ~/Mytester/trunk"\newline}
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+ls -lh ~/Mytester/trunk
+\end{verbatim} \end{large}
 A clear representation of the directory structure and the files is possible with the
-command \verb "tree ~/Mytester".
+command \lcmd{tree \textasciitilde/Mytester}.
 The tree command is not installed by default, which you can easily dos
-with \verb"sudo apt-get install tree".\\
+with \lcmd{sudo apt-get install tree}.\\
 
 If you now know which subdirectory is suitable for your tester,
 you can now change to this subdirectory.
 Let's assume you have a Chinese kit with a monochrome graphical display,s
-then the subdirectory \verb"mega328_st7565_kit" would be correct.
+then the subdirectory \lname{mega328\_st7565\_kit} would be correct.
 The command to do this would then be:
-\large{\newline\verb"cd ~/Mytester/trunk/mega328_st7565_kit"\newline}
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+cd ~/Mytester/trunk/mega328_st7565_kit
+\end{verbatim} \end{large}
 After the working directory is selected, you can compile the
-transistor tester sources with ''\verb"make"''.\\
+transistor tester sources with \lcmd{make}.\\
 
-You can also view the files in \verb"~/Mytester/trunk/" with the Files window \menu[,]{Menu,Accessories, Files}, the directory \verb"Mytester" and then
-\verb"trunk" can be selected by double-clicking \LMB.
-Many subdirectories now appear here, including that desired \verb"mega328_st7565_kit".
+You can also view the files in \verb"~/Mytester/trunk/" with the Files window \menu[,]{Menu,Accessories, Files}, the directory \lname{Mytester} and then
+\lname{trunk} can be selected by double-clicking \LMB.
+Many subdirectories now appear here, including that desired \lname{mega328\_st7565\_kit}.
 If you now select this directory with a double click on \LMB,
-you will also see that Makefile is one of the files.
+you will also see that \lname{Makefile} is one of the files.
 If you have done that, you can now use the \RMB key to activate the \menu{open in terminal} action.
 A command window opens with the correct working directory, which is also directly active.
-Now all you have to do is type \verb"make" and 
+Now all you have to do is type \lcmd{make} and 
 the transistor tester program is translated again.
 You now have two windows that are already in the correct working directory.
-The files window and the terminal window for entering commands (make).
+The files window and the terminal window for entering commands (\lcmd{make}).
 By double-clicking \LMB on the Makefile file in the files window,
 another window with the preset editor opens.
 If you'd prefer a different editor here, you can select this editor either
@@ -1013,9 +1040,11 @@ When you have checked these settings, you can reactivate the terminal window by 
 When the window is activated, the header has a higher contrast!
 If your ISP programmer is now completely connected,
 i.e. has a connection to the computer and the ATmega, you only need to enter the command:
-\large{\newline\verb"make upload"\newline}
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+make upload
+\end{verbatim} \end{large}
 The transistor tester program is now compiled again and then immediately loaded
-into the ATmega with the avrdude program.
+into the ATmega with the \lcmd{avrdude} program.
 You do not need to type in the command every time.
 Commands already issued in the terminal window can be displayed again with
 the \keys{arrowkeyup} key.
@@ -1029,11 +1058,11 @@ At last I would like to list the most important Makefile orders:
     \begin{tabular}{ l | l}
 	Instruction & Function\\
     \hline
-    make clean & to clean old files\\
-    make       & compile the transistor tester sources\\
-    make fuses & to set the ATmega ''fuses'' without crystali RC-clock\\
-    make fuses-crystal & to set the ATmega ,,fuses'' for crystal operation!\\
-    make upload & to load the complete program with the ISP-programmer to the ATmega.\\
+    \lcmd{make clean} & to clean old files\\
+    \lcmd{make}       & compile the transistor tester sources\\
+    \lcmd{make fuses} & to set the ATmega ''fuses'' without crystali RC-clock\\
+    \lcmd{make fuses-crystal} & to set the ATmega ,,fuses'' for crystal operation!\\
+    \lcmd{make upload} & to load the complete program with the ISP-programmer to the ATmega.\\
     \end{tabular}
 %  \end{center}
 %  \caption{}
@@ -1042,30 +1071,42 @@ At last I would like to list the most important Makefile orders:
 
 \subsubsection{Hints for updates of the transistortester sources}
 The copy of the transistortester sources can be kept up to date with the command:
-\large{\newline\verb"(cd ~/transistortester; git pull)"a\newline}
-If you work in a copy under \verb "~/Mytester" as recommended here,
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+(cd ~/transistortester; git pull)
+\end{verbatim} \end{large}
+If you work in a copy under \lname{\textasciitilde/Mytester} as recommended here,
 the changes will only be transferred if you also execute the command:
-\large{\newline\verb "rsync -auv ~/transistortester/Software/trunk ~/Mytester"\newline}
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+rsync -auv ~/transistortester/Software/trunk ~/Mytester
+\end{verbatim} \end{large}
 It can happen that the Makefile on the github server has a newer date than
 the locally changed copy.
 Then the changes made to the options in the Makefile locally in the Mytester folder would be lost.
 It is therefore a good idea to save the successfully modified Makefile as a copy.
 This can be done, for example, with the command:
-\large{\newline\verb"cp Makefile Makefile.bak"\newline}
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+cp Makefile Makefile.bak
+\end{verbatim} \end{large}
 Then you can use the command
-\large{\newline\verb"diff Makefile Makefile.bak"\newline}
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+diff Makefile Makefile.bak
+\end{verbatim} \end{large}
 to let the computer compare the files after an update.
 A better overview of the changes is also available with:
-\large{\newline\verb"kdiff3 Makefile Makefile.bak"\newline}
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+kdiff3 Makefile Makefile.bak
+\end{verbatim} \end{large}
 The kdiff3 program is probably missing because is is developed for a
 KDE desctop environment, but you can install ist with:
-\large{\newline\verb"sudo apt-get install kdiff3"\newline}
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+sudo apt-get install kdiff3
+\end{verbatim} \end{large}
 
 \subsection{Using the WinAVR package with Windows}
 If you use the Windows operating system, the easiest way to get a correct programmed
 ATmega is to use the WinAVR package \cite{winavr1},\cite{winavr2}.
 With my patch \cite{winavr3} you can also set the fuses by using the Makefile.
-Of course the avrdude program must support your programmer and the configuration
+Of course the \lcmd{avrdude} program must support your programmer and the configuration
 in the Makefile must match to your environment.
 But the WinAVR package use a very old compiler version. You should better install
 the Arduino package and overwrite the avr executables.
@@ -1090,7 +1131,7 @@ open the file Makefile and for saving the changed Makefile (Save).
 \end{figure}
 
 The next figures \ref{fig:WinAVR2} show the Tools menu of the Programmer's Notepad
-for compiling the program (Make All) and for programming the ATmega (Program) with avrdude.
+for compiling the program (Make All) and for programming the ATmega (Program) with \lcmd{avrdude}.
 
 \begin{figure}[H]
   \begin{subfigure}[b]{.5\textwidth}

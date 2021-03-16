@@ -111,8 +111,10 @@ $(OBJDIR)/samplingADC.o: ../samplingADC.S $(MKFILES)
 deleteobj:
 	rm -rf $(OBJDIR)
 # create directories
-directories: deleteobj
-	mkdir $(OBJDIR) ; mkdir $(DEPDIR)
+objdirect: deleteobj
+	mkdir -p $(OBJDIR)
+directories: objdirect
+	mkdir -p $(DEPDIR)
 
 OBJFILES = $(addprefix $(OBJDIR)/, $(OBJECTS))
 

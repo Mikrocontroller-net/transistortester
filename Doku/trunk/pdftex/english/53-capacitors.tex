@@ -207,7 +207,7 @@ this sampling technique. Every clock tick is important for building the program 
 
 By analysing the voltage characteristic of charging a small capacitor you can see, that the time constant
 is not continuous during the sampling period. This was shown by Pieter-Tjerk at a presentation at
-the ''60. UKW-Tagung in Weinheim''. The internal capacitor of about 10~pF, which hold the input voltage
+the \inquotes{60. UKW-Tagung in Weinheim}. The internal capacitor of about 10~pF, which hold the input voltage
 for the conversion, is uncoupled at the SH time and connected again two ADC clock cycles later. 
 Additionally there is a little jamming in the data just a half clock before the reconnection,
 which is probably caused by the switch of the multiplexor.
@@ -249,7 +249,7 @@ the resistance \(ESR\) represents the equivalent series resistance.
 Usually the data sheets publish ESR values, which are measured with a frequency of 100 kHz and a temperture 
 of 20\textdegree C .
 The figures \ref{fig:Cap_FC_data} and \ref{fig:Cap_FR_data} shows the ESR values of the Panasonic series FC and 
-the ''low ESR'' series FR.
+the \inquotes{low ESR} series FR.
 Both series are able to operate up to a temperature of 105\textdegree C.
 The figure \ref{fig:Cap_FC_FR_data} shows the data of both series with a allowable working stress of \(25V\).
 If the series have different types with the same capacity and voltage range, the one with the lowest ESR is
@@ -783,9 +783,9 @@ another percentage.
 
 Figure~\ref{fig:capcompare} illustrates, how difficult is it to choose the right base for the capacity measurement.
 All measurement results are compared with the best estimated value of the capacitors.
-The gradient ,,Multimeter'' shows the differences of the Peaktech~3315 Multimeter results.
-The next gradient ,,LCR'' shows the differences of the Peaktech~2170 LCR-Meter results, which is taken from best frequency approach.
-To compare this results to the results of a ATmega168 equipped Transistor-Tester the gradient ,,ATmega168as'' is also shown.
+The gradient \inquotes{Multimeter} shows the differences of the Peaktech~3315 Multimeter results.
+The next gradient \inquotes{LCR} shows the differences of the Peaktech~2170 LCR-Meter results, which is taken from best frequency approach.
+To compare this results to the results of a ATmega168 equipped Transistor-Tester the gradient \inquotes{ATmega168as} is also shown.
 I beleave, that this errors are not real measurement errors of the particular equipment, because my best estimated value are
 also not the real capacity value of the capacitors.
 
@@ -805,7 +805,7 @@ ATmega328P are shown in figure~\ref{fig:mega328Pall}.
 At this only the zero value of the capacity measurement of \(39pF\) is respected, all other facility to correct the results are
 not used.
 This zero value includes the \(2-3pF\), which are caused by the \(12cm\) long cable with the clips.
-The board layout can cause a different zero value, I have fixed this zero value with the board ''DG2BRS V 5.2.1''.
+The board layout can cause a different zero value, I have fixed this zero value with the board \inquotes{DG2BRS V 5.2.1}.
 
 \begin{figure}[H]
   \begin{subfigure}[b]{.5\textwidth}
@@ -882,16 +882,16 @@ which is shown in Figure~\ref{fig:mega168all}, \ref{fig:mega168Aall} and \ref{fi
 As a significant reason for this is found the different characteristic (Offset voltage) of the analog comparator.
 
 The date of measurement of nine different processors is shown in figure~\ref{fig:CompAdjust} .
-The ''diff2ref'' points show the difference of the voltage of a loaded capacitor of \(660nF\) to the
+The \inquotes{diff2ref} points show the difference of the voltage of a loaded capacitor of \(660nF\) to the
 individual internal reference voltages (band gap).
 Ideally this difference Voltage should be zero, if the analog comparator has stopped the loading by the signal to
 the processor. The short handling time of the processor should not result to a measurably rising of the 
 capacitor voltage of this relative big capacitor.
-The ''CapErr'' points show the estimated measurement errors of each processor out of figure~\ref{fig:mega168all}, \ref{fig:mega168Aall} 
+The \inquotes{CapErr} points show the estimated measurement errors of each processor out of figure~\ref{fig:mega168all}, \ref{fig:mega168Aall} 
 and \ref{fig:mega168PAall} with per mill units.
-It is noticeable, how the ''CapErr'' points will follow the ''diff2ref'' points.
-Therefore the ''diff'' points show the difference between the particular ''CapErr'' and ''diff2ref'' points.
-With a mean value of the ''diff'' points we can get a good estimation for the correction of the capacitor
+It is noticeable, how the \inquotes{CapErr} points will follow the \inquotes{diff2ref} points.
+Therefore the \inquotes{diff} points show the difference between the particular \inquotes{CapErr} and \inquotes{diff2ref} points.
+With a mean value of the \inquotes{diff} points we can get a good estimation for the correction of the capacitor
 measurements together with the difference voltage of the loaded capacitor and the internal reference.
 
 For the second part of adjustment you must connect a capacitor to pin~1 and pin~3. This capacitor should have
@@ -909,8 +909,8 @@ You don't need to know the exact value of this capacitor.
 The figures~\ref{fig:mega168cal}, \ref{fig:mega168Acal}, \ref{fig:mega168PAcal}, \ref{fig:mega328cal} and \ref{fig:mega328Pcal}
  shows the measurement results
 of the different processors with a standard software after the auto calibration.
-The flash of the processors was loaded with the same software, only the Makefile  option ''PARTNO = '' must be
-adapted to the different processor type (''m168'', ''m168p'', ''m328'' or ''m328p'') for the avrdude program.
+The flash of the processors was loaded with the same software, only the Makefile  option \inquotes{PARTNO = } must be
+adapted to the different processor type (\inquotes{m168}, \inquotes{m168p}, \inquotes{m328} or \inquotes{m328p}) for the avrdude program.
 After loading the data the selftest was started for each ATmega and a capacitor with \(330nF\) was connected
 during test No.~10 to pin~1 and pin~3.
 
@@ -959,8 +959,8 @@ At last I will make more clear the effect of the AUTO\_CAL option in the selftes
 The following figure~\ref{fig:MegaAuto} shows the results from the three ATmega processors
 with the biggest error of measurement, one measurement before the calibration and another
 measurement after the calibration.
-The points marked with the ending ''unc'' shows the the errors without calibration.
-The lines with the ending ''cal'' shows the error results of the \textbf {same processors} 
+The points marked with the ending \inquotes{unc} shows the the errors without calibration.
+The lines with the ending \inquotes{cal} shows the error results of the \textbf {same processors} 
 with the \textbf {same software} after the calibration in the selftest section.
 The reason for the measurement errors for big capacitors \textgreater(\(40\mu F\)) is
 not yet known. All used capacitors for this series of measurements are film capacitors or

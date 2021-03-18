@@ -29,7 +29,8 @@ Upozornění k tomuto vydání:
 \section*{Úvod}
 
 \subsection*{Hlavní motivy}
-Každý z nás zná tento problém: vymontuje transistor nebo ho najde mezi svými poklady, když je jeho označení čitelné a technické údaje nebo náhrada dostupné, je všechno v pořádku.
+Každý z nás zná tento problém: vymontuje transistor nebo ho najde mezi svými poklady,
+když je jeho označení čitelné a technické údaje nebo náhrada dostupné, je všechno v pořádku.
 pokud ale ne, nastává otázka, co je to za součástku.
 S konvenčními měřícími metodami je těžké a zdlouhavé typ součástky a její parametry zjistit.
 Může se jednat o NPN, PNP, N- nebo P-Kanal-MOSFET atd. 
@@ -41,8 +42,6 @@ Testerem v orinálu Transistor Tester od Markuse F. \cite{Frejek} jsem se začal
 \\schopen naprogramovat EPROM mcu ATmega8 bez chybových hlášení s driverem systému Windows.
 \\K vyřešení toho problému jsem v softwaru od Markuse F. změnil všechny zápisy do EEPROM paměti
 \\za zápisy do Flash.
-\\Při té příležitosti jsem v jiné části programu, z důvodu úspory místa v programové paměti, dostal nápad, změnit výsledek ReadADC funkce z jednotek DC  na rozlišení v milivoltech (mV).
-\\Rozlišení mV je nutné k výstupu hodnot napětí. Pokud funkce ReadADC poskytuje rozlišení přímo mV, můžete uložit transformaci při každém měření.
 Tyto mV hodnoty lze získat, když budou výsledky od 22 ADC čtení nejprve sečteny.
 Součet musí být vynásoben dvěma a potom dělen devíti.
 Tím získáte přesnou hodnotu od \begin{math}\frac{1023\cdot22\cdot2}{9} = 5001\end{math},
@@ -55,7 +54,10 @@ nemohlo nikdy zvýšit rozlišení ADC.
 Tím jsem neměl žádnou práci na změně funkce ReadADC, ale to vyžadovalo analýzu celého programu
 a úpravu všech ,,if'' dotazů v programu, kde byly kontrolovány hodnoty napětí.
 To byl ale jen začátek mé práce!\\
-Realizoval jsem spoustu nápadů, kvůli rychlejšímu a přesnějšímu měření. Kromě toho byl rozšířen také rozsah měření odporu a kondenzátoru. Výstupní formát LC displeje byl změněn tak, že symboly byly použity jako diody, rezistory a kondenzátory. Další podrobnosti naleznete v kapitole o aktuálních vlastnostech Kapitola \ref{sec:features}. 
+Realizoval jsem spoustu nápadů, kvůli rychlejšímu a přesnějšímu měření.
+Kromě toho byl rozšířen také rozsah měření odporu a kondenzátoru.
+Výstupní formát LC displeje byl změněn tak, že symboly byly použity jako diody, rezistory a kondenzátory.
+Další podrobnosti naleznete v kapitole o aktuálních vlastnostech Kapitola \ref{sec:features}. 
 Plánované práce a nové nápady byly shromážděny v kapitole \ref{sec:todo}.
 Mezitím mohu dokonale popsat EEPROM ATmega8 pod operačním systémem Linux.
 
@@ -69,6 +71,9 @@ Děkuji mu za opravu verze softwaru 1.10k a jeho integraci do aktuální vývojo
 Chtěl bych také poděkovat Asco B., který vytvořil tabulku pro lidi ochotné kopírovat a Dirk W.,
 který se postaral o hromadné objednávky pro tuto radu.
 Nebyl bych schopen strávit tolik času s vývojem softwaru, který by nebyl tak daleko.
-Chtěl bych také poděkovat členům místního sdružení města Lennestadt z německého radioamatérského  klubu (DARC) za řadu návrhů na zlepšení.
-Rád bych poděkoval radioamatérovi a operátorovi Pieter-Tjerkovi (PA3FWM) za integraci metody vzorkování S ADC, která značně zlepšila měření malých kapacitních hodnot a malých indukčností.
-V neposlední řadě bych rád poděkoval Nicku L. z Ukrajiny, který mě podpořil prototypovými tištěnými spoji a navrhl nějaké hardwarové vylepšení a poskytl ruský překlad tohoto popisu.
+Chtěl bych také poděkovat členům místního sdružení města Lennestadt z německého radioamatérského 
+klubu (DARC) za řadu návrhů na zlepšení.
+Rád bych poděkoval radioamatérovi a operátorovi Pieter-Tjerkovi (PA3FWM) za integraci metody vzorkování S ADC,
+která značně zlepšila měření malých kapacitních hodnot a malých indukčností.
+V neposlední řadě bych rád poděkoval Nicku L. z Ukrajiny, který mě podpořil prototypovými
+tištěnými spoji a navrhl nějaké hardwarové vylepšení a poskytl ruský překlad tohoto popisu.

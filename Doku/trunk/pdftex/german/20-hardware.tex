@@ -16,8 +16,8 @@ Zusätzliche Abblock-Kondensatoren wurden hinzugefügt und sollten nahe den Vers
 des ATmega und nahe bei dem Spannungsregler plaziert werden.
 
 Weil der PD7-Eingang und der PC6-Anschluss (RESET) die einzigen Anschlüsse sind, wo
-,,pull-up'' Widerstände gebraucht werden, wurde ein zusätzlicher \(27k\Omega\) Widerstand am PD7 (Pin 13) vorgesehen.
-Mit dieser Änderung können die internen ,,Pull-Up''-Widerstände des ATmega abgeschaltet werden.
+\inquotes{pull-up} Widerstände gebraucht werden, wurde ein zusätzlicher \(27k\Omega\) Widerstand am PD7 (Pin 13) vorgesehen.
+Mit dieser Änderung können die internen \inquotes{Pull-Up}-Widerstände des ATmega abgeschaltet werden.
 
 Ein Quarz mit seinen \(22pF\)-Kondensatoren wurde zusätzlich vorgesehen.
 Ein Quarz hat Vorteile für die Kapazitätsmessung wegen der genaueren Zeitmessung.
@@ -39,7 +39,7 @@ erforderlich.
 Sie können eine LM4040-AIZ2.5 (0,1\%),
 eine LT1004CZ-2.5 (0,8\%) oder eine LM336-Z2.5 (0,8\%) Spannungsreferenz benutzen.
 Wenn sie weder die Präzisionsreferenz noch die Relais-Erweiterung zum Schutz der Eingänge benutzen,
-sollten Sie wenigstens einen ,,Pull Up''-Widerstand R16 an PC4 installieren mit einem
+sollten Sie wenigstens einen \inquotes{Pull Up}-Widerstand R16 an PC4 installieren mit einem
 höheren Widerstandswert (\(47k\Omega\)).
 Dies hilft der Software, die fehlende Spannungsreferenz zu entdecken.
 Ein zusätzlicher ISP-Anschluss wurde hinzugefügt, um leichter neue Software-Versionen
@@ -392,9 +392,9 @@ Signal:     &       &       &        &      &      &      &      \\
 
 Normalerweise wird der ST7565- oder der SSD1306-Controller mit einer 4-Wire SPI-Schnittstelle angeschlossen.
 Beim SSD1306-Controller kann auch eine I\textsuperscript{2}C-Schnittstelle mit PD2 als SDA- und PD5 als SCL-Signal benutzt werden.
-Die SDA- und SCL-Signale müssen mit einem ,,Pull-up'' Widerstand von ungefähr \(4,7k\Omega\) nach \(3,3V\) versehen sein.
+Die SDA- und SCL-Signale müssen mit einem \inquotes{Pull-up} Widerstand von ungefähr \(4,7k\Omega\) nach \(3,3V\) versehen sein.
 Eine Anschlußmöglichkeit zeigt die Abbildung \ref{fig:ssd1306i2c}.
-Vor der Verwendung der ,,Pull-up'' Widerstände nach \(5V\) sollte überprüft werden, ob die Eingänge dieses Signal vertragen.
+Vor der Verwendung der \inquotes{Pull-up} Widerstände nach \(5V\) sollte überprüft werden, ob die Eingänge dieses Signal vertragen.
 Normalerweise sind die Eingänge des Kontrollers über Dioden nach \(3.3V\) geschützt.
 Die Ausgänge des ATmega werden für die I\textsuperscript{2}C-Signale nur nach \(0V\) geschaltet.
 Es sollte aber sichergestellt sein, daß das Programm mit der I\textsuperscript{2}C Schnittstelle in den ATmega geladen wurde,
@@ -436,8 +436,8 @@ speziellen Seriellschnittstelle angeschlossen werden, wie die Abbildung \ref{fig
 \end{figure}
 
 Für beide Anschlußarten muß die Software speziell konfiguriert werden. 
-Die Makefile Option ,,WITH\_LCD\_ST7565 = 7920'' muß dazu auf jeden Fall gesetzt werden, für die serielle
-Anschlußart muß außerdem die Option ,,CFLAGS += -DLCD\_INTERFACE\_MODE=5'' gesetzt sein.
+Die Makefile Option \inquotes{WITH\_LCD\_ST7565 = 7920} muß dazu auf jeden Fall gesetzt werden, für die serielle
+Anschlußart muß außerdem die Option \inquotes{CFLAGS += -DLCD\_INTERFACE\_MODE=5} gesetzt sein.
 Die Tabelle~\ref{tab:ser-processor} zeigt die Belegung der seriellen Anschlußsignale bei 
 dem Anschlußtyp 5 (ST7920) und 7 (SSD1803) für verschiedene Prozessoren.
 
@@ -569,8 +569,8 @@ Transistoren bei diesem Controller benutzt. Die Ausgabe is also ähnlich wie auf
 Wie bei den meisten graphischen Displays ist auch hier die Betriebsspannung 3.3 Volt.
 Deswegen ist eine Signalanpassung an die \(5V\) Ausgänge des ATmega erforderlich.
 Für die SPI-Schnittstelle und die 3-line Schnittstelle können die Ausgänge des ATmega
-mit der Makefile Option LCD\_SPI\_OPEN\_COL wie ein ,,Open Collector'' Ausgang benutzt werden.
-Es sind aber ,,Pull-Up'' Widerstände erforderlich oder es darf die Option PULLUP\_DISABLE
+mit der Makefile Option LCD\_SPI\_OPEN\_COL wie ein \inquotes{Open Collector} Ausgang benutzt werden.
+Es sind aber \inquotes{Pull-Up} Widerstände erforderlich oder es darf die Option PULLUP\_DISABLE
 in der Makefile nicht gesetzt sein.
 Getestet ist derzeit nur die 3-line Schnittstelle.
 
@@ -662,7 +662,7 @@ Es kann ein ATmega8, ATmega168 und ATmega328 Mikrocontroller verwendet werden.
 Empfohlen wird ein ATmega328, wenn man alle Funktionen nutzen möchte.
 
 Jedenfalls sollte man zuerst alle Bauteile ohne den Mikrocontroller bestücken.
-Es wird als IC2 ein moderner ,,low voltage drop''-Spannungsregler wie MCP1702-5002 empfohlen, weil
+Es wird als IC2 ein moderner \inquotes{low voltage drop}-Spannungsregler wie MCP1702-5002 empfohlen, weil
 dieser nur \(2\mu A\) Ruhestrom benötigt und auch noch \(5V\) liefern kann, 
  wenn die Eingangsspannung nur \(5,4V\) beträgt.
 Aber dieser Regler ist leider nicht Pin-kompatibel zum bekannteren 78L05-Regler im TO-92-Gehäuse!
@@ -712,7 +712,7 @@ geringerer Batteriespannung oder bei geringem Stromverstärkungsfaktor des PNP-T
 ein sicheres Einschalten zu gewährleisten.
 \item[Zusätzlicher Pull-Up-Widerstand an PD7]
 Der Fehler zeigt sich dadurch, dass der Tester nach einer kurzen Anzeigezeit mit der Meldung
-,,Timeout'' abschaltet. Die Software ist standardmäßig so konfiguriert (Option PULLUP\_DISABLE),
+		\inquotes{Timeout} abschaltet. Die Software ist standardmäßig so konfiguriert (Option PULLUP\_DISABLE),
 dass die internen Pull-Up-Widerstände abgeschaltet sind.
 Dadurch ist der Pegel am Pin PD7 nicht mehr definiert,
 wenn er nicht durch den Taster oder T2 auf GND-Potential geschaltet ist. Ein externer
@@ -789,7 +789,7 @@ Für die Umschaltung der Betriebszustände (Frequenzteiler und Quarz-Oszillator)
 die Analogschalter 74HC4052 benutzt.
 Die Tabelle \ref{tab:mega644-display} zeigt die Pinbelegung für den ATmega324/624/1284 Mikrocontroller für verschiedene Displayanschlüsse.
 Die I\textsuperscript{2}C-Schnittstelle ist nur mit dem SSD1306-Controller möglich.
-Die Signale der I\textsuperscript{2}C-Schnittstelle erfordern einen ,,Pull-Up''-Widerstand von etwa \(4,7k\Omega\) nach \(3,3V\).
+Die Signale der I\textsuperscript{2}C-Schnittstelle erfordern einen \inquotes{Pull-Up}-Widerstand von etwa \(4,7k\Omega\) nach \(3,3V\).
 Die Ausgänge des ATmega werden für die I\textsuperscript{2}C-Signale nur nach \(0V\) geschaltet.
 
 
@@ -924,7 +924,7 @@ einen externen Takt zuführen muss, oder der Programmiersockel mit einem Quarz a
 Die zweite Variante ist weitgehend in SMD-Technik aufgebaut. Auch der ATmega168 oder ATmega328 
 ist in einem 32TQFP Gehäuse fest verbaut.
 Dafür ist ein 10-poliger ISP-Stecker für die Programmierung auf der Platine vorgesehen.
-Ich habe die Version ,,2.1 2012/11/06'' analysiert. Ein Fehler ist die Bestückung des Bauteils ,,D1'',
+Ich habe die Version \inquotes{2.1 2012/11/06} analysiert. Ein Fehler ist die Bestückung des Bauteils \inquotes{D1},
 welches eigentlich die \(2,5V\) Präzisionsreferenz sein soll. Bestückt ist aber eine Zenerdiode.
 Dieses Bauteil sollte entfernt werden. Hier kann eine Präzisionsreferenz wie LM4040AIZ2.5 oder
 LT1004CZ-2.5 angeschlossen werden. Eine fehlende Präzisionsreferenz wird von der Software erkannt,
@@ -935,7 +935,7 @@ GND-Verbindung an Pin 10 erwartet, der Tester hatte aber nur bei Pin 4 und Pin 6
 Die Beschriftung des ATmega168 war abgeschliffen und es gab keine Dokumentation zum Gerät.
 Die Sicherheits-Bits des ATmega waren gesetzt, sodass sich das Programm nicht auslesen ließ.
 Ich konnte aber problemlos die Software Version 1.05k installieren.
-Die gleiche Softwareversion 1.05k hat bei einem anderen Nutzer mit der China-Version ,,2.2 2012/11/26'' Probleme
+Die gleiche Softwareversion 1.05k hat bei einem anderen Nutzer mit der China-Version \inquotes{2.2 2012/11/26} Probleme
 gemacht. Die Software 1.05k lief hier erst, als ein weiterer \(100nF\) SMD Kondensator zwischen die Pins 18-AVCC
 und 21-GND ergänzt wurde. Die Software 1.05k benutzt bei Wartezeiten den Schlafzustand des ATmega.
 Deswegen wechselt der Strombedarf häufiger und der Spannungsregler wird mehr beansprucht.
@@ -1010,7 +1010,7 @@ Fish8840 Tester zu befestigen.
 Anstelle dieser Umrüstung kann mit der Makefile Option LCD\_SPI\_OPEN\_COL auch eine spezielle Ausgangsschaltung
 der 4~SPI Signale des ATmega benutzt werden.
 Dabei werden die Ausgänge nicht auf VCC Pegel geschaltet,
-sondern nur die internen ,,Pull-Up'' Widerstände während der Ausgabe für den high Pegel freigeschaltet.
+sondern nur die internen \inquotes{Pull-Up} Widerstände während der Ausgabe für den high Pegel freigeschaltet.
 Wenn die Option PULLUP\_DISABLE gesetzt ist, ist ein externer Pull-Up Widerstand für das
 Reset Signal (PD0) erforderlich.
 Weil die Datensignale nie direkt auf VCC geschaltet werden, kann die \(3.3V\) Versorgung des LCD-Controllers
@@ -1066,7 +1066,7 @@ wegen der \(5V\) Signalpegel vom ATmega nicht zu befürchten.
 
 Bei der Aufrüstung auf die 1.12k Version
 der Software ergaben sich einige Schwierigkeiten. Wenn die extended Fuse wie empfohlen auf
-0x04 (oder 0xfc) gesetzt wird, kam es bei bestimmten Messungen zu ,,Brown Out'' Resets des
+0x04 (oder 0xfc) gesetzt wird, kam es bei bestimmten Messungen zu \inquotes{Brown Out} Resets des
 Prozessors. Diese Resets werden durch kurzzeitige Spannungseinbrüche der VCC Versorgung
 verursacht. Die Platine wurde deshalb mit einem \(4.7\mu F\) kermamischen Kondensator
 am Eingang des Spannungsreglers und mit einem \(10\mu F\) keramischen Kondensator am
@@ -1094,7 +1094,7 @@ seitlichen Druck mit einem Finger für die Dauer der Programmierung fixiert.
 Dadurch kann der Stecker nach der Programmierung wieder leicht entfernt werden und das Display
 an die ursprüngliche Stelle montiert werden.
 Die Software 1.12k konnte übrigens problemlos aufgespielt werden.
-Auch das Aktivieren der ,,Brown-Out'' Erkennung des Prozessors mit der extended fuse
+Auch das Aktivieren der \inquotes{Brown-Out} Erkennung des Prozessors mit der extended fuse
 brachte keine Überraschungen.
 
 \begin{figure}[H]
@@ -1117,7 +1117,7 @@ Auf den Fotos der Rückseite in Abbildung \ref{fig:T4_back} sieht man die nachge
 \(5mm\) Gewindebolzen sowie die nachträglich angelöteten Kabel mit Messclips.
 Da aber für die Datensignale des graphischen LCD-Controllers auch hier
 keine Signalanpassung (\(5V~-\textgreater ~3.3V\)) erfolgt, ist das Setzen der Option LCD\_SPI\_OPEN\_COL ratsam.
-Da die Nachrüstung eines ,,pull-up'' Widerstandes für das SPI-Reset Signal hier
+Da die Nachrüstung eines \inquotes{pull-up} Widerstandes für das SPI-Reset Signal hier
 aber schwierig durchzuführen ist, bleibt nur das Entfernen der Option
 DISABLE\_PULLUP übrig. 
 Für nachträgliche Erweiterungen ist diese Platine weniger geeignet, auch ein Austausch des
@@ -1139,7 +1139,7 @@ Displays ist hier nur schwer möglich.
   \label{fig:T4_back}
 \end{figure}
 
-Noch eine chinesische Version mit graphischem Display wird mit der Bezeichnung ,,GM328'' angeboten.
+Noch eine chinesische Version mit graphischem Display wird mit der Bezeichnung \inquotes{GM328} angeboten.
 Bei dieser Version ist das graphische Display an eine 16-pol Buchsenleiste mit einer Tochterplatine
 angeschlossen.
 Dabei ist auch der Port PD5 über die Buchsenleiste Pin 6 an das CE (Chip Enable) Signal
@@ -1148,7 +1148,7 @@ des graphischen Controllers angeschlossen. Das CE Signal ist aber auf der Tochte
 Das führt zu einem Kurzschluß, wenn der ATmega den PD5 Ausgang auf \(5V\) schalten möchte.
 Neuere Versionen der Software schalten aber auch das CE Signal, auch wenn das Signal für den Betrieb nicht
 benötigt wird.
-Deswegen sollte bei dem ,,GM328'' Tester die Verbindung der Tochterplatine zum Pin 6 
+Deswegen sollte bei dem \inquotes{GM328} Tester die Verbindung der Tochterplatine zum Pin 6 
 der Anschlußleiste unterbrochen werden.
 
 \section{Chinesische Bausätze mit Grafikdisplay}
@@ -1288,7 +1288,7 @@ und sind auf der Platine mit den Ziffern \textbf {1~~1~~1~~2~~3~~3,3} gekennzeic
 
 Die gleiche Bezeichnung befindet sich auf dem SMD Testfeld
 und es besteht auch eine Möglichkeit, eigene Test Kabel anzulöten.
-Der \textbf {Testport TP2} wird auch für die Ausgabe der Sonderfunktion ,,f-Generator'' benutzt.\\
+Der \textbf {Testport TP2} wird auch für die Ausgabe der Sonderfunktion \inquotes{f-Generator} benutzt.\\
 Die mit \textbf {LF} bezeichneten Pins sind für die Messung von Quarzen mit niedriger Resonanzfrequenz vorgesehen,
 und die mit \textbf {HF} bezeichneten Pins sind für Quarze mit hoher Resonanzfrequenz bestimmt.
 
@@ -1322,7 +1322,7 @@ Wenn der Tester jetzt startet, ist die LED möglicherweise falsch herum eingebau
 Wenn das nicht die Ursache ist, könnte der Grund ein unzureichender Stromverstärkungs-Faktor
 des Transistors T3 (BC557C) sein.
 Der Strom in die Basis von T3 ist niedriger, wenn der Mikrocontroller mit der LED einschaltet
-wie im ,,Taster gedrückt''-Zustand.
+		wie im \inquotes{Taster gedrückt}-Zustand.
 
 \item[Nichts ist lesbar auf der LCD-Anzeige] 
 Prüfen Sie die Spannung am Kontrast-Pin der LCD-Anzeige (Pin 3).

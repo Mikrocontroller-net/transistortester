@@ -3,12 +3,12 @@
 \chapter{Special Software Parts}
 
 Several modifications are done to save flash memory.
-The LCD-Output of probe-pin numbers was done in the form ``lcd\_data('1'+pin)''.
-To save the add operation for every call, the entry ``lcd\_testpin(uint8\_t pin)''
+The LCD-Output of probe-pin numbers was done in the form \inquotes{lcd\_data('1'+pin)}.
+To save the add operation for every call, the entry \inquotes{lcd\_testpin(uint8\_t pin)}
 was added to the lcd\_routines.c.
 
 
-The pseudo calls in the form ``\_delay\_ms(200)'' are not implemented as library calls,
+The pseudo calls in the form \inquotes{\_delay\_ms(200)} are not implemented as library calls,
 but wait loops are implemented for every call. This will consume much memory, if you
 have many calls at different location in your program.
 All of this pseudo calls are replaced with calls to my special assembly written library,
@@ -33,10 +33,10 @@ Last not least matches the wait calls the exactly delay time, if the lowest wait
 Only the wait calls above \(50ms\) are one cycle per \(100ms\) to long because of the additionally integrated watch dog reset.
 
 
-Additionally the often used calling sequence ``wait5ms(); ReadADC\dots();'' is replaced by the call
-``W5msReadADC(\dots);''.
-The same is done for the sequence ``wait20ms(); ReadADC(\dots);'' which is replaced by one 
-``W20msReadADC(\dots);'' call.
+Additionally the often used calling sequence \inquotes{wait5ms(); ReadADC\dots();} is replaced by the call
+\inquotes{W5msReadADC(\dots);}.
+The same is done for the sequence \inquotes{wait20ms(); ReadADC(\dots);} which is replaced by one 
+\inquotes{W20msReadADC(\dots);} call.
 The function ReadADC is additionally written in assembly language, so that this add-on could be
 implemented very effective. The functional identical C-version of the ReadADC function is
 also avaiable as source.

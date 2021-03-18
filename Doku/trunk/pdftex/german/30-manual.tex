@@ -59,7 +59,7 @@ Funktion in Zeile 3 eines vierzeiligen Displays gezeigt. Dabei wird die vorige u
 Nach einer längeren Wartezeit ohne jegliche Bedienung kehrt das Programm zu der normalen Transistortester-Funktion zurück.
 Durch kurzen Tastendruck kann zur nächsten Auswahl gewechselt werden.
 Mit einem längeren Tastendruck startet die angezeigte Zusatzfunktion.
-Nach Anzeige der letzten Funktion ,,Schalte aus'' wird wieder die erste Funktion angezeigt.\\
+Nach Anzeige der letzten Funktion \inquotes{Schalte aus} wird wieder die erste Funktion angezeigt.\\
 
 Wenn der Tester mit einem Drehimpulsgeber ausgerüstet ist, kann die Menü-Auswahl auch mit einem schnellen
 Drehen des Encoders während der Anzeige einer vorausgegangenen Messung aufgerufen werden.
@@ -70,14 +70,14 @@ Eine schnelle Drehung des Encoders kehrt zur Menü-Auswahl zurück.
 
 \begin{description} \setlength{\itemsep}{0em}
  \item[Frequenz]
-Die Zusatzfunktion ,,Frequenz'' (Frequenzmessung) benutzt als Eingang den PD4-Pin des ATmega, der auch an das LCD angeschlossen ist.
+ Die Zusatzfunktion \inquotes{Frequenz} (Frequenzmessung) benutzt als Eingang den PD4-Pin des ATmega, der auch an das LCD angeschlossen ist.
 Es wird immer zunächst die Frequenz gemessen, bei Frequenzen unter \(25kHz\) wird auch die mittlere Periode des Eingangssignals
 bestimmt und daraus die Frequenz mit einer Auflösung von bis zu \(0,001Hz\) berechnet.
 Bei gesetzter POWER\_OFF-Option in der Makefile wird die Dauer der Frequenzmessung auf 8~Minuten beschränkt.
 Die Frequenzmessung wird durch Tastendruck beendet und in das Auswahlmenü zurückgekehrt.\\
 
  \item[f-Generator]
-Bei der Zusatzfunktion ,,f-Generator'' (Frequenz-Generator) können die Frequenzen zwischen 1Hz und 2MHz gewählt werden.
+ Bei der Zusatzfunktion \inquotes{f-Generator} (Frequenz-Generator) können die Frequenzen zwischen 1Hz und 2MHz gewählt werden.
 Die Einstellung der Frequenz kann jeweils nur für die höchste dargestellte Stelle (Ziffernposition) verändert werden.
 Für die Stellen 1Hz bis 10kHz sind jeweils die Ziffern 0-9 wählbar. Bei der 100kHz Stelle ist 0-20 wählbar.
 In Spalte 1 der Frequenzzeile wird durch ein \textgreater~oder \textless~Symbol angezeigt, ob durch einen längeren
@@ -93,14 +93,14 @@ Durch einen regelmäßigen kurzen Tastendruck kann die vorzeitige Abschaltung de
 Ein längerer Tastendruck (\textgreater~2s) kehrt wieder zur Auswahl der Funktionen zurück.\\
 
  \item[10-bit PWM]
-Bei der Zusatzfunktion ,,10-bit PWM'' (Pulsweitenmodulation) wird eine feste Frequenz mit einstellbarer Pulsweite an Pin TP2 erzeugt.
+ Bei der Zusatzfunktion \inquotes{10-bit PWM} (Pulsweitenmodulation) wird eine feste Frequenz mit einstellbarer Pulsweite an Pin TP2 erzeugt.
 Mit einem kurzen Tastendruck (\textless~0,5s) wird die Pulsweite um \(1\%\) erhöht, mit einem längeren Tastendruck um \(10\%\).
 Bei Überschreiten von \(99\%\) werden \(100\%\) vom erhöhten Wert abgezogen.
 Bei gesetzter POWER\_OFF-Option in der Makefile wird die Frequenzerzeugung nach 8 Minuten ohne Bedienung beendet.
 Durch sehr langen Tastendruck (\textgreater~1,3s) kann die Frequenzerzeugung auch beendet werden.\\
 
  \item[C+ESR@TP1:3]
-Bei der Zusatzfunktion ,,C+ESR@TP1:3'' wird eine separate Kondensatormessung mit ESR-Messung an TP1 und TP3 gestartet.
+ Bei der Zusatzfunktion \inquotes{C+ESR@TP1:3} wird eine separate Kondensatormessung mit ESR-Messung an TP1 und TP3 gestartet.
 Messbar sind Kondensatoren mit mehr als \(2\mu F\) bis zu \(50mF\). Wegen der geringen Messspannung von etwa 300mV sollte
 in vielen Fällen die Messung in der Schaltung ohne vorherigen Ausbau möglich sein.
 Bei gesetzter POWER\_OFF-Option in der Makefile ist die Anzahl der Messungen auf 250 beschränkt,
@@ -136,17 +136,17 @@ Auch hier wird wie bei der Widerstands-Meßfunktion in den  Betriebs-Modus autom
 Der Tester kehrt nach dem automatischen Start wieder zu der normalen Testerfunktion zurück, wenn der Taster gedrückt wird.
 
  \item[Impulsdrehgeber]
-Mit der Zusatzfunktion ,,Impulsdrehgeber'' kann ein Drehgeber untersucht werden.
+ Mit der Zusatzfunktion \inquotes{Impulsdrehgeber} kann ein Drehgeber untersucht werden.
 Die drei Kontakte des Impulsdrehgebers müssen vor dem Start der Zusatzfunktion beliebig an die drei Testpins
  des Transistortesters angeschlossen werden.
 Nach dem Start der Funktion muss der Drehknopf nicht zu schnell gedreht werden.
 Wenn der Test erfolgreich abgeschlossen ist, wird die Pinbelegung der Kontakte symbolisch in Zeile 2 dargestellt.
 Dabei wird der gemeinsame Anschluss herausgefunden und für etwa zwei Sekunden angezeigt,
 ob an den Raststellung beide Kontake offen ('o') oder beide Kontakte geschlossen ('C') sind.
-Ein Impulsdrehgeber mit offenen Kontakten an den Raststellungen wird so mit der Zeile 2 ,,1-/-2-/-3~o'' zwei Sekunden lang angezeigt.
+Ein Impulsdrehgeber mit offenen Kontakten an den Raststellungen wird so mit der Zeile 2 \inquotes{1-/-2-/-3~o} zwei Sekunden lang angezeigt.
 Natürlich wird die richtige Pinnummer des gemeinsamen Kontaktes in der Mitte anstelle der '2' angezeigt.
 Wenn auch die geschlossene Schalterstellung an den Raststellungen vorkommt,
-wird außerdem in Zeile 2 ,,1---2---3~C'' zwei Sekunden lang angezeigt.
+wird außerdem in Zeile 2 \inquotes{1---2---3~C} zwei Sekunden lang angezeigt.
 Mir ist kein Impulsdrehgeber bekannt, der immer nur geschlossene Kontakte an jeder Raststellung hat.
 Die Stellungen der Kontakte zwischen den Raststellungen werden nur kurz (\textless\(~0,5s\)) ohne die Kennbuchstaben 'o' oder 'C' 
 in Zeile 2 angezeigt.
@@ -167,12 +167,12 @@ Zum Abgleich dieses Parameters sollten also nur Kondensatoren mit über \(50\mu 
 da die Kapazität sowohl von der Temperatur als auch der DC-Spannung abhängt.
 
  \item[Selbsttest]
-Mit der Zusatzfunktion ,,Selbsttest'' wird ein vollständiger Selbsttest mit Kalibration durchgeführt.
+ Mit der Zusatzfunktion \inquotes{Selbsttest} wird ein vollständiger Selbsttest mit Kalibration durchgeführt.
 Dabei werden sowohl die Testfunktionen T1 bis T7 (wenn nicht verhindert mit der Option NO\_TEST\_T1\_T7) 
 als auch die Kalibration mit dem externen Kondensator jedes Mal durchgeführt.\\
 
  \item[Spannung]
-Die Zusatzfunktion ,,Spannung'' (Spannungsmessung) ist nur möglich, wenn die serielle Ausgabe deaktiviert wurde
+ Die Zusatzfunktion \inquotes{Spannung} (Spannungsmessung) ist nur möglich, wenn die serielle Ausgabe deaktiviert wurde
 oder der ATmega mindestens 32 Pinne hat (PLCC) und einer der zusätzlichen Pinne ADC6 oder ADC7 für die Messung benutzt wird.
 Da am Port PC3 (oder ADC6/7) ein 10:1-Spannungsteiler vorgesehen ist, können Spannungen bis \(50V\) gemessen werden.
 Ein installierter DC-DC-Wandler für die Zenerdioden-Messung wird durch Tastendruck eingeschaltet.
@@ -202,7 +202,7 @@ Die Intensität der gewählten Farbe, die mit einem {\textgreater} Zeichen in Sp
 kann durch Drehen des Impulsdrehgebers verändert werden.
 
  \item[Zeige Daten]
-Die Funktion ,,Zeige Daten'' zeigt neben der Software-Versionsnummer die Daten des Abgleichs an.
+ Die Funktion \inquotes{Zeige Daten} zeigt neben der Software-Versionsnummer die Daten des Abgleichs an.
 Dies sind die Nullwiderstände R0 von Pin 1:3, 2:3 und 1:2 .
 Außerdem werden die Ausgangswiderstände der Ports zur \(5V\)-Seite (RiHi) und 
 zur \(0V\) Seite (RiLo) angezeigt.
@@ -215,10 +215,10 @@ zur nächsten Seite geblättert werden.
 Mit einer Linksdrehung des Impulsdrehgebers kann die Ausgabe wiederholt werden oder zur vorigen Seite zurückgeblättert werden.
 
  \item[Schalte aus]
-Mit der Zusatzfunktion ,,Schalte aus'' kann der Transistortester abgeschaltet werden.\\
+ Mit der Zusatzfunktion \inquotes{Schalte aus} kann der Transistortester abgeschaltet werden.\\
 
  \item[Transistor]
-Natürlich kann mit der Funktion ,,Transistor'' (Transistortester) wieder zu der normalen Transistortester-Funktion
+ Natürlich kann mit der Funktion \inquotes{Transistor} (Transistortester) wieder zu der normalen Transistortester-Funktion
 zurückgekehrt werden.
 
 \end{description}
@@ -233,7 +233,7 @@ Für den Start des Selbsttests muss die Starttaste innerhalb von 2 Sekunden noch
 sonst wird mit einer normalen Messung fortgefahren.
 Beim Selbsttest werden die im Selbsttest-Kapitel \ref{sec:selftest} beschriebenen Tests ausgeführt.
 Wenn der Tester mit einer Menüfunktion (Option WITH\_MENU) konfiguriert ist, 
-wird der vollständige Selbsttest mit den Tests T1 bis T7 nur bei dem ,,Selbsttest'' ausgeführt, 
+wird der vollständige Selbsttest mit den Tests T1 bis T7 nur bei dem \inquotes{Selbsttest} ausgeführt, 
 der als Menüfunktion ausgewählt werden kann.
 Außerdem wird beim Aufruf über die Menüfunktion der Abgleich mit dem externen Kondensator jedesmal durchgeführt,
 sonst nur für den ersten Aufruf.
@@ -287,7 +287,7 @@ Normalerweise wird beim Start des Testers die Batteriespannung angezeigt. Wenn d
 wird eine Warnung hinter der Batteriespannung ausgegeben. Wenn Sie eine aufladbare \(9V\)-Batterie benutzen, sollten Sie
 den Akku möglichst bald austauschen oder nachladen.
 Wenn Sie eine Version mit eingebauter \(2,5V\)-Präzisionsreferenz besitzen, wird beim Start für eine Sekunde die
-gemessene Betriebsspannung in der Zeile 2 mit ,,VCC=x.xxV'' angezeigt.
+gemessene Betriebsspannung in der Zeile 2 mit \inquotes{VCC=x.xxV} angezeigt.
 
 Es kann nicht oft genug erwähnt werden, dass Kondensatoren vor dem Messen entladen sein müssen.
 Sonst kann der Tester schon defekt sein, bevor der Startknopf gedrückt ist.

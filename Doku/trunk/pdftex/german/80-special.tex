@@ -3,9 +3,9 @@
 \chapter{Spezielle Softwareteile}
 
 Es wurden zahlreiche Veränderungen durchgeführt um Flashspeicher zu sparen.
-Die LCD-Ausgabe von Test-Anschlussnummern wurde in der Form ,,lcd\_data('1'+Pin)'' durchgeführt.
+Die LCD-Ausgabe von Test-Anschlussnummern wurde in der Form \inquotes{lcd\_data('1'+Pin)} durchgeführt.
 Um den Platz für die zusätzliche Addition für jeden Aufruf zu sparen, wurde die
-Funktion ,,lcd\_testpin(uint8\_t pin)'' in die Datei lcd\_routines.c eingefügt.
+Funktion \inquotes{lcd\_testpin(uint8\_t pin)} in die Datei lcd\_routines.c eingefügt.
 
 
 Die Pseudofunktionen in der Form \_delay\_ms(200) sind keine Bibliotheksfunktionen
@@ -14,7 +14,7 @@ Das verbraucht viel Speicher, wenn man viele Aufrufe an unterschiedlichen Progra
 Alle solche Aufrufe wurden durch Aufrufe einer speziellen in Assembler-Sprache geschriebenen
 Bibliothek ersetzt, welche nur 74~Bytes des Flashspeichers (bei \(8MHz\)) verbraucht, aber
 Aufrufe von wait1us() bis wait5s() in den Stufen 1,2,3,4,5,10,20\dots zur Verfügung stellt.
-Die Routinen enthalten den ''Watch Dog Reset''-Befehl für alle Aufrufe über \(50ms\).
+Die Routinen enthalten den \inquotes{Watch Dog Reset}-Befehl für alle Aufrufe über \(50ms\).
 Jeder Aufruf benötigt nur eine Anweisung (2~Byte). Warte-Aufrufe mit Zwischenwerten
 wie 8ms benötigen zwei Aufrufe (wait5ms() und wait3ms() oder zwei wait4ms()-Aufrufe).
 Ich kenne keine Lösung, die ökonomischer wäre, wenn man viele Warteaufrufe im Programm benutzt.
@@ -36,10 +36,10 @@ Nur die Warte-Aufrufe über \(50ms\) sind einen Takt pro \(100ms\) zu lang wegen
 Watch Dog Reset.
 
 
-Zusätzlich wurde die oft benutzte Folge ,,wait5ms(); ReadADC(\dots);'' durch einen einzelnen Aufruf
-,,W5msReadADC(\dots);'' ersetzt.
-Dasselbe wurde auch für die Folge ,,wait20ms(); ReadADC(\dots);'' gemacht, die durch den Aufruf
-,,W20msReadADC(\dots);'' ersetzt wurde.
+Zusätzlich wurde die oft benutzte Folge \inquotes{wait5ms(); ReadADC(\dots);} durch einen einzelnen Aufruf
+\inquotes{W5msReadADC(\dots);} ersetzt.
+Dasselbe wurde auch für die Folge \inquotes{wait20ms(); ReadADC(\dots);} gemacht, die durch den Aufruf
+\inquotes{W20msReadADC(\dots);} ersetzt wurde.
 Die Funktion ReadADC wurde zusätzlich in Assembler portiert, sodass diese Erweiterung
 sehr effektiv integriert werden konnte.
 Eine funktionell identische C-Version der ReadADC-Funktion ist auch beigefügt.

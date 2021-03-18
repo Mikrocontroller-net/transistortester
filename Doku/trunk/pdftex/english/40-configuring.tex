@@ -6,7 +6,7 @@ The compilation of modules is controlled with a Makefile. The developement was d
 at the Ubuntu Linux operating system with the GNU toolchain (gcc version 4.5.3).
 It should be possible to use other Linux operating systems without problems.
 To load the compiled data to the flash memory or
-the EEprom memory, the tool \lcmd{avrdude} (version 5.11svn) was taken by the Makefile, if you call ''make upload''.
+the EEprom memory, the tool \lcmd{avrdude} (version 5.11svn) was taken by the Makefile, if you call \inquotes{make upload}.
  The program \lcmd{avrdude} \cite{avrdude} is available for Linux and Windows operating system.
 The gnu C-compiler gcc is also taken by the AVR studio software and
 by the WinAVR \cite{winavr1},\cite{winavr2} software at the Windows operating system.
@@ -14,8 +14,8 @@ You can load the program data (.hex and .eep) also with other tools to the ATmeg
 but only my Makefile version takes care to load the correct data to the choosed processor.
 Avrdude loads only data to the ATmega if the Signature Bytes of the connected ATmega is
 identical to the choosed one. 
-If you alter the Makefile, all the software will be compiled new, if you call a ''make'' or
-''make upload'' command. The software compiled for a ATmega8 does not run on a ATmega168.
+If you alter the Makefile, all the software will be compiled new, if you call a \lcmd{make} or
+\lcmd{make upload} command. The software compiled for a ATmega8 does not run on a ATmega168.
 The software compiled for a ATmega328 does not run on the ATmega168! 
 A exeption from this rule is the software compiled for ATmega168, this data can also be used
 for a ATmega328 without changes.
@@ -192,7 +192,7 @@ You can select this option only for color displays (controller ST7735 or ILI9163
 Example: CFLAGS += -DLCD\_FG\_COLOR=0xffff
 
   \item[FONT\_8X16] You must select one font size for the ST7565 controller.
-Selectable are different fonts with the name ''FONT\_'' with appended size information (width X height).
+  Selectable are different fonts with the name \inquotes{FONT\_} with appended size information (width X height).
 Currently the font sizes 6X8, 8X8, 7X12, 8X12, 8x12thin, 8X14, 8X15, 8X16, and 8X16thin are available.
 Font size 8X16 or 8x16thin is the most efficient use of graphics space for a 128x64 pixel LCD.\\
 Example: FONT\_8X16
@@ -208,7 +208,7 @@ Example: CFLAGS += INVERSE\_TP
   \item[STRIP\_GRID\_BOARD] This option adapts the software to a changed port D connection for strip grid printed boards.
 You can find the details in the chapter hardware \ref{sec:hardware} at page~\pageref{sec:hardware}.
 You can also choose alternative assignments of ATmega pins for graphical displays.
-For the chinese ''T5'' board you must set the STRIP\_GRID\_BOARD option to 5.
+For the chinese \inquotes{T5} board you must set the STRIP\_GRID\_BOARD option to 5.
 For alternative pin assignments of graphical displays the assignment of the pushbutton signal is unchanged.\\
 Example: CFLAGS += -DSTRIP\_GRID\_BOARD
 
@@ -266,7 +266,7 @@ Example: CFLAGS += -DNO\_COMMON\_EMITTER\_HFE
   \item[NO\_TEST\_T1\_T7] This option disable the execution of the selftest parts T1 to T7.
 This tests are usefull to find errors in the hardware like incorrect measurement resistors or isolation problems.
 If your hardware is well, you can omitt this selftest parts T1 to T7 by setting this option to get a faster calibration.
-With enabled menu function the selftest parts T1 to T7 are only started by selection of the menu function ''Selftest''.
+With enabled menu function the selftest parts T1 to T7 are only started by selection of the menu function \inquotes{Selftest}.
 The ATmega168 processor does not use the selftest parts T1 to T7, if both measurement types for hFE determination are used.\\
 Example: CFLAGS += -DNO\_TEST\_T1\_T7
 
@@ -288,7 +288,7 @@ Example: CFLAGS += -DSHORT\_UNCAL\_MSG
 
  \item[NO\_ICONS\_DEMO]
 This option will switch off the additional demonstration of the icons and the output of the character set with
-the menu function ''Show data''.
+the menu function \inquotes{Show data}.
 This reduces the required space of flash memory  and also the display time for the user.\\
 Example: CFLAGS += -DNO\_ICONS\_DEMO
 
@@ -341,7 +341,7 @@ Without the option WITH\_UJT the unijunction transistors are detectes as double 
 Example: CFLAGS += -DWITH\_UJT
 
   \item[WITH\_PUT]
-This option enables a additional test for ''Programmable Unijunction Transistor''.
+  This option enables a additional test for \inquotes{Programmable Unijunction Transistor}.
 Without this option PUTs are usually detected as Bipolar Junction Transistor.\\
 Example: CFLAGS += -DWITH\_PUT
 
@@ -356,7 +356,7 @@ Example: CFLAGS += -DFREQUENCY\_50HZ
 
   \item[CAP\_EMPTY\_LEVEL]  This option defines the voltage level for discharged capacitor (mV units).
 You can set the level to higher value as \(3mV\), if the tester does not finish discharging of capacitors.
-In this case the tester ends after longer time with the message ''Cell!''.\\
+In this case the tester ends after longer time with the message \inquotes{Cell!}.\\
 Example: CFLAGS += -DCAP\_EMPTY\_LEVEL=3
 
   \item[WITH\_AUTO\_REF] specifies, that reference voltage is read to get the actual factor for capacity measuring of low capacity values (below \(40\mu F\)).\\
@@ -478,12 +478,12 @@ Example: CFLAGS += -DRESTART\_DELAY\_TICS=6
 Recommended is to use the EEprom (option set).\\
 Example: CFLAGS += -DUSE\_EEPROM
 
-\item[EBC\_STYLE] specifies, that the output of transistor pin layout is done with format ''EBC=...'' or ''GDS=...''.
+\item[EBC\_STYLE] specifies, that the output of transistor pin layout is done with format \inquotes{EBC=...} or \inquotes{GDS=...}.
 This way of output save program memory for the ATmega. Without this option the layout is shown with the
-format ''123=...'', where every point represent a E~(Emitter), B~(Base) or C~(Collector).
+format \inquotes{123=...}, where every point represent a E~(Emitter), B~(Base) or C~(Collector).
 For FET transistors every point can be a G~(Gate), D~(Drain) or S~(Source).
 If the sequence of the test pins is not 1, 2 and 3 in the reading direction, you can invert the sequence with the option
-EBC\_STYLE=321 . The pin assignment is then shown with style ''321=...'', which will better match the usual
+EBC\_STYLE=321 . The pin assignment is then shown with style \inquotes{321=...}, which will better match the usual
 reading direction, if the testpin sequence is 3,2,1 .\\
 Example: CFLAGS += EBC\_STYLE
 
@@ -492,8 +492,8 @@ So capacity values will be shown in \(\mu F\) instead of \(nF\).\\
 Example: CFLAGS += NO\_NANO
 
   \item[NO\_LONG\_PINLAYOUT] can be set to prevent the long style of pin layout for graphical displays 
- like '' Pin  1=E 2=B 3=C''.
-If the option is set, the short style is used instead like '' Pin  123=EBC''.\\
+  like \inquotes{ Pin  1=E 2=B 3=C}.
+If the option is set, the short style is used instead like \inquotes{ Pin  123=EBC}.\\
 Example: CFLAGS += NO\_LONG\_PINLAYOUT
 
 \item[PULLUP\_DISABLE] specifies, that you don't need the internal pull-up resistors.
@@ -552,10 +552,10 @@ Example for low drop regulator (\(5.4V\)): CFLAGS += -DBAT\_POOR=5400\\
 Example for 7805 type regulator (\(6.4V\)): CFLAGS += -DBAT\_POOR=6400
 
   \item[DC\_PWR] This voltage level in mV units specify the battery voltage above which the tester
-changes to the ''DC\_Pwr\_Mode''. Normally the tester operates in a battery mode, where all additional
-functions are limited in time. With the ''DC\_Pwr\_Mode'' the tester runs the additional functions with unlimited time.
+  changes to the \inquotes{DC\_Pwr\_Mode}. Normally the tester operates in a battery mode, where all additional
+functions are limited in time. With the \inquotes{DC\_Pwr\_Mode} the tester runs the additional functions with unlimited time.
 Because there is no DC-DC converter operating with \(0.9V\) input voltage,
-the ''DC\_Pwr\_Mode'' is also entered, if the battery voltage is detected below \(0.9V\). \\
+the \inquotes{DC\_Pwr\_Mode} is also entered, if the battery voltage is detected below \(0.9V\). \\
 Example: CFLAGS += -DDC\_PWR=9500
 
  \item[BAT\_NUMERATOR] defines the numerator of a fraction used for scaling the input voltage to get the right
@@ -583,7 +583,7 @@ Example: INHIBIT\_SLEEP\_MODE = 1
 
 \label{sec:config-Prog}
   \item[PROGRAMMER] select your programmer type for \lcmd{avrdude} interface program.
-The correct selection of this option is needed, if you use the ''make upload'' or ''make fuses'' call
+  The correct selection of this option is needed, if you use the \lcmd{make upload} or \lcmd{make fuses} call
 of this Makefile.
 For further information please look to the manual pages of \lcmd{avrdude} and online documentation~\cite{avrdude}.
 Usually the Diamex ALL-AVR programmer is preselected in the Makefile and some
@@ -594,7 +594,7 @@ Example: PROGRAMMER=avrisp2
 Example: BitClock=5.0
 
   \item[PORT] select the port where \lcmd{avrdude} can reach your microcontroller (atmega).
-	  For further information please look to the manual pages of \lcmd{avrdude}.
+  For further information please look to the manual pages of \lcmd{avrdude}.
 Some programmers use a build-in USB-serial interface for the connection to the PC.
 For this programmers the PORT must be set to /dev/ttyUSBx or /dev/ttyACMx , where
 the last x is a assigned number between 0 and 9.\\
@@ -623,12 +623,12 @@ The .hex file contains the data for the program memory (flash) of the ATmega pro
 The .eep file contains the data for the EEprom memory of the ATmega.\\
 Both data files must be loaded to the correct memory.
 
-Additionally the operating state of the ATmega processor must be programmed with the ''fuses''.
+Additionally the operating state of the ATmega processor must be programmed with the \inquotes{fuses}.
 If you can use my Makefile and additionally the program \lcmd{avrdude} \cite{avrdude}, you need no exact
 knowledge of the details about the fuses.
-You have only to type ''make fuses'' if you have no crystal or
-''make fuses-crystal'' if you have installed the \(8MHz\) crystal to your printed board.
-With the ATmega168 series of the microcontroller you can also use ''make fuses-crystal-lp''
+You have only to type \lcmd{make fuses} if you have no crystal or
+\lcmd{make fuses-crystal} if you have installed the \(8MHz\) crystal to your printed board.
+With the ATmega168 series of the microcontroller you can also use \lcmd{make fuses-crystal-lp}
 to use a crytal with the low power mode.\\
 Never choose the crystal mode of clock generation, if you don't have installed
 the \(8MHz\) or \(16MHz\) crystal.
@@ -639,8 +639,8 @@ Maybe your program runs too slow, if you use program data compiled for
 But a wrong set of fuses may inhibit further ISP-programming.
 
 The program \lcmd{avrdude} probably reports a error for setting the extended fuse efuse.
-The reading of unused fuse bits is specified as ''1'' for the ATmega, but the
-\lcmd{avrdude} program mask the unused bits, so that it expect a ''0'' for all unused bits.
+The reading of unused fuse bits is specified as \inquotes{1} for the ATmega, but the
+\lcmd{avrdude} program mask the unused bits, so that it expect a \inquotes{0} for all unused bits.
 Normally the efuse should be set to 0xfc, but \lcmd{avrdude} read back 0x04 with the mask.
 You can change the file \lname{avrdude.conf} to change the behaviour of \lcmd{avrdude} or
 you can set the efuse to 0x04. 
@@ -650,7 +650,7 @@ Probably the fuses are also set correctly with the error message.
 
 \newpage
 \subsection{Using of Linux}
-In order to spare other colleagues my experience of desperation and ''sleepless nights'',
+In order to spare other colleagues my experience of desperation and \inquotes{sleepless nights},
 this subchapter was written.
 I had acquired a clone tester without any AVR experience and wanted to let it spell the
 German language. 
@@ -776,7 +776,7 @@ git version
 The \lcmd{git} program should respond with the output of its version number.
 If a folder transistortester already exists in your home directory,
 you should rename or delete it.
-The package ''git'' is used for downloading the sources and the documentation from the Git archive.
+The package \inquotes{git} is used for downloading the sources and the documentation from the Git archive.
 With the command:
 \begin{large} \vspace{-0.4em} \begin{verbatim}
 git clone https://github.com/Mikrocontroller-net/transistortester
@@ -791,9 +791,9 @@ the command with options like \lcmd{ls -lh}.
 In this example two options for the \lcmd{ls} command have been combined here,
 the \lcmd{ -l} option and the \lcmd{ -h} option.
 This input form is a short form for the command \lcmd{ls -l -h} or
-\lcmd{ls -l --human-readable}.
+\lcmd{ls -l {-}{-}human-readable}.
 Some options appear in two forms, a short one with one - like \lcmd{ -h} and a long form
-with two -  like \lcmd{ --human-readable}.
+with two -  like \lcmd{ {-}{-}human-readable}.
 Usually the sequence of the options doesn't care, but the options must by separated
 by at least one space \keys{\space}.
 If you write some short form options (one character) together, there is no space allowed
@@ -819,7 +819,7 @@ in thbe right working directory.
 Because the ATmega can be easy programmed with a \lcmd{make upload} command,
 we should first prepare the access to the interface of the ISB-programmer.
 The further operating steps you can find in section \ref{sec:Arbeitsumgebung}
-at page \pageref{sec:arbeitsumgebung}.
+at page \pageref{sec:Arbeitsumgebung}.
 
 \subsubsection{usage of interfaces}
 \label{sec:Schnittstellen}
@@ -872,7 +872,7 @@ The group \lname{dialout} should appear in the list,
 otherwise the change of group membership is decribed in the
 next working point.
 Another example for the system log of a programmer with serial interface
-is a ''Diamex ISP-PRog NG'' programmer:
+is a \inquotes{Diamex ISP-PRog NG} programmer:
 
 \begin{footnotesize} \begin{verbatim}
 usb 1-6: new full-speed USB device number 8 using xhci_hcd
@@ -897,7 +897,7 @@ use a name \lname{ttyUSB} instead of \lname{ttyACM}.\\
 If your programmer does not use a standard USB-serial interface,
 but a special USB interface,
 you must probably prepare your system i to enable user access for this device.
-Your PORT setting in the Makefile should be ''usb'' for this devices.
+Your PORT setting in the Makefile should be \inquotes{usb} for this devices.
 If you have connected a ISP programmer with USB interface,
 you can see the recognized USB devices with the command \lcmd{lsusb}
 in any consol window.
@@ -911,7 +911,7 @@ Bus 002 Device 059: ID 2341:0042 Arduino SA Mega 2560 R3 (CDC ACM)
 Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
 \end{verbatim} \end{footnotesize}
 A Device 58 is detected here a a AVR ISP mkII type (DIAMEX ALL-AVR).
-The also detected USB device 59 is a ''USB-serial'' type device.
+The also detected USB device 59 is a \inquotes{USB-serial} type device.
 The ID 03eb is a vendor ID and the ID 2104 is a product ID of this ISP-programmer.
 Both ID's are required for a entry in the file \lname{/etc/udev/rules.d/90-atmel.rules}
 and can be added with:
@@ -931,7 +931,7 @@ For the \lcmd{xed} editor your call would be:
 \begin{large} \vspace{-0.4em} \begin{verbatim}
 sudo xed /etc/udev/rules.d/90-atmel.rules
 \end{verbatim} \end{large}
-You should add the above ''SUBSYSTEM=='' line to this file and close the file.
+You should add the above \inquotes{SUBSYSTEM==} line to this file and close the file.
 You can also build the entry without any editor only with the command feature:
 \begin{footnotesize} \vspace{-0.4em} \begin{verbatim}
 sudo echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2104"
@@ -944,7 +944,7 @@ Now your system give you access to the device, if you are member of the \lname{p
 Therefore your user identification should be a member of the group plugdev and also
 a member of the group \lname{dialout} for USB-serial devices..
 The correct setting for a non USB-serial type of ISP-programmer
-in your Makefile should be ''PORT=usb''.\\
+in your Makefile should be \inquotes{PORT=usb}.\\
 
 \subsubsection{group membership}
  
@@ -1056,12 +1056,12 @@ At last I would like to list the most important Makefile orders:
 \begin{table}[H]
 %  \begin{center}
     \begin{tabular}{ l | l}
-	Instruction & Function\\
+      Instruction & Function\\
     \hline
     \lcmd{make clean} & to clean old files\\
     \lcmd{make}       & compile the transistor tester sources\\
-    \lcmd{make fuses} & to set the ATmega ''fuses'' without crystali RC-clock\\
-    \lcmd{make fuses-crystal} & to set the ATmega ,,fuses'' for crystal operation!\\
+    \lcmd{make fuses} & to set the ATmega \inquotes{fuses} without crystali RC-clock\\
+    \lcmd{make fuses-crystal} & to set the ATmega \inquotes{fuses} for crystal operation!\\
     \lcmd{make upload} & to load the complete program with the ISP-programmer to the ATmega.\\
     \end{tabular}
 %  \end{center}
@@ -1175,7 +1175,7 @@ First you can shorten the LED and try again. If your Tester now starts,
 your LED may be faulty or mounted with wrong polarity. If this is not
 the reason, the current amplification factor of your T3 transistor (BC557C)
 is insufficient. The current to the base of T3 is lower in the microcontroller
-state as in the ''key pressed'' state.
+state as in the \inquotes{key pressed} state.
 
 \item[Nothing is readable on the LCD display]
 Check the voltage at the contrast pin at the LCD display (pin 3). Adjust to

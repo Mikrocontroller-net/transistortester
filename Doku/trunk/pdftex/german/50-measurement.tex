@@ -1,12 +1,12 @@
 \chapter{Beschreibung des Messverfahrens}
 \label{sec:measurement}
 Ein vereinfachtes Schaltbild eines Eingangs-/Ausgangs-Pin des ATmega wird in Abbildung~\ref{fig:port} gezeigt.
-Der Schalter PUD schaltet die Versorgung für alle ,,Pull Up''-Widerstände des ATmega ab.
+Der Schalter PUD schaltet die Versorgung für alle \inquotes{Pull Up}-Widerstände des ATmega ab.
 Mit dem Schalter DD kann der Ausgang abgeschaltet werden, der Eingang funktioniert sowohl im Ausgabe- wie im
-Eingabe-Modus. Im Eingabe-Modus wird mit dem Ausgabewert (PORT) der ,,Pull Up''-Widerstand des Eingangs mit geschaltet.
+Eingabe-Modus. Im Eingabe-Modus wird mit dem Ausgabewert (PORT) der \inquotes{Pull Up}-Widerstand des Eingangs mit geschaltet.
 Die beiden Schalter PORT und DD können nicht gleichzeitig, sondern nur nacheinander geschaltet werden.
-Weil beim Umschalten der ,,Pull Up''-Widerstand die Messung stören könnte, bevorzuge ich die komplette
-Abschaltung aller ,,Pull Up''-Widerstände mit dem PUD-Schalter.
+Weil beim Umschalten der \inquotes{Pull Up}-Widerstand die Messung stören könnte, bevorzuge ich die komplette
+Abschaltung aller \inquotes{Pull Up}-Widerstände mit dem PUD-Schalter.
 Natürlich sind die Schalter elektronisch und die Widerstände \(19\Omega\) und \(22\Omega\) sind angenäherte Werte.
 \begin{figure}[H]
 \centering
@@ -57,6 +57,6 @@ mit VCC oder GND, oder der Pin kann über den \(680\Omega\)-Widerstand mit VCC o
 
 Wenn die Kondensatormessung des Testers konfiguriert ist, versucht der Tester vor allen Messungen erst einmal,
 die Kondensatoren an allen Anschlusspins zu entladen. Wenn das nicht gelingt, also die Restspannung zu hoch bleibt,
-wird das Entladen nach etwa 12 Sekunden mit der Meldung ,,Cell!'' abgebrochen. Dies kann auch dann vorkommen, wenn
+wird das Entladen nach etwa 12 Sekunden mit der Meldung \inquotes{Cell!} abgebrochen. Dies kann auch dann vorkommen, wenn
 gar kein Kondensator angeschlossen ist. Die Ursache kann in diesem Fall sein, dass die Entlade-Grenzspannung für diesen
 ATmega zu niedrig gewählt ist. Man kann eine höhere Restspannung mit der Makefile-Option CAP\_EMPTY\_LEVEL wählen.

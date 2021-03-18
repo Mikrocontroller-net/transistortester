@@ -60,7 +60,7 @@ The previous and next function is also shown in row 2 and 4 of the display in th
 After a longer wait time without any interaction the program leave the menu and returns to the normal transistor tester function.
 With a short key press the next selection can be shown.
 A longer key press starts the shown or marked function.
-After showing the last function ''switch off'', the first function will be shown next.
+After showing the last function \inquotes{switch off}, the first function will be shown next.
 
 If your tester has also the rotary pulse encoder installed, you can call the menu with the additional functions
 also with a fast rotation of the encoder during the result of a previous test is shown.
@@ -71,7 +71,7 @@ A fast rotarion of the encoder will return to the selection menu.
 
 \begin{description} \setlength{\itemsep}{0em}
  \item[frequency]
-The additional function ''frequency'' (frequency measurement) uses the ATmega Pin PD4, which is also connected to the LCD.
+ The additional function \inquotes{frequency} (frequency measurement) uses the ATmega Pin PD4, which is also connected to the LCD.
 First the frequency is allways measured by counting.
 If the measured frequency is below \(25kHz\), additionally the mean period of the input signal
 is measured and with this value the frequency is computed with a resolution of up to \(0.001Hz\).
@@ -79,7 +79,7 @@ By selecting the POWER\_OFF option in the Makefile, the period of frequency meas
 The frequency measurement will be finished with a key press and the selectable functions are shown again.\\
 
  \item[f-Generator]
-With the additional function ''f-Generator'' (frequency generator) you can select output frequencies between 1Hz and 2MHz.
+ With the additional function \inquotes{f-Generator} (frequency generator) you can select output frequencies between 1Hz and 2MHz.
 You can change the selected frequency only at the highest shown digit location. 
 For the locations 1Hz up to 10kHz digits between 0 and 9 can be selected.
 For the highest 100kHz location you can select numericals between 0 and 20.
@@ -96,7 +96,7 @@ With periodical short key press you can prevent the time out of the frequency ge
 With a long key press (\textgreater~2s) you will stop the frequency generator and return to the function menu.\\
 
 \item[10-bit PWM]
-The additional function ''10-bit PWM'' (Pulse Width Modulation) generates a fixed frequency with selectable
+The additional function \inquotes{10-bit PWM} (Pulse Width Modulation) generates a fixed frequency with selectable
 puls width at the pin TP2.
 With a short key press (\textless~0.5s) the pulse width is increased by \(1\%\), with a longer key press the pulse width
 is increased by \(10\%\).
@@ -105,11 +105,11 @@ If the POWER\_OFF option is selected in the Makefile, the frequency generation i
 The frequency generation can also be finished with a very long key press (\textgreater~1.3s).\\
 
 \item[C+ESR@TP1:3]
-The additional function ''C+ESR@TP1:3'' selects a stand-alone capacity measurement with 
+The additional function \inquotes{C+ESR@TP1:3} selects a stand-alone capacity measurement with 
 ESR (Equivalent Series Resistance) measurement at the test pins TP1 and TP3. 
 Capacities from \(2\mu F\) up to \(50mF\) can be measured. 
 Because the measurement voltage is only about \(300mV\), in most cases the capacitor can be
-measured ''in circuit'' without previous disassembling.
+measured \inquotes{in circuit} without previous disassembling.
 If the POWER\_OFF option is selected in the Makefile, the count of measurements is limited
 to 250, but can be started immediately again.
 The series of measurements can be finished with a long key press.\\
@@ -144,18 +144,18 @@ After a automatically start of the capacitor meter function the tester returns w
 the normal tester function.
 
 \item[rotary encoder]
-With the function ''rotary encoder'' a rotary encoder can be checked.
+With the function \inquotes{rotary encoder} a rotary encoder can be checked.
 The three pins of the rotary encoder must be connected in any order to the three probes of the transistor tester 
 before the start of the function. 
 After starting the function the rotary knob must be turned not too fast.
 If the test is finished successfully, the connection of the encoder switches  is shown symbolic in display row 2.
 The tester finds out the common contact of the two switches and shows, if the indexed position has
 both contacts in open state ('o') or in closed state ('C').
-A rotary encoder with open switches at the indexed positions is shows in row 2 for two seconds as ''1-/-2-/-3 o''.
+A rotary encoder with open switches at the indexed positions is shows in row 2 for two seconds as \inquotes{1-/-2-/-3 o}.
 This type of encoder has the same count of indexed positions as count of pulses for every turn. 
 Of course the pin number of the right common contact is shown in the middle instead of '2'.
 If also the closed switches state is detected at the indexed positions, the row 2 of the display is also
-shown as ''1---2---3 C'' for two seconds.
+shown as \inquotes{1---2---3 C} for two seconds.
 I don't know any rotary encoder, which have the switches always closed at any indexed position.
 The interim state of the switches between the indexed positions is also shown in row 2 for a short time (\textless\(~0.5s\))
 without the characters 'o' or 'C'.
@@ -177,12 +177,12 @@ By the way the exactly capacity value of electrolytic capacitors is unimportant,
 with temperature and DC-voltage.
 
 \item[Selftest]
-With the menu function ''Selftest'' a full selftest with calibration is done.
+With the menu function \inquotes{Selftest} a full selftest with calibration is done.
 With that call all the test functions T1 to T7 (if not inhibited with the NO\_TEST\_T1\_T7 option) 
 and also the calibration with external capacitor is done every time.\\
 
 \item[Voltage]
-The additional function ''Voltage'' (Voltage measurement) is only possible, if the serial output is deselected
+The additional function \inquotes{Voltage} (Voltage measurement) is only possible, if the serial output is deselected
 or the ATmega has at least 32 pins (PLCC) and one of the additional pins ADC6 or ADC7 is used for the measurement.
 Because a 10:1 voltage divides is connected to PC3 (or ADC6/7), the maximum external voltage can be \(50V\).
 A installed DC-DC converter for zener diode measurement can be switched on by pressing the key.
@@ -210,7 +210,7 @@ You can select the colors red, green and blue with a longer key press. The inten
 selected color, which is marked with a {\textgreater} symbol in column 1, can be changed by a turn of the rotary encoder.
 
  \item[Show data]
-The function ,,Show Data'' shows besides the version number of the software the data of the calibration.
+ The function \inquotes{Show Data} shows besides the version number of the software the data of the calibration.
 These are the zero resistance (R0) of the pin combination 1:3, 2:3 and 1:2 .
 In addition the resistance of the port outputs to the \(5V\) side (RiHi) and
 to the \(0V\) side (RiLo) are shown.
@@ -222,10 +222,10 @@ With a left turn of the rotary encoder you can repeat the output of the last pag
 
 
 \item[Switch off]
-With the additional function ''Switch off'' the tester can be switched off immediately.\\
+With the additional function \inquotes{Switch off} the tester can be switched off immediately.\\
 
 \item[Transistor]
-Of course you can also select the function ''Transistor'' (Transistor tester) to return to a normal Transistor tester measurement. 
+Of course you can also select the function \inquotes{Transistor} (Transistor tester) to return to a normal Transistor tester measurement. 
 \end{description}
 
 With the selected POWER\_OFF option in the Makefile, all additional functions are limited in time without interaction to prevent a discharged battery.
@@ -240,7 +240,7 @@ with a normal measurement.
 
 If the self test is started, all of the documented tests in the Selftest chapter \ref{sec:selftest} will be done.
 If the tester is configured with the menu function (option WITH\_MENU), 
-the full selftest with the tests T1 to T7 are only done with the ''Selftest'' function, 
+the full selftest with the tests T1 to T7 are only done with the \inquotes{Selftest} function, 
 which is selectable as menu function.
 In addition the calibration with the external capacitor is done with every call from function menu,
 otherwise this part of calibration is only done first time.
@@ -258,7 +258,7 @@ But the equipment should be the same, which is used for further measurements.
 Otherwise the zero offset for capacity measurement is not detected correctly.
 The resistance values of port outputs are determined at the beginning of every measurement with this option.\\
 
-If you have selected the samplingADC function in the Makefile with the option ''WITH\_SamplingADC = 1'',
+If you have selected the samplingADC function in the Makefile with the option \inquotes{WITH\_SamplingADC = 1},
 two special steps are included to the calibration precedure.
 After the normal measuring of the zero capacity values, also the zero capacity values for the samplingADC function is
 measured (C0samp). As last step of the calibration the connection of a test capacitor at pin~1 and pin~3 is requested for
@@ -292,7 +292,7 @@ Normally the Tester shows the battery voltage with every start. If the voltage f
 a warning is shown behind the battery voltage. If you use a rechargeable \(9V\) battery, you should replace
 the battery as soon as possible or you should recharge.
 If you use a tester with attached \(2.5V\) precision reference, the measured supply voltage will be shown
-in display row two for 1 second with ''VCC=x.xxV''.
+in display row two for 1 second with \inquotes{VCC=x.xxV}.
 
 It can not repeat often enough, that capacitors should be discharged before measuring.
 Otherwise the Tester can be damaged before the start button is pressed.
@@ -449,7 +449,7 @@ If the resonant frequency let assume a parallel connected capacitor, the inducta
 is not shown and the resistance value is shown in line 1.
 For this resonant circuit the quality factor Q is also computed and shown behind the frequency value in line 3.
 You can identify this type of measurement with the inductance value at the first position of line 2,
-followed by the text '' if '' and the value of the assumed parallel capacity.
+followed by the text \inquotes{ if } and the value of the assumed parallel capacity.
 The value of this parallel capacitor can currently only be set with the calibration function (\mbox{\begin{large}1 \electricC 3~10-30nF(L)\end{large}}).
 
 For displays with only two lines, the content for the third line is shown time-delayed in line 2.

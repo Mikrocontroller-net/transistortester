@@ -427,8 +427,8 @@ special serial interface., as shown in figure \ref{fig:ST7920lcd}.
 \end{figure}
 
 For both connection types the software must be configured in a special way.
-The Makefile option ''WITH\_LCD\_ST7565 = 7920'' must be set in any case, for the serial
-connection type you must set also the option ''CFLAGS += -DLCD\_INTERFACE\_MODE=5''.
+The Makefile option \inquotes{WITH\_LCD\_ST7565 = 7920} must be set in any case, for the serial
+connection type you must set also the option \inquotes{CFLAGS += -DLCD\_INTERFACE\_MODE=5}.
 The table~\ref{tab:ser-processor} shows the connection of the serial signals with
 the INTERFACE\_MODE 5 (ST7920) and 7 (SSD1803) for different processors.
 
@@ -559,8 +559,8 @@ used with this controller. The output is simular to the character display.
 As with the most graphical displays this controller also operated with 3.3~Volt.
 Therefore a signal conversion for the \(5V\) outputs of the ATmega is required.
 For the SPI interface and the 3-line interface you can use the outputs of the ATmega
-like ''open collector'' outputs with the Makefile option LCD\_SPI\_OPEN\_COL.
-You must use ''Pull-Up'' resistors with this option or you should not set
+like \inquotes{open collector} outputs with the Makefile option LCD\_SPI\_OPEN\_COL.
+You must use \inquotes{Pull-Up} resistors with this option or you should not set
 the option PULLUP\_DISABLE in the Makefile.
 Currently only the 3-line interface is tested with the PCF8814 controller.
 
@@ -696,7 +696,7 @@ too much to save power consuming.
 To improve the switching with lower battery voltage or lower current amplification factor of
 the PNP transistor T3, you should reduce the resistance to \(3.3k\Omega\).
 \item[Additional pull-up resistor at PD7]
-The missing pull-up resistor results to a switch off of the tester with the message ''Timeout''
+The missing pull-up resistor results to a switch off of the tester with the message \inquotes{Timeout}
 after a short display time.
 The software is configured with the option PULLUP\_DISABLE, that all internal pull-up
 resistors are switched off. For that reason the voltage of pin PD7 is not definded,
@@ -914,7 +914,7 @@ your external ISP programmer must have a external clock for programming or a cry
 The second version of rebuilded tester is build with SMD components. Also the fix installed ATmega168
 is a SMD type with 32TQFP body.
 Fortunately on the board is a 10-pole ISP connector provided for the programming.
-I have analysed the board version ''2.1 2012/11/06''. One error is the assembly of the part ''D1'',
+I have analysed the board version \inquotes{2.1 2012/11/06}. One error is the assembly of the part \inquotes{D1},
 which should be a precision \(2.5V\) voltage reference. Assembled is only a zener diode.
 This part should be removed. You can mount a LM4040AIZ2.5 or LT1004CZ-2.5 precision voltage reference
 at this place. A missing voltage reference is noticed by the software, so that you must not install
@@ -925,7 +925,7 @@ board has GND level only on pin 4 and pin 6 of the ISP.
 The label of the ATmega168 was rub away and there was no documentation delivered with the part.
 The lock fuses of the ATmega were set, so no readout was possible.
 But I could install the software version 1.05k without any problems.
-Another user has problems with the same software version 1.05k. This user has the chinese board ''2.2 2012/11/26''.
+Another user has problems with the same software version 1.05k. This user has the chinese board \inquotes{2.2 2012/11/26}.
 The software runs only without problems, if a additional \(100nF\) keramic capacitor was placed between
 the pin 18-AVCC and 21-GND near by the ATmega.
 The software 1.05k uses the sleep state of the ATmega for waiting time. For this reason the current alternates
@@ -999,9 +999,9 @@ of the Fish8840 tester now.
 Instead of this modification you can also use a special output mode of the 4~SPI signals of the ATmega
 with the Makefile option LCD\_SPI\_OPEN\_COL .
 With this option the outputs are not switched to VCC level,
-but the internal ''pull-up'' resistors are switched on during the output of a high level.
+but the internal \inquotes{pull-up} resistors are switched on during the output of a high level.
 If the option PULLUP\_DISABLE is set, additionally a external pull-up resistor for
-the ''Reset'' signal (PD0) is required.
+the \inquotes{Reset} signal (PD0) is required.
 Because the data signals are never switched to VCC directly, the \(3.3V\) power of the LCD controller
 can not be elevated.
 My version of the Fish8840 tester has all signals for connecting a character display
@@ -1054,7 +1054,7 @@ increase of the \(3.3V\) power of the display controller.
 
 With the upgrade to version 1.12k some problems has occured.
 If the extended fuse is set to 0x04 (0xfc) as recommended, some measurements has
-caused a ''Brown Out'' reset of the processor.
+caused a \inquotes{Brown Out} reset of the processor.
 This resets are caused by short voltage drops of the VCC power.
 I have added a additional \(4.7\mu F\) ceramic capacitor at the input side of
 the voltage regulator and a \(10\mu F\) ceramic capacitor at the output side (VCC)
@@ -1074,7 +1074,7 @@ to enable a regular operation. With that setting the voltage drops remain undete
 \label{fig:WeiM8mod}
 \end{figure}
 
-A additional chinese version with graphical display is the ''LCD-T4'' tester with a yellow 
+A additional chinese version with graphical display is the \inquotes{LCD-T4} tester with a yellow 
 printed board.
 I have removed the display for replacing the software with a newer version.
 At the right picture of figure~\ref{fig:T4_front} you can see in the right upper corner the ISP male connector
@@ -1084,7 +1084,7 @@ the holes instead and have fixed it with a finger during the programming.
 With that procedure the male connector can be easy removed an the display can be mounted again to
 it's origin place.
 The chinese software could be replaced with the 1.12k without any noticeable problem. 
-Also the activating of the ''brown-out'' monitor by setting the extended fuse has not
+Also the activating of the \inquotes{brown-out} monitor by setting the extended fuse has not
 shown any surprice.
 
 \begin{figure}[H]
@@ -1107,7 +1107,7 @@ You can see the upgraded \(5mm\) threaded bolt and the upgraded cables with meas
 at the pictures of the back side in figure \ref{fig:T4_back}.
 Because the data signals for the graphical LCD controller have also no
 level adaption (\(5V\) -\textgreater~\(3.3V\)), the setting of the option LCD\_SPI\_OPEN\_COL is recommended.
-Due to the fact, that the board can not be easy upgraded with a ''pull-up'' resistor,
+Due to the fact, that the board can not be easy upgraded with a \inquotes{pull-up} resistor,
 it make sense to remove the option PULLUP\_DISABLE instead. 
 This board is lesser practical for later extensions, a replacement of the display is
 also difficult to realize.
@@ -1128,7 +1128,7 @@ also difficult to realize.
   \label{fig:T4_back}
 \end{figure}
 
-A additional chinese version with graphical display is offered with the name ''GM328''.
+A additional chinese version with graphical display is offered with the name \inquotes{GM328}.
 For this version the graphical display is connected with a adapter circuit board to the 16-pol female connector. 
 The port PD5 of the ATmega is connected via pin 6 of the female connector to the CE (Chip Enable) input of the 
 graphical controller.
@@ -1136,7 +1136,7 @@ The signal CE is also conneted at the adapter board to the \(0V\) power (GND).
 This will resulte to a short-circuit if the ATmega will switch the PD5 output to \(5V\).
 But newer versions of the software also switch the CE signal, even if the signal is not necessary for
 correct operation.
-For correct operation of the ''GM328'' tester with newer software versions you should cut the
+For correct operation of the \inquotes{GM328} tester with newer software versions you should cut the
 connection of the CE signal to pin 6 of the male connector.
 
 \section{Chinese kits with graphic displays}
@@ -1279,7 +1279,7 @@ The same numbers can be found on the SMD test field
 and at three holes to solder your own test cable.\\
 
 
-The \textbf {Testport TP2} is also used for the output of the special function ,,f-Generator''.\\
+The \textbf {Testport TP2} is also used for the output of the special function \inquotes{f-Generator}.\\
 The pins labeled \textbf {LF} are intended for the measurement of quartz crystals with a low resonance frequency,
 \\und die mit \textbf {HF} are intended for crystals with a high resonance frequency.
 

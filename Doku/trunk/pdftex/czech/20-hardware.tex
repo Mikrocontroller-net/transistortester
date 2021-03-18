@@ -76,7 +76,10 @@ Vstup CE (Chip Enable) řídicí jednotky může být také připojen k GND nam�
   \label{tab:displayCon}
 \end{table}
 
-Aby bylo dosaženo jednoduššího propojení displeje s ATmega na DPS, je možné softwarově přiřadit portu D jiné funkce. Následující tabulka 2.2 zobrazuje změny přiřazení pinů pro textové displeje a alternativní připojení grafických displejů pomocí mikrokontroléru ATmega328. Kromě toho je zobrazeno přiřazení Portových vstupů pro přídavné funkce.
+Aby bylo dosaženo jednoduššího propojení displeje s ATmega na DPS, je možné softwarově přiřadit portu D jiné funkce.
+Následující tabulka 2.2 zobrazuje změny přiřazení pinů pro textové displeje a alternativní
+připojení grafických displejů pomocí mikrokontroléru ATmega328.
+Kromě toho je zobrazeno přiřazení Portových vstupů pro přídavné funkce.
 Pokud používáte grafický displej s možností mřížky(STRIP\_GRID\_BOARD=1)
 není funkce čítače frekvence možná, protože displej používá port PD4 (T0).
 Přesto se o toto přiřazení jedna čínská verze s grafickým zobrazením pokouší.
@@ -680,9 +683,14 @@ na kvalitu výsledků měření jsem nezjistil. Dokonce i odstranění kondenzá
 Ten kdo si přeje tento \(100nF\) kondenzátor nutně zachovat, může v Makefile volbu NO\_AREF\_CAP odstranit,
  a tím čekací dobu v programu aktivovat.
 
-\item[Dovybavení \(8MHz\) krystalu] S trochou dovednosti lze na pájecí straně desky na vchody PB6 Pin9 a PB7 Pin10  \(8MHz\) krystal přímo naletovat. V mé versi jsem si oba \(22pF\) kondenzátory odpustil. U všech zkoušených procesorů, toto řešení fungovalo. Tento dodatek ale není nezbytný.
+\item[Dovybavení \(8MHz\) krystalu] S trochou dovednosti lze na pájecí straně desky na vchody PB6 Pin9 a PB7
+Pin10  \(8MHz\) krystal přímo naletovat.
+V mé versi jsem si oba \(22pF\) kondenzátory odpustil.
+U všech zkoušených procesorů, toto řešení fungovalo.
+Tento dodatek ale není nezbytný.
 Taktovací frekvence, ale z důvodu lepší časové konstanty pro měření kondenzátorů v každém případě
-hodnotu \(8MHz\). Tuto hodnotu lze také v RC-oscilátorovém provozu nastavit pojistkou.
+hodnotu \(8MHz\).
+Tuto hodnotu lze také v RC-oscilátorovém provozu nastavit pojistkou.
 
 \item[Odblokování provozního napětí]
 V původním schématu zapojení od Markuse F. je pouze jeden blokovací \(100nF\)-kondenzátor
@@ -819,7 +827,8 @@ Při tom nastane jen zpoždění spuštění programu.
 \label{fig:t1280tester}
 \end{figure}
 
-Samozřejmě že všechny podporované displeje lze také připojit k ATmega1280 nebo ATmega2560, jak je uvedeno v tabulce~\ref{tab:display1280}.
+Samozřejmě že všechny podporované displeje lze také připojit k ATmega1280 nebo ATmega2560,
+jak je uvedeno v tabulce~\ref{tab:display1280}.
 
 \begin{table}[H]
   \begin{center}
@@ -1161,7 +1170,8 @@ Na desce je pod displejem připravena 6ti pólová řada pro ISP rozhraní s ná
 Aby bylo možné tester aktualizovat je třeba mít modifikovaný kabel, který lze relativně lehce vyrobit.
 Při dodání jsou na desce dvě řady zdířek a testovací sokl je volně přiložen.
 
-U toho níže zobrazeného testeru, byl sokl přímo naletován a tím ušetřená zdířková řada naletována na přestřižený vlastní kabel a zajištěna smršťovací bužírkou.  
+U toho níže zobrazeného testeru, byl sokl přímo naletován a tím ušetřená zdířková řada naletována
+na přestřižený vlastní kabel a zajištěna smršťovací bužírkou.  
 \begin{figure}[H]
  \centering
  \begin{overpic}[width=.64\textwidth]{../FIG/Kabel_Hiland.pdf}
@@ -1191,7 +1201,8 @@ U toho níže zobrazeného testeru, byl sokl přímo naletován a tím ušetřen
   \label{fig:Hiland}
 \end{figure}
 
-{\textbf {Die Testovací piny TP1, TP2 und TP3}} lsou určeny pro automatické zjištění a měření součástek a jsou popsány čísly {\textbf {1~~1~~1~~2~~3~~3~~3}}.
+{\textbf {Die Testovací piny TP1, TP2 und TP3}} lsou určeny pro automatické zjištění a měření
+součástek a jsou popsány čísly {\textbf {1~~1~~1~~2~~3~~3~~3}}.
 
 Stejná čísla jsou také SMD poli a kromě toho je možné, naletovat vlastní kabely.
 

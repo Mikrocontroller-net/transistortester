@@ -1,7 +1,7 @@
 \chapter{Description of the measurement procedures}
 \label{sec:measurement}
 The simplified schematic of a Input/Output-Port pin of the ATmega is shown in figure~\ref{fig:port}.
-The PUD switch isolates all ``pull up'' resistors of the ATmega. The output of a pin can be switched off
+The PUD switch isolates all \inquotes{pull up} resistors of the ATmega. The output of a pin can be switched off
 with the DD switch. The Input can operate regardless to the state of the switch DD.
 The PORT switch usually defined the output level, but also switches the pull up resistor.
 Because the Switches PORT and DD can not be changed at the same time but only one after another, the
@@ -58,6 +58,6 @@ or that the probe can be connected with the \(680\Omega\) resistor to VCC or GND
 If the capacitor measuring is configured for the tester, the tester will try to discharge the capacitors connected at all
 test pins.
 If discharge will fail, that means the remaining voltage is to high, the discharging will be aborted after about 12 seconds
-with the meassage ''Cell!''. This can also be happen, if no capacitor is connected to any test pin.
+with the meassage \inquotes{Cell!}. This can also be happen, if no capacitor is connected to any test pin.
 The cause for this can be, that the cut-off voltage is choosed to low for this ATmega.
 You can choose a higher voltage with the Makefile option CAP\_EMPTY\_LEVEL.

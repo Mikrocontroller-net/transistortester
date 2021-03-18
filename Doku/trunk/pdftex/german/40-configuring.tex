@@ -7,15 +7,15 @@ Die Übersetzung der Module wird mit einer \lname{Makefile} gesteuert. Die Entwi
 auf einem Ubuntu Linux mit den GNU-Werkzeugen (GNU toolchain, gcc version 4.5.3) durchgeführt.
 Es sollte möglich sein, ohne Schwierigkeiten andere Linux-Betriebssysteme zu benutzen.
 Um die übersetzen Daten in den Flash-Speicher oder den EEPROM-Speicher zu laden, wird das
-Programm \lcmd{avrdude} \cite{avrdude} (Version 5.11svn) von der \lname{Makefile} benutzt, wenn man ,,make upload'' aufruft.
+Programm \lcmd{avrdude} \cite{avrdude} (Version 5.11svn) von der \lname{Makefile} benutzt, wenn man \lcmd{make upload} aufruft.
 Das Programm \lcmd{avrdude} ist für Linux und Windows verfügbar.
 Der GNU C-Kompiler wird auch von der AVR-studio-Software unter Windows oder von
 der WinAVR \cite{winavr1},\cite{winavr2} Software benutzt.
 Sie können die Programmdaten (.hex und .eep) auch mit anderen Programmen in den ATmega laden,
 aber nur meine \lname{Makefile}-Version stellt sicher, dass die richtigen Daten in den gewählten Prozessor gelangen.
 Avrdude lädt Daten nur in den ATmega, wenn die Signaturbytes des angeschlossenen ATmega gleich mit dem ausgewählten sind.
-Wenn Sie die \lname{Makefile} ändern, wird die Software komplett neu übersetzt, wenn man ,,make'' oder
-,,make upload'' aufruft.
+Wenn Sie die \lname{Makefile} ändern, wird die Software komplett neu übersetzt, wenn man \lcmd{make} oder
+\lcmd{make upload} aufruft.
 Die Software, die für einen ATmega8 übersetzt wurde, läuft nicht auf einem ATmega168.
 Die Software, die für einen ATmega328 übersetzt wurde, läuft nicht auf einem ATmega168.
 Eine Ausnahme bildet Software, die für einen ATmega168 übersetzt wurde. Diese Programmdateien
@@ -141,9 +141,9 @@ Beispiel: CFLAGS += -DLCD\_INTERFACE\_MODE=2
 
   \item[LCD\_SPI\_OPEN\_COL] Mit der Option LCD\_SPI\_OPEN\_COL werden die Datensignale der SPI-Schnittstelle
 nicht nach VCC direkt geschaltet.
-Die Signale werden nur nach GND geschaltet, für die ,,high'' Signale werden die ,,Pull-Up'' Widerstände
+Die Signale werden nur nach GND geschaltet, für die \inquotes{high} Signale werden die \inquotes{Pull-Up} Widerstände
 des ATmega benutzt.
-Für das Signal ,,Reset'' wird aber ein externer Pull-Up Widerstand benötigt, wenn die Option PULLUP\_DISABLE
+Für das Signal \inquotes{Reset} wird aber ein externer Pull-Up Widerstand benötigt, wenn die Option PULLUP\_DISABLE
 gesetzt ist. Für die anderen SPI Signale werden die internen Pull-Up Widerstände vorübergehend benutzt,
 wenn die Option PULLUP\_DISABLE gesetzt ist.
 Beispiel: CFLAG += -DLCD\_SPI\_OPEN\_COL
@@ -213,7 +213,7 @@ Beispiel: CFLAGS += INVERSE\_TP
   \item[STRIP\_GRID\_BOARD] Diese Option passt die Software an eine andere Pinbelegung von Port~D für Streifenleiterplatinen an.
 Die Einzelheiten findet man im Hardwarekapitel \ref{sec:hardware} auf Seite~\pageref{sec:hardware}.
 Mit dieser Option werden auch alternative Belegungen der ATmega Pins für graphische Displays gewählt.
-Für die chinesische ,,T5'' Platine muß die Option STRIP\_GRID\_BOARD auf 5 gesetzt werden.
+Für die chinesische \inquotes{T5} Platine muß die Option STRIP\_GRID\_BOARD auf 5 gesetzt werden.
 Bei den Alternativen für die graphischen Displays bleibt die Belegung  des Tastensignals unverändert.\\
 Beispiel: CFLAGS += -DSTRIP\_GRID\_BOARD
 
@@ -274,7 +274,7 @@ Beispiel: CFLAGS += -DNO\_COMMON\_EMITTER\_HFE
 Diese Tests sind nützlich um Fehler in der Schaltung wie falsche Messwiderstände oder Isolationsprobleme zu finden.
 Wenn Ihre Schaltung fehlerfrei ist, können Sie die Selbsttest-Teile T1 bis T7 durch das Setzen dieser Option weglassen, um eine
 schnellere Kalibration zu erreichen.
-Bei eingeschalteter Menüfunktion werden die Selbsttest-Teile T1 bis T7 nur bei Aufruf der Menüfunktion ,,Selbsttest'' ausgeführt.
+Bei eingeschalteter Menüfunktion werden die Selbsttest-Teile T1 bis T7 nur bei Aufruf der Menüfunktion \inquotes{Selbsttest} ausgeführt.
 Der ATmega168-Prozessor benutzt die Selbsttest Teile T1 bis T7 nicht, wenn beide Messmethoden für die hFE-Bestimmung benutzt werden.\\
 Beispiel: CFLAGS += -DNO\_TEST\_T1\_T7
 
@@ -296,7 +296,7 @@ Beispiel: CFLAGS += -DSHORT\_UNCAL\_MSG
 
  \item[NO\_ICONS\_DEMO]
 Diese Option schaltet die zusätzliche Demonstration der Symbole und die Ausgabe des Zeichensatzes bei der Menüfunktion
-,,Zeige Daten'' ab.
+\inquotes{Zeige Daten} ab.
 Dies spart Platz im Flash-Speicher und auch Ausgabezeit für den Nutzer.\\
 Beispiel: CFLAGS += -DNO\_ICONS\_DEMO
 
@@ -349,7 +349,7 @@ Ohne die Option WITH\_UJT werden Unijunctiontransistoren als Doppeldiode erkannt
 Beispiel: CFLAGS += -DWITH\_UJT
 
   \item[WITH\_PUT]
-Diese Option schaltet einen zusätzlichen Test auf ,,Programmable Unijunction Transistor'' frei.
+  Diese Option schaltet einen zusätzlichen Test auf \inquotes{Programmable Unijunction Transistor} frei.
 Ohne den zusätzlichen Test werden PUTs normalerweise als Bipolartransistor (Bipolar Junction Transistor) erkannt.\\
 Beispiel: CFLAGS += -DWITH\_PUT
 
@@ -363,7 +363,7 @@ Diese Option sollte nur in Ausnahmefällen bebraucht werden.\\
 Beispiel: CFLAGS += -DFREQUENCY\_50HZ
 
   \item[CAP\_EMPTY\_LEVEL] Diese Option legt die Spannung (mV) für einen entladenen Kondensator fest.
-Der Wert kann höher als 3mV gesetzt werden, wenn die Entladung nicht zum Ende kommt. In diesen Fall meldet der Tester nach längerer Zeit ,,Cell!''.\\
+  Der Wert kann höher als 3mV gesetzt werden, wenn die Entladung nicht zum Ende kommt. In diesen Fall meldet der Tester nach längerer Zeit \inquotes{Cell!}.\\
 Beispiel: CFLAGS += -DCAP\_EMPTY\_LEVEL=3
 
   \item[WITH\_AUTO\_REF] Mit dieser Option wird die Referenzspannung gemessen, um den aktuellen Faktor für die Kapazitätsmessung 
@@ -481,25 +481,25 @@ Beispiel: CFLAGS += -DRESTART\_DELAY\_TICS = 6
 Anderenfalls wird der Programmspeicher (Flash) benutzt.
 Es wird empfohlen, den EEPROM-Speicher zu benutzen (Option gesetzt).\\
 Beispiel: CFLAGS += -DUSE\_EEPROM
-  \item[EBC\_STYLE] gibt an, dass die Ausgabe der Transistor-Pinbelegung im Format ,,EBC=...'' bzw. ,,GDS=...'' erfolgen soll.
-Diese Darstellungsweise spart Programmplatz. Ohne diese Option wird die Belegung im Format ,,123=...'' angezeigt, wobei
+  \item[EBC\_STYLE] gibt an, dass die Ausgabe der Transistor-Pinbelegung im Format \inquotes{EBC=...} bzw. \inquotes{GDS=...} erfolgen soll.
+  Diese Darstellungsweise spart Programmplatz. Ohne diese Option wird die Belegung im Format \inquotes{123=...} angezeigt, wobei
 jeder Punkt ein E (Emitter), B (Basis) oder K (Kollektor) sein kann.
 Bei FETs kann jeder Punkt entsprechend ein G (Gate), D (Drain) oder S (Source) sein.
 Wenn die Reihenfolge der Testpins nicht 1,2 und 3 in Leserichtung ist, kann die Reihenfolge mit der Option EBC\_STYLE=321 
-umgedreht werden. Dann wird die Pinbelegung in der Form ,,321=...'', was der gewohnten Leserichtung von links nach rechts
+umgedreht werden. Dann wird die Pinbelegung in der Form \inquotes{321=...}, was der gewohnten Leserichtung von links nach rechts
 entgegen kommt, wenn die Testpins die Reihenfolge 3,2,1 haben.\\
 Beispiel: CFLAGS += EBC\_STYLE
   \item[NO\_NANO] gibt an, dass der Dezimalpräfix Nano nicht zur Darstellung von Messergebnissen benutzt werden soll.
 So werden Kapazitätswerte in \(\mu F\) statt in \(nF\) angegeben.\\
 Beispiel: CFLAGS += NO\_NANO
   \item[NO\_LONG\_PINLAYOUT] kann gesetzt werden, um die lange Form der Pinbelegung bei graphischen Displays zu verhindern
- wie ,, Pin  1=E 2=B 3=C''.
-Wenn die Option gesetzt ist, wird die kurze Form wie ,, Pin  123=EBC'' benutzt.\\
+wie \inquotes{ Pin  1=E 2=B 3=C}.
+Wenn die Option gesetzt ist, wird die kurze Form wie \inquotes{ Pin  123=EBC} benutzt.\\
 Example: CFLAGS += NO\_LONG\_PINLAYOUT
-  \item[PULLUP\_DISABLE] gibt an, dass man die internen ,,Pull-Up''-Widerstände nicht benötigt.
- Sie müssen einen externen ,,Pull-Up'' Widerstand an Pin 13 (PD7) und VCC angeschlossen haben, um diese
+  \item[PULLUP\_DISABLE] gibt an, dass man die internen \inquotes{Pull-Up}-Widerstände nicht benötigt.
+Sie müssen einen externen \inquotes{Pull-Up} Widerstand an Pin 13 (PD7) und VCC angeschlossen haben, um diese
 Option benutzen zu können.
-Mit dieser Option wird ein möglicher Einfluss der ,,Pull-Up'' Widerstände auf die Mess-Ports (Port B und Port C) verhindert.\\
+Mit dieser Option wird ein möglicher Einfluss der \inquotes{Pull-Up} Widerstände auf die Mess-Ports (Port B und Port C) verhindert.\\
 Beispiel: CFLAGS += -DPULLUP\_DISABLE
 
   \item[ANZ\_MESS] diese Option gibt an, wie oft der ADC-Wert eingelesen und addiert werden soll.
@@ -552,16 +552,16 @@ Sonst wird eine \(0,4V\) höhere Warn-Spannung gewählt, bei unter \(3,25V\) sog
 bei unter \(1,3V\) nur eine \(0,1V\) höhere Warnspannung als die angegebene Leer-Spannung.
 Das Setzen der Leer-Spannung auf Werte wie \(5,4V\) wird für wiederaufladbare \(9V\) Batterien nicht empfohlen,
 weil das die Gefahr von Batterie-Schäden aufgrund von Tiefentladung erhöht!
-Wenn Sie wiederaufladbare \(9V\)-Batterien einsetzen, werden ,,Ready to Use''-Typen wegen der geringeren Selbstentladung empfohlen.\\
+Wenn Sie wiederaufladbare \(9V\)-Batterien einsetzen, werden \inquotes{Ready to Use}-Typen wegen der geringeren Selbstentladung empfohlen.\\
 Beispiel für low-drop-Regler (\(5,4V\)): CFLAGS += -DBAT\_POOR=5400 \\
 Beispiel für 7805-Regler (\(6,4V\)): CFLAGS += -DBAT\_POOR=6400
 
   \item[DC\_PWR] Dieser Spannungspegel in mV Einheiten gibt eine Grenze für die Batteriespannung an, oberhalb
-derer der Tester in den ,,DC\_Pwr\_Mode'' wechselt. Normalerweise läuft der Tester in einem Batterie-Modus,
+  derer der Tester in den \inquotes{DC\_Pwr\_Mode} wechselt. Normalerweise läuft der Tester in einem Batterie-Modus,
 wo alle Zusatzfunktionen zeitlich beschränkt laufen.
-Mit dem ,,DC\_Pwr\_Mode'' laufen die Zusatzfunktionen zeitlich unbeschränkt.
+Mit dem \inquotes{DC\_Pwr\_Mode} laufen die Zusatzfunktionen zeitlich unbeschränkt.
 Weil es keinen DC-DC Konverter gibt, der mit einer Eingangsspannung von \(0.9V\) läuft,
-wird der ,,DC\_Pwr\_Mode'' auch gestartet, wenn eine Batteriespannung unterhalb \(0.9V\) entdeckt wird.\\
+wird der \inquotes{DC\_Pwr\_Mode} auch gestartet, wenn eine Batteriespannung unterhalb \(0.9V\) entdeckt wird.\\
 Beispiel: CFLAGS += -DDC\_PWR=9500
 
  \item[BAT\_NUMERATOR] Definiert den Zähler eines Bruchs an, mit dem die Spannung bewertet werden muß,
@@ -583,7 +583,7 @@ Beispiel: CFLAGS += -DEXT\_NUMERATOR=10
  \item[EXT\_DENOMINATOR] Gibt den Nenner eines Bruches an, mit dem die externe Spannung bewertet werden muß.\\
 Beispiel: CFLAGS += -DEXT\_DENOMINATOR=1
 
-  \item[INHIBIT\_SLEEP\_MODE] sperrt die Benutzung des ,,Sleep Mode'' (Schlafzustand) des Prozessors.
+  \item[INHIBIT\_SLEEP\_MODE] sperrt die Benutzung des \inquotes{Sleep Mode} (Schlafzustand) des Prozessors.
 Normalerweise wird von der Software für längere Pausen der Schlafzustand des Prozessors benutzt, um Strom zu sparen.
 Die Benutzung dieses Schlafzustandes mit dem Wiederaufwachen spart zwar Batteriekapazität, 
 stellt eine zusätzliche Anforderung für den Spannungsregler dar.\\
@@ -614,7 +614,7 @@ Beispiel: PROGRAMMER=avrisp2
 Beispiel: BitClock=5.0
 
   \item[PORT] stellt die verwendete Schnittstelle ein, wo \lcmd{avrdude} den Mikrocontroller (ATmega) erreichen kann.
-	  Für weitere Informationen schauen Sie bitte in das Handbuch von \lcmd{avrdude} oder in die Online-Dokumentation~\cite{avrdude}.\\
+  Für weitere Informationen schauen Sie bitte in das Handbuch von \lcmd{avrdude} oder in die Online-Dokumentation~\cite{avrdude}.\\
 Beispiel: PORT=usb
 
 \end{description}
@@ -635,21 +635,21 @@ Die \lname{Makefile} stellt sicher, dass die Software entsprechend der vorher in
 eingestellten Optionen übersetzt wird. Schauen Sie bitte in die Datei LiesMich.txt
 im Verzeichnis trunk/default und in das Konfigurations-Kapitel~\ref{sec:config} ab Seite~\pageref{sec:config}.
 
-Das Ergebnis der Übersetzung hat die Dateierweiterung .hex und .eep.
-Die .hex-Datei enthält die Daten für den Programmspeicher (Flash) des ATmega-Prozessors.
-Die .eep-Datei enthält die Daten für den EEPROM des ATmega.\\
+Das Ergebnis der Übersetzung hat die Dateierweiterung \lname{.hex} und \lname{.eep}.
+Die \lname{.hex}-Datei enthält die Daten für den Programmspeicher (Flash) des ATmega-Prozessors.
+Die \lname{.eep}-Datei enthält die Daten für den EEPROM des ATmega.\\
 Beide Dateien müssen in den richtigen Speicher geladen werden.
 
-Zusätzlich muss der ATmega mit den ,,fuses'' richtig konfiguriert werden.\\
-Wenn Sie meine \lname{Makefile} zusammen mit dem Programm \lcmd{avrdude} \cite{avrdude} benutzen, brauchen Sie
-keine genaue Kenntnis über die Einzelheiten der fuses.
+Zusätzlich muss der ATmega mit den \inquotes{fuses} richtig konfiguriert werden.\\
+Wenn Sie meine \lname{Makefile} zusammen mit dem Programm \lcmd{avrdude} \cite{avrdude} benutzen,
+brauchen Sie keine genaue Kenntnis über die Einzelheiten der fuses.
 
-Sie brauchen nur ,,make fuses'' aufrufen, wenn Sie keinen Quarz benutzen oder Sie
-müssen ,,make fuses-crystal'' aufrufen, wenn Sie einen \(8MHz\) Quarz auf der Baugruppe installiert haben.
+Sie brauchen nur \lcmd{make fuses} aufrufen, wenn Sie keinen Quarz benutzen oder Sie
+müssen \lcmd{make fuses-crystal} aufrufen, wenn Sie einen \(8MHz\) Quarz auf der Baugruppe installiert haben.
 
 Bei der ATmega168-Serie der Mikrocontroller können Sie alternativ auch
-,,make fuses-crystal-lp'' aufrufen für den low power Quarz-Betrieb.\\
-Benutzen Sie niemals die Quarz-Variante, wenn Sie keinen \(8MHz\) oder \(16MHz\) Quarz installiert haben.
+\lcmd{make fuses-crystal-lp} aufrufen für den low power Quarz-Betrieb.\\
+Benutzen Sie niemals die Quarz-Varianten, wenn Sie keinen \(8MHz\) oder \(16MHz\) Quarz installiert haben.
 
 Wenn Sie sich nicht sicher mit den fuses sind, lassen Sie diese erst einmal wie
 vom Werk gesetzt und bringen Sie den Tester in diesem Zustand zum Laufen.\\
@@ -658,8 +658,8 @@ erzeugten Programmdaten benutzen, aber das kann man später korrigieren!
 Aber falsch gesetzte fuses können die spätere ISP-Programmierung verhindern.
 
 Vielleicht meldet das Programm \lcmd{avrdude} einen Fehler beim Setzen der extendet Fuse efuse.
-Das Lesen von unbenutzten Fuse Bits ist beim ATmega als ,,1'' spezifiziert, aber
-das \lcmd{avrdude} Programm maskiert die unbenutzten Bits, so daß es eine ,,0'' für alle unbenutzen Bits erwartet.
+Das Lesen von unbenutzten Fuse Bits ist beim ATmega als \inquotes{1} spezifiziert, aber
+das \lcmd{avrdude} Programm maskiert die unbenutzten Bits, so daß es eine \inquotes{0} für alle unbenutzen Bits erwartet.
 Normalerweise sollte die efuse auf 0xfc gesetzt werden, aber \lcmd{avrdude} liest eine 0x04 mit der Maske zurück.
 Man kann die Datei avrdude.conf ändern, um das Verhalten von \lcmd{avrdude} zu ändern oder
 die efuse auf 0x04 setzen. 
@@ -669,19 +669,19 @@ gesetzt werden. Wahrscheinlich sind die Fuses aber auch mit der Fehlermeldung ri
 \newpage
 \subsection{Benutzung von Linux}
 
-Um meine Erfahrung mit Verzweiflung und "`schlaflose Nächten"' anderen Kollegen zu ersparen,
+Um meine Erfahrung mit Verzweiflung und \inquotes{schlaflose Nächten} anderen Kollegen zu ersparen,
 wurde dieses Unterkapitel geschrieben.
 Ich hatte ohne jegliche AVR Erfahrung einen Clonetester erworben und wollte diesem die deutsche Sprache
-"`beibringen"'.\\
+\inquotes{beibringen}.\\
 
-Die dabei erworbenen Erfahrungen sollen anderen "'willigen"' Unerfahrenen helfen,
+Die dabei erworbenen Erfahrungen sollen anderen \inquotes{willigen} Unerfahrenen helfen,
 ERFOLGREICH ihren Tester zu programmieren.
 Diese Gelegenheit wird benutzt, dem Entwickler des Transistortester und Autor dieses Dokuments,  
 Karl-Heinz Kübbeler siehe \cite{karlheinz1} zu danken für sein Engagement und Geduld,
 denn die folgenden Seiten wären ohne seine Hilfe nie entstanden.
      
 Damit das Übersetzen der Firmware und Brennen ins MCU gelingt und gleichzeitig \dots
-"`das Rad nicht neu erfunden sein müsste"', wurde ein Teil der folgenden Seiten aus dem
+\inquotes{das Rad nicht neu erfunden werden muß}, wurde ein Teil der folgenden Seiten aus dem
 ursprünglichen Original übernommen.
 
 Also noch einmal \dots \LARGE{EINEN RIESEN DANK}
@@ -698,7 +698,7 @@ Es gibt auch sehr leistungsfähige Editoren wie vim oder emacs, die aber etwas
 Einarbeitungszeit erfordern. Speziell vim hat den Vorteil, daß er praktisch auf
 jedem System vorinstalliert ist. Aber gerade bei diesem Editor ist der
 Wechsel zwischen Eingabe-Modus und Befehls-Modus gewöhnungsbedürfig.
-Diese Anleitung soll alle "'nicht"' Linux Benutzer dazu animieren es NUN zu testen
+Diese Anleitung soll alle \inquotes{nicht} Linux Benutzer dazu animieren es NUN zu testen
 indem sie ihr Tester damit programmieren.
 
 Die nachfolgenden Beispiele wurden mit Linux Mint getestet, das
@@ -790,7 +790,7 @@ Die graphischen Paketmanager können auch dabei helfen, den Namen der Pakete her
 
 \subsubsection{Download der Quellen}
 
-Ob die Versionsverwaltung git erfolgreich installiert wurde,
+Ob die Versionsverwaltung \lcmd{git} erfolgreich installiert wurde,
 kann man mit dem folgenden Kommando prüfen:
 \begin{large} \vspace{-0.4em} \begin{verbatim}
 git version
@@ -805,26 +805,26 @@ git clone https://github.com/Mikrocontroller-net/transistortester
 \end{verbatim} \end{large}
 wird das komplette transistortester Archiv heruntergeladen.
 Die Dateien sind nun in dem Linux [Persönlicher Ordner] , üblicherweise \lname{/home/} gefolgt
-von Ihrem Benutzerkürzel, mit dem  Verzeichnisnamen ,,transistortester''.
+von Ihrem Benutzerkürzel, mit dem  Verzeichnisnamen \lname{transistortester}.
 Mit der Terminaleingabe  \lcmd{ls} \(\mbox{\keys{L} \keys{S} \keys{\return}}\) kann man
 das Vorhandensein überprüfen.
 Mehr Informationen über Dateien und Verzeichnisse erhält man mit
 dem Kommando \lcmd{ls -lh}. Hier wurden jetzt zwei Optionen für das Kommando \lcmd{ls} zusammengefasst,
 die \lcmd{{ -l}} Option und die \lcmd{{ -h}} Option. Diese Eingabeform ist also eine Kurzform für
-das Kommando \lcmd{ls -l -h} oder auch \lcmd{ls -l --human-readable}.
+das Kommando \lcmd{ls -l -h} oder auch \lcmd{ls -l {-}{-}human-readable}.
 Einige der Optionen sind in zwei Versionen vorhanden, einer kurzen mit einem - (\lcmd{{ -h}})
-und einer langen Form mit zwei - (\lcmd{{ --human-readable}}).
+und einer langen Form mit zwei - (\lcmd{{ {-}{-}human-readable}}).
 Die Reihenfolge der Optionen spielt übrigens keine Rolle,
 genau wie die Anzahl der trennenden Leerzeichen \keys{\space}.
 Bei fast allen Kommandos erfährt man mehr über die Bedienung und die Optionen
 durch durch Anhängen der \lcmd{{ --help}} Option.
-Das gilt natürlich auch für das Kommando git.\\
+Das gilt natürlich auch für das Kommando \lcmd{git}.\\
 
 Um neue Updates heruntergeladen, reicht es in der Zukunft, 
 \begin{large} \vspace{-0.4em} \begin{verbatim}
 git pull
 \end{verbatim} \end{large}
-im Arbeitsverzeichnis ,,transistortester'' einzugeben.
+im Arbeitsverzeichnis \lname{transistortester} einzugeben.
 Das kann je nach Kommandointerpreter auch mit
 \begin{large} \vspace{-0.4em} \begin{verbatim}
 (cd ~/transistortester ; git pull)
@@ -893,14 +893,14 @@ ls -l /dev/ttyACM*
 crw-rw---- 1 root dialout 166, 0 Mär 11 09:57 /dev/ttyACM0
 crw-rw---- 1 root dialout 166, 1 Mär 11 09:57 /dev/ttyACM1
 \end{verbatim} \end{footnotesize}
-Bei dieser Ausgabe kann man lesen, daß der Zugriff für den Benutzer ,,root''
-und für die Benutzergruppe ,,dialout'' erlaubt ist.
+Bei dieser Ausgabe kann man lesen, daß der Zugriff für den Benutzer \lname{root}
+und für die Benutzergruppe \lname{dialout} erlaubt ist.
 Mit dem Kommando \lcmd{id} können Sie ihre Gruppenzugehörigkeit überprüfen.
-Hier sollte die Gruppe ,,dialout'' in der Liste auftauchen,
+Hier sollte die Gruppe \lname{dialout} in der Liste auftauchen,
 sonst wird im nächsten Arbeitspunkt die Änderung der Gruppenzugehörigkeit
 beschrieben.
 Ein anderes Beispiel für das Systemprotokoll eines anderen
-ISP-Programmers ,,Diamex ISP-PRog NG'' sehen sie hier:
+ISP-Programmers \inquotes{Diamex ISP-PRog NG} sehen sie hier:
 \begin{footnotesize} \begin{verbatim}
 usb 1-6: new full-speed USB device number 8 using xhci_hcd
 usb 1-6: New USB device found, idVendor=16c0, idProduct=2a9b, bcdDevice=43.40
@@ -916,7 +916,7 @@ Bei diesem Beispiel ist der Gerätename identisch (ttyACM0).\\
 
 Wenn bis zu diesem Schritt alles in Ordnung ist,
 muß für dieses Beispiel nur der PORT Eintrag in der \lname{Makefile} auf
-,,PORT=/dev/ttyACM0'' geändert werden,
+\inquotes{PORT=/dev/ttyACM0} geändert werden,
 damit das \lcmd{avrdude} Programm auf den Programmer zugreifen kann.
 Wenn bei Ihrem System noch andere USB-seriell Schnittstellen benutzt
 werden, können die letzten Ziffern der Gerätebezeichnung abweichen.
@@ -925,7 +925,7 @@ Schnittstellen statt ttyACM den Namen ttyUSB verwendet.\\
 
 Wenn Ihr Programmer eine spezielle USB-Schnittstelle benutzt und
 keinen USB-seriell Typ, ist wahrscheinlich noch zusätzliche
-Arbeit erforderlich. Als PORT kann hier fest ,,usb'' in der \lname{Makefile}
+Arbeit erforderlich. Als PORT kann hier fest \inquotes{usb} in der \lname{Makefile}
 eingetragen werden. Es ist aber wahrscheinlich, daß Sie trotzdem
 keinen Zugriff auf das Gerät haben.
 Alle angeschlossenen USB-Geräte können durch Eingabe von \lcmd{lsusb} im Befehlsfenster 
@@ -942,7 +942,7 @@ Bus 002 Device 059: ID 2341:0042 Arduino SA Mega 2560 R3 (CDC ACM)
 Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub}
 \end{verbatim} \end{footnotesize}
 Hier wurde als Device 58 ein AVR ISP mkII erkannt (DIAMEX ALL-AVR).
-Das ebenfalls entdeckte Gerät mit der Nummer 59 gehört zur Gruppe der ,,USB-seriell'' Geräte.
+Das ebenfalls entdeckte Gerät mit der Nummer 59 gehört zur Gruppe der \inquotes{USB-seriell} Geräte.
 Die ID 03eb ist eine Herstellerkennung und die ID 2104 eine Produktkennung für diesen ISP-Programmer.
 Diese beiden Kennungen werden der Datei /etc/udev/rules.d/90-atmel.rules benötigt und erstellt
 mit Hilfe von:
@@ -1098,14 +1098,14 @@ Zum Schluß sind hier noch einmal die wichtigsten \lname{Makefile} Aufrufe aufge
 \begin{table}[H]
 %  \begin{center}
     \begin{tabular}{ l | l}
-	    Befehl     & Bedeutung\\
-	    \hline
+    Befehl     & Bedeutung\\
+    \hline
 \lcmd{make clean} 		& zum reinigen des Arbeitsumgebung\\
 \lcmd{make}      		& zum Übersetzen des Programms\\
-\lcmd{make fuses}		& zum setzen von ATmega ,,fuses'' ohne Quarz\\
-\lcmd{make fuses-crystal}	& zum Setzen von ATmega ,,fuses'' NUR mit Version mit Quarz!\\
+    \lcmd{make fuses}		& zum setzen von ATmega \inquotes{fuses} ohne Quarz\\
+    \lcmd{make fuses-crystal}	& zum Setzen von ATmega \inquotes{fuses} NUR mit Version mit Quarz!\\
 \lcmd{make upload}		& zum Laden des kompletten Programms über die ISP Schnittstelle in den ATmega.\\
-        \end{tabular}
+    \end{tabular}
 %  \end{center}
 %  \caption{}
 %  \label{}

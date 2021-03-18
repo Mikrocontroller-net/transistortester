@@ -248,7 +248,7 @@ Serieninduktivität und der Widerstand \(ESR\) stellt den äquivalenten Serienwi
 Es ist in Datenblättern üblich, den ESR gemessen bei einer Frequenz von \(100kHz\) und
 einer Temperatur von \(20{\degree}C\) anzugeben.
 Die Abbildungen \ref{fig:Cap_FC_data} und \ref{fig:Cap_FR_data} zeigen die vom Hersteller Panasonic 
-angegebenen ESR-Werte für die Elektrolytkondensatoren verschiedener Betriebs-Spannungen für die FC- und die ,,low ESR'' FR-Reihe.
+angegebenen ESR-Werte für die Elektrolytkondensatoren verschiedener Betriebs-Spannungen für die FC- und die \inquotes{low ESR} FR-Reihe.
 Beide Serien sind für eine maximale Temperatur von \(105{\degree}C\) ausgelegt.
 Die Abbildung \ref{fig:Cap_FC_FR_data} stellt die angegebenen Daten beider Serien bei einer zulässigen Betriebsspannung
 von \(25V\) dar. Wenn in der Baureihe verschiedene Ausführungen mit gleicher Kapazität und Spannung zur Verfügung stehen,
@@ -258,21 +258,21 @@ abhängig.
 
 \begin{figure}[H]
   \centering
-	\includegraphics[width=.8\textwidth]{../GNU/Cap_FC_dataGE.pdf}
+   \includegraphics[width=.8\textwidth]{../GNU/Cap_FC_dataGE.pdf}
   \caption{ESR-Werte aus dem Panasonic Datenblatt der Serie FC}
   \label{fig:Cap_FC_data}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-	\includegraphics[width=.8\textwidth]{../GNU/Cap_FR_dataGE.pdf}
+   \includegraphics[width=.8\textwidth]{../GNU/Cap_FR_dataGE.pdf}
   \caption{ESR-Werte aus dem Panasonic Datenblatt der Serie FR}
   \label{fig:Cap_FR_data}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-	\includegraphics[width=.8\textwidth]{../GNU/Cap_FC_FR_dataGE.pdf}
+   \includegraphics[width=.8\textwidth]{../GNU/Cap_FC_FR_dataGE.pdf}
   \caption{Vergleich der ESR-Werte der Serie FC mit der Serie FR}
   \label{fig:Cap_FC_FR_data}
 \end{figure}
@@ -776,10 +776,10 @@ Elektrolytkondensatoren eine Rolle.
 \end{figure}
 
 Wie schwierig es ist, für Kondensatormessungen den richtigen Bezugswert zu finden, soll die Abbildung~\ref{fig:capcompare} zeigen.
-Als Bezugswert wurde hier eine beste Schätzung genommen. Die Kurve ,,Multimeter'' zeigt die Abweichungen, die mit einem
+Als Bezugswert wurde hier eine beste Schätzung genommen. Die Kurve \inquotes{Multimeter} zeigt die Abweichungen, die mit einem
 Peaktech~3315 Multimeter gemessen wurden.
-Die nächste Kurve ,,LCR'' zeigt die Abweichungen, die mit einem Peaktech~2170 LCR-Meter in dem jeweils günstigsten Frequenzbereich gemessen wurden.
-Zum Vergleich werden mit der Kurve ,,ATmega168as'' auch noch die Messabweichungen eines ATmega168 bestücktem Transistor-Testers gezeigt.
+Die nächste Kurve \inquotes{LCR} zeigt die Abweichungen, die mit einem Peaktech~2170 LCR-Meter in dem jeweils günstigsten Frequenzbereich gemessen wurden.
+Zum Vergleich werden mit der Kurve \inquotes{ATmega168as} auch noch die Messabweichungen eines ATmega168 bestücktem Transistor-Testers gezeigt.
 Ob die gezeigten Fehler aber tatsächliche Messfehler des jeweiligen Gerätes sind, muss bezweifelt werden, da auch die
 Schätzung des Kapazitätswert nicht der wirklichen Kapazität entspricht.
 
@@ -799,7 +799,7 @@ Hierbei wurde nur der Nullwert der Kapazitätsmessung von \(39pF\) berücksichti
 nicht benutzt. Dieser Nullwert beinhaltet schon die \(2-3pF\), die durch die etwa \(12cm\) langen
 Anschlussleitungen mit den Klemmen verursacht werden.
 Auch das Board-Layout hat Einfluss auf diesen Nullwert.
-Diesen Nullwert habe ich mit der Boardversion ,,DG2BRS V 5.2.1'' ermittelt.
+Diesen Nullwert habe ich mit der Boardversion \inquotes{DG2BRS V 5.2.1} ermittelt.
 
 \begin{figure}[H]
   \begin{subfigure}[b]{.5\textwidth}
@@ -885,22 +885,22 @@ Als wesentliche Ursache wurde das unterschiedliche Verhalten (Offset-Spannung)
 des analogen Komparators herausgefunden.
 
 In Abbildung \ref{fig:CompAdjust} werden die Daten von den neun untersuchten Prozessoren gezeigt.
-Die Punkte ,,diff2ref'' zeigen die Spannungsdifferenz, die sich nach dem Laden
+Die Punkte \inquotes{diff2ref} zeigen die Spannungsdifferenz, die sich nach dem Laden
 eines Kondensators mit \(660nF\) zu der jeweiligen internen Referenzspannung ergibt.
 Idealerweise wäre diese Spannung immer Null, wenn der analoge
 Komparator rechtzeitig das Signal zum Beenden des Ladevorganges gegeben hätte.s
 Die kurze Verwaltungszeit des ATmega sollte bei der relativ großen Kapazität zu
 keiner messbaren Spannungserhöhung geführt haben.
-Die Punkte ,,CapErr'' zeigen die aus den Abbildungen \ref{fig:mega168all},
+Die Punkte \inquotes{CapErr} zeigen die aus den Abbildungen \ref{fig:mega168all},
 \ref{fig:mega168Aall} und \ref{fig:mega168PAall} 
 geschätzten Messfehler der einzelnen ATmega-Exemplare in Promille.
-Auffällig ist, wie die ,,CapErr'' Punkte den ,,diff2ref'' Punkten folgen.
-Deshalb zeigen die Punkte ,,diff'' die Differenz zwischen den jeweiligen ,,CapErr'' und
-,,diff2ref'' Punkten.
+Auffällig ist, wie die \inquotes{CapErr} Punkte den \inquotes{diff2ref} Punkten folgen.
+Deshalb zeigen die Punkte \inquotes{diff} die Differenz zwischen den jeweiligen \inquotes{CapErr} und
+\inquotes{diff2ref} Punkten.
 Für die Korrektur der Kondensatormessung kann also die Differenz der
-Kondensator-Ladespannung zur internen Referenzspannung (,,diff2ref'') benutzt werden.
-Dabei kann zusätzlich der mittlere Wert der Differenzen zu den ,,CapErr'' Schätzungen
-(,,diff'') berücksichtigt werden.
+Kondensator-Ladespannung zur internen Referenzspannung (\inquotes{diff2ref}) benutzt werden.
+Dabei kann zusätzlich der mittlere Wert der Differenzen zu den \inquotes{CapErr} Schätzungen
+(\inquotes{diff}) berücksichtigt werden.
 
 Im zweiten Teil der Abgleichprozedur muss also ein Kondensator hoher Güte zwischen Pin~1 und Pin~3 mit einer
 Kapazität zwischen \(100nF\) und \(20\mu F\) angeschlossen werden. 
@@ -918,8 +918,8 @@ Die Diagramme \ref{fig:mega168cal}, \ref{fig:mega168Acal}, \ref{fig:mega168PAcal
 \ref{fig:mega328Pcal} zeigen die Messergebnisse
 der gleichen Prozessoren in einer Standard-Softwarekonfiguration nach der Autokalibration.
 Die Prozessoren wurden alle mit der selben Software programmiert, lediglich die Makefile
-Option ,,PARTNO = '' musste wegen dem avrdude-Programm an den unterschiedlichen
-Prozessortyp (,,m168'', ,,m168p'', ,,m328'' oder ,,m328p'') angepasst werden. 
+Option \inquotes{PARTNO = } musste wegen dem avrdude-Programm an den unterschiedlichen
+Prozessortyp (\inquotes{m168}, \inquotes{m168p}, \inquotes{m328} oder \inquotes{m328p}) angepasst werden. 
 Nach der Programmierung wurde bei jedem ATmega ein
 Selbsttest gestartet und bei Test~10 ein Kondensator mit \(330nF\) an Pin~1 und Pin~3 angeschlossen.
 
@@ -967,8 +967,8 @@ Selbsttest gestartet und bei Test~10 ein Kondensator mit \(330nF\) an Pin~1 und 
 Zuletzt will ich die Wirkung der AUTO\_CAL-Option im Selbsttest noch einmal verdeutlichen.
 Die folgende Diagramm \ref{fig:MegaAuto} zeigt die Ergebnisse von drei ATmega-Prozessoren 
 mit der grössten Messabweichung noch einmal vor und nach der Kalibration.
-Die Punkte mit der Endung ,,unc'' zeigen die Messabweichungen ohne Kalibration.
-Die Linien mit der Endung ,,cal'' zeigen die Messabweichungen der gleichen Prozessoren
+Die Punkte mit der Endung \inquotes{unc} zeigen die Messabweichungen ohne Kalibration.
+Die Linien mit der Endung \inquotes{cal} zeigen die Messabweichungen der gleichen Prozessoren
 mit der gleichen Software nach der Kalibration im Selbsttest-Zweig.
 Die Ursache der Messabweichungen für große Kondensatoren (\textgreater\(40\mu F\)) ist
 noch nicht bekannt. Alle verwendeten Kondensatoren für diese Messreihe waren

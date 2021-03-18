@@ -11,7 +11,7 @@ zwei Sekunden durch einen Tastendruck der Starttaste bestätigt wird. Diese Best
 worden, damit der Tester nicht von selbst beim Messen von einem defekten Transistor in den Selbsttest geht.
 Nach Beenden des Selbsttestes wird der Tester mit normaler Messung fortfahren.
 Wenn kein Bauteil angeschlossen ist, wird der TransistorTester mit der
-Meldung ,,kein,unbek. oder defektes Bauteil'' enden.
+Meldung \inquotes{kein,unbek. oder defektes Bauteil} enden.
 Man kann die Selbsttest-Funktion nur für einen ATmega168 oder ATmega328 wählen.
 Bevor die Testschritte durchgeführt werden, wird zuerst der Null-Widerstand für alle drei Testpin-Kombinationen
 (T1:T3, T2:T3 und T1:T2) bestimmt. Diese Nullwiderstände werden für die zukünftigen ESR- und Widerstands-Messungen
@@ -21,7 +21,7 @@ von Widerständen über \(10\Omega\) nicht berüchsichtigt werden.
 Bei der Verwendung von Kabeln muß also auf entsprechend
 geringe Widerstandswerte geachtet werden.
 Falls die später gemessenen Widerstandswerte den jeweiligen Nullwiderstand um mehr als \(0,2\Omega\) unterschreiten,
-wird der Tester auf ,,unkalibriert'' zurückgesetzt. 
+wird der Tester auf \inquotes{unkalibriert} zurückgesetzt. 
 Dies wird durch den aktivierten Positionszeiger (Cursor)  beim Testen angezeigt.
 Die einzelnen Schritte der Selbsttestfunktion werden für Test~1 bis Test~7 in Zeile~1 des LC-Displays mit dem Buchstaben T
 gefolgt von der Schritt-Nummer dargestellt.
@@ -43,22 +43,22 @@ Hier ist die Liste der derzeit eingebauten Tests:
 \begin{enumerate}
 
 \item \textbf {Messung der \(1,3V\) (oder \(1,1V\)) Referenzspannung (band gap Reference).}
-In Zeile~1 wird der Text ,,Ref='' und die
+In Zeile~1 wird der Text \inquotes{Ref=} und die
 gemessene Spannung in mV angezeigt.
 Für den ATmega8 sollte die gemessene Spannung nahe bei \(1,3V\) liegen, für die anderen Prozessoren liegt
 die Referenzspannung normal um die \(1,1V\).
 Die zweite Zeile zeigt den resultierenden Faktor für die Kapazitäts-Messung mit dem \(470k\Omega\) Widerstand.
 
 \item \textbf {Vergleich der \(680\Omega\) Widerstände.} 
-In Zeile~1 wird der kryptische Text  ,,+RL- 12 13 23'' angezeigt. Das bedeutet:
-RL ist eine Kurzform für Resistor Low, was die \(680\Omega\) Widerstände meint. Die ,,12'' steht für: 
+In Zeile~1 wird der kryptische Text  \inquotes{+RL- 12 13 23} angezeigt. Das bedeutet:
+RL ist eine Kurzform für Resistor Low, was die \(680\Omega\) Widerstände meint. Die \inquotes{12} steht für: 
 Widerstand am Pin~1 ist verbunden mit VCC (+) und Widerstand am Pin~2 ist verbunden mit GND (-). 
 Das Ergebnis dieser Messung steht in Zeile~2 an erster Stelle als Differenz zum theoretischen Wert.
- In Zeile~1 folgt nun ,,13'', was bedeutet, dass der Widerstand von Pin~1 wieder nach VCC verbunden ist,
+In Zeile~1 folgt nun \inquotes{13}, was bedeutet, dass der Widerstand von Pin~1 wieder nach VCC verbunden ist,
 aber dass jetzt der \(680\Omega\) Widerstand von Pin~3  mit GND verbunden ist.
 Das Ergebnis steht in Zeile 2 an der mittleren Stelle als Differenz zum theoretischen Wert.
 
-Die letzte Messung dieses Tests ,,23'' bedeutet, dass nun der Widerstand von Pin~2 mit VCC verbunden ist und
+Die letzte Messung dieses Tests \inquotes{23} bedeutet, dass nun der Widerstand von Pin~2 mit VCC verbunden ist und
 der Widerstand von Pin~3 mit GND verbunden ist.
 Das Ergebnis steht in der zweiten LCD-Zeile an letzter Stelle als Differenz zum theoretischen Wert.
 Ich möchte daran erinnern, dass die Auflösung des ADC etwa \(4,88mV\) beträgt!
@@ -79,25 +79,25 @@ Der theoretische Wert ergibt sich im Hinblick auf die internen Port-Widerstände
 \end{figure}
 
 \item \textbf {Vergleich der \(470k\Omega\) Widerstände.}
-Jetzt zeigt das Display in Zeile 1 ,,+RH- 12 13 23''. Das gleiche Verfahren wie in Schritt~2 wird wiederholt mit den
+Jetzt zeigt das Display in Zeile 1 \inquotes{+RH- 12 13 23}. Das gleiche Verfahren wie in Schritt~2 wird wiederholt mit den
  \(470k\Omega\)-Widerständen (Symbol RH).
 Die Ergebnisse werden als Differenz zu  \(\frac{VCC \cdot (19 + 470000]}{ (19 + 470000 + 470000 + 22)} \) für alle Kombinationen dargestellt.
 
-\item In diesem Schritt wird nichts gemessen, es erfolgt lediglich die \textbf {Anweisung ,,isolate Probe!''},
+\item In diesem Schritt wird nichts gemessen, es erfolgt lediglich die \textbf {Anweisung \inquotes{isolate Probe!}},
 was bedeutet, dass es nun Zeit ist die Klemmen zu trennen (vom blanken Draht lösen).
 Dieser Schritt wird nur beendet, wenn Sie die Verbindung zwischen den Testports getrennt haben.
 
 \item Dieser Schritt testet die \textbf {Fähigkeit von mit GND (-) verbundenen \(470k\Omega\)-Widerständen (H) die Testpins auf GND zu ziehen.}
-Zeile 1 zeigt den Text ,,RH-''.
+Zeile 1 zeigt den Text \inquotes{RH-}.
 Zeile 2 sollte für alle drei Pinne  Null mV anzeigen.
 
 \item Dieser Schritt testet die \textbf {Fähigkeit von mit VCC (+) verbundenen \(470k\Omega\)-Widerständen (H) die Testpins auf VCC zu ziehen.}
-Zeile 1 zeigt den Text ,,RH+''.
+Zeile 1 zeigt den Text \inquotes{RH+}.
 Der bestmögliche mV Wert für die drei Messungen wäre 0 in Zeile~2, da die Diffenz zu VCC dargestellt wird.
 Große Abweichungen vom Idealwert für Schritt 5 und 6 sind Fehler wie Isolations-Problem, Flussmittelreste oder beschädigter Port.
 
 \item \textbf {Dieser Schritt testet die Spannungen der \(470k\Omega / 680\Omega\)  Widerstandsteiler.}
-Zeile 1 zeigt den Text ,,RH/RL''.
+Zeile 1 zeigt den Text \inquotes{RH/RL}.
 Für alle drei Testpins wird die Abweichung von der erwarteten Spannung eines \(470k\Omega\) / \(680\Omega\) \(5V\)-Teilers 
 in Zeile 2 des Displays ausgegeben.
 Abweichungen von mehr als einige mV weisen auf einen Bestückungsfehler der Widerstände hin.
@@ -128,8 +128,8 @@ Es ist die gleiche Messung wie die in Test~8 zur anderen Seite, wie in Abbildung
 Der Innenwiderstand wird wie folgt berechnet:
 Um den Strom zu berechnen: \((5001 - (Ergebnis von Test 8) - (Ergebnis von Test 9)) / 680\).
 Die Widerstandswerte ergeben sich, wenn die gemessene Spannung durch diesen Strom dividiert wird.
-Das Ergebnis für diesen Test wird dann in Zeile~1 mit dem Text ,,RI\_Hi='' in \(\Omega\) angezeigt, der Innenwiderstand
-zur GND-Seite wird in Zeile~2 mit dem Text ,,RI\_Lo='' angezeigt.
+Das Ergebnis für diesen Test wird dann in Zeile~1 mit dem Text \inquotes{RI\_Hi=} in \(\Omega\) angezeigt, der Innenwiderstand
+zur GND-Seite wird in Zeile~2 mit dem Text \inquotes{RI\_Lo=} angezeigt.
 Diese Werte werden ab Software-Version 1.06k bei jeder Messung neu bestimmt und hier nur dargestellt.
 \begin{figure}[H]
 \centering
@@ -145,15 +145,15 @@ Diese Werte werden ab Software-Version 1.06k bei jeder Messung neu bestimmt und 
 
 \item \textbf {Messung des Nulloffsets der Kondensatormessung.}
 Für die Pinkombinationen 1:3, 2:3 und 1:2 wird der Nullwert der Kondensatormessung in pF in Zeile~1
-hinter dem Text ,,C0 '' ausgegeben.
+hinter dem Text \inquotes{C0 } ausgegeben.
 In der Software wird ein Vorgabewert von circa \(39pF\) für die normale Messwertausgabe berücksichtigt.
 Für die Ausgabe dieses Tests ist keine Korrektur berücksichtigt, es wird auch kein Nulloffset abgezogen.
 Es werden auch die Nulloffsets für die umgekehrte Pinkombination ermittelt.
 Die gefundenen Nulloffsets werden im EEPROM festgehalten, wenn alle Nulloffsets kleiner als \(190pF\) sind.
-In Zeile 2 wird dann ein ,,OK'' ausgegeben.
+In Zeile 2 wird dann ein \inquotes{OK} ausgegeben.
 Die gefundene Nulloffsets werden für die weiteren Kapazitäts-Messungen pinabhängig berücksichtigt.
 Dabei wird überwacht, ob die gemessene Kapazität die festgehaltene Nullkapazität um mehr als \(20pF\) unterschreitet.
-Wenn dies der Fall sein sollte, wird der Tester auf ,,unkalibriert'' zurückgesetzt.
+Wenn dies der Fall sein sollte, wird der Tester auf \inquotes{unkalibriert} zurückgesetzt.
 Dies wird durch die Aktivierung des LCD-Positionszeigers (Cursor) beim nächsten Testen angezeigt.
 Bitte beachten Sie, dass bei Veränderungen des Messaufbaus ein Neuabgleich sinnvoll ist.
 So kann sich der Nulloffset durch Verwenden von Kabeln mit Klemmen um circa \(3pF\) gegenüber einem leeren
@@ -164,7 +164,7 @@ Das kommt daher, weil die Nullkapazität in allen Pinkombinationen sowohl für d
 auch für den Entladevorgang bestimmt wird.
 
 \item \textbf {Warten auf den Anschluss eines Kondensators an Pin~1 und Pin~3.}
-Die Meldung ,,\mbox{\begin{large}1 \electricC 3~\textgreater 100nF\end{large}}'' wird in Zeile 1 des Displays angezeigt.
+Die Meldung \inquotes{\mbox{\begin{large}1 \electricC 3~\textgreater 100nF\end{large}}} wird in Zeile 1 des Displays angezeigt.
 Zur Vorbereitung der Messung des Spannungs-Offsets des analogen Komparators muss ein ausreichend großer
 Kondensator zwischen Pin 1 und Pin 3 angeschlossen werden.
 Es sollte ein Kondensator hoher Güte mit eine Kapazität zwischen \(100nF\) und \(20\mu F\) sein. 
@@ -175,28 +175,28 @@ Auf keinen Fall sollte man Elektrolyt-Kondensatoren verwenden.
 Um den Offset des analogen Komparators zu bestimmen, muss ein Kondensator an Pin~1 und Pin~3 angeschlossen sein.
 Der Kondensator wird für die Pufferung der Ladespannung bei der Kondensatormessung benötigt, um den Unterschied der 
 Ladespannung zur internen Referenzspannung bestimmen zu können.
-Bei erfolgreicher Messung wird der Korrekturwert kurz in Zeile 1 mit dem Text ,,REF\_C='' angezeigt und in den EEPROM geschrieben.
+Bei erfolgreicher Messung wird der Korrekturwert kurz in Zeile 1 mit dem Text \inquotes{REF\_C=} angezeigt und in den EEPROM geschrieben.
 
 Wenn Sie die AUTOSCALE\_ADC-Option gewählt haben, wird die Verstärkung der ADC-Lesefunktion mit der
 internen Referenzspannung abgeglichen. Das geschieht durch den Vergleich der Kondensatorspannung von unter \(1V\), einmal mit
 der VCC-Referenz gemessen und einmal mit der internen Referenz.
-Die gefundene Differenz wird in Zeile 2 mit dem Text ,,REF\_R='' angezeigt und ebenfalls im EEPROM festgehalten.
+Die gefundene Differenz wird in Zeile 2 mit dem Text \inquotes{REF\_R=} angezeigt und ebenfalls im EEPROM festgehalten.
 Der REF\_R\_KORR-Wert ist dann nur ein zusätzlicher Offset für diese automatisch gefundene Differenz.
 
 \item \textbf {Warten auf einen Kondensator für die Messung kleiner Induktivitäten}
 Wenn der Tester mit der SamplingADC Funktion konfiguriert wurde, ist für die Messung kleiner Induktivitäten
 ein Kondensator bekannter Größe für die Berechnung der Induktivität aus der Schwingfrequenz erforderlich.
 Brauchbare Kapazitätswerte sind hierfür etwa \(10nF\) bis \(27nF\). Ein geeigneter Kondensator
-sollte an Pin~1 und Pin~3 angeschlossen werden, wenn die Meldung ,,\mbox{\begin{large}1 \electricC 3~10-30nF(L)\end{large}}'' in Zeile 1 des
+sollte an Pin~1 und Pin~3 angeschlossen werden, wenn die Meldung \inquotes{\mbox{\begin{large}1 \electricC 3~10-30nF(L)\end{large}}} in Zeile 1 des
 Displays erscheint. Genau dieser Kondensator sollte für die Induktivitätsmessung der Spule
 parallelgeschaltet werden, wenn diese Art der Induktivitätsbestimmung gewünscht wird.
 
 \end{enumerate}
 
-Am Ende der Selbsttest-Funktion wird der Text ,,Test End'' in Zeile~1 und die Versions-Nummer der Software in Zeile~2 angezeigt.
+Am Ende der Selbsttest-Funktion wird der Text \inquotes{Test End} in Zeile~1 und die Versions-Nummer der Software in Zeile~2 angezeigt.
 Wenn gewählt, wird ein \textbf {50~Hz Rechtecksignal} auf Testpin~2 generiert und das gegenphasige Signal auf Testpin~3.
 Testpin~1 wird auf GND geschaltet. Der Strom für Testpin 2 und 3 wird mit \(680\Omega\) Widerständen begrenzt.
-Angezeigt wird das durch die Ausgabe von ,,50Hz'' am Ende der Zeile~1.
+Angezeigt wird das durch die Ausgabe von \inquotes{50Hz} am Ende der Zeile~1.
 Diese Ausgabe wird dreißig Mal mit jeweils 2~Sekunden Dauer durchgeführt.
 Man kann die Zeit der Verzögerungs-Aufrufe prüfen, wenn man ein Oszilloskop oder einen
 Frequenz-Zähler besitzt. Abbildung \ref{fig:Frequency50} zeigt ein Oszillogramm der ausgegebenen Pegel mit Quarz-Betrieb.

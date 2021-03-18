@@ -8,7 +8,7 @@ The program notice the shorten probes and start the self test function, if you c
 seconds with pressing the start key. This confirmation is implemented to prevent the tester
 going automatically to the self test by connecting a defect transistor.
 After finishing the self test the transistor tester will continue with normal measurement.
-If no equipment is connected, the program will end with ``part unknown or damaged''. 
+If no equipment is connected, the program will end with \inquotes{part unknown or damaged}. 
 You can configure self test only for a ATmega168  or ATmega328.
 Before the test steps begin, the zero resistance of the connected probes is determined for all three combinations
 (T1:T3, T2:T3 and T1:T2).
@@ -17,7 +17,7 @@ Only zero resistance values below \(0.90\Omega\) are accepted, because this corr
 uses for measurement of resistor values above \(10\Omega\).
 If you use cables for measurement, you should only take cables with low resistance values.
 If the later measured resistance results fall below the particular zero resistance for more than \(0.2\Omega\),
-the tester will be resetted to ''uncalibrated''.
+the tester will be resetted to \inquotes{uncalibrated}.
 This will be marked by a acticated cursor during the tests.
 The separate steps of the self test function 1 to 7 is displayed on row~1 of the LCD display with the letter T
 followed by the step number.
@@ -33,18 +33,18 @@ Here is the list of currently implemented tests:
 \vspace{1cm}
 \begin{enumerate} \setlength{\itemsep}{0em}
 \item \textbf {Measurement of the \(1.3V\) (or \(1.1V\)) reference Voltage (band gap Reference).}
-In row 1 the text ``Ref='' and the measured Voltage in mV is displayed.
+In row 1 the text \inquotes{Ref=} and the measured Voltage in mV is displayed.
 For the ATmega8 the voltage should be near to \(1.3V\). For the other processors the voltage should be near to \(1.1V\).
 The second row shows the resulting factor for the capacity measurement with the \(470k\Omega\) resistor.
 \item \textbf {Comparing of the  \(680\Omega\) resistors.}
-In row~1 the cryptic text  ``+RL- 12 13 23'' is shown. Meaning of this is as follows: 
+In row~1 the cryptic text  \inquotes{+RL- 12 13 23} is shown. Meaning of this is as follows: 
 The RL is the short form of Resistor Low meaning the \(680\Omega\) resistors. The 12 stand for: 
 resistor at pin~1 is connected to VCC (+) and resistor at pin~2 is connected to GND (-). 
 The result of this measurement  is displayed in row~2 at the first place as difference to the theoretical value. 
- In row~1 follows now a ``13'' which means, that the first connection of measurement~1 is still connected
+In row~1 follows now a \inquotes{13} which means, that the first connection of measurement~1 is still connected
 with \(680\Omega\) to VCC but that the resistor of pin~3 is connected to GND.
 The result is displayed in the middle place of row~2 as difference to the theoretical value. 
-The last measurement of this test ``23.'' means that now the resistor at pin~2 is connected to VCC (+) and
+The last measurement of this test \inquotes{23.} means that now the resistor at pin~2 is connected to VCC (+) and
 the resistor of pin 3 is connected to GND.
 The result of measurement is displayed at the last place of LCR row~2 as difference to the theoretical value.
 Please remember, that the resolution of the ADC is about \(4.88mV\)!
@@ -65,7 +65,7 @@ The theoretical value with respect to the internal resistance of the pins should
 \end{figure}
 
 \item \textbf {Comparing of the \(470k\Omega\) resistors.}
-Now the display shows in row 1 ``+RH- 12 13 23''. The same procedure as done in step~2 is repeated with the \(470k\Omega\) resistors (symbols RH).
+Now the display shows in row 1 \inquotes{+RH- 12 13 23}. The same procedure as done in step~2 is repeated with the \(470k\Omega\) resistors (symbols RH).
 All results are shown as difference to the theoretical value.
 The theoretical value is this time \(\frac{5001 \cdot (19 + 470000]}{ (19 + 470000 + 470000 + 22)} = 2500\) for all combinations.
 
@@ -74,11 +74,11 @@ which means that it is time to separate the probes (release from wire).
 This step will finish only if you release the connections between the probes.
 
 \item \textbf {This step tests the capability of GND (-) connected \(470k\Omega\) resistors (H) to pull the test pins to GND.}
-Row 1 shows the text  ``RH-''.
+Row 1 shows the text  \inquotes{RH-}.
 Row 2 should display zero for all three pins.
 
 \item \textbf {This step tests the capability of VCC (+) connected \(470k\Omega\) resistors (H) to pull the test pins  to VCC (+).}
-Row 1 shows the text ``RH+''.
+Row 1 shows the text \inquotes{RH+}.
 The results are shown als difference to VCC and should be near zero.
  Great differences from the best value for test 5 and 6 are errors  such as isolation problem, flux material or damaged port.
 
@@ -113,8 +113,8 @@ It are the same measurements as those in test~8 to the other side as you can see
 With the following steps the resistance is computed:
 To get the current, the following is computed:  \((VCC - (result of test 8) - (result of test 9)) / 680\).
 To get both resistor values, the voltage (result of test~8 or 9) is divided by this current.
-The result for this test will then be notified in row 1 with the text ''RI\_Hi='', the resistance value (\(\Omega\)) to the GND side is
-displayed in row 2 with the text ''RI\_Lo=''.
+The result for this test will then be notified in row 1 with the text \inquotes{RI\_Hi=}, the resistance value (\(\Omega\)) to the GND side is
+displayed in row 2 with the text \inquotes{RI\_Lo=}.
 Beginning with version 1.06k of the software, the port output resistance values are determined at the beginning of every
 measurement. The values are only shown by this step.
 
@@ -132,15 +132,15 @@ measurement. The values are only shown by this step.
 
 \item \textbf {Measurement of the zero offset of the capacitor measurement.}
 The zero offset for the capacity measurement with pin combinations 1:3, 2:3 and 1:2 is shown in that order
-in display row 1 following the ``C0 ''.
+in display row 1 following the \inquotes{ C0 }.
 Alls three values are shown in pF units.
 For this measurements no predefined zero offset is respected.
 The zero offsets of pin combinations in opposite order is also measured.
 The results will be written to the EEprom, if all values are less than \(190pF\).
-This will be notified by the output of ``OK'' in row~2.
+This will be notified by the output of \inquotes{OK} in row~2.
 The found zero offsets are used for further capacity measurements with respect to the pin combination.
 If there is any measurement found with a capacity value \(20pF\) below the particular zero offset, the
-tester will be resetted to ''uncalibrated''.
+tester will be resetted to \inquotes{uncalibrated}.
 This will be noticed by a activated LCD cursor during further tests.
 Please notice, that changes of the test equipment can cause a new adjustment of the zero offset.
 If you use wire with clips, the zero offset may be \(3pF\) greater compared to a empty socket.
@@ -150,7 +150,7 @@ with double the count of all pin combinations. The reason for this is, that the
 zero capacity is measured for the charge and the discharge of all pin combinations separately.
 
 \item \textbf {Wait for the connection of a capacitor to pin~1 and pin~3.}
-The message ``\mbox{\begin{large}1 \electricC 3~\textgreater 100nF\end{large}}'' is shown in row 1 of LCD.
+The message \inquotes{\mbox{\begin{large}1 \electricC 3~\textgreater 100nF\end{large}}} is shown in row 1 of LCD.
 To prepare the measurement of the comparator offset voltage, you must connect
 a sufficient big capacitor to pin~1 and pin~3.
 It should be a capacitor with a high quality factor and a capacity between \(100nF\) and \(20\mu F\).
@@ -160,21 +160,21 @@ You should never use electrolytical capacitors, use film capacitors instead.
 To get the offset of the analog comparator, a capacitor must already be connected to pin~1 and pin~3.
 The capacitor is needed for buffering the load voltage of a capacitor, in order to get the voltage
 difference of load voltage to the internal reference voltage (band gap).
-If measurement is successfull, the correction value is short shown with the text ``REF\_C='' in row~1 of 
+If measurement is successfull, the correction value is short shown with the text \inquotes{REF\_C=} in row~1 of 
 the LCD and written to the EEprom. You can give a additional offset to the automatic measured value
 with the REF\_C\_KORR option.
 
 If you have selected the AUTOSCALE\_ADC option, the gain of the ADC readings with the internal reference
 will be adjusted by comparing a capacitor voltage below 1 V once readed with VCC reference and once
 readed with the internal reference. 
-The measurement result is shown in row 2 with the text ``REF\_R=''. 
+The measurement result is shown in row 2 with the text \inquotes{REF\_R=}. 
 Your REF\_R\_KORR value is a additional offset to this automatic find out difference value.
 
 \item \textbf {Wait for a capacitor for measuring of low inductace values}
 If the tester is configured with the SamplingADC function, a known capacitor is required for
 the computation of the inductance value from the resonant frequency of a parallel connected coil.
 Practical capacity values can be choosed from \(10nF\) to \(27nF\). 
-A suitable capacitor must be connected to pin~1 and pin~3, if the message ''\mbox{\begin{large}1 \electricC 3~10-30nF(L)\end{large}}'' is shown in
+A suitable capacitor must be connected to pin~1 and pin~3, if the message \inquotes{\mbox{\begin{large}1 \electricC 3~10-30nF(L)\end{large}}} is shown in
 line 1 of the display.
 Exacly this capacitor should be connected later parallel to a little coil,
 if the calculation of the coil\'s inductance value from resonant frequency is desired.
@@ -182,11 +182,11 @@ If your tester does not include the SamplingADC function, this step is omitted.
 
 \end{enumerate}
 
-At the end of test function the text ``Test End''  is shown in row~1 and the version number of software is shown in row~2.
+At the end of test function the text \inquotes{Test End}  is shown in row~1 and the version number of software is shown in row~2.
 If the Makefile option FREQUENCY\_50HZ is set, a \textbf {50Hz rectangle signal} is generated on pin~2 and 
 the same signal in opposite direction on pin~3.
 Pin~1 is switched to GND . The current is limited with \(680\Omega\) resistors.
-This will be notified by the Output of ``50Hz'' at the end of row 1 of the LCD display.
+This will be notified by the Output of \inquotes{50Hz} at the end of row 1 of the LCD display.
 The \(50Hz\) signal will be generated 30 times for 2~seconds each.
 You can check the time of the wait calls, if you have an oscilloscope or frequency counter.
 Figure \ref{fig:Frequency50} shows the oscillograph curves of both \(50Hz\) output pins with crystal operation.

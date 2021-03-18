@@ -1,11 +1,11 @@
 \documentclass[12pt,a4paper,oneside,english]{report}
 %\documentclass[pdftex,12pt,a4paper,final,headings=normal,english]{scrreprt}
 \special{papersize=210mm,297mm}
-%\usepackage[T1]{fontenc}		% Wegan GNU
+%\usepackage[T1]{fontenc}		% Wegan GNU
 %\usepackage[latin1]{inputenc}
 \usepackage[cm]{fullpage}
 \usepackage{cmap}
-\usepackage[cp1251]{inputenc}		% statt utf8x wegen Russisch
+\usepackage[utf8x]{inputenc}		% statt utf8x wegen Russisch
 \usepackage[english,russian]{babel}
 \usepackage{textcomp}			% Wegen Fehler, perthousand, micro
 \usepackage[pdftex]{graphicx}
@@ -15,7 +15,7 @@
 \usepackage[percent]{overpic}   %ins Bild schreiben
 \usepackage{mwe}                %ins Bild schreiben
 
-\usepackage{blindtext}		% zum Дndern der Abstдnde der Bildunterschrift
+\usepackage{blindtext}		% zum Р”ndern der AbstРґnde der Bildunterschrift
 \setlength{\abovecaptionskip}{0.5em}
 \setlength{\belowcaptionskip}{-0.5em}
 
@@ -32,7 +32,7 @@
 %  afterskip=.25\baselineskip]{subsubsection}
 
 %\usepackage{fixltx2e}
-\setlength{\parindent}{0em}	% Absatz nicht einrьcken
+\setlength{\parindent}{0em}	% Absatz nicht einrСЊcken
 \usepackage{epstopdf}
 \usepackage{hyperref}
 \usepackage{gensymb}
@@ -42,6 +42,28 @@
 \usepackage{wallpaper}			%Wegen Hintegrundbild
 %\usepackage{subfig}
 \graphicspath{{./FIG}}
+\usepackage{blindtext}          % zum Р”ndern der AbstРґnde der Bildunterschrift
+\setlength{\abovecaptionskip}{0.5em}
+\setlength{\belowcaptionskip}{-0.5em}
+
+\usepackage[os=win]{menukeys}           % Zur Darstellung der Menue-Keys
+
+
+\newcommand{\LMB}{{\fbox{\(\bullet \circ \circ\)}} } % Left Mouse Button
+\newcommand{\RMB}{{\fbox{\(\circ \circ \bullet\)}} } % Right Mouse Button
+\newcommand{\MMB}{{\fbox{\(\circ \bullet \circ\)}} } % Middle Mouse Button
+\newcommand{\LRMB}{{\fbox{\(\bullet ~~ \bullet\)}} } % Middle Mouse Button
+\newcommand{\lsusb}{\colorbox{green!30}{{\textls[200]{lsusb}}}}
+
+%\newcommand{\lcmd}[1]{{\colorbox{green!15}{\textls[150]{#1}}}} % Linux command green stretched
+\newcommand{\lcmd}[1]{\mbox{{\colorbox{green!15}{#1}}}} % Linux command green normal
+%\newcommand{\lcmd}[1]{{\textls[150]{ #1}}} % Linux command only streched
+\newcommand{\lname}[1]{\mbox{{\colorbox{blue!15}{#1}}}} % Linux key word blue normal
+
+%\newcommand{\inquotes}[1]{\glqq{#1}\grqq}  % set "text" in german quotes
+%\newcommand{\inquotes}[1]{\og{#1}\fg}  % set "text" in french quotes
+\newcommand{\inquotes}[1]{``{#1}''}  % set "text" in american  quotes
+
 \sloppy
 
 \begin{document}
@@ -82,18 +104,18 @@
 \draw (0,0) to[full diode] (180:1);
 \end{circuitikz}
 }
-\title{Транзистор тестер \\
-с микроконтроллером AVR.\\
-Прибор для определения и измерения \\
-электронные компоненты, \\
-и минимумом дополнительных элементов \dots \\
+\title{РўСЂР°РЅР·РёСЃС‚РѕСЂ С‚РµСЃС‚РµСЂ \\
+СЃ РјРёРєСЂРѕРєРѕРЅС‚СЂРѕР»Р»РµСЂРѕРј AVR.\\
+РџСЂРёР±РѕСЂ РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРёСЏ Рё РёР·РјРµСЂРµРЅРёСЏ \\
+СЌР»РµРєС‚СЂРѕРЅРЅС‹Рµ РєРѕРјРїРѕРЅРµРЅС‚С‹, \\
+Рё РјРёРЅРёРјСѓРјРѕРј РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹С… СЌР»РµРјРµРЅС‚РѕРІ \dots \\
 ~\\
 ~\\
-Версия 1.13k \\
+Р’РµСЂСЃРёСЏ 1.13k \\
 }
 \author{Karl-Heinz K\"ubbeler\\
 \texttt{kh\_kuebbeler@web.de}\\
-\textbf{{\scriptsize русский перевод Сергей Базыкин}}}
+\textbf{{\scriptsize СЂСѓСЃСЃРєРёР№ РїРµСЂРµРІРѕРґ РЎРµСЂРіРµР№ Р‘Р°Р·С‹РєРёРЅ}}}
 \vspace{1cm}
 \date{\today}
 \maketitle
@@ -139,115 +161,115 @@ trunk/pdftex/german/ttester.pdf
 \bibitem{ATmega8}
 Atmel Corporation
 \emph{8-bit AVR with 8KBytes In-System Programmable Flash - ATmega8(L),}.
-Руководство,
+Р СѓРєРѕРІРѕРґСЃС‚РІРѕ,
 2486Z-AVR-02/11,
 2011
 
 \bibitem{ATmega168}
 Atmel Corporation
 \emph{8-bit AVR with 4/8/16/32KBytes In-System Programmable Flash - ATmega48 - ATmega328,}.
-Руководство,
+Р СѓРєРѕРІРѕРґСЃС‚РІРѕ,
 8271D-AVR-05/11,
 2011
 
 \bibitem{AVR126}
 Atmel Corporation
 \emph{Atmel AVR126: ADC of megaAVR in Single Ended Mode,}.
-Замечания по применению,
+Р—Р°РјРµС‡Р°РЅРёСЏ РїРѕ РїСЂРёРјРµРЅРµРЅРёСЋ,
 8444A-AVR-10/11,
 2011
 
 \bibitem{AVR121}
 Atmel Corporation
 \emph{Atmel AVR121: Enhancing ADC resolution by oversampling,}.
-Замечания по применению,
+Р—Р°РјРµС‡Р°РЅРёСЏ РїРѕ РїСЂРёРјРµРЅРµРЅРёСЋ,
 8003A-AVR-09/05,
 2005
 
 \bibitem{LaTeX}
 \url{http://en.wikibooks.org/wiki/LaTeX}
-\emph{Документация по LaTeX,}.
-Руководство по языку разметки LaTeX,
+\emph{Р”РѕРєСѓРјРµРЅС‚Р°С†РёСЏ РїРѕ LaTeX,}.
+Р СѓРєРѕРІРѕРґСЃС‚РІРѕ РїРѕ СЏР·С‹РєСѓ СЂР°Р·РјРµС‚РєРё LaTeX,
 2012
 
 \bibitem{Gnuplot}
 \url{http://en.wikibooks.org/wiki/Gnuplot}
-\emph{Документация по Gnuplot,}.
-Документация по инструменту построения Gnuplot,
+\emph{Р”РѕРєСѓРјРµРЅС‚Р°С†РёСЏ РїРѕ Gnuplot,}.
+Р”РѕРєСѓРјРµРЅС‚Р°С†РёСЏ РїРѕ РёРЅСЃС‚СЂСѓРјРµРЅС‚Сѓ РїРѕСЃС‚СЂРѕРµРЅРёСЏ Gnuplot,
 2012
 
 \bibitem{ESR}
 Wikipedia
 \url{http://de.wikipedia.org/wiki/Equivalent_Series_Resistance}
-\emph{Что такое ESR на немецком языке}.
-Стандартизация и эквивалентная схема конденсатора,
+\emph{Р§С‚Рѕ С‚Р°РєРѕРµ ESR РЅР° РЅРµРјРµС†РєРѕРј СЏР·С‹РєРµ}.
+РЎС‚Р°РЅРґР°СЂС‚РёР·Р°С†РёСЏ Рё СЌРєРІРёРІР°Р»РµРЅС‚РЅР°СЏ СЃС…РµРјР° РєРѕРЅРґРµРЅСЃР°С‚РѕСЂР°,
 2012
 
 
 \bibitem{Xfig}
 \url{http://www.xfig.org/userman}
-\emph{Документация по Xfig,}.
-Документация инструмента интерактивного рисования Xfig,
+\emph{Р”РѕРєСѓРјРµРЅС‚Р°С†РёСЏ РїРѕ Xfig,}.
+Р”РѕРєСѓРјРµРЅС‚Р°С†РёСЏ РёРЅСЃС‚СЂСѓРјРµРЅС‚Р° РёРЅС‚РµСЂР°РєС‚РёРІРЅРѕРіРѕ СЂРёСЃРѕРІР°РЅРёСЏ Xfig,
 2009
 
 \bibitem{gimp}
 \url{http://docs.gimp.org/2.6/de}
-\emph{Документация по gimp}.
-Документация программы Image Manipolation Program,
+\emph{Р”РѕРєСѓРјРµРЅС‚Р°С†РёСЏ РїРѕ gimp}.
+Р”РѕРєСѓРјРµРЅС‚Р°С†РёСЏ РїСЂРѕРіСЂР°РјРјС‹ Image Manipolation Program,
 2010
 
 \bibitem{markus1}
 \url{http://www.mikrocontroller.net/articles/AVR-Transistortester}
-\emph{Онлайн документация по Транзистор Тестеру,}
-Интернет статья,
+\emph{РћРЅР»Р°Р№РЅ РґРѕРєСѓРјРµРЅС‚Р°С†РёСЏ РїРѕ РўСЂР°РЅР·РёСЃС‚РѕСЂ РўРµСЃС‚РµСЂСѓ,}
+РРЅС‚РµСЂРЅРµС‚ СЃС‚Р°С‚СЊСЏ,
 2009-2011
 
 \bibitem{avrdude}
 \url{http://www.mikrocontroller.net/articles/AVRDUDE}
-\emph{Онлайн документация к интерфейсу avrdude программатора,}
-Интернет статья,
+\emph{РћРЅР»Р°Р№РЅ РґРѕРєСѓРјРµРЅС‚Р°С†РёСЏ Рє РёРЅС‚РµСЂС„РµР№СЃСѓ avrdude РїСЂРѕРіСЂР°РјРјР°С‚РѕСЂР°,}
+РРЅС‚РµСЂРЅРµС‚ СЃС‚Р°С‚СЊСЏ,
 2004-2011
 
 \bibitem{markus2}
 \url{http://www.mikrocontroller.net/topic/131804}
-\emph{Тема Markus,}
-Тема на форуме, 
+\emph{РўРµРјР° Markus,}
+РўРµРјР° РЅР° С„РѕСЂСѓРјРµ, 
 2009
 
 \bibitem{karlheinz1}
 \url{http://www.mikrocontroller.net/articles/AVR\_Transistortester}
-\emph{Краткое описание новых особенностей Транзистор Тестера Karl-Heinz K.,}
-Интернет статья,
+\emph{РљСЂР°С‚РєРѕРµ РѕРїРёСЃР°РЅРёРµ РЅРѕРІС‹С… РѕСЃРѕР±РµРЅРЅРѕСЃС‚РµР№ РўСЂР°РЅР·РёСЃС‚РѕСЂ РўРµСЃС‚РµСЂР° Karl-Heinz K.,}
+РРЅС‚РµСЂРЅРµС‚ СЃС‚Р°С‚СЊСЏ,
 2012
 
 \bibitem{karlheinz2}
 \url{http://www.mikrocontroller.net/topic/248078}
-\emph{Тема Karl-Heinz,}
-Тема и новые версии микропрограммного обеспечения,
+\emph{РўРµРјР° Karl-Heinz,}
+РўРµРјР° Рё РЅРѕРІС‹Рµ РІРµСЂСЃРёРё РјРёРєСЂРѕРїСЂРѕРіСЂР°РјРјРЅРѕРіРѕ РѕР±РµСЃРїРµС‡РµРЅРёСЏ,
 2012
 
 \bibitem{winavr1}
 \url{http://www.mikrocontroller.net/articles/WinAVR}
-\emph{Информация о WinAVR на немецком языке,}
-Интернет статья,
+\emph{РРЅС„РѕСЂРјР°С†РёСЏ Рѕ WinAVR РЅР° РЅРµРјРµС†РєРѕРј СЏР·С‹РєРµ,}
+РРЅС‚РµСЂРЅРµС‚ СЃС‚Р°С‚СЊСЏ,
 2012
 
 \bibitem{winavr2}
 \url{http://sourceforge.net/projects/winavr/files}
-\emph{Исходники WinAVR пакетов,}
-Ресурс для загрузки,
+\emph{РСЃС…РѕРґРЅРёРєРё WinAVR РїР°РєРµС‚РѕРІ,}
+Р РµСЃСѓСЂСЃ РґР»СЏ Р·Р°РіСЂСѓР·РєРё,
 2012
 
 \bibitem{winavr3}
 \url{http://www.mikrocontroller.net/topic/248078?page=5#2922341}
-\emph{Патч для WinAVR, установка фюзов в avrdude,}
-Ресурс для загрузки,
+\emph{РџР°С‚С‡ РґР»СЏ WinAVR, СѓСЃС‚Р°РЅРѕРІРєР° С„СЋР·РѕРІ РІ avrdude,}
+Р РµСЃСѓСЂСЃ РґР»СЏ Р·Р°РіСЂСѓР·РєРё,
 2012
 
 \bibitem{st7565}
 \url{http://www.orientdisplay.com/pdf/ST7565.pdf}
-\emph{Документация к графическому контроллеру ST7565,}
-Ресурс для загрузки,
+\emph{Р”РѕРєСѓРјРµРЅС‚Р°С†РёСЏ Рє РіСЂР°С„РёС‡РµСЃРєРѕРјСѓ РєРѕРЅС‚СЂРѕР»Р»РµСЂСѓ ST7565,}
+Р РµСЃСѓСЂСЃ РґР»СЏ Р·Р°РіСЂСѓР·РєРё,
 2014
 
 \bibitem{ds3231}

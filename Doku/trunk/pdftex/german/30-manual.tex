@@ -203,7 +203,7 @@ kann durch Drehen des Impulsdrehgebers verändert werden.
 
  \item[Zeige Daten]
  Die Funktion \inquotes{Zeige Daten} zeigt neben der Software-Versionsnummer die Daten des Abgleichs an.
-Dies sind die Nullwiderstände R0 von Pin 1:3, 2:3 und 1:2 .
+Dies sind die Nullwiderstände R0 von Pin 1:3, 2:3 und 1:2.
 Außerdem werden die Ausgangswiderstände der Ports zur \(5V\)-Seite (RiHi) und 
 zur \(0V\) Seite (RiLo) angezeigt.
 Die Nullkapazitätswerte (C0) werden ebenfalls in allen Pinkombinationen angezeigt (1:3, 2:3, 1:2 und 3:1, 3:2 2:1).
@@ -231,7 +231,7 @@ Wenn die Software mit der Selbsttestfunktion konfiguriert ist, kann der Selbstte
 Testports und Drücken der Starttaste eingeleitet werden.
 Für den Start des Selbsttests muss die Starttaste innerhalb von 2 Sekunden noch einmal gedrückt werden,
 sonst wird mit einer normalen Messung fortgefahren.
-Beim Selbsttest werden die im Selbsttest-Kapitel \ref{sec:selftest} beschriebenen Tests ausgeführt.
+Beim Selbsttest werden die im Selbsttest-Kapitel~\ref{sec:selftest} beschriebenen Tests ausgeführt.
 Wenn der Tester mit einer Menüfunktion (Option WITH\_MENU) konfiguriert ist, 
 wird der vollständige Selbsttest mit den Tests T1 bis T7 nur bei dem \inquotes{Selbsttest} ausgeführt, 
 der als Menüfunktion ausgewählt werden kann.
@@ -256,7 +256,7 @@ Messung durchgeführt. \\
 Bei der Kalibration werden zwei Sonderschritte gemacht, wenn die samplingADC Funktion in der Makefile gewählt wurde (WITH\_SamplingADC = 1).
 Nach der normalen Bestimmung der Nullwerte der Kapazitätsmessung werden dann auch die Nullwerte mit
 der Sampling Methode (C0samp) bestimmt. Als letzter Teil der Kalibration wird der Anschluß eines Testkondensators für die
-Spulenmessung an Pin~1 und Pin~3 angefordert mit der Meldung \mbox{\begin{large}1 \electricC 3 ~10-30nF(L)\end{large}}.
+Spulenmessung an Pin~1 und Pin~3 angefordert mit der Meldung \mbox{\begin{large}1 \electricC 3~10-30nF(L)\end{large}}.
 Der Kapazitätswert sollte hierbei zwischen \(10nF\) und \(30nF\) liegen,
 um eine meßbare Resonanzfrequenz bei der späteren Parallelschaltung mit einer Spule (\textless~\(2mH\)) zu erreichen.
 Für Spulen mit mehr als 2mH Induktivität sollte die normale Testfunktion ohne die Parallelschaltung eines
@@ -309,7 +309,7 @@ Kurzschluß am Testsockel durchführen und danach den Widerstand der kurzgeschlo
 
 An die Genauigkeit der Messwerte sollte man keine übertriebenen Erwartungen haben, dies gilt besonders
 für die ESR Messung und die Induktivitätsmessung.
-Die Ergebnisse meiner Messreihen kann man im Kapitel \ref{sec:measurement} ab Seite~\pageref{sec:measurement} finden.
+Die Ergebnisse meiner Messreihen kann man im Kapitel~\ref{sec:measurement} ab Seite~\pageref{sec:measurement} finden.
 
 
 
@@ -357,10 +357,10 @@ Bei der Emitterschaltung hat der Tester nur zwei Möglichkeiten, den Basisstrom 
 Kleinsignaltransistor mit hohem Verstärkungsfaktor meist zu viel, weil die Basis gesättigt ist.
 Da der Kollektorstrom ebenfalls mit einem \(680\Omega\) Widerstand gemessen wird, kann der Kollektorstrom
 den um den Verstärkungsfaktor höheren Strom gar nicht erreichen. Die Softwareversion vom Markus F. hat
-in diesem Zustand die Basis-Emitter Spannung gemessen (Uf=...).\\
+in diesem Zustand die Basis-Emitter Spannung gemessen (Uf=\ldots).\\
 \item Mit dem \(470k\Omega\) Widerstand] ergibt sich ein Basisstrom von nur \(9,2\mu A\) .
 Das ist für einen Leistungstransistor mit geringem Verstärkungsfaktor sehr wenig.
-Die Softwareversion von Markus F. hat in diesem Zustand den Stromverstärkungsfaktor bestimmt (hFE=...).\\
+Die Softwareversion von Markus F. hat in diesem Zustand den Stromverstärkungsfaktor bestimmt (hFE=\ldots).\\
 \end{enumerate}
 
 Die Software des Testers bestimmt die Stromverstärkung jetzt auch in der Kollektorschaltung.

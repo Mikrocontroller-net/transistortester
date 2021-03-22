@@ -2,7 +2,7 @@
 
 \section{Circuit of the TransistorTester}
 \label{sec:hardware}
-The circuit of the TransistorTester in figure \ref{fig:ttester} is based on the circuit of
+The circuit of the TransistorTester in figure~\ref{fig:ttester} is based on the circuit of
  Markus F. released in Abb.~1 of AVR-Transistortester report \cite{Frejek}.
 Changed or moved parts are marked with green color, optional parts are marked with red color.
 
@@ -25,7 +25,7 @@ by the external capacitor C1 at the AREF (21) pin of the ATmega. To avoid slowin
 measurement speed more than necessary, the value of this capacitor should be reduced to 1nF.
 Removing of the capacitor C1 is also possible.
 For adapting the software to the actual circuit take a look to the Makefile options in the
-configuring chapter \ref{sec:config} at page~\pageref{sec:config}.
+configuring chapter~\ref{sec:config} at page~\pageref{sec:config}.
 
 Some different versions of R11 / R12 resistor combinations circulates
 in the internet. I~have adapted my software to the original of Markus F. \cite{Frejek} with \(10k\Omega\) and \(3.3k\Omega\).
@@ -83,7 +83,7 @@ be also connected to GND instead of connecting this input to the ATmega output L
 
 The software can follow to another pin assignment of port D for a simpler connection of the
 LCD display. 
-The following table \ref{tab:grid-change} shows the modifies assignments for the strip grid layout and
+The following table~\ref{tab:grid-change} shows the modifies assignments for the strip grid layout and
 the alternativ connection of a graphical display for the micocontrollers ATmega328.
 Also the using of port inputs for additional functions is shown.
 With the connections for the graphical display with the strip grid option (STRIP\_GRID\_BOARD=1)
@@ -127,7 +127,7 @@ routed to the display connector.
 
 \subsection{Protection of the ATmega inputs}
 
-For better protection of the ATmega inputs one of the additional circuits~ \ref{fig:relay_addon} 
+For better protection of the ATmega inputs one of the additional circuits~\ref{fig:relay_addon} 
 can be integrated. The de-energized contacts of the relay protect the ATmega without power.
 The contacts will be opened by software only for measurement.
 Also with the additional diode protection the chance of the ATmega will be better to survive the connection
@@ -326,7 +326,7 @@ The ATmega processor should have at least 32k flash memory for the support of a 
 The ST7565 controller works with a operating voltage of \(3.3V\) .
 Therefore a additional \(3.3V\) voltage regulator is required.
 The data sheet of the ST7565 controller does not allow the direct connection of input pins to
-\(5V\) signal level. So the extension of figure \ref{fig:ST7565lcd} uses a additional 74HC4050 CMOS
+\(5V\) signal level. So the extension of figure~\ref{fig:ST7565lcd} uses a additional 74HC4050 CMOS
 device for the conversion of the voltage level.
 You can try to exchange the four 74HC4050 gates with four resistors of about \(2.7k\Omega\).
 With the voltage drop at the resistors you will prevent the increase of the \(3.3V\) controller power voltage 
@@ -345,7 +345,7 @@ The signal form at the controller inputs will be more simular to the output shap
 \label{fig:ST7565lcd}
 \end{figure}
 
-The table \ref{tab:spi-processor} shows more alternativs to connect a 
+The table~\ref{tab:spi-processor} shows more alternativs to connect a 
 ATmega328 or other prozessors with the SPI (LCD\_INTERFACE\_MODE=4) or the
 3LINE (LCD\_INTERFACE\_MODE=3) interface.
 The different connector lists for one processor type
@@ -382,7 +382,7 @@ Signal:     &       &       &        &      &      &      &      \\
 Normally the ST7565 or SSD1306 controller is connected with a 4-wire SPI interface.
 But with the SSD1306 controller you can also use a I\textsuperscript{2}C interface with PD2 as SDA and PD5 as SCL signal.
 The SDA and SCL signals must be equipped with pull-up resistors of about \(4.7k\Omega\) to \(3.3V\).
-A solution for connecting the OLED display shows the figure  \ref{fig:ssd1306i2c}.
+A solution for connecting the OLED display shows the figure~\ref{fig:ssd1306i2c}.
 The outputs of the ATmega is only switched to \(0V\) for the I\textsuperscript{2}C signals.
 Before connecting the pull-up resistors to \(5V\) you must check, if your display module can tolerate
 a \(5V\) signal level. Normally the data inputs of the controller are protected with diodes to \(3.3V\).
@@ -413,7 +413,7 @@ A little simpler is the connection of a graphical display with a ST7920 controll
 the controller can operate with \(5V\) power voltage.
 For that the display should offer 128x64 visible pixels.
 The display module with the ST7920 controller can be connected with the 4-bit parallel interface or with a
-special serial interface., as shown in figure \ref{fig:ST7920lcd}.
+special serial interface., as shown in figure~\ref{fig:ST7920lcd}.
  
 \begin{figure}[H]
 \centering
@@ -459,7 +459,7 @@ LCD\_ST7565\_V\_FLIP in the same way as with the other graphical displays.\\
 A special case is the connection of displays with a NT7108 (KS0108, S6B0108) controller. Because these displays can only use 
 the 8-bit parallel interface, you must use a serial to parallel converter.
 The simplest way seems to be the use of a 74HCT164 or a 74HCT595 chip.
-A suitable suggestion of a connection circuit shows the figure \ref{fig:NT7108lcd} .
+A suitable suggestion of a connection circuit shows the figure~\ref{fig:NT7108lcd} .
 
 \begin{figure}[H]
   \begin{subfigure}[b]{.5\textwidth}
@@ -520,7 +520,7 @@ Some different pin layouts found in data sheets for the ABG128064 series are sho
   \label{tab:NT7108types}
 \end{table}
 
-The table \ref{tab:7108-processor} shows the connection of a serial NT7108 controller
+The table~\ref{tab:7108-processor} shows the connection of a serial NT7108 controller
 for different processor series.
 \begin{table}[H]
   \begin{center}
@@ -596,7 +596,7 @@ but not yet tested.
 \subsection{Connection of a graphical color display}
 
 Some Chinese salesmen offer cheap color display modules with a SPI interface.
-The picture \ref{fig:Color_both} shows the backsides of two supported modules with 128x128 pixel
+The picture~\ref{fig:Color_both} shows the backsides of two supported modules with 128x128 pixel
 and 128x160 pixel. 
 The moduls are very small, so the shown text and symbols are very little.
 But the appearance is sharp and clear.
@@ -618,7 +618,7 @@ The background light (LED) is required for this modules because nothing is reada
 Because of the high count of pixels in vertical direction you can display more text lines for this modules.
 For the 128x128 pixel display you can display 8 lines of text with a 12x8 font,
 for the 128x160 pixel display you can evel show 10 lines of text.
-At the picture \ref{fig:Color_PNP} you can see the result of the measurement of a Germanium transistor
+At the picture~\ref{fig:Color_PNP} you can see the result of the measurement of a Germanium transistor
 at a 128x128 pixel display.
 
 \begin{figure}[H]
@@ -759,11 +759,11 @@ to the PC4 input and VCC.
 \section{Extented circuit with ATmega644 or ATmega1284}
 
 A extended circuit for ATmega644/1284 processors was developed with Nick L. from the Ukraine.
-The circuit \ref{fig:t644tester} enables a additional test of crystals and a extended range
+The circuit~\ref{fig:t644tester} enables a additional test of crystals and a extended range
 for the frequency measurement.
-Although the basic circuit is very simular to the circuit \ref{fig:ttester}, the
+Although the basic circuit is very simular to the circuit~\ref{fig:ttester}, the
 port assignment is different.
-A rotary pulse encoder with circuit \ref{fig:RotExt} can be connected here at the pins PB5 and PB7 (instead of PD1 and PD3).
+A rotary pulse encoder with circuit~\ref{fig:RotExt} can be connected here at the pins PB5 and PB7 (instead of PD1 and PD3).
 Both signals and also the power signals VCC and GND are available at the ISP connector,
 so that the extension can also be connected here.\\
 
@@ -772,7 +772,7 @@ The frequency divider can also be used for frequencies between \(25kHz\) and \(4
 upgrade the frequency resolution by using the period measurement.
 For switching between the operational states (frequency divider and crystal oszillator)
 the analog switches 74HC4052 are used.
-The table \ref{tab:mega644-display} shows the pin assignments for the ATmega324/644/1284
+The table~\ref{tab:mega644-display} shows the pin assignments for the ATmega324/644/1284
 microcontrollers for different display connections.
 The using of the I\textsuperscript{2}C interface is only possible with the SSD1306 controller.
 The signals of the I\textsuperscript{2}C interface require a pull-up resistor of \(4.7k\Omega\) to \(3.3V\).
@@ -903,7 +903,7 @@ as shown in table~\ref{tab:display-1280} .
 As I know, the tester is rebuild in China in two versions with character displays.
 The first model is rebuild from the first design of Markus F. without the ISP port.
 The assembled ATmega8 is placed in a socket, so you can replace it with a ATmega168 or ATmega328.
-For this version you should consider all the hints of section \ref{sec:change_markus}.
+For this version you should consider all the hints of section~\ref{sec:change_markus}.
 Additional \(100nF\) ceramic cpacitors should be connected near by the VCC-GND and AVCC-GND pins of
 the ATmega for better stabilization of the power voltage.
 Because there is no ISP connector at the board, you must expand the board with a ISP connector or you
@@ -943,7 +943,7 @@ Beginning with version 1.07k  the software does respect this offset for measurin
 \section{Chinese clones with graphical display}
 Newer rebuilds of the tester like a version from Fish8840  use a 128x64 pixel graphical display.
 This version use a modified circuit for the switch on logic. 
-The figure \ref{fig:Fish8840} shows a part of the modified circuit.
+The figure~\ref{fig:Fish8840} shows a part of the modified circuit.
 
 \begin{figure}[H]
 \centering
@@ -957,7 +957,7 @@ a 2:1 scaling factor for the battery voltage measurement is used instead of the 
 In addition R15 is direct connected to the battery, what results to a power consumption in the switch off state.
 The R15 should better be connected to the drain of Q1 or the input of the voltage regulator to prevent this
 unneeded battery power consumption.
-A suitable change of the printed board is shown in picture \ref{fig:Fish8840patch}.
+A suitable change of the printed board is shown in picture~\ref{fig:Fish8840patch}.
 A circuit path is cut between R17 and D5 and a new conductive path is inserted between Q1 and
 R15 with a enameled copper wire.
 
@@ -974,7 +974,7 @@ attempt can be done to replace the original software (BAT\_NUMERATOR=66 for exam
 The display module of the Fish8840 tester is equipped with a \(3.3V\) voltage regulator to adapt
 the operating voltage of the display controller.
 Because the \(3.3V\) operating voltage can be increased with the \(5V\) signal level of the data signals
-from the ATmega, a adapter circuit according to the picture \ref{fig:Fish8840Adapt} is recommended.
+from the ATmega, a adapter circuit according to the picture~\ref{fig:Fish8840Adapt} is recommended.
 The four data signal lines are equipped with four serial \(2.7k\Omega\) resistors at a little
 breadboard.
 Longer spacer bolts must be used to mount the display with the adapter board to the printed board
@@ -1062,7 +1062,7 @@ of the regulator.
 Both before and after the upgrade I have noticed, that with bipolar transistors
 a residual collector current (ICEO or ICEs) of about \(1\mu A\) was detected with this board.
 Not until the unknown LDO voltage regulator was replaced with a MCP1702-5002 this
-effect has disappeared. The figure \ref{fig:WeiM8mod} shows the modified board with
+effect has disappeared. The figure~\ref{fig:WeiM8mod} shows the modified board with
 the slantwise mounted capacitors and the MCP1702 regulator.
 If you don't wont to modify your board, you must set the extended fuse to 0x07 (0xff)
 to enable a regular operation. With that setting the voltage drops remain undetected.
@@ -1104,7 +1104,7 @@ shown any surprice.
 \end{figure}
 
 You can see the upgraded \(5mm\) threaded bolt and the upgraded cables with measurement clips
-at the pictures of the back side in figure \ref{fig:T4_back}.
+at the pictures of the back side in figure~\ref{fig:T4_back}.
 Because the data signals for the graphical LCD controller have also no
 level adaption (\(5V\) -\textgreater~\(3.3V\)), the setting of the option LCD\_SPI\_OPEN\_COL is recommended.
 Due to the fact, that the board can not be easy upgraded with a \inquotes{pull-up} resistor,
@@ -1216,7 +1216,7 @@ I could not find protection diodes at the input signals to the 3.3V supply side 
 
 \section{And another clone from Hiland M644}
 \vspace*{-0.3cm}
-This replica is based on the circuit diagram by Nick L. from Ukraine, see illustration \ref{fig:t644tester} on page \pageref{fig:t644tester}.
+This replica is based on the circuit diagram by Nick L. from Ukraine, see illustration~\ref{fig:t644tester} on page~\pageref{fig:t644tester}.
 \textbf {The tester is operated with a button that is both a button and an encoder.}
 It offers all of the the known measurement extensions:
 \begin{itemize} \setlength{\itemsep}{-0.5em}
@@ -1235,7 +1235,7 @@ plug-in display module which is occupied as follows: \\
 
 
 To be able to update the tester, you need an adapted cable that you can relatively simple
-create yourself as shown in figure \ref{fig:HiCable}.
+create yourself as shown in figure~\ref{fig:HiCable}.
 When delivered, the zero force test base is connected to the board via socket strips.
 
 In the tester shown below, the base was soldered directly and the socket strip saved with it

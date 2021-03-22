@@ -197,4 +197,6 @@ verify:
 upload_orig:
 	avrdude -c $(PROGRAMMER) -B $(BitClock) $(AVRDUDE_BAUD) -p $(PARTNO) -P $(PORT) -U flash:w:./TransistorTestorig.hex:a \
 	-U eeprom:w:./TransistorTestorig.eep:a
+if:
+	ls -l /dev/serial/by-id/* | cut -c 40-
 ## ****************************** EOF ***************************************** ##

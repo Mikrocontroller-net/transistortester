@@ -32,7 +32,7 @@ The MOSFET versions can be differed by the missing of gate current in any state
 of the TriStatePin.
 
 To get parameters of the depletion types, they will be measured with a \(680~\Omega\) resistor at
-the source pin, as shown in figure \ref{fig:JFETcd} . This measurement will be done instead of the
+the source pin, as shown in figure~\ref{fig:JFETcd} . This measurement will be done instead of the
 usually measurement of current with the gate hold at source level, because
 the \(I_\mathrm{DSS}\) current of the FET transistor can often not be reached
 with the relative high resistance of the \(680~\Omega\) resistor.
@@ -45,14 +45,14 @@ with the relative high resistance of the \(680~\Omega\) resistor.
 \end{figure}
 
 If the component has no current between positive probe and negative probe without signal at the
-TristatePin, the next tests are specified in the next section \ref{sec:pnp}.
-If current was detected, the next test is described in the diode section \ref{sec:diode}.
+TristatePin, the next tests are specified in the next section~\ref{sec:pnp}.
+If current was detected, the next test is described in the diode section~\ref{sec:diode}.
 
 \subsection{Measurement of PNP Transistor or P-Channel-MOSFET}
 \label{sec:pnp}
 First the current amplification factor is measured with common collector (emitter follower) for the assumed
 PNP transistor.
-The measuring situation is shown in figure \ref{fig:pnpcc}.
+The measuring situation is shown in figure~\ref{fig:pnpcc}.
 If the measured voltage at the Base (\(UB\)) is above \(9~mV\) with the \(680~\Omega\) resistor,
 the hFE is build as \(hFE = \frac{UE-UB}{UB}\).
 The voltage \(UE\) is the difference of the Emitter-voltage to VCC.
@@ -73,7 +73,7 @@ In this case the current amplification factor is build as \(hFE = \frac{UE \cdot
 
 Next the tests with common emitter are done for the assumed PNP transistor.
 The positive side of component is now direct connected to VCC, the negative side \(680~\Omega\) resistor
-is connected to GND as shown in Figure \ref{fig:pnpce}. 
+is connected to GND as shown in Figure~\ref{fig:pnpce}. 
 If the negative side of component has a voltage of above \(3.4~V\), when the base side \(680~\Omega\) resistor 
 was connected to GND, it must be a PNP transistor or a P-Channel FET.
 This can be easy find out by analysing the base voltage. If the base voltage is greater \(0.97~V\), it must be a PNP.
@@ -111,7 +111,7 @@ The measuring of NPN-Transistors begin in the same way as PNP-Transistors with m
 the current amplification factor in the common collector circuit.
 First measurement is done with a \(680~\Omega\) base resistor switched to VCC. If the
 voltage at the base resistor ist too low, the \(470~k\Omega\) resistor is taken instead.
-Measurement then continues with the common emitter circuit as shown in figure \ref{fig:npnce}.
+Measurement then continues with the common emitter circuit as shown in figure~\ref{fig:npnce}.
 
 \begin{figure}[H]
 \centering
@@ -316,7 +316,7 @@ with a hFE of 797 instead of 77200 and a base emitter voltage of \(1438~mV\).
 This will be caused by the additional measurement of current amplification with the
 common collector circuit.
 Also the new version shows the same low hFE result with the common emitter circiut,
-as you can see in the last column of table \ref{tab:bipolar}.
+as you can see in the last column of table~\ref{tab:bipolar}.
 The base emitter voltage is measured by the older Version as separate diode test with \(1438~mV\).
 Now the base emitter voltage is measured with the state of current amplification testing (\(1.20~V\)).
 The BUL38D Transistor has a build in protection diode over the anode and cathode of the NPN transistor,
@@ -330,7 +330,7 @@ the parasitical transistor are shown. With the label PNPn the existance of anoth
 The parasitical transistor structure is build only by integration of the protection diode nearby
 the transistor within the same material, not with a external diode.
 
-The following table \ref{tab:germanium} shows the measurement results for germanium transistors, which are extra problematic
+The following table~\ref{tab:germanium} shows the measurement results for germanium transistors, which are extra problematic
 to measure because of the temperatur dependent and high residual collector current.
 The results of the original version of Markus F. and the results of the actual 1.10k version are
 compared together. The 1.10k version for a ATmega328 measures the current amplification factor with
@@ -369,7 +369,7 @@ AD162       & PNP, B=2127, 280mV  & PNP, B=89, 107mV    & PNP, B=89, 107mV    \\
   \label{tab:germanium}
 \end{table}
 
-In the table \ref{tab:mos} the results of some field-effect transistor measurements are shown.
+In the table~\ref{tab:mos} the results of some field-effect transistor measurements are shown.
 One measured parameters of the E-type MOS types is the gate-source voltage, by which the
 digital input of the ATmega connected to the \(680~\Omega\) drain resistor
 changes the state.

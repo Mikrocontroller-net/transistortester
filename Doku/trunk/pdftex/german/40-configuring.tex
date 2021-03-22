@@ -7,7 +7,7 @@ Die Übersetzung der Module wird mit einer \lname{Makefile} gesteuert. Die Entwi
 auf einem Ubuntu Linux mit den GNU-Werkzeugen (GNU toolchain, gcc version 4.5.3) durchgeführt.
 Es sollte möglich sein, ohne Schwierigkeiten andere Linux-Betriebssysteme zu benutzen.
 Um die übersetzen Daten in den Flash-Speicher oder den EEPROM-Speicher zu laden, wird das
-Programm \lcmd{avrdude} \cite{avrdude} (Version 5.11svn) von der \lname{Makefile} benutzt, wenn man \lcmd{make upload} aufruft.
+Programm \lcmd{avrdude} \cite{avrdude} (Version 6.3) von der \lname{Makefile} benutzt, wenn man \lcmd{make upload} aufruft.
 Das Programm \lcmd{avrdude} ist für Linux und Windows verfügbar.
 Der GNU C-Kompiler wird auch von der AVR-studio-Software unter Windows oder von
 der WinAVR \cite{winavr1},\cite{winavr2} Software benutzt.
@@ -913,6 +913,20 @@ cdc_acm 1-6:1.0: ttyACM0: USB ACM device
 
 Bei diesem Beispiel ist der Gerätename identisch (ttyACM0).\\
 
+Einen Überblick über die angeschlossenen USB-seriell Wandler geben auch
+die Eintragungen in Verzeichnis \lname{/dev/serial/by-id/},
+die man mit dem Kommando abfragen kann:
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+ls -og /dev/serial/by-id/* | cut -d' ' -f 7-
+\end{verbatim} \end{large}
+Die Ausgabe kann beispielsweise so aussehen:
+\begin{footnotesize} \begin{verbatim}
+/dev/serial/by-id/usb-Arduino__www.arduino.cc__0043_954323131383519062F0-if00 -> ../../ttyACM2
+/dev/serial/by-id/usb-Pololu_Corporation_Pololu_USB_AVR_Programmer_v2.1_00227484-if01 -> ../../ttyACM0
+/dev/serial/by-id/usb-Pololu_Corporation_Pololu_USB_AVR_Programmer_v2.1_00227484-if03 -> ../../ttyACM1
+\end{verbatim} \end{footnotesize}
+Wenn die Beschreibung ausführlich genug ist, kann man so die Schnittstellen zuordnen.
+
 
 Wenn bis zu diesem Schritt alles in Ordnung ist,
 muß für dieses Beispiel nur der PORT Eintrag in der \lname{Makefile} auf
@@ -963,25 +977,41 @@ sudo echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2104"
 Die beiden Zeilen müssen sie zu einer langen Zeile 
 in der Kommandozeile zusammenfügen!
 \newline
-%Um die meisten Programmer verwenden zu können, wird folgender Text in 90-atmel.rules empfohlen:
-%\begin{footnotesize}
-%\begin{verbatim}
-%# Copy this file to /etc/udev/rules.d/90-atmel.rules
-%# AVR ISP mkII - DIAMEX ALL-AVR
-%SUBSYSTEM=="usb", ATTRS {idVendor}=="03eb", ATTS {idProduct}=="2104",\
-%MODE="0660", GROUP = "plugdev",
-%# USB ISP-programmer für Atmel AVR
-%SUBSYSTEM=="usb", ENV {DEVTYPE}=="usb_device", SYSFS {idVendor}=="16c0",\
-%MODE="0666", SYSFS {idProduct} == "05dc",
-%# USB asp programmer
-%ATTRS {idVendor}=="16c0", ATTRS {idProduct}=="05dc", GROUP="plugdev", MODE="0660"
-%# USBtiny programmer
-%ATTRS {idVendor}=="1781", ATTRS {idProduct}=="0c9f", GROUP="plugdev", MODE="0660"
-%\end{verbatim}
-%\end{footnotesize}
-%Nach dem die Datei erstellt wurde, kann die Erstellung und Inhalt kontrollieren mit:
-%\verb"less /etc/udev/rules.d/90-atmel.rules"\\ 
-Nach diesem Eintrag sollten Sie den ISP-Programmer ausstecken und wieder einstecken.
+Um die meisten Programmer verwenden zu können, wird folgender Text in 90-atmel.rules empfohlen:
+\begin{tiny}
+\begin{verbatim}
+# Copy this file to /etc/udev/rules.d/90-atmel.rules
+# AVR ISP mkII - DIAMEX ALL-AVR
+SUBSYSTEM=="usb", ATTRS {idVendor}=="03eb", ATTRS {idProduct}=="2104", GROUP = "plugdev", MODE="0660",
+# Atmel AVR Dragon
+ATTRS {idVendor}=="03eb", ATTRS {idProduct}=="2107", GROUP="plugdev", MODE="0660"
+# Atmel-ICE
+SUBSYSTEM=="usb", ATTRS {idVendor}=="03eb", ATTRS {idProduct}=="2141", GROUP = "plugdev", MODE="0660",
+# xplained-mini
+SUBSYSTEM=="usb", ATTRS {idVendor}=="03eb", ATTRS {idProduct}=="2145", GROUP = "plugdev", MODE="0660",
+# avrftdi
+#SUBSYSTEM=="usb", ATTRS {idVendor}=="0403, ATTRS {idProduct}=="6010", GROUP = "plugdev", MODE="0660",
+# UM232H
+#SUBSYSTEM=="usb", ATTRS {idVendor}=="0403, ATTRS {idProduct}=="6014", GROUP = "plugdev", MODE="0660",
+# USB asp programmer
+ATTRS {idVendor}=="16c0", ATTRS {idProduct}=="05dc", GROUP="plugdev", MODE="0660"
+# USB NIBObee-Programmer
+ATTRS {idVendor}=="16c0", ATTRS {idProduct}=="092f", GROUP="plugdev", MODE="0660"
+# USBtiny programmer
+ATTRS {idVendor}=="1781", ATTRS {idProduct}=="0c9f", GROUP="plugdev", MODE="0660"
+# USB ISP-programmer für Atmel AVR
+SUBSYSTEM=="usb", ENV {DEVTYPE}=="usb_device", SYSFS {idVendor}=="16c0", SYSFS {idProduct} == "05dc", MODE="0660",
+\end{verbatim}
+\end{tiny}
+Nach dem die Datei erstellt wurde, kann die Erstellung und Inhalt kontrollieren mit:
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+less /etc/udev/rules.d/90-atmel.rules 
+\end{verbatim} \end{large}
+Danach sollten Sie das System veranlassen, die udev-Regeln neu einzulesen mit:
+\begin{large} \vspace{-0.4em} \begin{verbatim}
+sudo udevadm control --reload-rules
+\end{verbatim} \end{large}
+Dann sollten Sie den ISP-Programmer ausstecken und wieder einstecken.
 Jetzt sollte das System Ihnen Zugriff auf das Gerät geben, wenn Sie Mitglied der Gruppe \lname{plugdev}
 sind.
 Daher sollten Sie Mitglied der Gruppe \lname{plugdev} und auch der Gruppe \lname{dialout}
@@ -1079,7 +1109,7 @@ Wenn sie diese Einstellungen überprüft haben,
 können sie durch \LMB Anklicken des Terminal Fensters dieses wieder aktivieren.
 Beim aktivierten Fenster hat die Kopfzeile einen höheren Kontrast!
 Wenn jetzt ihr ISP-Programmer komplett angeschlossen ist, also eine Verbinduung
-zum Rechner und zum ATmega hat, brauchen sie nur das Kommandoa eingeben:
+zum Rechner und zum ATmega hat, brauchen sie nur das Kommando eingeben:
 \begin{large} \vspace{-0.4em} \begin{verbatim}
 make upload
 \end{verbatim} \end{large}

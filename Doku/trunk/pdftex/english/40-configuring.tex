@@ -6,7 +6,7 @@ The compilation of modules is controlled with a Makefile. The developement was d
 at the Ubuntu Linux operating system with the GNU toolchain (gcc version 4.5.3).
 It should be possible to use other Linux operating systems without problems.
 To load the compiled data to the flash memory or
-the EEprom memory, the tool \lcmd{avrdude} (version 5.11svn) was taken by the Makefile, if you call \inquotes{make upload}.
+the EEprom memory, the tool \lcmd{avrdude} (version 6.3) was taken by the Makefile, if you call \inquotes{make upload}.
  The program \lcmd{avrdude} \cite{avrdude} is available for Linux and Windows operating system.
 The gnu C-compiler gcc is also taken by the AVR studio software and
 by the WinAVR \cite{winavr1},\cite{winavr2} software at the Windows operating system.
@@ -206,7 +206,7 @@ Because a boarder in required for this presentation, you can not combine this op
 Example: CFLAGS += INVERSE\_TP
 
   \item[STRIP\_GRID\_BOARD] This option adapts the software to a changed port D connection for strip grid printed boards.
-You can find the details in the chapter hardware \ref{sec:hardware} at page~\pageref{sec:hardware}.
+You can find the details in the chapter hardware~\ref{sec:hardware} at page~\pageref{sec:hardware}.
 You can also choose alternative assignments of ATmega pins for graphical displays.
 For the chinese \inquotes{T5} board you must set the STRIP\_GRID\_BOARD option to 5.
 For alternative pin assignments of graphical displays the assignment of the pushbutton signal is unchanged.\\
@@ -432,7 +432,7 @@ Example: CFLAGS += -DESR\_ZERO=29
   \item[NO\_AREF\_CAP] tells your Software, that you have no capacitor (\(100nF\)) installed at pin AREF (pin 21).
 This enables a shorter wait-time for the AUTOSCALE\_ADC scale switching of the ADC.
 A \(1nF\) capacitor was tested in this mode without detected errors.
-Figure \ref{pic:aref1} and \ref{pic:aref5} show the switching time with a \(1nF\) capacitor.
+Figure~\ref{pic:aref1} and~\ref{pic:aref5} show the switching time with a \(1nF\) capacitor.
 As you can see the switching from \(5V\) to \(1.1V\) is much slower than switching back to \(5V\). If you
 have still installed the \(100nF\), switching time will be about factor 100 longer!\\
 Example: CFLAGS += -DNO\_AREF\_CAP
@@ -818,8 +818,8 @@ For compiling the source you must only type the simple command \lcmd{make}
 in thbe right working directory.
 Because the ATmega can be easy programmed with a \lcmd{make upload} command,
 we should first prepare the access to the interface of the ISB-programmer.
-The further operating steps you can find in section \ref{sec:Arbeitsumgebung}
-at page \pageref{sec:Arbeitsumgebung}.
+The further operating steps you can find in section~\ref{sec:Arbeitsumgebung}
+at page~\pageref{sec:Arbeitsumgebung}.
 
 \subsubsection{usage of interfaces}
 \label{sec:Schnittstellen}
@@ -1034,7 +1034,7 @@ You can also use the \menu [,] {{Reset to system defaults}} to reset all changes
 
 For the next step it is important that the settings for
 \textbf {your ISP programmer} are correctly set in the Makefile.
-See the subsection \ref{sec:config}, on the page \pageref{sec:config-Prog},
+See the subsection~\ref{sec:config}, on the page~\pageref{sec:config-Prog},
 topic \textbf{PROGRAMMER} and \textbf{PORT}.
 When you have checked these settings, you can reactivate the terminal window by clicking \LMB.
 When the window is activated, the header has a higher contrast!
@@ -1111,7 +1111,7 @@ in the Makefile must match to your environment.
 But the WinAVR package use a very old compiler version. You should better install
 the Arduino package and overwrite the avr executables.
 
-The figures \ref{fig:WinAVR1} show the File menu of the graphical user interface of WinAVR for
+The figures~\ref{fig:WinAVR1} show the File menu of the graphical user interface of WinAVR for
 open the file Makefile and for saving the changed Makefile (Save).
 
 \begin{figure}[H]
@@ -1130,7 +1130,7 @@ open the file Makefile and for saving the changed Makefile (Save).
   \label{fig:WinAVR1}
 \end{figure}
 
-The next figures \ref{fig:WinAVR2} show the Tools menu of the Programmer's Notepad
+The next figures~\ref{fig:WinAVR2} show the Tools menu of the Programmer's Notepad
 for compiling the program (Make All) and for programming the ATmega (Program) with \lcmd{avrdude}.
 
 \begin{figure}[H]
@@ -1223,12 +1223,12 @@ the AUTOSCALE\_ADC option and with the option NO\_REF\_CAP, but the capacitor
 at the AREF pin has still a value of \(100nF\).
 Wrong assembly of components or remaining soft solder flux can disturb the 
 measurements too. Please check with the selftest function of your TransistorTester software
-if possible. For the details see Chapter \ref{sec:selftest}.
+if possible. For the details see Chapter~\ref{sec:selftest}.
 
 Otherwise inspect your board visually and check the resistor values
 with a ohmmeter. You can use the pins of the ATmega for this check, for example
 to check the R1 you can measure between pin 23 and pin 14. Take a look at the
-circuit diagram \ref{fig:ttester} for details. There is no need to
+circuit diagram~\ref{fig:ttester} for details. There is no need to
 remove the microcontroller, only battery or power supply should be removed before.
 
 \item[The Tester switch off the power after 2 seconds display time] 

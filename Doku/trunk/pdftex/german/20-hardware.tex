@@ -3,7 +3,7 @@
 \section{Die Schaltung des TransistorTesters}
 \label{sec:hardware}
 Die Schaltung des TransistorTesters in Abbildung~\ref{fig:ttester} basiert auf der Schaltung von
-Markus F., die er in Abb. 1 des AVR-Transistortester Reports \cite{Frejek} veröffentlicht hat.
+Markus F., die er in Abb. 1 des AVR-Transistortester Reports~\cite{Frejek} veröffentlicht hat.
 Geänderte oder verschobene Bauteile sind mit \textcolor{green}{grüner Farbe} markiert, optionale Teile sind
 mit \textcolor{red}{roter Farbe} gekennzeichnet.
 
@@ -84,12 +84,12 @@ Controllers kann aber auch fest auf GND gelegt werden anstelle mit dem LCD-CE Au
     \end{tabular}
   \end{center}
   \caption{Pinbelegung für verschiedene Displays}
-  \label{tab:display-con}
+\label{tab:display-con}
 \end{table}
 
 Um einen einfacheren Anschluss des Displays an den ATmega auf Streifenleiterplatinen zu erreichen,
 kann die Software auch eine andere Port-D-Belegung berücksichtigen.
-Die folgende Tabelle \ref{tab:grid-change} zeigt die Änderungen der Pinbelegungen für ein Textdisplay und 
+Die folgende Tabelle~\ref{tab:grid-change} zeigt die Änderungen der Pinbelegungen für ein Textdisplay und 
 alternative Anschlüsse für graphische Displays bei einem ATmega328 Mikrocontroller.
 Außerdem werden die Belegungen der Port-Eingänge für zusätzliche Funktionen gezeigt. 
 Bei der Belegung für das grafische Display mit der Streifenraster-Option (STRIP\_GRID\_BOARD=1)
@@ -125,7 +125,7 @@ Signale am Displayanschluß zur Verfügung stehen.
     \end{tabular}
   \end{center}
   \caption{Alternative Pinbelegungen mit der Option STRIP\_GRID\_BOARD}
-  \label{tab:grid-change}
+\label{tab:grid-change}
 \end{table}
 
 \section{Erweiterungen für den TransistorTester}
@@ -152,14 +152,14 @@ entladen werden.
    \end{overpic}
   \caption{mit Relais}
   \end{subfigure}
-  ~
+~
   \begin{subfigure}[b]{.5\textwidth}	%9cm
     \centering
     \includegraphics[width=.78\textwidth]{../FIG/diode_addon.pdf}	% width=7cm
     \caption{mit Dioden}
   \end{subfigure}
   \caption{Zusätzlicher Schutz der ATmega-Eingänge}
-  \label{fig:relay_addon}
+\label{fig:relay_addon}
 \end{figure}
 
 Ein noch besserer Schutz ist mit einem Relais mit 3 Umschaltkontakten nach Abbildung~\ref{fig:relay_um_addon} möglich.
@@ -174,7 +174,7 @@ Man darf aber nicht vergessen, daß der Tester während der Messung trotzdem ung
   \put(78,38){\makebox(0,0)[lb]{{\footnotesize von Relaisspannung}}}
  \end{overpic}
  \caption{Verbesserter Schutz mit Relais}
- \label{fig:relay_um_addon}
+\label{fig:relay_um_addon}
 \end{figure}
 
 \subsection{Zenerspannungsmessung}
@@ -199,7 +199,7 @@ Ungefähr \(40mA\) mehr Batteriestrom wird für diese Erweiterung bei gedrückte
   \put(42,2){\makebox(0,0)[lb]{Sollte separat positioniert werden!}}    
  \end{overpic}
  \caption{Erweiterung zum Messen von Zenerspannungen}
- \label{fig:zener}
+\label{fig:zener}
 \end{figure}
 
 Der 10:1-Spannungsteiler kann mit dem optionalen Dialogteil für den ATmega328 auch ohne 
@@ -280,13 +280,13 @@ Raststellung.
   \put(90,19){\makebox(0,0)[lb]{Schalter B}}
   \put(6,6){\makebox(0,0)[rb]{\footnotesize{Zustand:}}}
   \put(6,48.5){\makebox(0,0)[rb]{\footnotesize{Zustand:}}}
-  \multiput(23.5,53)(24.6,0){3}{\footnotesize {Rastung}}
-  \multiput(11,10)(12.3,0){6}{\footnotesize {Rastung}}
+  \multiput(23.5,53) (24.6,0){3}{\footnotesize {Rastung}}
+  \multiput(11,10) (12.3,0){6}{\footnotesize {Rastung}}
   \put(52,43){\makebox(0,0)[cb]{\large{Version 2}}}
   \put(52,1){\makebox(0,0)[cb]{\large{Version 1}}}
  \end{overpic}
  \caption{Zwei unterschiedliche Versionen eines Impulsdrehgeber}
- \label{fig:RotEnc}
+\label{fig:RotEnc}
 \end{figure}
 
 Die Abbildung~\ref{fig:RotBounce} zeigt einen Impulsdrehgeber, der nicht nur
@@ -311,12 +311,12 @@ ungünstiger Lage der Schaltflanken kann aber ein Zählpuls für eine Raststellu
   \color{black}
   \put(90,39){\makebox(0,0)[lb]{Schalter A}}
   \put(90,30){\makebox(0,0)[lb]{Schalter B}}
-  \multiput(11,23)(28,0){3}{\footnotesize {Rastung}}
+  \multiput(11,23) (28,0){3}{\footnotesize {Rastung}}
   \put(7,20){\makebox(0,0)[rb]{Zustand}}
   \put(5,12){\makebox(0,0)[lb]{Mögliche Zustände von links nach rechts:}}
  \end{overpic}
  \caption{Ein Impulsdrehgeber mit prellenden Kontakten}
- \label{fig:RotBounce}
+\label{fig:RotBounce}
 \end{figure}
 
 Anstelle der beiden Kontakte für den Impulsdrehgeber können auch zwei Taster für Rauf (Up) und Runter (Down)
@@ -335,7 +335,7 @@ Der ATmega-Prozessor sollte mindestens 32k Flash-Speicher besitzen.
 Der ST7565-Controller wird mit einer Betriebsspannung von \(3,3V\) betrieben.
 Deswegen ist ein zusätzlicher Spannungsregler notwendig.
 Nach dem Controller Datenblatt dürfen keine \(5V\) Signale direkt mit den Controller-Eingängen verbunden
-werden. Deshalb ist in der Erweiterung nach Bild \ref{fig:ST7565lcd} ein zusätzlicher CMOS 74HC4050
+werden. Deshalb ist in der Erweiterung nach Bild~\ref{fig:ST7565lcd} ein zusätzlicher CMOS 74HC4050
 für die Pegelanpassung vorgesehen. 
 Man kann auch versuchen, die vier Gatter des 74HC4050 durch vier Widerstände von etwa \(2,7k\Omega\) zu ersetzen.
 Über den Spannungsabfall an den Widerständen wird verhindert, dass die \(3,3V\)-Versorgung des Controllers über die Schutzdioden
@@ -351,10 +351,10 @@ Mit den Gattern des 74HC4050 bleibt die Signalform jedenfalls besser erhalten.\\
   \put(88,7){\makebox(0,0)[lb]{LED}}
  \end{overpic}
  \caption{Anschluss eines graphischen Displays mit ST7565 Controller}
- \label{fig:ST7565lcd}
+\label{fig:ST7565lcd}
 \end{figure}
 
-Die Tabelle \ref{tab:spi-processor} zeigt weitere Anschlußmöglichkeiten
+Die Tabelle~\ref{tab:spi-processor} zeigt weitere Anschlußmöglichkeiten
 für den ATmega328 und andere Prozessoren mit der SPI (LCD\_INTERFACE\_MODE=4)
 oder der 3LINE (LCD\_INTERFACE\_MODE=3) Schnittstelle. \\
 Verschiedene Belegungen für
@@ -387,13 +387,13 @@ Signal:     &       &       &        &      &      &      &      \\
     \end{tabular}
   \end{center}
   \caption{SPI Anschlußbelegungen für verschiedene Prozessoren}
-  \label{tab:spi-processor}
+\label{tab:spi-processor}
 \end{table}
 
 Normalerweise wird der ST7565- oder der SSD1306-Controller mit einer 4-Wire SPI-Schnittstelle angeschlossen.
 Beim SSD1306-Controller kann auch eine I\textsuperscript{2}C-Schnittstelle mit PD2 als SDA- und PD5 als SCL-Signal benutzt werden.
 Die SDA- und SCL-Signale müssen mit einem \inquotes{Pull-up} Widerstand von ungefähr \(4,7k\Omega\) nach \(3,3V\) versehen sein.
-Eine Anschlußmöglichkeit zeigt die Abbildung \ref{fig:ssd1306i2c}.
+Eine Anschlußmöglichkeit zeigt die Abbildung~\ref{fig:ssd1306i2c}.
 Vor der Verwendung der \inquotes{Pull-up} Widerstände nach \(5V\) sollte überprüft werden, ob die Eingänge dieses Signal vertragen.
 Normalerweise sind die Eingänge des Kontrollers über Dioden nach \(3.3V\) geschützt.
 Die Ausgänge des ATmega werden für die I\textsuperscript{2}C-Signale nur nach \(0V\) geschaltet.
@@ -422,7 +422,7 @@ Etwas einfacher ist der Anschluß eines graphischen Displays mit einem ST7920 Co
 der Controller mit \(5V\) Betriebsspannung läuft.
 Dabei sollte das Display 128x64 sichtbare Pixel besitzen.
 Das Display Modul mit dem ST7920 Controller kann entweder mit der 4-Bit Parallelschnittstelle oder mit einer 
-speziellen Seriellschnittstelle angeschlossen werden, wie die Abbildung \ref{fig:ST7920lcd} zeigt.
+speziellen Seriellschnittstelle angeschlossen werden, wie die Abbildung~\ref{fig:ST7920lcd} zeigt.
  
 \begin{figure}[H]
  \centering
@@ -432,7 +432,7 @@ speziellen Seriellschnittstelle angeschlossen werden, wie die Abbildung \ref{fig
   \put(80,1){\makebox(0,0)[cb]{4-bit parallel Betrieb}}
  \end{overpic}
  \caption{Anschluss eines Displays mit ST7920 Controller}
- \label{fig:ST7920lcd}
+\label{fig:ST7920lcd}
 \end{figure}
 
 Für beide Anschlußarten muß die Software speziell konfiguriert werden. 
@@ -459,7 +459,7 @@ Signal:     &       &       &        &         \\
     \end{tabular}
   \end{center}
   \caption{Serielle Anschlußbelegungen für verschiedene Prozessoren}
-  \label{tab:ser-processor}
+\label{tab:ser-processor}
 \end{table}
 
 Die Ausrichtung der Darstellung kann wie bei allen graphischen Displays  mit den Optionen
@@ -468,7 +468,7 @@ LCD\_ST7565\-\_H\_FLIP und LCD\_ST7565\-\_V\_FLIP angepaßt werden. \\
 Einen Sonderfall stellen Displays mit NT7108 oder KS0108 (S6B0108) Controller dar. Da die Displays nur mit 8-Bit Parallelschnittstelle
 angesteuert werden können, ist ein externer seriell-parallel Wandler erforderlich.
 Die einfachste Lösung scheint mir mit einem 74HCT164 oder einem 74HCT595 Chip möglich zu sein.
-Einen entsprechenden Schaltungsvorschlag zeigt das Bild \ref{fig:NT7108lcd} .
+Einen entsprechenden Schaltungsvorschlag zeigt das Bild~\ref{fig:NT7108lcd}.
 
 \begin{figure}[H]
   \begin{subfigure}[b]{.5\textwidth}	% 9cm
@@ -476,14 +476,14 @@ Einen entsprechenden Schaltungsvorschlag zeigt das Bild \ref{fig:NT7108lcd} .
     \includegraphics[width=.9\textwidth]{../FIG/ST7108serial164.pdf}	% 8cm
     \caption{mit 74HCT164}
   \end{subfigure}
-  ~
+~
   \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
     \includegraphics[width=.9\textwidth]{../FIG/ST7108serial595.pdf}	% 8cm
     \caption{mit 74HCT595}
   \end{subfigure}
   \caption{Anschluss eines graphischen Displays mit NT7108 Controller}
-  \label{fig:NT7108lcd}
+\label{fig:NT7108lcd}
 \end{figure}
 
 Sie müssen die Pinreihenfolge bei Ihrem LCD-Modul prüfen, einige Module haben eine andere Signalreihenfolge.
@@ -527,10 +527,10 @@ Einige verschiedene Pinbelegungen aus Datenblättern der ABG128064 Serie zeigt T
     \end{tabular}
   \end{center}
   \caption{Pinbelegung verschiedener NT7108 Module}
-  \label{tab:NT7108types}
+\label{tab:NT7108types}
 \end{table}
 
-Die Tabelle \ref{tab:7108-processor} zeigt die Belegung des seriellen NT7108 Controller
+Die Tabelle~\ref{tab:7108-processor} zeigt die Belegung des seriellen NT7108 Controller
 Anschluß für verschiedene Prozessor-Serien.
 \begin{table}[H]
   \begin{center}
@@ -556,7 +556,7 @@ Signal:     &       &        &         \\
     \end{tabular}
   \end{center}
   \caption{Serieller NT7108 Anschluß für verschiedene Prozessoren}
-  \label{tab:7108-processor}
+\label{tab:7108-processor}
 \end{table}
 
 Es können auch Displays mit einem PCF8814 Controller verwendet werden, wie sie beispielsweise
@@ -597,7 +597,7 @@ Getestet ist derzeit nur die 3-line Schnittstelle.
     \end{tabular}
   \end{center}
   \caption{Pinbelegung für verschiedene Anschlussvarianten des PCF8814 Kontrollers}
-  \label{tab:PCF8814-con}
+\label{tab:PCF8814-con}
 \end{table}
 
 Es ist auch eine Unterstützung für einen PCF8812 controller mit 102x65 Pixeln bereits vorhanden,
@@ -606,7 +606,7 @@ aber völlig ungetestet.
 \subsection{Anschluss eines graphischen Farbdisplays}
 
 Von chinesischen Händlern werden preisgünstige Farbdisplay-Module mit einer SPI Schnittstelle angeboten.
-Die Abbildung \ref{fig:Color_both} zeigt die Rückseite der beiden unterstützten Module mit 128x128 Pixeln
+Die Abbildung~\ref{fig:Color_both} zeigt die Rückseite der beiden unterstützten Module mit 128x128 Pixeln
 und 128x160 Pixeln.
 Diese Module sind sehr klein, so werden auch Texte und Symbole sehr klein dargestellt.
 Aber das Erscheinungsbild ist scharf und klar.
@@ -629,7 +629,7 @@ nichts erkennbar ist.
 Aufgrund der hohen Pixelzahl in vertikaler Richtung können auf den Displays mehr Textzeilen dargestellt
 werden. Für das 128x128 Pixel Display können bis zu 8 Textzeilen mit einem 12x8 Font dargestellt werden,
 Für das 128x160 Pixel Display sind es sogar 10 Textzeilen.
-Auf dem Foto \ref{fig:Color_PNP} ist das Ergebnis einer Messung eines Germanium Transistors auf einem
+Auf dem Foto~\ref{fig:Color_PNP} ist das Ergebnis einer Messung eines Germanium Transistors auf einem
 128x128 Pixel Display zu sehen.
 
 \begin{figure}[H]
@@ -774,11 +774,11 @@ angezeigt. Falls es zu der Anzeige kommen sollte, hilft ein nach VCC geschaltete
 \section{Erweiterte Schaltung mit ATmega644 oder ATmega1284}
 
 Eine erweiterte Schaltung für ATmega644/1284-Prozessoren wurde in Zusammenarbeit mit Nick L. aus
-der Ukraine entwickelt. Die Schaltung nach Abbildung \ref{fig:t644tester} ermöglicht zusätzlich
+der Ukraine entwickelt. Die Schaltung nach Abbildung~\ref{fig:t644tester} ermöglicht zusätzlich
 einen Test von Quarzen und einen erweiterten Frequenzbereich für die Frequenzmessung.
-Obwohl die Grundschaltung sehr ähnlich der Schaltung \ref{fig:ttester} ist, werden hier
+Obwohl die Grundschaltung sehr ähnlich der Schaltung~\ref{fig:ttester} ist, werden hier
 andere Portbelegungen benutzt.
-Ein Impulsdrehgeber nach Schaltung \ref{fig:RotExt} kann hier an PB5 und PB7 (statt PD1 und PD3) angeschlossen werden.
+Ein Impulsdrehgeber nach Schaltung~\ref{fig:RotExt} kann hier an PB5 und PB7 (statt PD1 und PD3) angeschlossen werden.
 Beide Signale und auch die Versorgungssignale VCC und GND sind am ISP-Stecker verfügbar,
 sodass die Erweiterung auch hier angeschlossen werden kann.
 
@@ -787,7 +787,7 @@ Der Teiler kann aber auch für Frequenzen von \(25kHz\) bis \(400kHz\) benutzt w
 Periodenmessung die Auflösung der Frequenzmessung zu verbessern.
 Für die Umschaltung der Betriebszustände (Frequenzteiler und Quarz-Oszillator) werden
 die Analogschalter 74HC4052 benutzt.
-Die Tabelle \ref{tab:mega644-display} zeigt die Pinbelegung für den ATmega324/624/1284 Mikrocontroller für verschiedene Displayanschlüsse.
+Die Tabelle~\ref{tab:mega644-display} zeigt die Pinbelegung für den ATmega324/624/1284 Mikrocontroller für verschiedene Displayanschlüsse.
 Die I\textsuperscript{2}C-Schnittstelle ist nur mit dem SSD1306-Controller möglich.
 Die Signale der I\textsuperscript{2}C-Schnittstelle erfordern einen \inquotes{Pull-Up}-Widerstand von etwa \(4,7k\Omega\) nach \(3,3V\).
 Die Ausgänge des ATmega werden für die I\textsuperscript{2}C-Signale nur nach \(0V\) geschaltet.
@@ -818,7 +818,7 @@ Die Ausgänge des ATmega werden für die I\textsuperscript{2}C-Signale nur nach 
     \end{tabular}
   \end{center}
   \caption{Verschiedene Varianten der Display-Anschlüsse}
-  \label{tab:mega644-display}
+\label{tab:mega644-display}
 \end{table}
 
 Auch ein Display mit NT7108 (KS0108, S6B0108) Controller kann mit einer kleinen Zusatzschaltung an einen
@@ -832,14 +832,14 @@ Tabelle~\ref{tab:NT7108types} auf Seite~\pageref{tab:NT7108types} angegeben.
     \includegraphics[width=.88\textwidth]{../FIG/ST7108serial164_644.pdf}	% width=8cm
     \caption{mit 74HCT164}
   \end{subfigure}
-  ~
+~
   \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
     \includegraphics[width=.88\textwidth]{../FIG/ST7108serial595_644.pdf}	% width=8cm
     \caption{mit 74HCT595}
   \end{subfigure}
   \caption{Anschluss des NT7108 Controllers an einen ATmega644/1284}
-  \label{fig:NT7108lcd_644}
+\label{fig:NT7108lcd_644}
 \end{figure}
 
 \begin{figure}[H]
@@ -907,14 +907,14 @@ werden, wie in der Tabelle~\ref{tab:display-1280} angegeben.
     \end{tabular}
   \end{center}
   \caption{Pinbelegungen für verschiede Displays an ATmega1280/2560}
-  \label{tab:display-1280}
+\label{tab:display-1280}
 \end{table}
 
 \section{Chinesische Nachbauten mit Textdisplay}
 Der Tester wird in China nach meinem Kenntnisstand in zwei Versionen mit Textdisplay nachgebaut.
 Die erste Variante ist der Nachbau des ersten Entwurfs von Markus F. ohne ISP-Schnittstelle.
 Der bestückte ATmega8 ist bei dieser Version gesockelt, kann also auch durch einen ATmega168/328 ausgetauscht werden.
-Für diese Version gelten alle Hinweise des Unterkapitels \ref{sec:change_markus}.
+Für diese Version gelten alle Hinweise des Unterkapitels~\ref{sec:change_markus}.
 Zusätzliche \(100nF\) keramische Kondensatoren sollten in der Nähe des ATmega an die VCC-GND und
 AVCC-GND Anschlüsse zur besseren Spannungsstabilisierung angebracht werden.
 Da auf der Platine ein ISP-Stecker fehlt, muß entweder ein ISP-Anschluß nachgerüstet werden oder
@@ -952,7 +952,7 @@ ab der Softwareversion 1.07k berücksichtigt.
 
 \section{Chinesische Nachbauten mit graphischem Display}
 Neuere Nachbauten verwenden ein 128x64 Pixel graphisches Display wie zum Beispiel eine Version von Fish8840.
-Bei dieser Version wird eine veränderte Schaltung für das Einschalten benutzt. Die Abbildung \ref{fig:Fish8840}
+Bei dieser Version wird eine veränderte Schaltung für das Einschalten benutzt. Die Abbildung~\ref{fig:Fish8840}
 zeigt einen Ausschnitt der Schaltung.
 
 \begin{figure}[H]
@@ -967,7 +967,7 @@ wird mit 2:1 ein anderes Teilerverhältnis für die Batteriespannung wie im Orig
 Außerdem ist R15 direkt an die Batterie angeschlossen, was zu einem geringen Stromverbrauch im
 ausgeschalteten Zustand führt. Hier sollte R15 besser an das Drain von Q1 beziehungsweise an den
 Eingang des Spannungsreglers angeschlossen werden um den unnötigen Batterieverbrauch zu vermeiden.
-Eine entsprechende Änderung auf der Platine zeigt die Abbildung \ref{fig:Fish8840patch}.
+Eine entsprechende Änderung auf der Platine zeigt die Abbildung~\ref{fig:Fish8840patch}.
 Eine Leiterbahn ist zwischen R17 und D5 getrennt und mit einem Stück Kupferlackdraht eine
 neue Verbindung zwischen Q1 und R15 gelötet.
 
@@ -985,7 +985,7 @@ Das Display Module des Fish8840 Testers besitzt einen \(3.3V\) Spannungsregler, 
 des Display-Controllers anpassen soll.
 Da es über die Datenleitungen des Display-Moduls zu einer Erhöhung der \(3.3V\) Betriebsspannung wegen
 der \(5V\) Signale vom ATmega kommt,
-wird eine Adapterschaltung nach Abbildung \ref{fig:Fish8840Adapt} empfohlen. Hier sind in die vier
+wird eine Adapterschaltung nach Abbildung~\ref{fig:Fish8840Adapt} empfohlen. Hier sind in die vier
 Datenleitungen vier serielle Widerstände mit jeweils \(2.7k\Omega\) auf einer kleinen Lochrasterplatine
 zwischengeschaltet.
 Längere Gewindebolzen müssen nun verwendet werden, um das Display mit der Adapterplatine auf dem
@@ -997,14 +997,14 @@ Fish8840 Tester zu befestigen.
     \includegraphics[width=1.\textwidth]{../PNG/Fish8840Adapt1.jpg}	% width=9cm
     \caption{Display mit Adapter}
   \end{subfigure}
-  ~
+~
   \begin{subfigure}[b]{.5\textwidth}	% width=9cm
     \centering
     \includegraphics[width=1.\textwidth]{../PNG/Fish8840Adapt2.jpg}	% width=9cm
     \caption{Fertig montierter Tester}
   \end{subfigure}
   \caption{Adapter für einen korrekten Display Anschluß}
-  \label{fig:Fish8840Adapt}
+\label{fig:Fish8840Adapt}
 \end{figure}
 
 Anstelle dieser Umrüstung kann mit der Makefile Option LCD\_SPI\_OPEN\_COL auch eine spezielle Ausgangsschaltung
@@ -1030,7 +1030,7 @@ Leider kann der Originalzustand der chinesischen Software-Variante auch nicht ge
 da die Sicherheits-Bits des ATmega328 gesetzt sind.
 Es gibt also keinen Weg zurück zur Originalversion der Software.\\ 
 
-Eine weitere Version mit graphischem Display ist die WEI\_M8 Platine, die in Abbildung \ref{fig:WeiM8}.
+Eine weitere Version mit graphischem Display ist die WEI\_M8 Platine, die in Abbildung~\ref{fig:WeiM8}.
 Dieser Nachbau benutzt als Stromquelle einen LiIon Akkumulator im AA (Mignon) Format, der über
 eine Micro-USB Schnittstelle geladen werden kann. Ein Betrieb ohne Akku ist über die USB-Schnittstelle
 ebenfalls möglich.
@@ -1053,14 +1053,14 @@ wegen der \(5V\) Signalpegel vom ATmega nicht zu befürchten.
     \includegraphics[width=1.\textwidth]{../PNG/WEI_M8_D.JPG}	% width=9cm
     \caption{Adapterplatine für das Display}
   \end{subfigure}
-  ~
+~
   \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
     \includegraphics[width=1.\textwidth]{../PNG/WEI_M8_L.JPG}	% width=9cm
     \caption{Grundplatine}
   \end{subfigure}
   \caption{Innenleben des WEI\_M8 Testers}
-  \label{fig:WeiM8int}
+\label{fig:WeiM8int}
 \end{figure}
 
 
@@ -1073,7 +1073,7 @@ am Eingang des Spannungsreglers und mit einem \(10\mu F\) keramischen Kondensato
 Reglerausgang (VCC) zusätzlich abgeblockt. Sowohl vor der Nachrüstung als auch danach
 wurde bei bipolaren Transistoren ein Kollektor-Reststrom (ICEO oder ICEs) gemessen.
 Erst der Austausch des LDO-Spannungsreglers (unbekannter Typ) durch einen MCP1702-5002
-brachte hier Abhilfe. Die Abbildung \ref{fig:WeiM8mod} zeigt die umgerüstete Platine
+brachte hier Abhilfe. Die Abbildung~\ref{fig:WeiM8mod} zeigt die umgerüstete Platine
 mit den schräg montierten nachgerüsteten Kondensatoren und dem MCP1702 Regler.
 Wer die Kondensatoren nicht nachrüsten möchte, sollte die extended Fuse auf 0x07 (0xff)
 setzen, damit ein Betrieb möglich ist. Damit bleiben die Spannungseinbrüche unentdeckt.
@@ -1087,7 +1087,7 @@ setzen, damit ein Betrieb möglich ist. Damit bleiben die Spannungseinbrüche un
 
 Eine weitere Version mit graphischem Display ist der LCD-T4 Tester mit einer gelben Platine.
 Für das Aufspielen neuer Software habe ich das Display abgenommen.
-Auf dem rechten Foto der Abbildung \ref{fig:T4_front} ist der Stecker für die ISP-Verbindung rechts oben
+Auf dem rechten Foto der Abbildung~\ref{fig:T4_front} ist der Stecker für die ISP-Verbindung rechts oben
  neben den entsprechen Bohrungen der Platine in der richtigen Ausrichtung aufgelegt.
 Für die Programmierung habe habe ich den Stecker nicht eingelötet, sondern nur eingesteckt und durch
 seitlichen Druck mit einem Finger für die Dauer der Programmierung fixiert.
@@ -1103,17 +1103,17 @@ brachte keine Überraschungen.
     \includegraphics[width=1.\textwidth]{../PNG/T4_front.JPG}	% width=9cm
     \caption{vollständig}
   \end{subfigure}
-  ~
+~
   \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
     \includegraphics[width=1.\textwidth]{../PNG/T4_front_noLCD.JPG}	% width=9cm
     \caption{mit abgenommenem Display}
   \end{subfigure}
   \caption{Frontansicht des T4 Testers}
-  \label{fig:T4_front}
+\label{fig:T4_front}
 \end{figure}
 
-Auf den Fotos der Rückseite in Abbildung \ref{fig:T4_back} sieht man die nachgerüsteten
+Auf den Fotos der Rückseite in Abbildung~\ref{fig:T4_back} sieht man die nachgerüsteten
 \(5mm\) Gewindebolzen sowie die nachträglich angelöteten Kabel mit Messclips.
 Da aber für die Datensignale des graphischen LCD-Controllers auch hier
 keine Signalanpassung (\(5V~-\textgreater ~3.3V\)) erfolgt, ist das Setzen der Option LCD\_SPI\_OPEN\_COL ratsam.
@@ -1129,14 +1129,14 @@ Displays ist hier nur schwer möglich.
     \includegraphics[width=1.\textwidth]{../PNG/T4_back.JPG}	% width=9cm
     \caption{Bestückungsseite}
   \end{subfigure}
-  ~
+~
   \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
     \includegraphics[width=1.\textwidth]{../PNG/T4_back_clips.JPG}	% width=9cm
     \caption{mit Messkabeln}
   \end{subfigure}
   \caption{Rückansicht des T4 Testers}
-  \label{fig:T4_back}
+\label{fig:T4_back}
 \end{figure}
 
 Noch eine chinesische Version mit graphischem Display wird mit der Bezeichnung \inquotes{GM328} angeboten.
@@ -1169,14 +1169,14 @@ Frequenzmessung bzw. Frequenzerzeugung abgleichen.
     \includegraphics[width=1.\textwidth]{../PNG/Kit_ST7565a.jpg}	% width=9cm
     \caption{zusammengebaut}
   \end{subfigure}
-  ~
+~
   \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
     \includegraphics[width=1.\textwidth]{../PNG/Kit_ST7565b.jpg}	% width=9cm
     \caption{mit abgenommenem Display}
   \end{subfigure}
   \caption{Bestückter Bausatz mit 128x64 Pixel Display}
-  \label{fig:Kit_mono}
+\label{fig:Kit_mono}
 \end{figure}
 
 Der später erschienene Bausatz verwendet ein Farbdisplay mit ST7735 Controller (128x160 Pixel) 
@@ -1184,7 +1184,7 @@ und hat zusätzlich zum Fequenzeingang noch einen Eingang für Spannungsmessung 
 Der Frequenzausgang ist aber nicht gepuffert, sondern ist lediglich zum Anschluß TP2 parallel 
 angeschlossen. Bei der Spannungsmessung handelt es sich nur um die Messung einer positiven Gleichspannung bis 50V,
 ein DC-DC Wandler für die Zenerspannungsmessung wurde nicht vorgesehen.
-Die Fotos \ref{fig:Kit_color} zeigen den zusammengebauten Bausatz.
+Die Fotos~\ref{fig:Kit_color} zeigen den zusammengebauten Bausatz.
 Auch hier wurde einer der beiden \(22 pF\) Kondensatoren 
 wurde hier durch einen Trimmer (grün) ersetzt. 
 
@@ -1194,14 +1194,14 @@ wurde hier durch einen Trimmer (grün) ersetzt.
     \includegraphics[width=1.\textwidth]{../PNG/Kit_Color_a.jpg}	% width=9cm
     \caption{zusammengebaut}
   \end{subfigure}
-  ~
+~
   \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
     \includegraphics[width=1.\textwidth]{../PNG/Kit_Color_b.jpg}	% width=9cm
     \caption{mit abgenommenem Display}
   \end{subfigure}
   \caption{Bestückter Bausatz mit 160x128 Pixel Farbdisplay}
-  \label{fig:Kit_color}
+\label{fig:Kit_color}
 \end{figure}
 
 Beide Bausätze verwenden einen gesockelte DIP Version des ATmega328P und haben keinen 
@@ -1225,8 +1225,8 @@ Wahrscheinlich toleriert die gewählte Controller-Variante die 5V Signalpegel de
 Es ist jedenfalls keine Schutzdiode gegen die 3.3V Versorgung bei diesem Controller feststellbar.
 
 section{Und noch ein Clone von Hiland M644}
-Dieses Nachbau basiert auf dem Schaltplan von Nick L. aus der Ukraine siehe Abbildung \ref{fig:t644tester}
-auf der Seite \pageref{fig:t644tester}.\\
+Dieses Nachbau basiert auf dem Schaltplan von Nick L. aus der Ukraine siehe Abbildung~\ref{fig:t644tester}
+auf der Seite~\pageref{fig:t644tester}.\\
 Bedient wird der Tester mit einem Knopf, der sowohl \textbf {Taster} als auch \textbf {Drehgeber} ist.
 
 \vspace{0.5cm}
@@ -1273,14 +1273,14 @@ auf ein vorhandenes Flachbandkabel mit Pfostenstecker angelötet und mit Schrump
     \includegraphics[width=.875\textwidth]{../PNG/Hi_u.jpg}  % width=7cm
     \caption{unten TP1 bis TP3 für Bauteilebestimmung}
   \end{subfigure}
-  ~
+~
   \begin{subfigure}[b]{.5\textwidth}	% 9cm
     \centering
     \includegraphics[width=.756\textwidth]{../PNG/Hi_o.jpg}  % 6.8cm
     \caption{oben Pins für Auswahlmenü und die IDE}
   \end{subfigure}
   \caption{Hiland Tester mit Testsockel und 128x64 Pixel Display}
-  \label{fig:Hiland}
+\label{fig:Hiland}
 \end{figure}
 
 \textbf {Die Testports TP1, TP2 und TP3} werden für die automatische Bauteilerkennung benutzt
@@ -1374,12 +1374,12 @@ Falsche Bestückung von Bauteilen können auch eine Ursache für Messfehler sein
 oder zurückgebliebene Flussmittelreste können die Messung stören.
 Bitte prüfen Sie nach Möglichkeit mit der Selbsttest-Funktion der
 TransistorTester-Software.
-Zu den Einzelheiten schauen Sie in das Selbsttest-Kapitel \ref{sec:selftest}.
+Zu den Einzelheiten schauen Sie in das Selbsttest-Kapitel~\ref{sec:selftest}.
 
 Anderenfalls prüfen sie Ihre Platine visuell und prüfen Sie die Widerstandswerte
 mit einem Ohmmeter. Sie können die Pins des ATmega für diese Prüfung benutzen,
 zum Beispiel können Sie der Widerstand R1 zwischen Pin 23 und Pin 14 messen.
-Schauen Sie in das Schaltbild \ref{fig:ttester} für die Einzelheiten.
+Schauen Sie in das Schaltbild~\ref{fig:ttester} für die Einzelheiten.
 Man braucht den Mikrocontroller nicht zu entfernen, nur die Stromversorgung sollte
 vorher getrennt werden.
 

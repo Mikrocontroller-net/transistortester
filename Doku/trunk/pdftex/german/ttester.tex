@@ -1,6 +1,5 @@
 \documentclass[pdftex,12pt,a4paper,oneside,english]{report}
 %\documentclass[pdftex,12pt,a4paper,final,headings=normal,english]{scrreprt}
-%\special{papersize=210mm,297mm}
 \usepackage{lmodern}
 \usepackage[T1]{fontenc}		%umlaute!
 \usepackage[utf8x]{inputenc}
@@ -15,16 +14,6 @@
 \usepackage{mwe}                %ins Bild schreiben
 
 %\usepackage{showframe}		% zum Anzeigen des Seitenlayouts
-
-%\RedeclareSectionCommand[  % nur mit documentclass scrreprt 
-%  beforeskip=-1\baselineskip,
-%  afterskip=.5\baselineskip]{section}
-%\RedeclareSectionCommand[
-%  beforeskip=-.75\baselineskip,
-%  afterskip=.5\baselineskip]{subsection}
-%\RedeclareSectionCommand[
-%  beforeskip=-.5\baselineskip,
-%  afterskip=.25\baselineskip]{subsubsection}
 
 \setlength{\parindent}{0em}	% Absatz nicht einrücken
 
@@ -44,11 +33,6 @@
 \setlength{\belowcaptionskip}{-0.5em}
 
 \usepackage[os=win]{menukeys}		% Zur Darstellung der Menue-Keys
-%\tw@make@key@box{backspace}{%
-%   \begin{tikzpicture}[yshift=0.65ex,menukeys key symbol]
-%      \draw [<-,menukeys thick] (0,0) -- (1.35em,0);
-%   \end{tikzpicture}%
-%}
 
 \newcommand{\LMB}{{\fbox{\(\bullet \circ \circ\)}} } % Left Mouse Button
 \newcommand{\RMB}{{\fbox{\(\circ \circ \bullet\)}} } % Right Mouse Button
@@ -70,36 +54,36 @@
 \end{figure}
 \ctikzset{bipoles/length=.6cm}
 \ctikzset{bipoles/thickness=4}
-\newcommand\electricC {
+\newcommand\electricC{
 \hspace{-10pt}
 \begin{circuitikz}
-\draw (0,0) to[capacitor] (0:1);
+\draw(0,0) to[capacitor] (0:1);
 \end{circuitikz}
 \hspace{-6pt}
 }
-\newcommand\electricR {
+\newcommand\electricR{
 \hspace{-10pt}
 \begin{circuitikz}
-\draw (0,0) to[european resistor] (0:1);
+\draw(0,0) to[european resistor] (0:1);
 \end{circuitikz}
 \hspace{-6pt}
 }
-\newcommand\electricL {
+\newcommand\electricL{
 \hspace{-10pt}
 \begin{circuitikz}
-\draw (0,0) 
+\draw(0,0) 
  to[american inductor] (-1,0);
 \end{circuitikz}
 \hspace{-6pt}
 }
-\newcommand\electricDAK {
+\newcommand\electricDAK{
 \begin{circuitikz}
-\draw (0,0) to[full diode] (0:1);
+\draw(0,0) to[full diode] (0:1);
 \end{circuitikz}
 }
-\newcommand\electricDKA {
+\newcommand\electricDKA{
 \begin{circuitikz}
-\draw (0,0) to[full diode] (180:1);
+\draw(0,0) to[full diode] (180:1);
 \end{circuitikz}
 }
 

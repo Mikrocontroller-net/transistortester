@@ -26,20 +26,25 @@ RefVoltage:
 #ifdef AUTO_CAL
  	ldi	r24, lo8(ref_offset)	; 1
  	ldi	r25, hi8(ref_offset)	; 0
-;; 	ACALL	eeprom_read_word	; eeprom_read_word((uint16_t *)(&ref_offset));
-;; 	lds	r18, ref_mv
-;; 	lds	r19, ref_mv+1
-;; 	add	r18, r24		; referenz =  ref_mv +
-;; 	adc	r19, r25
+ #if defined(WITH_SAMPLING_ADC) || defined(WITH_MENU)
+  ; any other function use eeprom_read_word
+ 	ACALL	eeprom_read_word	; eeprom_read_word((uint16_t *)(&ref_offset));
+ 	lds	r18, ref_mv
+ 	lds	r19, ref_mv+1
+ 	add	r18, r24		; referenz =  ref_mv +
+ 	adc	r19, r25
+ #else
+  ; no other function use eeprom_read_word, use two eeprom_read_byte instead to save memory
 	ACALL	eeprom_read_byte	; eeprom_read_word((uint16_t *)(&ref_offset)); done as two read_byte
-	mov	r19, r24
+	mov	r19, r24		; save lower bits of eeprom value in r19
 	ldi	r24, lo8(ref_offset+1)
 	ldi	r25, hi8(ref_offset+1)
 	ACALL	eeprom_read_byte
  	lds	r18, ref_mv
-	add	r18, r19
+	add	r18, r19		; add lower bits of eeprom value
  	lds	r19, ref_mv+1
-	adc	r19, r24
+	adc	r19, r24		; add higher bits and carry
+ #endif
 #else
 	lds	r18, ref_mv
 	lds	r19, ref_mv+1

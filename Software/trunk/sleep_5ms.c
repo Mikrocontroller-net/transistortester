@@ -55,3 +55,6 @@ while (pause > 0)
  #endif
   }
 }
+void sleep_10ms(){
+sleep_5ms(2);
+}

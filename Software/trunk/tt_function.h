@@ -36,6 +36,8 @@ void Display_mV(uint16_t val, uint8_t dd);		// show mV with dd digits
 void Display_Hz(unsigned long val, uint8_t dd);		// show Hz with dd digits
 unsigned int compute_hfe(unsigned int lpx, unsigned int tpy);
 void sleep_5ms(uint8_t xxx);		// set processor to sleep state for xxx times 5ms, xxx>200  (xxx-200)*100  
+void sleep_10ms();			// identical to sleep_5ms(2)
+//void sleep_20ms();			// identical to sleep_5ms(4)
 void PinLayout(char pin1, char pin2, char pin3); // show pin layout with EBC= or 123=
 void PinLayoutLine(char pin1, char pin2, char pin3); // show pin layout with Pin 1=...
 void Calibrate_UR(void);		// get reference voltages and port resistance

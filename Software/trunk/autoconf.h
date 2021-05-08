@@ -468,7 +468,7 @@
 #else
  // use sleep mode to save current for user interface
  #define wait_about5ms() sleep_5ms(1)
- #define wait_about10ms() sleep_5ms(2)
+ #define wait_about10ms() sleep_10ms()
  #define wait_about20ms() sleep_5ms(4)
  #define wait_about30ms() sleep_5ms(6)
  #define wait_about50ms() sleep_5ms(10)

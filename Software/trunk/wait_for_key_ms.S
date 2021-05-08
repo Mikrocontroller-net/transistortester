@@ -64,8 +64,7 @@ wloop:
 #if INHIBIT_SLEEP_MODE
 	RCALL	wait10ms	; wait10ms();
 #else
- 	ldi	r24, 0x02	; 2
- 	RCALL	sleep_5ms	; wait_about10ms();
+ 	RCALL	sleep_10ms	; wait_about10ms();
 #endif
         add	r16, r16	; key_pressed += key_pressed; // multiply with 2 is shift to left
  	sbis	_SFR_IO_ADDR(RST_PIN_REG), RST_PIN		; if((RST_PIN_REG & (1<<RST_PIN))) {

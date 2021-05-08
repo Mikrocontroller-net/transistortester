@@ -71,8 +71,7 @@ W20msReadADC:
 	rjmp   to_read;
 W10msReadADC:
 	push	r24;
-	ldi	r24, 2;		/* 2 * 5ms */
-	RCALL	sleep_5ms;
+	RCALL	sleep_10ms;
 	rjmp   to_read;
 W5msReadADC:
 	push	r24;
@@ -110,8 +109,7 @@ get_sample:
   #ifdef INHIBIT_SLEEP_MODE
 	RCALL	wait10ms		; wait10ms(); /* long time for voltage stabilization */
   #else
-	ldi	r24, 2			; /* 2 * 5ms */
-	RCALL	sleep_5ms		; wait_about10ms()
+	RCALL	sleep_10ms		; wait_about10ms()
   #endif
  #endif		/* end NO_AREF_CAP */
 	StartADCwait                    ; // allways do one dummy read of ADC, 112us

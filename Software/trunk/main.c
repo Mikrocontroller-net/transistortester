@@ -92,7 +92,13 @@
 	  PRR = (1<<PRTWI) | (1<<PRSPI) | (1<<PRUSART0);
 	 #endif
 //	disable digital inputs of Analog pins, but TP1-3 digital inputs must be left enabled for VGS measurement
-	  DIDR0 = ((1<<ADC5D) | (1<<ADC4D) | (1<<ADC3D) | (1<<ADC2D) | (1<<ADC1D) | (1<<ADC0D)) & ~((1<<TP3) | (1<<TP2) | (1<<TP1));	
+          #if (STRIP_GRID_BOARD == 3) && (PROCESSOR_TYP == 328)
+          // #define RST_PIN PC3     //Pin, is switched to low, if push button is pressed, enable Input with DIDR0
+	  DIDR0 = ((1<<ADC5D) | (1<<ADC4D) | (0<<ADC3D) | (1<<ADC2D) | (1<<ADC1D) | (1<<ADC0D)) & ~((1<<TP3) | (1<<TP2) | (1<<TP1));
+	  #else
+	  DIDR0 = ((1<<ADC5D) | (1<<ADC4D) | (1<<ADC3D) | (1<<ADC2D) | (1<<ADC1D) | (1<<ADC0D)) & ~((1<<TP3) | (1<<TP2) | (1<<TP1));
+          #endif
+
 	  TCCR2A = (0<<WGM21) | (0<<WGM20);		// Counter 2 normal mode
 	  TCCR2B = CNTR2_PRESCALER;	//prescaler set in autoconf
 	#endif		/* INHIBIT_SLEEP_MODE */

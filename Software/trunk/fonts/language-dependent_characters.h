@@ -191,20 +191,20 @@
       PIX_c_cedil            /* 0x81 c_cedil  e7 */
       PIX_e_acute            /* 0x82 e_acute  e9 */
       PIX_i_acute            /* 0x83 i_acute  ed */
-      PIX_n_tilde            /* 0x84 n_tilde     */
-      PIX_o_acute            /* 0x85 o_acute  f3 */
-      PIX_u_acute            /* 0x86 u_acute  fa */
-      PIX_u_uml              /* 0x87 u_uml    fc */
-      PIX_updown_exclam      /* 0x88 updown_exclam  */
-      PIX_updown_question    /* 0x89 updown_question */
-      PIX_a_super            /* 0x8a a_super     */
-      PIX_o_super            /* 0x8b o_super     */
-      PIX_A_acute            /* 0x8c A_acute  c1 */
-      PIX_E_acute            /* 0x8d E_acute  c9 */
-      PIX_I_acute            /* 0x8e I_acute  cd */
-      PIX_N_tilde            /* 0x8f N_tilde     */
-      PIX_O_acute            /* 0x90 O_acute  d3 */
-      PIX_U_acute            /* 0x91 U_acute  da */
+      PIX_o_acute            /* 0x84 o_acute  f3 */
+      PIX_u_acute            /* 0x85 u_acute  fa */
+      PIX_u_uml              /* 0x86 u_uml    fc */
+      PIX_A_acute            /* 0x87 A_acute  c1 */
+      PIX_E_acute            /* 0x88 E_acute  c9 */
+      PIX_I_acute            /* 0x89 I_acute  cd */
+      PIX_O_acute            /* 0x8a O_acute  d3 */
+      PIX_U_acute            /* 0x8b U_acute  da */
+      /* PIX_a_super */           /* 0x8c a_super     */
+      /* PIX_o_super */           /* 0x8d o_super     */
+      /* PIX_n_tilde */           /* 0x8e n_tilde     */
+      /* PIX_N_tilde */           /* 0x8f N_tilde     */
+      /* PIX_updown_exclam */     /* 0x90 updown_exclam  */
+      /* PIX_updown_question */   /* 0x91 updown_question */
  #elif defined LANG_HUNGARIAN
 /* ---H----  ISO8859-2  ------------- */
       PIX_a_acute            /* 0x80 a_acute  e1 */

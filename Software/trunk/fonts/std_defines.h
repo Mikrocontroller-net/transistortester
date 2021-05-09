@@ -291,25 +291,29 @@
   #define U_grave       0x93 /* d9 */
   #define CHAR_COUNT 0x94
   #elif defined LANG_SPANISH
+  #define a_acute       0x80
+  #define c_cedil       0x81
+  #define e_acute       0x82
+  #define i_acute       0x83
+  #define o_acute       0x84
+  #define u_acute       0x85
+  #define u_uml         0x86
+  #define A_acute       0x87
+  #define E_acute       0x88
+  #define I_acute       0x89
+  #define O_acute       0x8a
+  #define U_acute       0x8b
+  #define CHAR_COUNT 0x8c
+  #define a_super       'a'
+  #define o_super       'o'
+  #define n_tilde       'n'
+  #define N_tilde       'N'
   #define updown_exclam '!'
   #define updown_question '?'
-  #define a_super       'a'
-  #define A_acute       'A'
-  #define a_acute       'a'
-  #define c_cedil       'c'
-  #define E_acute       'E'
-  #define e_acute       'e'
-  #define I_acute       'I'
-  #define i_acute       'i'
-  #define N_tilde       'N'
-  #define n_tilde       'n'
-  #define o_super       'o'
-  #define O_acute       'O'
-  #define o_acute       'o'
-  #define U_acute       'U'
-  #define u_acute       'u'
-  #define u_uml         'u'
-  #define CHAR_COUNT 0x80
+  /* #define n_tilde       0x8e */
+  /* #define N_tilde       0x8f */
+  /* #define updown_exclam 0x90 */
+  /* #define updown_question 0x91 */
   #elif defined LANG_HUNGARIAN
   #define a_acute       0x80 /* e1 */
   #define e_acute       0x81 /* e9 */

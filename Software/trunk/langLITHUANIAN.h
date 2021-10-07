@@ -52,7 +52,7 @@
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Testuoju";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "short Probes!";	// ???
 
-  #if PROCESSOR_TYP == 644
+  #if (WITH_FREQUENCY_SWITCH == 1)
    const unsigned char HFREQ_str[] MEM2_TEXT = "Daznis > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kvarcas";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF kvarcas";

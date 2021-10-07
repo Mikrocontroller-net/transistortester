@@ -53,7 +53,7 @@
       const unsigned char TURN_str[] MEM2_TEXT = {'K','r','u',t_caron,'!'};    
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Plna_a kalibracia";	//"Samotestovanie";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "Prepoj sondy!";
-  #if PROCESSOR_TYP == 644
+  #if (WITH_FREQUENCY_SWITCH == 1)
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frekvencia > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF krystal";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF krystal";

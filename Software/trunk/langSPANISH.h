@@ -51,7 +51,7 @@
    const unsigned char TURN_str[] MEM2_TEXT = "rotar!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Calibracion...";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "Cortocircuite las puntas!";
-  #if PROCESSOR_TYP == 644
+  #if (WITH_FREQUENCY_SWITCH == 1)
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frequencia > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF cristal";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF cristal";

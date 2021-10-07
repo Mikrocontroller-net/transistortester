@@ -52,7 +52,7 @@
    const unsigned char TURN_str[] MEM2_TEXT = "forgat!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "On-teszt mod";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "Csatlakoztassa a csapokat!";
-  #if PROCESSOR_TYP == 644
+  #if (WITH_FREQUENCY_SWITCH == 1)
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frekvencia > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF Quarz";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF Quarz";

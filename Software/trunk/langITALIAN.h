@@ -51,7 +51,7 @@
    const unsigned char TURN_str[] MEM2_TEXT = "turno!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Autotest";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "Pin collegare!";
-  #if PROCESSOR_TYP == 644
+  #if (WITH_FREQUENCY_SWITCH == 1)
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frequenza > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF quarzo";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF quarzo";

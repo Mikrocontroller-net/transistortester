@@ -546,11 +546,11 @@
 
 
 #ifdef LCD_CYRILLIC
-        #define LCD_CHAR_OMEGA  3       //Omega-character 
-        #define LCD_CHAR_U  5           //mu-character
+        #define LCD_CHAR_OMEGA  7       // Omega-character cyrillic LCD
+        #define LCD_CHAR_U  6           // mu-character cyrillic LCD
 #else
-        #define LCD_CHAR_OMEGA  244     //Omega-character
-        #define LCD_CHAR_U  228         //mu-character
+        #define LCD_CHAR_OMEGA  244     // Omega-character standard LCD
+        #define LCD_CHAR_U  228         // mu-character standard LCD
 #endif
 
 #ifdef LCD_DOGM
@@ -581,9 +581,9 @@
         #define LCD_CHAR_INDUCTOR2  8		//end of coil
  #if (defined WITH_GRAPHICS)
 	#define LCD_CHAR_DEGREE 0x1f
-	#define LCD_CHAR_U	0x1e
-	#define LCD_CHAR_OMEGA	0x1d
-	#define LCD_CHAR_BETA	0x1c
+	#define LCD_CHAR_U	0x1e		// mu character for graphic display
+	#define LCD_CHAR_OMEGA	0x1d		// Omega character for graphic display
+	#define LCD_CHAR_BETA	0x1c		// Beta character for graphic display
  #else
         #define LCD_CHAR_DEGREE 0xf8	// Character for degree
         #define LCD_CHAR_OMEGA  13       //Omega-character 
@@ -774,7 +774,7 @@
 #ifndef TP_OFFSET
  #define TP_OFFSET 0
 #endif
-#if  !defined(LCD_INTERFACE_MODE)  || (LCD_INTERFACE_MODE == MODE_PARALLEL)
+#if  !defined(LCD_INTERFACE_MODE)  || (LCD_INTERFACE_MODE == MODE_PARALLEL) || (LCD_INTERFACE_MODE == MODE_I2C) || (LCD_INTERFACE_MODE == MODE_I2C_CHAR)
  #define MODE_8BIT 0x00         /* 4-bit Mode */
 #else
  #define MODE_8BIT 0x10
@@ -871,17 +871,20 @@
  #define USE_HFREQ 0
  #define USE_H_CRYSTAL 0
  #define USE_L_CRYSTAL 0
+ #define NO_FREQUENCY_SWITCH 0
 #else   /* with frequency counter */
- #if PROCESSOR_TYP == 644
+ #if (PROCESSOR_TYP == 644) && (NO_FREQUENCY_SWITCH != 1)
   #define USE_FREQ 1
   #define USE_HFREQ 1
   #define USE_H_CRYSTAL 1
   #define USE_L_CRYSTAL 1
+  #define WITH_FREQUENCY_SWITCH 1
  #else
   #define USE_FREQ 1
   #define USE_HFREQ 0
   #define USE_H_CRYSTAL 0
   #define USE_L_CRYSTAL 0
+  #define WITH_FREQUENCY_SWITCH 0
  #endif
 #endif
 

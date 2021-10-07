@@ -44,7 +44,7 @@
    const unsigned char TURN_str[] MEM2_TEXT = {'o','t','o',c_caron,'!',0};
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Autotest";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "propoj sondy!";
-  #if PROCESSOR_TYP == 644
+  #if (WITH_FREQUENCY_SWITCH == 1)
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frekvence > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF Quarz";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF Quarz";

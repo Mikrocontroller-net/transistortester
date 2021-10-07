@@ -57,7 +57,7 @@
    const unsigned char TURN_str[] MEM2_TEXT = {'K','p','y',Cyr_t,'i',Cyr_t,Cyr_ww,'!',0};
    const unsigned char FULLCHECK_str[] MEM2_TEXT = {'P','e',Cyr_zsch,Cyr_i,Cyr_m,' ','c','a',Cyr_m,'o',Cyr_t,'e','c',Cyr_t,'y',0};
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = {Cyr_Z,'a',Cyr_k,'o','p','o',Cyr_t,'i',Cyr_t,Cyr_ww,'!',0};
-  #if PROCESSOR_TYP == 644
+  #if (WITH_FREQUENCY_SWITCH == 1)
    const unsigned char HFREQ_str[] MEM2_TEXT = {Cyr_Tsch,'a','c',Cyr_t,'o',Cyr_t,'o',Cyr_m,'i','p',' ','>',' ','2','M','H','z',0};
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = {'H','F',' ',Cyr_k,Cyr_v,'a','p',Cyr_c,0};
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = {'L','F',' ',Cyr_k,Cyr_v,'a','p',Cyr_c,0};

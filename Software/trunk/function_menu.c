@@ -298,7 +298,7 @@ void message2line(uint8_t number) {
      if (number == MODE_FSCALER) lcd_MEM2_string(FScaler_str);
   #endif
  #endif
- #if PROCESSOR_TYP == 644
+ #if WITH_FREQUENCY_SWITCH == 1
      if (number == MODE_HFREQ) lcd_MEM2_string(HFREQ_str);
      if (number == MODE_H_CRYSTAL) lcd_MEM2_string(H_CRYSTAL_str);
      if (number == MODE_L_CRYSTAL) lcd_MEM2_string(L_CRYSTAL_str);
@@ -641,7 +641,7 @@ uint8_t contrast;
   {
   #if ((LCD_ST_TYPE == 7565) || (LCD_ST_TYPE == 1306))
      lcd_command(CMD_SET_VOLUME_FIRST);		// 0x81 set  volume command
-     lcd_command(contrast);			// value from 1 to 63 (0x3f) */
+     lcd_command(contrast);			// value from 1 to 63 (0x3f) 
   #elif (LCD_ST_TYPE == 8812)	/* PCF8812 controller */
      lcd_command(CMD_SET_EXTENDED_INSTRUCTION);		// set extended instruction mode
      lcd_command(ECMD_SET_CONTRAST | (contrast & 0x7f));	// set the contrast value

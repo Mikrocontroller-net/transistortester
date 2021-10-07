@@ -188,13 +188,13 @@ End of configuration
    const unsigned char TURN_str[] MEM2_TEXT = "turn!";	
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Selftest";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "short Probes!";
-#ifndef NO_FREQ_COUNTER
+  #ifndef NO_FREQ_COUNTER
    const unsigned char FREQ_str[] MEM2_TEXT = "Frequency";
- #ifdef WITH_FREQUENCY_DIVIDER
+   #ifdef WITH_FREQUENCY_DIVIDER
    const unsigned char FScaler_str[] MEM2_TEXT = "F-Scaler";
- #endif
-#endif
-  #if PROCESSOR_TYP == 644
+   #endif
+  #endif
+  #if (WITH_FREQUENCY_SWITCH == 1)
    const unsigned char HFREQ_str[] MEM2_TEXT = "Frequency > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF quartz";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF quartz";

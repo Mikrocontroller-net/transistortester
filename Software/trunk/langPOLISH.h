@@ -51,7 +51,7 @@
    const unsigned char TURN_str[] MEM2_TEXT = "Pokrec!";
    const unsigned char FULLCHECK_str[] MEM2_TEXT = "Auto-test";
    const unsigned char SHORT_PROBES_str[] MEM2_TEXT = "Polacz Piny!";
-  #if PROCESSOR_TYP == 644
+  #if (WITH_FREQUENCY_SWITCH == 1)
    const unsigned char HFREQ_str[] MEM2_TEXT = "Czestotliwosc > 2MHz";
    const unsigned char H_CRYSTAL_str[] MEM2_TEXT = "HF kwarc";
    const unsigned char L_CRYSTAL_str[] MEM2_TEXT = "LF kwarc";

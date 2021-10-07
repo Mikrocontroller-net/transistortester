@@ -31,6 +31,8 @@
 				/* EN + RS + B4 + B5 + B6 + B7 */
 #define MODE_I2C 2		/* I2C interface for SSD1306 */
 				/* SCL + SDA */
+#define MODE_I2C_CHAR 22	/* Special I2C converter with PCF8574 chip for character LCDs */
+				/* default I2C address is 27 */
 #define MODE_3LINE 3		/* special 3 line serial output with Data/Command as first data bit  PCF8814 */
 				/* RES + EN + B0 (+ CE) */
 #define MODE_SPI 4		/* 4 bit SPI interface for ST7565 or SSD1306 */
@@ -84,7 +86,11 @@
 #else
  #define PROCESSOR_TYP 8
 #endif
-
+#if (LCD_ST_TYPE == 0) && (LCD_INTERFACE_MODE == MODE_I2C)
+ /* set the interface mode to the special PCF8574 I2C interface type */
+ #undef LCD_INTERFACE_MODE
+ #define LCD_INTERFACE_MODE  MODE_I2C_CHAR
+#endif
 
 /* ************************************************************************* */
 /* Definition for the Port , that is directly connected to the probes.	     */
@@ -744,10 +750,14 @@
  #endif	/* PROCESSOR_TYP for SPI Interface*/
  
 /* ----------------------------------------------------------------------------- */
-#elif (LCD_INTERFACE_MODE == MODE_I2C)
+#elif (LCD_INTERFACE_MODE == MODE_I2C) || (LCD_INTERFACE_MODE == MODE_I2C_CHAR)
  /* only two wires are required for the I2C interface: SCL and SDA */
  #ifndef LCD_I2C_ADDR
-  #define LCD_I2C_ADDR 0x3C		/* SSD1306 controller defines 0x3c or 0x3d (SA0=1) as address */
+  #if LCD_INTERFACE_MODE == MODE_I2C_CHAR
+   #define LCD_I2C_ADDR 0x27	/* PCF8574 controller defines 0x27 as default address */
+  #else
+   #define LCD_I2C_ADDR 0x3C	/* SSD1306 controller defines 0x3c or 0x3d (SA0=1) as address */
+  #endif
  #endif
 				/* --------------------------------------------- */
  #if PROCESSOR_TYP == 644	/* mega324/644/1284 with I2C interface */
@@ -923,7 +933,7 @@
 
  #endif	/* PROCESSOR_TYP for the serial ST7108 Interface */
 /* ----------------------------------------------------------------------------- */
-#else /* (LCD_INTERFACE_MODE != MODE_SPI || MODE_I2C || MODE_ST7920_SERIAL || MODE_ST7108_SERIAL) */
+#else /* (LCD_INTERFACE_MODE != MODE_SPI || MODE_I2C || MODE_I2C_CHAR || MODE_ST7920_SERIAL || MODE_ST7108_SERIAL) */
  /* The 4-bit parallel Interface is usually used for the character display */
 				/* --------------------------------------------- */
  #if PROCESSOR_TYP == 644	/* connection for 4-bit parallel interface and mega324/644/1284 */
@@ -1217,6 +1227,9 @@ End of configuration
   #warning LCD_CYRILLIC automatically set!
   #define LCD_CYRILLIC    // LCD_CYRILLIC is required by font.h
  #endif
+#endif
+#ifndef NO_FREQUENCY_SWITCH
+#define NO_FREQUENCY_SWITCH 0
 #endif
 #include "font.h"
 #include "autoconf.h"

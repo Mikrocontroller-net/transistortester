@@ -17,6 +17,7 @@
 #define FMAX_INPUT 2004000
 #define FREQ_DIV 16
 
+
 #if PROCESSOR_TYP == 1280
  #define PCINTx_vect INT6_vect
 #elif PROCESSOR_TYP == 644
@@ -35,7 +36,7 @@
 
 void GetFrequency(uint8_t range) {
   unsigned char taste;			// set if key is pressed during measurement
- #if PROCESSOR_TYP == 644
+ #if WITH_FREQUENCY_SWITCH == 1
   unsigned long freq_count;		// the counted pulses in 1 second
  #endif
   unsigned long long ext_period;
@@ -46,7 +47,7 @@ void GetFrequency(uint8_t range) {
   /* The upper bits of range specifies the input selection. */
   /* 0 = external input, 2 = channel 2, 4 = HF Quartz, 6 = LF Quartz */
   
- #if PROCESSOR_TYP == 644
+ #if WITH_FREQUENCY_SWITCH == 1
   FDIV_DDR |= (1<<FDIV_PIN);		//switch to output
   if ((range & 0x01) == 0) {
      FDIV_PORT &= ~(1<<FDIV_PIN);	// switch off the 16:1 divider
@@ -90,7 +91,7 @@ void GetFrequency(uint8_t range) {
      u2lcd(freq_factor);	// show the frequency scaler, if not 1
   }
   #endif	/* WITH_FREQUENCY_DIVIDER */
- #endif		/* PROCESSOR_TYP */
+ #endif		/* WITH_FREQUENCY_SWITCH */
   taste = 0;				// reset flag for key pressed
   for (mm=0;mm<240;mm++) {
      // *************************************************************************
@@ -167,7 +168,7 @@ void GetFrequency(uint8_t range) {
      TCCR0B = 0;		// stop timer 0, if not stopped by timer 1 compare interrupt
      ext_freq.b[0] = TCNT0;	// add lower 8 bit to get total counts
 #endif
- #if PROCESSOR_TYP == 644
+ #if WITH_FREQUENCY_SWITCH == 1
      freq_count = ext_freq.dw;	// save the frequency counter
  #endif
  #if (LCD_LINES > 3)
@@ -181,7 +182,7 @@ void GetFrequency(uint8_t range) {
  #endif
      lcd_data('f');
      lcd_equal();		// lcd_data('=');
- #if PROCESSOR_TYP == 644
+ #if WITH_FREQUENCY_SWITCH == 1
      if ((FDIV_PORT&(1<<FDIV_PIN)) == 0) {
         Display_Hz(ext_freq.dw, 7);
         lcd_space();		// Frequency divider is not activ
@@ -200,7 +201,7 @@ void GetFrequency(uint8_t range) {
   #else
      Display_Hz(ext_freq.dw, 7);
   #endif
- #endif  /* PROCESSOR_TYP 644 or other */
+ #endif  /* WITH_FREQUENCY_SWITCH */
      FREQINP_DDR &= ~(1<<FREQINP_PIN);	// switch frequency pin to input
      if (TCCR1B != 0) {
        // Exact 1000ms period is only with "end of period" from timer1 interrupt.
@@ -271,13 +272,13 @@ void GetFrequency(uint8_t range) {
         lcd_data('T');
         lcd_equal();		// lcd_data('=');
         ext_period = ((unsigned long long)ext_freq.dw * (200000/MHZ_CPU)) / pinchange_max;
- #if PROCESSOR_TYP == 644
+ #if WITH_FREQUENCY_SWITCH == 1
         if ((FDIV_PORT&(1<<FDIV_PIN)) != 0) {
            // frequency divider is activ, period is measured too long
            ext_period = ext_period / FREQ_DIV;
         }
  #endif
- #if (PROCESSOR_TYP != 644) && defined(WITH_FREQUENCY_DIVIDER)
+ #if (WITH_FREQUENCY_SWITCH != 1) && defined(WITH_FREQUENCY_DIVIDER)
         ext_period /= freq_factor;
  #endif
         if (pinchange_max > 127) {
@@ -318,7 +319,7 @@ void GetFrequency(uint8_t range) {
            }
         }
      }  /* end if 1 < ext_freq < FMAX_PERIOD */
- #if PROCESSOR_TYP == 644
+ #if WITH_FREQUENCY_SWITCH == 1
      if ((FDIV_PORT & (1<<FDIV_PIN)) == 0) {
         // frequency divider is not activ
         if ( ((freq_count >= FMAX_PERIOD) && (freq_count < ((unsigned long)FMAX_PERIOD*FREQ_DIV))) ||

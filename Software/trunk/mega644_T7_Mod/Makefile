@@ -39,7 +39,9 @@ CFLAGS += -DMAX_MENU_LINES=8
 CFLAGS += -DWITH_ROTARY_CHECK
 #
 # Option NO_FREQ_COUNTER will disable the frequency counter function.
-CFLAGS += -DNO_FREQ_COUNTER
+#CFLAGS += -DNO_FREQ_COUNTER
+# Counter is enabled, but option NO_FREQUENCY_SWITCH will disable selection of different sources for mega644/1284.
+CFLAGS += -DNO_FREQUENCY_SWITCH=1
 
 # With the menu item "Show data" the used icons and the font data are displayed for
 # graphical displays after the presentation of calibration data.
@@ -76,7 +78,7 @@ CFLAGS += -DWITH_ROTARY_SWITCH=2
 #                          LANG_FRANCAIS, LANG_HUNGARIAN,
 #                          LANG_ITALIAN,LANG_LITHUANIAN, LANG_POLISH, LANG_RUSSIAN , LANG_SLOVAK, LANG_SLOVENE,
 #                          LANG_SPANISH, LANG_UKRAINIAN
-UI_LANGUAGE = LANG_GERMAN
+UI_LANGUAGE = LANG_ENGLISH
 
 # The LCD_CYRILLIC option is necessary, if you have a display with cyrillic characterset.
 # This lcd-display don't have a character for Ohm and for µ (micro).
